@@ -1,0 +1,8 @@
+proto.c:20:15:ULT_System_Mode	120	static
+proto.c:47:15:ULT_System_ModeQ	24	static
+proto.c:66:15:ULT_VM_ReadAll	136	static
+proto.c:108:15:ULT_SCOPE_ReadAll	40	static
+proto.c:155:15:ULT_PWM_SetChQ	96	static
+proto.c:200:15:ULT_PWM_SetCh	56	static
+proto.c:227:15:ULT_PWM_StartCh	16	static
+proto.c:249:15:ULT_PWM_StopCh	16	static

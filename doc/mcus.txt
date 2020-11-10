@@ -1,0 +1,9 @@
+F042F6 / F042K6         (chip / nucelo 32)
+F103C8                  (blue/black pill)
+F303RE                  (nucleo 64)
+F401CC / F401RE         (black pill / nucelo 64)
+F411CE                  (black pill)
+F446RE                  (nucleo 64)
+
+L072
+L412

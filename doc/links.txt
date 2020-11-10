@@ -1,0 +1,1 @@
+https://www.eevblog.com/forum/microcontrollers/stm32-adc-reference/
