@@ -1,4 +1,4 @@
-# UniLabTool - Universal Laboratory Tool (The cheapest oscilloscope - only 1$)
+# Universal Laboratory Tool (The cheapest scope for just 1$)
 Logic Analyzer, Voltmeter, PWM / Signal Generator, Counter  
 STM32 Blue Pill / Nucelo  
 Qt Windows, Linux, macOS GUI App  
