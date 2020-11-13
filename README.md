@@ -1,4 +1,4 @@
-# Universal Laboratory Tool (The cheapest scope- just 1$) 
+# PillScope (The Cheapest Scope- just 1$) 
 * Logic Analyzer, Voltmeter, PWM / Signal Generator, Counter  
 * STM32 Blue Pill / Nucelo  
 * Qt Windows, Linux, macOS GUI App  
