@@ -1,5 +1,5 @@
 /*
- * CTU/UniLabTool project
+ * CTU/PillScope project
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <assert.h>
 
 #include "cfg.h"
 #include "comm.h"
@@ -21,8 +20,8 @@
 
 
 // respond
-static void uart_put_char(const char data);
 static void uart_put_str(const char* data, int len);
+static void uart_put_char(const char data);
 static int respond(const char* data, int len);
 
 // scpi core
@@ -55,21 +54,33 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "SYSTem:VERSion?", .callback = SCPI_SystemVersionQ,},
 
     /* ULT - System */
-    {.pattern = "SYSTem:MODE?", .callback = ULT_System_ModeQ,},
-    {.pattern = "SYSTem:MODE", .callback = ULT_System_Mode,},
+    {.pattern = "SYSTem:MODE?", .callback = PS_System_ModeQ,},
+    {.pattern = "SYSTem:MODE", .callback = PS_System_Mode,},
 
     /* ULT - Voltmeter */
-    {.pattern = "VM:READ:ALL?", .callback = ULT_VM_ReadAll,},
-    //{.pattern = "VM:READ:CH?", .callback = ULT_VM_ReadChQ,},
+    {.pattern = "VM:READ?", .callback = PS_VM_ReadQ,},
 
     /* ULT - Scope */
-    {.pattern = "SCOPE:READ:ALL?", .callback = ULT_SCOPE_ReadAll,},
+    {.pattern = "SCOPe:READ?", .callback = PS_SCOPE_ReadQ,},
+    {.pattern = "SCOPe:SET?", .callback = PS_SCOPE_SetQ,},
+    {.pattern = "SCOPe:SET", .callback = PS_SCOPE_Set,},
+
+    /* ULT - Logic Analyzer */
+    {.pattern = "LA:READ?", .callback = PS_LA_ReadQ,},
+    {.pattern = "LA:SET?", .callback = PS_LA_SetQ,},
+    {.pattern = "LA:SET", .callback = PS_LA_Set,},
+
+    /* ULT - Counter */
+    {.pattern = "CNTR:READ?", .callback = PS_CNTR_ReadQ,},
+
+    /* ULT - Signal Generator */
+    {.pattern = "SGEN:SET", .callback = PS_SGEN_Set,},
 
     /* ULT - PWM */
-    {.pattern = "PWM:SET:CH?", .callback = ULT_PWM_SetChQ,},
-    {.pattern = "PWM:SET:CH", .callback = ULT_PWM_SetCh,},
-    {.pattern = "PWM:START:CH", .callback = ULT_PWM_StartCh,},
-    {.pattern = "PWM:STOP:CH", .callback = ULT_PWM_StopCh,},
+    {.pattern = "PWM:SET:CH?", .callback = PS_PWM_SetChQ,},
+    {.pattern = "PWM:SET:CH", .callback = PS_PWM_SetCh,},
+    {.pattern = "PWM:START:CH", .callback = PS_PWM_StartCh,},
+    {.pattern = "PWM:STOP:CH", .callback = PS_PWM_StopCh,},
 
 
     SCPI_CMD_LIST_END
@@ -139,10 +150,16 @@ scpi_result_t SCPI_Reset(scpi_t * context)
 
 /************************* Write Respond *************************/
 
+void uart_put_text(const char* data)
+{
+    for (int i = 0; i < strlen(data); i++)
+        uart_put_char(data[i]);
+}
+
 static void uart_put_char(const char data)
 {
-    while(!LL_USART_IsActiveFlag_TXE(ULT_UART));
-    LL_USART_TransmitData8(ULT_UART, data);
+    while(!LL_USART_IsActiveFlag_TXE(PS_UART));
+    LL_USART_TransmitData8(PS_UART, data);
 }
 
 static void uart_put_str(const char* data, int len)

@@ -42,7 +42,7 @@
 "__App/Src/irq.o"
 "__App/Src/periph.o"
 "__App/Src/proto.o"
-"__App/Src/utils.o"
+"__App/Src/utility.o"
 "__App/Src/scpi/error.o"
 "__App/Src/scpi/expression.o"
 "__App/Src/scpi/fifo.o"

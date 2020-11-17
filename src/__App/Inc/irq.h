@@ -1,5 +1,5 @@
 /*
- * CTU/UniLabTool project
+ * CTU/PillScope project
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 

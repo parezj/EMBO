@@ -21,7 +21,7 @@ void OnProjectLoad (void) {
   //
   // User settings
   //
-  File.Open ("./Debug/UniLabTool_F103C8.elf");
+  File.Open ("./Debug/PillScope_F103C8.elf");
 }
 
 /*********************************************************************

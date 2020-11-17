@@ -36,27 +36,27 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-UniLabTool_F103C8.elf \
+PillScope_F103C8.elf \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-UniLabTool_F103C8.list \
+PillScope_F103C8.list \
 
 OBJCOPY_HEX += \
-UniLabTool_F103C8.hex \
+PillScope_F103C8.hex \
 
 OBJCOPY_BIN += \
-UniLabTool_F103C8.bin \
+PillScope_F103C8.bin \
 
 
 # All Target
-all: UniLabTool_F103C8.elf secondary-outputs
+all: PillScope_F103C8.elf secondary-outputs
 
 # Tool invocations
-UniLabTool_F103C8.elf: $(OBJS) $(USER_OBJS) F:\STM32Cube\UniLabTool\src\F103C8\STM32F103C8TX_FLASH.ld
-	arm-none-eabi-gcc -o "UniLabTool_F103C8.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"F:\STM32Cube\UniLabTool\src\F103C8\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="UniLabTool_F103C8.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+PillScope_F103C8.elf: $(OBJS) $(USER_OBJS) F:\STM32Cube\PillScope\src\F103C8\STM32F103C8TX_FLASH.ld
+	arm-none-eabi-gcc -o "PillScope_F103C8.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"F:\STM32Cube\PillScope\src\F103C8\STM32F103C8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PillScope_F103C8.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -65,18 +65,18 @@ default.size.stdout: $(EXECUTABLES)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-UniLabTool_F103C8.list: $(EXECUTABLES)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "UniLabTool_F103C8.list"
+PillScope_F103C8.list: $(EXECUTABLES)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "PillScope_F103C8.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-UniLabTool_F103C8.hex: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "UniLabTool_F103C8.hex"
+PillScope_F103C8.hex: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O ihex $(EXECUTABLES) "PillScope_F103C8.hex"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-UniLabTool_F103C8.bin: $(EXECUTABLES)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "UniLabTool_F103C8.bin"
+PillScope_F103C8.bin: $(EXECUTABLES)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "PillScope_F103C8.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 

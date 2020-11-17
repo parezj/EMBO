@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>UniLabTool_F103C8</name>
+	<name>PillScope_F103C8</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -34,7 +34,7 @@
 		<link>
 			<name>__App</name>
 			<type>2</type>
-			<location>F:/STM32Cube/UniLabTool/src/__App</location>
+			<location>F:/STM32Cube/PillScope/src/__App</location>
 		</link>
 	</linkedResources>
 </projectDescription>

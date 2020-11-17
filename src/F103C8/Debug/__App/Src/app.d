@@ -1,5 +1,6 @@
-__App/Src/app.o: F:/STM32Cube/UniLabTool/src/__App/Src/app.c \
- F:/STM32Cube/UniLabTool/src/__App/Inc/cfg.h \
+__App/Src/app.o: F:/STM32Cube/PillScope/src/__App/Src/app.c \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h \
  ../Drivers/CMSIS/Include/core_cm3.h \
@@ -22,28 +23,26 @@ __App/Src/app.o: F:/STM32Cube/UniLabTool/src/__App/Src/app.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/app_data.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/periph.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/periph.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/comm.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/cfg.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/scpi.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/parser.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/types.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/config.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/cc.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/ieee488.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/error.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/constants.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/minimal.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/units.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/utils.h \
- F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/expression.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/app_data.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/periph.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/periph.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/comm.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/parser.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/types.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/config.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/cc.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/ieee488.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/error.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/constants.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/minimal.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h \
  ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
@@ -58,7 +57,9 @@ __App/Src/app.o: F:/STM32Cube/UniLabTool/src/__App/Src/app.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/cfg.h:
+F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
 
 ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h:
 
@@ -104,49 +105,45 @@ F:/STM32Cube/UniLabTool/src/__App/Inc/cfg.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h:
-
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/app_data.h:
+F:/STM32Cube/PillScope/src/__App/Inc/app_data.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/periph.h:
+F:/STM32Cube/PillScope/src/__App/Inc/periph.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/periph.h:
+F:/STM32Cube/PillScope/src/__App/Inc/periph.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/comm.h:
+F:/STM32Cube/PillScope/src/__App/Inc/comm.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/cfg.h:
+F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/scpi.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/parser.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/parser.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/types.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/types.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/config.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/config.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/cc.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/cc.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/ieee488.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/ieee488.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/error.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/error.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/constants.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/constants.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/minimal.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/minimal.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/units.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/utils.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h:
 
-F:/STM32Cube/UniLabTool/src/__App/Inc/scpi/expression.h:
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h:
 
 ../Core/Inc/main.h:
 

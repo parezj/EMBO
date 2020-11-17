@@ -1,5 +1,5 @@
 /*
- * CTU/UniLabTool project
+ * CTU/PillScope project
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -12,6 +12,7 @@
 #define RX_BUFF_LEN    100
 #define RX_BUFF_LAST   RX_BUFF_LEN - 1
 
+void uart_put_text(const char* data);
 
 extern const scpi_command_t scpi_commands[];
 extern scpi_interface_t scpi_interface;

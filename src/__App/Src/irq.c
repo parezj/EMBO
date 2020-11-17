@@ -1,5 +1,5 @@
 /*
- * CTU/UniLabTool project
+ * CTU/PillScope project
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -55,10 +55,10 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)       // OVERIDE THIS 
 
 void USART1_IRQHandler(void)
 {
-    if (LL_USART_IsActiveFlag_RXNE(ULT_UART))
+    if (LL_USART_IsActiveFlag_RXNE(PS_UART))
     {
-        LL_USART_ClearFlag_RXNE(ULT_UART);
-        char rx = LL_USART_ReceiveData8(ULT_UART);
+        LL_USART_ClearFlag_RXNE(PS_UART);
+        char rx = LL_USART_ReceiveData8(PS_UART);
 
         comm_d_uart.rx_buffer[comm_d_uart.rx_index++] = rx;
 
@@ -72,103 +72,117 @@ void USART1_IRQHandler(void)
 
 void ADC1_2_IRQHandler(void)
 {
+#if defined(PS_ADC_MODE_ADC1)
     if (LL_ADC_IsActiveFlag_AWD1(ADC1))
+#elif defined(PS_ADC_MODE_ADC12)
+    if (LL_ADC_IsActiveFlag_AWD1(ADC1) || LL_ADC_IsActiveFlag_AWD1(ADC2))
+#elif defined(PS_ADC_MODE_ADC1234)
+    if (LL_ADC_IsActiveFlag_AWD1(ADC1) || LL_ADC_IsActiveFlag_AWD1(ADC2) ||
+        LL_ADC_IsActiveFlag_AWD1(ADC3) || LL_ADC_IsActiveFlag_AWD1(ADC4))
+#endif
     {
-        int pos = ADC_BUFF_SIZE - LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_1);
 
+#ifdef PS_ADC_MODE_ADC1
         LL_ADC_ClearFlag_AWD1(ADC1);
+#endif
 
-        if (trig.ready)
-            return;
+#ifdef PS_ADC_MODE_ADC12
+        LL_ADC_ClearFlag_AWD1(ADC2);
+#endif
 
-        /*
-        if (tignore)
-        {
-            tignore = 0;
+#ifdef PS_ADC_MODE_ADC1234
+        LL_ADC_ClearFlag_AWD1(ADC3);
+        LL_ADC_ClearFlag_AWD1(ADC4);
+#endif
 
-            uint32_t h = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH);
-            uint32_t l = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW);
-
-            LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH, l);
-            LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW, h);
-        }
-        else
-        {
-        */
-            int last_idx = pos - 1;
-            if (last_idx < 0)
-                last_idx = ADC_BUFF_SIZE - 1;
-            int prev_last_idx = last_idx - CHANNELS;
-            if (prev_last_idx < 0)
-                prev_last_idx += ADC_BUFF_SIZE;
-
-            if ((trig.edge == RISING && buff_adc1[last_idx] > trig.val && buff_adc1[prev_last_idx] <= trig.val) ||
-                (trig.edge == FALLING && buff_adc1[last_idx] < trig.val && buff_adc1[prev_last_idx] >= trig.val)) // trig cond success
-            {
-                trig.cntr++;
-                trig.pos_trig = last_idx;
-                trig.pos_frst = last_idx - (ADC_BUFF_SIZE / 2);
-                if (trig.pos_frst < 0)
-                    trig.pos_frst += ADC_BUFF_SIZE;
-
-                if (trig.pretrig_cntr > 2000) // pretrigger counter
-                {
-                    LL_ADC_SetAnalogWDMonitChannels(ADC1, LL_ADC_AWD_DISABLE);
-                    // start timer - count posttriger (half buffer)
-
-                    LL_TIM_SetAutoReload(ULT_TIM_TRIG, 70); // posttrigger counter
-                    LL_TIM_EnableCounter(ULT_TIM_TRIG);
-                    LL_TIM_CC_EnableChannel(ULT_TIM_TRIG, LL_TIM_CHANNEL_CH1);
-                    trig.pretrig_cntr = 0;
-                }
-                if (uwTick > trig.uwtick_last)
-                    trig.pretrig_cntr += uwTick - trig.uwtick_last;
-                else
-                    trig.pretrig_cntr += (uwTick - trig.uwtick_last) + 4294967295;
-                trig.uwtick_last = uwTick;
-            }
-            trig.all_cntr++;
-
-            /*
-            //else // false trig, switch edges and wait for another window
-            //{
-                tignore = 1;
-
-                uint32_t h = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH);
-                uint32_t l = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW);
-
-                LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH, l);
-                LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW, h);
-                trig_false_cntr++;
-            //}
-             */
-        //}
+        daq_trig_trigger_scope(&daq);
     }
 }
+
+void ADC3_4_IRQHandler(void)
+{
+    ADC1_2_IRQHandler();
+}
+
 
 void DMA1_Channel1_IRQHandler(void)
 {
     asm("nop");
 }
 
-void TIM4_IRQHandler(void)
+void PS_TIM_TRIG_IRQh(void)
 {
-    if(LL_TIM_IsActiveFlag_CC1(ULT_TIM_TRIG) == 1)
+    if(LL_TIM_IsActiveFlag_CC1(PS_TIM_TRIG) == 1)
     {
-        int buffsz = ADC_BUFF_SIZE;
-        trig.pos_last = buffsz - LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_1) - 1;
+        ASSERT(daq.trig.buff_trig != NULL);
+        ASSERT(daq.trig.dma_trig != 0);
 
-        LL_TIM_ClearFlag_CC1(ULT_TIM_TRIG);
+        int pos = daq.trig.buff_trig->len - LL_DMA_GetDataLength(DMA1, daq.trig.dma_trig);
 
-        trig.pos_diff = trig.pos_last - trig.pos_trig;
-        if (trig.pos_diff < 0)
-            trig.pos_diff += buffsz;
+        int last_idx = pos - 1;
+        if (last_idx < 0)
+            last_idx = daq.trig.buff_trig->len - 1;
 
-        if (trig.pos_diff >= buffsz / 2)
+        daq.trig.pos_last = last_idx;
+        daq.trig.pos_diff = daq.trig.pos_last - daq.trig.pos_trig;
+
+        if (daq.trig.pos_diff < 0)
+            daq.trig.pos_diff += daq.trig.buff_trig->len;
+
+        if (daq.trig.pos_diff >= daq.trig.posttrig_size)
         {
-            daq_enable(&daq, syst.mode, 0);
-            LL_TIM_DisableCounter(ULT_TIM_TRIG);
-            trig.ready = 1;
+            daq_enable(&daq, 0);
+            //LL_TIM_DisableCounter(PS_TIM_TRIG);
+            LL_TIM_DisableIT_CC1(PS_TIM_ADC);
+            daq.trig.ready = 1;
+            daq.trig.is_post = 0;
         }
+
+        LL_TIM_ClearFlag_CC1(PS_TIM_TRIG);
+    }
+}
+
+void PS_TIM_CNTR_IRQh(void)
+{
+    if(LL_TIM_IsActiveFlag_UPDATE(PS_TIM_CNTR) == 1)
+    {
+        LL_TIM_ClearFlag_UPDATE(PS_TIM_CNTR);
+        cntr.ovf++;
+    }
+}
+
+void PS_LA_CH1_IRQh(void)
+{
+    if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI1) != RESET)
+    {
+        LL_EXTI_ClearFlag_0_31(PS_LA_EXTI1);
+        daq_trig_trigger_la(&daq);
+    }
+}
+
+void PS_LA_CH2_IRQh(void)
+{
+    if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI2) != RESET)
+    {
+        LL_EXTI_ClearFlag_0_31(PS_LA_EXTI2);
+        daq_trig_trigger_la(&daq);
+    }
+}
+
+void PS_LA_CH3_IRQh(void)
+{
+    if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI3) != RESET)
+    {
+        LL_EXTI_ClearFlag_0_31(PS_LA_EXTI3);
+        daq_trig_trigger_la(&daq);
+    }
+}
+
+void PS_LA_CH4_IRQh(void)
+{
+    if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI4) != RESET)
+    {
+        LL_EXTI_ClearFlag_0_31(PS_LA_EXTI4);
+        daq_trig_trigger_la(&daq);
     }
 }

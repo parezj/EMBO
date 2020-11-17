@@ -1,6 +1,7 @@
+stm32f1xx_ll_bus.h:447:22:LL_APB1_GRP1_EnableClock	8	static
 stm32f1xx_ll_bus.h:763:22:LL_APB2_GRP1_EnableClock	8	static
 stm32f1xx_ll_adc.h:2837:22:LL_ADC_SetChannelSamplingTime.constprop	16	static,ignoring_inline_asm
 core_cm3.h:1686:26:NVIC_EncodePriority.constprop	0	static
-main.c:123:6:SystemClock_Config	8	static
-main.c:75:5:main	128	static,ignoring_inline_asm
-main.c:563:6:Error_Handler	0	static
+main.c:122:6:SystemClock_Config	8	static
+main.c:73:5:main	128	static,ignoring_inline_asm
+main.c:620:6:Error_Handler	0	static

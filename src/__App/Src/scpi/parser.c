@@ -276,12 +276,10 @@ void SCPI_Init(scpi_t * context,
     context->idn[1] = idn2;
     context->idn[2] = idn3;
     context->idn[3] = idn4;
-    char *s1 = malloc( sizeof(char) * ( 25 ) );
-    char *s2 = malloc( sizeof(char) * ( 25 ) );
-    sprintf(s1, "%s-%s", idn2, "UART");
-    sprintf(s2, "%s-%s", idn2, "USB");
-    context->idn[4] = s1;
-    context->idn[5] = s2;
+    sprintf(context->idn4, "%s-%s", idn2, "UART");
+    sprintf(context->idn5, "%s-%s", idn2, "USB");
+    context->idn[4] = context->idn4;
+    context->idn[5] = context->idn5;
     context->buffer.data = input_buffer;
     context->buffer.length = input_buffer_length;
     context->buffer.position = 0;

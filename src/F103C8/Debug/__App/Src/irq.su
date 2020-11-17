@@ -1,4 +1,10 @@
 irq.c:56:6:USART1_IRQHandler	0	static
-irq.c:73:6:ADC1_2_IRQHandler	12	static
-irq.c:149:6:DMA1_Channel1_IRQHandler	0	static,ignoring_inline_asm
-irq.c:154:6:TIM4_IRQHandler	8	static
+irq.c:73:6:ADC1_2_IRQHandler	0	static
+irq.c:102:6:ADC3_4_IRQHandler	0	static
+irq.c:108:6:DMA1_Channel1_IRQHandler	0	static,ignoring_inline_asm
+irq.c:113:6:TIM3_IRQHandler	8	static
+irq.c:145:6:TIM1_UP_IRQHandler	0	static
+irq.c:154:6:EXTI1_IRQHandler	0	static
+irq.c:163:6:EXTI2_IRQHandler	0	static
+irq.c:172:6:EXTI3_IRQHandler	0	static
+irq.c:181:6:EXTI4_IRQHandler	0	static
