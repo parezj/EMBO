@@ -292,6 +292,9 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
      if (comm_d_usb.rx_index >= RX_BUFF_LAST)
          comm_d_usb.rx_index = 0;
 
+     comm_d_uart.last = 0;
+     comm_d_usb.last = 1;
+
      if (*Buf == '\n')
          comm_d_usb.available = 1;
      Buf++;

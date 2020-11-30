@@ -20,8 +20,8 @@ void app_main(void)
     cntr_init(&cntr);
 
     // init PWM (debug enable)
-    pwm_set(&pwm, 1, 10, 50);
-    pwm_set(&pwm, 2, 10, 50);
+    pwm_set(&pwm, 1, 15, 50);
+    pwm_set(&pwm, 2, 15, 50);
     LL_TIM_EnableCounter(PS_TIM_PWM);
     LL_TIM_CC_EnableChannel(PS_TIM_PWM, LL_TIM_CHANNEL_CH1);
     LL_TIM_CC_EnableChannel(PS_TIM_PWM, LL_TIM_CHANNEL_CH2);
@@ -34,8 +34,7 @@ void app_main(void)
     //LL_TIM_EnableIT_CC1(PS_TIM_ADC);
     //LL_TIM_EnableIT_CC1(PS_TIM_TRIG);
 
-    daq_mode_set(&daq, SCOPE);
-    daq_enable(&daq, 1);
+    daq_mode_set(&daq, VM);
 
     led_blink_set(&led, 3, PS_BLINK_LONG);
 
@@ -44,6 +43,8 @@ void app_main(void)
         IWDG->KR = 0xAAAA;
 
         daq_trig_check(&daq); // 100x less??
+        if (daq.trig.trig_ready)
+            daq_trig_trigger2(&daq);
 
         led_blink_do(&led);
 

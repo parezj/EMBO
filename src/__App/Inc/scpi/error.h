@@ -60,6 +60,8 @@ extern "C" {
      * X macro is for minimal set of errors for library itself
      * XE macro is for full set of SCPI errors available to user application
      */
+#define SCPI_OK "OK"
+
 #define LIST_OF_ERRORS \
     X(SCPI_ERROR_NO_ERROR,                         0, "No error")                                     \
     XE(SCPI_ERROR_COMMAND,                      -100, "Command error")                                \
@@ -172,7 +174,8 @@ extern "C" {
     XE(SCPI_ERROR_PARITY_ERROR_IN_CMD_MSG,      -361, "Parity error in program message")              \
     XE(SCPI_ERROR_FRAMING_ERROR_IN_CMD_MSG,     -362, "Framing error in program message")             \
     X(SCPI_ERROR_INPUT_BUFFER_OVERRUN,          -363, "Input buffer overrun")                         \
-    XE(SCPI_ERROR_TIME_OUT,                     -365, "Time out error")                               \
+    X(SCPI_ERROR_TIME_OUT,                      -365, "Time out error")                               \
+    X(SCPI_ERROR_DAC_NA,                        -370, "DAC not available")                            \
     XE(SCPI_ERROR_QUERY_ERROR,                  -400, "Query error")                                  \
     XE(SCPI_ERROR_QUERY_INTERRUPTED,            -410, "Query INTERRUPTED")                            \
     XE(SCPI_ERROR_QUERY_UNTERMINATED,           -420, "Query UNTERMINATED")                           \

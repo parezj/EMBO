@@ -22,7 +22,7 @@
 // respond
 static void uart_put_str(const char* data, int len);
 static void uart_put_char(const char data);
-static int respond(const char* data, int len);
+
 
 // scpi core
 size_t SCPI_Write(scpi_t * context, const char * data, size_t len);
@@ -41,7 +41,7 @@ const scpi_command_t scpi_commands[] = {
     { .pattern = "*IDN?", .callback = SCPI_CoreIdnQ,},
     { .pattern = "*OPC", .callback = SCPI_CoreOpc,},
     { .pattern = "*OPC?", .callback = SCPI_CoreOpcQ,},
-    { .pattern = "*RST", .callback = SCPI_CoreRst,},
+    { .pattern = "*RST", .callback = PS_Reset,},
     { .pattern = "*SRE", .callback = SCPI_CoreSre,},
     { .pattern = "*SRE?", .callback = SCPI_CoreSreQ,},
     { .pattern = "*STB?", .callback = SCPI_CoreStbQ,},
@@ -56,6 +56,7 @@ const scpi_command_t scpi_commands[] = {
     /* ULT - System */
     {.pattern = "SYSTem:MODE?", .callback = PS_System_ModeQ,},
     {.pattern = "SYSTem:MODE", .callback = PS_System_Mode,},
+    {.pattern = "SYSTem:LIMits?", .callback = PS_System_LimitsQ,},
 
     /* ULT - Voltmeter */
     {.pattern = "VM:READ?", .callback = PS_VM_ReadQ,},
@@ -79,7 +80,7 @@ const scpi_command_t scpi_commands[] = {
     /* ULT - PWM */
     {.pattern = "PWM:SET:CH?", .callback = PS_PWM_SetChQ,},
     {.pattern = "PWM:SET:CH", .callback = PS_PWM_SetCh,},
-    {.pattern = "PWM:START:CH", .callback = PS_PWM_StartCh,},
+    {.pattern = "PWM:START:CH", .callback = PS_PWM_StartCh,}, // TODO reduce
     {.pattern = "PWM:STOP:CH", .callback = PS_PWM_StopCh,},
 
 
@@ -168,14 +169,14 @@ static void uart_put_str(const char* data, int len)
         uart_put_char(data[i]);
 }
 
-static int respond(const char* data, int len)
+int respond(const char* data, int len)
 {
-    if (comm_d_uart.available)
+    if (comm_d_uart.last)
     {
         uart_put_str(data, len);
         return len;
     }
-    else if (comm_d_usb.available)
+    else if (comm_d_usb.last)
     {
         int cntr = 1000000;
         uint8_t ret = USBD_BUSY;
@@ -194,8 +195,10 @@ static int respond(const char* data, int len)
 
 void comm_init(void)
 {
+    comm_d_uart.last = 0;
     comm_d_uart.available = 0;
     comm_d_uart.rx_index = 0;
+    comm_d_usb.last = 0;
     comm_d_usb.available = 0;
     comm_d_usb.rx_index = 0;
 

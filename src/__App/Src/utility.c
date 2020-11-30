@@ -17,7 +17,7 @@ void assert2(const char *file, uint32_t line)
     //__asm("bkpt 3");
 }
 
-void get_avg_from_circ(int last_idx, int ch_num, int avg_num, uint16_t* buff, float* v1, float* v2, float* v3, float* v4, float* v5)
+void get_avg_from_circ(int last_idx, int ch_num, int avg_num, void* buff, int daq_bits, float* v1, float* v2, float* v3, float* v4, float* v5)
 {
     int total = ch_num * avg_num;
     ASSERT(v1 != NULL && total > 0 && buff != NULL);
@@ -27,16 +27,22 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, uint16_t* buff, fl
         if (i >= total)
             i = 0;
 
+        float val;
+        if (daq_bits == 12)
+            val = (float)(*((uint16_t*)(((uint8_t*)buff)+(i*2)))); //(float)(U8_TO_U16(*(((uint8_t*)buff)+(i*2)), *(((uint8_t*)buff)+(i*2)+1)));
+        else
+            val = (float)(((uint8_t*)buff)[i]);
+
         if (i % ch_num == 0)
-            *v1 += buff[i];
+            *v1 += val;
         else if (ch_num > 1 && i % ch_num == 1)
-            *v2 += buff[i];
+            *v2 += val;
         else if (ch_num > 2 && i % ch_num == 2)
-            *v3 += buff[i];
+            *v3 += val;
         else if (ch_num > 3 && i % ch_num == 3)
-            *v4 += buff[i];
+            *v4 += val;
         else if (ch_num > 4)  // && i % ch_num == 4)
-            *v5 += buff[i];
+            *v5 += val;
     }
     *v1 /= avg_num;
     if (v2 != NULL) *v2 /= avg_num;
@@ -45,19 +51,21 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, uint16_t* buff, fl
     if (v5 != NULL) *v5 /= avg_num;
 }
 
-int get_vcc_from_circ(int from, int total, int ch_num, int daq_bits, void* buff)
+volatile int a = 1;
+
+int get_vcc_from_circ(int from, int total, int bufflen, int ch_num, int daq_bits, void* buff)
 {
     ASSERT(ch_num > 0 && total > 0 && buff != NULL);
 
     for (int k = 0, i = from; k < total; k++, i++)
     {
-        if (i >= total)
+        if (i >= bufflen)
             i = 0;
 
         if (i % ch_num == 0)
         {
            if (daq_bits == 12)
-               return (int)(((uint16_t*)buff)[i]);
+               return (int)(*((uint16_t*)(((uint8_t*)buff)+(i*2)))); // (U8_TO_U16(*(((uint8_t*)buff)+(i*2)), *(((uint8_t*)buff)+(i*2)+1)));
            else
                return (int)(((uint8_t*)buff)[i]);
         }
@@ -65,18 +73,15 @@ int get_vcc_from_circ(int from, int total, int ch_num, int daq_bits, void* buff)
     return -1;
 }
 
-int get_1ch_from_circ(int from, int total, int ch, int ch_num, int daq_bits, float vcc, float vref_cal, void* buff, uint8_t* out, int* idx)
+int get_1ch_from_circ(int from, int total, int bufflen, int ch, int ch_num, int daq_bits, float vcc, float vref_cal, void* buff, uint8_t* out, int* idx)
 {
     ASSERT(ch > 0 && ch_num > 0 && total > 0 && buff != NULL);
 
-    int mod2 = ch_num - 1;
-    int mod3 = mod2 - 1;
-    int mod4 = mod3 - 1;
-
     int found = 0;
+
     for (int k = 0, i = from; k < total; k++, i++)
     {
-        if (i >= total)
+        if (i >= bufflen)
             i = 0;
 
         if (i % ch_num == ch - 1)
@@ -85,7 +90,7 @@ int get_1ch_from_circ(int from, int total, int ch, int ch_num, int daq_bits, flo
             float val = 0;
             if (daq_bits == 12)
             {
-                val = (float)(((uint16_t*)buff)[i]);
+                val = (float) (*((uint16_t*)(((uint8_t*)buff)+(i*2)))); // (U8_TO_U16(*(((uint8_t*)buff)+(i*2)), *(((uint8_t*)buff)+(i*2)+1)));
                 uint16_t ret = (uint16_t)(vref_cal * (val / vcc)); // 0.8 mV precision rounded (output in mV*10)
                 out[(*idx)++] = LO_BYTE16(ret);
                 out[(*idx)++] = HI_BYTE16(ret);
@@ -117,22 +122,55 @@ float get_freq(int* prescaler, int* reload, int max_reload, int freq_osc, int fr
 
     do
     {
-        *reload = (float)freq_osc / freq_want;
+        *reload = (int)((float)freq_osc / (float)(*prescaler) / (float)freq_want);
         if (*reload > max_reload)
-        {
             (*prescaler)++;
-            freq_want = freq_osc / *prescaler;
-        }
     }
     while (*reload > max_reload);
 
-    return (float)freq_osc / (float)(*prescaler) / (float)(*reload);
+    float ret = ((float)freq_osc) / ((float)(*prescaler)) / ((float)(*reload));
+    return ret;
 }
 
 void busy_wait(int us)
 {
     for (int i = 0; i < 2000000; ++i)
         asm("nop");
+}
+
+float fastlog2 (float x)
+{
+  union { float f; uint32_t i; } vx = { x };
+  union { uint32_t i; float f; } mx = { (vx.i & 0x007FFFFF) | 0x3f000000 };
+  float y = vx.i;
+  y *= 1.1920928955078125e-7f;
+
+  return y - 124.22551499f
+           - 1.498030302f * mx.f
+           - 1.72587999f / (0.3520887068f + mx.f);
+}
+
+float fastlog(float x)
+{
+  return 0.69314718f * fastlog2 (x);
+}
+
+float fastexp(float p)
+{
+  return fastpow2 (1.442695040f * p);
+}
+
+float fastpow2(float p)
+{
+    float offset = (p < 0) ? 1.0f : 0.0f;
+    float clipp = (p < -126) ? -126.0f : p;
+    int w = clipp;
+    float z = clipp - w + offset;
+    float temp = ( (1L << 23L) * (clipp + 121.2740575f + 27.7280233f / (4.84252568f - z) - 1.49012907f * z) );
+    uint32_t temp2 = (long)temp;
+    union { uint32_t i; float f; } v = { temp2 };
+
+    return v.f;
 }
 
 void itoa_fast(char* s, int num, int radix)

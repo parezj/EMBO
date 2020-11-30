@@ -44,6 +44,9 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)       // OVERIDE THIS 
      if (comm_d_usb.rx_index >= RX_BUFF_LAST)
          comm_d_usb.rx_index = 0;
 
+     comm_d_uart.last = 0;
+     comm_d_usb.last = 1;
+
      if (*Buf == '\n')
          comm_d_usb.available = 1;
      Buf++;
@@ -65,6 +68,9 @@ void USART1_IRQHandler(void)
         if (comm_d_uart.rx_index >= RX_BUFF_LAST)
             comm_d_uart.rx_index = 0;
 
+        comm_d_uart.last = 1;
+        comm_d_usb.last = 0;
+
         if (rx == '\n')
             comm_d_uart.available = 1;
     }
@@ -82,15 +88,15 @@ void ADC1_2_IRQHandler(void)
 #endif
     {
 
-#ifdef PS_ADC_MODE_ADC1
+#if defined(PS_ADC_MODE_ADC1) || defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
         LL_ADC_ClearFlag_AWD1(ADC1);
 #endif
 
-#ifdef PS_ADC_MODE_ADC12
+#if defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
         LL_ADC_ClearFlag_AWD1(ADC2);
 #endif
 
-#ifdef PS_ADC_MODE_ADC1234
+#if defined(PS_ADC_MODE_ADC1234)
         LL_ADC_ClearFlag_AWD1(ADC3);
         LL_ADC_ClearFlag_AWD1(ADC4);
 #endif
@@ -104,41 +110,37 @@ void ADC3_4_IRQHandler(void)
     ADC1_2_IRQHandler();
 }
 
-
-void DMA1_Channel1_IRQHandler(void)
+void PS_TIM_ADC_IRQh(void)
 {
-    asm("nop");
-}
-
-void PS_TIM_TRIG_IRQh(void)
-{
-    if(LL_TIM_IsActiveFlag_CC1(PS_TIM_TRIG) == 1)
+    if(LL_TIM_IsActiveFlag_CC1(PS_TIM_ADC) == 1)
     {
         ASSERT(daq.trig.buff_trig != NULL);
         ASSERT(daq.trig.dma_trig != 0);
 
-        int pos = daq.trig.buff_trig->len - LL_DMA_GetDataLength(DMA1, daq.trig.dma_trig);
+        int last_idx = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_trig);
 
-        int last_idx = pos - 1;
-        if (last_idx < 0)
-            last_idx = daq.trig.buff_trig->len - 1;
+        //if (last_idx % daq.trig.order != 0 && last_idx != 0)
+        //    return;
+
+        daq.trig.posttrig_size--;
 
         daq.trig.pos_last = last_idx;
-        daq.trig.pos_diff = daq.trig.pos_last - daq.trig.pos_trig;
+        //daq.trig.pos_diff = daq.trig.pos_last - daq.trig.pos_trig;
 
-        if (daq.trig.pos_diff < 0)
-            daq.trig.pos_diff += daq.trig.buff_trig->len;
+        //if (daq.trig.pos_diff < 0)
+        //    daq.trig.pos_diff += daq.trig.buff_trig->len;
 
-        if (daq.trig.pos_diff >= daq.trig.posttrig_size)
+        //if (daq.trig.pos_diff >= daq.trig.posttrig_size)
+        if (daq.trig.posttrig_size == 0)
         {
             daq_enable(&daq, 0);
             //LL_TIM_DisableCounter(PS_TIM_TRIG);
-            LL_TIM_DisableIT_CC1(PS_TIM_ADC);
+            //LL_TIM_DisableIT_CC1(PS_TIM_ADC);
             daq.trig.ready = 1;
             daq.trig.is_post = 0;
         }
 
-        LL_TIM_ClearFlag_CC1(PS_TIM_TRIG);
+        LL_TIM_ClearFlag_CC1(PS_TIM_ADC);
     }
 }
 

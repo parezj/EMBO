@@ -8,8 +8,11 @@
 
 #include "scpi/scpi.h"
 
+scpi_result_t PS_Reset(scpi_t * context);
+
 scpi_result_t PS_System_Mode(scpi_t * context);
 scpi_result_t PS_System_ModeQ(scpi_t * context);
+scpi_result_t PS_System_LimitsQ(scpi_t * context);
 
 scpi_result_t PS_VM_ReadQ(scpi_t * context);
 

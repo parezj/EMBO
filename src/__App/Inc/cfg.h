@@ -30,7 +30,7 @@
 // ADC pouze 12 bit
 // Vrefint_CAL neexistuje
 
-// TODO prehled timeru, rozliseni a freq
+// TODO prehled timeru, rozliseni a freq                         TODO POPSAT
 
 #define PS_FREQ_LSI            40000
 #define PS_FREQ_HCLK           72000000
@@ -55,6 +55,8 @@
 //#define PS_ADC_BIT8
 //#define PS_ADC_VREF_CAL      *((uint16_t*)VREFINT_CAL_ADDR)
 #define PS_ADC_SMPL_TIME       LL_ADC_SAMPLINGTIME_71CYCLES_5
+#define PS_ADC_SMPL_TIME_N     71.5
+#define PS_ADC_TCONV           12.5
 #define PS_ADC_VREF_CAL        1200
 #define PS_ADC_VREF_CAL_B12    12000.0
 #define PS_ADC_VREF_CAL_B8     120.0
@@ -62,21 +64,27 @@
 #define PS_TIM_ADC             TIM3
 #define PS_TIM_ADC_MAX         65535
 #define PS_TIM_ADC_FREQ        PS_FREQ_PCLK1
-#define PS_TIM_TRIG            TIM3 //TIM4
-#define PS_TIM_TRIG_IRQh       TIM3_IRQHandler          //TIM4_IRQHandler // TIM3_IRQHandler
-#define PS_TIM_TRIG_FREQ       PS_FREQ_PCLK1
-#define PS_TIM_PWM             TIM2
-#define PS_TIM_PWM_MAX         65535
-#define PS_TIM_PWM_FREQ        PS_FREQ_PCLK1
+#define PS_TIM_ADC_IRQh        TIM3_IRQHandler
+//#define PS_TIM_TRIG            TIM3
+//#define PS_TIM_TRIG_IRQh       TIM3_IRQHandler
+//#define PS_TIM_TRIG_FREQ       PS_FREQ_PCLK1
+#define PS_TIM_PWM            TIM2
+#define PS_TIM_PWM_MAX        65535
+#define PS_TIM_PWM_FREQ       PS_FREQ_PCLK1
+#define PS_TIM_PWM2            TIM4
+#define PS_TIM_PWM2_MAX        65535
+#define PS_TIM_PWM2_FREQ       PS_FREQ_PCLK1
 #define PS_TIM_CNTR            TIM1
 #define PS_TIM_CNTR_FREQ       PS_FREQ_PCLK2
 #define PS_TIM_CNTR_IRQh       TIM1_UP_IRQHandler
 #define PS_TIM_CNTR_MAX        65535
 
+#define PS_MEM_RESERVE         2
+
 #define PS_SYSTICK_FREQ        1000
-#define PS_AUTRIG_SYSTCKS      100
-#define PS_DAQ_MAX_MEM         10000
-#define PS_DAQ_MAX_FS          100000 // TODO
+#define PS_AUTRIG_SYSTCKS      1000 // TODO
+#define PS_DAQ_MAX_MEM         10000   // TODO
+#define PS_LA_MAX_FS           1000000 // TODO
 
 #define PS_DMA_ADC1            LL_DMA_CHANNEL_1
 //#define PS_DMA_ADC2          LL_DMA_CHANNEL_3
@@ -95,6 +103,8 @@
 #endif /* STM32F103xB */
 
 // general
+
+#define PS_ADC_1CH_SMPL_TM     ((1.0 / (float)PS_FREQ_ADCCLK) * (float)(PS_ADC_SMPL_TIME_N + PS_ADC_TCONV))
 
 #define PS_ADC_AWD1            LL_ADC_AWD_CHANNEL_1_REG
 #define PS_ADC_AWD2            LL_ADC_AWD_CHANNEL_2_REG
@@ -134,23 +144,14 @@
 #define PS_ADC_ADDR(x)         (uint32_t)LL_ADC_DMA_GetRegAddr(x, LL_ADC_DMA_REG_REGULAR_DATA)
 #define PS_DMA_LAST_IDX(x,y)   (get_last_circ_idx((x - LL_DMA_GetDataLength(DMA1, y)), x))
 
-#ifdef PS_ADC_MODE_ADC12
-#define PS_ADC_MODE_ADC1
-#endif
-#ifdef PS_ADC_MODE_ADC1234
-#define PS_ADC_MODE_ADC1
-#define PS_ADC_MODE_ADC12
-#endif
 
-#define WELCOME_STR "\n Welcome to:\n\
- ______ _ _ _ _____                       \n\
- | ___ (_| | /  ___|                      \n\
- | |_/ /_| | \\ `--.  ___ ___  _ __   ___  \n\
- |  __/| | | |`--. \\/ __/ _ \\| '_ \\ / _ \\ \n\
- | |   | | | /\\__/ | (_| (_) | |_) |  __/ \n\
- |_|   |_|_|_\\____/ \\___\\___/| .__/ \\___| \n\
-                             | |          \n\
-                             |_|          \n\n"
+#define WELCOME_STR "\n  Welcome to:\n\
+ .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.\n\
+ |  __                  __   __   __   __   ___  |\n\
+ | |__) | |    |       /__` /  ` /  \\ |__) |__   |\n\
+ | |    | |___ |___    .__/ \\__, \\__/ |    |___  |\n\
+ |                                               |\n\
+ `-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'\n\n"
 
 /*-----------------------------------------------------------------------------------------------------------+
  +                                                    USB                                                    +
@@ -185,8 +186,8 @@
 #define BITMAP_SET_BIT(m,b,s)         (*(m + (b / s)) |= (uint8_t)(1 << (b % s)))
 #define LO_BYTE16(x)                  ((uint8_t) ((x) & 0xFF))
 #define HI_BYTE16(x)                  ((uint8_t) ((x) >> 8u ))
-#define __CONVERT_U8_TO_U16(h,l)      ((uint16_t)(h << 8u) | l)
-#define __CONVERT_U8_TO_U32(h,a,b,l)  ((uint32_t)(h << 24u) | (uint32_t)(a << 16u) | (uint32_t)(b << 8u) | l)
+#define U8_TO_U16(h,l)                ((uint16_t)(h << 8u) | l)
+#define U8_TO_U32(h,a,b,l)            ((uint32_t)(h << 24u) | (uint32_t)(a << 16u) | (uint32_t)(b << 8u) | l)
 
 #define Pu8 "hu"
 #define Pd8 "hd"

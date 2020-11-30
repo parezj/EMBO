@@ -17,7 +17,8 @@ enum trig_mode
 {
     AUTO = 0,
     NORMAL = 1,
-    DISABLED = 2
+    SINGLE = 2,
+    DISABLED = 3
 };
 
 enum trig_edge
@@ -33,7 +34,7 @@ enum daq_bits
     B1 = 1
 };
 
-typedef struct __attribute__((packed))
+typedef struct //__attribute__((packed))
 {
     int pretrigger;             // pretrigger percentage 1-99
     enum trig_mode mode;        // main mode
@@ -43,14 +44,15 @@ typedef struct __attribute__((packed))
     int val_percent;            // percentage trig val
 }trig_settings_t;
 
-typedef struct __attribute__((packed))
+typedef struct //__attribute__((packed))
 {
     void* data;             // data storage
     uint16_t chans;         // number of channels in this buffer
     uint16_t len;           // total length of this buffer
+    uint16_t reserve;       // additional length (to compensate DMA stop)
 }daq_buff_t;
 
-typedef struct __attribute__((packed))
+typedef struct //__attribute__((packed))
 {
     trig_settings_t set;    // user settings actual
     trig_settings_t save_s; // user settings saved for SCOPE
@@ -61,6 +63,7 @@ typedef struct __attribute__((packed))
     uint8_t is_post;        // if daq is in posttrigger stage
     uint8_t ignore;         // AWD helper var
     uint8_t ready;          // if data is ready to read by user
+    uint8_t ready_last;     // previous value of ready
     int cntr;               // success trigger counter
     int all_cntr;           // all WDT debug counter
 
@@ -78,9 +81,14 @@ typedef struct __attribute__((packed))
     daq_buff_t* buff_trig;  // pointer to buffer 1-4, which is triggered
     uint32_t dma_trig;      // DMA channel, which is triggered
     uint32_t exti_trig;     // EXTI channel, which is triggered
+    int order;              // order from bottom of triggered ch in circular buffer
+
+    int trig_ready;         // TODO
+    int trig_data_pos;
+    int trig_data_last_idx;
 }trig_data_t;
 
-typedef struct __attribute__((packed))
+typedef struct //__attribute__((packed))
 {
     uint8_t ch1_en;         // channel 1 enabled
     uint8_t ch2_en;         // channel 2 enabled
@@ -93,14 +101,17 @@ typedef struct __attribute__((packed))
     enum daq_bits bits;     // bits per 1 channel
 }daq_settings_t;
 
-typedef struct __attribute__((packed))
+typedef struct //__attribute__((packed))
 {
-    daq_buff_t buff1;       // DAQ main buffer1
-    daq_buff_t buff2;       // DAQ main buffer2
-    daq_buff_t buff3;       // DAQ main buffer3
-    daq_buff_t buff4;       // DAQ main buffer4
+    daq_buff_t buff1;       // DAQ buffer1
+    daq_buff_t buff2;       // DAQ buffer2
+    daq_buff_t buff3;       // DAQ buffer3
+    daq_buff_t buff4;       // DAQ buffer4
 
     daq_buff_t buff_out;    // UART / USB output buffer
+
+    uint8_t buff_raw[PS_DAQ_MAX_MEM+100];  // static allocation of main buffer
+    uint16_t buff_raw_ptr;  // top pointer of main raw buffer
 
     daq_settings_t set;     // user settings actual
     daq_settings_t save_s;  // user settings saved for SCOPE
@@ -170,6 +181,10 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
 void daq_reset(daq_data_t* self);
 void daq_enable(daq_data_t* self, uint8_t enable);
 void daq_mode_set(daq_data_t* self, enum daq_mode mode);
+void daq_settings_save(daq_settings_t* src1, trig_settings_t* src2, daq_settings_t* dst1, trig_settings_t* dst2);
+void daq_settings_init(daq_data_t* self);
+
+void daq_trig_trigger2(daq_data_t* self);
 
 
 #endif /* PERIPH_H */

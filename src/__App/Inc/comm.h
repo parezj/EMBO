@@ -30,16 +30,18 @@ typedef struct
 {
     char rx_buffer[RX_BUFF_LEN];
 
+    uint8_t last;
     uint8_t available;
     uint8_t rx_index;
 }comm_data_t;
 
 
-comm_data_t comm_d_usb;
+comm_data_t comm_d_usb; // TODO RENAME
 comm_data_t comm_d_uart;
 
 
 void comm_init(void);
 uint8_t comm_main(void);
+int respond(const char* data, int len);
 
 #endif

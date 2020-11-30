@@ -26,7 +26,22 @@ __App/Src/periph.o: F:/STM32Cube/PillScope/src/__App/Src/periph.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
- F:/STM32Cube/PillScope/src/__App/Inc/periph.h ../Core/Inc/main.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/periph.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/comm.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/parser.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/types.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/config.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/cc.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/ieee488.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/error.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/constants.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/minimal.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h \
+ ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h \
@@ -95,6 +110,34 @@ F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/periph.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/comm.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/parser.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/types.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/config.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/cc.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/ieee488.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/error.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/constants.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/minimal.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h:
 
 ../Core/Inc/main.h:
 
