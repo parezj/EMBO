@@ -25,6 +25,7 @@ static void uart_put_char(const char data);
 
 
 // scpi core
+scpi_result_t SCPI_CoreIdnQ(scpi_t * context);
 size_t SCPI_Write(scpi_t * context, const char * data, size_t len);
 scpi_result_t SCPI_Flush(scpi_t * context);
 int SCPI_Error(scpi_t * context, int_fast16_t err);
@@ -78,10 +79,8 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "SGEN:SET", .callback = PS_SGEN_Set,},
 
     /* ULT - PWM */
-    {.pattern = "PWM:SET:CH?", .callback = PS_PWM_SetChQ,},
-    {.pattern = "PWM:SET:CH", .callback = PS_PWM_SetCh,},
-    {.pattern = "PWM:START:CH", .callback = PS_PWM_StartCh,}, // TODO reduce
-    {.pattern = "PWM:STOP:CH", .callback = PS_PWM_StopCh,},
+    {.pattern = "PWM:SET?", .callback = PS_PWM_SetQ,},
+    {.pattern = "PWM:SET", .callback = PS_PWM_Set,},
 
 
     SCPI_CMD_LIST_END
@@ -106,7 +105,7 @@ size_t SCPI_Write(scpi_t * context, const char * data, size_t len)
 {
     (void) context;
 
-    return respond(data, len);
+    return comm_respond((comm_data_t*)context->comm, data, len);
 }
 
 scpi_result_t SCPI_Flush(scpi_t * context)
@@ -122,7 +121,7 @@ int SCPI_Error(scpi_t * context, int_fast16_t err)
 
     char buff[100];
     int len = sprintf(buff, "**ERROR: %d, \"%s\"\r\n", (int16_t) err, SCPI_ErrorTranslate(err));
-    respond(buff, len);
+    comm_respond((comm_data_t*)context->comm, buff, len);
     return 0;
 }
 
@@ -137,7 +136,7 @@ scpi_result_t SCPI_Control(scpi_t * context, scpi_ctrl_name_t ctrl, scpi_reg_val
     else
         len = sprintf(buff, "**CTRL %02x: 0x%X (%d)\r\n", ctrl, val, val);
 
-    respond(buff, len);
+    comm_respond((comm_data_t*)context->comm, buff, len);
     return SCPI_RES_OK;
 }
 
@@ -145,7 +144,27 @@ scpi_result_t SCPI_Reset(scpi_t * context)
 {
     (void) context;
 
-    respond("**Reset\r\n", 9);
+    comm_respond((comm_data_t*)context->comm, "**Reset\r\n", 9);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t SCPI_CoreIdnQ(scpi_t * context)
+{
+    int i;
+    for (i = 0; i < 4; i++) {
+        if (context->idn[i])
+        {
+            int j = i;
+            if (i == 1 && ((comm_data_t*)(context->comm))->uart.available)
+                j = 4;
+            else if (i == 1) // comm_data_usb.available
+                j = 5;
+
+            SCPI_ResultMnemonic(context, context->idn[j]);
+        } else {
+            SCPI_ResultMnemonic(context, "0");
+        }
+    }
     return SCPI_RES_OK;
 }
 
@@ -169,14 +188,62 @@ static void uart_put_str(const char* data, int len)
         uart_put_char(data[i]);
 }
 
-int respond(const char* data, int len)
+/************************* Main Comm *************************/
+
+void comm_init(comm_data_t* self)
 {
-    if (comm_d_uart.last)
+    self->uart.last = 0;
+    self->uart.available = 0;
+    self->uart.rx_index = 0;
+    self->usb.last = 0;
+    self->usb.available = 0;
+    self->usb.rx_index = 0;
+    comm_ptr = self;
+
+    SCPI_Init(&scpi_context,
+              scpi_commands,
+              &scpi_interface,
+              scpi_units_def,
+              SCPI_IDN1, SCPI_IDN2, SCPI_IDN3, SCPI_IDN4,
+              scpi_input_buffer, SCPI_INPUT_BUFFER_LENGTH,
+              scpi_error_queue_data, SCPI_ERROR_QUEUE_SIZE,
+              self);
+
+    LL_USART_EnableIT_RXNE(PS_UART);
+    uart_put_text(WELCOME_STR);
+}
+
+uint8_t comm_main(comm_data_t* self)
+{
+    if (self->uart.available)
+    {
+        SCPI_Input(&scpi_context, self->uart.rx_buffer, self->uart.rx_index);
+
+        memset(self->uart.rx_buffer, 0, RX_BUFF_LEN * sizeof(char));
+        self->uart.rx_index = 0;
+        self->uart.available = 0;
+        return 1;
+    }
+    else if (self->usb.available)
+    {
+        SCPI_Input(&scpi_context, self->usb.rx_buffer, self->usb.rx_index);
+
+        memset(self->usb.rx_buffer, 0, RX_BUFF_LEN * sizeof(char));
+        self->usb.rx_index = 0;
+        self->usb.available = 0;
+        return 1;
+    }
+    return 0;
+}
+
+int comm_respond(comm_data_t* self, const char* data, int len)
+{
+    if (self->uart.last)
     {
         uart_put_str(data, len);
         return len;
     }
-    else if (comm_d_usb.last)
+    else if (self->usb.last)
     {
         int cntr = 1000000;
         uint8_t ret = USBD_BUSY;
@@ -190,47 +257,3 @@ int respond(const char* data, int len)
     }
     return 0;
 }
-
-/************************* Main Comm *************************/
-
-void comm_init(void)
-{
-    comm_d_uart.last = 0;
-    comm_d_uart.available = 0;
-    comm_d_uart.rx_index = 0;
-    comm_d_usb.last = 0;
-    comm_d_usb.available = 0;
-    comm_d_usb.rx_index = 0;
-
-    SCPI_Init(&scpi_context,
-             scpi_commands,
-             &scpi_interface,
-             scpi_units_def,
-             SCPI_IDN1, SCPI_IDN2, SCPI_IDN3, SCPI_IDN4,
-             scpi_input_buffer, SCPI_INPUT_BUFFER_LENGTH,
-             scpi_error_queue_data, SCPI_ERROR_QUEUE_SIZE);
-}
-
-uint8_t comm_main(void)
-{
-    if (comm_d_uart.available)
-    {
-        SCPI_Input(&scpi_context, comm_d_uart.rx_buffer, comm_d_uart.rx_index);
-
-        memset(comm_d_uart.rx_buffer, 0, RX_BUFF_LEN * sizeof(char));
-        comm_d_uart.rx_index = 0;
-        comm_d_uart.available = 0;
-        return 1;
-    }
-    else if (comm_d_usb.available)
-    {
-        SCPI_Input(&scpi_context, comm_d_usb.rx_buffer, comm_d_usb.rx_index);
-
-        memset(comm_d_usb.rx_buffer, 0, RX_BUFF_LEN * sizeof(char));
-        comm_d_usb.rx_index = 0;
-        comm_d_usb.available = 0;
-        return 1;
-    }
-    return 0;
-}
-

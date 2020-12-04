@@ -40,7 +40,13 @@ __App/Src/proto.o: F:/STM32Cube/PillScope/src/__App/Src/proto.c \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h \
  F:/STM32Cube/PillScope/src/__App/Inc/app_data.h \
- F:/STM32Cube/PillScope/src/__App/Inc/periph.h ../Core/Inc/main.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/pwm.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/led.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/daq.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/daq_trig.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cntr.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/comm.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h \
@@ -136,7 +142,19 @@ F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/app_data.h:
 
-F:/STM32Cube/PillScope/src/__App/Inc/periph.h:
+F:/STM32Cube/PillScope/src/__App/Inc/pwm.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/led.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/daq.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/daq_trig.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cntr.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/comm.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
 ../Core/Inc/main.h:
 

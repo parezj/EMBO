@@ -12,7 +12,7 @@
  +                                                  general                                                  +
  +-----------------------------------------------------------------------------------------------------------*/
 
-#define PS_DEV_VER             "0.0.3"
+#define PS_DEV_VER             "0.1.0"
 #define PS_DEV_AUTHOR          "CTU/Jakub Parez"
 
 /*-----------------------------------------------------------------------------------------------------------+
@@ -25,12 +25,23 @@
 
 #include "stm32f1xx.h"
 
-// USART3 nefunguje preruseni
-// ADC2 nema DMA
-// ADC pouze 12 bit
-// Vrefint_CAL neexistuje
 
-// TODO prehled timeru, rozliseni a freq                         TODO POPSAT
+/*
+ * - USART3 nefunguje preruseni
+ * - ADC2 nema DMA
+ * - ADC pouze 12 bit
+ * - Vrefint_CAL neexistuje
+ * - min 41.5 ADC cyklu, jinak vrefint je spatna
+ * =========layout ============
+ *  ADC CH1 ...... PA1
+ *  ADC CH2 ...... PA2
+ *  ADC CH3 ...... PA3
+ *  ADC CH4 ...... PA4
+ *  PWM CH1 ...... PA15
+ *  PWM CH2 ...... PB6
+ *  CNTR ......... PA8
+ *  ===========================
+*/
 
 #define PS_FREQ_LSI            40000
 #define PS_FREQ_HCLK           72000000
@@ -42,9 +53,9 @@
 #define PS_UART                USART1
 #define PS_UART_RX_IRQHandler  USART1_IRQHandler
 #define PS_LED_PORT            GPIOC
-#define PS_LED_PIN             13
+#define PS_LED_PIN             13   // main led pin
 
-#define PS_CNTR_BUFF_SZ        100
+#define PS_CNTR_BUFF_SZ        100  // countetr buffer size
 //#define PS_DAC               DAC1
 
 #define PS_ADC_MODE_ADC1
@@ -54,9 +65,10 @@
 #define PS_ADC_BIT12
 //#define PS_ADC_BIT8
 //#define PS_ADC_VREF_CAL      *((uint16_t*)VREFINT_CAL_ADDR)
-#define PS_ADC_SMPL_TIME       LL_ADC_SAMPLINGTIME_71CYCLES_5
-#define PS_ADC_SMPL_TIME_N     71.5
+#define PS_ADC_SMPL_TIME       LL_ADC_SAMPLINGTIME_41CYCLES_5 // LL_ADC_SAMPLINGTIME_71CYCLES_5
+#define PS_ADC_SMPL_TIME_N     41.5 //71.5
 #define PS_ADC_TCONV           12.5
+#define PS_ADC_TRIG_TIM        LL_ADC_REG_TRIG_EXT_TIM3_TRGO
 #define PS_ADC_VREF_CAL        1200
 #define PS_ADC_VREF_CAL_B12    12000.0
 #define PS_ADC_VREF_CAL_B8     120.0
@@ -65,33 +77,36 @@
 #define PS_TIM_ADC_MAX         65535
 #define PS_TIM_ADC_FREQ        PS_FREQ_PCLK1
 #define PS_TIM_ADC_IRQh        TIM3_IRQHandler
-//#define PS_TIM_TRIG            TIM3
-//#define PS_TIM_TRIG_IRQh       TIM3_IRQHandler
-//#define PS_TIM_TRIG_FREQ       PS_FREQ_PCLK1
-#define PS_TIM_PWM            TIM2
-#define PS_TIM_PWM_MAX        65535
-#define PS_TIM_PWM_FREQ       PS_FREQ_PCLK1
+#define PS_TIM_PWM1            TIM2
+#define PS_TIM_PWM1_MAX        65535
+#define PS_TIM_PWM1_FREQ       PS_FREQ_PCLK1
+#define PS_TIM_PWM1_CH         LL_TIM_CHANNEL_CH1
 #define PS_TIM_PWM2            TIM4
 #define PS_TIM_PWM2_MAX        65535
 #define PS_TIM_PWM2_FREQ       PS_FREQ_PCLK1
+#define PS_TIM_PWM2_CH         LL_TIM_CHANNEL_CH1
 #define PS_TIM_CNTR            TIM1
 #define PS_TIM_CNTR_FREQ       PS_FREQ_PCLK2
 #define PS_TIM_CNTR_IRQh       TIM1_UP_IRQHandler
 #define PS_TIM_CNTR_MAX        65535
-
-#define PS_MEM_RESERVE         2
+#define PS_TIM_CNTR_CH         LL_TIM_CHANNEL_CH1
+#define PS_TIM_CNTR_CCR        CNT // ?? CCR1
 
 #define PS_SYSTICK_FREQ        1000
-#define PS_AUTRIG_SYSTCKS      1000 // TODO
-#define PS_DAQ_MAX_MEM         10000   // TODO
-#define PS_LA_MAX_FS           1000000 // TODO
+#define PS_DAQ_MAX_MEM         12000
+#define PS_MEM_RESERVE         2
+#define PS_LA_MAX_FS           1000000 // TODO ??
 
-#define PS_DMA_ADC1            LL_DMA_CHANNEL_1
-//#define PS_DMA_ADC2          LL_DMA_CHANNEL_3
-//#define PS_DMA_ADC3          LL_DMA_CHANNEL_4
-//#define PS_DMA_ADC4          LL_DMA_CHANNEL_5
-#define PS_DMA_LA              LL_DMA_CHANNEL_6
-#define PS_DMA_CNTR            LL_DMA_CHANNEL_2
+#define PS_DMA_ADC             DMA1
+#define PS_DMA_LA              DMA1
+#define PS_DMA_CNTR            DMA1
+
+#define PS_DMA_CH_ADC1         LL_DMA_CHANNEL_1
+//#define PS_DMA_CH_ADC2         LL_DMA_CHANNEL_3
+//#define PS_DMA_CH_ADC3         LL_DMA_CHANNEL_4
+//#define PS_DMA_CH_ADC4         LL_DMA_CHANNEL_5
+#define PS_DMA_CH_LA           LL_DMA_CHANNEL_6
+#define PS_DMA_CH_CNTR         LL_DMA_CHANNEL_2
 
 #define VREFINT_CAL_ADDR       0x1FFFF7BA
 
@@ -102,7 +117,18 @@
 
 #endif /* STM32F103xB */
 
-// general
+/*-----------------------------------------------------------------------------------------------------------+
+ +                                                  common                                                   +
+ +-----------------------------------------------------------------------------------------------------------*/
+
+#define PS_RESP_NRDY           "Not ready!"
+#define PS_RESP_RDY            "\"Ready\"\r\n"
+
+#define PS_IWDG_RST_VAL        0xAAAA
+#define PS_IWDG_RST            (IWDG->KR = PS_IWDG_RST_VAL)     // watchdog reset
+
+#define PS_AUTRIG_MIN_MS       500   // auto trigger milisecond delay
+#define PS_MIN_OP_VCC          2500  // minimum operating vcc
 
 #define PS_ADC_1CH_SMPL_TM     ((1.0 / (float)PS_FREQ_ADCCLK) * (float)(PS_ADC_SMPL_TIME_N + PS_ADC_TCONV))
 
@@ -139,7 +165,6 @@
 #define PS_LA_CH3_IRQh         EXTI3_IRQHandler
 #define PS_LA_CH4_IRQh         EXTI4_IRQHandler
 
-// utils
 
 #define PS_ADC_ADDR(x)         (uint32_t)LL_ADC_DMA_GetRegAddr(x, LL_ADC_DMA_REG_REGULAR_DATA)
 #define PS_DMA_LAST_IDX(x,y)   (get_last_circ_idx((x - LL_DMA_GetDataLength(DMA1, y)), x))

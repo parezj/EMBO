@@ -47,7 +47,29 @@ USB_DEVICE/App/usb_device.o: ../USB_DEVICE/App/usb_device.c \
  ../USB_DEVICE/App/usbd_desc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc/usbd_cdc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
- ../USB_DEVICE/App/usbd_cdc_if.h
+ ../USB_DEVICE/App/usbd_cdc_if.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/comm.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/parser.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/types.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/config.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/cc.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/ieee488.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/error.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/constants.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/minimal.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/app_data.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/pwm.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/led.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/daq.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/daq_trig.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cntr.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/comm.h
 
 ../USB_DEVICE/App/usb_device.h:
 
@@ -148,3 +170,47 @@ USB_DEVICE/App/usb_device.o: ../USB_DEVICE/App/usb_device.c \
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
 
 ../USB_DEVICE/App/usbd_cdc_if.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/comm.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/parser.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/types.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/config.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/cc.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/ieee488.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/error.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/constants.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/minimal.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/app_data.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/pwm.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/led.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/daq.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/daq_trig.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cntr.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/comm.h:

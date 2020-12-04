@@ -1,6 +1,7 @@
 import serial
 import time
 import datetime
+import math
 import numpy as np
 #import math
 import matplotlib.pyplot as plt
@@ -10,7 +11,9 @@ import matplotlib.pyplot as plt
 class PillScope(object):
     TIMEOUT_CMD = 0.1
     TIMEOUT_READ = 2.0
-    VM_MAX_LEN = 500
+    VM_MAX_LEN = 200
+    READY_STR = "Ready"
+    NOT_READY_STR = "Not ready"
 
     def __init__(self):
         if __name__ == '__main__':
@@ -49,18 +52,22 @@ class PillScope(object):
             rx = self.send_cmd("SYST:MODE " + self.mode, self.TIMEOUT_CMD)
             print(rx + "\n")
             if ("OK" in rx):
+                time.sleep(0.25)
                 break   
         return True
 
     def limits(self):
+        self.receive(self.TIMEOUT_CMD)
         rx = self.send_cmd("SYST:LIM?", self.TIMEOUT_CMD)
+        print(rx + "\n")
         toks = rx.split(",")
         self.lim_adc_1ch_smpl_tm = float(toks[0])
         self.lim_mem = int(toks[1])
         self.lim_la_fs = int(toks[2])
-        self.lim_adcs = bool(toks[3])
-        self.lim_bit8 = bool(toks[4])
-        self.lim_dac = bool(toks[5])
+        self.lim_pwm_fs = int(toks[3])
+        self.lim_adcs = bool(toks[4])
+        self.lim_bit8 = bool(toks[5])
+        self.lim_dac = bool(toks[6])
 
     def loop(self):
         try:
@@ -77,9 +84,11 @@ class PillScope(object):
                         input("Press enter for continue...")
 
                         if self.mode == "SCOPE":
-                            self.send_cmd("SYST:MODE SCOP", self.TIMEOUT_CMD)
+                            rx = self.send_cmd("SYST:MODE SCOPE", self.TIMEOUT_CMD)
                         else:
-                            self.send_cmd("SYST:MODE LA", self.TIMEOUT_CMD)
+                            rx = self.send_cmd("SYST:MODE LA", self.TIMEOUT_CMD)
+                        if self.READY_STR in rx:
+                            self.ready = True
 
         except KeyboardInterrupt:
             pass
@@ -94,6 +103,7 @@ class PillScope(object):
                     self.ch = self.input2("Enter enabled channels (XXXX => T/F):", "TTFF")
                     if len(self.ch) == 4:
                         break
+                self.parse_ch()
                 self.vcc = self.input2("Show VCC:", "True")
                 self.vcc = bool(self.vcc)
             else:
@@ -108,19 +118,7 @@ class PillScope(object):
                     self.ch = self.input2("Enter enabled channels (XXXX => T/F):", "TFFF")
                     if len(self.ch) == 4:
                         break     
-                self.ch_num = self.ch.count('T')
-                self.ch1 = False
-                self.ch2 = False
-                self.ch3 = False
-                self.ch4 = False
-                if self.ch[0] == 'T':
-                    self.ch1 = True
-                if self.ch[1] == 'T':
-                    self.ch2 = True
-                if self.ch[2] == 'T':
-                    self.ch3 = True
-                if self.ch[3] == 'T':
-                    self.ch4 = True
+                self.parse_ch()
                 max_mem = self.lim_mem
                 if self.bits == 12:
                     max_mem = max_mem / 2
@@ -144,7 +142,7 @@ class PillScope(object):
                         if self.ch1:
                             cnt_result = 2
                         max_fs = 1.0 / (self.lim_adc_1ch_smpl_tm * float(cnt_result))
-                self.fs = self.input3("\nEnter sample frequency", "1000", 0, int(max_fs))            
+                self.fs = self.input3("\nEnter sample frequency", "1000", 0, int(math.floor(max_fs / 100.0)) * 100)            
                 self.fs = int(self.fs)
                 self.trig_ch = self.input3("Enter trigger channel", "1", 1, 4)
                 self.trig_ch = int(self.trig_ch)
@@ -153,7 +151,7 @@ class PillScope(object):
                     self.trig_val = self.input3("Enter trigger value in percentage", "50", 0, 100)
                 self.trig_edge = self.input4("Enter trigger edge (R - Rising / F - Falling):", "R", ["R", "F"])
                 self.trig_mode = self.input4("Enter trigger mode (A - Auto / N - Normal / S - Single / D - Disabled):", 
-                    "N", ["A", "N", "S", "D"])
+                    "A", ["A", "N", "S", "D"])
                 self.trig_pre = self.input3("Enter pretrigger value in percentage", "50", 0, 100)
                 self.trig_pre = int(self.trig_pre)
                  
@@ -173,22 +171,22 @@ class PillScope(object):
             if self.mode == "VM":
                 break
 
-            print(rx)
+            print(rx + "\n")
             self.ready = False
-            if "Ready" in rx:
+            if self.READY_STR in rx:
                 self.ready = True
-            if "OK" in rx:
-                break
-            """    
+            if "OK" not in rx:
+                continue
+
             if self.mode == "SCOPE":
                 rx = self.send_cmd("SCOP:SET?", self.TIMEOUT_CMD)
             elif self.mode == "LA":
                 rx = self.send_cmd("LA:SET?", self.TIMEOUT_CMD)
-            if "Ready" in rx:
+            if self.READY_STR in rx:
                 self.ready = True
-            print("\nsettings: " + rx)
+            print("settings: " + rx + "\n")
             break
-            """
+
 
 
     def read(self):
@@ -220,15 +218,17 @@ class PillScope(object):
         elif self.mode == "SCOPE":
             #if self.trig_mode != "D":
             if not self.ready:
-                rx2 = self.receive(1.0)
-                if ("Ready" not in rx2):
+                rx2 = self.receive(0.1)
+                if self.READY_STR not in rx2:
                     print(".", sep='', end='', flush=True)
+                    time.sleep(0.05)
                     return False
-                print(rx2)
+                #print(rx2)
             rx = self.read_bin_data("SCOP:READ?", self.TIMEOUT_READ)
-            self.ready = False
         elif self.mode == "LA":
             ex = self.read_bin_data("LA:READ?", self.TIMEOUT_READ)
+
+        self.ready = False
 
         if rx == "DATA":
             pass
@@ -236,7 +236,7 @@ class PillScope(object):
             print("No answer from device")
             print("---------------------")
             return False
-        elif "Not ready" in rx:
+        elif self.NOT_READY_STR in rx:
             print(".", sep='', end='', flush=True)
             return False
         else:
@@ -298,12 +298,12 @@ class PillScope(object):
     def plot(self):
         ax = plt.gca()
         plt.clf()
-
-        rngx = (self.mem / self.fs * 100)
-        rngx_l = -1 * rngx * (self.trig_pre / 100.0)
-        rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)
-
+        plt.grid(True, linestyle=':')
+        ax.grid(which='major', alpha=0.9)
         if self.mode != "VM":
+            rngx = (self.mem / self.fs * 1000)
+            rngx_l = -1 * rngx * (self.trig_pre / 100.0)
+            rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)
             major_ticks_x = np.linspace(rngx_l, rngx_r, 50)
             minor_ticks_x = np.linspace(rngx_l, rngx_r, 10)
             ax.set_xticks(major_ticks_x)
@@ -319,15 +319,13 @@ class PillScope(object):
             ax.set_xticks(major_ticks_x)
             ax.set_xticks(minor_ticks_x, minor=True)
             plt.xlim(0, self.VM_MAX_LEN)
-        plt.ylim(0, 3.3)
+        plt.ylim(0, 3.5)
         major_ticks_y = np.linspace(0, 3.3, 10)
         minor_ticks_y = np.linspace(0, 3.3, 20)
         ax.set_yticks(major_ticks_y)
+        #ax.set_xticklabels(major_ticks_y)
         ax.set_yticks(minor_ticks_y, minor=True)
-        ax.grid(which='major', alpha=0.9)
-        plt.grid(True, linestyle=':')
         plt.ylabel("Voltage [V]")
-
         LINE_WIDTH = 2.0
         if self.mode == "SCOPE":
             t = np.linspace(rngx_l, rngx_r, self.mem)
@@ -447,6 +445,21 @@ class PillScope(object):
                 print(str(state))
                 print(str(len(bin_buff)))
                 return "TIMEOUT"
+
+    def parse_ch(self):         
+        self.ch_num = self.ch.count('T')
+        self.ch1 = False
+        self.ch2 = False
+        self.ch3 = False
+        self.ch4 = False
+        if self.ch[0] == 'T':
+            self.ch1 = True
+        if self.ch[1] == 'T':
+            self.ch2 = True
+        if self.ch[2] == 'T':
+            self.ch3 = True
+        if self.ch[3] == 'T':
+            self.ch4 = True
 
 
 PillScope()

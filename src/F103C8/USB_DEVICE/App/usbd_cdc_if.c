@@ -23,7 +23,7 @@
 #include "usbd_cdc_if.h"
 
 /* USER CODE BEGIN INCLUDE */
-#include "comm.h"
+
 /* USER CODE END INCLUDE */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -287,16 +287,16 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
   while (len--)
   {
-     comm_d_usb.rx_buffer[comm_d_usb.rx_index++] = *Buf;
+     comm.usb.rx_buffer[comm.usb.rx_index++] = *Buf;
 
-     if (comm_d_usb.rx_index >= RX_BUFF_LAST)
-         comm_d_usb.rx_index = 0;
+     if (comm.usb.rx_index >= RX_BUFF_LAST)
+         comm.usb.rx_index = 0;
 
-     comm_d_uart.last = 0;
-     comm_d_usb.last = 1;
+     comm.uart.last = 0;
+     comm.usb.last = 1;
 
      if (*Buf == '\n')
-         comm_d_usb.available = 1;
+         comm.usb.available = 1;
      Buf++;
   }
 

@@ -48,7 +48,6 @@ extern "C" {
     scpi_result_t SCPI_CoreEse(scpi_t * context);
     scpi_result_t SCPI_CoreEseQ(scpi_t * context);
     scpi_result_t SCPI_CoreEsrQ(scpi_t * context);
-    scpi_result_t SCPI_CoreIdnQ(scpi_t * context);
     scpi_result_t SCPI_CoreOpc(scpi_t * context);
     scpi_result_t SCPI_CoreOpcQ(scpi_t * context);
     scpi_result_t SCPI_CoreRst(scpi_t * context);

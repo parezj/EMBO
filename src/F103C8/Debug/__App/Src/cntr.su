@@ -1,0 +1,3 @@
+cntr.c:11:6:cntr_init	16	static
+cntr.c:20:6:cntr_enable	8	static
+cntr.c:37:7:cntr_read	32	static

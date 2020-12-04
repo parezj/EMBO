@@ -267,7 +267,7 @@ void SCPI_Init(scpi_t * context,
         const scpi_unit_def_t * units,
         const char * idn1, const char * idn2, const char * idn3, const char * idn4,
         char * input_buffer, size_t input_buffer_length,
-        scpi_error_t * error_queue_data, int16_t error_queue_size) {
+        scpi_error_t * error_queue_data, int16_t error_queue_size, void* comm) {
     memset(context, 0, sizeof (*context));
     context->cmdlist = commands;
     context->interface = interface;
@@ -283,6 +283,7 @@ void SCPI_Init(scpi_t * context,
     context->buffer.data = input_buffer;
     context->buffer.length = input_buffer_length;
     context->buffer.position = 0;
+    context->comm = comm;
     SCPI_ErrorInit(context, error_queue_data, error_queue_size);
 }
 

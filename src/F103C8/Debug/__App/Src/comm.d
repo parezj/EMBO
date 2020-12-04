@@ -60,7 +60,14 @@ __App/Src/comm.o: F:/STM32Cube/PillScope/src/__App/Src/comm.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
- ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h
+ ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/app_data.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/pwm.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/led.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/daq.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/daq_trig.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cntr.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/comm.h
 
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
@@ -187,3 +194,17 @@ F:/STM32Cube/PillScope/src/__App/Inc/proto.h:
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h:
 
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/app_data.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/pwm.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/led.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/daq.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/daq_trig.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cntr.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/comm.h:

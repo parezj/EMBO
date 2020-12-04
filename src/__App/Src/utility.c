@@ -29,7 +29,7 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, void* buff, int da
 
         float val;
         if (daq_bits == 12)
-            val = (float)(*((uint16_t*)(((uint8_t*)buff)+(i*2)))); //(float)(U8_TO_U16(*(((uint8_t*)buff)+(i*2)), *(((uint8_t*)buff)+(i*2)+1)));
+            val = (float)(*((uint16_t*)(((uint8_t*)buff)+(i*2))));
         else
             val = (float)(((uint8_t*)buff)[i]);
 
@@ -51,12 +51,11 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, void* buff, int da
     if (v5 != NULL) *v5 /= avg_num;
 }
 
-volatile int a = 1;
-
 int get_vcc_from_circ(int from, int total, int bufflen, int ch_num, int daq_bits, void* buff)
 {
     ASSERT(ch_num > 0 && total > 0 && buff != NULL);
 
+    /*
     for (int k = 0, i = from; k < total; k++, i++)
     {
         if (i >= bufflen)
@@ -65,12 +64,33 @@ int get_vcc_from_circ(int from, int total, int bufflen, int ch_num, int daq_bits
         if (i % ch_num == 0)
         {
            if (daq_bits == 12)
-               return (int)(*((uint16_t*)(((uint8_t*)buff)+(i*2)))); // (U8_TO_U16(*(((uint8_t*)buff)+(i*2)), *(((uint8_t*)buff)+(i*2)+1)));
+               return (int)(*((uint16_t*)(((uint8_t*)buff)+(i*2))));
            else
                return (int)(((uint8_t*)buff)[i]);
         }
     }
     return -1;
+    */
+    float ret = 0;
+    int avg_num = 0;
+    for (int i = from, j = 0; j < total; j++, i++)
+    {
+        if (i >= bufflen)
+            i = 0;
+
+        float val;
+        if (daq_bits == 12)
+            val = (float)(*((uint16_t*)(((uint8_t*)buff)+(i*2))));
+        else
+            val = (float)(((uint8_t*)buff)[i]);
+
+        if (i % ch_num == 0)
+        {
+            ret += val;
+            avg_num++;
+        }
+    }
+    return ret /= avg_num;
 }
 
 int get_1ch_from_circ(int from, int total, int bufflen, int ch, int ch_num, int daq_bits, float vcc, float vref_cal, void* buff, uint8_t* out, int* idx)
@@ -90,7 +110,7 @@ int get_1ch_from_circ(int from, int total, int bufflen, int ch, int ch_num, int 
             float val = 0;
             if (daq_bits == 12)
             {
-                val = (float) (*((uint16_t*)(((uint8_t*)buff)+(i*2)))); // (U8_TO_U16(*(((uint8_t*)buff)+(i*2)), *(((uint8_t*)buff)+(i*2)+1)));
+                val = (float) (*((uint16_t*)(((uint8_t*)buff)+(i*2))));
                 uint16_t ret = (uint16_t)(vref_cal * (val / vcc)); // 0.8 mV precision rounded (output in mV*10)
                 out[(*idx)++] = LO_BYTE16(ret);
                 out[(*idx)++] = HI_BYTE16(ret);

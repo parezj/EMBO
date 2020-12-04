@@ -18,11 +18,6 @@
 
 scpi_result_t PS_Reset(scpi_t * context)
 {
-    //daq_enable(&daq, 0);
-    //daq_trig_disable(&daq);
-    //for(int i = 0; i < 50000; i++) __asm("nop");
-    //LL_DMA_DisableChannel(DMA1, PS_ADC_CH1);
-
     daq_settings_init(&daq);
     daq_mode_set(&daq, VM);
     daq_enable(&daq, 1);
@@ -91,9 +86,11 @@ scpi_result_t PS_System_LimitsQ(scpi_t * context)
 #endif
 
     char smplt_s[15];
-    sprint_fast(smplt_s, "%s", PS_ADC_1CH_SMPL_TM, 7);
+    sprint_fast(smplt_s, "%s", PS_ADC_1CH_SMPL_TM, 8);
 
-    int len = sprintf(buff, "%s,%d,%d,%d,%d,%d", smplt_s, PS_DAQ_MAX_MEM, PS_LA_MAX_FS, adcs, bit8, dac); // TODO  PS_DAQ_MAX_MEM lim
+    int pwm_max_f = PS_TIM_PWM1_FREQ / 2;
+
+    int len = sprintf(buff, "%s,%d,%d,%d,%d,%d,%d", smplt_s, PS_DAQ_MAX_MEM, PS_LA_MAX_FS, pwm_max_f, adcs, bit8, dac);
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -140,22 +137,22 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         }
 
 #if defined(PS_ADC_MODE_ADC1)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_ADC1);
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
 
         get_avg_from_circ(last1, 5, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
 
 #elif defined(PS_ADC_MODE_ADC12
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_ADC2);
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
+        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2);
 
         get_avg_from_circ(last1, 3, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, &ch2_raw, NULL, NULL);
         get_avg_from_circ(last2, 2, avg_num, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
 
 #elif defined(PS_ADC_MODE_ADC1234)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_ADC2);
-        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_ADC3);
-        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_ADC4);
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
+        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2);
+        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3);
+        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4);
 
         get_avg_from_circ(last1, 2, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, NULL, NULL, NULL);
         get_avg_from_circ(last2, 1, avg_num, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
@@ -169,11 +166,18 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         char ch3_s[10];
         char ch4_s[10];
 
-        float vcc = 4095.0 * PS_ADC_VREF_CAL / vcc_raw / 1000;
-        float ch1 = vcc * ch1_raw / 4095;
-        float ch2 = vcc * ch2_raw / 4095;
-        float ch3 = vcc * ch3_raw / 4095;
-        float ch4 = vcc * ch4_raw / 4095;
+        float vcc = daq.adc_max_val * PS_ADC_VREF_CAL / vcc_raw / 1000;
+        float ch1 = vcc * ch1_raw / daq.adc_max_val;
+        float ch2 = vcc * ch2_raw / daq.adc_max_val;
+        float ch3 = vcc * ch3_raw / daq.adc_max_val;
+        float ch4 = vcc * ch4_raw / daq.adc_max_val;
+
+        daq.vcc_mv = vcc * 1000;
+        if (daq.vcc_mv < PS_MIN_OP_VCC)
+        {
+            SCPI_ErrorPush(context, SCPI_ERROR_SAMPLING_FAILED);
+            return SCPI_RES_ERR;
+        }
 
         sprint_fast(vcc_s, "%s", vcc, 4);
         sprint_fast(ch1_s, "%s", ch1, 4);
@@ -198,24 +202,20 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
 
 /************************* [SCOPE Actions] *************************/
 
-volatile float vcc2 = 0;
-
 scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 {
     if (daq.mode == SCOPE)
     {
         if (daq.trig.ready == 0)
         {
-            SCPI_ResultText(context, "Not ready!");
+            SCPI_ResultText(context, PS_RESP_NRDY);
             return SCPI_RES_OK;
         }
 
         if (daq.trig.set.mode == DISABLED)
         {
             daq_enable(&daq, 0);
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_ADC1);
-            //if (daq.trig.pos_frst < 0)
-            //    daq.trig.pos_frst += daq.buff1.len;
+            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
         }
 
         float cal = PS_ADC_VREF_CAL_B12;
@@ -223,16 +223,15 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
             cal = PS_ADC_VREF_CAL_B8;
 
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
-        vcc2 = get_vcc_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, daq.buff1.chans,
-                                      daq.set.bits, daq.buff1.data);
+        daq.vcc = get_vcc_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, daq.buff1.chans,
+                                    daq.set.bits, daq.buff1.data);
 
-        //vcc2 = 1492;
-        if (vcc2 == 0)
+        daq.vcc_mv = daq.adc_max_val * PS_ADC_VREF_CAL / daq.vcc;
+        if (daq.vcc_mv < PS_MIN_OP_VCC)
         {
-            SCPI_ResultText(context, "ERROR: buffer empty"); // TODO DEBUG
-            return SCPI_RES_OK;
+            SCPI_ErrorPush(context, SCPI_ERROR_SAMPLING_FAILED);
+            return SCPI_RES_ERR;
         }
-        float vcc = vcc2;
 
 #if defined(PS_ADC_MODE_ADC1)
         int added = 0;
@@ -241,16 +240,16 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch2_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch3_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch4_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
 
 #elif defined(PS_ADC_MODE_ADC12)
 
@@ -263,25 +262,25 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch2_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
 
         ch_it = 1;
         if (daq.set.ch3_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, ch_it++, daq.buff2.chans,
-                                       daq.set.bits, vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
         if (daq.set.ch4_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, ch_it++, daq.buff2.chans,
-                                       daq.set.bits, vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
 
 #elif defined(PS_ADC_MODE_ADC1234)
         /*
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_ADC2);
-        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_ADC3);
-        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_ADC4);
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
+        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2);
+        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3);
+        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4);
         */
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
         int buff2_mem = daq.buff2.len - daq.buff2.reserve;
@@ -293,23 +292,24 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, 2, daq.buff1.chans,
-                                       daq.set.bits, vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch2_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, 1, daq.buff2.chans,
-                                       daq.set.bits, vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
         if (daq.set.ch3_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff3_mem, daq.buff3.len, 1, daq.buff3.chans,
-                                       daq.set.bits, vcc, cal, daq.buff3.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff3.data, daq.buff_out.data, &idx);
         if (daq.set.ch4_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff4_mem, daq.buff4.len, 1, daq.buff4.chans,
-                                       daq.set.bits, vcc, cal, daq.buff4.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vcc, cal, daq.buff4.data, daq.buff_out.data, &idx);
 #endif
+
+        daq.trig.pretrig_cntr = 0;
+        daq.trig.ready = 0;
+        daq.trig.ready_last = 0;
 
         if (daq.trig.set.mode != SINGLE)
         {
-            daq.trig.pretrig_cntr = 0;
-            daq.trig.ready = 0;
-            daq.trig.ready_last = 0;
             daq_enable(&daq, 1);
         }
 
@@ -362,16 +362,9 @@ scpi_result_t PS_SCOPE_Set(scpi_t * context)
             return SCPI_RES_ERR;
         }
 
-        //int reen = 0;
-        //if (daq.enabled)
-        //{
-        //    reen = 1;
-            daq_enable(&daq, 0);
-            //for(int i = 0; i < 50000; i++) __asm("nop");
-            //LL_DMA_DisableChannel(DMA1, PS_ADC_CH1);
-            daq_reset(&daq);
-            daq.dis_hold = 1;
-        //}
+        daq_enable(&daq, 0);
+        daq_reset(&daq);
+        daq.dis_hold = 1;
 
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, (int)p1);
@@ -384,9 +377,8 @@ scpi_result_t PS_SCOPE_Set(scpi_t * context)
 
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
         {
-            //if (reen)
-                daq.dis_hold = 0;
-                daq_enable(&daq, 1);
+            daq.dis_hold = 0;
+            daq_enable(&daq, 1);
 
             SCPI_ResultText(context, SCPI_OK);
             return SCPI_RES_OK;
@@ -447,16 +439,14 @@ scpi_result_t PS_LA_ReadQ(scpi_t * context)
     {
         if (daq.trig.ready == 0)
         {
-            SCPI_ResultText(context, "Not ready!");
+            SCPI_ResultText(context, PS_RESP_NRDY);
             return SCPI_RES_OK;
         }
 
         if (daq.trig.set.mode == DISABLED)
         {
             daq_enable(&daq, 0);
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_LA);
-            //if (daq.trig.pos_frst < 0)
-            //    daq.trig.pos_frst += daq.buff1.len;
+            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_LA);
         }
 
         for (int k = 0, i = daq.trig.pos_frst; k < daq.buff1.len; k++, i++) // TODO compress 4 + 4
@@ -467,10 +457,12 @@ scpi_result_t PS_LA_ReadQ(scpi_t * context)
             ((uint8_t*)daq.buff_out.data)[k] = (uint8_t)(((uint8_t*)daq.buff1.data)[i]);
         }
 
+        daq.trig.pretrig_cntr = 0;
+        daq.trig.ready = 0;
+        daq.trig.ready_last = 0;
+
         if (daq.trig.set.mode != SINGLE)
         {
-            daq.trig.pretrig_cntr = 0;
-            daq.trig.ready = 0;
             daq_enable(&daq, 1);
         }
 
@@ -511,16 +503,9 @@ scpi_result_t PS_LA_Set(scpi_t * context)
             return SCPI_RES_ERR;
         }
 
-        //int reen = 0;
-        //if (daq.enabled)
-        //{
-        //    reen = 1;
-            daq_enable(&daq, 0);
-            //for(int i = 0; i < 50000; i++) __asm("nop");
-            //LL_DMA_DisableChannel(DMA1, PS_ADC_CH1);
-            daq_reset(&daq);
-            daq.dis_hold = 1;
-        //}
+        daq_enable(&daq, 0);
+        daq_reset(&daq);
+        daq.dis_hold = 1;
 
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, B1);
@@ -532,9 +517,8 @@ scpi_result_t PS_LA_Set(scpi_t * context)
 
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
         {
-            //if (reen)
-                daq.dis_hold = 0;
-                daq_enable(&daq, 1);
+            daq.dis_hold = 0;
+            daq_enable(&daq, 1);
 
             SCPI_ResultText(context, SCPI_OK);
             return SCPI_RES_OK;
@@ -585,39 +569,13 @@ scpi_result_t PS_LA_SetQ(scpi_t * context)
 
 scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
 {
-    cntr_enable(&cntr, 0);
-    cntr.ovf = 0;
-    int last1 = PS_DMA_LAST_IDX(cntr.data_len, PS_DMA_CNTR);
-    cntr_enable(&cntr, 1);
-    int timeout = PS_FREQ_HCLK / 50;
+    float f = cntr_read(&cntr);
 
-    int diff = 0;
-    int last2 = 0;
-    uint32_t cc = 0;
-
-    while (1)
+    if (f > -1)
     {
-        cc = cntr.ovf;
-        int last2 = PS_DMA_LAST_IDX(cntr.data_len, PS_DMA_CNTR);
-        diff = last2 - last1;
-        if (diff < 0)
-            diff += cntr.data_len;
-        timeout--;
-        if (diff >= 3 || timeout < 0)
-            break;
-    }
-
-    if (diff >= 3)
-    {
-        int debug1 = cntr.data[last1];
-        float total = (cc * PS_TIM_CNTR_MAX) + cntr.data[last2];
-        if (diff > 3)
-            total /= (((float)diff / 2.0) - 0.5); // too fast, 1 period normalize
-
         char f_s[15];
         char T_s[15];
 
-        float f = total / (float)PS_TIM_CNTR_FREQ;
         float T = 1.0 / f;
 
         if (f < 1000)
@@ -645,8 +603,6 @@ scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
         SCPI_ErrorPush(context, SCPI_ERROR_TIME_OUT);
         return SCPI_RES_ERR;
     }
-
-    cntr_enable(&cntr, 0);
 }
 
 /************************* [SGEN Actions] *************************/
@@ -656,6 +612,7 @@ scpi_result_t PS_SGEN_Set(scpi_t * context)
     double p1;
     if (!SCPI_ParamDouble(context, &p1, TRUE))
     {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
 
@@ -673,116 +630,55 @@ scpi_result_t PS_SGEN_Set(scpi_t * context)
 
 /************************* [PWM Actions] *************************/
 
-scpi_result_t PS_PWM_SetChQ(scpi_t * context)
+scpi_result_t PS_PWM_SetQ(scpi_t * context)
 {
-    int param1;
-    uint32_t param1d;
-
-    char buff[30];
+    char buff[60];
     char buff_freq[10];
-    char buff_duty[10];
+    char buff_duty1[10];
+    char buff_duty2[10];
 
-    if (!SCPI_ParamUInt32(context, &param1d, TRUE))
-        return SCPI_RES_ERR;
+    float freq = pwm.ch1.freq;
+    float duty1 = pwm.ch1.duty;
+    float duty2 = pwm.ch2.duty;
+    int offset2 = pwm.ch2.offset;
+    uint8_t en1 = pwm.ch1.enabled;
+    uint8_t en2 = pwm.ch2.enabled;
 
-    param1 = param1d;
-    float real_freq = pwm.freq;
-    float real_duty;
-    uint8_t enabled;
-
-    if (param1 == 1)
-    {
-        real_duty = pwm.duty_ch1;
-        enabled = pwm.enabled_ch1;
-    }
-    else if (param1 == 2)
-    {
-        real_duty = pwm.duty_ch2;
-        enabled = pwm.enabled_ch2;
-    }
-    else
-    {
-        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
-        return SCPI_RES_ERR;
-    }
-
-    sprint_fast(buff_freq, "%s", real_freq, 4);
-    sprint_fast(buff_duty, "%s", real_duty, 4);
-    int len = sprintf(buff, "%d,%s,%s", enabled, buff_freq, buff_duty);
+    sprint_fast(buff_freq, "%s", freq, 4);
+    sprint_fast(buff_duty1, "%s", duty1, 4);
+    sprint_fast(buff_duty2, "%s", duty2, 4);
+    int len = sprintf(buff, "%s,%s,%s,%d,%d,%d", buff_freq, buff_duty1, buff_duty2, offset2, en1, en2);
 
     SCPI_ResultCharacters(context, buff, len);
 
     return SCPI_RES_OK;
 }
 
-scpi_result_t PS_PWM_SetCh(scpi_t * context)
+scpi_result_t PS_PWM_Set(scpi_t * context)
 {
-    int param1;
-    uint32_t param1d, param2, param3;
+    uint32_t param1, param2, param3, param4, param5, param6;
 
-    if (!SCPI_ParamUInt32(context, &param1d, TRUE) ||
+    if (!SCPI_ParamUInt32(context, &param1, TRUE) ||
         !SCPI_ParamUInt32(context, &param2, TRUE) ||
-        !SCPI_ParamUInt32(context, &param3, TRUE))
-    {
-        return SCPI_RES_ERR;
-    }
-
-    param1 = param1d;
-    if (param1 < 1 || param1 > 2 ||
-        (param2 <= 0 || param2 > 12000000) ||
-        (param3 < 0 || param3 > 100))
+        !SCPI_ParamUInt32(context, &param3, TRUE) ||
+        !SCPI_ParamUInt32(context, &param4, TRUE) ||
+        !SCPI_ParamUInt32(context, &param5, TRUE) ||
+        !SCPI_ParamUInt32(context, &param6, TRUE))
     {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
 
-    pwm_set(&pwm, param1, param2, param3);
+    int ret = pwm_set(&pwm, param1, param2, param3, param4, param5, param6);
 
-    SCPI_ResultText(context, SCPI_OK);
-    return SCPI_RES_OK;
-}
-
-scpi_result_t PS_PWM_StartCh(scpi_t * context)
-{
-    int param1;
-    uint32_t param1d;
-
-    if (!SCPI_ParamUInt32(context, &param1d, TRUE))
-        return SCPI_RES_ERR;
-
-    param1 = param1d;
-    if (param1 < 1 || param1 > 2)
+    if (ret != 0)
     {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
 
-    LL_TIM_CC_EnableChannel(PS_TIM_PWM, (param1 == 1 ? LL_TIM_CHANNEL_CH1 : LL_TIM_CHANNEL_CH2));
-
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;
 }
-
-scpi_result_t PS_PWM_StopCh(scpi_t * context)
-{
-    int param1;
-    uint32_t param1d;
-
-    if (!SCPI_ParamUInt32(context, &param1d, TRUE))
-        return SCPI_RES_ERR;
-
-    param1 = param1d;
-    if (param1 < 1 || param1 > 2)
-    {
-        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
-        return SCPI_RES_ERR;
-    }
-
-    LL_TIM_CC_DisableChannel(PS_TIM_PWM, (param1 == 1 ? LL_TIM_CHANNEL_CH1 : LL_TIM_CHANNEL_CH2));
-
-    SCPI_ResultText(context, SCPI_OK);
-    return SCPI_RES_OK;
-}
-
 
 

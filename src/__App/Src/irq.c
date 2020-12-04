@@ -11,48 +11,48 @@
 #include "comm.h"
 
 /*
-static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)       // OVERIDE THIS in: /USB_DEVICE/App/usbd_cdc_if.c !!!
+int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)       // OVERIDE THIS in: /USB_DEVICE/App/usbd_cdc_if.c !!!
 {
-  uint32_t len=*Len;
-  if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED)
-  {
-     return USBD_FAIL;
-  }
+    uint32_t len=*Len;
+    if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED)
+    {
+        return USBD_FAIL;
+    }
 
-  if (((Buf == NULL) || (Len == NULL)) || (*Len <= 0))
-  {
-     return USBD_FAIL;
-  }
+    if (((Buf == NULL) || (Len == NULL)) || (*Len <= 0))
+    {
+        return USBD_FAIL;
+    }
 
-  uint8_t result = USBD_OK;
-  do
-  {
-      result = USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
-  }
-  while(result != USBD_OK);
+    uint8_t result = USBD_OK;
+    do
+    {
+        result = USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
+    }
+    while(result != USBD_OK);
 
-  do
-  {
-     result = USBD_CDC_ReceivePacket(&hUsbDeviceFS);
-  }
-  while(result != USBD_OK);
+    do
+    {
+        result = USBD_CDC_ReceivePacket(&hUsbDeviceFS);
+    }
+    while(result != USBD_OK);
 
-  while (len--)
-  {
-     comm_d_usb.rx_buffer[comm_d_usb.rx_index++] = *Buf;
+    while (len--)
+    {
+        comm.usb.rx_buffer[comm.usb.rx_index++] = *Buf;
 
-     if (comm_d_usb.rx_index >= RX_BUFF_LAST)
-         comm_d_usb.rx_index = 0;
+        if (comm.usb.rx_index >= RX_BUFF_LAST)
+            comm.usb.rx_index = 0;
 
-     comm_d_uart.last = 0;
-     comm_d_usb.last = 1;
+        comm.usb.last = 0;
+        comm.usb.last = 1;
 
-     if (*Buf == '\n')
-         comm_d_usb.available = 1;
-     Buf++;
-  }
+        if (*Buf == '\n')
+            comm.usb.available = 1;
+        Buf++;
+    }
 
-  return USBD_OK;
+    return USBD_OK;
 }
 */
 
@@ -63,16 +63,16 @@ void USART1_IRQHandler(void)
         LL_USART_ClearFlag_RXNE(PS_UART);
         char rx = LL_USART_ReceiveData8(PS_UART);
 
-        comm_d_uart.rx_buffer[comm_d_uart.rx_index++] = rx;
+        comm.uart.rx_buffer[comm.uart.rx_index++] = rx;
 
-        if (comm_d_uart.rx_index >= RX_BUFF_LAST)
-            comm_d_uart.rx_index = 0;
+        if (comm.uart.rx_index >= RX_BUFF_LAST)
+            comm.uart.rx_index = 0;
 
-        comm_d_uart.last = 1;
-        comm_d_usb.last = 0;
+        comm.uart.last = 1;
+        comm.usb.last = 0;
 
         if (rx == '\n')
-            comm_d_uart.available = 1;
+            comm.uart.available = 1;
     }
 }
 

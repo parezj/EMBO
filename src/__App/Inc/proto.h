@@ -28,9 +28,7 @@ scpi_result_t PS_CNTR_ReadQ(scpi_t * context);
 
 scpi_result_t PS_SGEN_Set(scpi_t * context);
 
-scpi_result_t PS_PWM_SetChQ(scpi_t * context);
-scpi_result_t PS_PWM_SetCh(scpi_t * context);
-scpi_result_t PS_PWM_StartCh(scpi_t * context);
-scpi_result_t PS_PWM_StopCh(scpi_t * context);
+scpi_result_t PS_PWM_SetQ(scpi_t * context);
+scpi_result_t PS_PWM_Set(scpi_t * context);
 
 #endif /* PROTO_H */

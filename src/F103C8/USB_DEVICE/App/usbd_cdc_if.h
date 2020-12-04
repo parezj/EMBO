@@ -66,7 +66,8 @@
   */
 
 /* USER CODE BEGIN EXPORTED_TYPES */
-
+#include "comm.h"
+#include "app_data.h"
 /* USER CODE END EXPORTED_TYPES */
 
 /**

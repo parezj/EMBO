@@ -11,7 +11,7 @@
 #define ASSERT(expr) \
   do {                                          \
     if (!(expr)) {                              \
-      assert2(__FILE__, __LINE__);            \
+      assert2(__FILE__, __LINE__);              \
     }                                           \
   } while (0)
 

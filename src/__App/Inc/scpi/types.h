@@ -384,6 +384,7 @@ extern "C" {
         char idn4[25];
         char idn5[25];
         size_t arbitrary_reminding;
+        void* comm;
     };
 
     enum _scpi_array_format_t {

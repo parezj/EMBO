@@ -12,6 +12,9 @@
 #define RX_BUFF_LEN    100
 #define RX_BUFF_LAST   RX_BUFF_LEN - 1
 
+#define APP_RX_DATA_SIZE  RX_BUFF_LEN
+#define APP_TX_DATA_SIZE  1
+
 void uart_put_text(const char* data);
 
 extern const scpi_command_t scpi_commands[];
@@ -33,15 +36,19 @@ typedef struct
     uint8_t last;
     uint8_t available;
     uint8_t rx_index;
+}comm_ch_t;
+
+typedef struct
+{
+    comm_ch_t usb;
+    comm_ch_t uart;
 }comm_data_t;
 
 
-comm_data_t comm_d_usb; // TODO RENAME
-comm_data_t comm_d_uart;
+comm_data_t* comm_ptr;
 
-
-void comm_init(void);
-uint8_t comm_main(void);
-int respond(const char* data, int len);
+void comm_init(comm_data_t* self);
+uint8_t comm_main(comm_data_t* self);
+int comm_respond(comm_data_t* self, const char* data, int len);
 
 #endif

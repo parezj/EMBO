@@ -259,36 +259,6 @@ scpi_result_t SCPI_CoreEsrQ(scpi_t * context) {
 }
 
 /**
- * *IDN?
- * 
- * field1: MANUFACTURE
- * field2: MODEL
- * field4: SUBSYSTEMS REVISIONS
- * 
- * example: MANUFACTURE,MODEL,0,01-02-01
- * @param context
- * @return 
- */
-scpi_result_t SCPI_CoreIdnQ(scpi_t * context) {
-    int i;
-    for (i = 0; i < 4; i++) {
-        if (context->idn[i])
-        {
-            int j = i;
-            if (i == 1 && comm_d_uart.available)
-                j = 4;
-            else if (i == 1) // comm_data_usb.available
-                j = 5;
-
-            SCPI_ResultMnemonic(context, context->idn[j]);
-        } else {
-            SCPI_ResultMnemonic(context, "0");
-        }
-    }
-    return SCPI_RES_OK;
-}
-
-/**
  * *OPC
  * @param context
  * @return 
