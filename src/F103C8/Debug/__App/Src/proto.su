@@ -9,7 +9,7 @@ proto.c:399:15:PS_SCOPE_SetQ	200	static
 proto.c:436:15:PS_LA_ReadQ	16	static
 proto.c:479:15:PS_LA_Set	80	static
 proto.c:539:15:PS_LA_SetQ	176	static
-proto.c:570:15:PS_CNTR_ReadQ	152	static
+proto.c:570:15:PS_CNTR_ReadQ	160	static
 proto.c:609:15:PS_SGEN_Set	8	static
 proto.c:633:15:PS_PWM_SetQ	144	static
 proto.c:657:15:PS_PWM_Set	48	static

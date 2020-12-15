@@ -68,6 +68,9 @@
 /* USER CODE BEGIN EXPORTED_TYPES */
 #include "comm.h"
 #include "app_data.h"
+#include "app_sync.h"
+#include "FreeRTOS.h"
+#include "semphr.h"
 /* USER CODE END EXPORTED_TYPES */
 
 /**

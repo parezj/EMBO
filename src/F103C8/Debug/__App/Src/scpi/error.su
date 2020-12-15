@@ -5,5 +5,5 @@ error.c:63:13:SCPI_ErrorEmitEmpty	16	static
 error.c:90:6:SCPI_ErrorClear	8	static
 error.c:108:13:SCPI_ErrorPop	8	static
 error.c:176:6:SCPI_ErrorPushEx	40	static
-error.c:205:6:SCPI_ErrorPush	0	static
-error.c:215:14:SCPI_ErrorTranslate	0	static
+error.c:206:6:SCPI_ErrorPush	0	static
+error.c:216:14:SCPI_ErrorTranslate	0	static

@@ -25,7 +25,7 @@ void pwm_init(pwm_data_t* self)
 
 int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int enable1, int enable2)
 {
-    if (freq < 0 || freq > PS_TIM_PWM1_MAX || duty1 < 0 || duty1 > 100 ||
+    if (freq < 0 || freq > PS_PWM_MAX_F || duty1 < 0 || duty1 > 100 ||
         duty2 < 0 || duty2 > 100 || offset2 < 0 || offset2 > 100)
     {
         return -1;
@@ -68,15 +68,19 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
 
     LL_TIM_OC_SetCompareCH1(PS_TIM_PWM1, compare1);
     LL_TIM_OC_SetCompareCH1(PS_TIM_PWM2, compare2);
+    
+    LL_TIM_SetCounter(PS_TIM_PWM1, 0);
+    LL_TIM_SetCounter(PS_TIM_PWM2, 0);
 
+    // http://www.micromouseonline.com/2016/02/05/clock-pulses-with-variable-phase-stm32/
     if (offset2 > 0)
         LL_TIM_SetCounter(PS_TIM_PWM2, (int)((float)offset2 / 100.0 * (float)reload));
 
     if (enable1)
         LL_TIM_CC_EnableChannel(PS_TIM_PWM1, PS_TIM_PWM1_CH);
 
-    if (enable2)
-        LL_TIM_CC_EnableChannel(PS_TIM_PWM2, PS_TIM_PWM2_CH);
+    //if (enable2)
+    //    LL_TIM_CC_EnableChannel(PS_TIM_PWM2, PS_TIM_PWM2_CH);
 
     LL_TIM_EnableCounter(PS_TIM_PWM1);
 

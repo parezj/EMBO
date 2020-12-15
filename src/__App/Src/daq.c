@@ -45,6 +45,17 @@ void daq_init(daq_data_t* self)
     self->vcc_mv = 0;
     self->adc_max_val = 0;
 
+    NVIC_SetPriority(PS_IRQN_DAQ_TIM, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_TIM3, 0));
+    NVIC_SetPriority(PS_IRQN_ADC, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_ADC, 0));
+
+    NVIC_EnableIRQ(PS_IRQN_DAQ_TIM);
+    NVIC_EnableIRQ(PS_IRQN_ADC);
+
+    NVIC_DisableIRQ(PS_LA_IRQ_EXTI1);
+    NVIC_DisableIRQ(PS_LA_IRQ_EXTI2);
+    NVIC_DisableIRQ(PS_LA_IRQ_EXTI3);
+    NVIC_DisableIRQ(PS_LA_IRQ_EXTI4);
+
     adc_init();
 }
 
@@ -328,7 +339,6 @@ int daq_fs_set(daq_data_t* self, float fs)
     LL_TIM_SetPrescaler(PS_TIM_ADC, prescaler);
     LL_TIM_SetAutoReload(PS_TIM_ADC, reload);
 
-
     daq_trig_update(self);
     daq_enable(self, 1);
     return 0;
@@ -409,6 +419,11 @@ void daq_enable(daq_data_t* self, uint8_t enable)
 
     if (self->mode == SCOPE || self->mode == VM)
     {
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH1, LL_GPIO_MODE_ANALOG);
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH2, LL_GPIO_MODE_ANALOG);
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH3, LL_GPIO_MODE_ANALOG);
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH4, LL_GPIO_MODE_ANALOG);
+
 #if defined(PS_ADC_MODE_ADC1) || defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
         daq_enable_adc(self, ADC1, enable, PS_DMA_CH_ADC1);
 #endif
@@ -426,15 +441,22 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     {
         ASSERT(self->trig.exti_trig != 0);
 
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH1, LL_GPIO_MODE_FLOATING);
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH2, LL_GPIO_MODE_FLOATING);
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH3, LL_GPIO_MODE_FLOATING);
+        LL_GPIO_SetPinMode(PS_DAQ_PORT, PS_DAQ_CH4, LL_GPIO_MODE_FLOATING);
+
         if (enable)
         {
             LL_DMA_EnableChannel(PS_DMA_LA, PS_DMA_CH_LA);
+            LL_TIM_EnableDMAReq_CC1(PS_TIM_ADC);
             if (self->trig.set.mode != DISABLED)
                 NVIC_EnableIRQ(self->trig.exti_trig);
         }
         else
         {
             //LL_DMA_DisableChannel(PS_DMA_LA, PS_DMA_CH_LA);
+            LL_TIM_DisableDMAReq_CC1(PS_TIM_ADC);
             NVIC_DisableIRQ(self->trig.exti_trig);
         }
     }
@@ -474,11 +496,10 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     else if (self->mode == LA)
         daq_settings_save(&self->set, &self->trig.set, &self->save_l, &self->trig.save_l);
 
-    self->mode = mode;
-
     daq_enable(self, 0);
     daq_reset(self);
     self->dis_hold = 1;
+    self->mode = mode;
 
     LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
     GPIO_InitStruct.Pin = PS_DAQ_CH1 | PS_DAQ_CH2 | PS_DAQ_CH3 | PS_DAQ_CH4;

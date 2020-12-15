@@ -8,7 +8,9 @@
 
 typedef struct
 {
-    uint16_t data[PS_CNTR_BUFF_SZ];
+    uint16_t data_ccr[PS_CNTR_BUFF_SZ];
+    uint16_t data_ovf[PS_CNTR_BUFF_SZ];
+    int data_ovf_it;
     uint8_t enabled;
     float freq;
     uint32_t ovf;

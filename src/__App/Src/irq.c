@@ -8,7 +8,11 @@
 #include "periph.h"
 #include "main.h"
 #include "app_data.h"
+#include "app_sync.h"
 #include "comm.h"
+
+#include "FreeRTOS.h"
+#include "semphr.h"
 
 /*
 int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)       // OVERIDE THIS in: /USB_DEVICE/App/usbd_cdc_if.c !!!
@@ -47,14 +51,46 @@ int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)       // OVERIDE THIS in: /US
         comm.usb.last = 0;
         comm.usb.last = 1;
 
-        if (*Buf == '\n')
-            comm.usb.available = 1;
+        if (*Buf == '\n'))
+        {
+            portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+            if(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) != pdPASS)
+            {
+                comm.usb.rx_index = 0;
+            }
+            else
+            {
+                comm.usb.available = 1;
+                if (xHigherPriorityTaskWoken != pdFALSE)
+                    portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+            }
+        }
+
         Buf++;
     }
 
     return USBD_OK;
 }
 */
+
+void SysTick_Handler(void)
+{
+    if( xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED )
+    {
+        xPortSysTickHandler();
+    }
+    HAL_IncTick();
+}
+
+void SVC_Handler(void)
+{
+    vPortSVCHandler();
+}
+
+void PendSV_Handler(void)
+{
+    xPortPendSVHandler();
+}
 
 void USART1_IRQHandler(void)
 {
@@ -72,7 +108,19 @@ void USART1_IRQHandler(void)
         comm.usb.last = 0;
 
         if (rx == '\n')
-            comm.uart.available = 1;
+        {
+            portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+            if(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) != pdPASS)
+            {
+                comm.uart.rx_index = 0;
+            }
+            else
+            {
+                comm.uart.available = 1;
+                if (xHigherPriorityTaskWoken != pdFALSE)
+                    portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+            }
+        }
     }
 }
 
@@ -117,7 +165,7 @@ void PS_TIM_ADC_IRQh(void)
         ASSERT(daq.trig.buff_trig != NULL);
         ASSERT(daq.trig.dma_trig != 0);
 
-        int last_idx = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_trig);
+        int last_idx = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_trig, PS_DMA_ADC);
 
         //if (last_idx % daq.trig.order != 0 && last_idx != 0)
         //    return;
@@ -144,7 +192,7 @@ void PS_TIM_ADC_IRQh(void)
     }
 }
 
-void PS_TIM_CNTR_IRQh(void)
+void PS_TIM_CNTR_UP_IRQh(void)
 {
     if(LL_TIM_IsActiveFlag_UPDATE(PS_TIM_CNTR) == 1)
     {
@@ -152,6 +200,16 @@ void PS_TIM_CNTR_IRQh(void)
         cntr.ovf++;
     }
 }
+
+void PS_TIM_CNTR_CCR_IRQh(void)
+{
+    cntr.data_ovf[cntr.data_ovf_it++] = cntr.ovf; // bug
+    if(LL_TIM_IsActiveFlag_CC1(PS_TIM_CNTR) == 1)
+    {
+        LL_TIM_ClearFlag_CC1(PS_TIM_CNTR);
+    }
+}
+
 
 void PS_LA_CH1_IRQh(void)
 {
@@ -186,5 +244,13 @@ void PS_LA_CH4_IRQh(void)
     {
         LL_EXTI_ClearFlag_0_31(PS_LA_EXTI4);
         daq_trig_trigger_la(&daq);
+    }
+}
+
+void EXTI0_IRQHandler(void)
+{
+    if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_0) != RESET)
+    {
+        LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_0);
     }
 }

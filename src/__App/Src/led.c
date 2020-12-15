@@ -10,10 +10,10 @@
 
 void led_init(led_data_t* self)
 {
-    self->blink_cntr = 0;
-    self->blink_len = 0;
-    self->blink_cntr = 0;
+    self->ms = 0;
+    self->num = 0;
     self->enabled = 0;
+    self->uwtick_first = 0;
 }
 
 void led_set(led_data_t* self, uint8_t enable)
@@ -34,24 +34,28 @@ void led_toggle(led_data_t* self)
     self->enabled = !self->enabled;
 }
 
-void led_blink_set(led_data_t* self, int num, int len)
+void led_blink_set(led_data_t* self, int num, int ms)
 {
-    self->blink_num = (num * 2) - 1;
-    self->blink_len = len;
-    self->blink_cntr = len;
+    self->num = (num * 2) - 1;
+    self->ms = ms;
+    self->uwtick_first = uwTick;
     led_set(self, 1);
 }
 
 void led_blink_do(led_data_t* self)
 {
-    if (self->blink_num > 0)
+    if (self->num > 0)
     {
-        if (self->blink_cntr > 0)
-            self->blink_cntr--;
+        int diff;
+        if (uwTick >= self->uwtick_first)
+            diff = uwTick - self->uwtick_first;
         else
+            diff = (uwTick - self->uwtick_first) + 4294967295;
+
+        if (diff >= self->ms)
         {
-            self->blink_cntr = self->blink_len;
-            self->blink_num--;
+            self->uwtick_first = uwTick;
+            self->num--;
             led_toggle(self);
         }
     }

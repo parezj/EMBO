@@ -8,9 +8,9 @@
 
 typedef struct
 {
-    int blink_num;
-    int blink_len;
-    int blink_cntr;
+    int num;             // num of blink
+    int ms;              // total amount if ticks in ms
+    int uwtick_first;    // start timestamp
     int enabled;
 }led_data_t;
 

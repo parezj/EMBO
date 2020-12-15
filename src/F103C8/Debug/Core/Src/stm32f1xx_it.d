@@ -50,7 +50,14 @@ Core/Src/stm32f1xx_it.o: ../Core/Src/stm32f1xx_it.c ../Core/Inc/main.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/minimal.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h \
- F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h
+ F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h \
+ F:/STM32Cube/PillScope/src/__OS/include/FreeRTOS.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/FreeRTOSConfig.h \
+ F:/STM32Cube/PillScope/src/__OS/include/projdefs.h \
+ F:/STM32Cube/PillScope/src/__OS/include/portable.h \
+ F:/STM32Cube/PillScope/src/__OS/include/deprecated_definitions.h \
+ F:/STM32Cube/PillScope/src/__OS/include/portmacro.h \
+ F:/STM32Cube/PillScope/src/__OS/include/mpu_wrappers.h
 
 ../Core/Inc/main.h:
 
@@ -159,3 +166,17 @@ F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h:
 F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/FreeRTOS.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/FreeRTOSConfig.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/projdefs.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/portable.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/deprecated_definitions.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/portmacro.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/mpu_wrappers.h:

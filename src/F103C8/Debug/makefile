@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include __OS/subdir.mk
 -include __App/Src/scpi/subdir.mk
 -include __App/Src/subdir.mk
 -include USB_DEVICE/Target/subdir.mk

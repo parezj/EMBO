@@ -24,6 +24,7 @@ class PillScope(object):
                 bytesize=serial.EIGHTBITS)
             self.ser.flush()
             self.receive(self.TIMEOUT_CMD)
+            #self.pwm()
             if not self.choose_mode():
                 return
           
@@ -48,13 +49,21 @@ class PillScope(object):
             return False
         
         while True:
-            self.mode = self.input2("\nChoose mode (SCOPE, VM, LA):", "SCOPE")
+            self.mode = self.input2("\nChoose mode (SCOPE, VM, LA, CNTR):", "SCOPE")
+            if self.mode == "CNTR":
+                self.counter()
             rx = self.send_cmd("SYST:MODE " + self.mode, self.TIMEOUT_CMD)
             print(rx + "\n")
             if ("OK" in rx):
                 time.sleep(0.25)
                 break   
         return True
+
+    def counter(self):
+        while True:
+            rx = self.send_cmd("CNTR:READ?", self.TIMEOUT_READ)
+            print(rx + "\n")
+            time.sleep(0.5)
 
     def limits(self):
         self.receive(self.TIMEOUT_CMD)
@@ -68,6 +77,18 @@ class PillScope(object):
         self.lim_adcs = bool(toks[4])
         self.lim_bit8 = bool(toks[5])
         self.lim_dac = bool(toks[6])
+
+    def pwm(self):
+        default_pwm = "15,20,10,50,1,1";
+        while True:
+            cmd = input("Enter PWM 2-ch settings (FREQ1,DUTY1,DUTY2,EN1,EN2): [" + default_pwm + "]\n")
+            if cmd == "":
+                cmd = default_pwm
+            rx = self.send_cmd("PWM:SET " + cmd, self.TIMEOUT_CMD)
+            print(rx + "\n")
+            if "OK" in rx:
+                break
+        print(self.send_cmd("PWM:SET?", self.TIMEOUT_CMD) + "\n")
 
     def loop(self):
         try:
@@ -214,8 +235,7 @@ class PillScope(object):
             print("\n" + str(self.it) + f"., " + str(el.total_seconds()) + " ms")
             print("---------------------")
             return True
-
-        elif self.mode == "SCOPE":
+        else:
             #if self.trig_mode != "D":
             if not self.ready:
                 rx2 = self.receive(0.1)
@@ -224,9 +244,10 @@ class PillScope(object):
                     time.sleep(0.05)
                     return False
                 #print(rx2)
-            rx = self.read_bin_data("SCOP:READ?", self.TIMEOUT_READ)
-        elif self.mode == "LA":
-            ex = self.read_bin_data("LA:READ?", self.TIMEOUT_READ)
+            if self.mode == "SCOPE":
+                rx = self.read_bin_data("SCOP:READ?", self.TIMEOUT_READ)
+            elif self.mode == "LA":
+                rx = self.read_bin_data("LA:READ?", self.TIMEOUT_READ)
 
         self.ready = False
 
@@ -301,17 +322,26 @@ class PillScope(object):
         plt.grid(True, linestyle=':')
         ax.grid(which='major', alpha=0.9)
         if self.mode != "VM":
-            rngx = (self.mem / self.fs * 1000)
+
+
+            #rngx = (self.mem / self.fs * 1000)
+            #rngx_l = -1 * rngx * (self.trig_pre / 100.0)
+            #rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)
+            
+            
+            rngx = self.mem
             rngx_l = -1 * rngx * (self.trig_pre / 100.0)
             rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)
+
             major_ticks_x = np.linspace(rngx_l, rngx_r, 50)
             minor_ticks_x = np.linspace(rngx_l, rngx_r, 10)
             ax.set_xticks(major_ticks_x)
             ax.set_xticks(minor_ticks_x, minor=True)
             plt.xlim(rngx_l, rngx_r)
             plt.axvline(x=0, color='k', linestyle='--', linewidth=2.5, alpha=0.8)
-            plt.axhline(y=3.3 / 2.0, color='k', linestyle='--', linewidth=2.5, alpha=0.8)
-            plt.xlabel("Time [ms]")
+            if self.mode != "LA":
+                plt.axhline(y=3.3 / 2.0, color='k', linestyle='--', linewidth=2.5, alpha=0.8)
+            plt.xlabel("Samples [-]") #plt.xlabel("Time [ms]")
         else:
             plt.xlabel("Time")
             major_ticks_x = np.arange(0, self.VM_MAX_LEN, 50)
@@ -319,13 +349,19 @@ class PillScope(object):
             ax.set_xticks(major_ticks_x)
             ax.set_xticks(minor_ticks_x, minor=True)
             plt.xlim(0, self.VM_MAX_LEN)
-        plt.ylim(0, 3.5)
-        major_ticks_y = np.linspace(0, 3.3, 10)
-        minor_ticks_y = np.linspace(0, 3.3, 20)
+        if self.mode == "LA":
+            plt.ylim(-0.1, 1.1)
+            major_ticks_y = np.linspace(0, 1.0, 10)
+            minor_ticks_y = np.linspace(0, 1.0, 20)
+            plt.ylabel("Logic value")
+        else:
+            plt.ylim(0, 3.5)
+            major_ticks_y = np.linspace(0, 3.3, 10)
+            minor_ticks_y = np.linspace(0, 3.3, 20)
+            plt.ylabel("Voltage [V]")
         ax.set_yticks(major_ticks_y)
         #ax.set_xticklabels(major_ticks_y)
         ax.set_yticks(minor_ticks_y, minor=True)
-        plt.ylabel("Voltage [V]")
         LINE_WIDTH = 2.0
         if self.mode == "SCOPE":
             t = np.linspace(rngx_l, rngx_r, self.mem)

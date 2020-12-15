@@ -29,4 +29,5 @@ USB_DEVICE/App \
 USB_DEVICE/Target \
 __App/Src \
 __App/Src/scpi \
+__OS \
 

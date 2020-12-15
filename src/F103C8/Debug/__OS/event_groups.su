@@ -1,0 +1,9 @@
+event_groups.c:135:21:xEventGroupCreateStatic	16	static,ignoring_inline_asm
+event_groups.c:334:13:xEventGroupWaitBits	32	static,ignoring_inline_asm
+event_groups.c:482:13:xEventGroupClearBits	16	static,ignoring_inline_asm
+event_groups.c:524:13:xEventGroupGetBitsFromISR	0	static,ignoring_inline_asm
+event_groups.c:540:13:xEventGroupSetBits	24	static,ignoring_inline_asm
+event_groups.c:218:13:xEventGroupSync	24	static,ignoring_inline_asm
+event_groups.c:634:6:vEventGroupDelete	16	static,ignoring_inline_asm
+event_groups.c:678:6:vEventGroupSetBitsCallback	0	static
+event_groups.c:686:6:vEventGroupClearBitsCallback	0	static

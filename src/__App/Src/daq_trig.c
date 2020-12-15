@@ -11,10 +11,14 @@
 #include "cfg.h"
 #include "daq.h"
 #include "daq_trig.h"
+#include "app_sync.h"
 #include "utility.h"
 #include "periph.h"
 #include "comm.h"
 #include "main.h"
+
+#include "FreeRTOS.h"
+#include "semphr.h"
 
 
 void daq_trig_init(daq_data_t* self)
@@ -48,16 +52,14 @@ void daq_trig_check(daq_data_t* self)
 {
     if (self->enabled) //&& self->trig.is_post == 0 && self->trig.ready == 0)
     {
-        if (uwTick >= self->trig.uwtick_first)
-            self->trig.pretrig_cntr = uwTick - self->trig.uwtick_first;
-        else
-            self->trig.pretrig_cntr = (uwTick - self->trig.uwtick_first) + 4294967295;
+        self->trig.pretrig_cntr = uwTick - self->trig.uwtick_first;
+        if (self->trig.pretrig_cntr < 0)
+            self->trig.pretrig_cntr += PS_UWTICK_MAX;
     }
     else
     {
         self->trig.pretrig_cntr = 0;
     }
-
 
     if (self->mode != VM) // SCOPE || LA
     {
@@ -66,9 +68,9 @@ void daq_trig_check(daq_data_t* self)
             self->trig.is_post == 0 &&
             self->trig.ready == 0 &&
             self->trig.pretrig_cntr > self->trig.auttrig_val)
-{
+        {
             daq_enable(self, 0);
-            self->trig.pos_frst = PS_DMA_LAST_IDX(self->trig.buff_trig->len, PS_DMA_CH_ADC1);
+            self->trig.pos_frst = PS_DMA_LAST_IDX(self->trig.buff_trig->len, PS_DMA_CH_ADC1, PS_DMA_ADC);
 
             self->trig.ready = 1;
             self->trig.is_post = 0;
@@ -91,7 +93,7 @@ void daq_trig_trigger_scope(daq_data_t* self)
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_trig != 0);
 
-    int last_idx = PS_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_trig);
+    int last_idx = PS_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_trig, PS_DMA_ADC);
 
     if (self->trig.ready || self->trig.post_start)
         return;
@@ -162,7 +164,7 @@ void daq_trig_trigger_la(daq_data_t* self)
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_trig != 0);
 
-    int last_idx = PS_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_trig);
+    int last_idx = PS_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_trig, PS_DMA_LA);
 
     if (self->trig.ready || self->trig.post_start)
         return;
@@ -178,6 +180,11 @@ void daq_trig_poststart(daq_data_t* self, int pos)
 {
     self->trig.post_start = 1;
     self->trig.post_from = pos;
+
+    portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+    ASSERT(xSemaphoreGiveFromISR(sem2_trig, &xHigherPriorityTaskWoken) == pdPASS);
+    if (xHigherPriorityTaskWoken != pdFALSE)
+        portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
     //self->trig.trig_data_last_idx = last_idx;
 }
 void daq_trig_postcount(daq_data_t* self)
@@ -232,7 +239,7 @@ void daq_trig_postcount(daq_data_t* self)
     while(1)
     {
         iwdg_feed();
-        int last_idx = PS_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_trig);
+        int last_idx = PS_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_trig, PS_DMA_ADC); // TODO
 
         self->trig.pos_diff = self->trig.pos_last - self->trig.pos_trig;
 
@@ -431,7 +438,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         EXTI_InitStruct.Trigger = (self->trig.set.edge == RISING ? LL_EXTI_TRIGGER_RISING : LL_EXTI_TRIGGER_FALLING);
         LL_EXTI_Init(&EXTI_InitStruct);
 
-        NVIC_SetPriority(self->trig.exti_trig, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+        NVIC_SetPriority(self->trig.exti_trig, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_EXTI, 0));
         NVIC_EnableIRQ(self->trig.exti_trig);
 
         self->trig.set.val = 0;

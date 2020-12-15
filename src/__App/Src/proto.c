@@ -137,7 +137,7 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         }
 
 #if defined(PS_ADC_MODE_ADC1)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC);
 
         get_avg_from_circ(last1, 5, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
 
@@ -215,7 +215,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         if (daq.trig.set.mode == DISABLED)
         {
             daq_enable(&daq, 0);
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
+            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC);
         }
 
         float cal = PS_ADC_VREF_CAL_B12;
@@ -446,7 +446,7 @@ scpi_result_t PS_LA_ReadQ(scpi_t * context)
         if (daq.trig.set.mode == DISABLED)
         {
             daq_enable(&daq, 0);
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_LA);
+            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_LA, PS_DMA_LA);
         }
 
         for (int k = 0, i = daq.trig.pos_frst; k < daq.buff1.len; k++, i++) // TODO compress 4 + 4
@@ -573,24 +573,24 @@ scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
 
     if (f > -1)
     {
-        char f_s[15];
-        char T_s[15];
+        char f_s[20];
+        char T_s[20];
 
         float T = 1.0 / f;
 
         if (f < 1000)
-            sprint_fast(f_s, "%s Hz", f, 2);
+            sprint_fast(f_s, "%s Hz", f, 3);
         else if (f < 1000000)
-            sprint_fast(f_s, "%s kHz", f / 1000.0, 2);
+            sprint_fast(f_s, "%s kHz", f / 1000.0, 3);
         else //if (f < 1000000000)
-            sprint_fast(f_s, "%s MHz", f / 1000000.0, 2);
+            sprint_fast(f_s, "%s MHz", f / 1000000.0, 3);
 
         if (T >= 1)
-            sprint_fast(T_s, "%s s", T, 2);
+            sprint_fast(T_s, "%s s", T, 3);
         else if (T >= 0.001)
-            sprint_fast(T_s, "%s ms", T * 1000.0, 2);
+            sprint_fast(T_s, "%s ms", T * 1000.0, 3);
         else //if (T >= 0.000001)
-            sprint_fast(T_s, "%s us", T * 1000000.0, 2);
+            sprint_fast(T_s, "%s us", T * 1000000.0, 3);
 
         char buff[100];
         int len = sprintf(buff, "%s,%s", f_s, T_s);

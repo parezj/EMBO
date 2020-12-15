@@ -26,6 +26,7 @@ __App/Src/app.o: F:/STM32Cube/PillScope/src/__App/Src/app.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/app.h \
  F:/STM32Cube/PillScope/src/__App/Inc/app_data.h \
  F:/STM32Cube/PillScope/src/__App/Inc/pwm.h \
  F:/STM32Cube/PillScope/src/__App/Inc/led.h \
@@ -46,6 +47,18 @@ __App/Src/app.o: F:/STM32Cube/PillScope/src/__App/Src/app.c \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/app_sync.h \
+ F:/STM32Cube/PillScope/src/__OS/include/FreeRTOS.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/FreeRTOSConfig.h \
+ F:/STM32Cube/PillScope/src/__OS/include/projdefs.h \
+ F:/STM32Cube/PillScope/src/__OS/include/portable.h \
+ F:/STM32Cube/PillScope/src/__OS/include/deprecated_definitions.h \
+ F:/STM32Cube/PillScope/src/__OS/include/portmacro.h \
+ F:/STM32Cube/PillScope/src/__OS/include/mpu_wrappers.h \
+ F:/STM32Cube/PillScope/src/__OS/include/task.h \
+ F:/STM32Cube/PillScope/src/__OS/include/list.h \
+ F:/STM32Cube/PillScope/src/__OS/include/semphr.h \
+ F:/STM32Cube/PillScope/src/__OS/include/queue.h \
  F:/STM32Cube/PillScope/src/__App/Inc/periph.h \
  F:/STM32Cube/PillScope/src/__App/Inc/comm.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
@@ -115,6 +128,8 @@ F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h:
 
+F:/STM32Cube/PillScope/src/__App/Inc/app.h:
+
 F:/STM32Cube/PillScope/src/__App/Inc/app_data.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/pwm.h:
@@ -154,6 +169,30 @@ F:/STM32Cube/PillScope/src/__App/Inc/scpi/units.h:
 F:/STM32Cube/PillScope/src/__App/Inc/scpi/utils.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/scpi/expression.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/app_sync.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/FreeRTOS.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/FreeRTOSConfig.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/projdefs.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/portable.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/deprecated_definitions.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/portmacro.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/mpu_wrappers.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/task.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/list.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/semphr.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/queue.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/periph.h:
 

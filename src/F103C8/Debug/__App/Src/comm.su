@@ -2,8 +2,8 @@ comm.c:111:15:SCPI_Flush	0	static
 comm.c:151:15:SCPI_CoreIdnQ	24	static
 comm.c:173:6:uart_put_text	16	static
 comm.c:193:6:comm_init	48	static
-comm.c:216:9:comm_main	16	static
-comm.c:239:5:comm_respond	24	static
+comm.c:219:9:comm_main	16	static
+comm.c:242:5:comm_respond	24	static
 comm.c:104:8:SCPI_Write	0	static
 comm.c:118:5:SCPI_Error	120	static
 comm.c:128:15:SCPI_Control	120	static

@@ -38,7 +38,8 @@ __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/periph.h
 
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
@@ -121,3 +122,5 @@ F:/STM32Cube/PillScope/src/__App/Inc/cntr.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/periph.h:

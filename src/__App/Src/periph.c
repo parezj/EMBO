@@ -89,7 +89,7 @@ void adc_init_calib(ADC_TypeDef* adc)
     LL_ADC_StartCalibration(adc);
     while (LL_ADC_IsCalibrationOnGoing(adc) != 0);
 
-    for (int i = 0; i <  1000; ++i) asm("nop");
+    for (int i = 0; i <  10000; ++i) asm("nop");
 
     LL_ADC_REG_SetDMATransfer(adc, dma_tx_mode);
     //LL_ADC_Enable(adc);

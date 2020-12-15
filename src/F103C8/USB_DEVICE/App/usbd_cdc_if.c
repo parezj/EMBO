@@ -296,7 +296,19 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
      comm.usb.last = 1;
 
      if (*Buf == '\n')
-         comm.usb.available = 1;
+     {
+         portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+         if(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) != pdPASS)
+         {
+             comm.usb.rx_index = 0;
+         }
+         else
+         {
+             comm.usb.available = 1;
+             if (xHigherPriorityTaskWoken != pdFALSE)
+                 portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+         }
+     }
      Buf++;
   }
 

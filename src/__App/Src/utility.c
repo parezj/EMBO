@@ -135,20 +135,22 @@ int get_last_circ_idx(int pos, int len)
     return last_idx;
 }
 
+// freq_want = freq_osc/((prescaler+1)*(reload+1))
+// (prescaler+1)*(reload+1) = freq_osc/freq_want
 float get_freq(int* prescaler, int* reload, int max_reload, int freq_osc, int freq_want)
 {
     ASSERT(freq_osc >= freq_want && freq_want > 0 && freq_osc > 0 && max_reload > 0);
-    *prescaler = 1;
+    *prescaler = 0;
 
     do
     {
-        *reload = (int)((float)freq_osc / (float)(*prescaler) / (float)freq_want);
+        *reload = (int)((float)freq_osc / (float)(*prescaler + 1) / (float)freq_want) - 1; // TODO check negative reload?
         if (*reload > max_reload)
             (*prescaler)++;
     }
     while (*reload > max_reload);
 
-    float ret = ((float)freq_osc) / ((float)(*prescaler)) / ((float)(*reload));
+    float ret  = (float)freq_osc / ((float)(*prescaler + 1) * (float)(*reload + 1));
     return ret;
 }
 
@@ -234,6 +236,9 @@ void itoa_fast(char* s, int num, int radix)
     s[str_loc] = 0; // add null termination.
 }
 
+/* Author: Jakub Parez
+ * Descr:  ultra fast float sprintf
+ */
 void sprint_fast(char* s, const char* format, float fVal, int prec)
 {
     char result[100] = { '\0' };

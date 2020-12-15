@@ -211,6 +211,9 @@ void comm_init(comm_data_t* self)
 
     LL_USART_EnableIT_RXNE(PS_UART);
     uart_put_text(WELCOME_STR);
+
+    NVIC_SetPriority(PS_IRQN_UART, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_UART, 0));
+    NVIC_EnableIRQ(PS_IRQN_UART);
 }
 
 uint8_t comm_main(comm_data_t* self)

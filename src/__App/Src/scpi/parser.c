@@ -204,7 +204,8 @@ scpi_bool_t SCPI_Parse(scpi_t * context, char * data, int len) {
         r = scpiParser_detectProgramMessageUnit(state, data, len);
 
         if (state->programHeader.type == SCPI_TOKEN_INVALID) {
-            SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CHARACTER);
+            if (result != FALSE)
+                SCPI_ErrorPush(context, SCPI_ERROR_INVALID_CHARACTER); // EDIT
             result = FALSE;
         } else if (state->programHeader.len > 0) {
 

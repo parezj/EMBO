@@ -12,7 +12,7 @@
  +                                                  general                                                  +
  +-----------------------------------------------------------------------------------------------------------*/
 
-#define PS_DEV_VER             "0.1.0"
+#define PS_DEV_VER             "0.1.1"
 #define PS_DEV_AUTHOR          "CTU/Jakub Parez"
 
 /*-----------------------------------------------------------------------------------------------------------+
@@ -32,7 +32,7 @@
  * - ADC pouze 12 bit
  * - Vrefint_CAL neexistuje
  * - min 41.5 ADC cyklu, jinak vrefint je spatna
- * =========layout ============
+ * =========layout============
  *  ADC CH1 ...... PA1
  *  ADC CH2 ...... PA2
  *  ADC CH3 ...... PA3
@@ -40,13 +40,13 @@
  *  PWM CH1 ...... PA15
  *  PWM CH2 ...... PB6
  *  CNTR ......... PA8
- *  ===========================
+ *  ==========================
 */
 
 #define PS_FREQ_LSI            40000
 #define PS_FREQ_HCLK           72000000
 #define PS_FREQ_ADCCLK         12000000
-#define PS_FREQ_PCLK1          36000000  // TIM2,3,4
+#define PS_FREQ_PCLK1          72000000  // TIM2,3,4
 #define PS_FREQ_PCLK2          72000000  // TIM1
 
 #define PS_DEV_NAME            "PillScope-F103C8"
@@ -55,13 +55,13 @@
 #define PS_LED_PORT            GPIOC
 #define PS_LED_PIN             13   // main led pin
 
-#define PS_CNTR_BUFF_SZ        100  // countetr buffer size
+#define PS_CNTR_BUFF_SZ        100   // countetr buffer size
 //#define PS_DAC               DAC1
 
 #define PS_ADC_MODE_ADC1
 //#define PS_ADC_MODE_ADC12
 //#define PS_ADC_MODE_ADC1234
-#define PS_ADC_MSPS            1
+//#define PS_ADC_MSPS            1 // ??
 #define PS_ADC_BIT12
 //#define PS_ADC_BIT8
 //#define PS_ADC_VREF_CAL      *((uint16_t*)VREFINT_CAL_ADDR)
@@ -87,15 +87,17 @@
 #define PS_TIM_PWM2_CH         LL_TIM_CHANNEL_CH1
 #define PS_TIM_CNTR            TIM1
 #define PS_TIM_CNTR_FREQ       PS_FREQ_PCLK2
-#define PS_TIM_CNTR_IRQh       TIM1_UP_IRQHandler
+#define PS_TIM_CNTR_UP_IRQh    TIM1_UP_IRQHandler
+#define PS_TIM_CNTR_CCR_IRQh   TIM1_CC_IRQHandler
 #define PS_TIM_CNTR_MAX        65535
 #define PS_TIM_CNTR_CH         LL_TIM_CHANNEL_CH1
-#define PS_TIM_CNTR_CCR        CNT // ?? CCR1
+#define PS_TIM_CNTR_CCR        CCR1
 
 #define PS_SYSTICK_FREQ        1000
-#define PS_DAQ_MAX_MEM         12000
+#define PS_DAQ_MAX_MEM         8000
 #define PS_MEM_RESERVE         2
 #define PS_LA_MAX_FS           1000000 // TODO ??
+#define PS_PWM_MAX_F           1000000
 
 #define PS_DMA_ADC             DMA1
 #define PS_DMA_LA              DMA1
@@ -108,10 +110,15 @@
 #define PS_DMA_CH_LA           LL_DMA_CHANNEL_6
 #define PS_DMA_CH_CNTR         LL_DMA_CHANNEL_2
 
+#define PS_IRQN_ADC            ADC1_2_IRQn
+#define PS_IRQN_UART           USART1_IRQn
+#define PS_IRQN_EXTI           EXTI0_IRQn
+#define PS_IRQN_DAQ_TIM        TIM3_IRQn
+
 #define VREFINT_CAL_ADDR       0x1FFFF7BA
 
-#define PS_BLINK_LONG          300000
-#define PS_BLINK_SHORT         30000
+#define PS_BLINK_LONG_MS       500
+#define PS_BLINK_SHORT_MS      50
 
 #elif defined(STM32F303)
 
@@ -121,6 +128,14 @@
  +                                                  common                                                   +
  +-----------------------------------------------------------------------------------------------------------*/
 
+// IRQ priorities
+#define PS_IT_PRI_TIM3          1   // main DAQ timing
+#define PS_IT_PRI_ADC           5   // analog watchdog
+#define PS_IT_PRI_EXTI          5   // logic analyzer GPIO
+#define PS_IT_PRI_UART          6   // UART RX
+#define PS_IT_PRI_USB           7   // USB RX
+#define PS_IT_PRI_SYST          15  // systick
+
 #define PS_RESP_NRDY           "Not ready!"
 #define PS_RESP_RDY            "\"Ready\"\r\n"
 
@@ -128,7 +143,10 @@
 #define PS_IWDG_RST            (IWDG->KR = PS_IWDG_RST_VAL)     // watchdog reset
 
 #define PS_AUTRIG_MIN_MS       500   // auto trigger milisecond delay
-#define PS_MIN_OP_VCC          2500  // minimum operating vcc
+#define PS_MIN_OP_VCC          2500  // minimum operating vcc ??
+#define PS_UWTICK_MAX          4294967295
+
+#define PS_CNTR_MEAS_MS        2000  // counter max measure time
 
 #define PS_ADC_1CH_SMPL_TM     ((1.0 / (float)PS_FREQ_ADCCLK) * (float)(PS_ADC_SMPL_TIME_N + PS_ADC_TCONV))
 
@@ -167,7 +185,8 @@
 
 
 #define PS_ADC_ADDR(x)         (uint32_t)LL_ADC_DMA_GetRegAddr(x, LL_ADC_DMA_REG_REGULAR_DATA)
-#define PS_DMA_LAST_IDX(x,y)   (get_last_circ_idx((x - LL_DMA_GetDataLength(DMA1, y)), x))
+#define PS_DMA_LAST_IDX(x,y,z) (get_last_circ_idx((x - LL_DMA_GetDataLength(z, y)), x))
+#define PS_MILIS(x)            (x / portTICK_PERIOD_MS)
 
 
 #define WELCOME_STR "\n  Welcome to:\n\

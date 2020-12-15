@@ -36,5 +36,10 @@
 			<type>2</type>
 			<location>F:/STM32Cube/PillScope/src/__App</location>
 		</link>
+		<link>
+			<name>__OS</name>
+			<type>2</type>
+			<location>F:/STM32Cube/PillScope/src/__OS</location>
+		</link>
 	</linkedResources>
 </projectDescription>

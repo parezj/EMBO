@@ -195,6 +195,7 @@ void SCPI_ErrorPushEx(scpi_t * context, int16_t err, char * info, size_t info_le
     if (context) {
         context->cmd_error = TRUE;
     }
+    fifo_clear(&context->error_queue); // EDIT
 }
 
 /**
