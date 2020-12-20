@@ -22,43 +22,50 @@ void cntr_init(cntr_data_t* self)
     dma_set((uint32_t)&PS_TIM_CNTR->PS_TIM_CNTR_CCR, PS_DMA_CNTR, PS_DMA_CH_CNTR, (uint32_t)self->data_ccr, PS_CNTR_BUFF_SZ, LL_DMA_PDATAALIGN_HALFWORD);
     NVIC_SetPriority(TIM1_UP_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
     NVIC_SetPriority(TIM1_CC_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
+    LL_TIM_EnableIT_CC1(PS_TIM_CNTR);
     LL_TIM_EnableIT_UPDATE(PS_TIM_CNTR);
-    LL_TIM_EnableDMAReq_CC1(PS_TIM_CNTR);
 }
 
-void cntr_enable(cntr_data_t* self, uint8_t enable)
+int cntr_enable(cntr_data_t* self, uint8_t enable)
 {
     if (enable)
     {
         cntr_init(self);
+        if ((self->data_ccr[0] != 0) || (self->data_ovf[0] != 0) || (self->data_ovf_it != 0)) // sometimes happens, why?
+        {
+            //return -1;
+            __asm("nop");
+        }
 
+        LL_TIM_EnableDMAReq_CC1(PS_TIM_CNTR);
         NVIC_EnableIRQ(TIM1_CC_IRQn);
         NVIC_EnableIRQ(TIM1_UP_IRQn);
         LL_DMA_EnableChannel(PS_DMA_CNTR, PS_DMA_CH_CNTR);
-        LL_TIM_EnableIT_CC1(PS_TIM_CNTR);
         LL_TIM_EnableCounter(PS_TIM_CNTR);
         LL_TIM_CC_EnableChannel(PS_TIM_CNTR, PS_TIM_CNTR_CH);
-        LL_TIM_CC_EnableChannel(PS_TIM_CNTR, LL_TIM_CHANNEL_CH1);
     }
     else
     {
-        NVIC_DisableIRQ(TIM1_CC_IRQn);
-        NVIC_DisableIRQ(TIM1_UP_IRQn);
-        LL_TIM_DisableIT_CC1(PS_TIM_CNTR);
         LL_TIM_DisableCounter(PS_TIM_CNTR);
         LL_TIM_CC_DisableChannel(PS_TIM_CNTR, PS_TIM_CNTR_CH);
-        LL_TIM_CC_DisableChannel(PS_TIM_CNTR, LL_TIM_CHANNEL_CH1);
         LL_DMA_DisableChannel(PS_DMA_CNTR, PS_DMA_CH_CNTR);
+        NVIC_DisableIRQ(TIM1_CC_IRQn);
+        NVIC_DisableIRQ(TIM1_UP_IRQn);
+        LL_TIM_DisableDMAReq_CC1(PS_TIM_CNTR);
     }
     self->enabled = enable;
+    return 0;
 }
 
-float cntr_read(cntr_data_t* self)
+float cntr_read(cntr_data_t* self) // TODO BUG - 10x fast call wipes daq.buff1 (zeroes)
 {
     int uwTick_start = uwTick;
     int sz = 0;
 
-    cntr_enable(self, 1);
+    int ret = cntr_enable(self, 1);
+
+    if (ret != 0)
+        return -2; // init error - corrupted data
 
     while (1)
     {
@@ -97,6 +104,6 @@ float cntr_read(cntr_data_t* self)
     }
     else
     {
-        return -1;
+        return -1; // timeout
     }
 }

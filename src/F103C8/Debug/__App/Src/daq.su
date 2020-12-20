@@ -6,8 +6,8 @@ daq.c:81:6:daq_settings_init	12	static
 daq.c:25:6:daq_init	16	static,ignoring_inline_asm
 daq.c:384:6:daq_reset	8	static
 daq.c:410:6:daq_enable	16	static,ignoring_inline_asm
-daq.c:118:5:daq_mem_set	48	static
+daq.c:118:5:daq_mem_set	40	static
 daq.c:264:5:daq_bit_set	16	static
 daq.c:316:5:daq_fs_set	48	static
 daq.c:347:5:daq_ch_set	48	static
-daq.c:492:6:daq_mode_set	48	static
+daq.c:495:6:daq_mode_set	48	static

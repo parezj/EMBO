@@ -12,7 +12,9 @@
  +                                                  general                                                  +
  +-----------------------------------------------------------------------------------------------------------*/
 
-#define PS_DEV_VER             "0.1.1"
+#define PS_DEBUG
+
+#define PS_DEV_VER             "0.1.2"
 #define PS_DEV_AUTHOR          "CTU/Jakub Parez"
 
 /*-----------------------------------------------------------------------------------------------------------+
@@ -65,8 +67,8 @@
 #define PS_ADC_BIT12
 //#define PS_ADC_BIT8
 //#define PS_ADC_VREF_CAL      *((uint16_t*)VREFINT_CAL_ADDR)
-#define PS_ADC_SMPL_TIME       LL_ADC_SAMPLINGTIME_41CYCLES_5 // LL_ADC_SAMPLINGTIME_71CYCLES_5
-#define PS_ADC_SMPL_TIME_N     41.5 //71.5
+#define PS_ADC_SMPL_TIME       LL_ADC_SAMPLINGTIME_239CYCLES_5 // LL_ADC_SAMPLINGTIME_71CYCLES_5
+#define PS_ADC_SMPL_TIME_N     239.5 //71.5
 #define PS_ADC_TCONV           12.5
 #define PS_ADC_TRIG_TIM        LL_ADC_REG_TRIG_EXT_TIM3_TRGO
 #define PS_ADC_VREF_CAL        1200
@@ -94,7 +96,7 @@
 #define PS_TIM_CNTR_CCR        CCR1
 
 #define PS_SYSTICK_FREQ        1000
-#define PS_DAQ_MAX_MEM         8000
+#define PS_DAQ_MAX_MEM         7000
 #define PS_MEM_RESERVE         2
 #define PS_LA_MAX_FS           1000000 // TODO ??
 #define PS_PWM_MAX_F           1000000
@@ -143,7 +145,7 @@
 #define PS_IWDG_RST            (IWDG->KR = PS_IWDG_RST_VAL)     // watchdog reset
 
 #define PS_AUTRIG_MIN_MS       500   // auto trigger milisecond delay
-#define PS_MIN_OP_VCC          2500  // minimum operating vcc ??
+//#define PS_MIN_OP_VCC          2500  // minimum operating vcc ??
 #define PS_UWTICK_MAX          4294967295
 
 #define PS_CNTR_MEAS_MS        2000  // counter max measure time

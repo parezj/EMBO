@@ -42,6 +42,7 @@ void daq_trig_init(daq_data_t* self)
     self->trig.buff_trig = NULL;
     self->trig.dma_trig = PS_DMA_CH_ADC1;
     self->trig.exti_trig = PS_LA_IRQ_EXTI1;
+    self->trig.adc_trig = ADC1;
     self->trig.order = 0;
     self->trig.ready_last = 0;
     self->trig.post_start = 0;
@@ -55,10 +56,16 @@ void daq_trig_check(daq_data_t* self)
         self->trig.pretrig_cntr = uwTick - self->trig.uwtick_first;
         if (self->trig.pretrig_cntr < 0)
             self->trig.pretrig_cntr += PS_UWTICK_MAX;
+
+        if (self->trig.pretrig_cntr > self->trig.pretrig_val && self->trig.set.mode != DISABLED)
+        {
+            ASSERT(self->trig.ch_reg != 0);
+            LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, self->trig.ch_reg);
+        }
     }
     else
     {
-        self->trig.pretrig_cntr = 0;
+        self->trig.pretrig_cntr = 0; // TODO delete?
     }
 
     if (self->mode != VM) // SCOPE || LA
@@ -116,47 +123,38 @@ void daq_trig_trigger_scope(daq_data_t* self)
         prev_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev_last_idx*2))));
     }
 
+    self->trig.all_cntr++;
 
-    /*
-    if (tignore)
+    if (self->trig.ignore)
     {
-        tignore = 0;
+        self->trig.ignore = 0;
 
-        uint32_t h = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH);
-        uint32_t l = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW);
+        uint32_t h = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_HIGH);
+        uint32_t l = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_LOW);
 
-        LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH, l);
-        LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW, h);
+        LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_HIGH, l);
+        LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_LOW, h);
     }
     else
     {
-    */
         // trigger condition
         if ((self->trig.set.edge == RISING && last_val > self->trig.set.val && prev_last_val <= self->trig.set.val) ||
             (self->trig.set.edge == FALLING && last_val < self->trig.set.val && prev_last_val >= self->trig.set.val))
         {
-            if (self->trig.pretrig_cntr > self->trig.pretrig_val) // pretrigger counter
-            {
-                //self->trig.pretrig_cntr = 0;
-                daq_trig_poststart(self, last_idx);
-            }
+            LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, LL_ADC_AWD_DISABLE);
+            daq_trig_poststart(self, last_idx);
         }
-        self->trig.all_cntr++;
+        else // false trig, switch edges and wait for another window
+        {
+            self->trig.ignore = 1;
 
-        /*
-        //else // false trig, switch edges and wait for another window
-        //{
-            tignore = 1;
+            uint32_t h = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_HIGH);
+            uint32_t l = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_LOW);
 
-            uint32_t h = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH);
-            uint32_t l = LL_ADC_GetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW);
-
-            LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_HIGH, l);
-            LL_ADC_SetAnalogWDThresholds(ADC1, LL_ADC_AWD_THRESHOLD_LOW, h);
-            trig_false_cntr++;
-        //}
-         */
-    //}
+            LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_HIGH, l);
+            LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, LL_ADC_AWD_THRESHOLD_LOW, h);
+        }
+    }
 }
 
 void daq_trig_trigger_la(daq_data_t* self)
@@ -375,10 +373,8 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 #endif
 
     self->trig.fullmem_val = (int)(((1.0 / (float)self->set.fs) * (float)self->set.mem) * (float)PS_SYSTICK_FREQ) + 1;
-    if (self->trig.pretrig_val < 10)
-        self->trig.pretrig_val = 10;
-
     self->trig.auttrig_val = PS_AUTRIG_MIN_MS + (int)((float)self->trig.fullmem_val * 1.0);
+    self->trig.adc_trig = adc;
 
     if (ch == 0 || mode == DISABLED)
     {
@@ -490,6 +486,8 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         self->trig.set.ch = ch;
     }
 
+    if (self->trig.pretrig_val < 1)
+        self->trig.pretrig_val = 1;
 
     daq_enable(self, 1);
     return 0;

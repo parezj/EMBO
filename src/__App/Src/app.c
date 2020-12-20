@@ -17,6 +17,16 @@
 #include "task.h"
 #include "semphr.h"
 
+#define PS_STACK_T1     64
+#define PS_STACK_T2     64
+#define PS_STACK_T3     64
+#define PS_STACK_T4     512
+
+#define PS_PRI_T1       3 // 2
+#define PS_PRI_T2       1
+#define PS_PRI_T3       4
+#define PS_PRI_T4       2 // 3
+
 void t1_wd(void* p);
 void t2_trig_check(void* p);
 void t3_trig_post_count(void* p);
@@ -46,6 +56,7 @@ void app_main(void)
 {
     __disable_irq();
 
+    // TODO - put on head of comm task?
     pwm_init(&pwm);
     led_init(&led);
     cntr_init(&cntr);
@@ -54,17 +65,19 @@ void app_main(void)
     daq_mode_set(&daq, VM);
     led_blink_set(&led, 3, PS_BLINK_LONG_MS);
 
+#ifdef PS_DEBUG
     pwm_set(&pwm, 1000, 20, 10, 50, 1, 1);
+    //LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
+    //LL_IWDG_SetReloadCounter(IWDG, 0x0FFF);
+#endif
 
     sem1_comm = xSemaphoreCreateBinaryStatic(&buff_sem1_comm);
     sem2_trig = xSemaphoreCreateBinaryStatic(&buff_sem2_trig);
-    mtx1 = xSemaphoreCreateBinaryStatic(&buff_mtx1);
+    mtx1 = xSemaphoreCreateMutexStatic(&buff_mtx1);
 
     ASSERT(sem1_comm != NULL);
     ASSERT(sem2_trig != NULL);
     ASSERT(mtx1 != NULL);
-
-    ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
     h_t1 = xTaskCreateStatic(t1_wd, "T1", PS_STACK_T1, NULL, PS_PRI_T1, stack_t1, &buff_t1);
     h_t2 = xTaskCreateStatic(t2_trig_check, "T2", PS_STACK_T2, NULL, PS_PRI_T2, stack_t2, &buff_t2);
@@ -72,9 +85,10 @@ void app_main(void)
     h_t4 = xTaskCreateStatic(t4_comm, "T4", PS_STACK_T4, NULL, PS_PRI_T4, stack_t4, &buff_t4);
 
     __enable_irq();
+
     vTaskStartScheduler();
 
-    while(1);
+    ASSERT(0);
 }
 
 void t1_wd(void* p)
@@ -99,7 +113,6 @@ void t2_trig_check(void* p)
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
         taskYIELD();
-        //vTaskDelay(5);
     }
 }
 

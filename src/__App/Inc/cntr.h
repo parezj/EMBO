@@ -17,7 +17,7 @@ typedef struct
 }cntr_data_t;
 
 void cntr_init(cntr_data_t* self);
-void cntr_enable(cntr_data_t* self, uint8_t enable);
+int cntr_enable(cntr_data_t* self, uint8_t enable);
 float cntr_read(cntr_data_t* self);
 
 #endif /* INC_CNTR_H_ */

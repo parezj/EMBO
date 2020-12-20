@@ -7,8 +7,8 @@ irq.c:156:6:ADC3_4_IRQHandler	0	static
 irq.c:161:6:TIM3_IRQHandler	16	static
 irq.c:195:6:TIM1_UP_IRQHandler	0	static
 irq.c:204:6:TIM1_CC_IRQHandler	0	static
-irq.c:214:6:EXTI1_IRQHandler	0	static
-irq.c:223:6:EXTI2_IRQHandler	0	static
-irq.c:232:6:EXTI3_IRQHandler	0	static
-irq.c:241:6:EXTI4_IRQHandler	0	static
-irq.c:250:6:EXTI0_IRQHandler	0	static
+irq.c:216:6:EXTI1_IRQHandler	0	static
+irq.c:225:6:EXTI2_IRQHandler	0	static
+irq.c:234:6:EXTI3_IRQHandler	0	static
+irq.c:243:6:EXTI4_IRQHandler	0	static
+irq.c:252:6:EXTI0_IRQHandler	0	static

@@ -31,6 +31,7 @@ USB_DEVICE/App/usbd_cdc_if.o: ../USB_DEVICE/App/usbd_cdc_if.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_iwdg.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_bus.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_system.h \
@@ -144,6 +145,8 @@ USB_DEVICE/App/usbd_cdc_if.o: ../USB_DEVICE/App/usbd_cdc_if.c \
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h:
+
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_iwdg.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h:
 

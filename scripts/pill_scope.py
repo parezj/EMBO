@@ -145,7 +145,7 @@ class PillScope(object):
                     max_mem = max_mem / 2
                 if self.mode == "SCOPE":
                     max_mem = max_mem / ((self.ch_num * 2) + 1)
-                self.mem = self.input3("Enter memory depth", "500", 1, int(max_mem))
+                self.mem = self.input3("Enter memory depth", str(int(max_mem)), 1, int(max_mem))
                 self.mem = int(self.mem)
                 max_fs = self.lim_la_fs
                 if self.mode == "SCOPE":
@@ -163,7 +163,8 @@ class PillScope(object):
                         if self.ch1:
                             cnt_result = 2
                         max_fs = 1.0 / (self.lim_adc_1ch_smpl_tm * float(cnt_result))
-                self.fs = self.input3("\nEnter sample frequency", "1000", 0, int(math.floor(max_fs / 100.0)) * 100)            
+                fs_max = int(math.floor(max_fs / 100.0)) * 100
+                self.fs = self.input3("\nEnter sample frequency", str(fs_max), 0, fs_max)            
                 self.fs = int(self.fs)
                 self.trig_ch = self.input3("Enter trigger channel", "1", 1, 4)
                 self.trig_ch = int(self.trig_ch)
@@ -199,6 +200,7 @@ class PillScope(object):
             if "OK" not in rx:
                 continue
 
+            """
             if self.mode == "SCOPE":
                 rx = self.send_cmd("SCOP:SET?", self.TIMEOUT_CMD)
             elif self.mode == "LA":
@@ -206,6 +208,7 @@ class PillScope(object):
             if self.READY_STR in rx:
                 self.ready = True
             print("settings: " + rx + "\n")
+            """
             break
 
 
@@ -322,17 +325,9 @@ class PillScope(object):
         plt.grid(True, linestyle=':')
         ax.grid(which='major', alpha=0.9)
         if self.mode != "VM":
-
-
-            #rngx = (self.mem / self.fs * 1000)
-            #rngx_l = -1 * rngx * (self.trig_pre / 100.0)
-            #rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)
-            
-            
-            rngx = self.mem
+            rngx = (self.mem / self.fs * 1000)
             rngx_l = -1 * rngx * (self.trig_pre / 100.0)
-            rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)
-
+            rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)  
             major_ticks_x = np.linspace(rngx_l, rngx_r, 50)
             minor_ticks_x = np.linspace(rngx_l, rngx_r, 10)
             ax.set_xticks(major_ticks_x)
@@ -341,7 +336,7 @@ class PillScope(object):
             plt.axvline(x=0, color='k', linestyle='--', linewidth=2.5, alpha=0.8)
             if self.mode != "LA":
                 plt.axhline(y=3.3 / 2.0, color='k', linestyle='--', linewidth=2.5, alpha=0.8)
-            plt.xlabel("Samples [-]") #plt.xlabel("Time [ms]")
+            plt.xlabel("Time [ms]")
         else:
             plt.xlabel("Time")
             major_ticks_x = np.arange(0, self.VM_MAX_LEN, 50)
@@ -400,7 +395,13 @@ class PillScope(object):
         start = datetime.datetime.now()
         buffer_string = ""
         while True:
-            buffer_string = buffer_string + (self.ser.read(self.ser.inWaiting())).decode("utf-8") 
+            try:
+                buffer_string = buffer_string + (self.ser.read(self.ser.inWaiting())).decode("utf-8") 
+            except Exception as e:
+                pass
+                #print("--" + str(buffer_string) + "--")
+                #print(e)
+
             if (datetime.datetime.now() - start).total_seconds() > timeout:
                 #print("Command timeout!")
                 return ""

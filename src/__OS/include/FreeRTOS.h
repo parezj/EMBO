@@ -75,6 +75,7 @@
  */
 #include <stddef.h>
 
+
 /*
  * If stdint.h cannot be located then:
  *   + If using GCC ensure the -nostdint options is *not* being used.
@@ -1088,6 +1089,7 @@ typedef struct xSTATIC_TIMER
 void xPortSysTickHandler( void );
 void xPortPendSVHandler( void ) __attribute__ (( naked ));
 void vPortSVCHandler( void ) __attribute__ (( naked ));
+
 
 #endif /* INC_FREERTOS_H */
 

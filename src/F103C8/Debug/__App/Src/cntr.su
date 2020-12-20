@@ -1,4 +1,4 @@
 core_cm3.h:1686:26:NVIC_EncodePriority.constprop	0	static
 cntr.c:14:6:cntr_init	24	static
-cntr.c:29:6:cntr_enable	24	static,ignoring_inline_asm
-cntr.c:56:7:cntr_read	16	static
+cntr.c:29:5:cntr_enable	16	static,ignoring_inline_asm
+cntr.c:60:7:cntr_read	24	static

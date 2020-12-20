@@ -25,7 +25,7 @@ void pwm_init(pwm_data_t* self)
 
 int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int enable1, int enable2)
 {
-    if (freq < 0 || freq > PS_PWM_MAX_F || duty1 < 0 || duty1 > 100 ||
+    if (freq <= 0 || freq > PS_PWM_MAX_F || duty1 < 0 || duty1 > 100 ||
         duty2 < 0 || duty2 > 100 || offset2 < 0 || offset2 > 100)
     {
         return -1;

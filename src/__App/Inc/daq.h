@@ -83,6 +83,7 @@ typedef struct //__attribute__((packed))
     daq_buff_t* buff_trig;  // pointer to buffer 1-4, which is triggered
     uint32_t dma_trig;      // DMA channel, which is triggered
     uint32_t exti_trig;     // EXTI channel, which is triggered
+    ADC_TypeDef* adc_trig;  // ADC, which is triggered
     int order;              // order from bottom of triggered ch in circular buffer
 
     int post_start;         // flag when set, posttrigger counting starts

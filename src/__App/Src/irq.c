@@ -160,7 +160,7 @@ void ADC3_4_IRQHandler(void)
 
 void PS_TIM_ADC_IRQh(void)
 {
-    if(LL_TIM_IsActiveFlag_CC1(PS_TIM_ADC) == 1)
+    if(LL_TIM_IsActiveFlag_CC1(PS_TIM_ADC) == 1)  // TODO DELETE??? ------------------------------------------
     {
         ASSERT(daq.trig.buff_trig != NULL);
         ASSERT(daq.trig.dma_trig != 0);
@@ -203,7 +203,9 @@ void PS_TIM_CNTR_UP_IRQh(void)
 
 void PS_TIM_CNTR_CCR_IRQh(void)
 {
-    cntr.data_ovf[cntr.data_ovf_it++] = cntr.ovf; // bug
+    if (cntr.data_ovf_it < PS_CNTR_BUFF_SZ)
+        cntr.data_ovf[cntr.data_ovf_it++] = cntr.ovf;
+
     if(LL_TIM_IsActiveFlag_CC1(PS_TIM_CNTR) == 1)
     {
         LL_TIM_ClearFlag_CC1(PS_TIM_CNTR);

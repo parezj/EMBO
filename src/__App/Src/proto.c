@@ -18,6 +18,7 @@
 
 scpi_result_t PS_Reset(scpi_t * context)
 {
+    daq_enable(&daq, 0);
     daq_settings_init(&daq);
     daq_mode_set(&daq, VM);
     daq_enable(&daq, 1);
@@ -100,21 +101,8 @@ scpi_result_t PS_System_LimitsQ(scpi_t * context)
 
 scpi_result_t PS_VM_ReadQ(scpi_t * context)
 {
-    //char f1[10];
-    //sprintFast(f1, " %s M", , 0);
     if (daq.mode == VM)
     {
-        //uint16_t raw_ch3 = adc_read(LL_ADC_CHANNEL_3);
-        //uint16_t raw_ch4 = adc_read(LL_ADC_CHANNEL_4);
-
-        //uint16_t raw_vref = readADC(LL_ADC_CHANNEL_VREFINT);
-
-        //int vcc_mv = (3300 * raw_cal) / raw_vref;
-        //int vcc_mv = (4095 * 1200) / raw_vref;
-
-        //int ch3 = (3300 * raw_cal * raw_ch3) / (raw_vref * 4095);
-        //int ch4 = (3300 * raw_cal * raw_ch4) / (raw_vref * 4095);
-
         daq_enable(&daq, 0);
 
         uint32_t p1 = 0;
@@ -173,7 +161,7 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         float ch4 = vcc * ch4_raw / daq.adc_max_val;
 
         daq.vcc_mv = vcc * 1000;
-        if (daq.vcc_mv < PS_MIN_OP_VCC)
+        if (daq.vcc_mv < 2000)
         {
             SCPI_ErrorPush(context, SCPI_ERROR_SAMPLING_FAILED);
             return SCPI_RES_ERR;
@@ -227,7 +215,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
                                     daq.set.bits, daq.buff1.data);
 
         daq.vcc_mv = daq.adc_max_val * PS_ADC_VREF_CAL / daq.vcc;
-        if (daq.vcc_mv < PS_MIN_OP_VCC)
+        if (daq.vcc_mv < 2000)
         {
             SCPI_ErrorPush(context, SCPI_ERROR_SAMPLING_FAILED);
             return SCPI_RES_ERR;
@@ -598,7 +586,12 @@ scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;
     }
-    else
+    else if (f == -2)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_MEASURE_FAILED);
+        return SCPI_RES_ERR;
+    }
+    else // if (f == -1)
     {
         SCPI_ErrorPush(context, SCPI_ERROR_TIME_OUT);
         return SCPI_RES_ERR;

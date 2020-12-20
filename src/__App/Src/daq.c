@@ -324,7 +324,7 @@ int daq_fs_set(daq_data_t* self, float fs)
 #elif defined(PS_ADC_MODE_ADC1234)
     float scope_max_fs = 1.0 / (PS_ADC_1CH_SMPL_TM * (float)(self->set.ch1_en ? 2 : 1));
 #endif
-    if (fs < 0 || fs > (self->mode == LA ? PS_LA_MAX_FS : scope_max_fs))
+    if (fs <= 0 || fs > (self->mode == LA ? PS_LA_MAX_FS : scope_max_fs))
         return -1;
 
     self->set.fs = fs;
@@ -410,6 +410,9 @@ void daq_reset(daq_data_t* self)
 void daq_enable(daq_data_t* self, uint8_t enable)
 {
     self->trig.pretrig_cntr = 0;
+    self->trig.all_cntr = 0;
+    self->trig.cntr = 0;
+    self->trig.ignore = 0;
 
     if (!enable)
         LL_TIM_DisableCounter(PS_TIM_ADC);
@@ -475,11 +478,11 @@ static void daq_enable_adc(daq_data_t* self, ADC_TypeDef* adc, uint8_t enable, u
     {
         LL_DMA_EnableChannel(PS_DMA_ADC, dma_ch);
         LL_ADC_REG_StartConversionExtTrig(adc, LL_ADC_REG_TRIG_EXT_RISING);
-        if (self->trig.set.mode != DISABLED)
-        {
-            ASSERT(self->trig.ch_reg != 0);
-            LL_ADC_SetAnalogWDMonitChannels(adc, self->trig.ch_reg);
-        }
+        //if (self->trig.set.mode != DISABLED)
+        //{
+        //    ASSERT(self->trig.ch_reg != 0);
+        //    LL_ADC_SetAnalogWDMonitChannels(adc, self->trig.ch_reg);
+        //}
     }
     else
     {
