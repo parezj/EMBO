@@ -11,7 +11,7 @@ static inline void iwdg_feed()
     PS_IWDG_RST;
 };
 
-void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t sz);
+void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t p_sz, uint32_t m_sz);
 
 void adc_init();
 void adc_init_calib(ADC_TypeDef* adc);

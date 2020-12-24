@@ -24,7 +24,19 @@ class PillScope(object):
                 bytesize=serial.EIGHTBITS)
             self.ser.flush()
             self.receive(self.TIMEOUT_CMD)
-            #self.pwm()
+            rx = self.send_cmd("*IDN?", self.TIMEOUT_CMD)
+            print(rx)
+            if (rx == ""):
+                print("Device not connected!")
+                return False
+
+            rx = self.send_cmd("*RST", self.TIMEOUT_CMD)
+            print(rx)
+            if (rx == ""):
+                print("Device not connected!")
+                return False
+            
+            self.pwm()
             if not self.choose_mode():
                 return
           
@@ -35,19 +47,7 @@ class PillScope(object):
             self.limits()
             self.loop()
         
-    def choose_mode(self):
-        rx = self.send_cmd("*IDN?", self.TIMEOUT_CMD)
-        print(rx)
-        if (rx == ""):
-            print("Device not connected!")
-            return False
-
-        rx = self.send_cmd("*RST", self.TIMEOUT_CMD)
-        print(rx)
-        if (rx == ""):
-            print("Device not connected!")
-            return False
-        
+    def choose_mode(self):       
         while True:
             self.mode = self.input2("\nChoose mode (SCOPE, VM, LA, CNTR):", "SCOPE")
             if self.mode == "CNTR":
@@ -70,18 +70,21 @@ class PillScope(object):
         rx = self.send_cmd("SYST:LIM?", self.TIMEOUT_CMD)
         print(rx + "\n")
         toks = rx.split(",")
-        self.lim_adc_1ch_smpl_tm = float(toks[0])
-        self.lim_mem = int(toks[1])
-        self.lim_la_fs = int(toks[2])
-        self.lim_pwm_fs = int(toks[3])
-        self.lim_adcs = bool(toks[4])
-        self.lim_bit8 = bool(toks[5])
-        self.lim_dac = bool(toks[6])
+        self.lim_adc_1ch_smpl_tm12 = float(toks[0])
+        self.lim_adc_1ch_smpl_tm8 = float(toks[1])
+        self.lim_mem = int(toks[2])
+        self.lim_la_fs = int(toks[3])
+        self.lim_pwm_fs = int(toks[4])
+        self.lim_adcs = int(toks[5].replace("D", "").replace("I", ""))
+        self.lim_dual = "D" in toks[5]
+        self.lim_inter = "I" in toks[5]
+        self.lim_bit8 = bool(toks[6])
+        self.lim_dac = bool(toks[7])
 
     def pwm(self):
-        default_pwm = "15,20,10,50,1,1";
+        default_pwm = "1000,25,25,50,1,1";
         while True:
-            cmd = input("Enter PWM 2-ch settings (FREQ1,DUTY1,DUTY2,EN1,EN2): [" + default_pwm + "]\n")
+            cmd = input("Enter PWM 2-ch settings (FREQ1,DUTY1,DUTY2,OFFSET,EN1,EN2): [" + default_pwm + "]\n")
             if cmd == "":
                 cmd = default_pwm
             rx = self.send_cmd("PWM:SET " + cmd, self.TIMEOUT_CMD)
@@ -126,7 +129,7 @@ class PillScope(object):
                         break
                 self.parse_ch()
                 self.vcc = self.input2("Show VCC:", "True")
-                self.vcc = bool(self.vcc)
+                self.vcc = "True" in self.vcc
             else:
                 self.bits = 1
                 if self.mode == "SCOPE":
@@ -144,28 +147,42 @@ class PillScope(object):
                 if self.bits == 12:
                     max_mem = max_mem / 2
                 if self.mode == "SCOPE":
-                    max_mem = max_mem / ((self.ch_num * 2) + 1)
+                    max_mem = max_mem / ((self.ch_num * 2))
+                if self.mode == "LA":
+                    max_mem = max_mem / 2
                 self.mem = self.input3("Enter memory depth", str(int(max_mem)), 1, int(max_mem))
                 self.mem = int(self.mem)
                 max_fs = self.lim_la_fs
                 if self.mode == "SCOPE":
+                    smpltm = self.lim_adc_1ch_smpl_tm12;
+                    if self.bits == 8:
+                        smpltm = self.lim_adc_1ch_smpl_tm8;
                     if self.lim_adcs == 1:
-                        max_fs = 1.0 / (self.lim_adc_1ch_smpl_tm * float((self.ch_num + 1)))
+                        max_fs = smpltm / float(self.ch_num)
+                        if self.lim_dual and (self.ch_num == 2 or self.ch_num == 4):
+                            print("Dual mode enabled (x2)\n");
+                            max_fs = max_fs * 2.0
                     elif self.lim_adcs == 2:
-                        cnt1 = int(self.ch1) + int(self.ch2) + 1
+                        cnt1 = int(self.ch1) + int(self.ch2)
                         cnt2 = int(self.ch3) + int(self.ch4)
                         cnt_result = cnt1
                         if cnt2 > cnt1:
                             cnt_result = cnt2
-                        max_fs = 1.0 / (self.lim_adc_1ch_smpl_tm * float(cnt_result))
+                        max_fs = smpltm / float(cnt_result)
                     else: # 4
-                        cnt_result = 1
-                        if self.ch1:
-                            cnt_result = 2
-                        max_fs = 1.0 / (self.lim_adc_1ch_smpl_tm * float(cnt_result))
+                        max_fs = smpltm
                 fs_max = int(math.floor(max_fs / 100.0)) * 100
+                if self.mode == "SCOPE" and self.lim_inter and self.ch_num == 1:
+                    tmpstr = "Interleaved mode enabled";
+                    if self.lim_adcs == 4:
+                        fs_max = fs_max * 4.0;
+                        tmpstr = tmpstr + " (x4)\n"
+                    else:
+                        fs_max = fs_max * 2.0;
+                        tmpstr = tmpstr + " (x2)\n"
+                    print(tmpstr)
                 self.fs = self.input3("\nEnter sample frequency", str(fs_max), 0, fs_max)            
-                self.fs = int(self.fs)
+                self.fs = int(float(self.fs))
                 self.trig_ch = self.input3("Enter trigger channel", "1", 1, 4)
                 self.trig_ch = int(self.trig_ch)
                 self.trig_val = 0
@@ -305,10 +322,10 @@ class PillScope(object):
             self.la_data = []
             self.la_data.extend(([], [], [], []))
             for i in range(0, int(len(self.raw_data))):
-                ch1 = self.raw_data[i] & 1 != 0
-                ch2 = self.raw_data[i] & 2 != 0
-                ch3 = self.raw_data[i] & 4 != 0
-                ch4 = self.raw_data[i] & 8 != 0
+                ch1 = self.raw_data[i] & 2 != 0
+                ch2 = self.raw_data[i] & 4 != 0
+                ch3 = self.raw_data[i] & 8 != 0
+                ch4 = self.raw_data[i] & 16 != 0
                 self.la_data[0].append(ch1)
                 self.la_data[1].append(ch2)
                 self.la_data[2].append(ch3)
@@ -325,9 +342,14 @@ class PillScope(object):
         plt.grid(True, linestyle=':')
         ax.grid(which='major', alpha=0.9)
         if self.mode != "VM":
-            rngx = (self.mem / self.fs * 1000)
+
+            rngx = (self.mem / self.fs * 1000) * 1.0
             rngx_l = -1 * rngx * (self.trig_pre / 100.0)
             rngx_r = rngx * ((100.0 - self.trig_pre) / 100.0)  
+            #rngx = self.mem
+            #rngx_l = 0
+            #rngx_r = rngx
+
             major_ticks_x = np.linspace(rngx_l, rngx_r, 50)
             minor_ticks_x = np.linspace(rngx_l, rngx_r, 10)
             ax.set_xticks(major_ticks_x)
@@ -369,11 +391,15 @@ class PillScope(object):
             if self.ch4:
                 plt.plot(t, self.scope_data[3], 'm', label="Channel 4", linewidth=LINE_WIDTH)
         elif self.mode == "LA":
-            t = np.arange(0, len(self.la_data[0]))
-            plt.plot(t, self.la_data[0], 'g', label="Channel 1", linewidth=LINE_WIDTH)
-            plt.plot(t, self.la_data[1], 'r', label="Channel 2", linewidth=LINE_WIDTH)
-            plt.plot(t, self.la_data[2], 'b', label="Channel 3", linewidth=LINE_WIDTH)
-            plt.plot(t, self.la_data[3], 'm', label="Channel 4", linewidth=LINE_WIDTH)
+            t = np.linspace(rngx_l, rngx_r, self.mem)
+            if self.ch1:
+                plt.plot(t, self.la_data[0], 'g', label="Channel 1", linewidth=LINE_WIDTH)
+            if self.ch2:
+                plt.plot(t, self.la_data[1], 'r', label="Channel 2", linewidth=LINE_WIDTH)
+            if self.ch3:
+                plt.plot(t, self.la_data[2], 'b', label="Channel 3", linewidth=LINE_WIDTH)
+            if self.ch4:
+                plt.plot(t, self.la_data[3], 'm', label="Channel 4", linewidth=LINE_WIDTH)
         else:
             t = np.arange(0, len(self.vm_data[0]))
             if self.ch1:

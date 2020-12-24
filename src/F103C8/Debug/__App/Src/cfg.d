@@ -1,4 +1,4 @@
-__App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
+__App/Src/cfg.o: F:/STM32Cube/PillScope/src/__App/Src/cfg.c \
  F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
  F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h \
@@ -26,20 +26,7 @@ __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
- F:/STM32Cube/PillScope/src/__App/Inc/cntr.h ../Core/Inc/main.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_bus.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_system.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_exti.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_cortex.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h \
- F:/STM32Cube/PillScope/src/__App/Inc/periph.h
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h
 
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
@@ -95,32 +82,4 @@ F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h:
 
-F:/STM32Cube/PillScope/src/__App/Inc/cntr.h:
-
-../Core/Inc/main.h:
-
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_bus.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_system.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_exti.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_cortex.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_utils.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
-
-../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
-
-F:/STM32Cube/PillScope/src/__App/Inc/periph.h:

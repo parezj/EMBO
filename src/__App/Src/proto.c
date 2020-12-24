@@ -67,7 +67,9 @@ scpi_result_t PS_System_ModeQ(scpi_t * context)
 
 scpi_result_t PS_System_LimitsQ(scpi_t * context)
 {
-    char buff[100];
+    char buff[80];
+    char dual[2] = {'\0'};
+    char inter[2] = {'\0'};
     uint8_t dac = 0;
     uint8_t bit8 = 0;
     uint8_t adcs = 0;
@@ -86,12 +88,22 @@ scpi_result_t PS_System_LimitsQ(scpi_t * context)
     adcs = 4;
 #endif
 
-    char smplt_s[15];
-    sprint_fast(smplt_s, "%s", PS_ADC_1CH_SMPL_TM, 8);
+#if defined(PS_ADC_DUALMODE)
+    dual[0] = 'D';
+#endif
+#if defined(PS_ADC_INTERLEAVED)
+    inter[0] = 'I';
+#endif
+
+    //char smplt12_s[15];
+    //char smplt8_s[15];
+    //sprint_fast(smplt12_s, "%s", PS_ADC_1CH_SMPL_TM(PS_ADC_SMPLT_MAX_N, PS_ADC_TCONV12), 8);
+    //sprint_fast(smplt8_s, "%s", PS_ADC_1CH_SMPL_TM(PS_ADC_SMPLT_MAX_N, PS_ADC_TCONV8), 8);
 
     int pwm_max_f = PS_TIM_PWM1_FREQ / 2;
 
-    int len = sprintf(buff, "%s,%d,%d,%d,%d,%d,%d", smplt_s, PS_DAQ_MAX_MEM, PS_LA_MAX_FS, pwm_max_f, adcs, bit8, dac);
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d", PS_DAQ_MAX_B12_FS, PS_DAQ_MAX_B8_FS, PS_DAQ_MAX_MEM,
+                      PS_LA_MAX_FS, pwm_max_f, adcs, dual, inter, bit8, dac);
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -106,7 +118,10 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         daq_enable(&daq, 0);
 
         uint32_t p1 = 0;
-        SCPI_ParamUInt32(context, &p1, FALSE);
+        if (context != NULL)
+            SCPI_ParamUInt32(context, &p1, FALSE);
+        else
+            p1 = 1;
 
         float vcc_raw = 0;
         float ch1_raw = 0;
@@ -125,22 +140,22 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         }
 
 #if defined(PS_ADC_MODE_ADC1)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC);
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
 
         get_avg_from_circ(last1, 5, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
 
-#elif defined(PS_ADC_MODE_ADC12
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2);
+#elif defined(PS_ADC_MODE_ADC12)
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
+        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2, PS_DMA_ADC2);
 
         get_avg_from_circ(last1, 3, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, &ch2_raw, NULL, NULL);
         get_avg_from_circ(last2, 2, avg_num, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
 
 #elif defined(PS_ADC_MODE_ADC1234)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2);
-        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3);
-        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4);
+        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
+        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2, PS_DMA_ADC2);
+        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3, PS_DMA_ADC3);
+        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4, PS_DMA_ADC4);
 
         get_avg_from_circ(last1, 2, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, NULL, NULL, NULL);
         get_avg_from_circ(last2, 1, avg_num, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
@@ -160,11 +175,15 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         float ch3 = vcc * ch3_raw / daq.adc_max_val;
         float ch4 = vcc * ch4_raw / daq.adc_max_val;
 
+        daq.vcc = vcc_raw;
         daq.vcc_mv = vcc * 1000;
-        if (daq.vcc_mv < 2000)
+
+        if (context == NULL)
         {
-            SCPI_ErrorPush(context, SCPI_ERROR_SAMPLING_FAILED);
-            return SCPI_RES_ERR;
+            if (daq.vcc_mv > 0)
+                return SCPI_RES_OK;
+            else
+                return SCPI_RES_ERR;
         }
 
         sprint_fast(vcc_s, "%s", vcc, 4);
@@ -203,28 +222,19 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         if (daq.trig.set.mode == DISABLED)
         {
             daq_enable(&daq, 0);
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC);
+            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
         }
 
-        float cal = PS_ADC_VREF_CAL_B12;
+        float cal = PS_ADC_VREF_CAL * 10.0;
         if (daq.set.bits == B8)
-            cal = PS_ADC_VREF_CAL_B8;
+            cal = PS_ADC_VREF_CAL / 10.0;
 
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
-        daq.vcc = get_vcc_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, daq.buff1.chans,
-                                    daq.set.bits, daq.buff1.data);
-
-        daq.vcc_mv = daq.adc_max_val * PS_ADC_VREF_CAL / daq.vcc;
-        if (daq.vcc_mv < 2000)
-        {
-            SCPI_ErrorPush(context, SCPI_ERROR_SAMPLING_FAILED);
-            return SCPI_RES_ERR;
-        }
 
 #if defined(PS_ADC_MODE_ADC1)
         int added = 0;
         int idx = 0;
-        int ch_it = 2;
+        int ch_it = 1; // 2 /w Vcc
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
@@ -241,9 +251,9 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
 #elif defined(PS_ADC_MODE_ADC12)
 
-       int added = 0;
+        int added = 0;
         int idx = 0;
-        int ch_it = 2;
+        int ch_it = 1; // 2 /w Vcc
 
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
         int buff2_mem = daq.buff2.len - daq.buff2.reserve;
@@ -264,12 +274,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
                                        daq.set.bits, daq.vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
 
 #elif defined(PS_ADC_MODE_ADC1234)
-        /*
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2);
-        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3);
-        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4);
-        */
+
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
         int buff2_mem = daq.buff2.len - daq.buff2.reserve;
         int buff3_mem = daq.buff3.len - daq.buff3.reserve;
@@ -279,7 +284,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         int idx = 0;
 
         if (daq.set.ch1_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, 2, daq.buff1.chans,
+            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, 1, daq.buff1.chans,
                                        daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch2_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, 1, daq.buff2.chans,
@@ -350,6 +355,7 @@ scpi_result_t PS_SCOPE_Set(scpi_t * context)
             return SCPI_RES_ERR;
         }
 
+        daq_settings_save(&daq.set, &daq.trig.set, &daq.save_s, &daq.trig.save_s);
         daq_enable(&daq, 0);
         daq_reset(&daq);
         daq.dis_hold = 1;
@@ -357,7 +363,7 @@ scpi_result_t PS_SCOPE_Set(scpi_t * context)
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, (int)p1);
         int ret4 = daq_ch_set(&daq, p4[0] == 'T' ? 1 : 0, p4[1] == 'T' ? 1 : 0,
-                                    p4[2] == 'T' ? 1 : 0, p4[3] == 'T' ? 1 : 0);
+                                    p4[2] == 'T' ? 1 : 0, p4[3] == 'T' ? 1 : 0, (int)p3);
         int ret3 = daq_fs_set(&daq, (int)p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
         int ret5 = daq_trig_set(&daq, p5, p6, (p7[0] == 'R' ? RISING : FALLING),
@@ -373,6 +379,11 @@ scpi_result_t PS_SCOPE_Set(scpi_t * context)
         }
         else
         {
+            daq.mode = VM;
+            daq_mode_set(&daq, SCOPE);  // reload saved settings
+            daq.dis_hold = 0;
+            daq_enable(&daq, 1);
+
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
         }
@@ -388,7 +399,7 @@ scpi_result_t PS_SCOPE_SetQ(scpi_t * context)
 {
     if (daq.mode == SCOPE)
     {
-        char buff[100];
+        char buff[80];
         char freq_s[30];
         char chans_en[5];
         char edge_s[2];
@@ -406,8 +417,12 @@ scpi_result_t PS_SCOPE_SetQ(scpi_t * context)
         edge_s[1] = '\0';
         mode_s[1] = '\0';
 
-        int len = sprintf(buff, "%d,%d,%s,%s,%d,%d,%s,%s,%d", daq.set.bits, daq.set.mem, freq_s, chans_en,
-                          daq.trig.set.ch, daq.trig.set.val_percent, edge_s, mode_s, daq.trig.set.pretrigger);
+        char maxZ_s[15];
+        float max_Z = PS_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? PS_LN2POW14 : PS_LN2POW10);
+        sprint_fast(maxZ_s, "%skOhm", max_Z, 1);
+
+        int len = sprintf(buff, "\"%d,%d,%s,%s,%d,%d,%s,%s,%d,%s\"", daq.set.bits, daq.set.mem, freq_s, chans_en,
+                          daq.trig.set.ch, daq.trig.set.val_percent, edge_s, mode_s, daq.trig.set.pretrigger, maxZ_s);
 
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;
@@ -491,13 +506,14 @@ scpi_result_t PS_LA_Set(scpi_t * context)
             return SCPI_RES_ERR;
         }
 
+        daq_settings_save(&daq.set, &daq.trig.set, &daq.save_l, &daq.trig.save_l);
         daq_enable(&daq, 0);
         daq_reset(&daq);
         daq.dis_hold = 1;
 
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, B1);
-        int ret4 = daq_ch_set(&daq, 1, 1, 1, 1);
+        int ret4 = daq_ch_set(&daq, 1, 1, 1, 1, (int)p3);
         int ret3 = daq_fs_set(&daq, (int)p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
         int ret5 = daq_trig_set(&daq, p5, 0, (p7[0] == 'R' ? RISING : FALLING),
@@ -513,6 +529,11 @@ scpi_result_t PS_LA_Set(scpi_t * context)
         }
         else
         {
+            daq.mode = VM;
+            daq_mode_set(&daq, LA); // reload saved settings
+            daq.dis_hold = 0;
+            daq_enable(&daq, 1);
+
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
         }
@@ -528,7 +549,7 @@ scpi_result_t PS_LA_SetQ(scpi_t * context)
 {
     if (daq.mode == LA)
     {
-        char buff[100];
+        char buff[80];
         char freq_s[30];
         char edge_s[2];
         char mode_s[2];
@@ -540,7 +561,7 @@ scpi_result_t PS_LA_SetQ(scpi_t * context)
         edge_s[1] = '\0';
         mode_s[1] = '\0';
 
-        int len = sprintf(buff, "%d,%s,%d,%s,%s,%d", daq.set.mem, freq_s,
+        int len = sprintf(buff, "\"%d,%s,%d,%s,%s,%d\"", daq.set.mem, freq_s,
                           daq.trig.set.ch, edge_s, mode_s, daq.trig.set.pretrigger);
 
         SCPI_ResultCharacters(context, buff, len);
@@ -585,11 +606,6 @@ scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
 
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;
-    }
-    else if (f == -2)
-    {
-        SCPI_ErrorPush(context, SCPI_ERROR_MEASURE_FAILED);
-        return SCPI_RES_ERR;
     }
     else // if (f == -1)
     {

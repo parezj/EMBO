@@ -1,5 +1,5 @@
-app.c:93:6:t1_wd	8	static
-app.c:104:6:t2_trig_check	8	static,ignoring_inline_asm
-app.c:118:6:t3_trig_post_count	8	static
-app.c:131:6:t4_comm	8	static
-app.c:55:6:app_main	32	static,ignoring_inline_asm
+app.c:75:6:t1_wd	8	static
+app.c:89:6:t2_trig_check	8	static,ignoring_inline_asm
+app.c:106:6:t3_trig_post_count	8	static
+app.c:122:6:t4_comm_and_init	24	static
+app.c:51:6:app_main	32	static,ignoring_inline_asm

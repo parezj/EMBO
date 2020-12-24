@@ -38,6 +38,7 @@
 "USB_DEVICE/App/usbd_desc.o"
 "USB_DEVICE/Target/usbd_conf.o"
 "__App/Src/app.o"
+"__App/Src/cfg.o"
 "__App/Src/cntr.o"
 "__App/Src/comm.o"
 "__App/Src/daq.o"

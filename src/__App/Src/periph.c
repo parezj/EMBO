@@ -16,7 +16,7 @@
 #include "main.h"
 
 
-void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t sz)
+void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t p_sz, uint32_t m_sz)
 {
     LL_DMA_DisableChannel(dma, dma_ch);
     // Select ADC as DMA transfer request.
@@ -26,7 +26,8 @@ void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint
     LL_DMA_ConfigAddresses(dma, dma_ch, src,
                            dst,
                            LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
-    LL_DMA_SetPeriphSize(dma, dma_ch, sz);
+    LL_DMA_SetPeriphSize(dma, dma_ch, p_sz);
+    LL_DMA_SetMemorySize(dma, dma_ch, m_sz);
     LL_DMA_SetDataLength(dma, dma_ch, buff_size);
 
     //LL_DMA_EnableIT_TC(dma, dma_ch); // Enable transfer complete interrupt.
@@ -55,6 +56,11 @@ void adc_init()
 {
 #if defined(PS_ADC_MODE_ADC1) || defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
     adc_init_calib(ADC1);
+
+#if defined(PS_ADC_DUALMODE)
+    adc_init_calib(ADC2);
+#endif
+
 #endif
 
 #if defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
@@ -98,6 +104,8 @@ void adc_init_calib(ADC_TypeDef* adc)
 void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, uint32_t smpl_time, uint8_t vrefint)
 {
     LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_TIM);
+    LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(adc), LL_ADC_MULTI_INDEPENDENT);
+    LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
 
     //LL_ADC_Disable(adc);
     int len = ch1 + ch2 + ch3 + ch4 + vrefint;
@@ -119,27 +127,27 @@ void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t
     if (vrefint)
     {
         LL_ADC_REG_SetSequencerRanks(adc, next_rank, LL_ADC_CHANNEL_VREFINT);
-        LL_ADC_SetChannelSamplingTime(adc, LL_ADC_CHANNEL_VREFINT, PS_ADC_SMPL_TIME);
+        LL_ADC_SetChannelSamplingTime(adc, LL_ADC_CHANNEL_VREFINT, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch1) {
         LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH1);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH1, PS_ADC_SMPL_TIME);
+        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH1, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch2) {
         LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH2);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH2, PS_ADC_SMPL_TIME);
+        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH2, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch3) {
         LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH3);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH3, PS_ADC_SMPL_TIME);
+        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH3, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch4) {
         LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH4);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH4, PS_ADC_SMPL_TIME);
+        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH4, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
 

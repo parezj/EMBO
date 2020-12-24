@@ -5,6 +5,7 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
 F:/STM32Cube/PillScope/src/__App/Src/app.c \
+F:/STM32Cube/PillScope/src/__App/Src/cfg.c \
 F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
 F:/STM32Cube/PillScope/src/__App/Src/comm.c \
 F:/STM32Cube/PillScope/src/__App/Src/daq.c \
@@ -18,6 +19,7 @@ F:/STM32Cube/PillScope/src/__App/Src/utility.c
 
 OBJS += \
 ./__App/Src/app.o \
+./__App/Src/cfg.o \
 ./__App/Src/cntr.o \
 ./__App/Src/comm.o \
 ./__App/Src/daq.o \
@@ -31,6 +33,7 @@ OBJS += \
 
 C_DEPS += \
 ./__App/Src/app.d \
+./__App/Src/cfg.d \
 ./__App/Src/cntr.d \
 ./__App/Src/comm.d \
 ./__App/Src/daq.d \
@@ -46,6 +49,8 @@ C_DEPS += \
 # Each subdirectory must supply rules for building sources it contributes
 __App/Src/app.o: F:/STM32Cube/PillScope/src/__App/Src/app.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -DUSE_FULL_LL_DRIVER -DDEBUG -c -I"F:/STM32Cube/PillScope/src/__App/Inc" -I"F:/STM32Cube/PillScope/src/__OS/include" -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -Os -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"__App/Src/app.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
+__App/Src/cfg.o: F:/STM32Cube/PillScope/src/__App/Src/cfg.c
+	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -DUSE_FULL_LL_DRIVER -DDEBUG -c -I"F:/STM32Cube/PillScope/src/__App/Inc" -I"F:/STM32Cube/PillScope/src/__OS/include" -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -Os -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"__App/Src/cfg.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c
 	arm-none-eabi-gcc "$<" -mcpu=cortex-m3 -std=gnu11 -g3 -DUSE_HAL_DRIVER -DSTM32F103xB -DUSE_FULL_LL_DRIVER -DDEBUG -c -I"F:/STM32Cube/PillScope/src/__App/Inc" -I"F:/STM32Cube/PillScope/src/__OS/include" -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -I../USB_DEVICE/App -I../USB_DEVICE/Target -I../Middlewares/ST/STM32_USB_Device_Library/Core/Inc -I../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc -Os -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"__App/Src/cntr.d" -MT"$@" --specs=nano.specs -mfloat-abi=soft -mthumb -o "$@"
 __App/Src/comm.o: F:/STM32Cube/PillScope/src/__App/Src/comm.c

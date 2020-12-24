@@ -185,9 +185,7 @@ extern "C" {
     XE(SCPI_ERROR_USER_REQUEST,                 -600, "User request")                                 \
     XE(SCPI_ERROR_REQUEST_CONTROL,              -700, "Request control")                              \
     XE(SCPI_ERROR_OPERATION_COMPLETE,           -800, "Operation complete")                           \
-    X(SCPI_ERROR_INVALID_MODE,                     1, "Invalid mode")                                 \
-    X(SCPI_ERROR_SAMPLING_FAILED,                  2, "Sampling failed - unstable power supply (low vcc)") \
-    X(SCPI_ERROR_MEASURE_FAILED,                   3, "Measure failed")
+    X(SCPI_ERROR_INVALID_MODE,                     1, "Invalid mode")
 
 
     enum {

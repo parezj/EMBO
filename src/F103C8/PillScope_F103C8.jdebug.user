@@ -1,46 +1,49 @@
 
 
-Breakpoint=tasks.c:634, State=BP_STATE_DISABLED
-Breakpoint=irq.c:165, State=BP_STATE_DISABLED
+Breakpoint=stm32f1xx_ll_exti.h:845, State=BP_STATE_DISABLED
+Breakpoint=daq.c:424, State=BP_STATE_DISABLED
+Breakpoint=stm32f1xx_ll_gpio.h:806, State=BP_STATE_DISABLED
+Breakpoint=daq_trig.c:305, State=BP_STATE_DISABLED
+Breakpoint=proto.c:463, State=BP_STATE_DISABLED
 GraphedExpression="((app.c::daq).trig).pos_frst", DisplayFormat=DISPLAY_FORMAT_DEC
-OpenDocument="tasks.c", FilePath="F:/STM32Cube/PillScope/src/__OS/tasks.c", Line=2943
-OpenDocument="startup_stm32f103c8tx.s", FilePath="F:/STM32Cube/PillScope/src/F103C8/Core/Startup/startup_stm32f103c8tx.s", Line=49
-OpenDocument="queue.c", FilePath="F:/STM32Cube/PillScope/src/__OS/queue.c", Line=1457
-OpenDocument="stm32f1xx_ll_usart.h", FilePath="F:/STM32Cube/PillScope/src/F103C8/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h", Line=1848
-OpenDocument="main.c", FilePath="F:/STM32Cube/PillScope/src/F103C8/Core/Src/main.c", Line=58
+OpenDocument="startup_stm32f103c8tx.s", FilePath="F:/STM32Cube/PillScope/src/F103C8/Core/Startup/startup_stm32f103c8tx.s", Line=50
+OpenDocument="queue.c", FilePath="F:/STM32Cube/PillScope/src/__OS/queue.c", Line=758
+OpenDocument="port.c", FilePath="F:/STM32Cube/PillScope/src/__OS/port.c", Line=418
+OpenDocument="main.c", FilePath="F:/STM32Cube/PillScope/src/F103C8/Core/Src/main.c", Line=60
+OpenDocument="tasks.c", FilePath="F:/STM32Cube/PillScope/src/__OS/tasks.c", Line=4456
+OpenDocument="daq.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/daq.c", Line=297
 OpenDocument="cntr.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/cntr.c", Line=23
-OpenDocument="utility.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/utility.c", Line=7
-OpenDocument="proto.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/proto.c", Line=111
-OpenDocument="app.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/app.c", Line=64
+OpenDocument="utility.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/utility.c", Line=117
+OpenDocument="proto.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/proto.c", Line=438
+OpenDocument="app.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/app.c", Line=81
 OpenDocument="parser.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/scpi/parser.c", Line=178
-OpenDocument="comm.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/comm.c", Line=204
+OpenDocument="comm.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/comm.c", Line=189
 OpenDocument="irq.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/irq.c", Line=114
-OpenDocument="pwm.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/pwm.c", Line=8
-OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/daq_trig.c", Line=105
+OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/daq_trig.c", Line=156
 OpenDocument="list.c", FilePath="F:/STM32Cube/PillScope/src/__OS/list.c", Line=112
 OpenDocument="led.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/led.c", Line=0
-OpenDocument="daq.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/daq.c", Line=376
+OpenDocument="cfg.h", FilePath="F:/STM32Cube/PillScope/src/__App/Inc/cfg.h", Line=163
 OpenDocument="periph.h", FilePath="F:/STM32Cube/PillScope/src/__App/Inc/periph.h", Line=0
 OpenDocument="periph.c", FilePath="F:/STM32Cube/PillScope/src/__App/Src/periph.c", Line=70
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=491, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=491, h=440, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=491, h=331, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=491, h=440, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
-OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=602, h=122, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x20001658
-OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=491, h=440, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=491, h=440, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=491, h=440, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=285, h=1115, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=999, h=122, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=531, h=210, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=531, h=296, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=531, h=211, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=531, h=296, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
+OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=719, h=122, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x20001658
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=531, h=296, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=531, h=296, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=531, h=296, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=230, h=735, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1184, h=122, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;224]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;470]
 TableHeader="Local Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[78;105;84;44;145;100]
-TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[144;131;224]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;103;100;109]
-TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[196;104;84;44;185;242]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[144;147;224]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;103;100;149]
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[196;121;84;44;185;100]
 TableHeader="Functions", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[130;64;44;57;176]
-TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;355]
+TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;395]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
 TableHeader="Task List", SortCol="None", SortOrder="ASCENDING", VisibleCols=["Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State"], ColWidths=[110;110;110;110;110;110;110;110;110;110]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
