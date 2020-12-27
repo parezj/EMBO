@@ -22,6 +22,7 @@ scpi_result_t PS_Reset(scpi_t * context)
     daq_settings_init(&daq);
     daq_mode_set(&daq, VM);
     daq_enable(&daq, 1);
+    // TODO reset pwm?
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;

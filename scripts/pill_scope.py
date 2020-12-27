@@ -36,7 +36,9 @@ class PillScope(object):
                 print("Device not connected!")
                 return False
             
-            self.pwm()
+            self.limits()
+            if self.input2("\nWant to setup PWM? (n, y)", "n") == "y":
+                self.pwm()
             if not self.choose_mode():
                 return
           
@@ -44,7 +46,6 @@ class PillScope(object):
             self.vm_data = []
             self.vm_data.extend(([], [], [], [], []))
             self.tm_last = datetime.datetime.now()
-            self.limits()
             self.loop()
         
     def choose_mode(self):       

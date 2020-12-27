@@ -99,7 +99,7 @@ void t2_trig_check(void* p)
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
-        taskYIELD();
+        vTaskDelay(5);
     }
 }
 

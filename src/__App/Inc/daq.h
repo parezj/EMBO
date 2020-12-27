@@ -119,7 +119,7 @@ typedef struct //__attribute__((packed))
     daq_buff_t buff4;       // DAQ buffer4
     daq_buff_t buff_out;    // UART / USB output buffer
 
-    uint8_t buff_raw[PS_DAQ_MAX_MEM+100];  // static allocation of main buffer
+    uint8_t buff_raw[PS_DAQ_MAX_MEM + (PS_MEM_RESERVE * 2 * 5) + 10];  // static allocation of main buffer
     uint16_t buff_raw_ptr;  // top pointer of main raw buffer
 
     daq_settings_t set;     // user settings actual

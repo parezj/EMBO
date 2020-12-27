@@ -1,7 +1,7 @@
 daq.c:250:13:daq_malloc.constprop	24	static
 core_cm3.h:1686:26:NVIC_EncodePriority.constprop	0	static
 daq.c:72:6:daq_settings_save	8	static
-daq.c:91:6:daq_settings_init	16	static
+daq.c:91:6:daq_settings_init	20	static
 daq.c:25:6:daq_init	16	static,ignoring_inline_asm
 daq.c:628:6:daq_reset	8	static
 daq.c:654:6:daq_enable	16	static,ignoring_inline_asm

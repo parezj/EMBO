@@ -33,10 +33,10 @@
  * - ADC pouze 12 bit
  * - Vrefint_CAL neexistuje
  * =========layout=========
- *  ADC CH1 ........... PA1
- *  ADC CH2 ........... PA2
- *  ADC CH3 ........... PA3
- *  ADC CH4 ........... PA4
+ *  DAQ CH1 ........... PA1
+ *  DAQ CH2 ........... PA2
+ *  DAQ CH3 ........... PA3
+ *  DAQ CH4 ........... PA4
  *  PWM CH1 ........... PA15
  *  PWM CH2 ........... PB6
  *  CNTR .............. PA8
@@ -114,7 +114,7 @@
 #define PS_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
 #define PS_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
 #define PS_PWM_MAX_F           1000000   // PWM max freq - TODO
-#define PS_MEM_RESERVE         2         // DAQ circ buff memory reserve (min 2)
+#define PS_MEM_RESERVE         10        // DAQ circ buff memory reserve (min 2)
 
 // DMA -------------------------------------------------------------
 #define PS_DMA_ADC1            DMA1
@@ -162,14 +162,17 @@
 
 // Async respond strings -------------------------------------------
 #define PS_RESP_NRDY           "Not ready!"
-#define PS_RESP_RDY            "\"Ready\"\r\n"
+#define PS_RESP_RDY_N          "\"ReadyN\"\r\n"  // normal trigger data ready (+ single)
+#define PS_RESP_RDY_A          "\"ReadyA\"\r\n"  // auto trigger data ready
+#define PS_RESP_RDY_D          "\"ReadyD\"\r\n"  // disabled trigger data ready
 
 // IWDG ------------------------------------------------------------
 #define PS_IWDG_RST_VAL        0xAAAA  // watchdog reset key value
 #define PS_IWDG_RST            (IWDG->KR = PS_IWDG_RST_VAL) // watchdog reset
 
-// DAQ autotrigger -------------------------------------------------
+// DAQ -------------------------------------------------------------
 #define PS_AUTRIG_MIN_MS       500   // auto trigger ms delay
+#define PS_PRETRIG_MIN_MS      10    // pre trigger minimum ms
 
 // Counter common --------------------------------------------------
 #define PS_CNTR_BUFF_SZ        100   // countetr buffer size

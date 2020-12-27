@@ -104,7 +104,7 @@ void daq_settings_init(daq_data_t* self)
     self->trig.save_s.val = 2047;
     self->trig.save_s.ch = 1;
     self->trig.save_s.edge = RISING;
-    self->trig.save_s.mode = AUTO;
+    self->trig.save_s.mode = DISABLED;
     self->trig.save_s.pretrigger = 50;
 
     // LA
@@ -121,7 +121,7 @@ void daq_settings_init(daq_data_t* self)
     self->trig.save_l.val = 0;
     self->trig.save_l.ch = 1;
     self->trig.save_l.edge = RISING;
-    self->trig.save_l.mode = AUTO;
+    self->trig.save_l.mode = DISABLED;
     self->trig.save_l.pretrigger = 50;
 }
 
@@ -653,11 +653,6 @@ void daq_reset(daq_data_t* self)
 
 void daq_enable(daq_data_t* self, uint8_t enable)
 {
-    self->trig.pretrig_cntr = 0;
-    self->trig.all_cntr = 0;
-    self->trig.cntr = 0;
-    self->trig.ignore = 0;
-
     if (!enable)
     {
         LL_TIM_DisableCounter(PS_TIM_DAQ);
@@ -666,6 +661,11 @@ void daq_enable(daq_data_t* self, uint8_t enable)
 
     if (self->enabled && self->dis_hold)
         return;
+
+    self->trig.pretrig_cntr = 0;
+    self->trig.all_cntr = 0;
+    self->trig.cntr = 0;
+    self->trig.ignore = 0;
 
     if (self->mode == SCOPE || self->mode == VM)
     {

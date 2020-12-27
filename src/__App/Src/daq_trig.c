@@ -95,14 +95,14 @@ void daq_trig_check(daq_data_t* self)
             self->trig.ready = 1;
             self->trig.is_post = 0;
 
-            comm_respond(comm_ptr, PS_RESP_RDY, 9);
+            comm_respond(comm_ptr, PS_RESP_RDY_A, 10);
         }
-        else if (self->trig.set.mode == DISABLED &&  // trigger disabled
+        else if (self->trig.set.mode == DISABLED &&  // trigger is disabled
                  self->trig.pretrig_cntr > self->trig.fullmem_val)
         {
             self->trig.ready = 1;
             if (self->trig.ready_last == 0)
-                comm_respond(comm_ptr, PS_RESP_RDY, 9);
+                comm_respond(comm_ptr, PS_RESP_RDY_D, 10);
         }
     }
     self->trig.ready_last = self->trig.ready;
@@ -130,7 +130,7 @@ void daq_trig_trigger_scope(daq_data_t* self)
         last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[last_idx]);
         prev_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev_last_idx]);
     }
-    else
+    else //(self->set.bits == B12)
     {
         last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(last_idx*2))));
         prev_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev_last_idx*2))));
@@ -181,10 +181,11 @@ void daq_trig_trigger_la(daq_data_t* self)
 
     if (self->trig.pretrig_cntr > self->trig.pretrig_val)
     {
-        self->trig.pretrig_cntr = 0;
+        //self->trig.pretrig_cntr = 0;
         daq_trig_poststart(self, last_idx);
     }
 }
+
 
 void daq_trig_poststart(daq_data_t* self, int pos)
 {
@@ -218,6 +219,8 @@ void daq_trig_poststart(daq_data_t* self, int pos)
     if (xHigherPriorityTaskWoken != pdFALSE)
         portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 }
+
+volatile int timeout;
 
 void daq_trig_postcount(daq_data_t* self)
 {
@@ -261,16 +264,38 @@ void daq_trig_postcount(daq_data_t* self)
             self->trig.pos_frst += self->trig.buff_trig->len;
     }
 
-    int pos_last_trig = self->trig.buff_trig->len - self->trig.pos_last;
+    int pos_last_len = self->trig.buff_trig->len - self->trig.pos_last;  // DMA len of last valid point to compare
+    //int pos_reserve1 = pos_last_len - PS_MEM_RESERVE;                    // DMA len of reserve point
+    //int pos_reserve2 = pos_reserve1;
+    //if (pos_reserve1 < 0)
+    //    pos_reserve2 = -1 * pos_reserve1;
 
+    //int uwTick_frist = uwTick;
+    //timeout = (int)(((float)self->trig.posttrig_size + PS_MEM_RESERVE) * (1.0 / self->set.fs) * 1000.0);
+    //if (timeout < 1)
+    //    timeout = 1;
 
+    int target_prev = -1;
+    int dma_changes = 0;
     while(1)
     {
-        iwdg_feed();
+        iwdg_feed(); // 1
 
-        // 15 instr.
+        //int uwTick_diff = uwTick - uwTick_frist; // 4
+        //if (uwTick_diff < 0)
+        //    uwTick_diff += PS_UWTICK_MAX;
+
+        // 15 instructions worst case
         // Cortex M3 - 1.25 IPC per core -> 72/(15/1.25) = 6 MHz max
-        if (LL_DMA_GetDataLength(self->trig.dma_trig, self->trig.dma_ch_trig) == pos_last_trig) // posttrig cond
+        int target = LL_DMA_GetDataLength(self->trig.dma_trig, self->trig.dma_ch_trig); // 6
+        if (target != target_prev)
+            dma_changes++;
+        target_prev = target;
+
+        if (target == pos_last_len || dma_changes == self->trig.posttrig_size)// || uwTick_diff > timeout) // 5
+        //if (((pos_reserve1 >= 0) &&  (target <= pos_last_len && target >= pos_reserve1)) || // posttrig cond
+        //    ((pos_reserve1 <  0) && ((target <= pos_last_len && target >= 0) ||
+        //                             (target <= self->trig.buff_trig->len && target >= pos_reserve2))))
         {
             LL_TIM_DisableCounter(PS_TIM_DAQ);
 
@@ -282,7 +307,7 @@ void daq_trig_postcount(daq_data_t* self)
             if (self->trig.pos_diff < 0)
                 self->trig.pos_diff += self->trig.buff_trig->len;
 
-            comm_respond(comm_ptr, PS_RESP_RDY, 9); // data ready
+            comm_respond(comm_ptr, PS_RESP_RDY_N, 10); // data ready
 
             break;
         }
@@ -544,8 +569,8 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
     self->trig.set.edge = edge;
     self->trig.set.ch = ch;
 
-    if (self->trig.pretrig_val < 1)
-        self->trig.pretrig_val = 1;
+    if (self->trig.pretrig_val < PS_PRETRIG_MIN_MS)
+        self->trig.pretrig_val = PS_PRETRIG_MIN_MS;
 
     daq_enable(self, 1);
     return 0;
