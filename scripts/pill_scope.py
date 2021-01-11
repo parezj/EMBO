@@ -264,6 +264,8 @@ class PillScope(object):
                     print(".", sep='', end='', flush=True)
                     time.sleep(0.05)
                     return False
+                else:
+                    print(rx2)
                 #print(rx2)
             if self.mode == "SCOPE":
                 rx = self.read_bin_data("SCOP:READ?", self.TIMEOUT_READ)

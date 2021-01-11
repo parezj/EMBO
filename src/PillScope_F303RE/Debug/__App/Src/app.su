@@ -1,0 +1,6 @@
+periph.h:9:20:iwdg_feed	4	static
+app.c:51:6:app_main	24	static,ignoring_inline_asm
+app.c:75:6:t1_wd	16	static
+app.c:89:6:t2_trig_check	16	static
+app.c:106:6:t3_trig_post_count	16	static
+app.c:122:6:t4_comm_and_init	32	static

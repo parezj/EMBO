@@ -77,8 +77,10 @@ void SysTick_Handler(void)
 {
     if(xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
         xPortSysTickHandler();
-
+#ifdef PS_HAL_SYSTICK
     HAL_IncTick();
+#endif
+    daq.uwTick++;
 }
 
 void SVC_Handler(void)
@@ -119,23 +121,21 @@ void USART1_IRQHandler(void)
                     portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
             }
         }
-#ifdef PS_UART_RXNE
-        LL_USART_ClearFlag_RXNE(PS_UART);
-#endif
+        PS_UART_CLEAR_FLAG(PS_UART);
     }
 }
 
 void ADC1_2_IRQHandler(void)
 {
-#if defined(PS_ADC_MODE_ADC1)
+    daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
+
+#if defined(PS_ADC_MODE_ADC1) || defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
     if (LL_ADC_IsActiveFlag_AWD1(ADC1) == 1)
     {
         daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC1);
     }
-#endif
 
-#if defined(PS_ADC_MODE_ADC12)
     if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1)
     {
         daq_trig_trigger_scope(&daq);
@@ -144,22 +144,29 @@ void ADC1_2_IRQHandler(void)
 #endif
 }
 
-void ADC3_4_IRQHandler(void)
-{
 #if defined(PS_ADC_MODE_ADC1234)
+void ADC3_IRQHandler(void)
+{
+    daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
+
     if (LL_ADC_IsActiveFlag_AWD1(ADC3) == 1)
     {
         daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC3);
     }
+}
+
+void ADC4_IRQHandler(void)
+{
+    daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
 
     if (LL_ADC_IsActiveFlag_AWD1(ADC4) == 1)
     {
         daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC4);
     }
-#endif
 }
+#endif
 
 void PS_TIM_CNTR_UP_IRQh(void)
 {
@@ -175,15 +182,16 @@ void PS_TIM_CNTR_CCR_IRQh(void)
     if (cntr.data_ovf_it < PS_CNTR_BUFF_SZ)
         cntr.data_ovf[cntr.data_ovf_it++] = cntr.ovf; // BUG
 
-    if(LL_TIM_IsActiveFlag_CC1(PS_TIM_CNTR) == 1)
+    if(PS_TIM_CNTR_CC(LL_TIM_IsActiveFlag_)(PS_TIM_CNTR) == 1)
     {
-        LL_TIM_ClearFlag_CC1(PS_TIM_CNTR);
+        PS_TIM_CNTR_CC(LL_TIM_ClearFlag_)(PS_TIM_CNTR);
     }
 }
 
-
 void PS_LA_CH1_IRQh(void)
 {
+    daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, PS_DMA_LA); // critical
+
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI1) == 1)
     {
         daq_trig_trigger_la(&daq);
@@ -193,6 +201,8 @@ void PS_LA_CH1_IRQh(void)
 
 void PS_LA_CH2_IRQh(void)
 {
+    daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, PS_DMA_LA); // critical
+
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI2) == 1)
     {
         daq_trig_trigger_la(&daq);
@@ -202,6 +212,8 @@ void PS_LA_CH2_IRQh(void)
 
 void PS_LA_CH3_IRQh(void)
 {
+    daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, PS_DMA_LA); // critical
+
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI3) == 1)
     {
         daq_trig_trigger_la(&daq);
@@ -211,6 +223,8 @@ void PS_LA_CH3_IRQh(void)
 
 void PS_LA_CH4_IRQh(void)
 {
+    daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, PS_DMA_LA); // critical
+
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI4) == 1)
     {
         daq_trig_trigger_la(&daq);
@@ -218,10 +232,10 @@ void PS_LA_CH4_IRQh(void)
     }
 }
 
-void EXTI0_IRQHandler(void)
+void PS_LA_UNUSED_IRQh(void)
 {
-    if (LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_0) == 1)
+    if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI_UNUSED) == 1)
     {
-        LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_0);
+        LL_EXTI_ClearFlag_0_31(PS_LA_EXTI_UNUSED);
     }
 }

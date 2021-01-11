@@ -1,0 +1,10 @@
+core_cm3.h:1547:22:__NVIC_DisableIRQ	0	static,ignoring_inline_asm
+daq_trig.c:24:6:daq_trig_init	0	static
+daq_trig.c:54:6:daq_trig_check	8	static
+daq_trig.c:199:6:daq_trig_poststart	16	static,ignoring_inline_asm
+daq_trig.c:112:6:daq_trig_trigger_scope	16	static
+daq_trig.c:184:6:daq_trig_trigger_la	8	static
+daq_trig.c:234:6:daq_trig_postcount	32	static
+daq_trig.c:331:5:daq_trig_set	64	static,ignoring_inline_asm
+daq_trig.c:320:6:daq_trig_update	16	static
+daq_trig.c:326:6:daq_trig_disable	16	static

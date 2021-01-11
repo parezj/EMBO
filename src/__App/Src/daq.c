@@ -41,12 +41,13 @@ void daq_init(daq_data_t* self)
     self->buff_out.reserve = 0;
     self->enabled = 0;
     self->dis_hold = 0;
-    self->vcc = 0;
+    self->vref = 0;
     self->vcc_mv = 0;
     self->adc_max_val = 0;
     self->smpl_time = 0;
     self->interleaved = 0;
     self->dualmode = 0;
+    self->uwTick = 0;
 
     NVIC_SetPriority(PS_IRQN_DAQ_TIM, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_TIM3, 0));
     NVIC_EnableIRQ(PS_IRQN_DAQ_TIM);
@@ -57,8 +58,11 @@ void daq_init(daq_data_t* self)
 #endif
 
 #if defined(PS_ADC_MODE_ADC1234)
-    NVIC_SetPriority(PS_IRQN_ADC34, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(PS_IRQN_ADC34);
+    NVIC_SetPriority(PS_IRQN_ADC3, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_ADC, 0));
+    NVIC_EnableIRQ(PS_IRQN_ADC3);
+
+    NVIC_SetPriority(PS_IRQN_ADC4, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_ADC, 0));
+    NVIC_EnableIRQ(PS_IRQN_ADC4);
 #endif
 
     NVIC_DisableIRQ(PS_LA_IRQ_EXTI1);
@@ -182,9 +186,9 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             return -2;
 
         if (len1 > 0)
-            daq_malloc(self, &self->buff1, mem_per_ch * len1, PS_ADC_MEM_RESERVE, len1, PS_ADC_ADDR(ADC1), PS_DMA_CH_ADC1, PS_DMA_ADC1, self->set.bits);
+            daq_malloc(self, &self->buff1, mem_per_ch * len1, PS_MEM_RESERVE, len1, PS_ADC_ADDR(ADC1), PS_DMA_CH_ADC1, PS_DMA_ADC1, self->set.bits);
         if (len2 > 0)
-            daq_malloc(self, &self->buff2, mem_per_ch * len2, PS_ADC_MEM_RESERVE, len2, PS_ADC_ADDR(ADC2), PS_DMA_CH_ADC2, PS_DMA_ADC2, self->set.bits);
+            daq_malloc(self, &self->buff2, mem_per_ch * len2, PS_MEM_RESERVE, len2, PS_ADC_ADDR(ADC2), PS_DMA_CH_ADC2, PS_DMA_ADC2, self->set.bits);
 
         self->buff_out.chans = total - is_vcc;
         self->buff_out.len = out_per_ch * (total - is_vcc);
@@ -211,13 +215,13 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             return -2;
 
         if (len1 > 0)
-            daq_malloc(self, &self->buff1, mem_per_ch * len1, PS_ADC_MEM_RESERVE, len1, PS_ADC_ADDR(ADC1), PS_DMA_CH_ADC1, PS_DMA_ADC1, self->set.bits);
+            daq_malloc(self, &self->buff1, mem_per_ch * len1, PS_MEM_RESERVE, len1, PS_ADC_ADDR(ADC1), PS_DMA_CH_ADC1, PS_DMA_ADC1, self->set.bits);
         if (len2 > 0)
-            daq_malloc(self, &self->buff2, mem_per_ch * len2, PS_ADC_MEM_RESERVE, len2, PS_ADC_ADDR(ADC2), PS_DMA_CH_ADC2, PS_DMA_ADC2, self->set.bits);
+            daq_malloc(self, &self->buff2, mem_per_ch * len2, PS_MEM_RESERVE, len2, PS_ADC_ADDR(ADC2), PS_DMA_CH_ADC2, PS_DMA_ADC2, self->set.bits);
         if (len3 > 0)
-            daq_malloc(self, &self->buff3, mem_per_ch * len3, PS_ADC_MEM_RESERVE, len3, PS_ADC_ADDR(ADC3), PS_DMA_CH_ADC3, PS_DMA_ADC3, self->set.bits);
+            daq_malloc(self, &self->buff3, mem_per_ch * len3, PS_MEM_RESERVE, len3, PS_ADC_ADDR(ADC3), PS_DMA_CH_ADC3, PS_DMA_ADC3, self->set.bits);
         if (len4 > 0)
-            daq_malloc(self, &self->buff4, mem_per_ch * len4, PS_ADC_MEM_RESERVE, len4, PS_ADC_ADDR(ADC4), PS_DMA_CH_ADC4, PS_DMA_ADC4, self->set.bits);
+            daq_malloc(self, &self->buff4, mem_per_ch * len4, PS_MEM_RESERVE, len4, PS_ADC_ADDR(ADC4), PS_DMA_CH_ADC4, PS_DMA_ADC4, self->set.bits);
 
         self->buff_out.chans = total - is_vcc;
         self->buff_out.len = out_per_ch * (total - is_vcc);
@@ -232,7 +236,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
         if (mem_per_ch < 0 || (mem_per_ch * 2) > PS_DAQ_MAX_MEM)
             return -2;
 
-        daq_malloc(self, &self->buff1, mem_per_ch, PS_MEM_RESERVE, 4, (uint32_t)&PS_DAQ_PORT->IDR, PS_DMA_CH_LA, PS_DMA_LA, self->set.bits);
+        daq_malloc(self, &self->buff1, mem_per_ch, PS_MEM_RESERVE, 4, (uint32_t)&PS_GPIO_LA_PORT->IDR, PS_DMA_CH_LA, PS_DMA_LA, self->set.bits);
 
         self->buff_out.chans = 4;
         self->buff_out.len = mem_per_ch;
@@ -277,7 +281,8 @@ static void daq_malloc(daq_data_t* self, daq_buff_t* buff, int mem, int reserve,
             dma_m_sz = LL_DMA_MDATAALIGN_WORD;
         }
 #endif
-        dma_set(src, dma, dma_ch, (uint32_t)((uint16_t*)((uint8_t*)buff->data)), mem, dma_p_sz, dma_m_sz);
+        dma_set(src, dma, dma_ch, (uint32_t)((uint16_t*)((uint8_t*)buff->data)), mem,
+                dma_p_sz, dma_m_sz, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
     }
     else if (bits == B8)
     {
@@ -306,7 +311,8 @@ static void daq_malloc(daq_data_t* self, daq_buff_t* buff, int mem, int reserve,
             dma_m_sz = LL_DMA_PDATAALIGN_HALFWORD;
         }
 #endif
-        dma_set(src, dma, dma_ch, (uint32_t)((uint8_t*)buff->data), mem,  dma_p_sz, dma_m_sz);
+        dma_set(src, dma, dma_ch, (uint32_t)((uint8_t*)buff->data), mem,
+                dma_p_sz, dma_m_sz, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
     }
     else // if (bits == B1)
     {
@@ -319,7 +325,8 @@ static void daq_malloc(daq_data_t* self, daq_buff_t* buff, int mem, int reserve,
         buff->chans = chans;
         buff->len = mem;
         memset(buff->data, 0, ln);
-        dma_set(src, dma, PS_DMA_CH_LA, (uint32_t)((uint8_t*)buff->data), mem, LL_DMA_PDATAALIGN_BYTE, LL_DMA_MDATAALIGN_BYTE);
+        dma_set(src, dma, PS_DMA_CH_LA, (uint32_t)((uint8_t*)buff->data), mem,
+                LL_DMA_PDATAALIGN_BYTE, LL_DMA_MDATAALIGN_BYTE, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
     }
 }
 
@@ -386,10 +393,10 @@ int daq_bit_set(daq_data_t* self, enum daq_bits bits)
 int daq_fs_set(daq_data_t* self, float fs)
 {
     uint8_t is_vcc = (self->mode == VM ? 1 : 0);
-    int channs = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + is_vcc;
     float fs2 = fs;
 
 #if defined(PS_ADC_MODE_ADC1)
+    int channs = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + is_vcc;
     //float scope_max_fs = 1.0 / (PS_ADC_1CH_SMPL_TM(PS_ADC_SMPLT_MAX_N, (self->set.bits == B12 ? PS_ADC_TCONV12 : PS_ADC_TCONV8)) * (float)(channs));
     float scope_max_fs = (self->set.bits == B12 ? PS_DAQ_MAX_B12_FS : PS_DAQ_MAX_B8_FS) / (float)(channs);
 
@@ -406,6 +413,7 @@ int daq_fs_set(daq_data_t* self, float fs)
 #elif defined(PS_ADC_MODE_ADC12)
     int adc1 = self->set.ch1_en + self->set.ch2_en + is_vcc;
     int adc2 = self->set.ch3_en + self->set.ch4_en;
+    int channs = adc1 + adc2;
     float scope_max_fs = (self->set.bits == B12 ? PS_DAQ_MAX_B12_FS : PS_DAQ_MAX_B8_FS) / (float)(adc1 > adc2 ? adc1 : adc2);
 #if defined(PS_ADC_INTERLEAVED)
     if (channs == 1)
@@ -500,7 +508,7 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
         }
         self->smpl_time = smpl_time_n;
 
-#if defined(PS_ADC_MODE_ADC1)
+#if defined(PS_ADC_MODE_ADC1) /* --------------------------------------------------------------------------*/
         adc_set_ch(ADC1, ch1, ch2, ch3, ch4, smpl_time, is_vcc);
 
 #if defined(PS_ADC_DUALMODE)
@@ -567,7 +575,7 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
             self->interleaved = 0;
 #endif
 
-#elif defined(PS_ADC_MODE_ADC12)
+#elif defined(PS_ADC_MODE_ADC12) /* --------------------------------------------------------------------------*/
         adc_set_ch(ADC1, ch1, ch2, 0, 0, smpl_time, is_vcc);
         adc_set_ch(ADC2, 0, 0, ch3, ch4, smpl_time, 0);
 
@@ -587,7 +595,7 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
             self->interleaved = 0;
 #endif
 
-#elif defined(PS_ADC_MODE_ADC1234)
+#elif defined(PS_ADC_MODE_ADC1234) /* --------------------------------------------------------------------------*/
         adc_set_ch(ADC1, ch1, 0, 0, 0, smpl_time, is_vcc);
         adc_set_ch(ADC2, 0, ch2, 0, 0, smpl_time, 0);
         adc_set_ch(ADC1, 0, 0, ch3, 0, smpl_time, 0);
@@ -711,19 +719,27 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         for (int i = 0; i < 10000; i++) __asm("nop"); // let DMA and ADC finish their jobs
 
     self->enabled = enable;
-    self->trig.uwtick_first = uwTick;
+    self->trig.uwtick_first = self->uwTick;
 }
 
 static void daq_enable_adc(daq_data_t* self, ADC_TypeDef* adc, uint8_t enable, uint32_t dma_ch)
 {
     if (enable)
     {
+#ifdef LL_ADC_SPEC_START
         LL_ADC_REG_StartConversionExtTrig(adc, LL_ADC_REG_TRIG_EXT_RISING);
+#else
+        LL_ADC_REG_StartConversion(adc);
+#endif
     }
     else
     {
+#ifdef LL_ADC_SPEC_START
         LL_ADC_REG_StopConversionExtTrig(adc);
-        LL_ADC_SetAnalogWDMonitChannels(adc, LL_ADC_AWD_DISABLE);
+#else
+        LL_ADC_REG_StopConversion(adc);
+#endif
+        LL_ADC_SetAnalogWDMonitChannels(adc, PS_ADC_AWD LL_ADC_AWD_DISABLE);
     }
 }
 
@@ -739,14 +755,37 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     self->dis_hold = 1;
     self->mode = mode;
 
-    LL_GPIO_InitTypeDef GPIO_InitStruct = {0};
-    GPIO_InitStruct.Pin = PS_DAQ_CH1 | PS_DAQ_CH2 | PS_DAQ_CH3 | PS_DAQ_CH4;
-    GPIO_InitStruct.Speed = LL_GPIO_SPEED_FREQ_HIGH;
-    if (mode == SCOPE) // save settings
+    // GPIO init
+    if (mode == SCOPE || mode == VM)
     {
-        GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
-        LL_GPIO_Init(PS_DAQ_PORT, &GPIO_InitStruct);
+        LL_GPIO_InitTypeDef GPIO_InitStruct =
+        {
+            .Pin = PS_GPIO_ADC_CH1,
+            .Speed = LL_GPIO_SPEED_FREQ_HIGH,
+            .Mode = LL_GPIO_MODE_ANALOG
+        };
+        LL_GPIO_Init(PS_GPIO_ADC_PORT1, &GPIO_InitStruct);
+        GPIO_InitStruct.Pin = PS_GPIO_ADC_CH2;
+        LL_GPIO_Init(PS_GPIO_ADC_PORT2, &GPIO_InitStruct);
+        GPIO_InitStruct.Pin = PS_GPIO_ADC_CH3;
+        LL_GPIO_Init(PS_GPIO_ADC_PORT3, &GPIO_InitStruct);
+        GPIO_InitStruct.Pin = PS_GPIO_ADC_CH4;
+        LL_GPIO_Init(PS_GPIO_ADC_PORT4, &GPIO_InitStruct);
+    }
+    else // if (mode == LA)
+    {
+        LL_GPIO_InitTypeDef GPIO_InitStruct =
+        {
+            .Pin = PS_GPIO_LA_CH1 | PS_GPIO_LA_CH2 | PS_GPIO_LA_CH3 | PS_GPIO_LA_CH4,
+            .Speed = LL_GPIO_SPEED_FREQ_HIGH,
+            .Mode = LL_GPIO_MODE_INPUT //LL_GPIO_MODE_FLOATING;
+        };
+        LL_GPIO_Init(PS_GPIO_LA_PORT, &GPIO_InitStruct);
+    }
 
+    // DAQ init
+    if (mode == SCOPE)
+    {
         daq_mem_set(self, 3); // safety guard
         daq_bit_set(self, self->save_s.bits);
         daq_ch_set(self, self->save_s.ch1_en, self->save_s.ch2_en, self->save_s.ch3_en, self->save_s.ch4_en, self->save_s.fs);
@@ -757,9 +796,6 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     }
     else if (mode == VM)
     {
-        GPIO_InitStruct.Mode = LL_GPIO_MODE_ANALOG;
-        LL_GPIO_Init(PS_DAQ_PORT, &GPIO_InitStruct);
-
         daq_mem_set(self, 3); // safety guard
         daq_bit_set(self, B12);
         daq_ch_set(self, 1, 1, 1, 1, PS_VM_FS);
@@ -769,10 +805,6 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     }
     else // if (mode == LA)
     {
-        GPIO_InitStruct.Mode = LL_GPIO_MODE_FLOATING; //LL_GPIO_MODE_INPUT;
-        //GPIO_InitStruct.Pull = LL_GPIO_PULL_DOWN;
-        LL_GPIO_Init(PS_DAQ_PORT, &GPIO_InitStruct);
-
         daq_mem_set(self, 3); // safety guard
         daq_bit_set(self, self->save_l.bits);
         daq_ch_set(self, self->save_l.ch1_en, self->save_l.ch2_en, self->save_l.ch3_en, self->save_l.ch4_en, self->save_l.fs);

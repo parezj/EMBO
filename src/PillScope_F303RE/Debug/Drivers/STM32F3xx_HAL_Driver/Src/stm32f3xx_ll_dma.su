@@ -1,0 +1,14 @@
+stm32f3xx_ll_dma.h:563:22:LL_DMA_ConfigTransfer	24	static
+stm32f3xx_ll_dma.h:916:22:LL_DMA_SetDataLength	24	static
+stm32f3xx_ll_dma.h:1001:22:LL_DMA_SetMemoryAddress	24	static
+stm32f3xx_ll_dma.h:1023:22:LL_DMA_SetPeriphAddress	24	static
+stm32f3xx_ll_dma.h:1475:22:LL_DMA_ClearFlag_GI1	16	static
+stm32f3xx_ll_dma.h:1486:22:LL_DMA_ClearFlag_GI2	16	static
+stm32f3xx_ll_dma.h:1497:22:LL_DMA_ClearFlag_GI3	16	static
+stm32f3xx_ll_dma.h:1508:22:LL_DMA_ClearFlag_GI4	16	static
+stm32f3xx_ll_dma.h:1519:22:LL_DMA_ClearFlag_GI5	16	static
+stm32f3xx_ll_dma.h:1530:22:LL_DMA_ClearFlag_GI6	16	static
+stm32f3xx_ll_dma.h:1541:22:LL_DMA_ClearFlag_GI7	16	static
+stm32f3xx_ll_dma.c:150:10:LL_DMA_DeInit	24	static
+stm32f3xx_ll_dma.c:239:10:LL_DMA_Init	24	static
+stm32f3xx_ll_dma.c:301:6:LL_DMA_StructInit	16	static

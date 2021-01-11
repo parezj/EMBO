@@ -1,0 +1,14 @@
+minimal.c:51:15:SCPI_Stub	16	static
+minimal.c:61:15:SCPI_StubQ	16	static
+minimal.c:71:15:SCPI_SystemVersionQ	16	static
+minimal.c:81:15:SCPI_SystemErrorNextQ	24	static
+minimal.c:96:15:SCPI_SystemErrorCountQ	16	static
+minimal.c:107:15:SCPI_StatusQuestionableConditionQ	16	static
+minimal.c:119:15:SCPI_StatusQuestionableEventQ	16	static
+minimal.c:134:15:SCPI_StatusQuestionableEnableQ	16	static
+minimal.c:146:15:SCPI_StatusQuestionableEnable	24	static
+minimal.c:159:15:SCPI_StatusOperationConditionQ	16	static
+minimal.c:171:15:SCPI_StatusOperationEventQ	16	static
+minimal.c:186:16:SCPI_StatusOperationEnableQ	16	static
+minimal.c:198:15:SCPI_StatusOperationEnable	24	static
+minimal.c:211:15:SCPI_StatusPreset	16	static

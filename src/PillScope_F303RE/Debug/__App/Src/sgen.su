@@ -1,0 +1,9 @@
+stm32f3xx_ll_dac.h:926:22:LL_DAC_EnableDMAReq	16	static
+stm32f3xx_ll_dac.h:947:22:LL_DAC_DisableDMAReq	16	static
+stm32f3xx_ll_dac.h:1008:26:LL_DAC_DMA_GetRegAddr	32	static,ignoring_inline_asm
+stm32f3xx_ll_dac.h:1105:22:LL_DAC_EnableTrigger	16	static
+stm32f3xx_ll_dac.h:1124:22:LL_DAC_DisableTrigger	16	static
+stm32f3xx_ll_tim.h:1353:22:LL_TIM_EnableCounter	16	static
+stm32f3xx_ll_tim.h:1364:22:LL_TIM_DisableCounter	16	static
+sgen.c:16:6:sgen_init	40	static
+sgen.c:25:6:sgen_enable	16	static

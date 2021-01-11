@@ -77,7 +77,7 @@ typedef struct //__attribute__((packed))
     int pos_diff;           // helper var to compare last trig pos
 
     // misc
-    int uwtick_first;       // systick timestamp when sampling start
+    uint32_t uwtick_first;  // systick timestamp when sampling start
     int pretrig_cntr;       // pre trig counter - ms
     int pretrig_val;        // pre trig systick count - ms
     int auttrig_val;        // auto trig systick count - ms
@@ -93,9 +93,10 @@ typedef struct //__attribute__((packed))
     ADC_TypeDef* adc_trig;  // ADC, which is triggered
     int order;              // order from bottom of triggered ch in circular buffer
 
-    // postcount flags
+    // helpers
     int post_start;         // flag when set, posttrigger counting starts
     int post_from;          // position from where start counting posttrigger
+    int dma_pos_catched;    // catched actual DMA circular buffer position
 }trig_data_t;
 
 typedef struct //__attribute__((packed))
@@ -126,10 +127,11 @@ typedef struct //__attribute__((packed))
     daq_settings_t save_s;  // user settings saved for SCOPE
     daq_settings_t save_l;  // user settings saved for LA
 
-    float vcc;              // last raw vcc readout by DMA
-    float vcc_mv;           // last vcc readout by DMA in milivots
+    float vref;             // last raw vref readout by DMA
+    float vcc_mv;           // last vcc value in milivots
     float smpl_time;        // dynamic ADC sampling time
     float adc_max_val;      // max adc value
+    uint32_t uwTick;        // 1 kHz counter
 
     enum daq_mode mode;     // main system mode
     uint8_t dis_hold;       // keep disabled until is 0

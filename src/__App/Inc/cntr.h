@@ -6,6 +6,8 @@
 #ifndef INC_CNTR_H_
 #define INC_CNTR_H_
 
+#include "daq.h"
+
 typedef struct
 {
     uint16_t data_ccr[PS_CNTR_BUFF_SZ];
@@ -18,6 +20,6 @@ typedef struct
 
 void cntr_init(cntr_data_t* self);
 void cntr_enable(cntr_data_t* self, uint8_t enable);
-float cntr_read(cntr_data_t* self);
+float cntr_read(cntr_data_t* self, daq_data_t* daq);
 
 #endif /* INC_CNTR_H_ */

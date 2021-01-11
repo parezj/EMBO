@@ -1,0 +1,3 @@
+stm32f3xx_hal_msp.c:64:6:HAL_MspInit	16	static
+stm32f3xx_hal_msp.c:88:6:HAL_TIM_Base_MspInit	24	static
+stm32f3xx_hal_msp.c:110:6:HAL_TIM_Base_MspDeInit	16	static

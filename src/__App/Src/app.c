@@ -80,7 +80,7 @@ void t1_wd(void* p)
     while(1)
     {
         iwdg_feed();
-        led_blink_do(&led);
+        led_blink_do(&led, daq.uwTick);
 
         vTaskDelay(10);
     }
@@ -127,7 +127,11 @@ void t4_comm_and_init(void* p)
     comm_init(&comm);
     daq_init(&daq);
     daq_mode_set(&daq, VM);
-    led_blink_set(&led, 3, PS_BLINK_LONG_MS);
+    led_blink_set(&led, 3, PS_BLINK_LONG_MS, daq.uwTick);
+
+#ifdef PS_DAC
+    sgen_init(&sgen);
+#endif
 
 #ifdef PS_DEBUG
     pwm_set(&pwm, 1000, 25, 25, 50, 1, 1);
@@ -145,7 +149,7 @@ void t4_comm_and_init(void* p)
 
         //iwdg_feed();
         if (comm_main(&comm))
-            led_blink_set(&led, 1, PS_BLINK_SHORT_MS);
+            led_blink_set(&led, 1, PS_BLINK_SHORT_MS, daq.uwTick);
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
     }

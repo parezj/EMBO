@@ -12,12 +12,17 @@
 #include "daq_trig.h"
 #include "cntr.h"
 #include "comm.h"
+#include "sgen.h"
 
 pwm_data_t pwm;
 led_data_t led;
 daq_data_t daq;
 cntr_data_t cntr;
 comm_data_t comm;
+
+#ifdef PS_DAC
+sgen_data_t sgen;
+#endif
 
 #endif /* APP_DATA_H */
 

@@ -1,0 +1,5 @@
+units.c:296:32:translateUnit	40	static
+units.c:318:21:translateUnitInverse	24	static
+units.c:342:20:transformNumber	40	static
+units.c:372:13:SCPI_ParamNumber	72	static
+units.c:476:8:SCPI_NumberToStr	40	static

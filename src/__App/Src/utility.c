@@ -127,14 +127,6 @@ int get_1ch_from_circ(int from, int total, int bufflen, int ch, int ch_num, int 
     return found;
 }
 
-int get_last_circ_idx(int pos, int len)
-{
-    int last_idx = pos - 1;
-    if (last_idx < 0)
-        last_idx = len - 1;
-    return last_idx;
-}
-
 // freq_want = freq_osc/((prescaler+1)*(reload+1))
 // (prescaler+1)*(reload+1) = freq_osc/freq_want
 float get_freq(int* prescaler, int* reload, int max_reload, int freq_osc, int freq_want)

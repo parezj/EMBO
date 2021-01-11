@@ -1,0 +1,10 @@
+event_groups.c:135:21:xEventGroupCreateStatic	32	static,ignoring_inline_asm
+event_groups.c:218:13:xEventGroupSync	56	static,ignoring_inline_asm
+event_groups.c:334:13:xEventGroupWaitBits	72	static,ignoring_inline_asm
+event_groups.c:482:13:xEventGroupClearBits	32	static,ignoring_inline_asm
+event_groups.c:524:13:xEventGroupGetBitsFromISR	40	static,ignoring_inline_asm
+event_groups.c:540:13:xEventGroupSetBits	64	static,ignoring_inline_asm
+event_groups.c:634:6:vEventGroupDelete	32	static,ignoring_inline_asm
+event_groups.c:678:6:vEventGroupSetBitsCallback	16	static
+event_groups.c:686:6:vEventGroupClearBitsCallback	16	static
+event_groups.c:692:19:prvTestWaitCondition	32	static

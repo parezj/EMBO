@@ -1,0 +1,5 @@
+list.c:79:6:vListInitialise	16	static
+list.c:104:6:vListInitialiseItem	16	static
+list.c:116:6:vListInsertEnd	24	static
+list.c:145:6:vListInsert	24	static
+list.c:212:13:uxListRemove	24	static

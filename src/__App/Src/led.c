@@ -34,27 +34,27 @@ void led_toggle(led_data_t* self)
     self->enabled = !self->enabled;
 }
 
-void led_blink_set(led_data_t* self, int num, int ms)
+void led_blink_set(led_data_t* self, int num, int ms, uint32_t _uwTick)
 {
     self->num = (num * 2) - 1;
     self->ms = ms;
-    self->uwtick_first = uwTick;
+    self->uwtick_first = _uwTick;
     led_set(self, 1);
 }
 
-void led_blink_do(led_data_t* self)
+void led_blink_do(led_data_t* self, uint32_t _uwTick)
 {
     if (self->num > 0)
     {
         int diff;
-        if (uwTick >= self->uwtick_first)
-            diff = uwTick - self->uwtick_first;
+        if (_uwTick >= self->uwtick_first)
+            diff = _uwTick - self->uwtick_first;
         else
-            diff = (uwTick - self->uwtick_first) + 4294967295;
+            diff = (_uwTick - self->uwtick_first) + 4294967295;
 
         if (diff >= self->ms)
         {
-            self->uwtick_first = uwTick;
+            self->uwtick_first = _uwTick;
             self->num--;
             led_toggle(self);
         }

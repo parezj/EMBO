@@ -17,7 +17,7 @@ typedef struct
 void led_init(led_data_t* self);
 void led_set(led_data_t* self, uint8_t enable);
 void led_toggle(led_data_t* self);
-void led_blink_set(led_data_t* self, int num, int len);
-void led_blink_do(led_data_t* self);
+void led_blink_set(led_data_t* self, int num, int len, uint32_t _uwTick);
+void led_blink_do(led_data_t* self, uint32_t _uwTick);
 
 #endif /* INC_LED_H_ */

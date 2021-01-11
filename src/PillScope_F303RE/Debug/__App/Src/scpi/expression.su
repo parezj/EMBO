@@ -1,0 +1,7 @@
+expression.c:53:27:numericRange	24	static
+expression.c:84:20:SCPI_ExprNumericListEntry	48	static
+expression.c:135:20:SCPI_ExprNumericListEntryInt	64	static
+expression.c:166:20:SCPI_ExprNumericListEntryDouble	64	static
+expression.c:192:27:channelSpec	40	static
+expression.c:226:27:channelRange	56	static
+expression.c:267:20:SCPI_ExprChannelListEntry	72	static

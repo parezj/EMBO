@@ -1,0 +1,8 @@
+fifo.c:35:6:fifo_init	24	static
+fifo.c:47:6:fifo_clear	16	static
+fifo.c:58:13:fifo_is_empty	16	static
+fifo.c:67:13:fifo_is_full	16	static
+fifo.c:78:13:fifo_add	16	static
+fifo.c:99:13:fifo_remove	16	static
+fifo.c:121:13:fifo_remove_last	16	static
+fifo.c:143:13:fifo_count	16	static

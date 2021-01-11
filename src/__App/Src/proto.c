@@ -124,7 +124,7 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         else
             p1 = 1;
 
-        float vcc_raw = 0;
+        float vref_raw = 0;
         float ch1_raw = 0;
         float ch2_raw = 0;
         float ch3_raw = 0;
@@ -143,13 +143,13 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
 #if defined(PS_ADC_MODE_ADC1)
         int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
 
-        get_avg_from_circ(last1, 5, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
+        get_avg_from_circ(last1, 5, avg_num, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
 
 #elif defined(PS_ADC_MODE_ADC12)
         int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
         int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2, PS_DMA_ADC2);
 
-        get_avg_from_circ(last1, 3, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, &ch2_raw, NULL, NULL);
+        get_avg_from_circ(last1, 3, avg_num, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
         get_avg_from_circ(last2, 2, avg_num, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
 
 #elif defined(PS_ADC_MODE_ADC1234)
@@ -158,7 +158,7 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3, PS_DMA_ADC3);
         int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4, PS_DMA_ADC4);
 
-        get_avg_from_circ(last1, 2, avg_num, daq.buff1.data, daq.set.bits, &vcc_raw, &ch1_raw, NULL, NULL, NULL);
+        get_avg_from_circ(last1, 2, avg_num, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
         get_avg_from_circ(last2, 1, avg_num, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
         get_avg_from_circ(last3, 1, avg_num, daq.buff3.data, daq.set.bits, &ch3_raw, NULL, NULL, NULL, NULL);
         get_avg_from_circ(last4, 1, avg_num, daq.buff4.data, daq.set.bits, &ch4_raw, NULL, NULL, NULL, NULL);
@@ -170,13 +170,17 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         char ch3_s[10];
         char ch4_s[10];
 
-        float vcc = daq.adc_max_val * PS_ADC_VREF_CAL / vcc_raw / 1000;
+#ifdef VREFINT_CAL_ADDR
+        float vcc = 3.3 * PS_ADC_VREF_CAL / vref_raw;
+#else
+        float vcc = daq.adc_max_val * PS_ADC_VREF_CAL / vref_raw / 1000;
+#endif
         float ch1 = vcc * ch1_raw / daq.adc_max_val;
         float ch2 = vcc * ch2_raw / daq.adc_max_val;
         float ch3 = vcc * ch3_raw / daq.adc_max_val;
         float ch4 = vcc * ch4_raw / daq.adc_max_val;
 
-        daq.vcc = vcc_raw;
+        daq.vref = vref_raw;
         daq.vcc_mv = vcc * 1000;
 
         if (context == NULL)
@@ -226,29 +230,36 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
             daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
         }
 
-        float cal = PS_ADC_VREF_CAL * 10.0;
-        if (daq.set.bits == B8)
-            cal = PS_ADC_VREF_CAL / 10.0;
+#ifdef VREFINT_CAL_ADDR
+        float cal = PS_ADC_VREF_CAL / daq.adc_max_val * 3300;
+#else
+        float cal = PS_ADC_VREF_CAL;
+#endif
 
-        int buff1_mem = daq.buff1.len - daq.buff1.reserve;
+        if (daq.set.bits == B8) // compressing
+            cal /= 10.0;
+        else
+            cal *= 10.0;
 
 #if defined(PS_ADC_MODE_ADC1)
         int added = 0;
         int idx = 0;
         int ch_it = 1; // 2 /w Vcc
 
+        int buff1_mem = daq.buff1.len - daq.buff1.reserve;
+
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch2_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch3_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch4_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
 
 #elif defined(PS_ADC_MODE_ADC12)
 
@@ -261,18 +272,18 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch2_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
 
         ch_it = 1;
         if (daq.set.ch3_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, ch_it++, daq.buff2.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff2.data, daq.buff_out.data, &idx);
         if (daq.set.ch4_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, ch_it++, daq.buff2.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff2.data, daq.buff_out.data, &idx);
 
 #elif defined(PS_ADC_MODE_ADC1234)
 
@@ -286,16 +297,16 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, 1, daq.buff1.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff1.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
         if (daq.set.ch2_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, 1, daq.buff2.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff2.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff2.data, daq.buff_out.data, &idx);
         if (daq.set.ch3_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff3_mem, daq.buff3.len, 1, daq.buff3.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff3.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff3.data, daq.buff_out.data, &idx);
         if (daq.set.ch4_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff4_mem, daq.buff4.len, 1, daq.buff4.chans,
-                                       daq.set.bits, daq.vcc, cal, daq.buff4.data, daq.buff_out.data, &idx);
+                                       daq.set.bits, daq.vref, cal, daq.buff4.data, daq.buff_out.data, &idx);
 #endif
 
         daq.trig.pretrig_cntr = 0;
@@ -579,7 +590,7 @@ scpi_result_t PS_LA_SetQ(scpi_t * context)
 
 scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
 {
-    float f = cntr_read(&cntr);
+    float f = cntr_read(&cntr, &daq);
 
     if (f > -1)
     {
@@ -626,9 +637,7 @@ scpi_result_t PS_SGEN_Set(scpi_t * context)
         return SCPI_RES_ERR;
     }
 
-    // TODO range check
-
-    LL_DAC_SetOutputBuffer(PS_DAC, PS_DAC_CH, p1);
+    sgen_enable(&sgen, p1 == 1);
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;

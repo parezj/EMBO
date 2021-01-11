@@ -19,11 +19,12 @@ void cntr_init(cntr_data_t* self)
     self->data_ovf_it = 0;
     memset(self->data_ccr, 0, PS_CNTR_BUFF_SZ * sizeof(uint16_t));
     memset(self->data_ovf, 0, PS_CNTR_BUFF_SZ * sizeof(uint16_t));
-    dma_set((uint32_t)&PS_TIM_CNTR->PS_TIM_CNTR_CCR, PS_DMA_CNTR, PS_DMA_CH_CNTR,
-            (uint32_t)&self->data_ccr, PS_CNTR_BUFF_SZ, LL_DMA_PDATAALIGN_HALFWORD, LL_DMA_MDATAALIGN_HALFWORD);
-    NVIC_SetPriority(TIM1_UP_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
+    dma_set((uint32_t)&PS_TIM_CNTR->PS_TIM_CNTR_CCR, PS_DMA_CNTR, PS_DMA_CH_CNTR, (uint32_t)&self->data_ccr, PS_CNTR_BUFF_SZ,
+            LL_DMA_PDATAALIGN_HALFWORD, LL_DMA_MDATAALIGN_HALFWORD, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
+
+    NVIC_SetPriority(TIM1_UP_TIM16_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
     NVIC_SetPriority(TIM1_CC_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
-    LL_TIM_EnableIT_CC1(PS_TIM_CNTR);
+    PS_TIM_CNTR_CC(LL_TIM_EnableIT_)(PS_TIM_CNTR);
     LL_TIM_EnableIT_UPDATE(PS_TIM_CNTR);
 }
 
@@ -33,9 +34,9 @@ void cntr_enable(cntr_data_t* self, uint8_t enable)
     {
         cntr_init(self);
 
-        LL_TIM_EnableDMAReq_CC1(PS_TIM_CNTR);
+        PS_TIM_CNTR_CC(LL_TIM_EnableDMAReq_)(PS_TIM_CNTR);
         NVIC_EnableIRQ(TIM1_CC_IRQn);
-        NVIC_EnableIRQ(TIM1_UP_IRQn);
+        NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
         LL_TIM_EnableCounter(PS_TIM_CNTR);
         LL_TIM_CC_EnableChannel(PS_TIM_CNTR, PS_TIM_CNTR_CH);
     }
@@ -44,15 +45,15 @@ void cntr_enable(cntr_data_t* self, uint8_t enable)
         LL_TIM_DisableCounter(PS_TIM_CNTR);
         LL_TIM_CC_DisableChannel(PS_TIM_CNTR, PS_TIM_CNTR_CH);
         NVIC_DisableIRQ(TIM1_CC_IRQn);
-        NVIC_DisableIRQ(TIM1_UP_IRQn);
-        LL_TIM_DisableDMAReq_CC1(PS_TIM_CNTR);
+        NVIC_DisableIRQ(TIM1_UP_TIM16_IRQn);
+        PS_TIM_CNTR_CC(LL_TIM_DisableDMAReq_)(PS_TIM_CNTR);
     }
     self->enabled = enable;
 }
 
-float cntr_read(cntr_data_t* self) // TODO BUG - 10x fast call wipes daq.buff1 (zeroes)
+float cntr_read(cntr_data_t* self, daq_data_t* daq)
 {
-    int uwTick_start = uwTick;
+    int uwTick_start = daq->uwTick;
     int sz = 0;
 
     cntr_enable(self, 1);
@@ -61,7 +62,7 @@ float cntr_read(cntr_data_t* self) // TODO BUG - 10x fast call wipes daq.buff1 (
     {
         sz = LL_DMA_GetDataLength(PS_DMA_CNTR, PS_DMA_CH_CNTR);
 
-        uint32_t timeout = uwTick - uwTick_start;
+        uint32_t timeout = daq->uwTick - uwTick_start;
         if (timeout < 0)
             timeout += PS_UWTICK_MAX;
 

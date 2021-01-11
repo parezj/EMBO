@@ -1,0 +1,8 @@
+stm32f1xx_ll_adc.h:2131:22:LL_ADC_REG_SetSequencerRanks	12	static,ignoring_inline_asm
+stm32f1xx_ll_adc.h:2837:22:LL_ADC_SetChannelSamplingTime	20	static,ignoring_inline_asm
+periph.c:19:6:dma_set	12	static
+periph.c:74:6:adc_init_calib	0	static,ignoring_inline_asm
+periph.c:53:6:adc_init	0	static
+periph.c:171:10:adc_get_next_rank	0	static
+periph.c:111:6:adc_set_ch	32	static
+periph.c:185:6:adc_set_res	0	static

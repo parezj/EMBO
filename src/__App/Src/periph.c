@@ -16,16 +16,14 @@
 #include "main.h"
 
 
-void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t p_sz, uint32_t m_sz)
+void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t p_sz, uint32_t m_sz, uint32_t dir)
 {
     LL_DMA_DisableChannel(dma, dma_ch);
     // Select ADC as DMA transfer request.
     //LL_DMAMUX_SetRequestID(DMAMUX1, LL_DMAMUX_CHANNEL_0, LL_DMAMUX_REQ_ADC1);
 
     // DMA transfer addresses and size.
-    LL_DMA_ConfigAddresses(dma, dma_ch, src,
-                           dst,
-                           LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
+    LL_DMA_ConfigAddresses(dma, dma_ch, src, dst, dir);
     LL_DMA_SetPeriphSize(dma, dma_ch, p_sz);
     LL_DMA_SetMemorySize(dma, dma_ch, m_sz);
     LL_DMA_SetDataLength(dma, dma_ch, buff_size);
@@ -75,10 +73,13 @@ void adc_init()
 
 void adc_init_calib(ADC_TypeDef* adc)
 {
+#if defined(PS_ADC_CAL_EN)
     LL_ADC_Enable(adc);
+#endif
+#if defined(ADC_CR2_TSVREFE)
     adc->CR2 |= ADC_CR2_TSVREFE;
-
-    uint32_t  wait_loop_index = ((LL_ADC_DELAY_ENABLE_CALIB_ADC_CYCLES * 32) >> 1);
+#endif
+    uint32_t  wait_loop_index = ((PS_ADC_EN_TICKS * 32) >> 1);
     while(wait_loop_index != 0)
     {
       wait_loop_index--;
@@ -92,18 +93,31 @@ void adc_init_calib(ADC_TypeDef* adc)
     const uint32_t dma_tx_mode = LL_ADC_REG_GetDMATransfer(adc);
     LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_NONE);
 
+#ifdef LL_ADC_DIFFERENTIAL_ENDED
+    LL_ADC_StartCalibration(adc, LL_ADC_SINGLE_ENDED);
+#else
     LL_ADC_StartCalibration(adc);
+#endif
     while (LL_ADC_IsCalibrationOnGoing(adc) != 0);
 
     for (int i = 0; i <  10000; ++i) asm("nop");
 
     LL_ADC_REG_SetDMATransfer(adc, dma_tx_mode);
-    //LL_ADC_Enable(adc);
+#if !defined(PS_ADC_CAL_EN)
+    LL_ADC_Enable(adc);
+#endif
 }
 
 void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, uint32_t smpl_time, uint8_t vrefint)
 {
-    LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_TIM);
+#ifdef PS_ADC_TRIG_34
+    if (ch1 == 1 || ch2 == 2)
+        LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_12);
+    else
+        LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_34);
+#else
+    LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_12);
+#endif
     LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(adc), LL_ADC_MULTI_INDEPENDENT);
     LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
 

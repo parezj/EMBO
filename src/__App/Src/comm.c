@@ -11,7 +11,9 @@
 #include "cfg.h"
 #include "comm.h"
 #include "proto.h"
+#ifdef PS_USB
 #include "usbd_cdc_if.h"
+#endif
 #include "main.h"
 
 
@@ -227,6 +229,7 @@ uint8_t comm_main(comm_data_t* self)
         self->uart.available = 0;
         return 1;
     }
+#ifdef PS_USB
     else if (self->usb.available)
     {
         SCPI_Input(&scpi_context, self->usb.rx_buffer, self->usb.rx_index);
@@ -236,6 +239,7 @@ uint8_t comm_main(comm_data_t* self)
         self->usb.available = 0;
         return 1;
     }
+#endif
     return 0;
 }
 
@@ -246,6 +250,7 @@ int comm_respond(comm_data_t* self, const char* data, int len)
         uart_put_str(data, len);
         return len;
     }
+#ifdef PS_USB
     else if (self->usb.last)
     {
         int cntr = 1000000;
@@ -258,5 +263,6 @@ int comm_respond(comm_data_t* self, const char* data, int len)
 
         return len;
     }
+#endif
     return 0;
 }
