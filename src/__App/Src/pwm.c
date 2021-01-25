@@ -79,8 +79,8 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     if (enable1)
         LL_TIM_CC_EnableChannel(PS_TIM_PWM1, PS_TIM_PWM1_CH);
 
-    //if (enable2)
-    //    LL_TIM_CC_EnableChannel(PS_TIM_PWM2, PS_TIM_PWM2_CH);
+    if (enable2)
+        LL_TIM_CC_EnableChannel(PS_TIM_PWM2, PS_TIM_PWM2_CH);
 
     LL_TIM_EnableCounter(PS_TIM_PWM1);
 

@@ -45,7 +45,8 @@ USB_DEVICE/App/usbd_desc.o: ../USB_DEVICE/App/usbd_desc.c \
  ../USB_DEVICE/App/usbd_desc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
  F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
- F:/STM32Cube/PillScope/src/__App/Inc/utility.h
+ F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h
 
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:
 
@@ -142,3 +143,5 @@ USB_DEVICE/App/usbd_desc.o: ../USB_DEVICE/App/usbd_desc.c \
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h:

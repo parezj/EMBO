@@ -1,6 +1,7 @@
 __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
  F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
  F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h \
  ../Drivers/CMSIS/Include/core_cm3.h \
@@ -26,8 +27,7 @@ __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
- F:/STM32Cube/PillScope/src/__App/Inc/cntr.h \
- F:/STM32Cube/PillScope/src/__App/Inc/daq.h ../Core/Inc/main.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cntr.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h \
@@ -40,11 +40,26 @@ __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/app_sync.h \
+ F:/STM32Cube/PillScope/src/__OS/include/FreeRTOS.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/FreeRTOSConfig.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
+ F:/STM32Cube/PillScope/src/__OS/include/projdefs.h \
+ F:/STM32Cube/PillScope/src/__OS/include/portable.h \
+ F:/STM32Cube/PillScope/src/__OS/include/deprecated_definitions.h \
+ F:/STM32Cube/PillScope/src/__OS/include/portmacro.h \
+ F:/STM32Cube/PillScope/src/__OS/include/mpu_wrappers.h \
+ F:/STM32Cube/PillScope/src/__OS/include/task.h \
+ F:/STM32Cube/PillScope/src/__OS/include/list.h \
+ F:/STM32Cube/PillScope/src/__OS/include/semphr.h \
+ F:/STM32Cube/PillScope/src/__OS/include/queue.h \
  F:/STM32Cube/PillScope/src/__App/Inc/periph.h
 
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h:
 
 ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h:
 
@@ -98,8 +113,6 @@ F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/cntr.h:
 
-F:/STM32Cube/PillScope/src/__App/Inc/daq.h:
-
 ../Core/Inc/main.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h:
@@ -125,5 +138,31 @@ F:/STM32Cube/PillScope/src/__App/Inc/daq.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/app_sync.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/FreeRTOS.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/FreeRTOSConfig.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/projdefs.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/portable.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/deprecated_definitions.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/portmacro.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/mpu_wrappers.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/task.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/list.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/semphr.h:
+
+F:/STM32Cube/PillScope/src/__OS/include/queue.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/periph.h:

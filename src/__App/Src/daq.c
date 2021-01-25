@@ -49,9 +49,6 @@ void daq_init(daq_data_t* self)
     self->dualmode = 0;
     self->uwTick = 0;
 
-    NVIC_SetPriority(PS_IRQN_DAQ_TIM, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_TIM3, 0));
-    NVIC_EnableIRQ(PS_IRQN_DAQ_TIM);
-
 #if defined(PS_ADC_MODE_ADC1) || defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
     NVIC_SetPriority(PS_IRQN_ADC12, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_ADC, 0));
     NVIC_EnableIRQ(PS_IRQN_ADC12);
@@ -158,9 +155,8 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
 #if defined(PS_ADC_MODE_ADC1)
 
         int len1 = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + is_vcc;
-
         //                            DMA ADC            UART / USB OUT
-        if (mem_per_ch < 0 || (mem_per_ch * len1) + (mem_per_ch * (len1 - is_vcc)) > max_len)
+        if (mem_per_ch < 1 || (mem_per_ch * len1) + (mem_per_ch * (len1 - is_vcc)) > max_len)
             return -2;
 
         daq_malloc(self, &self->buff1, mem_per_ch * len1, PS_MEM_RESERVE, len1, PS_ADC_ADDR(ADC1), PS_DMA_CH_ADC1, PS_DMA_ADC1, self->set.bits);
@@ -182,7 +178,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             total = 1;
         }
 #endif
-        if (mem_per_ch < 0 || (mem_per_ch * total) + (mem_per_ch * (total - is_vcc)) > max_len)
+        if (mem_per_ch < 1 || (mem_per_ch * total) + (mem_per_ch * (total - is_vcc)) > max_len)
             return -2;
 
         if (len1 > 0)
@@ -211,7 +207,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             total = 2; // TODO size??
         }
 #endif
-        if (mem_per_ch < 0 || (mem_per_ch * total) + (mem_per_ch * (total - is_vcc)) > max_len)
+        if (mem_per_ch < 1 || (mem_per_ch * total) + (mem_per_ch * (total - is_vcc)) > max_len)
             return -2;
 
         if (len1 > 0)
@@ -233,7 +229,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
     }
     else // mode == LA
     {
-        if (mem_per_ch < 0 || (mem_per_ch * 2) > PS_DAQ_MAX_MEM)
+        if (mem_per_ch < 1 || (mem_per_ch * 2) > PS_DAQ_MAX_MEM)
             return -2;
 
         daq_malloc(self, &self->buff1, mem_per_ch, PS_MEM_RESERVE, 4, (uint32_t)&PS_GPIO_LA_PORT->IDR, PS_DMA_CH_LA, PS_DMA_LA, self->set.bits);
@@ -429,7 +425,7 @@ int daq_fs_set(daq_data_t* self, float fs)
 
 #endif
 
-    if (fs2 <= 0 || fs2 > (self->mode == LA ? PS_LA_MAX_FS : scope_max_fs))
+    if (fs2 < 1 || fs2 > (self->mode == LA ? PS_LA_MAX_FS : scope_max_fs))
         return -1;
 
     self->set.fs = fs;
@@ -456,7 +452,7 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
     self->set.ch3_en = ch3;
     self->set.ch4_en = ch4;
 
-    if (self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en == 0)
+    if (self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en <= 0)
         return -1;
 
     int reen = 0;

@@ -17,7 +17,7 @@ class PillScope(object):
 
     def __init__(self):
         if __name__ == '__main__':
-            com = self.input2("Select COM port:", "COM12")
+            com = self.input2("Select COM port:", "COM15")
             self.ser = serial.Serial(com, 115200, timeout=0, 
                 parity=serial.PARITY_NONE, 
                 stopbits=serial.STOPBITS_ONE, 
@@ -61,6 +61,7 @@ class PillScope(object):
         return True
 
     def counter(self):
+        self.send_cmd("CNTR:ENABLE 1", self.TIMEOUT_CMD)
         while True:
             rx = self.send_cmd("CNTR:READ?", self.TIMEOUT_READ)
             print(rx + "\n")
@@ -360,7 +361,7 @@ class PillScope(object):
             plt.xlim(rngx_l, rngx_r)
             plt.axvline(x=0, color='k', linestyle='--', linewidth=2.5, alpha=0.8)
             if self.mode != "LA":
-                plt.axhline(y=3.3 / 2.0, color='k', linestyle='--', linewidth=2.5, alpha=0.8)
+                plt.axhline(y=3.3 * (float(self.trig_val) / 100.0), color='k', linestyle='--', linewidth=2.5, alpha=0.8)
             plt.xlabel("Time [ms]")
         else:
             plt.xlabel("Time")
@@ -417,6 +418,7 @@ class PillScope(object):
                 plt.plot(t, self.vm_data[4], 'c', label="Vcc", linewidth=LINE_WIDTH)
 
         plt.legend(loc="lower right")
+        plt.rcParams.update({'font.size': 22})
         plt.show()
         plt.pause(0.0001)  # ?    
 

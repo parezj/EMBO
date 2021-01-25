@@ -75,6 +75,7 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "LA:SET", .callback = PS_LA_Set,},
 
     /* ULT - Counter */
+    {.pattern = "CNTR:ENABLE", .callback = PS_CNTR_Enable,},
     {.pattern = "CNTR:READ?", .callback = PS_CNTR_ReadQ,},
 
     /* ULT - Signal Generator */

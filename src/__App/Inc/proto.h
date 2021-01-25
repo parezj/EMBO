@@ -24,6 +24,7 @@ scpi_result_t PS_LA_Set(scpi_t * context);
 scpi_result_t PS_LA_SetQ(scpi_t * context);
 scpi_result_t PS_LA_ReadQ(scpi_t * context);
 
+scpi_result_t PS_CNTR_Enable(scpi_t * context);
 scpi_result_t PS_CNTR_ReadQ(scpi_t * context);
 
 scpi_result_t PS_SGEN_Set(scpi_t * context);

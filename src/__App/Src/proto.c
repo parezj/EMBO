@@ -13,6 +13,8 @@
 #include "app_data.h"
 #include "main.h"
 
+#include "FreeRTOS.h"
+
 
 /************************* [IEEE 488] *************************/
 
@@ -22,6 +24,8 @@ scpi_result_t PS_Reset(scpi_t * context)
     daq_settings_init(&daq);
     daq_mode_set(&daq, VM);
     daq_enable(&daq, 1);
+    cntr_enable(&cntr, 0);
+    //sgen_enable(&sgen, 0);
     // TODO reset pwm?
 
     SCPI_ResultText(context, SCPI_OK);
@@ -143,14 +147,14 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
 #if defined(PS_ADC_MODE_ADC1)
         int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
 
-        get_avg_from_circ(last1, 5, avg_num, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
+        get_avg_from_circ(last1, 5, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
 
 #elif defined(PS_ADC_MODE_ADC12)
         int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
         int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2, PS_DMA_ADC2);
 
-        get_avg_from_circ(last1, 3, avg_num, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
-        get_avg_from_circ(last2, 2, avg_num, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
+        get_avg_from_circ(last1, 3, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
+        get_avg_from_circ(last2, 2, avg_num, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
 
 #elif defined(PS_ADC_MODE_ADC1234)
         int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
@@ -158,10 +162,10 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3, PS_DMA_ADC3);
         int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4, PS_DMA_ADC4);
 
-        get_avg_from_circ(last1, 2, avg_num, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
-        get_avg_from_circ(last2, 1, avg_num, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
-        get_avg_from_circ(last3, 1, avg_num, daq.buff3.data, daq.set.bits, &ch3_raw, NULL, NULL, NULL, NULL);
-        get_avg_from_circ(last4, 1, avg_num, daq.buff4.data, daq.set.bits, &ch4_raw, NULL, NULL, NULL, NULL);
+        get_avg_from_circ(last1, 2, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
+        get_avg_from_circ(last2, 1, avg_num, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
+        get_avg_from_circ(last3, 1, avg_num, daq.buff3.len, daq.buff3.data, daq.set.bits, &ch3_raw, NULL, NULL, NULL, NULL);
+        get_avg_from_circ(last4, 1, avg_num, daq.buff4.len, daq.buff4.data, daq.set.bits, &ch4_raw, NULL, NULL, NULL, NULL);
 #endif
 
         char vcc_s[10];
@@ -469,7 +473,11 @@ scpi_result_t PS_LA_ReadQ(scpi_t * context)
             if (i >= daq.buff1.len)
                 i = 0;
 
-            ((uint8_t*)daq.buff_out.data)[k] = (uint8_t)(((uint8_t*)daq.buff1.data)[i]);
+            uint8_t val = (uint8_t)(((uint8_t*)daq.buff1.data)[i]);
+            ((uint8_t*)daq.buff_out.data)[k] = (((val & (1 << PS_GPIO_LA_CH1_NUM)) ? 1 : 0) << 1) |
+                                               (((val & (1 << PS_GPIO_LA_CH2_NUM)) ? 1 : 0) << 2) |
+                                               (((val & (1 << PS_GPIO_LA_CH3_NUM)) ? 1 : 0) << 3) |
+                                               (((val & (1 << PS_GPIO_LA_CH4_NUM)) ? 1 : 0) << 4);
         }
 
         daq.trig.pretrig_cntr = 0;
@@ -588,9 +596,36 @@ scpi_result_t PS_LA_SetQ(scpi_t * context)
 
 /************************* [CNTR Actions] *************************/
 
+scpi_result_t PS_CNTR_Enable(scpi_t * context)
+{
+    uint32_t p1;
+
+    if (!SCPI_ParamUInt32(context, &p1, TRUE))
+    {
+        return SCPI_RES_ERR;
+    }
+
+    if (p1 < 0 || p1 > 1)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+        return SCPI_RES_ERR;
+    }
+
+    cntr_enable(&cntr, p1);
+
+    SCPI_ResultText(context, SCPI_OK);
+    return SCPI_RES_OK;
+}
+
 scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
 {
-    float f = cntr_read(&cntr, &daq);
+    if (!cntr.enabled)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_CNTR_NOT_ENABLED);
+        return SCPI_RES_ERR;
+    }
+
+    float f = cntr.freq;
 
     if (f > -1)
     {
@@ -637,7 +672,7 @@ scpi_result_t PS_SGEN_Set(scpi_t * context)
         return SCPI_RES_ERR;
     }
 
-    sgen_enable(&sgen, p1 == 1);
+    //sgen_enable(&sgen, p1 == 1); // TODO
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;

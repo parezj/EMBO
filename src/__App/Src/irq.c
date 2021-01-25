@@ -128,20 +128,20 @@ void USART1_IRQHandler(void)
 void ADC1_2_IRQHandler(void)
 {
     daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
+    ASSERT(!(LL_ADC_IsActiveFlag_AWD1(ADC1) && LL_ADC_IsActiveFlag_AWD1(ADC2)));
 
-#if defined(PS_ADC_MODE_ADC1) || defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
     if (LL_ADC_IsActiveFlag_AWD1(ADC1) == 1)
     {
+        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, PS_ADC_AWD LL_ADC_AWD_DISABLE);
         daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC1);
     }
-
-    if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1)
+    else if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1)
     {
+        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, PS_ADC_AWD LL_ADC_AWD_DISABLE);
         daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC2);
     }
-#endif
 }
 
 #if defined(PS_ADC_MODE_ADC1234)
@@ -151,6 +151,7 @@ void ADC3_IRQHandler(void)
 
     if (LL_ADC_IsActiveFlag_AWD1(ADC3) == 1)
     {
+        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, PS_ADC_AWD LL_ADC_AWD_DISABLE);
         daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC3);
     }
@@ -162,6 +163,7 @@ void ADC4_IRQHandler(void)
 
     if (LL_ADC_IsActiveFlag_AWD1(ADC4) == 1)
     {
+        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, PS_ADC_AWD LL_ADC_AWD_DISABLE);
         daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC4);
     }
@@ -172,20 +174,10 @@ void PS_TIM_CNTR_UP_IRQh(void)
 {
     if(LL_TIM_IsActiveFlag_UPDATE(PS_TIM_CNTR) == 1)
     {
-        LL_TIM_ClearFlag_UPDATE(PS_TIM_CNTR);
         cntr.ovf++;
+        PS_TIM_CNTR_OVF(LL_TIM_OC_SetCompare)(PS_TIM_CNTR, cntr.ovf);
     }
-}
-
-void PS_TIM_CNTR_CCR_IRQh(void)
-{
-    if (cntr.data_ovf_it < PS_CNTR_BUFF_SZ)
-        cntr.data_ovf[cntr.data_ovf_it++] = cntr.ovf; // BUG
-
-    if(PS_TIM_CNTR_CC(LL_TIM_IsActiveFlag_)(PS_TIM_CNTR) == 1)
-    {
-        PS_TIM_CNTR_CC(LL_TIM_ClearFlag_)(PS_TIM_CNTR);
-    }
+    LL_TIM_ClearFlag_UPDATE(PS_TIM_CNTR); // bug
 }
 
 void PS_LA_CH1_IRQh(void)
@@ -194,6 +186,7 @@ void PS_LA_CH1_IRQh(void)
 
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI1) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.exti_trig);
         daq_trig_trigger_la(&daq);
         LL_EXTI_ClearFlag_0_31(PS_LA_EXTI1);
     }
@@ -205,6 +198,7 @@ void PS_LA_CH2_IRQh(void)
 
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI2) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.exti_trig);
         daq_trig_trigger_la(&daq);
         LL_EXTI_ClearFlag_0_31(PS_LA_EXTI2);
     }
@@ -216,6 +210,7 @@ void PS_LA_CH3_IRQh(void)
 
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI3) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.exti_trig);
         daq_trig_trigger_la(&daq);
         LL_EXTI_ClearFlag_0_31(PS_LA_EXTI3);
     }
@@ -227,6 +222,7 @@ void PS_LA_CH4_IRQh(void)
 
     if (LL_EXTI_IsActiveFlag_0_31(PS_LA_EXTI4) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.exti_trig);
         daq_trig_trigger_la(&daq);
         LL_EXTI_ClearFlag_0_31(PS_LA_EXTI4);
     }

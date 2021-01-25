@@ -1,6 +1,7 @@
 __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
  F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
  F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f303re.h \
  ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h \
  ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f303xe.h \
  ../Drivers/CMSIS/Include/core_cm4.h \
@@ -49,6 +50,8 @@ __App/Src/cntr.o: F:/STM32Cube/PillScope/src/__App/Src/cntr.c \
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f303re.h:
 
 ../Drivers/CMSIS/Device/ST/STM32F3xx/Include/stm32f3xx.h:
 

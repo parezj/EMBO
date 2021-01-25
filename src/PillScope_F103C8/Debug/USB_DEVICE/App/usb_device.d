@@ -51,6 +51,7 @@ USB_DEVICE/App/usb_device.o: ../USB_DEVICE/App/usb_device.c \
  F:/STM32Cube/PillScope/src/__App/Inc/comm.h \
  F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
  F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/parser.h \
  F:/STM32Cube/PillScope/src/__App/Inc/scpi/types.h \
@@ -189,6 +190,8 @@ F:/STM32Cube/PillScope/src/__App/Inc/comm.h:
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/scpi/scpi.h:
 

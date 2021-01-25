@@ -10,6 +10,7 @@ __App/Src/scpi/ieee488.o: \
  F:/STM32Cube/PillScope/src/__App/Inc/comm.h \
  F:/STM32Cube/PillScope/src/__App/Inc/cfg.h \
  F:/STM32Cube/PillScope/src/__App/Inc/utility.h \
+ F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h \
  ../Drivers/CMSIS/Include/core_cm3.h \
@@ -60,6 +61,8 @@ F:/STM32Cube/PillScope/src/__App/Inc/comm.h:
 F:/STM32Cube/PillScope/src/__App/Inc/cfg.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/utility.h:
+
+F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h:
 
 ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h:
 

@@ -97,7 +97,7 @@ typedef struct //__attribute__((packed))
     int post_start;         // flag when set, posttrigger counting starts
     int post_from;          // position from where start counting posttrigger
     int dma_pos_catched;    // catched actual DMA circular buffer position
-}trig_data_t;
+}daq_trig_data_t;
 
 typedef struct //__attribute__((packed))
 {
@@ -139,7 +139,7 @@ typedef struct //__attribute__((packed))
     uint8_t interleaved;    // interleaved enabled
     uint8_t dualmode;       // dual mode enabled
 
-    trig_data_t trig;       // trigger substruct
+    daq_trig_data_t trig;       // trigger substruct
 }daq_data_t;
 
 void daq_init(daq_data_t* self);

@@ -176,6 +176,7 @@ extern "C" {
     X(SCPI_ERROR_INPUT_BUFFER_OVERRUN,          -363, "Input buffer overrun")                         \
     X(SCPI_ERROR_TIME_OUT,                      -365, "Time out error")                               \
     X(SCPI_ERROR_DAC_NA,                        -370, "DAC not available")                            \
+    X(SCPI_ERROR_CNTR_NOT_ENABLED,              -371, "Counter is not enabled")                       \
     XE(SCPI_ERROR_QUERY_ERROR,                  -400, "Query error")                                  \
     XE(SCPI_ERROR_QUERY_INTERRUPTED,            -410, "Query INTERRUPTED")                            \
     XE(SCPI_ERROR_QUERY_UNTERMINATED,           -420, "Query UNTERMINATED")                           \
@@ -185,7 +186,7 @@ extern "C" {
     XE(SCPI_ERROR_USER_REQUEST,                 -600, "User request")                                 \
     XE(SCPI_ERROR_REQUEST_CONTROL,              -700, "Request control")                              \
     XE(SCPI_ERROR_OPERATION_COMPLETE,           -800, "Operation complete")                           \
-    X(SCPI_ERROR_INVALID_MODE,                     1, "Invalid mode")
+    X(SCPI_ERROR_INVALID_MODE,                  -372, "Invalid mode") // 1 ?
 
 
     enum {

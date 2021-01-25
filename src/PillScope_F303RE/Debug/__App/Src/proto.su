@@ -12,6 +12,6 @@ proto.c:451:15:PS_LA_ReadQ	32	static
 proto.c:494:15:PS_LA_Set	80	static
 proto.c:560:15:PS_LA_SetQ	168	static
 proto.c:591:15:PS_CNTR_ReadQ	168	static
-proto.c:630:15:PS_SGEN_Set	32	static
+proto.c:630:15:PS_SGEN_Set	24	static
 proto.c:652:15:PS_PWM_SetQ	160	static
 proto.c:676:15:PS_PWM_Set	72	static

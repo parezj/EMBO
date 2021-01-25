@@ -17,15 +17,16 @@ void assert2(const char *file, uint32_t line)
     //__asm("bkpt 3");
 }
 
-void get_avg_from_circ(int last_idx, int ch_num, int avg_num, void* buff, int daq_bits, float* v1, float* v2, float* v3, float* v4, float* v5)
+void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void* buff, int daq_bits,
+                       float* v1, float* v2, float* v3, float* v4, float* v5)
 {
     int total = ch_num * avg_num;
     ASSERT(v1 != NULL && total > 0 && buff != NULL);
 
-    for (int i = last_idx, j = 0; j < total; j++, i++)
+    for (int i = last_idx, j = 0; j < total; j++, i--)
     {
-        if (i >= total)
-            i = 0;
+        if (i < 0)
+            i = bufflen - 1;
 
         float val;
         if (daq_bits == 12)
