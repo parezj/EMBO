@@ -3,8 +3,13 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
-#include "cfg.h"
 #include "app.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "semphr.h"
+
+#include "cfg.h"
 #include "app_data.h"
 #include "app_sync.h"
 #include "periph.h"
@@ -12,9 +17,6 @@
 #include "proto.h"
 #include "main.h"
 
-#include "FreeRTOS.h"
-#include "task.h"
-#include "semphr.h"
 
 #define PS_STACK_T1     64
 #define PS_STACK_T2     64

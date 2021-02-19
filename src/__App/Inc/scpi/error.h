@@ -186,7 +186,8 @@ extern "C" {
     XE(SCPI_ERROR_USER_REQUEST,                 -600, "User request")                                 \
     XE(SCPI_ERROR_REQUEST_CONTROL,              -700, "Request control")                              \
     XE(SCPI_ERROR_OPERATION_COMPLETE,           -800, "Operation complete")                           \
-    X(SCPI_ERROR_INVALID_MODE,                  -372, "Invalid mode") // 1 ?
+    X(SCPI_ERROR_INVALID_MODE,                  -372, "Invalid mode")                                 \
+    X(SCPI_ERROR_FUNCTION_NOT_AVAILABLE,        -373, "Function not available for current settings")
 
 
     enum {

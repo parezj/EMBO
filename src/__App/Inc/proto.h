@@ -32,4 +32,6 @@ scpi_result_t PS_SGEN_Set(scpi_t * context);
 scpi_result_t PS_PWM_SetQ(scpi_t * context);
 scpi_result_t PS_PWM_Set(scpi_t * context);
 
+scpi_result_t PS_Force_Trig(scpi_t * context);
+
 #endif /* PROTO_H */

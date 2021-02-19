@@ -3,6 +3,7 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "periph.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +12,6 @@
 
 #include "utility.h"
 #include "cfg.h"
-#include "periph.h"
 #include "comm.h"
 #include "main.h"
 

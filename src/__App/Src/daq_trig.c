@@ -3,22 +3,23 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "daq.h"
+#include "daq_trig.h"
+
+#include "FreeRTOS.h"
+#include "semphr.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 #include "cfg.h"
-#include "daq.h"
-#include "daq_trig.h"
 #include "app_sync.h"
 #include "utility.h"
 #include "periph.h"
 #include "comm.h"
 #include "main.h"
-
-#include "FreeRTOS.h"
-#include "semphr.h"
 
 
 void daq_trig_init(daq_data_t* self)
@@ -151,8 +152,7 @@ void daq_trig_trigger_scope(daq_data_t* self)
         if ((self->trig.set.edge == RISING && prev_last_val <= self->trig.set.val) || // last_val > self->trig.set.val &&
             (self->trig.set.edge == FALLING && prev_last_val >= self->trig.set.val))  // last_val < self->trig.set.val &&
         {
-            daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG - continue from here
-            return;
+            daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
         }
         else // false trig, switch edges and wait for another window
         {
@@ -171,7 +171,9 @@ void daq_trig_trigger_scope(daq_data_t* self)
         LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, PS_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, awd_h);
         //LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, PS_ADC_AWD self->trig.awd_trig);
     }
-
+    
+    return;
+    
     invalid_trigger:  // if any code gets here, means that trigger is invalid
     LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, PS_ADC_AWD self->trig.awd_trig); // reenable irq
 }
@@ -211,10 +213,11 @@ void daq_trig_trigger_la(daq_data_t* self)
         }
         */
 
-        daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG - continue from here
-        return;
+        daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
     }
-
+    
+    return;
+    
     invalid_trigger: // if any code gets here, means that trigger is invalid
     NVIC_ClearPendingIRQ(self->trig.exti_trig);
     NVIC_EnableIRQ(self->trig.exti_trig); // reenable irq
@@ -274,7 +277,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             self->trig.pos_frst += self->trig.buff_trig->len;
     }
 
-    int pos_last_len = self->trig.buff_trig->len - self->trig.pos_last;  // DMA len of last valid point to compare
+    //int pos_last_len = self->trig.buff_trig->len - self->trig.pos_last;  // DMA len of last valid point to compare
     int target_prev = self->trig.buff_trig->len - self->trig.post_from;
     int target_sum = 0;
 

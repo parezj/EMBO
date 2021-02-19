@@ -3,13 +3,15 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "utility.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
-#include "utility.h"
 #include "cfg.h"
+
 
 void assert2(const char *file, uint32_t line)
 {

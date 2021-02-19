@@ -2,9 +2,10 @@
  * CTU/PillScope project
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
+ 
+#include "led.h"
 
 #include "cfg.h"
-#include "led.h"
 #include "main.h"
 
 

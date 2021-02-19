@@ -3,17 +3,18 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "proto.h"
+
+#include "FreeRTOS.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "utility.h"
 #include "cfg.h"
-#include "proto.h"
 #include "app_data.h"
 #include "main.h"
-
-#include "FreeRTOS.h"
 
 
 /************************* [IEEE 488] *************************/
@@ -229,10 +230,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         }
 
         if (daq.trig.set.mode == DISABLED)
-        {
             daq_enable(&daq, 0);
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
-        }
 
 #ifdef VREFINT_CAL_ADDR
         float cal = PS_ADC_VREF_CAL / daq.adc_max_val * 3300;
@@ -251,6 +249,9 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         int ch_it = 1; // 2 /w Vcc
 
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
+
+        if (daq.trig.set.mode == DISABLED)
+            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
@@ -273,6 +274,10 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
         int buff2_mem = daq.buff2.len - daq.buff2.reserve;
+
+        if (daq.trig.set.mode == DISABLED)
+            daq.trig.pos_frst = PS_DMA_LAST_IDX((daq.set.ch1_en || daq.set.ch2_en) ? daq.buff1.len : daq.buff2.len,
+                daq.trig.dma_ch_trig, daq.trig.dma_trig);
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
@@ -298,6 +303,16 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
 
         int added = 0;
         int idx = 0;
+
+        if (daq.trig.set.mode == DISABLED)
+        {
+            uint16_t buff_ln = daq.buff1.len;
+            if (daq.set.ch2_en) buff_ln = daq.buff2.len;
+            else if (daq.set.ch3_en) buff_ln = daq.buff3.len;
+            else if (daq.set.ch4_en) buff_ln = daq.buff4.len;
+
+            daq.trig.pos_frst = PS_DMA_LAST_IDX(buff_ln, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+        }
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, 1, daq.buff1.chans,
@@ -736,3 +751,31 @@ scpi_result_t PS_PWM_Set(scpi_t * context)
 }
 
 
+scpi_result_t PS_Force_Trig(scpi_t * context)
+{
+    if (daq.mode == VM)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_MODE);
+        return SCPI_RES_ERR;
+    }
+
+    if (daq.trig.ready || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE);
+        return SCPI_RES_ERR;
+    }
+
+    if (daq.mode == LA)
+    {
+        daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, PS_DMA_CH_LA, PS_DMA_LA);
+        daq_trig_trigger_scope(&daq);
+    }
+    else // (daq.mode == SCOPE)
+    {
+        daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+        daq_trig_trigger_scope(&daq);
+    }
+
+    SCPI_ResultText(context, SCPI_OK);
+    return SCPI_RES_OK;
+}

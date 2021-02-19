@@ -27,7 +27,6 @@ __App/Src/irq.o: F:/STM32Cube/PillScope/src/__App/Src/irq.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
- F:/STM32Cube/PillScope/src/__App/Inc/irq.h \
  F:/STM32Cube/PillScope/src/__App/Inc/periph.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
@@ -131,8 +130,6 @@ F:/STM32Cube/PillScope/src/__App/Inc/cfg/cfg_f103c8.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h:
-
-F:/STM32Cube/PillScope/src/__App/Inc/irq.h:
 
 F:/STM32Cube/PillScope/src/__App/Inc/periph.h:
 

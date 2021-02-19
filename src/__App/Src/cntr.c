@@ -3,15 +3,17 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "cntr.h"
+
 #include <string.h>
 
+#include "FreeRTOS.h"
+
 #include "cfg.h"
-#include "cntr.h"
 #include "main.h"
 #include "app_sync.h"
 #include "periph.h"
 
-#include "FreeRTOS.h"
 
 static void cntr_reset(cntr_data_t* self);
 

@@ -95,7 +95,7 @@ static size_t writeDelimiter(scpi_t * context) {
  * @return number of characters written
  */
 static size_t writeNewLine(scpi_t * context) {
-    if (context->output_count > 0) {
+    //if (context->output_count > 0) {
         size_t len;
 #ifndef SCPI_LINE_ENDING
 #error no termination character defined
@@ -103,9 +103,9 @@ static size_t writeNewLine(scpi_t * context) {
         len = writeData(context, SCPI_LINE_ENDING, strlen(SCPI_LINE_ENDING));
         flushData(context);
         return len;
-    } else {
-        return 0;
-    }
+    //} else {
+    //    return 0;
+    //}
 }
 
 /**
@@ -241,7 +241,7 @@ scpi_bool_t SCPI_Parse(scpi_t * context, char * data, int len) {
 
     }
 
-    /* conditionaly write new line */
+    /* conditionaly write new line */  // EDITED: NOT CONDITIONALY -> ALWAYS
     writeNewLine(context);
 
     return result;

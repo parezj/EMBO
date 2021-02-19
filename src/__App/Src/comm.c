@@ -3,13 +3,14 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "comm.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 #include "cfg.h"
-#include "comm.h"
 #include "proto.h"
 #ifdef PS_USB
 #include "usbd_cdc_if.h"
@@ -60,6 +61,7 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "SYSTem:MODE?", .callback = PS_System_ModeQ,},
     {.pattern = "SYSTem:MODE", .callback = PS_System_Mode,},
     {.pattern = "SYSTem:LIMits?", .callback = PS_System_LimitsQ,},
+    {.pattern = "SYSTem:FORCetrig?", .callback = PS_Force_Trig,},
 
     /* ULT - Voltmeter */
     {.pattern = "VM:READ?", .callback = PS_VM_ReadQ,},
@@ -123,7 +125,7 @@ int SCPI_Error(scpi_t * context, int_fast16_t err)
     (void) context;
 
     char buff[100];
-    int len = sprintf(buff, "**ERROR: %d, \"%s\"\r\n", (int16_t) err, SCPI_ErrorTranslate(err));
+    int len = sprintf(buff, ";ERROR: %d, \"%s\";", (int16_t) err, SCPI_ErrorTranslate(err));
     comm_respond((comm_data_t*)context->comm, buff, len);
     return 0;
 }

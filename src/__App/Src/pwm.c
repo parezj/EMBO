@@ -3,13 +3,14 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "pwm.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 #include "cfg.h"
-#include "pwm.h"
 #include "main.h"
 
 

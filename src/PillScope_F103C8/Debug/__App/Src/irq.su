@@ -1,12 +1,3 @@
-core_cm3.h:1547:22:__NVIC_DisableIRQ	0	static,ignoring_inline_asm
-irq.c:76:6:SysTick_Handler	8	static
-irq.c:86:6:SVC_Handler	0	static
-irq.c:91:6:PendSV_Handler	0	static
-irq.c:96:6:USART1_IRQHandler	24	static,ignoring_inline_asm
-irq.c:128:6:ADC1_2_IRQHandler	16	static
-irq.c:173:6:TIM1_UP_IRQHandler	0	static
-irq.c:183:6:EXTI1_IRQHandler	8	static
-irq.c:195:6:EXTI2_IRQHandler	8	static
-irq.c:207:6:EXTI3_IRQHandler	8	static
-irq.c:219:6:EXTI4_IRQHandler	8	static
-irq.c:231:6:EXTI0_IRQHandler	0	static
+irq.c:75:6:SysTick_Handler	8	static
+irq.c:85:6:SVC_Handler	0	static
+irq.c:90:6:PendSV_Handler	0	static

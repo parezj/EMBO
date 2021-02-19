@@ -3,14 +3,15 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "daq.h"
+#include "daq_trig.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
 #include "cfg.h"
-#include "daq.h"
-#include "daq_trig.h"
 #include "utility.h"
 #include "periph.h"
 #include "main.h"
