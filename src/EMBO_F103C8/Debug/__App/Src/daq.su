@@ -1,0 +1,11 @@
+daq.c:251:13:daq_malloc.constprop	40	static
+daq.c:74:6:daq_settings_save	8	static
+daq.c:93:6:daq_settings_init	20	static
+daq.c:26:6:daq_init	16	static,ignoring_inline_asm
+daq.c:633:6:daq_reset	8	static
+daq.c:659:6:daq_enable	16	static,ignoring_inline_asm
+daq.c:130:5:daq_mem_set	48	static
+daq.c:338:5:daq_bit_set	16	static
+daq.c:390:5:daq_fs_set	56	static
+daq.c:449:5:daq_ch_set	96	static
+daq.c:743:6:daq_mode_set	56	static

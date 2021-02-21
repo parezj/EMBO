@@ -1,5 +1,5 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -12,10 +12,10 @@
  +                                                  general                                                  +
  +-----------------------------------------------------------------------------------------------------------*/
 
-#define PS_DEBUG
+#define EM_DEBUG
 
-#define PS_DEV_VER             "0.1.5"
-#define PS_DEV_AUTHOR          "CTU/Jakub Parez"
+#define EM_DEV_VER             "0.1.6"
+#define EM_DEV_AUTHOR          "CTU/Jakub Parez"
 
 /*-----------------------------------------------------------------------------------------------------------+
  +                                               board specific                                              +
@@ -65,70 +65,70 @@
  +-----------------------------------------------------------------------------------------------------------*/
 
 // generic constants -----------------------------------------------
-#define PS_LN2POW14            9.70406    // ln(2^14)
-#define PS_LN2POW10            6.93147    // ln(2^10)
-#define PS_UWTICK_MAX          4294967295 // (2^32) - 1
+#define EM_LN2POW14            9.70406    // ln(2^14)
+#define EM_LN2POW10            6.93147    // ln(2^10)
+#define EM_UWTICK_MAX          4294967295 // (2^32) - 1
 
 // IRQ priorities --------------------------------------------------
-#define PS_IT_PRI_ADC          5   // analog watchdog ADC
-#define PS_IT_PRI_EXTI         5   // logic analyzer GPIO
-#define PS_IT_PRI_UART         6   // UART RX
-#define PS_IT_PRI_USB          7   // USB RX
-#define PS_IT_PRI_SYST         15  // systick
+#define EM_IT_PRI_ADC          5   // analog watchdog ADC
+#define EM_IT_PRI_EXTI         5   // logic analyzer GPIO
+#define EM_IT_PRI_UART         6   // UART RX
+#define EM_IT_PRI_USB          7   // USB RX
+#define EM_IT_PRI_SYST         15  // systick
 
 // Async respond strings -------------------------------------------
-#define PS_RESP_NRDY           "Not ready!"
-#define PS_RESP_RDY_N          "\"ReadyN\"\r\n"  // normal trigger data ready (+ single)
-#define PS_RESP_RDY_A          "\"ReadyA\"\r\n"  // auto trigger data ready
-#define PS_RESP_RDY_D          "\"ReadyD\"\r\n"  // disabled trigger data ready
+#define EM_RESP_NRDY           "Not ready!"
+#define EM_RESP_RDY_N          "\"ReadyN\"\r\n"  // normal trigger data ready (+ single)
+#define EM_RESP_RDY_A          "\"ReadyA\"\r\n"  // auto trigger data ready
+#define EM_RESP_RDY_D          "\"ReadyD\"\r\n"  // disabled trigger data ready
 
 // IWDG ------------------------------------------------------------
-#define PS_IWDG_RST_VAL        0xAAAA  // watchdog reset key value
-#define PS_IWDG_RST            (IWDG->KR = PS_IWDG_RST_VAL) // watchdog reset
+#define EM_IWDG_RST_VAL        0xAAAA  // watchdog reset key value
+#define EM_IWDG_RST            (IWDG->KR = EM_IWDG_RST_VAL) // watchdog reset
 
 // DAQ -------------------------------------------------------------
-#define PS_AUTRIG_MIN_MS       500   // auto trigger ms delay
-#define PS_PRETRIG_MIN_MS      10    // pre trigger minimum ms
+#define EM_AUTRIG_MIN_MS       500   // auto trigger ms delay
+#define EM_PRETRIG_MIN_MS      10    // pre trigger minimum ms
 
 // Counter common --------------------------------------------------
-#define PS_CNTR_BUFF_SZ        100   // counter buffer size
-#define PS_CNTR_MEAS_MS        2000  // counter max measure time ms
-#define PS_CNTR_INT_DELAY      10    // counter internal read delay
+#define EM_CNTR_BUFF_SZ        100   // counter buffer size
+#define EM_CNTR_MEAS_MS        2000  // counter max measure time ms
+#define EM_CNTR_INT_DELAY      10    // counter internal read delay
 
 // Voltmeter common ------------------------------------------------
-#define PS_VM_FS               100  // voltmeter fs (Hz)
-#define PS_VM_MEM              300  // voltmeter mem
+#define EM_VM_FS               100  // voltmeter fs (Hz)
+#define EM_VM_MEM              300  // voltmeter mem
 
 // LED timing ------------------------------------------------------
-#define PS_BLINK_LONG_MS       500  // long blink - startup
-#define PS_BLINK_SHORT_MS      50   // short blink - rx msg
+#define EM_BLINK_LONG_MS       500  // long blink - startup
+#define EM_BLINK_SHORT_MS      50   // short blink - rx msg
 
 // SCPI  -----------------------------------------------------------
-#define SCPI_IDN1              PS_DEV_AUTHOR
-#define SCPI_IDN2              PS_DEV_NAME
-#define SCPI_IDN3              PS_DEV_VER
+#define SCPI_IDN1              EM_DEV_AUTHOR
+#define SCPI_IDN2              EM_DEV_NAME
+#define SCPI_IDN3              EM_DEV_VER
 #define SCPI_IDN4              "0"
 
 // calc helpers ----------------------------------------------------
-#define PS_ADC_ADDR(x)           (uint32_t)LL_ADC_DMA_GetRegAddr(x, LL_ADC_DMA_REG_REGULAR_DATA) // ADC DMA address
-#define PS_ADC_1CH_SMPL_TM(T,B)  ((1.0 / (float)PS_FREQ_ADCCLK) * ((float)T + (B))) // ADC 1 channel sampling time in seconds (T - smpl ticks, B - Tconv)
-#define PS_ADC_MAXZ(T,L)         (((T) / ((float)PS_FREQ_ADCCLK * PS_ADC_C_F * (L))) - PS_ADC_R_KOHM) // ADC max input impedance (T - smpl ticks, L - ln2^(N+2))
-#define PS_DMA_LAST_IDX(x,y,z)   (get_last_circ_idx((x - LL_DMA_GetDataLength(z, y)), x)) // last DMA index from circular buffer (x - buff len, y - dma ch, z - dma)
-#define PS_MILIS(x)              (x / portTICK_PERIOD_MS) // FreeRTOS miliseconds
+#define EM_ADC_ADDR(x)           (uint32_t)LL_ADC_DMA_GetRegAddr(x, LL_ADC_DMA_REG_REGULAR_DATA) // ADC DMA address
+#define EM_ADC_1CH_SMPL_TM(T,B)  ((1.0 / (float)EM_FREQ_ADCCLK) * ((float)T + (B))) // ADC 1 channel sampling time in seconds (T - smpl ticks, B - Tconv)
+#define EM_ADC_MAXZ(T,L)         (((T) / ((float)EM_FREQ_ADCCLK * EM_ADC_C_F * (L))) - EM_ADC_R_KOHM) // ADC max input impedance (T - smpl ticks, L - ln2^(N+2))
+#define EM_DMA_LAST_IDX(x,y,z)   (get_last_circ_idx((x - LL_DMA_GetDataLength(z, y)), x)) // last DMA index from circular buffer (x - buff len, y - dma ch, z - dma)
+#define EM_MILIS(x)              (x / portTICK_PERIOD_MS) // FreeRTOS miliseconds
 #define J(a,b)                   a##b // join two tokens
 
 // ADC sampling times and their float values -----------------------
-extern const uint32_t PS_ADC_SMPLT[PS_ADC_SMPLT_CNT];
-extern const float PS_ADC_SMPLT_N[PS_ADC_SMPLT_CNT];
+extern const uint32_t EM_ADC_SMPLT[EM_ADC_SMPLT_CNT];
+extern const float EM_ADC_SMPLT_N[EM_ADC_SMPLT_CNT];
 
 // Welcome string  -------------------------------------------------
 #define WELCOME_STR "\n  Welcome to:\n\
- .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.\n\
- |  __                  __   __   __   __   ___  |\n\
- | |__) | |    |       /__` /  ` /  \\ |__) |__   |\n\
- | |    | |___ |___    .__/ \\__, \\__/ |    |___  |\n\
- |                                               |\n\
- `-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'\n\n"
+ .-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-.\n\
+ |  _       _   _  _   _   _  _     __  _  _   _   _ |\n\
+ | |_ |\\/| |_) |_ | \\ | \\ |_ | \\   (_  /  / \\ |_) |_ |\n\
+ | |_ |  | |_) |_ |_/ |_/ |_ |_/   __) \\_ \\_/ |   |_ |\n\
+ |                                                   |\n\
+ `-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-'\n\n"
 
 /*-----------------------------------------------------------------------------------------------------------+
  +                                                    USB                                                    +
@@ -138,9 +138,9 @@ extern const float PS_ADC_SMPLT_N[PS_ADC_SMPLT_CNT];
 
 #define USBD_VID                        0x0483
 #define USBD_LANGID_STRING              0x5740
-#define USBD_MANUFACTURER_STRING        PS_DEV_AUTHOR
+#define USBD_MANUFACTURER_STRING        EM_DEV_AUTHOR
 #define USBD_PID_FS                     22336
-#define USBD_PRODUCT_STRING_FS          PS_DEV_NAME
+#define USBD_PRODUCT_STRING_FS          EM_DEV_NAME
 #define USBD_CONFIGURATION_STRING_FS    "CDC Config"
 #define USBD_INTERFACE_STRING_FS        "CDC Interface"
 

@@ -1,16 +1,15 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "cfg.h"
 #include "utility.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-#include "cfg.h"
 
 
 void assert2(const char *file, uint32_t line)

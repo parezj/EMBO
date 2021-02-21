@@ -1,5 +1,5 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 

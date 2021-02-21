@@ -1,0 +1,7 @@
+core_cm3.h:1547:22:__NVIC_DisableIRQ	0	static,ignoring_inline_asm
+daq_irq.c:15:6:ADC1_2_IRQHandler	16	static
+daq_irq.c:60:6:EXTI1_IRQHandler	8	static
+daq_irq.c:72:6:EXTI2_IRQHandler	8	static
+daq_irq.c:84:6:EXTI3_IRQHandler	8	static
+daq_irq.c:96:6:EXTI4_IRQHandler	8	static
+daq_irq.c:108:6:EXTI0_IRQHandler	0	static

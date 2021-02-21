@@ -1,0 +1,10 @@
+comm.c:116:15:SCPI_Flush	0	static
+comm.c:156:15:SCPI_CoreIdnQ	24	static
+comm.c:178:6:uart_put_text	16	static
+comm.c:198:6:comm_init	48	static
+comm.c:224:9:comm_main	16	static
+comm.c:249:5:comm_respond	24	static
+comm.c:109:8:SCPI_Write	0	static
+comm.c:123:5:SCPI_Error	120	static
+comm.c:133:15:SCPI_Control	120	static
+comm.c:148:15:SCPI_Reset	8	static

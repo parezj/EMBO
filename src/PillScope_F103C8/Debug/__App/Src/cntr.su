@@ -1,6 +1,0 @@
-cntr.c:26:13:cntr_reset	48	static
-cntr.c:53:6:cntr_start.part.0	8	static
-cntr.c:19:6:cntr_init	0	static
-cntr.c:44:6:cntr_enable	8	static
-cntr.c:53:6:cntr_start	0	static,ignoring_inline_asm
-cntr.c:77:6:cntr_meas	24	static

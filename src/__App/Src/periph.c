@@ -1,8 +1,9 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "cfg.h"
 #include "periph.h"
 
 #include <stdio.h>
@@ -11,7 +12,6 @@
 #include <math.h>
 
 #include "utility.h"
-#include "cfg.h"
 #include "comm.h"
 #include "main.h"
 
@@ -52,20 +52,20 @@ static uint16_t adc_read(uint32_t ch)
 
 void adc_init()
 {
-#if defined(PS_ADC_MODE_ADC1) || defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
+#if defined(EM_ADC_MODE_ADC1) || defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
     adc_init_calib(ADC1);
 
-#if defined(PS_ADC_DUALMODE)
+#if defined(EM_ADC_DUALMODE)
     adc_init_calib(ADC2);
 #endif
 
 #endif
 
-#if defined(PS_ADC_MODE_ADC12) || defined(PS_ADC_MODE_ADC1234)
+#if defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
     adc_init_calib(ADC2);
 #endif
 
-#if defined(PS_ADC_MODE_ADC1234)
+#if defined(EM_ADC_MODE_ADC1234)
     adc_init_calib(ADC3);
     adc_init_calib(ADC4);
 #endif
@@ -73,13 +73,13 @@ void adc_init()
 
 void adc_init_calib(ADC_TypeDef* adc)
 {
-#if defined(PS_ADC_CAL_EN)
+#if defined(EM_ADC_CAL_EN)
     LL_ADC_Enable(adc);
 #endif
 #if defined(ADC_CR2_TSVREFE)
     adc->CR2 |= ADC_CR2_TSVREFE;
 #endif
-    uint32_t  wait_loop_index = ((PS_ADC_EN_TICKS * 32) >> 1);
+    uint32_t  wait_loop_index = ((EM_ADC_EN_TICKS * 32) >> 1);
     while(wait_loop_index != 0)
     {
       wait_loop_index--;
@@ -103,20 +103,20 @@ void adc_init_calib(ADC_TypeDef* adc)
     for (int i = 0; i <  10000; ++i) asm("nop");
 
     LL_ADC_REG_SetDMATransfer(adc, dma_tx_mode);
-#if !defined(PS_ADC_CAL_EN)
+#if !defined(EM_ADC_CAL_EN)
     LL_ADC_Enable(adc);
 #endif
 }
 
 void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, uint32_t smpl_time, uint8_t vrefint)
 {
-#ifdef PS_ADC_TRIG_34
+#ifdef EM_ADC_TRIG_34
     if (ch1 == 1 || ch2 == 2)
-        LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_12);
+        LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_12);
     else
-        LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_34);
+        LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_34);
 #else
-    LL_ADC_REG_SetTriggerSource(adc, PS_ADC_TRIG_12);
+    LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_12);
 #endif
     LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(adc), LL_ADC_MULTI_INDEPENDENT);
     LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
@@ -145,23 +145,23 @@ void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch1) {
-        LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH1);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH1, smpl_time);
+        LL_ADC_REG_SetSequencerRanks(adc, next_rank, EM_ADC_CH1);
+        LL_ADC_SetChannelSamplingTime(adc, EM_ADC_CH1, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch2) {
-        LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH2);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH2, smpl_time);
+        LL_ADC_REG_SetSequencerRanks(adc, next_rank, EM_ADC_CH2);
+        LL_ADC_SetChannelSamplingTime(adc, EM_ADC_CH2, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch3) {
-        LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH3);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH3, smpl_time);
+        LL_ADC_REG_SetSequencerRanks(adc, next_rank, EM_ADC_CH3);
+        LL_ADC_SetChannelSamplingTime(adc, EM_ADC_CH3, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
     if (ch4) {
-        LL_ADC_REG_SetSequencerRanks(adc, next_rank, PS_ADC_CH4);
-        LL_ADC_SetChannelSamplingTime(adc, PS_ADC_CH4, smpl_time);
+        LL_ADC_REG_SetSequencerRanks(adc, next_rank, EM_ADC_CH4);
+        LL_ADC_SetChannelSamplingTime(adc, EM_ADC_CH4, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
 
@@ -185,7 +185,7 @@ uint32_t adc_get_next_rank(uint32_t rank)
 void adc_set_res(ADC_TypeDef* adc, uint32_t resolution) // LL_ADC_RESOLUTION_12B, LL_ADC_RESOLUTION_8B
 {
     //LL_ADC_Disable(adc);
-#ifdef PS_ADC_BIT8
+#ifdef EM_ADC_BIT8
     LL_ADC_SetResolution(adc, resolution);
 #endif
     //LL_ADC_Enable(adc);

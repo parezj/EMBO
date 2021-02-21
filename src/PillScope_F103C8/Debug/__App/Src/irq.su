@@ -1,3 +1,0 @@
-irq.c:75:6:SysTick_Handler	8	static
-irq.c:85:6:SVC_Handler	0	static
-irq.c:90:6:PendSV_Handler	0	static

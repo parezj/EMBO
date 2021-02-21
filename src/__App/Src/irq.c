@@ -1,12 +1,13 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
+
+#include "cfg.h"
 
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-#include "cfg.h"
 #include "periph.h"
 #include "main.h"
 #include "app_data.h"
@@ -77,7 +78,7 @@ void SysTick_Handler(void)
 {
     if(xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
         xPortSysTickHandler();
-#ifdef PS_HAL_SYSTICK
+#ifdef EM_HAL_SYSTICK
     HAL_IncTick();
 #endif
     daq.uwTick++;

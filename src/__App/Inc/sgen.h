@@ -1,5 +1,5 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -8,7 +8,7 @@
 
 #include "cfg.h"
 
-#ifdef PS_DAC
+#ifdef EM_DAC
 
 enum sgen_mode
 {
@@ -29,7 +29,7 @@ typedef struct
     float tim_f;
     float tim_f_real;
     int samples;
-    uint16_t data[PS_DAC_BUFF_LEN];
+    uint16_t data[EM_DAC_BUFF_LEN];
 }sgen_data_t;
 
 

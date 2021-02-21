@@ -1,5 +1,5 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -9,8 +9,8 @@
 
 typedef struct
 {
-    uint16_t data_ccr[PS_CNTR_BUFF_SZ];
-    uint16_t data_ovf[PS_CNTR_BUFF_SZ];
+    uint16_t data_ccr[EM_CNTR_BUFF_SZ];
+    uint16_t data_ovf[EM_CNTR_BUFF_SZ];
     uint8_t enabled;
     float freq;
     uint16_t ovf;

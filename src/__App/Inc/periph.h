@@ -1,5 +1,5 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -8,7 +8,7 @@
 
 static inline void iwdg_feed()
 {
-    PS_IWDG_RST;
+    EM_IWDG_RST;
 };
 
 // p_sz=periph size, m_sz=memory size, dir=periph-to-mem / mem-to-periph / mem-to-mem

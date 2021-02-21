@@ -1,11 +1,11 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
  
+#include "cfg.h"
 #include "led.h"
 
-#include "cfg.h"
 #include "main.h"
 
 
@@ -21,17 +21,17 @@ void led_set(led_data_t* self, uint8_t enable)
 {
     self->enabled = enable;
     if (!self->enabled)
-        PS_LED_PORT->BSRR |= (1 << PS_LED_PIN);  // 1
+        EM_LED_PORT->BSRR |= (1 << EM_LED_PIN);  // 1
     else
-        PS_LED_PORT->BRR |= (1 << PS_LED_PIN);   // 0
+        EM_LED_PORT->BRR |= (1 << EM_LED_PIN);   // 0
 }
 
 void led_toggle(led_data_t* self)
 {
     if (self->enabled)
-        PS_LED_PORT->BSRR |= (1 << PS_LED_PIN);  // 1
+        EM_LED_PORT->BSRR |= (1 << EM_LED_PIN);  // 1
     else
-        PS_LED_PORT->BRR |= (1 << PS_LED_PIN);   // 0
+        EM_LED_PORT->BRR |= (1 << EM_LED_PIN);   // 0
     self->enabled = !self->enabled;
 }
 

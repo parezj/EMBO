@@ -1,0 +1,4 @@
+stm32f3xx_ll_usart.h:2575:26:LL_USART_IsActiveFlag_RXNE	16	static
+stm32f3xx_ll_usart.h:2869:22:LL_USART_ClearFlag_RTO	16	static
+stm32f3xx_ll_usart.h:3499:25:LL_USART_ReceiveData8	16	static
+comm_irq.c:17:6:USART2_IRQHandler	16	static,ignoring_inline_asm

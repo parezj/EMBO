@@ -1,15 +1,15 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "cfg.h"
 #include "app.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
 
-#include "cfg.h"
 #include "app_data.h"
 #include "app_sync.h"
 #include "periph.h"
@@ -18,17 +18,17 @@
 #include "main.h"
 
 
-#define PS_STACK_T1     64
-#define PS_STACK_T2     64
-#define PS_STACK_T3     64
-#define PS_STACK_T4     512
-#define PS_STACK_T5     64
+#define EM_STACK_T1     64
+#define EM_STACK_T2     64
+#define EM_STACK_T3     64
+#define EM_STACK_T4     512
+#define EM_STACK_T5     64
 
-#define PS_PRI_T1       3
-#define PS_PRI_T2       1
-#define PS_PRI_T3       5
-#define PS_PRI_T4       2
-#define PS_PRI_T5       4
+#define EM_PRI_T1       3
+#define EM_PRI_T2       1
+#define EM_PRI_T3       5
+#define EM_PRI_T4       2
+#define EM_PRI_T5       4
 
 void t1_wd(void* p);
 void t2_trig_check(void* p);
@@ -36,11 +36,11 @@ void t3_trig_post_count(void* p);
 void t4_comm_and_init(void* p);
 void t5_cntr(void* p);
 
-StackType_t stack_t1[PS_STACK_T1];
-StackType_t stack_t2[PS_STACK_T2];
-StackType_t stack_t3[PS_STACK_T3];
-StackType_t stack_t4[PS_STACK_T4];
-StackType_t stack_t5[PS_STACK_T5];
+StackType_t stack_t1[EM_STACK_T1];
+StackType_t stack_t2[EM_STACK_T2];
+StackType_t stack_t3[EM_STACK_T3];
+StackType_t stack_t4[EM_STACK_T4];
+StackType_t stack_t5[EM_STACK_T5];
 
 StaticTask_t buff_t1;
 StaticTask_t buff_t2;
@@ -70,11 +70,11 @@ void app_main(void)
     ASSERT(sem3_cntr != NULL);
     ASSERT(mtx1 != NULL);
 
-    ASSERT(xTaskCreateStatic(t1_wd, "T1", PS_STACK_T1, NULL, PS_PRI_T1, stack_t1, &buff_t1) != NULL);
-    ASSERT(xTaskCreateStatic(t2_trig_check, "T2", PS_STACK_T2, NULL, PS_PRI_T2, stack_t2, &buff_t2) != NULL);
-    ASSERT(xTaskCreateStatic(t3_trig_post_count, "T3", PS_STACK_T3, NULL, PS_PRI_T3, stack_t3, &buff_t3) != NULL);
-    ASSERT(xTaskCreateStatic(t4_comm_and_init, "T4", PS_STACK_T4, NULL, PS_PRI_T4, stack_t4, &buff_t4) != NULL);
-    ASSERT(xTaskCreateStatic(t5_cntr, "T5", PS_STACK_T5, NULL, PS_PRI_T5, stack_t5, &buff_t5) != NULL);
+    ASSERT(xTaskCreateStatic(t1_wd, "T1", EM_STACK_T1, NULL, EM_PRI_T1, stack_t1, &buff_t1) != NULL);
+    ASSERT(xTaskCreateStatic(t2_trig_check, "T2", EM_STACK_T2, NULL, EM_PRI_T2, stack_t2, &buff_t2) != NULL);
+    ASSERT(xTaskCreateStatic(t3_trig_post_count, "T3", EM_STACK_T3, NULL, EM_PRI_T3, stack_t3, &buff_t3) != NULL);
+    ASSERT(xTaskCreateStatic(t4_comm_and_init, "T4", EM_STACK_T4, NULL, EM_PRI_T4, stack_t4, &buff_t4) != NULL);
+    ASSERT(xTaskCreateStatic(t5_cntr, "T5", EM_STACK_T5, NULL, EM_PRI_T5, stack_t5, &buff_t5) != NULL);
 
     __enable_irq();
 
@@ -138,22 +138,22 @@ void t4_comm_and_init(void* p)
     comm_init(&comm);
     daq_init(&daq);
     daq_mode_set(&daq, VM);
-    led_blink_set(&led, 3, PS_BLINK_LONG_MS, daq.uwTick);
+    led_blink_set(&led, 3, EM_BLINK_LONG_MS, daq.uwTick);
 
-#ifdef PS_DAC
+#ifdef EM_DAC
     sgen_init(&sgen);
 #endif
 
-#ifdef PS_DEBUG
+#ifdef EM_DEBUG
     pwm_set(&pwm, 1000, 25, 25, 50, 1, 1);
     //LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
     //LL_IWDG_SetReloadCounter(IWDG, 0x0FFF);
-#ifdef PS_DAC
-    sgen_enable(&sgen, SINE, 100, 1000, PS_DAC_BUFF_LEN);
+#ifdef EM_DAC
+    sgen_enable(&sgen, SINE, 100, 1000, EM_DAC_BUFF_LEN);
 #endif
 #endif
 
-    while (PS_VM_ReadQ(NULL) == SCPI_RES_ERR); // read vcc
+    while (EM_VM_ReadQ(NULL) == SCPI_RES_ERR); // read vcc
     init_done = 1;
 
     while(1)
@@ -163,7 +163,7 @@ void t4_comm_and_init(void* p)
 
         //iwdg_feed();
         if (comm_main(&comm))
-            led_blink_set(&led, 1, PS_BLINK_SHORT_MS, daq.uwTick);
+            led_blink_set(&led, 1, EM_BLINK_SHORT_MS, daq.uwTick);
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
     }

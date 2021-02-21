@@ -1,0 +1,12 @@
+utility.c:15:6:assert2	16	static
+utility.c:21:6:get_avg_from_circ	40	static
+utility.c:56:5:get_vcc_from_circ	48	static
+utility.c:98:5:get_1ch_from_circ	64	static
+utility.c:134:7:get_freq	32	static
+utility.c:151:6:busy_wait	24	static,ignoring_inline_asm
+utility.c:157:7:fastlog2	32	static
+utility.c:169:7:fastlog	16	static
+utility.c:174:7:fastexp	16	static
+utility.c:179:7:fastpow2	48	static
+utility.c:192:6:itoa_fast	64	static
+utility.c:236:6:sprint_fast	256	static

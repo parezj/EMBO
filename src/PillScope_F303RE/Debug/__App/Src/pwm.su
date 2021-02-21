@@ -1,9 +1,0 @@
-stm32f3xx_ll_tim.h:1353:22:LL_TIM_EnableCounter	16	static
-stm32f3xx_ll_tim.h:1364:22:LL_TIM_DisableCounter	16	static
-stm32f3xx_ll_tim.h:1604:22:LL_TIM_SetCounter	16	static
-stm32f3xx_ll_tim.h:1646:22:LL_TIM_SetPrescaler	16	static
-stm32f3xx_ll_tim.h:1673:22:LL_TIM_SetAutoReload	16	static
-stm32f3xx_ll_tim.h:1877:22:LL_TIM_CC_EnableChannel	16	static
-stm32f3xx_ll_tim.h:2609:22:LL_TIM_OC_SetCompareCH1	16	static
-pwm.c:16:6:pwm_init	16	static
-pwm.c:26:5:pwm_set	64	static

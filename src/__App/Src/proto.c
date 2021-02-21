@@ -1,8 +1,9 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+#include "cfg.h"
 #include "proto.h"
 
 #include "FreeRTOS.h"
@@ -12,14 +13,13 @@
 #include <string.h>
 
 #include "utility.h"
-#include "cfg.h"
 #include "app_data.h"
 #include "main.h"
 
 
 /************************* [IEEE 488] *************************/
 
-scpi_result_t PS_Reset(scpi_t * context)
+scpi_result_t EM_Reset(scpi_t * context)
 {
     daq_enable(&daq, 0);
     daq_settings_init(&daq);
@@ -35,7 +35,7 @@ scpi_result_t PS_Reset(scpi_t * context)
 
 /************************* [System Actions] *************************/
 
-scpi_result_t PS_System_Mode(scpi_t * context)
+scpi_result_t EM_System_Mode(scpi_t * context)
 {
     const char* p1;
     size_t p1l;
@@ -59,7 +59,7 @@ scpi_result_t PS_System_Mode(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t PS_System_ModeQ(scpi_t * context)
+scpi_result_t EM_System_ModeQ(scpi_t * context)
 {
     if (daq.mode == SCOPE)
         SCPI_ResultText(context, "SCOPE");
@@ -71,7 +71,7 @@ scpi_result_t PS_System_ModeQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t PS_System_LimitsQ(scpi_t * context)
+scpi_result_t EM_System_LimitsQ(scpi_t * context)
 {
     char buff[80];
     char dual[2] = {'\0'};
@@ -79,37 +79,37 @@ scpi_result_t PS_System_LimitsQ(scpi_t * context)
     uint8_t dac = 0;
     uint8_t bit8 = 0;
     uint8_t adcs = 0;
-#ifdef PS_DAC
+#ifdef EM_DAC
     dac = 1;
 #endif
-#ifdef PS_ADC_BIT8
+#ifdef EM_ADC_BIT8
     bit8 = 1;
 #endif
 
-#if defined(PS_ADC_MODE_ADC1)
+#if defined(EM_ADC_MODE_ADC1)
     adcs = 1;
-#elif defined(PS_ADC_MODE_ADC12)
+#elif defined(EM_ADC_MODE_ADC12)
     adcs = 2;
-#elif defined(PS_ADC_MODE_ADC1234)
+#elif defined(EM_ADC_MODE_ADC1234)
     adcs = 4;
 #endif
 
-#if defined(PS_ADC_DUALMODE)
+#if defined(EM_ADC_DUALMODE)
     dual[0] = 'D';
 #endif
-#if defined(PS_ADC_INTERLEAVED)
+#if defined(EM_ADC_INTERLEAVED)
     inter[0] = 'I';
 #endif
 
     //char smplt12_s[15];
     //char smplt8_s[15];
-    //sprint_fast(smplt12_s, "%s", PS_ADC_1CH_SMPL_TM(PS_ADC_SMPLT_MAX_N, PS_ADC_TCONV12), 8);
-    //sprint_fast(smplt8_s, "%s", PS_ADC_1CH_SMPL_TM(PS_ADC_SMPLT_MAX_N, PS_ADC_TCONV8), 8);
+    //sprint_fast(smplt12_s, "%s", EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_MAX_N, EM_ADC_TCONV12), 8);
+    //sprint_fast(smplt8_s, "%s", EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_MAX_N, EM_ADC_TCONV8), 8);
 
-    int pwm_max_f = PS_TIM_PWM1_FREQ / 2;
+    int pwm_max_f = EM_TIM_PWM1_FREQ / 2;
 
-    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d", PS_DAQ_MAX_B12_FS, PS_DAQ_MAX_B8_FS, PS_DAQ_MAX_MEM,
-                      PS_LA_MAX_FS, pwm_max_f, adcs, dual, inter, bit8, dac);
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
+                      EM_LA_MAX_FS, pwm_max_f, adcs, dual, inter, bit8, dac);
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -117,7 +117,7 @@ scpi_result_t PS_System_LimitsQ(scpi_t * context)
 
 /************************* [VM Actions] *************************/
 
-scpi_result_t PS_VM_ReadQ(scpi_t * context)
+scpi_result_t EM_VM_ReadQ(scpi_t * context)
 {
     if (daq.mode == VM)
     {
@@ -145,23 +145,23 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
             return SCPI_RES_ERR;
         }
 
-#if defined(PS_ADC_MODE_ADC1)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
+#if defined(EM_ADC_MODE_ADC1)
+        int last1 = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
 
         get_avg_from_circ(last1, 5, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
 
-#elif defined(PS_ADC_MODE_ADC12)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2, PS_DMA_ADC2);
+#elif defined(EM_ADC_MODE_ADC12)
+        int last1 = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
+        int last2 = EM_DMA_LAST_IDX(daq.buff2.len, EM_DMA_CH_ADC2, EM_DMA_ADC2);
 
         get_avg_from_circ(last1, 3, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
         get_avg_from_circ(last2, 2, avg_num, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
 
-#elif defined(PS_ADC_MODE_ADC1234)
-        int last1 = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_ADC1, PS_DMA_ADC1);
-        int last2 = PS_DMA_LAST_IDX(daq.buff2.len, PS_DMA_CH_ADC2, PS_DMA_ADC2);
-        int last3 = PS_DMA_LAST_IDX(daq.buff3.len, PS_DMA_CH_ADC3, PS_DMA_ADC3);
-        int last4 = PS_DMA_LAST_IDX(daq.buff4.len, PS_DMA_CH_ADC4, PS_DMA_ADC4);
+#elif defined(EM_ADC_MODE_ADC1234)
+        int last1 = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
+        int last2 = EM_DMA_LAST_IDX(daq.buff2.len, EM_DMA_CH_ADC2, EM_DMA_ADC2);
+        int last3 = EM_DMA_LAST_IDX(daq.buff3.len, EM_DMA_CH_ADC3, EM_DMA_ADC3);
+        int last4 = EM_DMA_LAST_IDX(daq.buff4.len, EM_DMA_CH_ADC4, EM_DMA_ADC4);
 
         get_avg_from_circ(last1, 2, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
         get_avg_from_circ(last2, 1, avg_num, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
@@ -176,9 +176,9 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
         char ch4_s[10];
 
 #ifdef VREFINT_CAL_ADDR
-        float vcc = 3.3 * PS_ADC_VREF_CAL / vref_raw;
+        float vcc = 3.3 * EM_ADC_VREF_CAL / vref_raw;
 #else
-        float vcc = daq.adc_max_val * PS_ADC_VREF_CAL / vref_raw / 1000;
+        float vcc = daq.adc_max_val * EM_ADC_VREF_CAL / vref_raw / 1000;
 #endif
         float ch1 = vcc * ch1_raw / daq.adc_max_val;
         float ch2 = vcc * ch2_raw / daq.adc_max_val;
@@ -219,13 +219,13 @@ scpi_result_t PS_VM_ReadQ(scpi_t * context)
 
 /************************* [SCOPE Actions] *************************/
 
-scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
+scpi_result_t EM_SCOPE_ReadQ(scpi_t * context)
 {
     if (daq.mode == SCOPE)
     {
         if (daq.trig.ready == 0)
         {
-            SCPI_ResultText(context, PS_RESP_NRDY);
+            SCPI_ResultText(context, EM_RESP_NRDY);
             return SCPI_RES_OK;
         }
 
@@ -233,9 +233,9 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
             daq_enable(&daq, 0);
 
 #ifdef VREFINT_CAL_ADDR
-        float cal = PS_ADC_VREF_CAL / daq.adc_max_val * 3300;
+        float cal = EM_ADC_VREF_CAL / daq.adc_max_val * 3300;
 #else
-        float cal = PS_ADC_VREF_CAL;
+        float cal = EM_ADC_VREF_CAL;
 #endif
 
         if (daq.set.bits == B8) // compressing
@@ -243,7 +243,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         else
             cal *= 10.0;
 
-#if defined(PS_ADC_MODE_ADC1)
+#if defined(EM_ADC_MODE_ADC1)
         int added = 0;
         int idx = 0;
         int ch_it = 1; // 2 /w Vcc
@@ -251,7 +251,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
 
         if (daq.trig.set.mode == DISABLED)
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+            daq.trig.pos_frst = EM_DMA_LAST_IDX(daq.buff1.len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
 
         if (daq.set.ch1_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
@@ -266,7 +266,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
                                        daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
 
-#elif defined(PS_ADC_MODE_ADC12)
+#elif defined(EM_ADC_MODE_ADC12)
 
         int added = 0;
         int idx = 0;
@@ -276,7 +276,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
         int buff2_mem = daq.buff2.len - daq.buff2.reserve;
 
         if (daq.trig.set.mode == DISABLED)
-            daq.trig.pos_frst = PS_DMA_LAST_IDX((daq.set.ch1_en || daq.set.ch2_en) ? daq.buff1.len : daq.buff2.len,
+            daq.trig.pos_frst = EM_DMA_LAST_IDX((daq.set.ch1_en || daq.set.ch2_en) ? daq.buff1.len : daq.buff2.len,
                 daq.trig.dma_ch_trig, daq.trig.dma_trig);
 
         if (daq.set.ch1_en)
@@ -294,7 +294,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, ch_it++, daq.buff2.chans,
                                        daq.set.bits, daq.vref, cal, daq.buff2.data, daq.buff_out.data, &idx);
 
-#elif defined(PS_ADC_MODE_ADC1234)
+#elif defined(EM_ADC_MODE_ADC1234)
 
         int buff1_mem = daq.buff1.len - daq.buff1.reserve;
         int buff2_mem = daq.buff2.len - daq.buff2.reserve;
@@ -311,7 +311,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
             else if (daq.set.ch3_en) buff_ln = daq.buff3.len;
             else if (daq.set.ch4_en) buff_ln = daq.buff4.len;
 
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(buff_ln, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+            daq.trig.pos_frst = EM_DMA_LAST_IDX(buff_ln, daq.trig.dma_ch_trig, daq.trig.dma_trig);
         }
 
         if (daq.set.ch1_en)
@@ -354,7 +354,7 @@ scpi_result_t PS_SCOPE_ReadQ(scpi_t * context)
     }
 }
 
-scpi_result_t PS_SCOPE_Set(scpi_t * context)
+scpi_result_t EM_SCOPE_Set(scpi_t * context)
 {
     if (daq.mode == SCOPE)
     {
@@ -426,7 +426,7 @@ scpi_result_t PS_SCOPE_Set(scpi_t * context)
     }
 }
 
-scpi_result_t PS_SCOPE_SetQ(scpi_t * context)
+scpi_result_t EM_SCOPE_SetQ(scpi_t * context)
 {
     if (daq.mode == SCOPE)
     {
@@ -449,7 +449,7 @@ scpi_result_t PS_SCOPE_SetQ(scpi_t * context)
         mode_s[1] = '\0';
 
         char maxZ_s[15];
-        float max_Z = PS_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? PS_LN2POW14 : PS_LN2POW10);
+        float max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
         sprint_fast(maxZ_s, "%skOhm", max_Z, 1);
 
         int len = sprintf(buff, "\"%d,%d,%s,%s,%d,%d,%s,%s,%d,%s\"", daq.set.bits, daq.set.mem, freq_s, chans_en,
@@ -467,20 +467,20 @@ scpi_result_t PS_SCOPE_SetQ(scpi_t * context)
 
 /************************* [LA Actions] *************************/
 
-scpi_result_t PS_LA_ReadQ(scpi_t * context)
+scpi_result_t EM_LA_ReadQ(scpi_t * context)
 {
     if (daq.mode == LA)
     {
         if (daq.trig.ready == 0)
         {
-            SCPI_ResultText(context, PS_RESP_NRDY);
+            SCPI_ResultText(context, EM_RESP_NRDY);
             return SCPI_RES_OK;
         }
 
         if (daq.trig.set.mode == DISABLED)
         {
             daq_enable(&daq, 0);
-            daq.trig.pos_frst = PS_DMA_LAST_IDX(daq.buff1.len, PS_DMA_CH_LA, PS_DMA_LA);
+            daq.trig.pos_frst = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_LA, EM_DMA_LA);
         }
 
         for (int k = 0, i = daq.trig.pos_frst; k < daq.buff1.len; k++, i++) // TODO compress 4 + 4
@@ -489,10 +489,10 @@ scpi_result_t PS_LA_ReadQ(scpi_t * context)
                 i = 0;
 
             uint8_t val = (uint8_t)(((uint8_t*)daq.buff1.data)[i]);
-            ((uint8_t*)daq.buff_out.data)[k] = (((val & (1 << PS_GPIO_LA_CH1_NUM)) ? 1 : 0) << 1) |
-                                               (((val & (1 << PS_GPIO_LA_CH2_NUM)) ? 1 : 0) << 2) |
-                                               (((val & (1 << PS_GPIO_LA_CH3_NUM)) ? 1 : 0) << 3) |
-                                               (((val & (1 << PS_GPIO_LA_CH4_NUM)) ? 1 : 0) << 4);
+            ((uint8_t*)daq.buff_out.data)[k] = (((val & (1 << EM_GPIO_LA_CH1_NUM)) ? 1 : 0) << 1) |
+                                               (((val & (1 << EM_GPIO_LA_CH2_NUM)) ? 1 : 0) << 2) |
+                                               (((val & (1 << EM_GPIO_LA_CH3_NUM)) ? 1 : 0) << 3) |
+                                               (((val & (1 << EM_GPIO_LA_CH4_NUM)) ? 1 : 0) << 4);
         }
 
         daq.trig.pretrig_cntr = 0;
@@ -514,7 +514,7 @@ scpi_result_t PS_LA_ReadQ(scpi_t * context)
     }
 }
 
-scpi_result_t PS_LA_Set(scpi_t * context)
+scpi_result_t EM_LA_Set(scpi_t * context)
 {
     if (daq.mode == LA)
     {
@@ -580,7 +580,7 @@ scpi_result_t PS_LA_Set(scpi_t * context)
     }
 }
 
-scpi_result_t PS_LA_SetQ(scpi_t * context)
+scpi_result_t EM_LA_SetQ(scpi_t * context)
 {
     if (daq.mode == LA)
     {
@@ -611,7 +611,7 @@ scpi_result_t PS_LA_SetQ(scpi_t * context)
 
 /************************* [CNTR Actions] *************************/
 
-scpi_result_t PS_CNTR_Enable(scpi_t * context)
+scpi_result_t EM_CNTR_Enable(scpi_t * context)
 {
     uint32_t p1;
 
@@ -632,7 +632,7 @@ scpi_result_t PS_CNTR_Enable(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
+scpi_result_t EM_CNTR_ReadQ(scpi_t * context)
 {
     if (!cntr.enabled)
     {
@@ -677,9 +677,9 @@ scpi_result_t PS_CNTR_ReadQ(scpi_t * context)
 }
 
 /************************* [SGEN Actions] *************************/
-scpi_result_t PS_SGEN_Set(scpi_t * context)
+scpi_result_t EM_SGEN_Set(scpi_t * context)
 {
-#ifdef PS_DAC
+#ifdef EM_DAC
     double p1;
     if (!SCPI_ParamDouble(context, &p1, TRUE))
     {
@@ -699,7 +699,7 @@ scpi_result_t PS_SGEN_Set(scpi_t * context)
 
 /************************* [PWM Actions] *************************/
 
-scpi_result_t PS_PWM_SetQ(scpi_t * context)
+scpi_result_t EM_PWM_SetQ(scpi_t * context)
 {
     char buff[60];
     char buff_freq[10];
@@ -723,7 +723,7 @@ scpi_result_t PS_PWM_SetQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t PS_PWM_Set(scpi_t * context)
+scpi_result_t EM_PWM_Set(scpi_t * context)
 {
     uint32_t param1, param2, param3, param4, param5, param6;
 
@@ -751,7 +751,7 @@ scpi_result_t PS_PWM_Set(scpi_t * context)
 }
 
 
-scpi_result_t PS_Force_Trig(scpi_t * context)
+scpi_result_t EM_Force_Trig(scpi_t * context)
 {
     if (daq.mode == VM)
     {
@@ -767,12 +767,12 @@ scpi_result_t PS_Force_Trig(scpi_t * context)
 
     if (daq.mode == LA)
     {
-        daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, PS_DMA_CH_LA, PS_DMA_LA);
+        daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, EM_DMA_CH_LA, EM_DMA_LA);
         daq_trig_trigger_scope(&daq);
     }
     else // (daq.mode == SCOPE)
     {
-        daq.trig.dma_pos_catched = PS_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+        daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
         daq_trig_trigger_scope(&daq);
     }
 

@@ -1,2 +1,0 @@
-pwm.c:16:6:pwm_init	0	static
-pwm.c:26:5:pwm_set	56	static

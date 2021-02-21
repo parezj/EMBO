@@ -1,8 +1,9 @@
 /*
- * CTU/PillScope project
+ * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
-
+ 
+#include "cfg.h"
 #include "comm.h"
 
 #include <stdio.h>
@@ -10,9 +11,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "cfg.h"
 #include "proto.h"
-#ifdef PS_USB
+#ifdef EM_USB
 #include "usbd_cdc_if.h"
 #endif
 #include "main.h"
@@ -45,7 +45,7 @@ const scpi_command_t scpi_commands[] = {
     { .pattern = "*IDN?", .callback = SCPI_CoreIdnQ,},
     { .pattern = "*OPC", .callback = SCPI_CoreOpc,},
     { .pattern = "*OPC?", .callback = SCPI_CoreOpcQ,},
-    { .pattern = "*RST", .callback = PS_Reset,},
+    { .pattern = "*RST", .callback = EM_Reset,},
     { .pattern = "*SRE", .callback = SCPI_CoreSre,},
     { .pattern = "*SRE?", .callback = SCPI_CoreSreQ,},
     { .pattern = "*STB?", .callback = SCPI_CoreStbQ,},
@@ -53,39 +53,39 @@ const scpi_command_t scpi_commands[] = {
     { .pattern = "*WAI", .callback = SCPI_CoreWai,},
 
     ///* Required SCPI commands (SCPI std V1999.0 4.2.1) */
-    {.pattern = "SYSTem:ERRor[:NEXT]?", .callback = SCPI_SystemErrorNextQ,},
-    {.pattern = "SYSTem:ERRor:COUNt?", .callback = SCPI_SystemErrorCountQ,},
-    {.pattern = "SYSTem:VERSion?", .callback = SCPI_SystemVersionQ,},
+    {.pattern = "SYStem:ERRor[:NEXT]?", .callback = SCPI_SystemErrorNextQ,},
+    {.pattern = "SYStem:ERRor:COUNt?", .callback = SCPI_SystemErrorCountQ,},
+    {.pattern = "SYStem:VERsion?", .callback = SCPI_SystemVersionQ,},
 
-    /* ULT - System */
-    {.pattern = "SYSTem:MODE?", .callback = PS_System_ModeQ,},
-    {.pattern = "SYSTem:MODE", .callback = PS_System_Mode,},
-    {.pattern = "SYSTem:LIMits?", .callback = PS_System_LimitsQ,},
-    {.pattern = "SYSTem:FORCetrig?", .callback = PS_Force_Trig,},
+    /* EMBO - System */
+    {.pattern = "SYStem:MODE?", .callback = EM_System_ModeQ,},
+    {.pattern = "SYStem:MODE", .callback = EM_System_Mode,},
+    {.pattern = "SYStem:LIMits?", .callback = EM_System_LimitsQ,},
+    {.pattern = "SYStem:FORCetrig", .callback = EM_Force_Trig,},
 
-    /* ULT - Voltmeter */
-    {.pattern = "VM:READ?", .callback = PS_VM_ReadQ,},
+    /* EMBO - Voltmeter */
+    {.pattern = "VM:READ?", .callback = EM_VM_ReadQ,},
 
-    /* ULT - Scope */
-    {.pattern = "SCOPe:READ?", .callback = PS_SCOPE_ReadQ,},
-    {.pattern = "SCOPe:SET?", .callback = PS_SCOPE_SetQ,},
-    {.pattern = "SCOPe:SET", .callback = PS_SCOPE_Set,},
+    /* EMBO - Scope */
+    {.pattern = "SCOPe:READ?", .callback = EM_SCOPE_ReadQ,},
+    {.pattern = "SCOPe:SET?", .callback = EM_SCOPE_SetQ,},
+    {.pattern = "SCOPe:SET", .callback = EM_SCOPE_Set,},
 
-    /* ULT - Logic Analyzer */
-    {.pattern = "LA:READ?", .callback = PS_LA_ReadQ,},
-    {.pattern = "LA:SET?", .callback = PS_LA_SetQ,},
-    {.pattern = "LA:SET", .callback = PS_LA_Set,},
+    /* EMBO - Logic Analyzer */
+    {.pattern = "LA:READ?", .callback = EM_LA_ReadQ,},
+    {.pattern = "LA:SET?", .callback = EM_LA_SetQ,},
+    {.pattern = "LA:SET", .callback = EM_LA_Set,},
 
-    /* ULT - Counter */
-    {.pattern = "CNTR:ENABLE", .callback = PS_CNTR_Enable,},
-    {.pattern = "CNTR:READ?", .callback = PS_CNTR_ReadQ,},
+    /* EMBO - Counter */
+    {.pattern = "CNTR:ENAble", .callback = EM_CNTR_Enable,},
+    {.pattern = "CNTR:READ?", .callback = EM_CNTR_ReadQ,},
 
-    /* ULT - Signal Generator */
-    {.pattern = "SGEN:SET", .callback = PS_SGEN_Set,},
+    /* EMBO - Signal Generator */
+    {.pattern = "SGEN:SET", .callback = EM_SGEN_Set,},
 
-    /* ULT - PWM */
-    {.pattern = "PWM:SET?", .callback = PS_PWM_SetQ,},
-    {.pattern = "PWM:SET", .callback = PS_PWM_Set,},
+    /* EMBO - PWM */
+    {.pattern = "PWM:SET?", .callback = EM_PWM_SetQ,},
+    {.pattern = "PWM:SET", .callback = EM_PWM_Set,},
 
 
     SCPI_CMD_LIST_END
@@ -183,8 +183,8 @@ void uart_put_text(const char* data)
 
 static void uart_put_char(const char data)
 {
-    while(!LL_USART_IsActiveFlag_TXE(PS_UART));
-    LL_USART_TransmitData8(PS_UART, data);
+    while(!LL_USART_IsActiveFlag_TXE(EM_UART));
+    LL_USART_TransmitData8(EM_UART, data);
 }
 
 static void uart_put_str(const char* data, int len)
@@ -214,11 +214,11 @@ void comm_init(comm_data_t* self)
               scpi_error_queue_data, SCPI_ERROR_QUEUE_SIZE,
               self);
 
-    LL_USART_EnableIT_RXNE(PS_UART);
+    LL_USART_EnableIT_RXNE(EM_UART);
     uart_put_text(WELCOME_STR);
 
-    NVIC_SetPriority(PS_IRQN_UART, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), PS_IT_PRI_UART, 0));
-    NVIC_EnableIRQ(PS_IRQN_UART);
+    NVIC_SetPriority(EM_IRQN_UART, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_UART, 0));
+    NVIC_EnableIRQ(EM_IRQN_UART);
 }
 
 uint8_t comm_main(comm_data_t* self)
@@ -232,7 +232,7 @@ uint8_t comm_main(comm_data_t* self)
         self->uart.available = 0;
         return 1;
     }
-#ifdef PS_USB
+#ifdef EM_USB
     else if (self->usb.available)
     {
         SCPI_Input(&scpi_context, self->usb.rx_buffer, self->usb.rx_index);
@@ -253,7 +253,7 @@ int comm_respond(comm_data_t* self, const char* data, int len)
         uart_put_str(data, len);
         return len;
     }
-#ifdef PS_USB
+#ifdef EM_USB
     else if (self->usb.last)
     {
         int cntr = 1000000;
