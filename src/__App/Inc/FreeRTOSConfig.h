@@ -8,7 +8,7 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
-#include "cfg.h"
+#include <cfg.h>
 
 /*-----------------------------------------------------------
  * Application specific definitions.

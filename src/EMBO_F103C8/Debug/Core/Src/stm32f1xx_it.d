@@ -36,24 +36,25 @@ Core/Src/stm32f1xx_it.o: ../Core/Src/stm32f1xx_it.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h \
- ../Core/Inc/stm32f1xx_it.h F:/STM32Cube/EMBO/src/__App/Inc/comm.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg.h \
- F:/STM32Cube/EMBO/src/__App/Inc/utility.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/scpi.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/parser.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/types.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/config.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/cc.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/ieee488.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/error.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/constants.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/minimal.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/units.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/utils.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/expression.h \
+ ../Core/Inc/stm32f1xx_it.h F:/STM32Cube/EMBO/src/__App/inc/comm.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg.h \
+ F:/STM32Cube/EMBO/src/__App/inc/utility.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/scpi.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/parser.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/types.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/config.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/cc.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/ieee488.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/error.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/constants.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/minimal.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/units.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/utils.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/expression.h \
  F:/STM32Cube/EMBO/src/__OS/include/FreeRTOS.h \
- F:/STM32Cube/EMBO/src/__App/Inc/FreeRTOSConfig.h \
+ F:/STM32Cube/EMBO/src/__App/inc/FreeRTOSConfig.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg.h \
  F:/STM32Cube/EMBO/src/__OS/include/projdefs.h \
  F:/STM32Cube/EMBO/src/__OS/include/portable.h \
  F:/STM32Cube/EMBO/src/__OS/include/deprecated_definitions.h \
@@ -138,41 +139,43 @@ Core/Src/stm32f1xx_it.o: ../Core/Src/stm32f1xx_it.c ../Core/Inc/main.h \
 
 ../Core/Inc/stm32f1xx_it.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/comm.h:
+F:/STM32Cube/EMBO/src/__App/inc/comm.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/utility.h:
+F:/STM32Cube/EMBO/src/__App/inc/utility.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/scpi.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/scpi.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/parser.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/parser.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/types.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/types.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/config.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/config.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/cc.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/cc.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/ieee488.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/ieee488.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/error.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/error.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/constants.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/constants.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/minimal.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/minimal.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/units.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/units.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/utils.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/utils.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/expression.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/expression.h:
 
 F:/STM32Cube/EMBO/src/__OS/include/FreeRTOS.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/FreeRTOSConfig.h:
+F:/STM32Cube/EMBO/src/__App/inc/FreeRTOSConfig.h:
+
+F:/STM32Cube/EMBO/src/__App/inc/cfg.h:
 
 F:/STM32Cube/EMBO/src/__OS/include/projdefs.h:
 

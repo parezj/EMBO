@@ -44,33 +44,34 @@ USB_DEVICE/App/usbd_cdc_if.o: ../USB_DEVICE/App/usbd_cdc_if.c \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ioreq.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
- F:/STM32Cube/EMBO/src/__App/Inc/comm.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg.h \
- F:/STM32Cube/EMBO/src/__App/Inc/utility.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/scpi.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/parser.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/types.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/config.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/cc.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/ieee488.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/error.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/constants.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/minimal.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/units.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/utils.h \
- F:/STM32Cube/EMBO/src/__App/Inc/scpi/expression.h \
- F:/STM32Cube/EMBO/src/__App/Inc/app_data.h \
- F:/STM32Cube/EMBO/src/__App/Inc/pwm.h \
- F:/STM32Cube/EMBO/src/__App/Inc/led.h \
- F:/STM32Cube/EMBO/src/__App/Inc/daq.h \
- F:/STM32Cube/EMBO/src/__App/Inc/daq_trig.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cntr.h \
- F:/STM32Cube/EMBO/src/__App/Inc/comm.h \
- F:/STM32Cube/EMBO/src/__App/Inc/sgen.h \
- F:/STM32Cube/EMBO/src/__App/Inc/app_sync.h \
+ F:/STM32Cube/EMBO/src/__App/inc/comm.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg.h \
+ F:/STM32Cube/EMBO/src/__App/inc/utility.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/scpi.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/parser.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/types.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/config.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/cc.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/ieee488.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/error.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/constants.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/minimal.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/units.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/utils.h \
+ F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/expression.h \
+ F:/STM32Cube/EMBO/src/__App/inc/app_data.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cntr.h \
+ F:/STM32Cube/EMBO/src/__App/inc/comm.h \
+ F:/STM32Cube/EMBO/src/__App/inc/daq.h \
+ F:/STM32Cube/EMBO/src/__App/inc/daq_trig.h \
+ F:/STM32Cube/EMBO/src/__App/inc/led.h \
+ F:/STM32Cube/EMBO/src/__App/inc/pwm.h \
+ F:/STM32Cube/EMBO/src/__App/inc/sgen.h \
+ F:/STM32Cube/EMBO/src/__App/inc/app_sync.h \
  F:/STM32Cube/EMBO/src/__OS/include/FreeRTOS.h \
- F:/STM32Cube/EMBO/src/__App/Inc/FreeRTOSConfig.h \
+ F:/STM32Cube/EMBO/src/__App/inc/FreeRTOSConfig.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg.h \
  F:/STM32Cube/EMBO/src/__OS/include/projdefs.h \
  F:/STM32Cube/EMBO/src/__OS/include/portable.h \
  F:/STM32Cube/EMBO/src/__OS/include/deprecated_definitions.h \
@@ -173,59 +174,61 @@ USB_DEVICE/App/usbd_cdc_if.o: ../USB_DEVICE/App/usbd_cdc_if.c \
 
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/comm.h:
+F:/STM32Cube/EMBO/src/__App/inc/comm.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/utility.h:
+F:/STM32Cube/EMBO/src/__App/inc/utility.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/scpi.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/scpi.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/parser.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/parser.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/types.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/types.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/config.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/config.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/cc.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/cc.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/ieee488.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/ieee488.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/error.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/error.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/constants.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/constants.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/minimal.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/minimal.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/units.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/units.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/utils.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/utils.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/scpi/expression.h:
+F:/STM32Cube/EMBO/src/__Lib/scpi/inc/scpi/expression.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/app_data.h:
+F:/STM32Cube/EMBO/src/__App/inc/app_data.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/pwm.h:
+F:/STM32Cube/EMBO/src/__App/inc/cntr.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/led.h:
+F:/STM32Cube/EMBO/src/__App/inc/comm.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/daq.h:
+F:/STM32Cube/EMBO/src/__App/inc/daq.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/daq_trig.h:
+F:/STM32Cube/EMBO/src/__App/inc/daq_trig.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cntr.h:
+F:/STM32Cube/EMBO/src/__App/inc/led.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/comm.h:
+F:/STM32Cube/EMBO/src/__App/inc/pwm.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/sgen.h:
+F:/STM32Cube/EMBO/src/__App/inc/sgen.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/app_sync.h:
+F:/STM32Cube/EMBO/src/__App/inc/app_sync.h:
 
 F:/STM32Cube/EMBO/src/__OS/include/FreeRTOS.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/FreeRTOSConfig.h:
+F:/STM32Cube/EMBO/src/__App/inc/FreeRTOSConfig.h:
+
+F:/STM32Cube/EMBO/src/__App/inc/cfg.h:
 
 F:/STM32Cube/EMBO/src/__OS/include/projdefs.h:
 

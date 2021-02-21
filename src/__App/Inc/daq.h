@@ -1,5 +1,5 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -35,7 +35,7 @@ enum trig_edge
     FALLING = 1,
 };
 
-typedef struct //__attribute__((packed))
+typedef struct
 {
     int pretrigger;         // pretrigger percentage 1-99
     enum trig_mode mode;    // main mode
@@ -45,7 +45,7 @@ typedef struct //__attribute__((packed))
     int val_percent;        // percentage trig val
 }trig_settings_t;
 
-typedef struct //__attribute__((packed))
+typedef struct
 {
     void* data;             // data storage
     uint16_t chans;         // number of channels in this buffer
@@ -53,7 +53,7 @@ typedef struct //__attribute__((packed))
     uint16_t reserve;       // additional length (to compensate DMA stop)
 }daq_buff_t;
 
-typedef struct //__attribute__((packed))
+typedef struct
 {
     // settings
     trig_settings_t set;    // user settings actual
@@ -99,7 +99,7 @@ typedef struct //__attribute__((packed))
     int dma_pos_catched;    // catched actual DMA circular buffer position
 }daq_trig_data_t;
 
-typedef struct //__attribute__((packed))
+typedef struct
 {
     uint8_t ch1_en;         // channel 1 enabled
     uint8_t ch2_en;         // channel 2 enabled
@@ -112,7 +112,7 @@ typedef struct //__attribute__((packed))
     enum daq_bits bits;     // bits per 1 channel
 }daq_settings_t;
 
-typedef struct //__attribute__((packed))
+typedef struct
 {
     daq_buff_t buff1;       // DAQ buffer1
     daq_buff_t buff2;       // DAQ buffer2

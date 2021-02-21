@@ -1,19 +1,19 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #include "cfg.h"
 #include "periph.h"
 
+#include "comm.h"
+#include "main.h"
+#include "utility.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-#include "utility.h"
-#include "comm.h"
-#include "main.h"
 
 
 void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t p_sz, uint32_t m_sz, uint32_t dir)

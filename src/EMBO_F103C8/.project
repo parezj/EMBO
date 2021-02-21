@@ -32,12 +32,17 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>__App</name>
+			<name>__app</name>
 			<type>2</type>
 			<location>F:/STM32Cube/EMBO/src/__App</location>
 		</link>
 		<link>
-			<name>__OS</name>
+			<name>__lib</name>
+			<type>2</type>
+			<location>F:/STM32Cube/EMBO/src/__Lib</location>
+		</link>
+		<link>
+			<name>__os</name>
 			<type>2</type>
 			<location>F:/STM32Cube/EMBO/src/__OS</location>
 		</link>

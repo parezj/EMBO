@@ -1,27 +1,35 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #include "cfg.h"
 #include "pwm.h"
 
+#include "main.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
 
-#include "main.h"
-
 
 void pwm_init(pwm_data_t* self)
 {
-    self->ch1.enabled = 0;
-    self->ch2.enabled = 0;
+    self->ch1.enabled = EM_FALSE;
+    self->ch2.enabled = EM_FALSE;
     self->ch1.freq = 1000;
     self->ch2.freq = 1000;
     self->ch1.duty = 50;
     self->ch2.duty = 50;
+}
+
+void pwm_disable(pwm_data_t* self)
+{
+    LL_TIM_DisableCounter(EM_TIM_PWM1);
+    LL_TIM_DisableCounter(EM_TIM_PWM2);
+    self->ch1.enabled = EM_FALSE;
+    self->ch2.enabled = EM_FALSE;
 }
 
 int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int enable1, int enable2)
@@ -35,7 +43,7 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     LL_TIM_DisableCounter(EM_TIM_PWM1);
     LL_TIM_DisableCounter(EM_TIM_PWM2);
 
-    if (!enable1)
+    if (enable1 == EM_FALSE)
         return 0;
 
     int prescaler = 1;
@@ -77,10 +85,10 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     if (offset2 > 0)
         LL_TIM_SetCounter(EM_TIM_PWM2, (int)((float)offset2 / 100.0 * (float)reload));
 
-    if (enable1)
+    if (enable1 == EM_TRUE)
         LL_TIM_CC_EnableChannel(EM_TIM_PWM1, EM_TIM_PWM1_CH);
 
-    if (enable2)
+    if (enable2 == EM_TRUE)
         LL_TIM_CC_EnableChannel(EM_TIM_PWM2, EM_TIM_PWM2_CH);
 
     LL_TIM_EnableCounter(EM_TIM_PWM1);

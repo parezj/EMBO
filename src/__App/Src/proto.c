@@ -1,10 +1,15 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
+
 #include "cfg.h"
 #include "proto.h"
+
+#include "app_data.h"
+#include "main.h"
+#include "utility.h"
 
 #include "FreeRTOS.h"
 
@@ -12,22 +17,27 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "utility.h"
-#include "app_data.h"
-#include "main.h"
-
 
 /************************* [IEEE 488] *************************/
 
 scpi_result_t EM_Reset(scpi_t * context)
 {
-    daq_enable(&daq, 0);
+    daq_enable(&daq, EM_FALSE);
     daq_settings_init(&daq);
     daq_mode_set(&daq, VM);
-    daq_enable(&daq, 1);
-    cntr_enable(&cntr, 0);
-    //sgen_enable(&sgen, 0);
-    // TODO reset pwm?
+    daq_enable(&daq, EM_TRUE);
+    cntr_enable(&cntr, EM_FALSE);
+    pwm_disable(&pwm);
+#ifdef EM_DAC
+    sgen_disable(&sgen);
+#endif
+
+#ifdef EM_DEBUG
+    pwm_set(&pwm, 1000, 25, 25, 50, EM_TRUE, EM_TRUE); // TODO to fn
+#ifdef EM_DAC
+    sgen_enable(&sgen, SINE, 100, 1000, EM_DAC_BUFF_LEN);
+#endif
+#endif
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;
@@ -35,7 +45,7 @@ scpi_result_t EM_Reset(scpi_t * context)
 
 /************************* [System Actions] *************************/
 
-scpi_result_t EM_System_Mode(scpi_t * context)
+scpi_result_t EM_SYS_Mode(scpi_t * context)
 {
     const char* p1;
     size_t p1l;
@@ -59,7 +69,7 @@ scpi_result_t EM_System_Mode(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_System_ModeQ(scpi_t * context)
+scpi_result_t EM_SYS_ModeQ(scpi_t * context)
 {
     if (daq.mode == SCOPE)
         SCPI_ResultText(context, "SCOPE");
@@ -71,7 +81,7 @@ scpi_result_t EM_System_ModeQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_System_LimitsQ(scpi_t * context)
+scpi_result_t EM_SYS_LimitsQ(scpi_t * context)
 {
     char buff[80];
     char dual[2] = {'\0'};
@@ -121,7 +131,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t * context)
 {
     if (daq.mode == VM)
     {
-        daq_enable(&daq, 0);
+        daq_enable(&daq, EM_FALSE);
 
         uint32_t p1 = 0;
         if (context != NULL)
@@ -205,7 +215,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t * context)
         char buff[100];
         int len = sprintf(buff, "%s,%s,%s,%s,%s", ch1_s, ch2_s, ch3_s, ch4_s, vcc_s);
 
-        daq_enable(&daq, 1);
+        daq_enable(&daq, EM_TRUE);
 
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;
@@ -230,7 +240,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t * context)
         }
 
         if (daq.trig.set.mode == DISABLED)
-            daq_enable(&daq, 0);
+            daq_enable(&daq, EM_FALSE);
 
 #ifdef VREFINT_CAL_ADDR
         float cal = EM_ADC_VREF_CAL / daq.adc_max_val * 3300;
@@ -334,7 +344,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t * context)
 
         if (daq.trig.set.mode != SINGLE)
         {
-            daq_enable(&daq, 1);
+            daq_enable(&daq, EM_TRUE);
         }
 
         //ASSERT(added == daq.buff_out.len);
@@ -387,7 +397,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t * context)
         }
 
         daq_settings_save(&daq.set, &daq.trig.set, &daq.save_s, &daq.trig.save_s);
-        daq_enable(&daq, 0);
+        daq_enable(&daq, EM_FALSE);
         daq_reset(&daq);
         daq.dis_hold = 1;
 
@@ -403,7 +413,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t * context)
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
         {
             daq.dis_hold = 0;
-            daq_enable(&daq, 1);
+            daq_enable(&daq, EM_TRUE);
 
             SCPI_ResultText(context, SCPI_OK);
             return SCPI_RES_OK;
@@ -413,7 +423,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t * context)
             daq.mode = VM;
             daq_mode_set(&daq, SCOPE);  // reload saved settings
             daq.dis_hold = 0;
-            daq_enable(&daq, 1);
+            daq_enable(&daq, EM_TRUE);
 
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
@@ -465,6 +475,34 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t * context)
     }
 }
 
+scpi_result_t EM_SCOPE_ForceTrig(scpi_t * context)
+{
+    if (daq.mode != SCOPE)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_MODE);
+        return SCPI_RES_ERR;
+    }
+
+    if (daq.trig.ready || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE);
+        return SCPI_RES_ERR;
+    }
+
+    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+    daq_trig_trigger_scope(&daq);
+
+    SCPI_ResultText(context, SCPI_OK);
+    return SCPI_RES_OK;
+}
+
+scpi_result_t EM_SCOPE_Average(scpi_t * context)
+{
+    // TODO
+    SCPI_ResultText(context, SCPI_OK);
+    return SCPI_RES_OK;
+}
+
 /************************* [LA Actions] *************************/
 
 scpi_result_t EM_LA_ReadQ(scpi_t * context)
@@ -479,7 +517,7 @@ scpi_result_t EM_LA_ReadQ(scpi_t * context)
 
         if (daq.trig.set.mode == DISABLED)
         {
-            daq_enable(&daq, 0);
+            daq_enable(&daq, EM_FALSE);
             daq.trig.pos_frst = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_LA, EM_DMA_LA);
         }
 
@@ -501,7 +539,7 @@ scpi_result_t EM_LA_ReadQ(scpi_t * context)
 
         if (daq.trig.set.mode != SINGLE)
         {
-            daq_enable(&daq, 1);
+            daq_enable(&daq, EM_TRUE);
         }
 
         SCPI_ResultArbitraryBlock(context, daq.buff_out.data, daq.buff_out.len);
@@ -542,7 +580,7 @@ scpi_result_t EM_LA_Set(scpi_t * context)
         }
 
         daq_settings_save(&daq.set, &daq.trig.set, &daq.save_l, &daq.trig.save_l);
-        daq_enable(&daq, 0);
+        daq_enable(&daq, EM_FALSE);
         daq_reset(&daq);
         daq.dis_hold = 1;
 
@@ -557,7 +595,7 @@ scpi_result_t EM_LA_Set(scpi_t * context)
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
         {
             daq.dis_hold = 0;
-            daq_enable(&daq, 1);
+            daq_enable(&daq, EM_TRUE);
 
             SCPI_ResultText(context, SCPI_OK);
             return SCPI_RES_OK;
@@ -567,7 +605,7 @@ scpi_result_t EM_LA_Set(scpi_t * context)
             daq.mode = VM;
             daq_mode_set(&daq, LA); // reload saved settings
             daq.dis_hold = 0;
-            daq_enable(&daq, 1);
+            daq_enable(&daq, EM_TRUE);
 
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
@@ -607,6 +645,28 @@ scpi_result_t EM_LA_SetQ(scpi_t * context)
         SCPI_ErrorPush(context, SCPI_ERROR_INVALID_MODE);
         return SCPI_RES_ERR;
     }
+}
+
+scpi_result_t EM_LA_ForceTrig(scpi_t * context)
+{
+    if (daq.mode != LA)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_MODE);
+        return SCPI_RES_ERR;
+    }
+
+    if (daq.trig.ready || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE);
+        return SCPI_RES_ERR;
+    }
+
+
+    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, EM_DMA_CH_LA, EM_DMA_LA);
+    daq_trig_trigger_la(&daq);
+
+    SCPI_ResultText(context, SCPI_OK);
+    return SCPI_RES_OK;
 }
 
 /************************* [CNTR Actions] *************************/
@@ -744,36 +804,6 @@ scpi_result_t EM_PWM_Set(scpi_t * context)
     {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
-    }
-
-    SCPI_ResultText(context, SCPI_OK);
-    return SCPI_RES_OK;
-}
-
-
-scpi_result_t EM_Force_Trig(scpi_t * context)
-{
-    if (daq.mode == VM)
-    {
-        SCPI_ErrorPush(context, SCPI_ERROR_INVALID_MODE);
-        return SCPI_RES_ERR;
-    }
-
-    if (daq.trig.ready || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
-    {
-        SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE);
-        return SCPI_RES_ERR;
-    }
-
-    if (daq.mode == LA)
-    {
-        daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, EM_DMA_CH_LA, EM_DMA_LA);
-        daq_trig_trigger_scope(&daq);
-    }
-    else // (daq.mode == SCOPE)
-    {
-        daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
-        daq_trig_trigger_scope(&daq);
     }
 
     SCPI_ResultText(context, SCPI_OK);

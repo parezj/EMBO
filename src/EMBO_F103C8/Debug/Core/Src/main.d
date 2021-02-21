@@ -38,7 +38,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h \
  ../USB_DEVICE/App/usb_device.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
- ../USB_DEVICE/Target/usbd_conf.h F:/STM32Cube/EMBO/src/__App/Inc/app.h
+ ../USB_DEVICE/Target/usbd_conf.h F:/STM32Cube/EMBO/src/__App/inc/app.h
 
 ../Core/Inc/main.h:
 
@@ -122,4 +122,4 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../USB_DEVICE/Target/usbd_conf.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/app.h:
+F:/STM32Cube/EMBO/src/__App/inc/app.h:

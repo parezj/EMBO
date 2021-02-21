@@ -1,8 +1,7 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
-
 
 #include "cfg.h"
 
@@ -10,12 +9,13 @@
 
 #include "sgen.h"
 
+#include "main.h"
+#include "periph.h"
+
 #include <string.h>
 #include <math.h>
 #include <stdlib.h>
 
-#include "main.h"
-#include "periph.h"
 
 static void sgen_const(sgen_data_t* self, float A);
 static void sgen_sine(sgen_data_t* self, float A, float f, int N);
@@ -29,7 +29,7 @@ static int get_rnd(int* m_w, int* m_z);
 
 void sgen_init(sgen_data_t* self)
 {
-    self->enabled = 0;
+    self->enabled = EM_FALSE;
     self->tim_f_real = 0;
     memset(self->data, 0x00, EM_DAC_BUFF_LEN * sizeof(uint16_t));
     sgen_const(self, 50);
@@ -37,7 +37,7 @@ void sgen_init(sgen_data_t* self)
 
 void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int N)
 {
-    if (self->enabled)
+    if (self->enabled == EM_TRUE)
         return;
 
     if (mode == SINE)
@@ -68,7 +68,7 @@ void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int N
     LL_TIM_SetPrescaler(EM_TIM_SGEN, prescaler);
     LL_TIM_EnableCounter(EM_TIM_SGEN);
 
-    self->enabled = 1;
+    self->enabled = EM_TRUE;
 }
 
 void sgen_disable(sgen_data_t* self)
@@ -77,7 +77,7 @@ void sgen_disable(sgen_data_t* self)
     LL_DAC_DisableDMAReq(EM_DAC, EM_DAC_CH);
     LL_DAC_DisableTrigger(EM_DAC, EM_DAC_CH);
 
-    self->enabled = 0;
+    self->enabled = EM_FALSE;
 }
 
 static void sgen_const(sgen_data_t* self, float A)

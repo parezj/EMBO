@@ -1,15 +1,15 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #include "cfg.h"
 
-#include "FreeRTOS.h"
-#include "semphr.h"
-
 #include "app_data.h"
 #include "main.h"
+
+#include "FreeRTOS.h"
+#include "semphr.h"
 
 
 void EM_TIM_CNTR_UP_IRQh(void)

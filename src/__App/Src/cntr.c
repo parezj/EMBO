@@ -1,18 +1,18 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #include "cfg.h"
 #include "cntr.h"
 
-#include <string.h>
+#include "app_sync.h"
+#include "periph.h"
+#include "main.h"
 
 #include "FreeRTOS.h"
 
-#include "main.h"
-#include "app_sync.h"
-#include "periph.h"
+#include <string.h>
 
 
 static void cntr_reset(cntr_data_t* self);
@@ -21,7 +21,7 @@ static void cntr_reset(cntr_data_t* self);
 void cntr_init(cntr_data_t* self)
 {
     self->freq = -1;
-    self->enabled = 0;
+    self->enabled = EM_FALSE;
     cntr_reset(self);
 }
 
@@ -48,7 +48,7 @@ void cntr_enable(cntr_data_t* self, uint8_t enable)
     uint8_t en = self->enabled;
     self->enabled = enable;
 
-    if (enable && !en)
+    if (enable == EM_TRUE && !en)
         ASSERT(xSemaphoreGive(sem3_cntr) == pdPASS);
 }
 

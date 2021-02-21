@@ -1,5 +1,5 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -24,6 +24,7 @@ typedef struct
 }pwm_data_t;
 
 void pwm_init(pwm_data_t* self);
+void pwm_disable(pwm_data_t* self);
 int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int enable1, int enable2);
 
 #endif /* INC_PWM_H_ */

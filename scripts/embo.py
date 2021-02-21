@@ -53,7 +53,7 @@ class Embo(object):
             self.mode = self.input2("\nChoose mode (SCOPE, VM, LA, CNTR):", "SCOPE")
             if self.mode == "CNTR":
                 self.counter()
-            rx = self.send_cmd("SYST:MODE " + self.mode, self.TIMEOUT_CMD)
+            rx = self.send_cmd("SYS:MODE " + self.mode, self.TIMEOUT_CMD)
             print(rx + "\n")
             if ("OK" in rx):
                 time.sleep(0.25)
@@ -69,7 +69,7 @@ class Embo(object):
 
     def limits(self):
         self.receive(self.TIMEOUT_CMD)
-        rx = self.send_cmd("SYST:LIM?", self.TIMEOUT_CMD)
+        rx = self.send_cmd("SYS:LIM?", self.TIMEOUT_CMD)
         print(rx + "\n")
         toks = rx.split(",")
         self.lim_adc_1ch_smpl_tm12 = float(toks[0])
@@ -110,9 +110,9 @@ class Embo(object):
                         input("Press enter for continue...")
 
                         if self.mode == "SCOPE":
-                            rx = self.send_cmd("SYST:MODE SCOPE", self.TIMEOUT_CMD)
+                            rx = self.send_cmd("SYS:MODE SCOPE", self.TIMEOUT_CMD)
                         else:
-                            rx = self.send_cmd("SYST:MODE LA", self.TIMEOUT_CMD)
+                            rx = self.send_cmd("SYS:MODE LA", self.TIMEOUT_CMD)
                         if self.READY_STR in rx:
                             self.ready = True
 

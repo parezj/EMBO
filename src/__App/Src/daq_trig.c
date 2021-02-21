@@ -1,11 +1,17 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #include "cfg.h"
 #include "daq.h"
 #include "daq_trig.h"
+
+#include "app_sync.h"
+#include "comm.h"
+#include "main.h"
+#include "periph.h"
+#include "utility.h"
 
 #include "FreeRTOS.h"
 #include "semphr.h"
@@ -14,12 +20,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-#include "app_sync.h"
-#include "utility.h"
-#include "periph.h"
-#include "comm.h"
-#include "main.h"
 
 
 void daq_trig_init(daq_data_t* self)
@@ -54,7 +54,7 @@ void daq_trig_init(daq_data_t* self)
 
 void daq_trig_check(daq_data_t* self)
 {
-    if (self->enabled) // check pre trigger
+    if (self->enabled == EM_TRUE) // check pre trigger
     {
         self->trig.pretrig_cntr = self->uwTick - self->trig.uwtick_first;
         if (self->trig.pretrig_cntr < 0)
@@ -76,13 +76,13 @@ void daq_trig_check(daq_data_t* self)
 
     if (self->mode != VM) // auto trigger
     {
-        if (self->enabled &&
+        if (self->enabled == EM_TRUE &&
             self->trig.set.mode == AUTO &&
             self->trig.is_post == 0 &&
             self->trig.ready == 0 &&
             self->trig.pretrig_cntr > self->trig.auttrig_val)
         {
-            daq_enable(self, 0);
+            daq_enable(self, EM_FALSE);
             self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
 
             self->trig.ready = 1;
@@ -303,7 +303,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
 
             LL_TIM_DisableCounter(EM_TIM_DAQ);
 
-            daq_enable(self, 0);
+            daq_enable(self, EM_FALSE);
             self->trig.ready = 1;
             self->trig.is_post = 0;
 
@@ -339,7 +339,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         return -1;
     }
 
-    daq_enable(self, 0);
+    daq_enable(self, EM_FALSE);
     daq_reset(self);
     ADC_TypeDef* adc = ADC1;
 
@@ -471,7 +471,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         self->trig.set.ch = 0;
         self->trig.set.mode = DISABLED;
 
-        daq_enable(self, 1);
+        daq_enable(self, EM_TRUE);
         return 0;
     }
 
@@ -582,6 +582,6 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
     if (self->trig.pretrig_val < EM_PRETRIG_MIN_MS)
         self->trig.pretrig_val = EM_PRETRIG_MIN_MS;
 
-    daq_enable(self, 1);
+    daq_enable(self, EM_TRUE);
     return 0;
 }

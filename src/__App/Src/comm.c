@@ -1,21 +1,21 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
  
 #include "cfg.h"
 #include "comm.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-
 #include "proto.h"
 #ifdef EM_USB
 #include "usbd_cdc_if.h"
 #endif
 #include "main.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <math.h>
 
 
 #define SCPI_INPUT_BUFFER_LENGTH    256
@@ -58,10 +58,9 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "SYStem:VERsion?", .callback = SCPI_SystemVersionQ,},
 
     /* EMBO - System */
-    {.pattern = "SYStem:MODE?", .callback = EM_System_ModeQ,},
-    {.pattern = "SYStem:MODE", .callback = EM_System_Mode,},
-    {.pattern = "SYStem:LIMits?", .callback = EM_System_LimitsQ,},
-    {.pattern = "SYStem:FORCetrig", .callback = EM_Force_Trig,},
+    {.pattern = "SYStem:MODE?", .callback = EM_SYS_ModeQ,},
+    {.pattern = "SYStem:MODE", .callback = EM_SYS_Mode,},
+    {.pattern = "SYStem:LIMits?", .callback = EM_SYS_LimitsQ,},
 
     /* EMBO - Voltmeter */
     {.pattern = "VM:READ?", .callback = EM_VM_ReadQ,},
@@ -70,11 +69,14 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "SCOPe:READ?", .callback = EM_SCOPE_ReadQ,},
     {.pattern = "SCOPe:SET?", .callback = EM_SCOPE_SetQ,},
     {.pattern = "SCOPe:SET", .callback = EM_SCOPE_Set,},
+    {.pattern = "SCOPe:FORCetrig", .callback = EM_SCOPE_ForceTrig,},
+    {.pattern = "SCOPe:AVERage", .callback = EM_SCOPE_Average,},
 
     /* EMBO - Logic Analyzer */
     {.pattern = "LA:READ?", .callback = EM_LA_ReadQ,},
     {.pattern = "LA:SET?", .callback = EM_LA_SetQ,},
     {.pattern = "LA:SET", .callback = EM_LA_Set,},
+    {.pattern = "LA:FORCetrig", .callback = EM_LA_ForceTrig,},
 
     /* EMBO - Counter */
     {.pattern = "CNTR:ENAble", .callback = EM_CNTR_Enable,},

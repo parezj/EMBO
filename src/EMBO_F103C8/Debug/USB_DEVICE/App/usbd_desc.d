@@ -44,9 +44,9 @@ USB_DEVICE/App/usbd_desc.o: ../USB_DEVICE/App/usbd_desc.c \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_ctlreq.h \
  ../USB_DEVICE/App/usbd_desc.h \
  ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg.h \
- F:/STM32Cube/EMBO/src/__App/Inc/utility.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h
+ F:/STM32Cube/EMBO/src/__App/inc/cfg.h \
+ F:/STM32Cube/EMBO/src/__App/inc/utility.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h
 
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_core.h:
 
@@ -140,8 +140,8 @@ USB_DEVICE/App/usbd_desc.o: ../USB_DEVICE/App/usbd_desc.c \
 
 ../Middlewares/ST/STM32_USB_Device_Library/Core/Inc/usbd_def.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/utility.h:
+F:/STM32Cube/EMBO/src/__App/inc/utility.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h:

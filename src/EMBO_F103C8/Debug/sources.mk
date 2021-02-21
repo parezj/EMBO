@@ -27,8 +27,7 @@ Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src \
 Middlewares/ST/STM32_USB_Device_Library/Core/Src \
 USB_DEVICE/App \
 USB_DEVICE/Target \
-__App/Src \
-__App/Src/scpi \
-__OS \
-__OS/include \
+__app/src \
+__lib/scpi/src \
+__os \
 

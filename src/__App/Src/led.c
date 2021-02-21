@@ -1,5 +1,5 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
  
@@ -13,14 +13,14 @@ void led_init(led_data_t* self)
 {
     self->ms = 0;
     self->num = 0;
-    self->enabled = 0;
+    self->enabled = EM_FALSE;
     self->uwtick_first = 0;
 }
 
 void led_set(led_data_t* self, uint8_t enable)
 {
     self->enabled = enable;
-    if (!self->enabled)
+    if (self->enabled == EM_FALSE)
         EM_LED_PORT->BSRR |= (1 << EM_LED_PIN);  // 1
     else
         EM_LED_PORT->BRR |= (1 << EM_LED_PIN);   // 0
@@ -28,7 +28,7 @@ void led_set(led_data_t* self, uint8_t enable)
 
 void led_toggle(led_data_t* self)
 {
-    if (self->enabled)
+    if (self->enabled == EM_TRUE)
         EM_LED_PORT->BSRR |= (1 << EM_LED_PIN);  // 1
     else
         EM_LED_PORT->BRR |= (1 << EM_LED_PIN);   // 0

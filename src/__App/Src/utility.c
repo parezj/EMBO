@@ -1,5 +1,5 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -57,22 +57,6 @@ int get_vcc_from_circ(int from, int total, int bufflen, int ch_num, int daq_bits
 {
     ASSERT(ch_num > 0 && total > 0 && buff != NULL);
 
-    /*
-    for (int k = 0, i = from; k < total; k++, i++)
-    {
-        if (i >= bufflen)
-            i = 0;
-
-        if (i % ch_num == 0)
-        {
-           if (daq_bits == 12)
-               return (int)(*((uint16_t*)(((uint8_t*)buff)+(i*2))));
-           else
-               return (int)(((uint8_t*)buff)[i]);
-        }
-    }
-    return -1;
-    */
     float ret = 0;
     int avg_num = 0;
     for (int i = from, j = 0; j < total; j++, i++)

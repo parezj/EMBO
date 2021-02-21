@@ -1,7 +1,7 @@
-__App/Src/daq.o: F:/STM32Cube/EMBO/src/__App/Src/daq.c \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg.h \
- F:/STM32Cube/EMBO/src/__App/Inc/utility.h \
- F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h \
+__app/src/daq.o: F:/STM32Cube/EMBO/src/__App/src/daq.c \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg.h \
+ F:/STM32Cube/EMBO/src/__App/inc/utility.h \
+ F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h \
  ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f103xb.h \
  ../Drivers/CMSIS/Include/core_cm3.h \
@@ -27,10 +27,9 @@ __App/Src/daq.o: F:/STM32Cube/EMBO/src/__App/Src/daq.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usb.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h \
- F:/STM32Cube/EMBO/src/__App/Inc/daq.h \
- F:/STM32Cube/EMBO/src/__App/Inc/daq_trig.h \
- F:/STM32Cube/EMBO/src/__App/Inc/daq.h \
- F:/STM32Cube/EMBO/src/__App/Inc/periph.h ../Core/Inc/main.h \
+ F:/STM32Cube/EMBO/src/__App/inc/daq.h \
+ F:/STM32Cube/EMBO/src/__App/inc/daq_trig.h \
+ F:/STM32Cube/EMBO/src/__App/inc/daq.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_adc.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_rcc.h \
@@ -42,13 +41,15 @@ __App/Src/daq.o: F:/STM32Cube/EMBO/src/__App/Src/daq.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h \
- ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h \
+ F:/STM32Cube/EMBO/src/__App/inc/periph.h \
+ F:/STM32Cube/EMBO/src/__App/inc/utility.h
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/utility.h:
+F:/STM32Cube/EMBO/src/__App/inc/utility.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h:
+F:/STM32Cube/EMBO/src/__App/inc/cfg/cfg_f103c8.h:
 
 ../Drivers/CMSIS/Device/ST/STM32F1xx/Include/stm32f1xx.h:
 
@@ -100,13 +101,11 @@ F:/STM32Cube/EMBO/src/__App/Inc/cfg/cfg_f103c8.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pcd_ex.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/daq.h:
+F:/STM32Cube/EMBO/src/__App/inc/daq.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/daq_trig.h:
+F:/STM32Cube/EMBO/src/__App/inc/daq_trig.h:
 
-F:/STM32Cube/EMBO/src/__App/Inc/daq.h:
-
-F:/STM32Cube/EMBO/src/__App/Inc/periph.h:
+F:/STM32Cube/EMBO/src/__App/inc/daq.h:
 
 ../Core/Inc/main.h:
 
@@ -133,3 +132,7 @@ F:/STM32Cube/EMBO/src/__App/Inc/periph.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_gpio.h:
+
+F:/STM32Cube/EMBO/src/__App/inc/periph.h:
+
+F:/STM32Cube/EMBO/src/__App/inc/utility.h:

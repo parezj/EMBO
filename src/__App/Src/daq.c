@@ -1,5 +1,5 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -7,14 +7,14 @@
 #include "daq.h"
 #include "daq_trig.h"
 
+#include "main.h"
+#include "periph.h"
+#include "utility.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-
-#include "utility.h"
-#include "periph.h"
-#include "main.h"
 
 
 static void daq_enable_adc(daq_data_t* self, ADC_TypeDef* adc, uint8_t enable, uint32_t dma_ch);
@@ -40,7 +40,7 @@ void daq_init(daq_data_t* self)
 
     self->trig.buff_trig = NULL;
     self->buff_out.reserve = 0;
-    self->enabled = 0;
+    self->enabled = EM_FALSE;
     self->dis_hold = 0;
     self->vref = 0;
     self->vcc_mv = 0;
@@ -129,7 +129,7 @@ void daq_settings_init(daq_data_t* self)
 
 int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
 {
-    daq_enable(self, 0);
+    daq_enable(self, EM_FALSE);
     daq_reset(self);
 
     self->buff_out.reserve = 0;
@@ -244,7 +244,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
     self->set.mem = mem_per_ch;
 
     daq_trig_update(self);
-    daq_enable(self, 1);
+    daq_enable(self, EM_TRUE);
     return 0;
 }
 
@@ -350,7 +350,7 @@ int daq_bit_set(daq_data_t* self, enum daq_bits bits)
 
     if (self->mode == SCOPE || self->mode == VM)
     {
-        daq_enable(self, 0);
+        daq_enable(self, EM_FALSE);
         daq_reset(self);
 
         if (bits == B8)
@@ -380,7 +380,7 @@ int daq_bit_set(daq_data_t* self, enum daq_bits bits)
 #endif
         int ret = daq_mem_set(self, self->set.mem);
 
-        daq_enable(self, 1);
+        daq_enable(self, EM_TRUE);
 
         return ret;
     }
@@ -431,7 +431,7 @@ int daq_fs_set(daq_data_t* self, float fs)
 
     self->set.fs = fs;
 
-    daq_enable(self, 0);
+    daq_enable(self, EM_FALSE);
     daq_reset(self);
 
     int prescaler = 1;
@@ -442,7 +442,7 @@ int daq_fs_set(daq_data_t* self, float fs)
     LL_TIM_SetAutoReload(EM_TIM_DAQ, reload);
 
     daq_trig_update(self);
-    daq_enable(self, 1);
+    daq_enable(self, EM_TRUE);
     return 0;
 }
 
@@ -460,7 +460,7 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
     if (self->enabled)
     {
         reen = 1;
-        daq_enable(self, 0);
+        daq_enable(self, EM_FALSE);
         daq_reset(self);
     }
 
@@ -626,7 +626,7 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
     int ret = daq_mem_set(self, self->set.mem);
 
     if (reen)
-        daq_enable(self, 1);
+        daq_enable(self, EM_TRUE);
     return ret;
 }
 
@@ -658,13 +658,13 @@ void daq_reset(daq_data_t* self)
 
 void daq_enable(daq_data_t* self, uint8_t enable)
 {
-    if (!enable)
+    if (enable == EM_FALSE)
     {
         LL_TIM_DisableCounter(EM_TIM_DAQ);
         //for (int i = 0; i < 1000; i++) __asm("nop");
     }
 
-    if (self->enabled && self->dis_hold)
+    if (self->enabled == EM_TRUE && self->dis_hold)
         return;
 
     self->trig.pretrig_cntr = 0;
@@ -696,7 +696,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     {
         ASSERT(self->trig.exti_trig != 0);
 
-        if (enable)
+        if (enable == EM_TRUE)
         {
             LL_TIM_EnableDMAReq_CC1(EM_TIM_DAQ);
             NVIC_ClearPendingIRQ(self->trig.exti_trig);
@@ -710,7 +710,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
             NVIC_DisableIRQ(self->trig.exti_trig);
         }
     }
-    if (enable)
+    if (enable == EM_TRUE)
         LL_TIM_EnableCounter(EM_TIM_DAQ);
     else
         for (int i = 0; i < 10000; i++) __asm("nop"); // let DMA and ADC finish their jobs
@@ -721,7 +721,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
 
 static void daq_enable_adc(daq_data_t* self, ADC_TypeDef* adc, uint8_t enable, uint32_t dma_ch)
 {
-    if (enable)
+    if (enable == EM_TRUE)
     {
 #ifdef LL_ADC_SPEC_START
         LL_ADC_REG_StartConversionExtTrig(adc, LL_ADC_REG_TRIG_EXT_RISING);
@@ -747,7 +747,7 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     else if (self->mode == LA)
         daq_settings_save(&self->set, &self->trig.set, &self->save_l, &self->trig.save_l);
 
-    daq_enable(self, 0);
+    daq_enable(self, EM_FALSE);
     daq_reset(self);
     self->dis_hold = 1;
     self->mode = mode;
@@ -812,5 +812,5 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     }
 
     self->dis_hold = 0;
-    daq_enable(self, 1);
+    daq_enable(self, EM_TRUE);
 }

@@ -8,10 +8,9 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include __OS/include/subdir.mk
--include __OS/subdir.mk
--include __App/Src/scpi/subdir.mk
--include __App/Src/subdir.mk
+-include __os/subdir.mk
+-include __lib/scpi/src/subdir.mk
+-include __app/src/subdir.mk
 -include USB_DEVICE/Target/subdir.mk
 -include USB_DEVICE/App/subdir.mk
 -include Middlewares/ST/STM32_USB_Device_Library/Core/Src/subdir.mk

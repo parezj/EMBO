@@ -1,5 +1,5 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -7,6 +7,7 @@
 #define INC_DAQ_TRIG_H_
 
 #include "daq.h"
+
 
 void daq_trig_check(daq_data_t* self);
 void daq_trig_trigger_scope(daq_data_t* self);

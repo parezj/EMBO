@@ -1,12 +1,12 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #ifndef CFG_H
 #define CFG_H
 
-#include <utility.h>
+#include "utility.h"
 
 /*-----------------------------------------------------------------------------------------------------------+
  +                                                  general                                                  +
@@ -148,6 +148,8 @@ extern const float EM_ADC_SMPLT_N[EM_ADC_SMPLT_CNT];
  +                                                   utils                                                   +
  +-----------------------------------------------------------------------------------------------------------*/
 
+#define EM_TRUE                       1
+#define EM_FALSE                      0
 #define PI                            3.14159265359
 #define WTF                           assert(0)
 #define NUMARGS8(...)                 (sizeof((uint8_t[]){__VA_ARGS__})/sizeof(uint8_t))

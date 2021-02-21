@@ -1,21 +1,21 @@
 /*
- * CTU/EMBO - Embedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #include "cfg.h"
 #include "app.h"
+#include "app_data.h"
+#include "app_sync.h"
+
+#include "comm.h"
+#include "periph.h"
+#include "proto.h"
+#include "main.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
-
-#include "app_data.h"
-#include "app_sync.h"
-#include "periph.h"
-#include "comm.h"
-#include "proto.h"
-#include "main.h"
 
 
 #define EM_STACK_T1     64
@@ -145,7 +145,7 @@ void t4_comm_and_init(void* p)
 #endif
 
 #ifdef EM_DEBUG
-    pwm_set(&pwm, 1000, 25, 25, 50, 1, 1);
+    pwm_set(&pwm, 1000, 25, 25, 50, EM_TRUE, EM_TRUE);
     //LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
     //LL_IWDG_SetReloadCounter(IWDG, 0x0FFF);
 #ifdef EM_DAC

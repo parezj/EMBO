@@ -1,8 +1,6 @@
 /*
- * app_sync.h
- *
- *  Created on: 6. 12. 2020
- *      Author: Jakub
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
+ * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
 #ifndef INC_APP_SYNC_H_
