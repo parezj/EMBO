@@ -1,4 +1,4 @@
-# EMBO - Embedded Oscilloscope
+# EMBO - EMBedded Oscilloscope
 * Logic Analyzer, Voltmeter, PWM / Signal Generator, Counter  
 * STM32 Blue Pill / Nucleo (F1, F3, F4, L0, L1)
 * Qt Windows, Linux, macOS GUI App  
