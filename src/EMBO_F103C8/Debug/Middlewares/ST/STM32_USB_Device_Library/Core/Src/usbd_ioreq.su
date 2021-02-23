@@ -1,7 +1,0 @@
-usbd_ioreq.c:87:20:USBD_CtlSendData	8	static
-usbd_ioreq.c:109:20:USBD_CtlContinueSendData	8	static
-usbd_ioreq.c:126:20:USBD_CtlPrepareRx	8	static
-usbd_ioreq.c:148:20:USBD_CtlContinueRx	8	static
-usbd_ioreq.c:162:20:USBD_CtlSendStatus	8	static
-usbd_ioreq.c:179:20:USBD_CtlReceiveStatus	8	static
-usbd_ioreq.c:197:10:USBD_GetRxCount	0	static

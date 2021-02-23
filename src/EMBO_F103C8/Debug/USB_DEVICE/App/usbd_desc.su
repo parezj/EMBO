@@ -1,8 +1,0 @@
-usbd_desc.c:227:11:USBD_FS_DeviceDescriptor	0	static
-usbd_desc.c:240:11:USBD_FS_LangIDStrDescriptor	0	static
-usbd_desc.c:366:13:IntToUnicode	16	static
-usbd_desc.c:285:11:USBD_FS_SerialStrDescriptor	8	static
-usbd_desc.c:272:11:USBD_FS_ManufacturerStrDescriptor	8	static
-usbd_desc.c:253:11:USBD_FS_ProductStrDescriptor	8	static
-usbd_desc.c:305:11:USBD_FS_ConfigStrDescriptor	8	static
-usbd_desc.c:324:11:USBD_FS_InterfaceStrDescriptor	8	static
