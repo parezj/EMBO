@@ -1,7 +1,7 @@
 QT       += core gui
 QT       += serialport
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
@@ -11,7 +11,9 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-VERSION = 0.0.1.0
+RC_ICONS = icon.ico
+
+VERSION = 0.0.2.0
 QMAKE_TARGET_COMPANY = CTU/Jakub Parez
 QMAKE_TARGET_PRODUCT = EMBO
 QMAKE_TARGET_DESCRIPTION = EMBedded Oscilloscope
@@ -23,14 +25,22 @@ QMAKE_TARGET_COPYRIGHT = Jakub Parez
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    core.cpp \
+    lib/qcustomplot.cpp \
     main.cpp \
-    mainwindow.cpp
+    msg.cpp \
+    utils.cpp \
+    window_main.cpp
 
 HEADERS += \
-    mainwindow.h
+    core.h \
+    lib/qcustomplot.h \
+    msg.h \
+    utils.h \
+    window_main.h
 
 FORMS += \
-    mainwindow.ui
+    window_main.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -39,3 +49,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resources.qrc
+
+DISTFILES += \
+    css/style.css \
+    icon.ico

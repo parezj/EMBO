@@ -1,0 +1,6 @@
+\_form#0=258x15:$\cdot value2 - value1 <= abs(intervalSize * 10e^{-6})$
+\_form#1=80x14:$y = f([x1,x2])$
+\_form#2=78x14:$[y1,y2] = f(x)$
+\_form#3=334x15:$stepSize = (intervalSize - intervalSize * 10e^{-6}) / numSteps$
+\_form#4=70x14:$\left\{ 1,2,5\right\} \cdot 10^{n}$
+\_form#5=81x14:$\left\{ 1,2,3,5\right\} \cdot 10^{n}$

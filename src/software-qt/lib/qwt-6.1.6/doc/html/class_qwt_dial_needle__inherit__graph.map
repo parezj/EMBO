@@ -1,0 +1,6 @@
+<map id="QwtDialNeedle" name="QwtDialNeedle">
+<area shape="rect" id="node1" title="Base class for needles that can be used in a QwtDial." alt="" coords="245,5,355,32"/>
+<area shape="rect" id="node2" href="$class_qwt_compass_magnet_needle.html" title="A magnet needle for compass widgets." alt="" coords="5,80,192,107"/>
+<area shape="rect" id="node3" href="$class_qwt_compass_wind_arrow.html" title="An indicator for the wind direction." alt="" coords="217,80,383,107"/>
+<area shape="rect" id="node4" href="$class_qwt_dial_simple_needle.html" title="A needle for dial widgets." alt="" coords="407,80,558,107"/>
+</map>

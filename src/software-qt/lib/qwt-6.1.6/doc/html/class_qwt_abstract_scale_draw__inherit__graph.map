@@ -1,0 +1,8 @@
+<map id="QwtAbstractScaleDraw" name="QwtAbstractScaleDraw">
+<area shape="rect" id="node1" title="A abstract base class for drawing scales." alt="" coords="294,5,453,32"/>
+<area shape="rect" id="node2" href="$class_qwt_round_scale_draw.html" title="A class for drawing round scales." alt="" coords="223,80,371,107"/>
+<area shape="rect" id="node5" href="$class_qwt_scale_draw.html" title="A class for drawing scales." alt="" coords="407,80,518,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,155,189,181"/>
+<area shape="rect" id="node4" href="$class_qwt_compass_scale_draw.html" title="A special scale draw made for QwtCompass." alt="" coords="214,155,381,181"/>
+<area shape="rect" id="node6" href="$class_qwt_date_scale_draw.html" title="A class for drawing datetime scales." alt="" coords="405,155,544,181"/>
+</map>

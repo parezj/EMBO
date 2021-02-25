@@ -1,6 +1,12 @@
-#include "mainwindow.h"
+/*
+ * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
+ * Author: Jakub Parez <parez.jakub@gmail.com>
+ */
+
+#include "window_main.h"
 
 #include <QApplication>
+
 
 int main(int argc, char *argv[])
 {

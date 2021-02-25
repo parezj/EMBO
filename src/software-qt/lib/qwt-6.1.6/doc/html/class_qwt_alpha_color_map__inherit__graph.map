@@ -1,0 +1,4 @@
+<map id="QwtAlphaColorMap" name="QwtAlphaColorMap">
+<area shape="rect" id="node1" title="QwtAlphaColorMap varies the alpha value of a color." alt="" coords="5,80,140,107"/>
+<area shape="rect" id="node2" href="$class_qwt_color_map.html" title="QwtColorMap is used to map values into colors." alt="" coords="21,5,124,32"/>
+</map>

@@ -5,6 +5,7 @@
  
 #include "cfg.h"
 #include "comm.h"
+#include "build_defs.h"
 
 #include "proto.h"
 #ifdef EM_USB

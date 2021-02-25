@@ -10,10 +10,22 @@
         <file>resources/fonts/SF-UI-Text-Medium.otf</file>
         <file>resources/fonts/SF-UI-Text-Regular.otf</file>
         <file>resources/fonts/SF-UI-Text-Semibold.otf</file>
-        <file>resources/img/bluepill.png</file>
-        <file>resources/img/nucelo.png</file>
-        <file>resources/img/icon.png</file>
         <file>resources/img/plug_off.png</file>
         <file>resources/img/plug_on.png</file>
+        <file>resources/img/icon.png</file>
+        <file>resources/img/logo_cvut_en_doplnkova_verze.svg</file>
+        <file>resources/img/magnifying-glass.svg</file>
+        <file>resources/img/nucleo-f303.png</file>
+        <file>resources/img/power-off-green3.png</file>
+        <file>resources/img/power-off-red.png</file>
+        <file>resources/img/scope.svg</file>
+        <file>resources/img/sgen.svg</file>
+        <file>resources/img/wave-square.svg</file>
+        <file>resources/img/bluepill2.png</file>
+        <file>resources/img/unknown2.png</file>
+        <file>resources/img/la.png</file>
+        <file>resources/img/vm.png</file>
+        <file>resources/img/cntr.png</file>
+        <file>resources/img/pwm.png</file>
     </qresource>
 </RCC>

@@ -1,0 +1,5 @@
+<map id="QwtCompassScaleDraw" name="QwtCompassScaleDraw">
+<area shape="rect" id="node1" title="A special scale draw made for QwtCompass." alt="" coords="5,155,172,181"/>
+<area shape="rect" id="node2" href="$class_qwt_round_scale_draw.html" title="A class for drawing round scales." alt="" coords="15,80,163,107"/>
+<area shape="rect" id="node3" href="$class_qwt_abstract_scale_draw.html" title="A abstract base class for drawing scales." alt="" coords="9,5,168,32"/>
+</map>

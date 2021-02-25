@@ -34,6 +34,7 @@
  *
  *
  */
+#include <build_defs.h>
 
 #include <ctype.h>
 #include <string.h>
@@ -247,6 +248,7 @@ scpi_bool_t SCPI_Parse(scpi_t * context, char * data, int len) {
     return result;
 }
 
+
 /**
  * Initialize SCPI context structure
  * @param context
@@ -273,14 +275,37 @@ void SCPI_Init(scpi_t * context,
     context->cmdlist = commands;
     context->interface = interface;
     context->units = units;
+
+    const char completeVersion[] =
+    {
+        idn3[0], idn3[1], idn3[2], idn3[3], idn3[4],
+        ' ', '(',
+        BUILD_YEAR_CH0, BUILD_YEAR_CH1, BUILD_YEAR_CH2, BUILD_YEAR_CH3,
+        '/',
+        BUILD_MONTH_CH0, BUILD_MONTH_CH1,
+        '/',
+        BUILD_DAY_CH0, BUILD_DAY_CH1,
+        ' ',
+        BUILD_HOUR_CH0, BUILD_HOUR_CH1,
+        ':',
+        BUILD_MIN_CH0, BUILD_MIN_CH1,
+        ':',
+        BUILD_SEC_CH0, BUILD_SEC_CH1,
+        ')', '\0'
+    };
+
     context->idn[0] = idn1;
     context->idn[1] = idn2;
-    context->idn[2] = idn3;
-    context->idn[3] = idn4;
-    sprintf(context->idn4, "%s-%s", idn2, "UART");
+
+    sprintf(context->idn2, "%s", completeVersion);
     sprintf(context->idn5, "%s-%s", idn2, "USB");
+    sprintf(context->idn4, "%s-%s", idn2, "UART");
+
+    context->idn[2] = context->idn2;
+    context->idn[3] = idn4;
     context->idn[4] = context->idn4;
     context->idn[5] = context->idn5;
+
     context->buffer.data = input_buffer;
     context->buffer.length = input_buffer_length;
     context->buffer.position = 0;

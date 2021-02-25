@@ -1,0 +1,11 @@
+debug/core.o
+debug/qcustomplot.o
+debug/main.o
+debug/msg.o
+debug/utils.o
+debug/window_main.o
+debug/qrc_resources.o
+debug/moc_core.o
+debug/moc_qcustomplot.o
+debug/moc_msg.o
+debug/moc_window_main.o

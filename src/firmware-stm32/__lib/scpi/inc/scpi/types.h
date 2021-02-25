@@ -381,8 +381,9 @@ extern "C" {
         void * user_context;
         scpi_parser_state_t parser_state;
         const char * idn[6];
-        char idn4[25];
-        char idn5[25];
+        char idn2[50];
+        char idn4[50];
+        char idn5[50];
         size_t arbitrary_reminding;
         void* comm;
     };

@@ -1,0 +1,6 @@
+<map id="QwtTextEngine" name="QwtTextEngine">
+<area shape="rect" id="node1" title="Abstract base class for rendering text strings." alt="" coords="201,5,311,32"/>
+<area shape="rect" id="node2" href="$class_qwt_math_m_l_text_engine.html" title="Text Engine for the MathML renderer of the Qt solutions package." alt="" coords="5,80,163,107"/>
+<area shape="rect" id="node3" href="$class_qwt_plain_text_engine.html" title="A text engine for plain texts." alt="" coords="187,80,325,107"/>
+<area shape="rect" id="node4" href="$class_qwt_rich_text_engine.html" title="A text engine for Qt rich texts." alt="" coords="349,80,488,107"/>
+</map>

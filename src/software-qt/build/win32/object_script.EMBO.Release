@@ -1,0 +1,11 @@
+release/core.o
+release/qcustomplot.o
+release/main.o
+release/msg.o
+release/utils.o
+release/window_main.o
+release/qrc_resources.o
+release/moc_core.o
+release/moc_qcustomplot.o
+release/moc_msg.o
+release/moc_window_main.o

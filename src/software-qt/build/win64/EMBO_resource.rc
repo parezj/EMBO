@@ -1,8 +1,10 @@
 #include <windows.h>
 
+IDI_ICON1	ICON	DISCARDABLE	"F:/STM32Cube/EMBO/src/software-qt/EMBO/icon.ico"
+
 VS_VERSION_INFO VERSIONINFO
-	FILEVERSION 0,0,1,0
-	PRODUCTVERSION 0,0,1,0
+	FILEVERSION 0,0,2,0
+	PRODUCTVERSION 0,0,2,0
 	FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
 	FILEFLAGS VS_FF_DEBUG
@@ -19,11 +21,11 @@ VS_VERSION_INFO VERSIONINFO
 			BEGIN
 				VALUE "CompanyName", "CTU/Jakub Parez\0"
 				VALUE "FileDescription", "EMBedded Oscilloscope\0"
-				VALUE "FileVersion", "0.0.1.0\0"
+				VALUE "FileVersion", "0.0.2.0\0"
 				VALUE "LegalCopyright", "Jakub Parez\0"
 				VALUE "OriginalFilename", "EMBO.exe\0"
 				VALUE "ProductName", "EMBO\0"
-				VALUE "ProductVersion", "0.0.1.0\0"
+				VALUE "ProductVersion", "0.0.2.0\0"
 			END
 		END
 		BLOCK "VarFileInfo"

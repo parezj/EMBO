@@ -31,7 +31,7 @@
 #define EM_SYSTICK_FREQ        1000      // Systick clock
 
 // device name ------------------------------------------------------
-#define EM_DEV_NAME            "EMBO-STM32F103C8"   // device specific name
+#define EM_DEV_NAME            "EMBO-STM32F103C8-BluePill"   // device specific name
 
 // UART -------------------------------------------------------------
 #define EM_UART                USART1               // UART periph

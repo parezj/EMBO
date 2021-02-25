@@ -34,7 +34,7 @@
 #define EM_SYSTICK_FREQ        1000      // Systick clock
 
 // device name ------------------------------------------------------
-#define EM_DEV_NAME            "EMBO-STM32F303RE"   // device specific name
+#define EM_DEV_NAME            "EMBO-STM32F303RE-Nucleo64"   // device specific name
 
 // UART -------------------------------------------------------------
 #define EM_UART                USART2               // UART periph

@@ -1,0 +1,13 @@
+<map id="QwtPlotSeriesItem" name="QwtPlotSeriesItem">
+<area shape="rect" id="node1" title="Base class for plot items representing a series of samples." alt="" coords="216,157,348,184"/>
+<area shape="rect" id="node4" href="$class_qwt_plot_abstract_bar_chart.html" title="Abstract base class for bar chart items." alt="" coords="396,31,567,57"/>
+<area shape="rect" id="node7" href="$class_qwt_plot_curve.html" title="A plot item, that represents a series of points." alt="" coords="429,81,533,108"/>
+<area shape="rect" id="node8" href="$class_qwt_plot_histogram.html" title="QwtPlotHistogram represents a series of samples, where an interval is associated with a value ( &#160;)." alt="" coords="417,132,546,159"/>
+<area shape="rect" id="node9" href="$class_qwt_plot_interval_curve.html" title="QwtPlotIntervalCurve represents a series of samples, where each value is associated with an interval ..." alt="" coords="408,183,555,209"/>
+<area shape="rect" id="node10" href="$class_qwt_plot_spectro_curve.html" title="Curve that displays 3D points as dots, where the z coordinate is mapped to a color." alt="" coords="407,233,556,260"/>
+<area shape="rect" id="node11" href="$class_qwt_plot_trading_curve.html" title="QwtPlotTradingCurve illustrates movements in the price of a financial instrument over time." alt="" coords="408,284,555,311"/>
+<area shape="rect" id="node2" href="$class_qwt_plot_item.html" title="Base class for items on the plot canvas." alt="" coords="39,132,134,159"/>
+<area shape="rect" id="node3" href="$class_qwt_abstract_series_store.html" title="Bridge between QwtSeriesStore and QwtPlotSeriesItem." alt="" coords="5,183,168,209"/>
+<area shape="rect" id="node5" href="$class_qwt_plot_bar_chart.html" title="QwtPlotBarChart displays a series of a values as bars." alt="" coords="629,5,751,32"/>
+<area shape="rect" id="node6" href="$class_qwt_plot_multi_bar_chart.html" title="QwtPlotMultiBarChart displays a series of a samples that consist each of a set of values." alt="" coords="615,56,765,83"/>
+</map>
