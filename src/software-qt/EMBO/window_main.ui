@@ -253,7 +253,7 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>561</width>
+       <width>351</width>
        <height>21</height>
       </rect>
      </property>
@@ -298,7 +298,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>60</y>
+       <y>50</y>
        <width>141</width>
        <height>16</height>
       </rect>
@@ -321,7 +321,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>80</y>
+       <y>70</y>
        <width>141</width>
        <height>16</height>
       </rect>
@@ -334,7 +334,7 @@
       </font>
      </property>
      <property name="text">
-      <string>• LL Drivers Version:</string>
+      <string>• STM LL Version:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -344,7 +344,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>100</y>
+       <y>90</y>
        <width>141</width>
        <height>16</height>
       </rect>
@@ -367,7 +367,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>120</y>
+       <y>110</y>
        <width>141</width>
        <height>16</height>
       </rect>
@@ -380,7 +380,7 @@
       </font>
      </property>
      <property name="text">
-      <string>• CPU Clock Frequency:</string>
+      <string>• CPU Frequency:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -390,7 +390,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>140</y>
+       <y>130</y>
        <width>141</width>
        <height>16</height>
       </rect>
@@ -412,9 +412,9 @@
     <widget class="QLabel" name="label_dev_fw">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>60</y>
-       <width>151</width>
+       <x>160</x>
+       <y>50</y>
+       <width>191</width>
        <height>20</height>
       </rect>
      </property>
@@ -435,9 +435,9 @@
     <widget class="QLabel" name="label_dev_fcpu">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>120</y>
-       <width>151</width>
+       <x>160</x>
+       <y>110</y>
+       <width>191</width>
        <height>20</height>
       </rect>
      </property>
@@ -458,9 +458,9 @@
     <widget class="QLabel" name="label_dev_comm">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>140</y>
-       <width>151</width>
+       <x>160</x>
+       <y>130</y>
+       <width>191</width>
        <height>20</height>
       </rect>
      </property>
@@ -481,9 +481,9 @@
     <widget class="QLabel" name="label_dev_rtos">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>100</y>
-       <width>151</width>
+       <x>160</x>
+       <y>90</y>
+       <width>191</width>
        <height>20</height>
       </rect>
      </property>
@@ -504,9 +504,55 @@
     <widget class="QLabel" name="label_dev_ll">
      <property name="geometry">
       <rect>
-       <x>180</x>
-       <y>80</y>
-       <width>151</width>
+       <x>160</x>
+       <y>70</y>
+       <width>191</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>-</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>150</y>
+       <width>141</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>• Voltage reference:</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_dev_vref">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>150</y>
+       <width>191</width>
        <height>20</height>
       </rect>
      </property>
@@ -589,7 +635,7 @@
        <string notr="true">QPushButton {    
     padding: 0.2em 0.2em 0.3em 0.2em;
     border: 1px solid rgb(100, 100, 100);
-	border-radius: 0;
+	border-radius: 5px;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
@@ -598,14 +644,14 @@
 QPushButton:hover:!pressed
 {
 	border: 1px solid black;
-	border-radius: 0;
+	border-radius: 5px;
  	background: #FFFFFF;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
-	border-radius: 0;
+	border-radius: 5px;
  	background: #888888;
 	color:white;
 }</string>
@@ -710,7 +756,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Modes:</string>
+       <string>• Mode:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -728,6 +774,8 @@ QPushButton:pressed
       <property name="font">
        <font>
         <pointsize>9</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -740,9 +788,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_scope_fs">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>10</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -763,9 +811,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_scope_mem">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>30</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -786,9 +834,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_scope_bits">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>50</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -809,9 +857,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_scope_modes">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>70</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -832,9 +880,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_scope_pins">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>90</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -892,7 +940,7 @@ QPushButton:pressed
        <string notr="true">QPushButton {    
     padding: 0.2em 0.2em 0.3em 0.2em;
     border: 1px solid rgb(100, 100, 100);
-	border-radius: 0;
+	border-radius: 5px;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
@@ -901,14 +949,14 @@ QPushButton:pressed
 QPushButton:hover:!pressed
 {
 	border: 1px solid black;
-	border-radius: 0;
+	border-radius: 5px;
  	background: #FFFFFF;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
-	border-radius: 0;
+	border-radius: 5px;
  	background: #888888;
 	color:white;
 }</string>
@@ -990,7 +1038,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Protocols:</string>
+       <string>• Proto:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -1020,10 +1068,10 @@ QPushButton:pressed
      <widget class="QLabel" name="label_la_pins">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>70</y>
-        <width>71</width>
-        <height>16</height>
+        <width>101</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
@@ -1043,9 +1091,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_la_protocols">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>50</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -1066,9 +1114,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_la_fs">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>10</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -1089,9 +1137,9 @@ QPushButton:pressed
      <widget class="QLabel" name="label_la_mem">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>30</y>
-        <width>71</width>
+        <width>101</width>
         <height>16</height>
        </rect>
       </property>
@@ -1149,7 +1197,7 @@ QPushButton:pressed
        <string notr="true">QPushButton {    
     padding: 0.2em 0.2em 0.3em 0.2em;
     border: 1px solid rgb(100, 100, 100);
-	border-radius: 0;
+	border-radius: 5px;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
@@ -1158,14 +1206,14 @@ QPushButton:pressed
 QPushButton:hover:!pressed
 {
 	border: 1px solid black;
-	border-radius: 0;
+	border-radius: 5px;
  	background: #FFFFFF;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
-	border-radius: 0;
+	border-radius: 5px;
  	background: #888888;
 	color:white;
 }</string>

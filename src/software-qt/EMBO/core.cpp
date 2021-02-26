@@ -16,7 +16,7 @@
 
 /******************************** Messages ********************************/
 
-void MsgIdn::on_dataRx()
+void Msg_Idn::on_dataRx()
 {
     qInfo() << "IDN: " << rxData;
     auto core = Core::getInstance(this);
@@ -30,11 +30,20 @@ void MsgIdn::on_dataRx()
     }
     catch (...)
     {
-        core->err("Invalid message!", true);
+        core->err(INVALID_MSG, true);
     }
 }
 
-void MsgLims::on_dataRx()
+void Msg_Rst::on_dataRx()
+{
+    qInfo() << "RST: " << rxData;
+    auto core = Core::getInstance(this);
+
+    if (!rxData.contains(EMBO_OK))
+        core->err(INVALID_MSG, true);
+}
+
+void Msg_Sys_Lims::on_dataRx()
 {
     qInfo() << "LIM: " <<  rxData;
     auto core = Core::getInstance(this);
@@ -43,8 +52,8 @@ void MsgLims::on_dataRx()
 
     try
     {
-        core->devInfo->adc_1ch_smpl_time12 = tokens[0].toDouble();
-        core->devInfo->adc_1ch_smpl_time8 = tokens[1].toDouble();
+        core->devInfo->adc_fs_12b = tokens[0].toInt();
+        core->devInfo->adc_fs_8b = tokens[1].toInt();
         core->devInfo->mem = tokens[2].toInt();
         core->devInfo->la_fs = tokens[3].toInt();
         core->devInfo->pwm_fs = tokens[4].toInt();
@@ -53,10 +62,43 @@ void MsgLims::on_dataRx()
         core->devInfo->adc_interleaved = tokens[5].contains('I');
         core->devInfo->adc_bit8 = tokens[6] == '1';
         core->devInfo->dac = tokens[7] == '1';
+        core->devInfo->vm_fs = tokens[8].toInt();
+        core->devInfo->vm_mem = tokens[9].toInt();
+        core->devInfo->cntr_freq = tokens[10].toInt();
+        core->devInfo->cntr_timeout = tokens[11].toInt();
+        core->devInfo->sgen_maxf = tokens[12].toInt();
+        core->devInfo->sgen_maxmem = tokens[13].toInt();
     }
     catch (...)
     {
-        core->err("Invalid message!", true);
+        core->err(INVALID_MSG, true);
+    }
+}
+
+
+void Msg_Sys_Info::on_dataRx()
+{
+    qInfo() << "INFO: " <<  rxData;
+    auto core = Core::getInstance(this);
+
+    QStringList tokens = rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+
+    try
+    {
+        core->devInfo->rtos = tokens[0];
+        core->devInfo->ll = tokens[1];
+        core->devInfo->comm = tokens[2];
+        core->devInfo->fcpu = tokens[3].toInt();
+        core->devInfo->ref_mv = tokens[4].toInt();
+        core->devInfo->pins_scope_vm = tokens[5];
+        core->devInfo->pins_la = tokens[6];
+        core->devInfo->pins_cntr = tokens[7];
+        core->devInfo->pins_pwm = tokens[8];
+        core->devInfo->pins_sgen = tokens[9];
+    }
+    catch (...)
+    {
+        core->err(INVALID_MSG, true);
     }
 }
 
@@ -77,8 +119,10 @@ Core::Core(QObject* parent) : QObject(parent)
     m_timer_render = new QTimer(this);
     m_timer_comm = new QTimer(this);
 
-    m_msg_idn = new MsgIdn(this);
-    m_msg_lims = new MsgLims(this);
+    m_msg_idn = new Msg_Idn(this);
+    m_msg_rst = new Msg_Rst(this);
+    m_msg_sys_lims = new Msg_Sys_Lims(this);
+    m_msg_sys_info = new Msg_Sys_Info(this);
 
     devInfo = new DevInfo(this);
 
@@ -92,10 +136,6 @@ Core::Core(QObject* parent) : QObject(parent)
 
 Core::~Core()
 {
-    //delete m_msg_idn;
-    //delete m_msg_lims;
-
-    //delete devInfo;
 }
 
 bool Core::open(QString port)
@@ -111,7 +151,8 @@ bool Core::open(QString port)
 
         assert(m_activeMsgs.isEmpty());
         m_activeMsgs.append(m_msg_idn);
-        m_activeMsgs.append(m_msg_lims);
+        m_activeMsgs.append(m_msg_sys_lims);
+        m_activeMsgs.append(m_msg_sys_info);
         send();
 
         return true;
@@ -191,21 +232,24 @@ void Core::on_serial_readyRead()
     {
         const QByteArray data = m_serial->readAll();
         QString str = QString::fromUtf8(data);
-        qInfo() << "rx raw: " << str;
 
-        m_mainBuffer += data;
+        m_mainBuffer = m_mainBuffer.append(data);
         QStringList messages = m_mainBuffer.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
 
-        for(const QString message : messages) // iterate all msgs
-        {
-            m_mainBuffer = m_mainBuffer.left(message.size() + 2);
+        //qInfo() << "rx buffer: " << m_mainBuffer;
 
-            if (message == EMBO_READY_A || message == EMBO_READY_A || message == EMBO_READY_A)
+        for(int i = 0; i < m_mainBuffer.count(EMBO_NEWLINE); i++) // iterate all full msgs
+        {
+            qInfo() << "rx msg: " << messages[i];
+
+            m_mainBuffer = m_mainBuffer.right(m_mainBuffer.size() - (messages[i].size() + 2));
+
+            if (messages[i] == EMBO_READY_A || messages[i] == EMBO_READY_A || messages[i] == EMBO_READY_A)
             {
                 // emit READY signal
                 continue;
             }
-            QStringList submessages = message.split(EMBO_DELIM1, Qt::SkipEmptyParts);
+            QStringList submessages = messages[i].split(EMBO_DELIM1, Qt::SkipEmptyParts);
 
             m_submsgIt = 0;
             for(const QString submessage : submessages)
@@ -242,7 +286,10 @@ void Core::on_timer_rxTimeout()
 void Core::on_timer_comm()
 {
     //m_timer_rxTimeout->stop();
-    assert(m_activeMsgs.isEmpty());
+
+    //assert(m_activeMsgs.isEmpty());
+    if (!m_activeMsgs.isEmpty())
+        return;
 
     // TODO
 

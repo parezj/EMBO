@@ -2037,18 +2037,23 @@ debug/window_main.o: ../../EMBO/window_main.cpp ../../EMBO/window_main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlabel.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qframe.h \
 		ui_window_main.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QDebug \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QGridLayout \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgridlayout.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayout.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayoutitem.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qboxlayout.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QStatusBar \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qstatusbar.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMessageBox \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmessagebox.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qdialog.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QListView \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QVariant \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QIcon \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QAction \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qaction.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qactiongroup.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QApplication \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qapplication.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcoreapplication.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qeventloop.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qdesktopwidget.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qguiapplication.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qinputmethod.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QFrame \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QGroupBox \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgroupbox.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QListWidget \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlistwidget.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlistview.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qabstractitemview.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
@@ -2064,6 +2069,27 @@ debug/window_main.o: ../../EMBO/window_main.cpp ../../EMBO/window_main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qstyle.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtabbar.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qrubberband.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenu \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmenu.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenuBar \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmenubar.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QPushButton \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qpushbutton.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qabstractbutton.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QStatusBar \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qstatusbar.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QWidget \
+		../../EMBO/utils.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QDebug \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QGridLayout \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgridlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayoutitem.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qboxlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMessageBox \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmessagebox.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qdialog.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QListView \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QFontDatabase \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qfontdatabase.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPortInfo \

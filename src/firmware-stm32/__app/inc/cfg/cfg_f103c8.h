@@ -22,6 +22,15 @@
  *  =======================
 */
 
+// pins strings
+#define EM_PINS_SCOPE_VM       "A1-A2-A3-A4"
+#define EM_PINS_LA             "A1-A2-A3-A4"
+#define EM_PINS_CNTR           "A8"
+#define EM_PINS_PWM            "A15-B6"
+#define EM_PINS_SGEN           "-"
+
+#define EM_LL_VER              "1.8.3" // TODO automate
+
 // freqs  -----------------------------------------------------------
 #define EM_FREQ_LSI            40000     // LSI clock - wdg
 #define EM_FREQ_HCLK           72000000  // HCLK clock - main
@@ -30,8 +39,9 @@
 #define EM_FREQ_PCLK2          72000000  // APB2 clock - TIM1
 #define EM_SYSTICK_FREQ        1000      // Systick clock
 
-// device name ------------------------------------------------------
+// device -----------------------------------------------------------
 #define EM_DEV_NAME            "EMBO-STM32F103C8-BluePill"   // device specific name
+#define EM_DEV_COMM            "USB + UART (115200 bps)"     // device comm methods
 
 // UART -------------------------------------------------------------
 #define EM_UART                USART1               // UART periph
@@ -46,9 +56,9 @@
 
 // DAC -------------------------------------------------------------
 //#define EM_DAC               DAC1                 // sgen available
-//#define EM_DAC_CH            LL_DAC_CHANNEL_1     // DAC channel
-//#define EM_DAC_BUFF_LEN      1000                 // buffer max len
-//#define EM_DAC_MAX_VAL       4095.0               // DAC max value
+#define EM_DAC_CH              LL_DAC_CHANNEL_1     // DAC channel
+#define EM_DAC_BUFF_LEN        1000                 // buffer max len
+#define EM_DAC_MAX_VAL         4095.0               // DAC max value
 
 // GPIO ------------------------------------------------------------
 #define EM_GPIO_EXTI_SRC       LL_GPIO_AF_SetEXTISource        // GPIO EXTI source
@@ -62,6 +72,7 @@
 //#define EM_ADC_INTERLEAVED                                   // interleaved mode available - TODO
 //#define EM_ADC_DUALMODE                                      // dual mode available        - TODO
 
+#define EM_VREF                3300                            // main voltage reference in mV
 #define EM_ADC_VREF_CAL        1200                            // vref cal value
 //#define EM_ADC_VREF_CAL      *((uint16_t*)VREFINT_CAL_ADDR)  // Vref cal value
 #define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // max sampling time in ticks
@@ -112,7 +123,9 @@
 #define EM_LA_MAX_FS           5000000   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
-#define EM_PWM_MAX_F           1000000   // PWM max freq - TODO
+#define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq - TODO
+#define EM_CNTR_MAX_F          5000000   // Counter max input frequency
+#define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve
 
 // DMA -------------------------------------------------------------

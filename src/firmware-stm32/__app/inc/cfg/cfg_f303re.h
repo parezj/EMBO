@@ -25,6 +25,14 @@
  *  =======================
 */
 
+#define EM_PINS_SCOPE_VM       "C0-C1-B0-B14"
+#define EM_PINS_LA             "C0-C1-C2-C3"
+#define EM_PINS_CNTR           "C9"
+#define EM_PINS_PWM            "B8-B10"
+#define EM_PINS_SGEN           "A4"
+
+#define EM_LL_VER              "1.11.2" // TODO automate
+
 // freqs  -----------------------------------------------------------
 #define EM_FREQ_LSI            40000     // LSI clock - wdg
 #define EM_FREQ_HCLK           72000000  // HCLK clock - main
@@ -33,8 +41,12 @@
 #define EM_FREQ_PCLK2          72000000  // APB2 clock - TIM1
 #define EM_SYSTICK_FREQ        1000      // Systick clock
 
-// device name ------------------------------------------------------
+// device -----------------------------------------------------------
 #define EM_DEV_NAME            "EMBO-STM32F303RE-Nucleo64"   // device specific name
+#define EM_DEV_COMM            "USB (ST) + UART (115200 bps)"    // device comm methods
+
+// device name ------------------------------------------------------
+
 
 // UART -------------------------------------------------------------
 #define EM_UART                USART2               // UART periph
@@ -65,6 +77,7 @@
 //#define EM_ADC_INTERLEAVED                                   // interleaved mode available  - N/A ??
 //#define EM_ADC_DUALMODE                                      // dual mode available         - N/A
 
+#define EM_VREF                3300                            // main voltage reference in mV
 //#define EM_ADC_VREF_CAL      1200                            // vref cal value
 #define EM_ADC_VREF_CAL        *((uint16_t*)VREFINT_CAL_ADDR)  // Vref cal value TODO
 #define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // max sampling time in ticks
@@ -118,6 +131,8 @@
 #define EM_DAQ_MAX_B12_FS      400000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       500000    // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           1000000   // PWM max freq - TODO
+#define EM_CNTR_MAX_F          5000000   // Counter max input frequency
+#define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve (min 2)
 
 // DMA -------------------------------------------------------------

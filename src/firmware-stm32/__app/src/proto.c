@@ -12,6 +12,7 @@
 #include "utility.h"
 
 #include "FreeRTOS.h"
+#include "task.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,7 +84,7 @@ scpi_result_t EM_SYS_ModeQ(scpi_t * context)
 
 scpi_result_t EM_SYS_LimitsQ(scpi_t * context)
 {
-    char buff[80];
+    char buff[100];
     char dual[2] = {'\0'};
     char inter[2] = {'\0'};
     uint8_t dac = 0;
@@ -111,15 +112,20 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t * context)
     inter[0] = 'I';
 #endif
 
-    //char smplt12_s[15];
-    //char smplt8_s[15];
-    //sprint_fast(smplt12_s, "%s", EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_MAX_N, EM_ADC_TCONV12), 8);
-    //sprint_fast(smplt8_s, "%s", EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_MAX_N, EM_ADC_TCONV8), 8);
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
+                      EM_LA_MAX_FS, EM_PWM_MAX_F, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MAX_F, EM_CNTR_MEAS_MS,
+                      EM_SGEN_MAX_F, EM_DAC_BUFF_LEN); // 78 chars
 
-    int pwm_max_f = EM_TIM_PWM1_FREQ / 2;
+    SCPI_ResultCharacters(context, buff, len);
+    return SCPI_RES_OK;
+}
 
-    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
-                      EM_LA_MAX_FS, pwm_max_f, adcs, dual, inter, bit8, dac);
+scpi_result_t EM_SYS_InfoQ(scpi_t * context)
+{
+    char buff[100];
+
+    int len = sprintf(buff, "%s,%s,%s,%d,%d,%s,%s,%s,%s,%s", tskKERNEL_VERSION_NUMBER, EM_LL_VER, EM_DEV_COMM, EM_FREQ_HCLK/1000000, EM_VREF,
+                      EM_PINS_SCOPE_VM, EM_PINS_LA, EM_PINS_CNTR, EM_PINS_PWM, EM_PINS_SGEN);
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -243,7 +249,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t * context)
             daq_enable(&daq, EM_FALSE);
 
 #ifdef VREFINT_CAL_ADDR
-        float cal = EM_ADC_VREF_CAL / daq.adc_max_val * 3300;
+        float cal = EM_ADC_VREF_CAL / daq.adc_max_val * EM_VREF;
 #else
         float cal = EM_ADC_VREF_CAL;
 #endif

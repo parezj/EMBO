@@ -6,6 +6,7 @@
 #include "window_main.h"
 #include "ui_window_main.h"
 #include "core.h"
+#include "utils.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -85,12 +86,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Main
     QString style1 = "QGroupBox {background-color: rgb(238,238,238);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \
                       QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}";
 
-    QString style1b = "QGroupBox {background-color: rgb(238,238,238);border: 1px solid gray; border-radius: 0px;  margin-top: 0.5em;}; \
-                      QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}";
+    //QString style1b = "QGroupBox {background-color: rgb(238,238,238);border: 1px solid gray; border-radius: 0px;  margin-top: 0.5em;}; \
+    //                  QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}";
 
-    m_ui->groupBox_scope->setStyleSheet(style1b);
-    m_ui->groupBox_la->setStyleSheet(style1b);
-    m_ui->groupBox_vm->setStyleSheet(style1b);
+    m_ui->groupBox_scope->setStyleSheet(style1);
+    m_ui->groupBox_la->setStyleSheet(style1);
+    m_ui->groupBox_vm->setStyleSheet(style1);
     m_ui->groupBox_pwm->setStyleSheet(style1);
     m_ui->groupBox_sgen->setStyleSheet(style1);
     m_ui->groupBox_cntr->setStyleSheet(style1);
@@ -191,13 +192,48 @@ void MainWindow::setConnected()
     m_ui->label_deviceName->setText(info->name);
     m_ui->label_dev_fw->setText(info->fw);
     m_ui->label_dev_ll->setText(info->ll);
-    m_ui->label_dev_fcpu->setText(info->fcpu + " MHz");
+    m_ui->label_dev_fcpu->setText(QString::number(info->fcpu) + " MHz");
     m_ui->label_dev_rtos->setText(info->rtos);
     m_ui->label_dev_comm->setText(info->comm);
+    m_ui->label_dev_vref->setText(QString::number(info->ref_mv) + " mV");
     if (info->name.toLower().contains("bluepill"))
         m_ui->label_boardImg->setPixmap(m_img_bluepill);
     else if (info->name.toLower().contains("nucleo"))
         m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
+
+    m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps"));
+    m_ui->label_scope_mem->setText(format_unit((info->mem / 2) / (1 * 2), "B") +
+                                   (info->adc_bit8 ? " / " + format_unit(info->mem / (1 * 2), "B") : ""));
+    m_ui->label_scope_bits->setText(info->adc_bit8 ? "12 / 8 bit" : "12 bit");
+    m_ui->label_scope_modes->setText("4ch " + QString::number(info->adc_num) + "ADC " + (info->adc_dualmode ? "D" : "") +
+                                     (info->adc_dualmode && info->adc_interleaved ? "+" : "") + (info->adc_interleaved ? "I" : ""));
+    m_ui->label_scope_pins->setText(info->pins_scope_vm.replace("-", ", "));
+
+    m_ui->label_la_fs->setText(format_unit(info->la_fs, "Sps"));
+    m_ui->label_la_mem->setText(format_unit(info->mem, "B"));
+    m_ui->label_la_protocols->setText("Serial, I2C, SPI");
+    m_ui->label_la_pins->setText(info->pins_la.replace("-", ", "));
+
+    m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Sps"));
+    m_ui->label_vm_mem->setText(format_unit(info->vm_mem, "S"));
+    m_ui->label_vm_bits->setText("12 bit");
+    m_ui->label_vm_pins->setText(info->pins_scope_vm.replace("-", ", "));
+
+    m_ui->label_cntr_freq->setText(format_unit(info->cntr_freq, "Hz"));
+    m_ui->label_cntr_timeout->setText(format_unit(info->cntr_timeout, "ms"));
+    m_ui->label_cntr_pins->setText(info->pins_cntr);
+
+    m_ui->label_pwm_freq->setText(format_unit(info->pwm_fs, "Hz"));
+    m_ui->label_pwm_pins->setText(info->pins_pwm.replace("-", ", "));
+
+    if (info->dac)
+    {
+        m_ui->label_sgen_freq->setText(format_unit(info->sgen_maxf, "Hz"));
+        m_ui->label_sgen_mem->setText(format_unit(info->sgen_maxmem, "S"));
+        m_ui->label_sgen_pins->setText(info->pins_sgen);
+        m_ui->groupBox_sgen->show();
+    }
+    else m_ui->groupBox_sgen->hide();
 
     m_connected = true;
 }
@@ -228,7 +264,35 @@ void MainWindow::setDisconnected()
     m_ui->label_dev_fcpu->setText("-");
     m_ui->label_dev_rtos->setText("-");
     m_ui->label_dev_comm->setText("-");
+    m_ui->label_dev_vref->setText("-");
     m_ui->label_boardImg->setPixmap(m_img_unknown);
+
+    m_ui->label_scope_fs->setText("-");
+    m_ui->label_scope_mem->setText("-");
+    m_ui->label_scope_bits->setText("-");
+    m_ui->label_scope_modes->setText("-");
+    m_ui->label_scope_pins->setText("-");
+
+    m_ui->label_la_fs->setText("-");
+    m_ui->label_la_mem->setText("-");
+    m_ui->label_la_protocols->setText("-");
+    m_ui->label_la_pins->setText("-");
+
+    m_ui->label_vm_fs->setText("-");
+    m_ui->label_vm_mem->setText("-");
+    m_ui->label_vm_bits->setText("-");
+    m_ui->label_vm_pins->setText("-");
+
+    m_ui->label_cntr_freq->setText("-");
+    m_ui->label_cntr_timeout->setText("-");
+    m_ui->label_cntr_pins->setText("-");
+
+    m_ui->label_pwm_freq->setText("-");
+    m_ui->label_pwm_pins->setText("-");
+
+    m_ui->label_sgen_freq->setText("-");
+    m_ui->label_sgen_mem->setText("-");
+    m_ui->label_sgen_pins->setText("-");
 
     m_connected = false;
 }

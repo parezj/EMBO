@@ -18,14 +18,19 @@
 #define TIMER_COMM      20
 #define TIMER_RENDER    25
 
+#define INVALID_MSG     "Invalid message!"
+
 /******************************** Protocol ********************************/
 
 #define EMBO_NEWLINE    "\r\n"
 #define EMBO_DELIM1     ";"
 #define EMBO_DELIM2     ","
 
+#define EMBO_OK         "OK"
+
 #define EMBO_IDN        "*IDN?"
-#define EMBO_LIMS       "SYS:LIM?"
+#define EMBO_LIMS       ":SYS:LIM?"
+#define EMBO_INFO       ":SYS:INFO?"
 #define EMBO_RST        "*RST"
 
 #define EMBO_READY_A    "ReadyA"
@@ -35,19 +40,35 @@
 
 /******************************** Messages ********************************/
 
-class MsgIdn : public Msg
+class Msg_Idn : public Msg
 {
 public:
-    explicit MsgIdn(QObject* parent=0) : Msg(EMBO_IDN, parent) {};
+    explicit Msg_Idn(QObject* parent=0) : Msg(EMBO_IDN, parent) {};
     virtual void on_dataRx();
 };
 
-class MsgLims : public Msg
+class Msg_Rst : public Msg
 {
 public:
-    explicit MsgLims(QObject* parent=0) : Msg(EMBO_LIMS, parent) {};
+    explicit Msg_Rst(QObject* parent=0) : Msg(EMBO_RST, parent) {};
     virtual void on_dataRx();
 };
+
+class Msg_Sys_Lims : public Msg
+{
+public:
+    explicit Msg_Sys_Lims(QObject* parent=0) : Msg(EMBO_LIMS, parent) {};
+    virtual void on_dataRx();
+};
+
+class Msg_Sys_Info : public Msg
+{
+public:
+    explicit Msg_Sys_Info(QObject* parent=0) : Msg(EMBO_INFO, parent) {};
+    virtual void on_dataRx();
+};
+
+
 
 /********************************* Core *********************************/
 
@@ -64,15 +85,25 @@ Q_OBJECT
 public:
     DevInfo(QObject* parent) : QObject(parent) { }
 
-    QString name = "";
-    QString fw = "";
-    QString rtos = ""; // TODO
-    QString ll = ""; // TODO
-    QString comm = ""; // TODO
-    QString fcpu = ""; // TODO
+    /* IDN */
+    QString name;
+    QString fw;
 
-    double adc_1ch_smpl_time12;
-    double adc_1ch_smpl_time8;
+    /* SYS:INFO */
+    QString rtos;
+    QString ll;
+    QString comm;
+    int fcpu;
+    int ref_mv;
+    QString pins_scope_vm;
+    QString pins_la;
+    QString pins_cntr;
+    QString pins_pwm;
+    QString pins_sgen;
+
+    /* SYS:LIM */
+    int adc_fs_12b;
+    int adc_fs_8b;
     int mem;
     int la_fs;
     int pwm_fs;
@@ -81,19 +112,12 @@ public:
     bool adc_interleaved;
     bool adc_bit8;
     bool dac;
-    int ref_mv; // TODO
-    int vm_mem; // TODO
-    int vm_fs; // TODO
-    int cntr_freq;// TODO
-    int cntr_timeout;// TODO
-    int sgen_maxf;// TODO
-    int sgen_maxmem;// TODO
-
-    QString pins_scope = "";  // TODO
-    QString pins_la = "";  // TODO
-    QString pins_cntr = "";  // TODO
-    QString pins_pwm = "";  // TODO
-    QString pins_sgen = "";  // TODO
+    int vm_mem;
+    int vm_fs;
+    int cntr_freq;
+    int cntr_timeout;
+    int sgen_maxf;
+    int sgen_maxmem;
 };
 
 class Core : public QObject
@@ -147,8 +171,10 @@ private:
     QTimer* m_timer_comm;
 
     /* messages */
-    MsgIdn* m_msg_idn;
-    MsgLims* m_msg_lims;
+    Msg_Idn* m_msg_idn;
+    Msg_Rst* m_msg_rst;
+    Msg_Sys_Lims* m_msg_sys_lims;
+    Msg_Sys_Info* m_msg_sys_info;
 };
 
 #endif // CORE_H

@@ -6,5 +6,8 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <QString>
+
+QString format_unit(double value, QString unit);
 
 #endif // UTILS_H

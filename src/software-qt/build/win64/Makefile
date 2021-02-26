@@ -244,6 +244,7 @@ Makefile: ../../EMBO/EMBO.pro F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/qt_config.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf \
@@ -274,7 +275,6 @@ Makefile: ../../EMBO/EMBO.pro F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5SerialPort.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl \
-		.qmake.stash \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/build_pass.prf \
 		../../EMBO/resources.qrc
 	$(QMAKE) -o Makefile ../../EMBO/EMBO.pro -spec win32-g++ CONFIG+=qtquickcompiler
@@ -452,6 +452,7 @@ F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/qt_functions.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/qt_config.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/win32-g++/qmake.conf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf:
@@ -482,7 +483,6 @@ F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Gui.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5SerialPort.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl:
-.qmake.stash:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/build_pass.prf:
 ../../EMBO/resources.qrc:
 qmake: FORCE
