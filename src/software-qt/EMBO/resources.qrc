@@ -27,5 +27,6 @@
         <file>resources/img/vm.png</file>
         <file>resources/img/cntr.png</file>
         <file>resources/img/pwm.png</file>
+        <file>resources/img/cvut_meas.png</file>
     </qresource>
 </RCC>

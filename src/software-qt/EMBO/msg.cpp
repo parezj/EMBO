@@ -7,24 +7,21 @@
 
 #include <QString>
 
+Msg::Msg(const Msg& msg) : QObject(msg.parent())
+{
+    m_cmd = msg.m_cmd;
+    m_isQuery = msg.m_isQuery;
+    m_params = msg.m_params;
+}
 
-Msg::Msg(QString txData, QObject* parent) : QObject(parent), txData(txData)
+Msg::Msg(QString cmd, bool isQuery, QObject* parent) : QObject(parent), m_cmd(cmd), m_isQuery(isQuery)
 {
     connect(this, &Msg::rx, this, &Msg::on_dataRx);
 }
 
 void Msg::fire(QString data)
 {
-    rxData = data.isEmpty() ? "" : data;
+    m_rxData = data.isEmpty() ? "" : data;
     emit rx();
 }
 
-void Msg::setTxData(QString data)
-{
-    this->txData = data;
-}
-
-QString Msg::getTxData()
-{
-    return this->txData;
-}

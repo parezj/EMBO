@@ -28,9 +28,11 @@ scpi_result_t EM_LA_SetQ(scpi_t * context);
 scpi_result_t EM_LA_ReadQ(scpi_t * context);
 scpi_result_t EM_LA_ForceTrig(scpi_t * context);
 
+scpi_result_t EM_CNTR_EnableQ(scpi_t * context);
 scpi_result_t EM_CNTR_Enable(scpi_t * context);
 scpi_result_t EM_CNTR_ReadQ(scpi_t * context);
 
+scpi_result_t EM_SGEN_SetQ(scpi_t * context);
 scpi_result_t EM_SGEN_Set(scpi_t * context);
 
 scpi_result_t EM_PWM_SetQ(scpi_t * context);

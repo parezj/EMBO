@@ -25,6 +25,10 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+signals:
+    void open(const QString port);
+    void close();
+
 private slots:
     void on_close();
     void on_actionAbout_triggered();
@@ -33,14 +37,17 @@ private slots:
     void on_pushButton_connect_clicked();
     void on_pushButton_disconnect_clicked();
 
-    void on_coreState_changed(State newState);
-    void on_coreError_happend(QString name);
+    void on_coreState_changed(const State newState);
+    void on_coreError_happend(const QString name);
 
 private:
+    void loadSettings();
+    void saveSettings();
     void setConnected();
     void setDisconnected();
 
     bool m_connected = false;
+    State m_state_old = DISCONNECTED;
 
     QPixmap m_img_plugOn;
     QPixmap m_img_plugOff;

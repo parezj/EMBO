@@ -2,6 +2,7 @@ debug/core.o
 debug/qcustomplot.o
 debug/main.o
 debug/msg.o
+debug/settings.o
 debug/utils.o
 debug/window_main.o
 debug/qrc_resources.o

@@ -29,6 +29,7 @@ SOURCES += \
     lib/qcustomplot.cpp \
     main.cpp \
     msg.cpp \
+    settings.cpp \
     utils.cpp \
     window_main.cpp
 
@@ -36,6 +37,7 @@ HEADERS += \
     core.h \
     lib/qcustomplot.h \
     msg.h \
+    settings.h \
     utils.h \
     window_main.h
 

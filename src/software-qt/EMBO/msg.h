@@ -8,6 +8,7 @@
 
 #include <QObject>
 #include <QString>
+#include <QDebug>
 
 
 class Msg : public QObject
@@ -15,12 +16,17 @@ class Msg : public QObject
 Q_OBJECT
 
 public:
-    explicit Msg(QString msg = "", QObject* parent = 0);
+    explicit Msg(const Msg& msg);
+    explicit Msg(QString cmd = "", bool isQuery = true, QObject* parent = 0);
     virtual ~Msg() {};
 
     void fire(QString data);
-    void setTxData(QString data);
-    QString getTxData();
+
+    QString getCmd() { return this->m_cmd; }
+    bool getIsQuery() { return this->m_isQuery; }
+    void setIsQuery(bool val) { this->m_isQuery = val; }
+    QString getParams() { return this->m_params; }
+    void setParams(QString val) { this->m_params = val; }
 
 protected slots:
     virtual void on_dataRx() {};
@@ -29,9 +35,10 @@ signals:
     void rx();
 
 protected:
-    void* core;
-    QString txData;
-    QString rxData;
+    QString m_cmd;
+    QString m_rxData;
+    bool m_isQuery;
+    QString m_params = "";
 };
 
 

@@ -81,10 +81,12 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "LA:FORCetrig", .callback = EM_LA_ForceTrig,},
 
     /* EMBO - Counter */
+    {.pattern = "CNTR:ENAble?", .callback = EM_CNTR_EnableQ,},
     {.pattern = "CNTR:ENAble", .callback = EM_CNTR_Enable,},
     {.pattern = "CNTR:READ?", .callback = EM_CNTR_ReadQ,},
 
     /* EMBO - Signal Generator */
+    {.pattern = "SGEN:SET?", .callback = EM_SGEN_SetQ,},
     {.pattern = "SGEN:SET", .callback = EM_SGEN_Set,},
 
     /* EMBO - PWM */
@@ -129,7 +131,7 @@ int SCPI_Error(scpi_t * context, int_fast16_t err)
     (void) context;
 
     char buff[100];
-    int len = sprintf(buff, ";ERROR: %d, \"%s\";", (int16_t) err, SCPI_ErrorTranslate(err));
+    int len = sprintf(buff, ";ERROR %d \"%s\";", (int16_t) err, SCPI_ErrorTranslate(err));
     comm_respond((comm_data_t*)context->comm, buff, len);
     return 0;
 }

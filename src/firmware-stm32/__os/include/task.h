@@ -85,10 +85,10 @@ extern "C" {
  * MACROS AND DEFINITIONS
  *----------------------------------------------------------*/
 
-#define tskKERNEL_VERSION_NUMBER "V9.0.1"
+#define tskKERNEL_VERSION_NUMBER "9.0.1"
 #define tskKERNEL_VERSION_MAJOR 9
 #define tskKERNEL_VERSION_MINOR 0
-#define tskKERNEL_VERSION_BUILD 0
+#define tskKERNEL_VERSION_BUILD 1
 
 /**
  * task. h

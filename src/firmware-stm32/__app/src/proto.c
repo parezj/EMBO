@@ -124,7 +124,7 @@ scpi_result_t EM_SYS_InfoQ(scpi_t * context)
 {
     char buff[100];
 
-    int len = sprintf(buff, "%s,%s,%s,%d,%d,%s,%s,%s,%s,%s", tskKERNEL_VERSION_NUMBER, EM_LL_VER, EM_DEV_COMM, EM_FREQ_HCLK/1000000, EM_VREF,
+    int len = sprintf(buff, "%s,%s,%s,%d,%d,%s,%s,%s,%s,%s", tskKERNEL_VERSION_NUMBER, EM_LL_VER, EM_DEV_COMM, EM_FREQ_HCLK/1000000, (int)daq.vcc_mv,
                       EM_PINS_SCOPE_VM, EM_PINS_LA, EM_PINS_CNTR, EM_PINS_PWM, EM_PINS_SGEN);
 
     SCPI_ResultCharacters(context, buff, len);
@@ -677,6 +677,12 @@ scpi_result_t EM_LA_ForceTrig(scpi_t * context)
 
 /************************* [CNTR Actions] *************************/
 
+scpi_result_t EM_CNTR_EnableQ(scpi_t * context)
+{
+    SCPI_ResultText(context, cntr.enabled ? "1" : "0");
+    return SCPI_RES_OK;
+}
+
 scpi_result_t EM_CNTR_Enable(scpi_t * context)
 {
     uint32_t p1;
@@ -743,6 +749,18 @@ scpi_result_t EM_CNTR_ReadQ(scpi_t * context)
 }
 
 /************************* [SGEN Actions] *************************/
+
+scpi_result_t EM_SGEN_SetQ(scpi_t * context)
+{
+#ifdef EM_DAC
+    SCPI_ResultText(context, "0");
+    return SCPI_RES_OK;
+#else
+    SCPI_ErrorPush(context, SCPI_ERROR_DAC_NA);
+    return SCPI_RES_ERR;
+#endif
+}
+
 scpi_result_t EM_SGEN_Set(scpi_t * context)
 {
 #ifdef EM_DAC

@@ -2,6 +2,7 @@ release/core.o
 release/qcustomplot.o
 release/main.o
 release/msg.o
+release/settings.o
 release/utils.o
 release/window_main.o
 release/qrc_resources.o

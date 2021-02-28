@@ -7,6 +7,7 @@
 #include "ui_window_main.h"
 #include "core.h"
 #include "utils.h"
+#include "settings.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -15,6 +16,8 @@
 #include <QMessageBox>
 #include <QListView>
 #include <QFontDatabase>
+#include <QThread>
+#include <QSettings>
 #include <QtSerialPort/QSerialPortInfo>
 
 
@@ -22,11 +25,24 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Main
 {
     m_ui->setupUi(this);
 
-    auto core = Core::getInstance(this);
-    connect(core, &Core::stateChanged, this, &MainWindow::on_coreState_changed);
-    connect(core, &Core::errorHappend, this, &MainWindow::on_coreError_happend);
+    QThread* t1 = new QThread(this);
+    auto core = Core::getInstance();
+    core->moveToThread(t1);
 
-    connect(qApp,SIGNAL(aboutToQuit()),this,SLOT(on_close()));
+    qRegisterMetaType<State>("State");
+    qRegisterMetaType<Msg>("Msg");
+
+    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(on_close()));
+    connect(core, &Core::stateChanged, this, &MainWindow::on_coreState_changed, Qt::QueuedConnection);
+    connect(core, &Core::errorHappend, this, &MainWindow::on_coreError_happend, Qt::QueuedConnection);
+    connect(this, &MainWindow::open, core, &Core::on_open, Qt::QueuedConnection);
+    connect(this, &MainWindow::close, core, &Core::on_close, Qt::QueuedConnection);
+    connect(t1, SIGNAL(started()), core, SLOT(on_start()));
+    connect(core, SIGNAL(finished()), t1, SLOT(quit()));
+    connect(core, SIGNAL(finished()), core, SLOT(deleteLater()));
+    connect(t1, SIGNAL(finished()), t1, SLOT(deleteLater()));
+
+    t1->start();
 
     m_ui->pushButton_disconnect->hide();
     m_ui->groupBox_scope->hide();
@@ -36,24 +52,24 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Main
     m_ui->groupBox_sgen->hide();
     m_ui->groupBox_cntr->hide();
 
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Bold.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Light.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Medium.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Regular.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Semibold.ttf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Bold.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Light.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Medium.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Regular.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Semibold.otf");
 
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Bold.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Light.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Medium.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Regular.ttf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Semibold.ttf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Bold.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Light.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Medium.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Regular.otf");
+    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Semibold.otf");
 
-    QFont font("SF-UI-Display");
+    QFont font("SF UI Display");
     font.setStyleHint(QFont::Monospace);
     QApplication::setFont(font);
 
     QWidget* widget = new QWidget();
-    QFont font1( "SF-UI-Display", 10, QFont::Normal);
+    QFont font1( "SF UI Display", 10, QFont::Normal);
     m_status_icon = new QLabel(this);
     QLabel* status_txt = new QLabel(" Disconnected");
     QLabel* status_author = new QLabel("CTU FEE - Jakub Pařez 2021 ");
@@ -110,12 +126,30 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Main
 MainWindow::~MainWindow()
 {
     delete m_ui;
+    delete Core::getInstance();
+}
+
+void MainWindow::loadSettings()
+{
+  QString port_saved = Settings::getValue("main/port", "").toString();
+
+  for(int i = 0; i < m_ui->listWidget_ports->count(); ++i)
+  {
+      if (m_ui->listWidget_ports->item(i)->text() == port_saved)
+          m_ui->listWidget_ports->setCurrentRow(i);
+  }
+}
+
+void MainWindow::saveSettings()
+{
+    Settings::setValue("main/port", m_ui->listWidget_ports->currentIndex().data().toString());
 }
 
 void MainWindow::on_close()
 {
     if (m_connected)
-        Core::getInstance(this)->close();
+        emit close();
+    Core::getInstance()->dispose();
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -143,31 +177,32 @@ void MainWindow::on_pushButton_scan_clicked()
         m_ui->listWidget_ports->setCurrentRow(0);
 
     m_ui->pushButton_connect->setEnabled(m_ui->listWidget_ports->children().count() > 0);
+
+    loadSettings();
 }
 
 void MainWindow::on_pushButton_connect_clicked()
 {
     m_ui->listWidget_ports->setEnabled(false);
     m_ui->pushButton_scan->setEnabled(false);
-    m_ui->pushButton_connect->setText("Connecting");
+    m_ui->pushButton_connect->setText("Wait");
     m_ui->pushButton_connect->setEnabled(false);
 
     QLabel *status_txt = m_ui->statusbar->findChild<QLabel*>("status_txt");
     status_txt->setText(" Connecting...");
 
-    QModelIndex selIdx = m_ui->listWidget_ports->currentIndex();
-    QString selPort = selIdx.data().toString();
+    QString selPort = m_ui->listWidget_ports->currentIndex().data().toString();
+    saveSettings();
 
-    if (!Core::getInstance(this)->open(selPort))
-    {
-        on_coreError_happend("Serial port opening failed!");
-        setDisconnected();
-    }
+    emit open(selPort);
 }
 
 void MainWindow::on_pushButton_disconnect_clicked()
 {
-    Core::getInstance(this)->close();
+    m_ui->pushButton_connect->setText("Wait");
+    m_ui->pushButton_connect->setEnabled(false);
+
+    emit close();
 }
 
 void MainWindow::setConnected()
@@ -176,7 +211,7 @@ void MainWindow::setConnected()
     m_ui->pushButton_disconnect->show();
 
     QLabel *status_txt = m_ui->statusbar->findChild<QLabel*>("status_txt");
-    status_txt->setText(" Connected (" + Core::getInstance(this)->getPort() + ")");
+    status_txt->setText(" Connected (" + Core::getInstance()->getPort() + ")");
     m_status_icon->setPixmap(m_img_plugOn);
     m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
 
@@ -187,7 +222,7 @@ void MainWindow::setConnected()
     m_ui->groupBox_sgen->show();
     m_ui->groupBox_cntr->show();
 
-    auto info = Core::getInstance(this)->devInfo;
+    auto info = Core::getInstance()->getDevInfo();
 
     m_ui->label_deviceName->setText(info->name);
     m_ui->label_dev_fw->setText(info->fw);
@@ -220,7 +255,7 @@ void MainWindow::setConnected()
     m_ui->label_vm_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
     m_ui->label_cntr_freq->setText(format_unit(info->cntr_freq, "Hz"));
-    m_ui->label_cntr_timeout->setText(format_unit(info->cntr_timeout, "ms"));
+    m_ui->label_cntr_timeout->setText(QString::number(info->cntr_timeout) + " ms");
     m_ui->label_cntr_pins->setText(info->pins_cntr);
 
     m_ui->label_pwm_freq->setText(format_unit(info->pwm_fs, "Hz"));
@@ -297,7 +332,7 @@ void MainWindow::setDisconnected()
     m_connected = false;
 }
 
-void MainWindow::on_coreState_changed(State newState)
+void MainWindow::on_coreState_changed(const State newState)
 {
     if (newState == CONNECTED)
     {
@@ -307,9 +342,10 @@ void MainWindow::on_coreState_changed(State newState)
     {
         setDisconnected();
     }
+    m_state_old = newState;
 }
 
-void MainWindow::on_coreError_happend(QString name)
+void MainWindow::on_coreError_happend(const QString name)
 {
     QMessageBox msg("EMBO", name,
                    QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default,
