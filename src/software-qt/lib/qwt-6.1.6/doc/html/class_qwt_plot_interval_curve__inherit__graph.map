@@ -1,7 +1,0 @@
-<map id="QwtPlotIntervalCurve" name="QwtPlotIntervalCurve">
-<area shape="rect" id="node1" title="QwtPlotIntervalCurve represents a series of samples, where each value is associated with an interval ..." alt="" coords="91,169,238,196"/>
-<area shape="rect" id="node2" href="$class_qwt_plot_series_item.html" title="Base class for plot items representing a series of samples." alt="" coords="5,87,137,114"/>
-<area shape="rect" id="node3" href="$class_qwt_plot_item.html" title="Base class for items on the plot canvas." alt="" coords="24,5,119,32"/>
-<area shape="rect" id="node4" href="$class_qwt_abstract_series_store.html" title="Bridge between QwtSeriesStore and QwtPlotSeriesItem." alt="" coords="159,5,322,32"/>
-<area shape="rect" id="node5" href="$class_qwt_series_store.html" title=" " alt="" coords="161,80,355,121"/>
-</map>

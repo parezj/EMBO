@@ -1,7 +1,0 @@
-<map id="QwtPlotZoomer" name="QwtPlotZoomer">
-<area shape="rect" id="node1" title="QwtPlotZoomer provides stacked zooming for a plot widget." alt="" coords="44,229,157,256"/>
-<area shape="rect" id="node2" href="$class_qwt_plot_picker.html" title="QwtPlotPicker provides selections on a plot canvas." alt="" coords="48,155,153,181"/>
-<area shape="rect" id="node3" href="$class_qwt_picker.html" title="QwtPicker provides selections on a widget." alt="" coords="59,80,142,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,76,32"/>
-<area shape="rect" id="node5" href="$class_qwt_event_pattern.html" title="A collection of event patterns." alt="" coords="100,5,221,32"/>
-</map>
