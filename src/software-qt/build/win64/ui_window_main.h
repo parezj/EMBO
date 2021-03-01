@@ -128,6 +128,11 @@ public:
         MainWindow->setSizePolicy(sizePolicy);
         MainWindow->setMinimumSize(QSize(800, 594));
         MainWindow->setMaximumSize(QSize(800, 594));
+        QFont font;
+        font.setFamily(QString::fromUtf8("Roboto"));
+        font.setItalic(false);
+        font.setKerning(true);
+        MainWindow->setFont(font);
         QIcon icon;
         icon.addFile(QString::fromUtf8("../logo/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         MainWindow->setWindowIcon(icon);
@@ -145,21 +150,29 @@ public:
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(groupBox_ports->sizePolicy().hasHeightForWidth());
         groupBox_ports->setSizePolicy(sizePolicy1);
-        QFont font;
-        font.setPointSize(10);
-        font.setBold(true);
-        font.setWeight(75);
-        groupBox_ports->setFont(font);
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Roboto Medium"));
+        font1.setPointSize(11);
+        font1.setBold(false);
+        font1.setItalic(false);
+        font1.setWeight(50);
+        font1.setKerning(true);
+        groupBox_ports->setFont(font1);
         listWidget_ports = new QListWidget(groupBox_ports);
+        new QListWidgetItem(listWidget_ports);
+        new QListWidgetItem(listWidget_ports);
         listWidget_ports->setObjectName(QString::fromUtf8("listWidget_ports"));
         listWidget_ports->setGeometry(QRect(10, 30, 201, 461));
         sizePolicy1.setHeightForWidth(listWidget_ports->sizePolicy().hasHeightForWidth());
         listWidget_ports->setSizePolicy(sizePolicy1);
-        QFont font1;
-        font1.setPointSize(12);
-        font1.setBold(false);
-        font1.setWeight(50);
-        listWidget_ports->setFont(font1);
+        QFont font2;
+        font2.setFamily(QString::fromUtf8("Roboto"));
+        font2.setPointSize(13);
+        font2.setBold(false);
+        font2.setItalic(false);
+        font2.setWeight(50);
+        font2.setKerning(true);
+        listWidget_ports->setFont(font2);
         listWidget_ports->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         listWidget_ports->setProperty("showDropIndicator", QVariant(false));
         listWidget_ports->setAlternatingRowColors(true);
@@ -167,40 +180,50 @@ public:
         pushButton_scan = new QPushButton(groupBox_ports);
         pushButton_scan->setObjectName(QString::fromUtf8("pushButton_scan"));
         pushButton_scan->setGeometry(QRect(10, 500, 81, 31));
-        pushButton_scan->setFont(font);
+        QFont font3;
+        font3.setFamily(QString::fromUtf8("Roboto"));
+        font3.setPointSize(11);
+        font3.setBold(false);
+        font3.setItalic(false);
+        font3.setWeight(50);
+        font3.setKerning(true);
+        pushButton_scan->setFont(font3);
         QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/resources/img/magnifying-glass.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        icon1.addFile(QString::fromUtf8(":/main/resources/img/magnifying-glass.svg"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_scan->setIcon(icon1);
         pushButton_connect = new QPushButton(groupBox_ports);
         pushButton_connect->setObjectName(QString::fromUtf8("pushButton_connect"));
         pushButton_connect->setEnabled(false);
         pushButton_connect->setGeometry(QRect(100, 500, 111, 31));
-        pushButton_connect->setFont(font);
+        pushButton_connect->setFont(font3);
         QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_connect->setIcon(icon2);
         pushButton_disconnect = new QPushButton(groupBox_ports);
         pushButton_disconnect->setObjectName(QString::fromUtf8("pushButton_disconnect"));
         pushButton_disconnect->setEnabled(true);
         pushButton_disconnect->setGeometry(QRect(100, 500, 111, 31));
-        pushButton_disconnect->setFont(font);
+        pushButton_disconnect->setFont(font3);
         QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/resources/img/power-off-red.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-red.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_disconnect->setIcon(icon3);
         label_deviceLogo = new QLabel(groupBox_ports);
         label_deviceLogo->setObjectName(QString::fromUtf8("label_deviceLogo"));
         label_deviceLogo->setGeometry(QRect(150, 450, 31, 31));
-        QFont font2;
-        font2.setPointSize(14);
-        font2.setBold(true);
-        font2.setWeight(75);
-        label_deviceLogo->setFont(font2);
+        QFont font4;
+        font4.setFamily(QString::fromUtf8("Roboto Medium"));
+        font4.setPointSize(14);
+        font4.setBold(true);
+        font4.setItalic(false);
+        font4.setWeight(75);
+        font4.setKerning(true);
+        label_deviceLogo->setFont(font4);
         label_deviceLogo->setPixmap(QPixmap(QString::fromUtf8("../icon/icon2.png")));
         label_deviceLogo->setScaledContents(true);
         label_cvutlogo = new QLabel(groupBox_ports);
         label_cvutlogo->setObjectName(QString::fromUtf8("label_cvutlogo"));
         label_cvutlogo->setGeometry(QRect(20, 410, 161, 71));
-        label_cvutlogo->setPixmap(QPixmap(QString::fromUtf8(":/resources/img/logo_cvut_en_doplnkova_verze.svg")));
+        label_cvutlogo->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/logo_cvut_en_doplnkova_verze.svg")));
         label_cvutlogo->setScaledContents(true);
         groupBox_device = new QGroupBox(centralwidget);
         groupBox_device->setObjectName(QString::fromUtf8("groupBox_device"));
@@ -210,87 +233,118 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(groupBox_device->sizePolicy().hasHeightForWidth());
         groupBox_device->setSizePolicy(sizePolicy2);
-        groupBox_device->setFont(font);
+        QFont font5;
+        font5.setFamily(QString::fromUtf8("Roboto"));
+        font5.setPointSize(10);
+        font5.setBold(false);
+        font5.setItalic(false);
+        font5.setWeight(50);
+        font5.setKerning(true);
+        groupBox_device->setFont(font5);
         label_deviceName = new QLabel(groupBox_device);
         label_deviceName->setObjectName(QString::fromUtf8("label_deviceName"));
-        label_deviceName->setGeometry(QRect(10, 20, 351, 21));
-        label_deviceName->setFont(font2);
+        label_deviceName->setGeometry(QRect(10, 20, 361, 21));
+        QFont font6;
+        font6.setFamily(QString::fromUtf8("Roboto Black"));
+        font6.setPointSize(14);
+        font6.setBold(true);
+        font6.setItalic(false);
+        font6.setWeight(75);
+        font6.setKerning(true);
+        label_deviceName->setFont(font6);
         label_boardImg = new QLabel(groupBox_device);
         label_boardImg->setObjectName(QString::fromUtf8("label_boardImg"));
         label_boardImg->setGeometry(QRect(360, 20, 181, 151));
-        label_boardImg->setFont(font2);
-        label_boardImg->setPixmap(QPixmap(QString::fromUtf8(":/resources/img/unknown2.png")));
+        QFont font7;
+        font7.setFamily(QString::fromUtf8("Roboto"));
+        font7.setPointSize(14);
+        font7.setBold(true);
+        font7.setItalic(false);
+        font7.setWeight(75);
+        font7.setKerning(true);
+        label_boardImg->setFont(font7);
+        label_boardImg->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/unknown2.png")));
         label_boardImg->setScaledContents(true);
         label = new QLabel(groupBox_device);
         label->setObjectName(QString::fromUtf8("label"));
-        label->setGeometry(QRect(20, 50, 141, 16));
-        QFont font3;
-        font3.setPointSize(10);
-        font3.setBold(false);
-        font3.setWeight(50);
-        label->setFont(font3);
+        label->setGeometry(QRect(10, 50, 141, 16));
+        label->setFont(font5);
         label->setTextFormat(Qt::AutoText);
         label_2 = new QLabel(groupBox_device);
         label_2->setObjectName(QString::fromUtf8("label_2"));
-        label_2->setGeometry(QRect(20, 70, 141, 16));
-        label_2->setFont(font3);
+        label_2->setGeometry(QRect(10, 70, 141, 16));
+        label_2->setFont(font5);
         label_2->setTextFormat(Qt::AutoText);
         label_3 = new QLabel(groupBox_device);
         label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(20, 90, 141, 16));
-        label_3->setFont(font3);
+        label_3->setGeometry(QRect(10, 90, 141, 16));
+        label_3->setFont(font5);
         label_3->setTextFormat(Qt::AutoText);
         label_4 = new QLabel(groupBox_device);
         label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setGeometry(QRect(20, 110, 141, 16));
-        label_4->setFont(font3);
+        label_4->setGeometry(QRect(10, 110, 141, 16));
+        label_4->setFont(font5);
         label_4->setTextFormat(Qt::AutoText);
         label_5 = new QLabel(groupBox_device);
         label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(20, 130, 141, 16));
-        label_5->setFont(font3);
+        label_5->setGeometry(QRect(10, 130, 141, 16));
+        label_5->setFont(font5);
         label_5->setTextFormat(Qt::AutoText);
         label_dev_fw = new QLabel(groupBox_device);
         label_dev_fw->setObjectName(QString::fromUtf8("label_dev_fw"));
         label_dev_fw->setGeometry(QRect(160, 50, 191, 20));
-        label_dev_fw->setFont(font3);
+        label_dev_fw->setFont(font5);
         label_dev_fw->setTextFormat(Qt::AutoText);
         label_dev_fcpu = new QLabel(groupBox_device);
         label_dev_fcpu->setObjectName(QString::fromUtf8("label_dev_fcpu"));
         label_dev_fcpu->setGeometry(QRect(160, 110, 191, 20));
-        label_dev_fcpu->setFont(font3);
+        label_dev_fcpu->setFont(font5);
         label_dev_fcpu->setTextFormat(Qt::AutoText);
         label_dev_comm = new QLabel(groupBox_device);
         label_dev_comm->setObjectName(QString::fromUtf8("label_dev_comm"));
         label_dev_comm->setGeometry(QRect(160, 130, 191, 20));
-        label_dev_comm->setFont(font3);
+        label_dev_comm->setFont(font5);
         label_dev_comm->setTextFormat(Qt::AutoText);
         label_dev_rtos = new QLabel(groupBox_device);
         label_dev_rtos->setObjectName(QString::fromUtf8("label_dev_rtos"));
         label_dev_rtos->setGeometry(QRect(160, 90, 191, 20));
-        label_dev_rtos->setFont(font3);
+        label_dev_rtos->setFont(font5);
         label_dev_rtos->setTextFormat(Qt::AutoText);
         label_dev_ll = new QLabel(groupBox_device);
         label_dev_ll->setObjectName(QString::fromUtf8("label_dev_ll"));
         label_dev_ll->setGeometry(QRect(160, 70, 191, 20));
-        label_dev_ll->setFont(font3);
+        label_dev_ll->setFont(font5);
         label_dev_ll->setTextFormat(Qt::AutoText);
         label_7 = new QLabel(groupBox_device);
         label_7->setObjectName(QString::fromUtf8("label_7"));
-        label_7->setGeometry(QRect(20, 150, 141, 16));
-        label_7->setFont(font3);
+        label_7->setGeometry(QRect(10, 150, 141, 16));
+        label_7->setFont(font5);
         label_7->setTextFormat(Qt::AutoText);
         label_dev_vref = new QLabel(groupBox_device);
         label_dev_vref->setObjectName(QString::fromUtf8("label_dev_vref"));
         label_dev_vref->setGeometry(QRect(160, 150, 191, 20));
-        label_dev_vref->setFont(font3);
+        label_dev_vref->setFont(font5);
         label_dev_vref->setTextFormat(Qt::AutoText);
+        label_boardImg->raise();
+        label->raise();
+        label_2->raise();
+        label_3->raise();
+        label_4->raise();
+        label_5->raise();
+        label_dev_fw->raise();
+        label_dev_fcpu->raise();
+        label_dev_comm->raise();
+        label_dev_rtos->raise();
+        label_dev_ll->raise();
+        label_7->raise();
+        label_dev_vref->raise();
+        label_deviceName->raise();
         groupBox_instr1 = new QGroupBox(centralwidget);
         groupBox_instr1->setObjectName(QString::fromUtf8("groupBox_instr1"));
         groupBox_instr1->setGeometry(QRect(240, 180, 551, 181));
         sizePolicy2.setHeightForWidth(groupBox_instr1->sizePolicy().hasHeightForWidth());
         groupBox_instr1->setSizePolicy(sizePolicy2);
-        groupBox_instr1->setFont(font);
+        groupBox_instr1->setFont(font1);
         groupBox_scope = new QGroupBox(groupBox_instr1);
         groupBox_scope->setObjectName(QString::fromUtf8("groupBox_scope"));
         groupBox_scope->setGeometry(QRect(10, 20, 171, 151));
@@ -298,11 +352,13 @@ public:
         pushButton_scope = new QPushButton(groupBox_scope);
         pushButton_scope->setObjectName(QString::fromUtf8("pushButton_scope"));
         pushButton_scope->setGeometry(QRect(0, 110, 171, 41));
-        QFont font4;
-        font4.setPointSize(12);
-        font4.setBold(true);
-        font4.setWeight(75);
-        pushButton_scope->setFont(font4);
+        QFont font8;
+        font8.setFamily(QString::fromUtf8("Roboto Medium"));
+        font8.setPointSize(13);
+        font8.setBold(false);
+        font8.setWeight(50);
+        font8.setKerning(false);
+        pushButton_scope->setFont(font8);
         pushButton_scope->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
@@ -327,16 +383,12 @@ public:
 "	color:white;\n"
 "}"));
         QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/resources/img/scope.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        icon4.addFile(QString::fromUtf8(":/main/resources/img/scope.svg"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_scope->setIcon(icon4);
         pushButton_scope->setIconSize(QSize(22, 22));
         label_6 = new QLabel(groupBox_scope);
         label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(10, 10, 61, 16));
-        QFont font5;
-        font5.setPointSize(9);
-        font5.setBold(false);
-        font5.setWeight(50);
         label_6->setFont(font5);
         label_6->setTextFormat(Qt::AutoText);
         label_8 = new QLabel(groupBox_scope);
@@ -391,7 +443,7 @@ public:
         pushButton_la = new QPushButton(groupBox_la);
         pushButton_la->setObjectName(QString::fromUtf8("pushButton_la"));
         pushButton_la->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_la->setFont(font4);
+        pushButton_la->setFont(font8);
         pushButton_la->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
@@ -416,7 +468,7 @@ public:
 "	color:white;\n"
 "}"));
         QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/resources/img/la.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon5.addFile(QString::fromUtf8(":/main/resources/img/la.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_la->setIcon(icon5);
         pushButton_la->setIconSize(QSize(21, 21));
         label_11 = new QLabel(groupBox_la);
@@ -437,9 +489,7 @@ public:
         label_39 = new QLabel(groupBox_la);
         label_39->setObjectName(QString::fromUtf8("label_39"));
         label_39->setGeometry(QRect(10, 70, 61, 16));
-        QFont font6;
-        font6.setPointSize(9);
-        label_39->setFont(font6);
+        label_39->setFont(font5);
         label_39->setTextFormat(Qt::AutoText);
         label_la_pins = new QLabel(groupBox_la);
         label_la_pins->setObjectName(QString::fromUtf8("label_la_pins"));
@@ -468,7 +518,7 @@ public:
         pushButton_vm = new QPushButton(groupBox_vm);
         pushButton_vm->setObjectName(QString::fromUtf8("pushButton_vm"));
         pushButton_vm->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_vm->setFont(font4);
+        pushButton_vm->setFont(font8);
         pushButton_vm->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
@@ -493,7 +543,7 @@ public:
 "	color:white;\n"
 "}"));
         QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/resources/img/vm.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon6.addFile(QString::fromUtf8(":/main/resources/img/vm.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_vm->setIcon(icon6);
         pushButton_vm->setIconSize(QSize(22, 22));
         label_15 = new QLabel(groupBox_vm);
@@ -514,26 +564,26 @@ public:
         label_38 = new QLabel(groupBox_vm);
         label_38->setObjectName(QString::fromUtf8("label_38"));
         label_38->setGeometry(QRect(10, 70, 51, 16));
-        label_38->setFont(font6);
+        label_38->setFont(font5);
         label_38->setTextFormat(Qt::AutoText);
         label_vm_fs = new QLabel(groupBox_vm);
         label_vm_fs->setObjectName(QString::fromUtf8("label_vm_fs"));
-        label_vm_fs->setGeometry(QRect(90, 10, 71, 16));
+        label_vm_fs->setGeometry(QRect(70, 10, 91, 20));
         label_vm_fs->setFont(font5);
         label_vm_fs->setTextFormat(Qt::AutoText);
         label_vm_mem = new QLabel(groupBox_vm);
         label_vm_mem->setObjectName(QString::fromUtf8("label_vm_mem"));
-        label_vm_mem->setGeometry(QRect(90, 30, 71, 16));
+        label_vm_mem->setGeometry(QRect(70, 30, 91, 20));
         label_vm_mem->setFont(font5);
         label_vm_mem->setTextFormat(Qt::AutoText);
         label_vm_bits = new QLabel(groupBox_vm);
         label_vm_bits->setObjectName(QString::fromUtf8("label_vm_bits"));
-        label_vm_bits->setGeometry(QRect(90, 50, 71, 16));
+        label_vm_bits->setGeometry(QRect(70, 50, 91, 20));
         label_vm_bits->setFont(font5);
         label_vm_bits->setTextFormat(Qt::AutoText);
         label_vm_pins = new QLabel(groupBox_vm);
         label_vm_pins->setObjectName(QString::fromUtf8("label_vm_pins"));
-        label_vm_pins->setGeometry(QRect(90, 70, 71, 16));
+        label_vm_pins->setGeometry(QRect(70, 70, 91, 20));
         label_vm_pins->setFont(font5);
         label_vm_pins->setTextFormat(Qt::AutoText);
         groupBox_instr2 = new QGroupBox(centralwidget);
@@ -541,7 +591,7 @@ public:
         groupBox_instr2->setGeometry(QRect(240, 360, 551, 181));
         sizePolicy2.setHeightForWidth(groupBox_instr2->sizePolicy().hasHeightForWidth());
         groupBox_instr2->setSizePolicy(sizePolicy2);
-        groupBox_instr2->setFont(font);
+        groupBox_instr2->setFont(font1);
         groupBox_pwm = new QGroupBox(groupBox_instr2);
         groupBox_pwm->setObjectName(QString::fromUtf8("groupBox_pwm"));
         groupBox_pwm->setGeometry(QRect(190, 20, 171, 151));
@@ -549,7 +599,7 @@ public:
         pushButton_pwm = new QPushButton(groupBox_pwm);
         pushButton_pwm->setObjectName(QString::fromUtf8("pushButton_pwm"));
         pushButton_pwm->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_pwm->setFont(font4);
+        pushButton_pwm->setFont(font8);
         pushButton_pwm->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
@@ -574,7 +624,7 @@ public:
 "	color:white;\n"
 "}"));
         QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/resources/img/pwm.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon7.addFile(QString::fromUtf8(":/main/resources/img/pwm.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_pwm->setIcon(icon7);
         pushButton_pwm->setIconSize(QSize(21, 21));
         label_19 = new QLabel(groupBox_pwm);
@@ -585,7 +635,7 @@ public:
         label_35 = new QLabel(groupBox_pwm);
         label_35->setObjectName(QString::fromUtf8("label_35"));
         label_35->setGeometry(QRect(10, 30, 71, 16));
-        label_35->setFont(font6);
+        label_35->setFont(font5);
         label_35->setTextFormat(Qt::AutoText);
         label_pwm_pins = new QLabel(groupBox_pwm);
         label_pwm_pins->setObjectName(QString::fromUtf8("label_pwm_pins"));
@@ -604,7 +654,7 @@ public:
         pushButton_sgen = new QPushButton(groupBox_sgen);
         pushButton_sgen->setObjectName(QString::fromUtf8("pushButton_sgen"));
         pushButton_sgen->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_sgen->setFont(font4);
+        pushButton_sgen->setFont(font8);
         pushButton_sgen->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
@@ -629,9 +679,9 @@ public:
 "	color:white;\n"
 "}"));
         QIcon icon8;
-        icon8.addFile(QString::fromUtf8(":/resources/img/sgen.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        icon8.addFile(QString::fromUtf8(":/main/resources/img/sgen.svg"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_sgen->setIcon(icon8);
-        pushButton_sgen->setIconSize(QSize(21, 21));
+        pushButton_sgen->setIconSize(QSize(20, 21));
         label_27 = new QLabel(groupBox_sgen);
         label_27->setObjectName(QString::fromUtf8("label_27"));
         label_27->setGeometry(QRect(10, 10, 71, 16));
@@ -645,7 +695,7 @@ public:
         label_36 = new QLabel(groupBox_sgen);
         label_36->setObjectName(QString::fromUtf8("label_36"));
         label_36->setGeometry(QRect(10, 50, 71, 16));
-        label_36->setFont(font6);
+        label_36->setFont(font5);
         label_36->setTextFormat(Qt::AutoText);
         label_sgen_pins = new QLabel(groupBox_sgen);
         label_sgen_pins->setObjectName(QString::fromUtf8("label_sgen_pins"));
@@ -669,7 +719,7 @@ public:
         pushButton_cntr = new QPushButton(groupBox_cntr);
         pushButton_cntr->setObjectName(QString::fromUtf8("pushButton_cntr"));
         pushButton_cntr->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_cntr->setFont(font4);
+        pushButton_cntr->setFont(font8);
         pushButton_cntr->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
@@ -694,23 +744,23 @@ public:
 "	color:white;\n"
 "}"));
         QIcon icon9;
-        icon9.addFile(QString::fromUtf8(":/resources/img/cntr.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon9.addFile(QString::fromUtf8(":/main/resources/img/cntr.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_cntr->setIcon(icon9);
         pushButton_cntr->setIconSize(QSize(21, 21));
         label_37 = new QLabel(groupBox_cntr);
         label_37->setObjectName(QString::fromUtf8("label_37"));
         label_37->setGeometry(QRect(10, 50, 71, 16));
-        label_37->setFont(font6);
+        label_37->setFont(font5);
         label_37->setTextFormat(Qt::AutoText);
         label_32 = new QLabel(groupBox_cntr);
         label_32->setObjectName(QString::fromUtf8("label_32"));
         label_32->setGeometry(QRect(10, 10, 71, 16));
-        label_32->setFont(font6);
+        label_32->setFont(font5);
         label_32->setTextFormat(Qt::AutoText);
         label_34 = new QLabel(groupBox_cntr);
         label_34->setObjectName(QString::fromUtf8("label_34"));
         label_34->setGeometry(QRect(10, 30, 71, 16));
-        label_34->setFont(font6);
+        label_34->setFont(font5);
         label_34->setTextFormat(Qt::AutoText);
         label_cntr_freq = new QLabel(groupBox_cntr);
         label_cntr_freq->setObjectName(QString::fromUtf8("label_cntr_freq"));
@@ -735,8 +785,13 @@ public:
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
-        menubar->setFont(font6);
+        menubar->setGeometry(QRect(0, 0, 800, 20));
+        QFont font9;
+        font9.setFamily(QString::fromUtf8("Roboto"));
+        font9.setPointSize(9);
+        font9.setItalic(false);
+        font9.setKerning(true);
+        menubar->setFont(font9);
         menuFile = new QMenu(menubar);
         menuFile->setObjectName(QString::fromUtf8("menuFile"));
         menuAbout = new QMenu(menubar);
@@ -744,9 +799,12 @@ public:
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        QFont font7;
-        font7.setPointSize(8);
-        statusbar->setFont(font7);
+        QFont font10;
+        font10.setFamily(QString::fromUtf8("Roboto"));
+        font10.setPointSize(8);
+        font10.setItalic(false);
+        font10.setKerning(true);
+        statusbar->setFont(font10);
         MainWindow->setStatusBar(statusbar);
 
         menubar->addAction(menuFile->menuAction());
@@ -771,6 +829,15 @@ public:
         actionOpen->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+O", nullptr));
 #endif // QT_CONFIG(shortcut)
         groupBox_ports->setTitle(QCoreApplication::translate("MainWindow", "Devices", nullptr));
+
+        const bool __sortingEnabled = listWidget_ports->isSortingEnabled();
+        listWidget_ports->setSortingEnabled(false);
+        QListWidgetItem *___qlistwidgetitem = listWidget_ports->item(0);
+        ___qlistwidgetitem->setText(QCoreApplication::translate("MainWindow", "COM1", nullptr));
+        QListWidgetItem *___qlistwidgetitem1 = listWidget_ports->item(1);
+        ___qlistwidgetitem1->setText(QCoreApplication::translate("MainWindow", "COM15", nullptr));
+        listWidget_ports->setSortingEnabled(__sortingEnabled);
+
 #if QT_CONFIG(accessibility)
         listWidget_ports->setAccessibleName(QString());
 #endif // QT_CONFIG(accessibility)
@@ -782,10 +849,10 @@ public:
         groupBox_device->setTitle(QString());
         label_deviceName->setText(QCoreApplication::translate("MainWindow", "NOT CONNECTED", nullptr));
         label_boardImg->setText(QString());
-        label->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Firmware Version:", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "\342\200\242 STM LL Version:", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "\342\200\242 FreeRTOS Version:", nullptr));
-        label_4->setText(QCoreApplication::translate("MainWindow", "\342\200\242 CPU Frequency:", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Firmware version:", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "\342\200\242 STM LL version:", nullptr));
+        label_3->setText(QCoreApplication::translate("MainWindow", "\342\200\242 FreeRTOS version:", nullptr));
+        label_4->setText(QCoreApplication::translate("MainWindow", "\342\200\242 CPU frequency:", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Communication:", nullptr));
         label_dev_fw->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
         label_dev_fcpu->setText(QCoreApplication::translate("MainWindow", "-", nullptr));

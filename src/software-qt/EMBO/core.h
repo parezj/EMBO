@@ -18,7 +18,8 @@
 #define TIMER_COMM      20
 #define TIMER_RENDER    25
 
-#define INVALID_MSG     "Invalid message!"
+#define INVALID_MSG     "Invalid message! "
+#define COMM_FATAL_ERR  "Communication fatal error! "
 
 /******************************** Protocol ********************************/
 
@@ -64,35 +65,35 @@ class Msg_Idn : public Msg
 {
 public:
     explicit Msg_Idn(QObject* parent=0) : Msg(EMBO_IDN, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_Rst : public Msg
 {
 public:
     explicit Msg_Rst(QObject* parent=0) : Msg(EMBO_RST, false, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_SYS_Lims : public Msg
 {
 public:
     explicit Msg_SYS_Lims(QObject* parent=0) : Msg(EMBO_SYS_LIMS, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_SYS_Info : public Msg
 {
 public:
     explicit Msg_SYS_Info(QObject* parent=0) : Msg(EMBO_SYS_INFO, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_SYS_Mode : public Msg
 {
 public:
     explicit Msg_SYS_Mode(QObject* parent=0) : Msg(EMBO_SYS_MODE, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 /***************************** Messages - VM ****************************/
@@ -101,7 +102,7 @@ class Msg_VM_Read : public Msg
 {
 public:
     explicit Msg_VM_Read(QObject* parent=0) : Msg(EMBO_VM_READ, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 /***************************** Messages - SCOP **************************/
@@ -110,28 +111,28 @@ class Msg_SCOP_Read : public Msg
 {
 public:
     explicit Msg_SCOP_Read(QObject* parent=0) : Msg(EMBO_SCOP_READ, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_SCOP_Set : public Msg
 {
 public:
     explicit Msg_SCOP_Set(QObject* parent=0) : Msg(EMBO_SCOP_SET, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_SCOP_ForceTrig : public Msg
 {
 public:
     explicit Msg_SCOP_ForceTrig(QObject* parent=0) : Msg(EMBO_SCOP_FORCETRIG, false, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_SCOP_Average : public Msg
 {
 public:
     explicit Msg_SCOP_Average(QObject* parent=0) : Msg(EMBO_SCOP_AVERAGE, false, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 /***************************** Messages - LA ****************************/
@@ -140,21 +141,21 @@ class Msg_LA_Read : public Msg
 {
 public:
     explicit Msg_LA_Read(QObject* parent=0) : Msg(EMBO_LA_READ, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_LA_Set : public Msg
 {
 public:
     explicit Msg_LA_Set(QObject* parent=0) : Msg(EMBO_LA_SET, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_LA_ForceTrig : public Msg
 {
 public:
     explicit Msg_LA_ForceTrig(QObject* parent=0) : Msg(EMBO_LA_FORCETRIG, false, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 /***************************** Messages - CNTR **************************/
@@ -163,14 +164,14 @@ class Msg_CNTR_Enable : public Msg
 {
 public:
     explicit Msg_CNTR_Enable(QObject* parent=0) : Msg(EMBO_CNTR_ENABLE, false, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 class Msg_CNTR_Read : public Msg
 {
 public:
     explicit Msg_CNTR_Read(QObject* parent=0) : Msg(EMBO_CNTR_READ, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 /***************************** Messages - SGEN **************************/
@@ -179,7 +180,7 @@ class Msg_SGEN_Set : public Msg
 {
 public:
     explicit Msg_SGEN_Set(QObject* parent=0) : Msg(EMBO_SGEN_SET, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 /***************************** Messages - PWM ***************************/
@@ -188,7 +189,7 @@ class Msg_PWM_Set : public Msg
 {
 public:
     explicit Msg_PWM_Set(QObject* parent=0) : Msg(EMBO_PWM_SET, true, parent) {};
-    virtual void on_dataRx();
+    virtual void on_dataRx() override;
 };
 
 /********************************* Core *********************************/

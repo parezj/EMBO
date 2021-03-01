@@ -10,11 +10,16 @@
 #include "settings.h"
 
 #include <QDebug>
+#include <QDir>
+#include <QUrl>
+#include <QDesktopServices>
+#include <QDirIterator>
 #include <QLabel>
 #include <QGridLayout>
 #include <QStatusBar>
 #include <QMessageBox>
 #include <QListView>
+#include <QSpacerItem>
 #include <QFontDatabase>
 #include <QThread>
 #include <QSettings>
@@ -52,52 +57,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Main
     m_ui->groupBox_sgen->hide();
     m_ui->groupBox_cntr->hide();
 
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Bold.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Light.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Medium.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Regular.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Display-Semibold.otf");
+    QStringList addedFonts = addFontsFromResources();
+    for ( const QString& font : addedFonts )
+        qInfo() << "Added font: " << font;
 
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Bold.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Light.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Medium.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Regular.otf");
-    QFontDatabase::addApplicationFont(":/resources/fonts/SF-UI-Text-Semibold.otf");
+    //QFont font("Roboto");
+    //QApplication::setFont(font);
 
-    QFont font("SF UI Display");
-    font.setStyleHint(QFont::Monospace);
-    QApplication::setFont(font);
-
-    QWidget* widget = new QWidget();
-    QFont font1( "SF UI Display", 10, QFont::Normal);
-    m_status_icon = new QLabel(this);
-    QLabel* status_txt = new QLabel(" Disconnected");
-    QLabel* status_author = new QLabel("CTU FEE - Jakub Pařez 2021 ");
-
-    m_img_plugOn = QPixmap(":/resources/img/plug_on.png");
-    m_img_plugOff= QPixmap(":/resources/img/plug_off.png");
-    m_img_bluepill = QPixmap(":/resources/img/bluepill2.png");
-    m_img_nucleoF303 = QPixmap(":/resources/img/nucleo-f303.png");
-    m_img_unknown = QPixmap(":/resources/img/unknown2.png");
-
-    m_status_icon->setPixmap(m_img_plugOff);
-    m_status_icon->setFixedWidth(15);
-    m_status_icon->setFixedHeight(18);
-    m_status_icon->setScaledContents(true);
-
-    status_txt->setObjectName("status_txt");
-    status_author->setObjectName("status_author");
-    status_txt->setFont(font1);
-    status_author->setFont(font1);
-
-    QGridLayout * layout = new QGridLayout(widget);
-    layout->addWidget(m_status_icon,0,0,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_txt,0,1,1,1,Qt::AlignVCenter | Qt::AlignLeft);
-    layout->addWidget(status_author,0,2,1,1,Qt::AlignVCenter | Qt::AlignRight);
-    layout->setMargin(0);
-    layout->setSpacing(0);
-    m_ui->statusbar->addWidget(widget,1);
-    m_ui->statusbar->setSizeGripEnabled(false);
+    statusBarLoad();
 
     QString style1 = "QGroupBox {background-color: rgb(238,238,238);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \
                       QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}";
@@ -126,24 +93,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Main
 MainWindow::~MainWindow()
 {
     delete m_ui;
-    delete Core::getInstance();
 }
 
-void MainWindow::loadSettings()
-{
-  QString port_saved = Settings::getValue("main/port", "").toString();
-
-  for(int i = 0; i < m_ui->listWidget_ports->count(); ++i)
-  {
-      if (m_ui->listWidget_ports->item(i)->text() == port_saved)
-          m_ui->listWidget_ports->setCurrentRow(i);
-  }
-}
-
-void MainWindow::saveSettings()
-{
-    Settings::setValue("main/port", m_ui->listWidget_ports->currentIndex().data().toString());
-}
+/* slots */
 
 void MainWindow::on_close()
 {
@@ -188,8 +140,8 @@ void MainWindow::on_pushButton_connect_clicked()
     m_ui->pushButton_connect->setText("Wait");
     m_ui->pushButton_connect->setEnabled(false);
 
-    QLabel *status_txt = m_ui->statusbar->findChild<QLabel*>("status_txt");
-    status_txt->setText(" Connecting...");
+    QLabel *status_comm = m_ui->statusbar->findChild<QLabel*>("status_comm");
+    status_comm->setText(" Connecting...");
 
     QString selPort = m_ui->listWidget_ports->currentIndex().data().toString();
     saveSettings();
@@ -205,14 +157,116 @@ void MainWindow::on_pushButton_disconnect_clicked()
     emit close();
 }
 
+void MainWindow::on_coreState_changed(const State newState)
+{
+    if (newState == CONNECTED)
+    {
+        setConnected();
+    }
+    else if (newState == DISCONNECTED)
+    {
+        setDisconnected();
+    }
+    m_state_old = newState;
+}
+
+void MainWindow::on_coreError_happend(const QString name)
+{
+    QMessageBox msg("EMBO", name,
+                   QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default,
+                   QMessageBox::NoButton, QMessageBox::NoButton);
+    msg.setWindowIcon(QIcon(":/main/resources/img/icon.png"));
+    msg.exec();
+}
+
+/* private */
+
+void MainWindow::statusBarLoad()
+{
+    m_status_icon_comm = new QLabel(this);
+    QLabel* status_comm = new QLabel(" Disconnected ");
+    QSpacerItem* status_spacer = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
+    QLabel* status_ctu = new QLabel("CTU FEE - 2021  ");
+    QLabel* status_icon_jp = new QLabel(this);
+    QLabel* status_author = new QLabel("&nbsp;&nbsp;<a href='https://www.jakubparez.com' style='color:black'>Jakub Pařez</a> ");
+    status_author->connect(status_author, &QLabel::linkActivated, [](const QString &link) {
+        QDesktopServices::openUrl(QUrl(link));
+    });
+
+    QWidget* widget = new QWidget();
+    QFont font1("Roboto", 11, QFont::Normal);
+
+    status_comm->setObjectName("status_comm");
+    status_comm->setFont(font1);
+    status_ctu->setFont(font1);
+    status_author->setFont(font1);
+
+    m_icon_plugOn = QPixmap(":/main/resources/img/plug_on.png");
+    m_icon_plugOff = QPixmap(":/main/resources/img/plug_off.png");
+    m_img_bluepill = QPixmap(":/main/resources/img/bluepill2.png");
+    m_img_nucleoF303 = QPixmap(":/main/resources/img/nucleo-f303.png");
+    m_img_unknown = QPixmap(":/main/resources/img/unknown2.png");
+    QPixmap icon_jp = QPixmap(":/main/resources/img/jp.png");
+
+    m_status_icon_comm->setPixmap(m_icon_plugOff);
+    m_status_icon_comm->setFixedWidth(15);
+    m_status_icon_comm->setFixedHeight(18);
+    m_status_icon_comm->setScaledContents(true);
+    status_icon_jp->setPixmap(icon_jp);
+    status_icon_jp->setFixedWidth(17);
+    status_icon_jp->setFixedHeight(17);
+    status_icon_jp->setScaledContents(true);
+
+    QGridLayout * layout = new QGridLayout(widget);
+    layout->addWidget(m_status_icon_comm,0,0,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_comm,0,1,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addItem(status_spacer,0,2,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_ctu,0,3,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_icon_jp,0,4,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_author,0,5,1,1,Qt::AlignVCenter);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    m_ui->statusbar->addWidget(widget,1);
+    m_ui->statusbar->setSizeGripEnabled(false);
+}
+
+QStringList MainWindow::addFontsFromResources(const QStringList& filters)
+{
+    QStringList addedFonts;
+    QDirIterator iter(QStringLiteral(":/fonts"), filters, QDir::Files|QDir::Readable, QDirIterator::Subdirectories);
+    while (iter.hasNext())
+    {
+        const QString& entry = iter.next();
+        if ( QFontDatabase::addApplicationFont(entry) >= 0 )
+            addedFonts << entry;
+    }
+    return addedFonts;
+}
+
+void MainWindow::loadSettings()
+{
+  QString port_saved = Settings::getValue("main/port", "").toString();
+
+  for(int i = 0; i < m_ui->listWidget_ports->count(); ++i)
+  {
+      if (m_ui->listWidget_ports->item(i)->text() == port_saved)
+          m_ui->listWidget_ports->setCurrentRow(i);
+  }
+}
+
+void MainWindow::saveSettings()
+{
+    Settings::setValue("main/port", m_ui->listWidget_ports->currentIndex().data().toString());
+}
+
 void MainWindow::setConnected()
 {
     m_ui->pushButton_connect->hide();
     m_ui->pushButton_disconnect->show();
 
-    QLabel *status_txt = m_ui->statusbar->findChild<QLabel*>("status_txt");
-    status_txt->setText(" Connected (" + Core::getInstance()->getPort() + ")");
-    m_status_icon->setPixmap(m_img_plugOn);
+    QLabel *status_comm = m_ui->statusbar->findChild<QLabel*>("status_comm");
+    status_comm->setText(" Connected (" + Core::getInstance()->getPort() + ")");
+    m_status_icon_comm->setPixmap(m_icon_plugOn);
     m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
 
     m_ui->groupBox_scope->show();
@@ -280,9 +334,9 @@ void MainWindow::setDisconnected()
     m_ui->pushButton_disconnect->hide();
     m_ui->pushButton_connect->show();
 
-    QLabel *status_txt = m_ui->statusbar->findChild<QLabel*>("status_txt");
-    status_txt->setText(" Disconnected");
-    m_status_icon->setPixmap(m_img_plugOff);
+    QLabel *status_comm = m_ui->statusbar->findChild<QLabel*>("status_comm");
+    status_comm->setText(" Disconnected");
+    m_status_icon_comm->setPixmap(m_icon_plugOff);
 
     m_ui->listWidget_ports->setEnabled(true);
     m_ui->pushButton_scan->setEnabled(true);
@@ -332,24 +386,3 @@ void MainWindow::setDisconnected()
     m_connected = false;
 }
 
-void MainWindow::on_coreState_changed(const State newState)
-{
-    if (newState == CONNECTED)
-    {
-        setConnected();
-    }
-    else if (newState == DISCONNECTED)
-    {
-        setDisconnected();
-    }
-    m_state_old = newState;
-}
-
-void MainWindow::on_coreError_happend(const QString name)
-{
-    QMessageBox msg("EMBO", name,
-                   QMessageBox::Warning, QMessageBox::Ok | QMessageBox::Default,
-                   QMessageBox::NoButton, QMessageBox::NoButton);
-    msg.setWindowIcon(QIcon(":/resources/img/icon.png"));
-    msg.exec();
-}

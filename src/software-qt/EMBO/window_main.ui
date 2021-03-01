@@ -28,6 +28,13 @@
     <height>594</height>
    </size>
   </property>
+  <property name="font">
+   <font>
+    <family>Roboto</family>
+    <italic>false</italic>
+    <kerning>true</kerning>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>EMBO - EMBedded Oscilloscope</string>
   </property>
@@ -53,9 +60,12 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Roboto Medium</family>
+      <pointsize>11</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="title">
@@ -78,9 +88,12 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>12</pointsize>
+       <family>Roboto</family>
+       <pointsize>13</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="accessibleName">
@@ -98,6 +111,16 @@
      <property name="sortingEnabled">
       <bool>false</bool>
      </property>
+     <item>
+      <property name="text">
+       <string>COM1</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>COM15</string>
+      </property>
+     </item>
     </widget>
     <widget class="QPushButton" name="pushButton_scan">
      <property name="geometry">
@@ -110,9 +133,12 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -120,7 +146,7 @@
      </property>
      <property name="icon">
       <iconset resource="resources.qrc">
-       <normaloff>:/resources/img/magnifying-glass.svg</normaloff>:/resources/img/magnifying-glass.svg</iconset>
+       <normaloff>:/main/resources/img/magnifying-glass.svg</normaloff>:/main/resources/img/magnifying-glass.svg</iconset>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_connect">
@@ -137,9 +163,12 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -147,7 +176,7 @@
      </property>
      <property name="icon">
       <iconset resource="resources.qrc">
-       <normaloff>:/resources/img/power-off-green3.png</normaloff>:/resources/img/power-off-green3.png</iconset>
+       <normaloff>:/main/resources/img/power-off-green3.png</normaloff>:/main/resources/img/power-off-green3.png</iconset>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_disconnect">
@@ -164,9 +193,12 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
+       <weight>50</weight>
+       <italic>false</italic>
+       <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -174,7 +206,7 @@
      </property>
      <property name="icon">
       <iconset resource="resources.qrc">
-       <normaloff>:/resources/img/power-off-red.png</normaloff>:/resources/img/power-off-red.png</iconset>
+       <normaloff>:/main/resources/img/power-off-red.png</normaloff>:/main/resources/img/power-off-red.png</iconset>
      </property>
     </widget>
     <widget class="QLabel" name="label_deviceLogo">
@@ -188,9 +220,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto Medium</family>
        <pointsize>14</pointsize>
        <weight>75</weight>
+       <italic>false</italic>
        <bold>true</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -216,7 +251,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="resources.qrc">:/resources/img/logo_cvut_en_doplnkova_verze.svg</pixmap>
+      <pixmap resource="resources.qrc">:/main/resources/img/logo_cvut_en_doplnkova_verze.svg</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -240,9 +275,12 @@
     </property>
     <property name="font">
      <font>
+      <family>Roboto</family>
       <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="title">
@@ -253,15 +291,18 @@
       <rect>
        <x>10</x>
        <y>20</y>
-       <width>351</width>
+       <width>361</width>
        <height>21</height>
       </rect>
      </property>
      <property name="font">
       <font>
+       <family>Roboto Black</family>
        <pointsize>14</pointsize>
        <weight>75</weight>
+       <italic>false</italic>
        <bold>true</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -279,16 +320,19 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>14</pointsize>
        <weight>75</weight>
+       <italic>false</italic>
        <bold>true</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="resources.qrc">:/resources/img/unknown2.png</pixmap>
+      <pixmap resource="resources.qrc">:/main/resources/img/unknown2.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -297,7 +341,7 @@
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>50</y>
        <width>141</width>
        <height>16</height>
@@ -305,13 +349,16 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
-      <string>• Firmware Version:</string>
+      <string>• Firmware version:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -320,7 +367,7 @@
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>70</y>
        <width>141</width>
        <height>16</height>
@@ -328,13 +375,16 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
-      <string>• STM LL Version:</string>
+      <string>• STM LL version:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -343,7 +393,7 @@
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>90</y>
        <width>141</width>
        <height>16</height>
@@ -351,13 +401,16 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
-      <string>• FreeRTOS Version:</string>
+      <string>• FreeRTOS version:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -366,7 +419,7 @@
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>110</y>
        <width>141</width>
        <height>16</height>
@@ -374,13 +427,16 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
-      <string>• CPU Frequency:</string>
+      <string>• CPU frequency:</string>
      </property>
      <property name="textFormat">
       <enum>Qt::AutoText</enum>
@@ -389,7 +445,7 @@
     <widget class="QLabel" name="label_5">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>130</y>
        <width>141</width>
        <height>16</height>
@@ -397,9 +453,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -420,9 +479,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -443,9 +505,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -466,9 +531,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -489,9 +557,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -512,9 +583,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -527,7 +601,7 @@
     <widget class="QLabel" name="label_7">
      <property name="geometry">
       <rect>
-       <x>20</x>
+       <x>10</x>
        <y>150</y>
        <width>141</width>
        <height>16</height>
@@ -535,9 +609,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -558,9 +635,12 @@
      </property>
      <property name="font">
       <font>
+       <family>Roboto</family>
        <pointsize>10</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="text">
@@ -570,6 +650,20 @@
       <enum>Qt::AutoText</enum>
      </property>
     </widget>
+    <zorder>label_boardImg</zorder>
+    <zorder>label</zorder>
+    <zorder>label_2</zorder>
+    <zorder>label_3</zorder>
+    <zorder>label_4</zorder>
+    <zorder>label_5</zorder>
+    <zorder>label_dev_fw</zorder>
+    <zorder>label_dev_fcpu</zorder>
+    <zorder>label_dev_comm</zorder>
+    <zorder>label_dev_rtos</zorder>
+    <zorder>label_dev_ll</zorder>
+    <zorder>label_7</zorder>
+    <zorder>label_dev_vref</zorder>
+    <zorder>label_deviceName</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_instr1">
     <property name="geometry">
@@ -588,9 +682,12 @@
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Roboto Medium</family>
+      <pointsize>11</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="title">
@@ -607,9 +704,12 @@
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="title">
@@ -626,9 +726,11 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <family>Roboto Medium</family>
+        <pointsize>13</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+        <kerning>false</kerning>
        </font>
       </property>
       <property name="styleSheet">
@@ -661,7 +763,7 @@ QPushButton:pressed
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
-        <normaloff>:/resources/img/scope.svg</normaloff>:/resources/img/scope.svg</iconset>
+        <normaloff>:/main/resources/img/scope.svg</normaloff>:/main/resources/img/scope.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -681,9 +783,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -704,9 +809,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -727,9 +835,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -750,9 +861,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -773,9 +887,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -796,9 +913,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -819,9 +939,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -842,9 +965,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -865,9 +991,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -888,9 +1017,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -912,9 +1044,12 @@ QPushButton:pressed
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="title">
@@ -931,9 +1066,11 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <family>Roboto Medium</family>
+        <pointsize>13</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+        <kerning>false</kerning>
        </font>
       </property>
       <property name="styleSheet">
@@ -966,7 +1103,7 @@ QPushButton:pressed
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
-        <normaloff>:/resources/img/la.png</normaloff>:/resources/img/la.png</iconset>
+        <normaloff>:/main/resources/img/la.png</normaloff>:/main/resources/img/la.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -986,9 +1123,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1009,9 +1149,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1032,9 +1175,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1055,7 +1201,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1076,9 +1227,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1099,9 +1253,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1122,9 +1279,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1145,9 +1305,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1169,9 +1332,12 @@ QPushButton:pressed
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="title">
@@ -1188,9 +1354,11 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <family>Roboto Medium</family>
+        <pointsize>13</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+        <kerning>false</kerning>
        </font>
       </property>
       <property name="styleSheet">
@@ -1223,7 +1391,7 @@ QPushButton:pressed
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
-        <normaloff>:/resources/img/vm.png</normaloff>:/resources/img/vm.png</iconset>
+        <normaloff>:/main/resources/img/vm.png</normaloff>:/main/resources/img/vm.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -1243,9 +1411,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1266,9 +1437,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1289,9 +1463,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1312,7 +1489,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1325,17 +1507,20 @@ QPushButton:pressed
      <widget class="QLabel" name="label_vm_fs">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>10</y>
-        <width>71</width>
-        <height>16</height>
+        <width>91</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1348,17 +1533,20 @@ QPushButton:pressed
      <widget class="QLabel" name="label_vm_mem">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>30</y>
-        <width>71</width>
-        <height>16</height>
+        <width>91</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1371,17 +1559,20 @@ QPushButton:pressed
      <widget class="QLabel" name="label_vm_bits">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>50</y>
-        <width>71</width>
-        <height>16</height>
+        <width>91</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1394,17 +1585,20 @@ QPushButton:pressed
      <widget class="QLabel" name="label_vm_pins">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>70</x>
         <y>70</y>
-        <width>71</width>
-        <height>16</height>
+        <width>91</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1433,9 +1627,12 @@ QPushButton:pressed
     </property>
     <property name="font">
      <font>
-      <pointsize>10</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Roboto Medium</family>
+      <pointsize>11</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <kerning>true</kerning>
      </font>
     </property>
     <property name="title">
@@ -1452,9 +1649,12 @@ QPushButton:pressed
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="title">
@@ -1471,9 +1671,11 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <family>Roboto Medium</family>
+        <pointsize>13</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+        <kerning>false</kerning>
        </font>
       </property>
       <property name="styleSheet">
@@ -1506,7 +1708,7 @@ QPushButton:pressed
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
-        <normaloff>:/resources/img/pwm.png</normaloff>:/resources/img/pwm.png</iconset>
+        <normaloff>:/main/resources/img/pwm.png</normaloff>:/main/resources/img/pwm.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -1526,9 +1728,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1549,7 +1754,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1570,9 +1780,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1593,9 +1806,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1617,9 +1833,12 @@ QPushButton:pressed
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="title">
@@ -1636,9 +1855,11 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <family>Roboto Medium</family>
+        <pointsize>13</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+        <kerning>false</kerning>
        </font>
       </property>
       <property name="styleSheet">
@@ -1671,11 +1892,11 @@ QPushButton:pressed
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
-        <normaloff>:/resources/img/sgen.svg</normaloff>:/resources/img/sgen.svg</iconset>
+        <normaloff>:/main/resources/img/sgen.svg</normaloff>:/main/resources/img/sgen.svg</iconset>
       </property>
       <property name="iconSize">
        <size>
-        <width>21</width>
+        <width>20</width>
         <height>21</height>
        </size>
       </property>
@@ -1691,9 +1912,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1714,9 +1938,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1737,7 +1964,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1758,9 +1990,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1781,9 +2016,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1804,9 +2042,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1828,9 +2069,12 @@ QPushButton:pressed
      </property>
      <property name="font">
       <font>
-       <pointsize>10</pointsize>
+       <family>Roboto</family>
+       <pointsize>11</pointsize>
        <weight>50</weight>
+       <italic>false</italic>
        <bold>false</bold>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="title">
@@ -1847,9 +2091,11 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <family>Roboto Medium</family>
+        <pointsize>13</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+        <kerning>false</kerning>
        </font>
       </property>
       <property name="styleSheet">
@@ -1882,7 +2128,7 @@ QPushButton:pressed
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
-        <normaloff>:/resources/img/cntr.png</normaloff>:/resources/img/cntr.png</iconset>
+        <normaloff>:/main/resources/img/cntr.png</normaloff>:/main/resources/img/cntr.png</iconset>
       </property>
       <property name="iconSize">
        <size>
@@ -1902,7 +2148,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1923,7 +2174,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1944,7 +2200,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1965,9 +2226,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -1988,9 +2252,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -2011,9 +2278,12 @@ QPushButton:pressed
       </property>
       <property name="font">
        <font>
-        <pointsize>9</pointsize>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
         <weight>50</weight>
+        <italic>false</italic>
         <bold>false</bold>
+        <kerning>true</kerning>
        </font>
       </property>
       <property name="text">
@@ -2045,12 +2315,15 @@ QPushButton:pressed
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <property name="font">
     <font>
+     <family>Roboto</family>
      <pointsize>9</pointsize>
+     <italic>false</italic>
+     <kerning>true</kerning>
     </font>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -2071,7 +2344,10 @@ QPushButton:pressed
   <widget class="QStatusBar" name="statusbar">
    <property name="font">
     <font>
+     <family>Roboto</family>
      <pointsize>8</pointsize>
+     <italic>false</italic>
+     <kerning>true</kerning>
     </font>
    </property>
   </widget>

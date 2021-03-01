@@ -1,15 +1,5 @@
 <RCC>
-    <qresource prefix="/">
-        <file>resources/fonts/SF-UI-Display-Bold.otf</file>
-        <file>resources/fonts/SF-UI-Display-Light.otf</file>
-        <file>resources/fonts/SF-UI-Display-Medium.otf</file>
-        <file>resources/fonts/SF-UI-Display-Regular.otf</file>
-        <file>resources/fonts/SF-UI-Display-Semibold.otf</file>
-        <file>resources/fonts/SF-UI-Text-Bold.otf</file>
-        <file>resources/fonts/SF-UI-Text-Light.otf</file>
-        <file>resources/fonts/SF-UI-Text-Medium.otf</file>
-        <file>resources/fonts/SF-UI-Text-Regular.otf</file>
-        <file>resources/fonts/SF-UI-Text-Semibold.otf</file>
+    <qresource prefix="/main">
         <file>resources/img/plug_off.png</file>
         <file>resources/img/plug_on.png</file>
         <file>resources/img/icon.png</file>
@@ -28,5 +18,35 @@
         <file>resources/img/cntr.png</file>
         <file>resources/img/pwm.png</file>
         <file>resources/img/cvut_meas.png</file>
+        <file>resources/img/jp.png</file>
+        <file>resources/img/jp2.png</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>resources/fonts/Roboto-Black.ttf</file>
+        <file>resources/fonts/Roboto-BlackItalic.ttf</file>
+        <file>resources/fonts/Roboto-Bold.ttf</file>
+        <file>resources/fonts/Roboto-BoldItalic.ttf</file>
+        <file>resources/fonts/Roboto-Italic.ttf</file>
+        <file>resources/fonts/Roboto-Light.ttf</file>
+        <file>resources/fonts/Roboto-LightItalic.ttf</file>
+        <file>resources/fonts/Roboto-Medium.ttf</file>
+        <file>resources/fonts/Roboto-MediumItalic.ttf</file>
+        <file>resources/fonts/RobotoMono-Bold.ttf</file>
+        <file>resources/fonts/RobotoMono-BoldItalic.ttf</file>
+        <file>resources/fonts/RobotoMono-ExtraLight.ttf</file>
+        <file>resources/fonts/RobotoMono-ExtraLightItalic.ttf</file>
+        <file>resources/fonts/RobotoMono-Italic.ttf</file>
+        <file>resources/fonts/RobotoMono-Light.ttf</file>
+        <file>resources/fonts/RobotoMono-LightItalic.ttf</file>
+        <file>resources/fonts/RobotoMono-Medium.ttf</file>
+        <file>resources/fonts/RobotoMono-MediumItalic.ttf</file>
+        <file>resources/fonts/RobotoMono-Regular.ttf</file>
+        <file>resources/fonts/RobotoMono-SemiBold.ttf</file>
+        <file>resources/fonts/RobotoMono-SemiBoldItalic.ttf</file>
+        <file>resources/fonts/RobotoMono-Thin.ttf</file>
+        <file>resources/fonts/RobotoMono-ThinItalic.ttf</file>
+        <file>resources/fonts/Roboto-Regular.ttf</file>
+        <file>resources/fonts/Roboto-Thin.ttf</file>
+        <file>resources/fonts/Roboto-ThinItalic.ttf</file>
     </qresource>
 </RCC>

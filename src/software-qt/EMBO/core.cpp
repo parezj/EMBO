@@ -26,7 +26,7 @@ void Msg_Idn::on_dataRx()
 
     if (tokens.size() != 4)
     {
-        core->err(INVALID_MSG, true);
+        core->err(INVALID_MSG + m_rxData, true);
         return;
     }
 
@@ -52,7 +52,7 @@ void Msg_SYS_Lims::on_dataRx()
 
     if (tokens.size() != 14)
     {
-        core->err(INVALID_MSG, true);
+        core->err(INVALID_MSG + m_rxData, true);
         return;
     }
 
@@ -84,7 +84,7 @@ void Msg_SYS_Info::on_dataRx()
 
     if (tokens.size() != 10)
     {
-        core->err(INVALID_MSG, true);
+        core->err(INVALID_MSG + m_rxData, true);
         return;
     }
 
@@ -114,7 +114,7 @@ void Msg_SYS_Mode::on_dataRx()
         else if (m_rxData.contains("LA"))
             core->setMode(LA, true);
         else
-            core->err(INVALID_MSG, true);
+            core->err(INVALID_MSG + m_rxData, true);
     }
     else
     {
@@ -269,7 +269,8 @@ void Core::on_start()
     m_timer_render = new QTimer();
     m_timer_comm = new QTimer();
 
-    //m_timer_comm->setTimerType(Qt::PreciseTimer);
+    m_timer_rxTimeout->setTimerType(Qt::PreciseTimer);
+    m_timer_comm->setTimerType(Qt::PreciseTimer);
     m_timer_render->setTimerType(Qt::PreciseTimer);
 
     m_msg_idn = new Msg_Idn(this);
@@ -456,7 +457,7 @@ void Core::on_serial_readyRead()
                     return;
                 if (m_submsgIt >= activeMsg_size)
                 {
-                    err(INVALID_MSG, true);
+                    err(COMM_FATAL_ERR + messages[i] + m_mainBuffer, true);
                     return;
                 }
 
@@ -502,17 +503,9 @@ void Core::on_timer_comm()
 
     if (!m_activeMsgs.isEmpty())
     {
-        qInfo() << "!!! ACTIVE MSG NOT EMPTY: " << m_activeMsgs;
-        m_activeMsgs.clear();
+        qInfo() << "Communication is throttling!";
+        return;
     }
-
-    //assert(m_activeMsgs.isEmpty()); // TODO BUG???????????????????????????????????  - vyzkouset hard connect disconnect test click
-
-    //if (!m_activeMsgs.isEmpty())
-    //{
-    //    qInfo() << "on_timer_comm - m_activeMsgs NOT empty!";
-    //    return;
-    //}
 
     if (m_mode != m_mode_last)
     {
