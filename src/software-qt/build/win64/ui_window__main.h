@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'window_main.ui'
+** Form generated from reading UI file 'window__main.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.14.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef UI_WINDOW_MAIN_H
-#define UI_WINDOW_MAIN_H
+#ifndef UI_WINDOW__MAIN_H
+#define UI_WINDOW__MAIN_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
@@ -26,7 +26,7 @@
 
 QT_BEGIN_NAMESPACE
 
-class Ui_MainWindow
+class Ui_WindowMain
 {
 public:
     QAction *actionAbout;
@@ -115,27 +115,27 @@ public:
     QMenu *menuAbout;
     QStatusBar *statusbar;
 
-    void setupUi(QMainWindow *MainWindow)
+    void setupUi(QMainWindow *WindowMain)
     {
-        if (MainWindow->objectName().isEmpty())
-            MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 594);
+        if (WindowMain->objectName().isEmpty())
+            WindowMain->setObjectName(QString::fromUtf8("WindowMain"));
+        WindowMain->resize(800, 594);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
-        MainWindow->setSizePolicy(sizePolicy);
-        MainWindow->setMinimumSize(QSize(800, 594));
-        MainWindow->setMaximumSize(QSize(800, 594));
+        sizePolicy.setHeightForWidth(WindowMain->sizePolicy().hasHeightForWidth());
+        WindowMain->setSizePolicy(sizePolicy);
+        WindowMain->setMinimumSize(QSize(800, 594));
+        WindowMain->setMaximumSize(QSize(800, 594));
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setItalic(false);
         font.setKerning(true);
-        MainWindow->setFont(font);
+        WindowMain->setFont(font);
         QIcon icon;
-        icon.addFile(QString::fromUtf8("../logo/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
-        MainWindow->setWindowIcon(icon);
-        actionAbout = new QAction(MainWindow);
+        icon.addFile(QString::fromUtf8(":/main/resources/img/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
+        WindowMain->setWindowIcon(icon);
+        actionAbout = new QAction(WindowMain);
         actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
         actionAbout->setCheckable(false);
         QIcon icon1;
@@ -146,9 +146,9 @@ public:
         font1.setPointSize(10);
         font1.setItalic(false);
         actionAbout->setFont(font1);
-        actionOpen = new QAction(MainWindow);
+        actionOpen = new QAction(WindowMain);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
-        centralwidget = new QWidget(MainWindow);
+        centralwidget = new QWidget(WindowMain);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         groupBox_ports = new QGroupBox(centralwidget);
         groupBox_ports->setObjectName(QString::fromUtf8("groupBox_ports"));
@@ -166,6 +166,8 @@ public:
         font2.setWeight(50);
         font2.setKerning(true);
         groupBox_ports->setFont(font2);
+        groupBox_ports->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         listWidget_ports = new QListWidget(groupBox_ports);
         new QListWidgetItem(listWidget_ports);
         new QListWidgetItem(listWidget_ports);
@@ -230,8 +232,8 @@ public:
         label_deviceLogo->setScaledContents(true);
         label_cvutlogo = new QLabel(groupBox_ports);
         label_cvutlogo->setObjectName(QString::fromUtf8("label_cvutlogo"));
-        label_cvutlogo->setGeometry(QRect(20, 410, 161, 71));
-        label_cvutlogo->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/logo_cvut_en_doplnkova_verze.svg")));
+        label_cvutlogo->setGeometry(QRect(20, 370, 161, 110));
+        label_cvutlogo->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/ctu_meas_small.png")));
         label_cvutlogo->setScaledContents(true);
         groupBox_device = new QGroupBox(centralwidget);
         groupBox_device->setObjectName(QString::fromUtf8("groupBox_device"));
@@ -249,6 +251,8 @@ public:
         font6.setWeight(50);
         font6.setKerning(true);
         groupBox_device->setFont(font6);
+        groupBox_device->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         label_deviceName = new QLabel(groupBox_device);
         label_deviceName->setObjectName(QString::fromUtf8("label_deviceName"));
         label_deviceName->setGeometry(QRect(10, 20, 361, 21));
@@ -353,10 +357,14 @@ public:
         sizePolicy2.setHeightForWidth(groupBox_instr1->sizePolicy().hasHeightForWidth());
         groupBox_instr1->setSizePolicy(sizePolicy2);
         groupBox_instr1->setFont(font2);
+        groupBox_instr1->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         groupBox_scope = new QGroupBox(groupBox_instr1);
         groupBox_scope->setObjectName(QString::fromUtf8("groupBox_scope"));
         groupBox_scope->setGeometry(QRect(10, 20, 171, 151));
         groupBox_scope->setFont(font4);
+        groupBox_scope->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(190,220,240, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_scope = new QPushButton(groupBox_scope);
         pushButton_scope->setObjectName(QString::fromUtf8("pushButton_scope"));
         pushButton_scope->setGeometry(QRect(0, 110, 171, 41));
@@ -448,6 +456,8 @@ public:
         groupBox_la->setObjectName(QString::fromUtf8("groupBox_la"));
         groupBox_la->setGeometry(QRect(190, 20, 171, 151));
         groupBox_la->setFont(font4);
+        groupBox_la->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(240,190,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_la = new QPushButton(groupBox_la);
         pushButton_la->setObjectName(QString::fromUtf8("pushButton_la"));
         pushButton_la->setGeometry(QRect(0, 110, 171, 41));
@@ -523,6 +533,8 @@ public:
         groupBox_vm->setObjectName(QString::fromUtf8("groupBox_vm"));
         groupBox_vm->setGeometry(QRect(370, 20, 171, 151));
         groupBox_vm->setFont(font4);
+        groupBox_vm->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(240,230,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_vm = new QPushButton(groupBox_vm);
         pushButton_vm->setObjectName(QString::fromUtf8("pushButton_vm"));
         pushButton_vm->setGeometry(QRect(0, 110, 171, 41));
@@ -600,10 +612,14 @@ public:
         sizePolicy2.setHeightForWidth(groupBox_instr2->sizePolicy().hasHeightForWidth());
         groupBox_instr2->setSizePolicy(sizePolicy2);
         groupBox_instr2->setFont(font2);
+        groupBox_instr2->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         groupBox_pwm = new QGroupBox(groupBox_instr2);
         groupBox_pwm->setObjectName(QString::fromUtf8("groupBox_pwm"));
         groupBox_pwm->setGeometry(QRect(190, 20, 171, 151));
         groupBox_pwm->setFont(font4);
+        groupBox_pwm->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,200,180, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_pwm = new QPushButton(groupBox_pwm);
         pushButton_pwm->setObjectName(QString::fromUtf8("pushButton_pwm"));
         pushButton_pwm->setGeometry(QRect(0, 110, 171, 41));
@@ -659,6 +675,8 @@ public:
         groupBox_sgen->setObjectName(QString::fromUtf8("groupBox_sgen"));
         groupBox_sgen->setGeometry(QRect(370, 20, 171, 151));
         groupBox_sgen->setFont(font4);
+        groupBox_sgen->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,220, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_sgen = new QPushButton(groupBox_sgen);
         pushButton_sgen->setObjectName(QString::fromUtf8("pushButton_sgen"));
         pushButton_sgen->setGeometry(QRect(0, 110, 171, 41));
@@ -724,6 +742,8 @@ public:
         groupBox_cntr->setObjectName(QString::fromUtf8("groupBox_cntr"));
         groupBox_cntr->setGeometry(QRect(10, 20, 171, 151));
         groupBox_cntr->setFont(font4);
+        groupBox_cntr->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,220,200, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_cntr = new QPushButton(groupBox_cntr);
         pushButton_cntr->setObjectName(QString::fromUtf8("pushButton_cntr"));
         pushButton_cntr->setGeometry(QRect(0, 110, 171, 41));
@@ -790,8 +810,8 @@ public:
         line->setGeometry(QRect(0, 540, 801, 21));
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
-        MainWindow->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(MainWindow);
+        WindowMain->setCentralWidget(centralwidget);
+        menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 800, 20));
         QFont font10;
@@ -802,8 +822,8 @@ public:
         menubar->setFont(font10);
         menuAbout = new QMenu(menubar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
-        MainWindow->setMenuBar(menubar);
-        statusbar = new QStatusBar(MainWindow);
+        WindowMain->setMenuBar(menubar);
+        statusbar = new QStatusBar(WindowMain);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
         QFont font11;
         font11.setFamily(QString::fromUtf8("Roboto"));
@@ -811,125 +831,125 @@ public:
         font11.setItalic(false);
         font11.setKerning(true);
         statusbar->setFont(font11);
-        MainWindow->setStatusBar(statusbar);
+        WindowMain->setStatusBar(statusbar);
 
         menubar->addAction(menuAbout->menuAction());
         menuAbout->addAction(actionAbout);
 
-        retranslateUi(MainWindow);
+        retranslateUi(WindowMain);
 
-        QMetaObject::connectSlotsByName(MainWindow);
+        QMetaObject::connectSlotsByName(WindowMain);
     } // setupUi
 
-    void retranslateUi(QMainWindow *MainWindow)
+    void retranslateUi(QMainWindow *WindowMain)
     {
-        MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "EMBO - EMBedded Oscilloscope", nullptr));
-        actionAbout->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
+        WindowMain->setWindowTitle(QCoreApplication::translate("WindowMain", "EMBO - EMBedded Oscilloscope", nullptr));
+        actionAbout->setText(QCoreApplication::translate("WindowMain", "About", nullptr));
 #if QT_CONFIG(shortcut)
-        actionAbout->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+A", nullptr));
+        actionAbout->setShortcut(QCoreApplication::translate("WindowMain", "Ctrl+A", nullptr));
 #endif // QT_CONFIG(shortcut)
-        actionOpen->setText(QCoreApplication::translate("MainWindow", "Open", nullptr));
+        actionOpen->setText(QCoreApplication::translate("WindowMain", "Open", nullptr));
 #if QT_CONFIG(shortcut)
-        actionOpen->setShortcut(QCoreApplication::translate("MainWindow", "Ctrl+O", nullptr));
+        actionOpen->setShortcut(QCoreApplication::translate("WindowMain", "Ctrl+O", nullptr));
 #endif // QT_CONFIG(shortcut)
-        groupBox_ports->setTitle(QCoreApplication::translate("MainWindow", "Devices", nullptr));
+        groupBox_ports->setTitle(QCoreApplication::translate("WindowMain", "Devices", nullptr));
 
         const bool __sortingEnabled = listWidget_ports->isSortingEnabled();
         listWidget_ports->setSortingEnabled(false);
         QListWidgetItem *___qlistwidgetitem = listWidget_ports->item(0);
-        ___qlistwidgetitem->setText(QCoreApplication::translate("MainWindow", "COM1", nullptr));
+        ___qlistwidgetitem->setText(QCoreApplication::translate("WindowMain", "COM1", nullptr));
         QListWidgetItem *___qlistwidgetitem1 = listWidget_ports->item(1);
-        ___qlistwidgetitem1->setText(QCoreApplication::translate("MainWindow", "COM15", nullptr));
+        ___qlistwidgetitem1->setText(QCoreApplication::translate("WindowMain", "COM15", nullptr));
         listWidget_ports->setSortingEnabled(__sortingEnabled);
 
 #if QT_CONFIG(accessibility)
         listWidget_ports->setAccessibleName(QString());
 #endif // QT_CONFIG(accessibility)
-        pushButton_scan->setText(QCoreApplication::translate("MainWindow", "Scan", nullptr));
-        pushButton_connect->setText(QCoreApplication::translate("MainWindow", "Connect", nullptr));
-        pushButton_disconnect->setText(QCoreApplication::translate("MainWindow", "Disconnect", nullptr));
+        pushButton_scan->setText(QCoreApplication::translate("WindowMain", "Scan", nullptr));
+        pushButton_connect->setText(QCoreApplication::translate("WindowMain", "Connect", nullptr));
+        pushButton_disconnect->setText(QCoreApplication::translate("WindowMain", "Disconnect", nullptr));
         label_deviceLogo->setText(QString());
         label_cvutlogo->setText(QString());
         groupBox_device->setTitle(QString());
-        label_deviceName->setText(QCoreApplication::translate("MainWindow", "NOT CONNECTED", nullptr));
+        label_deviceName->setText(QCoreApplication::translate("WindowMain", "NOT CONNECTED", nullptr));
         label_boardImg->setText(QString());
-        label->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Firmware version:", nullptr));
-        label_2->setText(QCoreApplication::translate("MainWindow", "\342\200\242 STM LL version:", nullptr));
-        label_3->setText(QCoreApplication::translate("MainWindow", "\342\200\242 FreeRTOS version:", nullptr));
-        label_4->setText(QCoreApplication::translate("MainWindow", "\342\200\242 CPU frequency:", nullptr));
-        label_5->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Communication:", nullptr));
-        label_dev_fw->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_dev_fcpu->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_dev_comm->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_dev_rtos->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_dev_ll->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_7->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Voltage reference:", nullptr));
-        label_dev_vref->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        groupBox_instr1->setTitle(QCoreApplication::translate("MainWindow", "Main Instruments", nullptr));
+        label->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Firmware version:", nullptr));
+        label_2->setText(QCoreApplication::translate("WindowMain", "\342\200\242 STM LL version:", nullptr));
+        label_3->setText(QCoreApplication::translate("WindowMain", "\342\200\242 FreeRTOS version:", nullptr));
+        label_4->setText(QCoreApplication::translate("WindowMain", "\342\200\242 CPU frequency:", nullptr));
+        label_5->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Communication:", nullptr));
+        label_dev_fw->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_dev_fcpu->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_dev_comm->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_dev_rtos->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_dev_ll->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_7->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Voltage reference:", nullptr));
+        label_dev_vref->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        groupBox_instr1->setTitle(QCoreApplication::translate("WindowMain", "Main Instruments", nullptr));
         groupBox_scope->setTitle(QString());
-        pushButton_scope->setText(QCoreApplication::translate("MainWindow", "Oscilloscope", nullptr));
-        label_6->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Fs:", nullptr));
-        label_8->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Mem:", nullptr));
-        label_9->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Bits:", nullptr));
-        label_10->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Mode:", nullptr));
-        label_40->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Pins:", nullptr));
-        label_scope_fs->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_scope_mem->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_scope_bits->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_scope_modes->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_scope_pins->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
+        pushButton_scope->setText(QCoreApplication::translate("WindowMain", "Oscilloscope", nullptr));
+        label_6->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Fs:", nullptr));
+        label_8->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Mem:", nullptr));
+        label_9->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Bits:", nullptr));
+        label_10->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Mode:", nullptr));
+        label_40->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Pins:", nullptr));
+        label_scope_fs->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_scope_mem->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_scope_bits->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_scope_modes->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_scope_pins->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
         groupBox_la->setTitle(QString());
-        pushButton_la->setText(QCoreApplication::translate("MainWindow", "Logic Analyzer", nullptr));
-        label_11->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Fs:", nullptr));
-        label_12->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Mem:", nullptr));
-        label_13->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Proto:", nullptr));
-        label_39->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Pins:", nullptr));
-        label_la_pins->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_la_protocols->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_la_fs->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_la_mem->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
+        pushButton_la->setText(QCoreApplication::translate("WindowMain", "Logic Analyzer", nullptr));
+        label_11->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Fs:", nullptr));
+        label_12->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Mem:", nullptr));
+        label_13->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Proto:", nullptr));
+        label_39->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Pins:", nullptr));
+        label_la_pins->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_la_protocols->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_la_fs->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_la_mem->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
         groupBox_vm->setTitle(QString());
-        pushButton_vm->setText(QCoreApplication::translate("MainWindow", "Voltmeter", nullptr));
-        label_15->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Fs:", nullptr));
-        label_16->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Mem:", nullptr));
-        label_17->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Bits:", nullptr));
-        label_38->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Pins:", nullptr));
-        label_vm_fs->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_vm_mem->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_vm_bits->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_vm_pins->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        groupBox_instr2->setTitle(QCoreApplication::translate("MainWindow", "Aux Instruments", nullptr));
+        pushButton_vm->setText(QCoreApplication::translate("WindowMain", "Voltmeter", nullptr));
+        label_15->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Fs:", nullptr));
+        label_16->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Mem:", nullptr));
+        label_17->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Bits:", nullptr));
+        label_38->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Pins:", nullptr));
+        label_vm_fs->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_vm_mem->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_vm_bits->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_vm_pins->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        groupBox_instr2->setTitle(QCoreApplication::translate("WindowMain", "Aux Instruments", nullptr));
         groupBox_pwm->setTitle(QString());
-        pushButton_pwm->setText(QCoreApplication::translate("MainWindow", "PWM Generator", nullptr));
-        label_19->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Max freq:", nullptr));
-        label_35->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Pins:", nullptr));
-        label_pwm_pins->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_pwm_freq->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
+        pushButton_pwm->setText(QCoreApplication::translate("WindowMain", "PWM Generator", nullptr));
+        label_19->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Max freq:", nullptr));
+        label_35->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Pins:", nullptr));
+        label_pwm_pins->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_pwm_freq->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
         groupBox_sgen->setTitle(QString());
-        pushButton_sgen->setText(QCoreApplication::translate("MainWindow", "Signal Generator", nullptr));
-        label_27->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Max freq:", nullptr));
-        label_28->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Max mem:", nullptr));
-        label_36->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Pins:", nullptr));
-        label_sgen_pins->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_sgen_mem->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_sgen_freq->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
+        pushButton_sgen->setText(QCoreApplication::translate("WindowMain", "Signal Generator", nullptr));
+        label_27->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Max freq:", nullptr));
+        label_28->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Max mem:", nullptr));
+        label_36->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Pins:", nullptr));
+        label_sgen_pins->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_sgen_mem->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_sgen_freq->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
         groupBox_cntr->setTitle(QString());
-        pushButton_cntr->setText(QCoreApplication::translate("MainWindow", "Counter", nullptr));
-        label_37->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Pins:", nullptr));
-        label_32->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Max freq:", nullptr));
-        label_34->setText(QCoreApplication::translate("MainWindow", "\342\200\242 Timeout:", nullptr));
-        label_cntr_freq->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_cntr_pins->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        label_cntr_timeout->setText(QCoreApplication::translate("MainWindow", "-", nullptr));
-        menuAbout->setTitle(QCoreApplication::translate("MainWindow", "Help", nullptr));
+        pushButton_cntr->setText(QCoreApplication::translate("WindowMain", "Counter", nullptr));
+        label_37->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Pins:", nullptr));
+        label_32->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Max freq:", nullptr));
+        label_34->setText(QCoreApplication::translate("WindowMain", "\342\200\242 Timeout:", nullptr));
+        label_cntr_freq->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_cntr_pins->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        label_cntr_timeout->setText(QCoreApplication::translate("WindowMain", "-", nullptr));
+        menuAbout->setTitle(QCoreApplication::translate("WindowMain", "Help", nullptr));
     } // retranslateUi
 
 };
 
 namespace Ui {
-    class MainWindow: public Ui_MainWindow {};
+    class WindowMain: public Ui_WindowMain {};
 } // namespace Ui
 
 QT_END_NAMESPACE
 
-#endif // UI_WINDOW_MAIN_H
+#endif // UI_WINDOW__MAIN_H

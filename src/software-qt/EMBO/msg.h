@@ -10,10 +10,18 @@
 #include <QString>
 #include <QDebug>
 
+enum MsgBoxType
+{
+    INFO,
+    QUESTION,
+    WARNING,
+    CRITICAL
+};
+
 
 class Msg : public QObject
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
     explicit Msg(const Msg& msg);
@@ -33,6 +41,7 @@ protected slots:
 
 signals:
     void rx();
+    void err(QString text, MsgBoxType type, bool needClose);
 
 protected:
     QString m_cmd;

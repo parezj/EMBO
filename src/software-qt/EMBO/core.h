@@ -6,7 +6,15 @@
 #ifndef CORE_H
 #define CORE_H
 
+#include "window_scope.h"
+#include "window_la.h"
+#include "window_vm.h"
+#include "window_cntr.h"
+#include "window_pwm.h"
+#include "window_sgen.h"
+
 #include "msg.h"
+#include "messages.h"
 
 #include <QObject>
 #include <QTimer>
@@ -21,178 +29,26 @@
 #define INVALID_MSG     "Invalid message! "
 #define COMM_FATAL_ERR  "Communication fatal error! "
 
-/******************************** Protocol ********************************/
+#define EMBO_TITLE      "EMBO"
+#define EMBO_TITLE2     "EMBedded Oscilloscope"
+#define EMBO_ABOUT_TXT  "<b>EMBO - EMBedded Oscilloscope</b><br><br> EMBO is useful tool for every electronics enthusiast.<br>\
+For just few dollar hardware (STM32 BluePill) can become a powerfull scope, logic analyzer, voltmeter, counter, \
+PWM and signal generator.<br>And of course, it's opensource!<br><br>\
+<a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
+
+#define CFG_MAIN_PORT   "main/port"
 
 #define EMBO_NEWLINE        "\r\n"
 #define EMBO_DELIM1         ";"
 #define EMBO_DELIM2         ","
 
-#define EMBO_OK             "OK"
-
-#define EMBO_IDN            "*IDN"
-#define EMBO_RST            "*RST"
-
-#define EMBO_SYS_LIMS       ":SYS:LIM"
-#define EMBO_SYS_INFO       ":SYS:INFO"
-#define EMBO_SYS_MODE       ":SYS:MODE"
-
-#define EMBO_VM_READ        ":VM:READ"
-
-#define EMBO_SCOP_READ      ":SCOP:READ"
-#define EMBO_SCOP_SET       ":SCOP:SET"
-#define EMBO_SCOP_FORCETRIG ":SCOP:FORC"
-#define EMBO_SCOP_AVERAGE   ":SCOP:AVER"
-
-#define EMBO_LA_READ        ":LA:READ"
-#define EMBO_LA_SET         ":LA:SET"
-#define EMBO_LA_FORCETRIG   ":LA:FORC"
-
-#define EMBO_CNTR_ENABLE    ":CNTR:ENA"
-#define EMBO_CNTR_READ      ":CNTR:READ"
-
-#define EMBO_SGEN_SET       ":SGEN:SET"
-
-#define EMBO_PWM_SET        ":PWM:SET"
+#define EMBO_TRUE           "\"1\""
+#define EMBO_FALSE          "\"0\""
+#define EMBO_OK             "\"OK\""
 
 #define EMBO_READY_A        "ReadyA"
 #define EMBO_READY_N        "ReadyD"
 #define EMBO_READY_D        "ReadyA"
-
-
-/***************************** Messages - SYS *****************************/
-
-class Msg_Idn : public Msg
-{
-public:
-    explicit Msg_Idn(QObject* parent=0) : Msg(EMBO_IDN, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_Rst : public Msg
-{
-public:
-    explicit Msg_Rst(QObject* parent=0) : Msg(EMBO_RST, false, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_SYS_Lims : public Msg
-{
-public:
-    explicit Msg_SYS_Lims(QObject* parent=0) : Msg(EMBO_SYS_LIMS, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_SYS_Info : public Msg
-{
-public:
-    explicit Msg_SYS_Info(QObject* parent=0) : Msg(EMBO_SYS_INFO, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_SYS_Mode : public Msg
-{
-public:
-    explicit Msg_SYS_Mode(QObject* parent=0) : Msg(EMBO_SYS_MODE, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-/***************************** Messages - VM ****************************/
-
-class Msg_VM_Read : public Msg
-{
-public:
-    explicit Msg_VM_Read(QObject* parent=0) : Msg(EMBO_VM_READ, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-/***************************** Messages - SCOP **************************/
-
-class Msg_SCOP_Read : public Msg
-{
-public:
-    explicit Msg_SCOP_Read(QObject* parent=0) : Msg(EMBO_SCOP_READ, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_SCOP_Set : public Msg
-{
-public:
-    explicit Msg_SCOP_Set(QObject* parent=0) : Msg(EMBO_SCOP_SET, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_SCOP_ForceTrig : public Msg
-{
-public:
-    explicit Msg_SCOP_ForceTrig(QObject* parent=0) : Msg(EMBO_SCOP_FORCETRIG, false, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_SCOP_Average : public Msg
-{
-public:
-    explicit Msg_SCOP_Average(QObject* parent=0) : Msg(EMBO_SCOP_AVERAGE, false, parent) {};
-    virtual void on_dataRx() override;
-};
-
-/***************************** Messages - LA ****************************/
-
-class Msg_LA_Read : public Msg
-{
-public:
-    explicit Msg_LA_Read(QObject* parent=0) : Msg(EMBO_LA_READ, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_LA_Set : public Msg
-{
-public:
-    explicit Msg_LA_Set(QObject* parent=0) : Msg(EMBO_LA_SET, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_LA_ForceTrig : public Msg
-{
-public:
-    explicit Msg_LA_ForceTrig(QObject* parent=0) : Msg(EMBO_LA_FORCETRIG, false, parent) {};
-    virtual void on_dataRx() override;
-};
-
-/***************************** Messages - CNTR **************************/
-
-class Msg_CNTR_Enable : public Msg
-{
-public:
-    explicit Msg_CNTR_Enable(QObject* parent=0) : Msg(EMBO_CNTR_ENABLE, false, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_CNTR_Read : public Msg
-{
-public:
-    explicit Msg_CNTR_Read(QObject* parent=0) : Msg(EMBO_CNTR_READ, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-/***************************** Messages - SGEN **************************/
-
-class Msg_SGEN_Set : public Msg
-{
-public:
-    explicit Msg_SGEN_Set(QObject* parent=0) : Msg(EMBO_SGEN_SET, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-/***************************** Messages - PWM ***************************/
-
-class Msg_PWM_Set : public Msg
-{
-public:
-    explicit Msg_PWM_Set(QObject* parent=0) : Msg(EMBO_PWM_SET, true, parent) {};
-    virtual void on_dataRx() override;
-};
-
-/********************************* Core *********************************/
 
 enum State
 {
@@ -208,6 +64,7 @@ enum Mode
     SCOPE,
     LA
 };
+
 
 class DevInfo : public QObject
 {
@@ -258,16 +115,20 @@ public:
     ~Core();
 
     void setUp();
-    bool open(QString port);
-    bool close();
-    void start();
+    bool openComm(QString port);
+    bool closeComm();
+    void startComm();
     void err(QString name, bool needClose);
-    void dispose();
+    void msgAdd(Msg* msg);
 
+    QVector<IEmboInstrument*> emboInstruments;
+
+     /* setters getters */
     const QString getPort() { return m_serial->portName(); }
     DevInfo* getDevInfo() const { return devInfo; }
     void setMode(Mode mode, bool alsoLast) { m_mode = mode; if (alsoLast) m_mode_last = mode; }
 
+     /* singleton */
     static Core* getInstance(QObject* parent = 0)
     {
         if (m_instance == Q_NULLPTR)
@@ -276,31 +137,33 @@ public:
     }
 
 public slots:
-    void on_start();
-    void on_open(const QString port);
-    void on_msgAdd(Msg* const msg);
-    void on_close();
+    void on_startThread();
+    void on_openComm(const QString port);
+    //void on_msgAdd(Msg* msg);
+    void on_closeComm(bool force);
+    void on_dispose();
 
 signals:
     void stateChanged(const State state);
-    void errorHappend(const QString name);
+    void msgDisplay(const QString name, MsgBoxType type);
     void finished();
 
-private:
-    explicit Core(QObject* parent = 0);
-
-    void send();
-
+private slots:
     void on_serial_errorOccurred(QSerialPort::SerialPortError error);
     void on_serial_readyRead();
     void on_timer_rxTimeout();
     void on_timer_comm();
     void on_timer_render();
 
+private:
+    explicit Core(QObject* parent = 0);
+
+    void send();
+
     /* instance */
     static Core* m_instance;
 
-    QSerialPort* m_serial = nullptr;
+    QSerialPort* m_serial = Q_NULLPTR;
     State m_state = DISCONNECTED;
 
     /* helpers */
@@ -328,6 +191,8 @@ private:
     Msg_SYS_Lims* m_msg_sys_lims;
     Msg_SYS_Info* m_msg_sys_info;
     Msg_SYS_Mode* m_msg_sys_mode;
+
+    /*
     Msg_VM_Read* m_msg_vm_read;
     Msg_SCOP_Set* m_msg_scope_set;
     Msg_SCOP_Read* m_msg_scope_read;
@@ -340,6 +205,7 @@ private:
     Msg_CNTR_Read* m_msg_cntr_read;
     Msg_SGEN_Set* m_msg_sgen_set;
     Msg_PWM_Set* m_msg_pwm_set;
+    */
 };
 
 #endif // CORE_H

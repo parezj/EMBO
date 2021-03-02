@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>WindowMain</class>
+ <widget class="QMainWindow" name="WindowMain">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -39,8 +39,8 @@
    <string>EMBO - EMBedded Oscilloscope</string>
   </property>
   <property name="windowIcon">
-   <iconset>
-    <normaloff>../logo/icon.png</normaloff>../logo/icon.png</iconset>
+   <iconset resource="resources.qrc">
+    <normaloff>:/main/resources/img/icon.png</normaloff>:/main/resources/img/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QGroupBox" name="groupBox_ports">
@@ -67,6 +67,10 @@
       <bold>false</bold>
       <kerning>true</kerning>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
      <string>Devices</string>
@@ -242,16 +246,16 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>410</y>
+       <y>370</y>
        <width>161</width>
-       <height>71</height>
+       <height>110</height>
       </rect>
      </property>
      <property name="text">
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="resources.qrc">:/main/resources/img/logo_cvut_en_doplnkova_verze.svg</pixmap>
+      <pixmap resource="resources.qrc">:/main/resources/img/ctu_meas_small.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -282,6 +286,10 @@
       <bold>false</bold>
       <kerning>true</kerning>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
      <string/>
@@ -690,6 +698,10 @@
       <kerning>true</kerning>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+    </property>
     <property name="title">
      <string>Main Instruments</string>
     </property>
@@ -711,6 +723,10 @@
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {background-color: rgb(190,220,240, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
       <string/>
@@ -1052,6 +1068,10 @@ QPushButton:pressed
        <kerning>true</kerning>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {background-color: rgb(240,190,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+     </property>
      <property name="title">
       <string/>
      </property>
@@ -1339,6 +1359,10 @@ QPushButton:pressed
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {background-color: rgb(240,230,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
       <string/>
@@ -1635,6 +1659,10 @@ QPushButton:pressed
       <kerning>true</kerning>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+    </property>
     <property name="title">
      <string>Aux Instruments</string>
     </property>
@@ -1656,6 +1684,10 @@ QPushButton:pressed
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {background-color: rgb(220,200,180, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
       <string/>
@@ -1840,6 +1872,10 @@ QPushButton:pressed
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {background-color: rgb(200,200,220, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
       <string/>
@@ -2076,6 +2112,10 @@ QPushButton:pressed
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QGroupBox {background-color: rgb(200,220,200, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
       <string/>
@@ -2326,19 +2366,12 @@ QPushButton:pressed
      <kerning>true</kerning>
     </font>
    </property>
-   <widget class="QMenu" name="menuFile">
-    <property name="title">
-     <string>File</string>
-    </property>
-    <addaction name="actionOpen"/>
-   </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
    </widget>
-   <addaction name="menuFile"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
@@ -2352,8 +2385,22 @@ QPushButton:pressed
    </property>
   </widget>
   <action name="actionAbout">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/main/resources/img/info.svg</normaloff>:/main/resources/img/info.svg</iconset>
+   </property>
    <property name="text">
     <string>About</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+     <italic>false</italic>
+    </font>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>

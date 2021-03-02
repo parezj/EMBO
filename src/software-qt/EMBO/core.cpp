@@ -15,236 +15,6 @@
 #include <QtSerialPort/QSerialPortInfo>
 
 
-/****************************** Messages - SYS ******************************/
-
-void Msg_Idn::on_dataRx()
-{
-    qInfo() << "IDN: " << m_rxData;
-    auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-
-    if (tokens.size() != 4)
-    {
-        core->err(INVALID_MSG + m_rxData, true);
-        return;
-    }
-
-    core->getDevInfo()->name = tokens[1];
-    core->getDevInfo()->fw = tokens[2];
-}
-
-void Msg_Rst::on_dataRx()
-{
-    qInfo() << "RST: " << m_rxData;
-    auto core = Core::getInstance(this);
-
-    if (!m_rxData.contains(EMBO_OK))
-        core->err("Reset failed!", false);
-}
-
-void Msg_SYS_Lims::on_dataRx()
-{
-    qInfo() << "SYS:LIM: " <<  m_rxData;
-    auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-
-    if (tokens.size() != 14)
-    {
-        core->err(INVALID_MSG + m_rxData, true);
-        return;
-    }
-
-    core->getDevInfo()->adc_fs_12b = tokens[0].toInt();
-    core->getDevInfo()->adc_fs_8b = tokens[1].toInt();
-    core->getDevInfo()->mem = tokens[2].toInt();
-    core->getDevInfo()->la_fs = tokens[3].toInt();
-    core->getDevInfo()->pwm_fs = tokens[4].toInt();
-    core->getDevInfo()->adc_num = (tokens[5])[0].digitValue();
-    core->getDevInfo()->adc_dualmode = tokens[5].contains('D');
-    core->getDevInfo()->adc_interleaved = tokens[5].contains('I');
-    core->getDevInfo()->adc_bit8 = tokens[6] == '1';
-    core->getDevInfo()->dac = tokens[7] == '1';
-    core->getDevInfo()->vm_fs = tokens[8].toInt();
-    core->getDevInfo()->vm_mem = tokens[9].toInt();
-    core->getDevInfo()->cntr_freq = tokens[10].toInt();
-    core->getDevInfo()->cntr_timeout = tokens[11].toInt();
-    core->getDevInfo()->sgen_maxf = tokens[12].toInt();
-    core->getDevInfo()->sgen_maxmem = tokens[13].toInt();
-}
-
-
-void Msg_SYS_Info::on_dataRx()
-{
-    qInfo() << "SYS:INFO: " <<  m_rxData;
-    auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-
-    if (tokens.size() != 10)
-    {
-        core->err(INVALID_MSG + m_rxData, true);
-        return;
-    }
-
-    core->getDevInfo()->rtos = tokens[0];
-    core->getDevInfo()->ll = tokens[1];
-    core->getDevInfo()->comm = tokens[2];
-    core->getDevInfo()->fcpu = tokens[3].toInt();
-    core->getDevInfo()->ref_mv = tokens[4].toInt();
-    core->getDevInfo()->pins_scope_vm = tokens[5];
-    core->getDevInfo()->pins_la = tokens[6];
-    core->getDevInfo()->pins_cntr = tokens[7];
-    core->getDevInfo()->pins_pwm = tokens[8];
-    core->getDevInfo()->pins_sgen = tokens[9];
-}
-
-void Msg_SYS_Mode::on_dataRx()
-{
-    qInfo() << "SYS:MODE: " <<  m_rxData;
-    auto core = Core::getInstance(this);
-
-    if (getIsQuery())
-    {
-        if (m_rxData.contains("SCOPE"))
-            core->setMode(SCOPE, true);
-        else if (m_rxData.contains("VM"))
-            core->setMode(VM, true);
-        else if (m_rxData.contains("LA"))
-            core->setMode(LA, true);
-        else
-            core->err(INVALID_MSG + m_rxData, true);
-    }
-    else
-    {
-        if (!m_rxData.contains(EMBO_OK))
-            core->err("Mode set failed!", true);
-    }
-}
-
-/***************************** Messages - VM ****************************/
-
-void Msg_VM_Read::on_dataRx()
-{
-    qInfo() << "VM:READ: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-/***************************** Messages - SCOP **************************/
-
-void Msg_SCOP_Read::on_dataRx()
-{
-    qInfo() << "SCOP:READ: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-void Msg_SCOP_Set::on_dataRx()
-{
-    qInfo() << "SCOP:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-void Msg_SCOP_ForceTrig::on_dataRx()
-{
-    qInfo() << "SCOP:FORC: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-void Msg_SCOP_Average::on_dataRx()
-{
-    qInfo() << "SCOP:AVER: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-/***************************** Messages - LA ****************************/
-
-void Msg_LA_Read::on_dataRx()
-{
-    qInfo() << "LA:READ: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-void Msg_LA_Set::on_dataRx()
-{
-    qInfo() << "LA:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-void Msg_LA_ForceTrig::on_dataRx()
-{
-    qInfo() << "LA:FORC: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-/***************************** Messages - CNTR **************************/
-
-void Msg_CNTR_Enable::on_dataRx()
-{
-    qInfo() << "CNTR:ENA: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-void Msg_CNTR_Read::on_dataRx()
-{
-    qInfo() << "CNTR:READ: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-/***************************** Messages - SGEN **************************/
-
-void Msg_SGEN_Set::on_dataRx()
-{
-    qInfo() << "SGEN:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-/***************************** Messages - PWM ***************************/
-
-void Msg_PWM_Set::on_dataRx()
-{
-    qInfo() << "PWM:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-/********************************* Core *********************************/
-
 Core* Core::m_instance = Q_NULLPTR;
 
 Core::Core(QObject* parent) : QObject(parent)
@@ -256,7 +26,7 @@ Core::~Core()
     qInfo() << "Core destroyed";
 }
 
-void Core::on_start()
+void Core::on_startThread()
 {
     m_serial = new QSerialPort();
     m_serial->setBaudRate(QSerialPort::Baud115200);
@@ -278,6 +48,8 @@ void Core::on_start()
     m_msg_sys_lims = new Msg_SYS_Lims(this);
     m_msg_sys_info = new Msg_SYS_Info(this);
     m_msg_sys_mode = new Msg_SYS_Mode(this);
+
+    /*
     m_msg_vm_read = new Msg_VM_Read(this);
     m_msg_scope_set = new Msg_SCOP_Set(this);
     m_msg_scope_read = new Msg_SCOP_Read(this);
@@ -290,6 +62,7 @@ void Core::on_start()
     m_msg_cntr_read = new Msg_CNTR_Read(this);
     m_msg_sgen_set = new Msg_SGEN_Set(this);
     m_msg_pwm_set = new Msg_PWM_Set(this);
+    */
 
     devInfo = new DevInfo(this);
 
@@ -300,10 +73,10 @@ void Core::on_start()
     connect(m_timer_comm, &QTimer::timeout, this, &Core::on_timer_comm);
     connect(m_timer_render, &QTimer::timeout, this, &Core::on_timer_render);
 
-    qInfo() << "Core started";
+    qInfo() << "Core thread started";
 }
 
-bool Core::open(QString port)
+bool Core::openComm(QString port)
 {
     m_serial->setPortName(port);
     m_state = OPENING;
@@ -338,7 +111,7 @@ bool Core::open(QString port)
     }
 }
 
-bool Core::close()
+bool Core::closeComm()
 {
     m_state = DISCONNECTED;
     m_serial->close(); // TODO enque
@@ -350,7 +123,7 @@ bool Core::close()
     return true;
 }
 
-void Core::start()
+void Core::startComm()
 {
     m_state = CONNECTED;
     emit stateChanged(m_state);
@@ -360,14 +133,15 @@ void Core::start()
 
 void Core::err(QString name, bool needClose)
 {
-    emit errorHappend(name);
+    emit msgDisplay(name, needClose ? CRITICAL : WARNING);
+
     if (needClose)
-        close();
+        closeComm();
 }
 
-void Core::dispose()
+void Core::msgAdd(Msg* msg)
 {
-    emit finished();
+    m_waitingMsgs.append(msg);
 }
 
 /* private */
@@ -399,23 +173,34 @@ void Core::send()
 
 /* slots */
 
-void Core::on_open(const QString port)
+void Core::on_openComm(const QString port)
 {
-    open(port);
+    openComm(port);
 }
 
-void Core::on_msgAdd(Msg* const msg)
+/*
+void Core::on_msgAdd(Msg* msg)
 {
-    m_waitingMsgs.append(msg);
+    msgAdd(msg);
 }
+*/
 
-void Core::on_close()
+void Core::on_closeComm(bool force)
 {
-    if (m_state == CONNECTED)
-        close_init = true;
+    if (force || m_state != CONNECTED)
+        closeComm();
     else
-        close();
+        close_init = true;
 }
+
+void Core::on_dispose()
+{
+    closeComm();
+    emit finished();
+    //this->thread()->quit();
+}
+
+/* private slots */
 
 void Core::on_serial_errorOccurred(QSerialPort::SerialPortError error)
 {
@@ -470,7 +255,7 @@ void Core::on_serial_readyRead()
                 m_activeMsgs.clear();
 
                 if (m_state == CONNECTING)
-                    start();
+                    startComm();
                 else if (m_state == CONNECTED)
                     m_timer_comm->start();
             }
@@ -497,7 +282,7 @@ void Core::on_timer_comm()
     if (close_init)
     {
         close_init = false;
-        close();
+        closeComm();
         return;
     }
 
@@ -515,11 +300,19 @@ void Core::on_timer_comm()
     }
     m_mode_last = m_mode;
 
-    m_activeMsgs.append(m_waitingMsgs);
-    m_waitingMsgs.clear();
+    int waitingSize = m_waitingMsgs.size();
+    if (waitingSize > 0)
+    {
+        m_activeMsgs.append(m_waitingMsgs.mid(0, waitingSize));
+        m_waitingMsgs.remove(0, waitingSize);
+    }
 
-    //if (cntr.enabled)
-    // m_activeMsgs.append(CNTR READ);
+    for (auto instr : emboInstruments)
+    {
+        auto activeMsg = instr->getActiveMsg();
+        if (activeMsg != Q_NULLPTR)
+            m_activeMsgs.append(activeMsg);
+    }
 
     if (m_activeMsgs.isEmpty())
         m_activeMsgs.append(m_msg_idn);

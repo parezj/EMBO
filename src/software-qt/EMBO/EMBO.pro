@@ -28,21 +28,42 @@ SOURCES += \
     core.cpp \
     lib/qcustomplot.cpp \
     main.cpp \
+    messages.cpp \
     msg.cpp \
     settings.cpp \
     utils.cpp \
-    window_main.cpp
+    window__main.cpp \
+    window_cntr.cpp \
+    window_la.cpp \
+    window_pwm.cpp \
+    window_scope.cpp \
+    window_sgen.cpp \
+    window_vm.cpp
 
 HEADERS += \
     core.h \
+    interfaces.h \
     lib/qcustomplot.h \
+    messages.h \
     msg.h \
     settings.h \
     utils.h \
-    window_main.h
+    window__main.h \
+    window_cntr.h \
+    window_la.h \
+    window_pwm.h \
+    window_scope.h \
+    window_sgen.h \
+    window_vm.h
 
 FORMS += \
-    window_main.ui
+    window__main.ui \
+    window_cntr.ui \
+    window_la.ui \
+    window_pwm.ui \
+    window_scope.ui \
+    window_sgen.ui \
+    window_vm.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

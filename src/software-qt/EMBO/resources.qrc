@@ -17,9 +17,10 @@
         <file>resources/img/vm.png</file>
         <file>resources/img/cntr.png</file>
         <file>resources/img/pwm.png</file>
-        <file>resources/img/cvut_meas.png</file>
         <file>resources/img/jp.png</file>
         <file>resources/img/jp2.png</file>
+        <file>resources/img/info.svg</file>
+        <file>resources/img/ctu_meas_small.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.ttf</file>
