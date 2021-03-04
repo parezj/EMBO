@@ -13,7 +13,12 @@ class IEmboInstrument
 {
 public :
     virtual ~IEmboInstrument() {}
+
     virtual Msg* getActiveMsg() = 0;
+    virtual bool getInstrEnabled() = 0;
+
+    bool m_instrEnabled = false;
+    Msg* m_activeMsg = Q_NULLPTR;
 };
 
 #endif // INTERFACES_H

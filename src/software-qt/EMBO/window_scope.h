@@ -9,6 +9,7 @@
 #include "interfaces.h"
 
 #include <QMainWindow>
+#include <QLabel>
 
 
 QT_BEGIN_NAMESPACE
@@ -24,22 +25,24 @@ public:
     explicit WindowScope(QWidget *parent = nullptr);
     ~WindowScope();
 
+    bool getInstrEnabled() override { return m_instrEnabled; };
     Msg* getActiveMsg() override { return m_activeMsg; };
 
 signals:
     void closing(const char* className);
 
 private slots:
-    void on_actionHelp_triggered();
+    void on_msg_err(QString text, MsgBoxType type, bool needClose);
+
+    void on_actionAbout_triggered();
 
 private:
     void closeEvent(QCloseEvent *event) override;
+    void showEvent(QShowEvent* event) override;
 
     Ui::WindowScope* m_ui;
 
     /* messages */
-    Msg* m_activeMsg = Q_NULLPTR;
-
     //Msg_CNTR_Enable* m_msg_enable;
    // Msg_CNTR_Read* m_msg_read;
 };

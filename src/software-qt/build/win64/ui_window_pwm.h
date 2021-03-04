@@ -13,9 +13,16 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QDial>
+#include <QtWidgets/QFrame>
+#include <QtWidgets/QGroupBox>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSlider>
+#include <QtWidgets/QSpinBox>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -24,17 +31,47 @@ QT_BEGIN_NAMESPACE
 class Ui_WindowPwm
 {
 public:
-    QAction *actionHelp;
+    QAction *actionAbout;
     QWidget *centralwidget;
+    QFrame *line;
+    QPushButton *pushButton_ch1enable;
+    QPushButton *pushButton_ch1disable;
+    QPushButton *pushButton_ch2enable;
+    QPushButton *pushButton_ch2disable;
+    QGroupBox *groupBox_1;
+    QDial *dial_freq;
+    QSlider *horizontalSlider_freq;
+    QLabel *label_4;
+    QSpinBox *spinBox_freq;
+    QLabel *label_5;
+    QLabel *label_realFreq;
+    QGroupBox *groupBox_2;
+    QLabel *label_2;
+    QLabel *label;
+    QSpinBox *spinBox_duty1;
+    QSpinBox *spinBox_duty2;
+    QDial *dial_duty2;
+    QDial *dial_duty1;
+    QGroupBox *groupBox_3;
+    QLabel *label_3;
+    QDial *dial_offset;
+    QSpinBox *spinBox_offset;
     QMenuBar *menubar;
-    QMenu *menuAbout;
+    QMenu *menuHelp;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *WindowPwm)
     {
         if (WindowPwm->objectName().isEmpty())
             WindowPwm->setObjectName(QString::fromUtf8("WindowPwm"));
-        WindowPwm->resize(800, 600);
+        WindowPwm->resize(411, 463);
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(WindowPwm->sizePolicy().hasHeightForWidth());
+        WindowPwm->setSizePolicy(sizePolicy);
+        WindowPwm->setMinimumSize(QSize(411, 463));
+        WindowPwm->setMaximumSize(QSize(411, 463));
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -42,27 +79,480 @@ public:
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/main/resources/img/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         WindowPwm->setWindowIcon(icon);
-        actionHelp = new QAction(WindowPwm);
-        actionHelp->setObjectName(QString::fromUtf8("actionHelp"));
+        actionAbout = new QAction(WindowPwm);
+        actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
         QIcon icon1;
         icon1.addFile(QString::fromUtf8(":/main/resources/img/info.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHelp->setIcon(icon1);
-        actionHelp->setFont(font);
+        actionAbout->setIcon(icon1);
+        actionAbout->setFont(font);
         centralwidget = new QWidget(WindowPwm);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        line = new QFrame(centralwidget);
+        line->setObjectName(QString::fromUtf8("line"));
+        line->setGeometry(QRect(0, 410, 431, 16));
+        line->setFrameShape(QFrame::HLine);
+        line->setFrameShadow(QFrame::Sunken);
+        pushButton_ch1enable = new QPushButton(centralwidget);
+        pushButton_ch1enable->setObjectName(QString::fromUtf8("pushButton_ch1enable"));
+        pushButton_ch1enable->setGeometry(QRect(40, 355, 151, 41));
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Roboto"));
+        font1.setPointSize(14);
+        pushButton_ch1enable->setFont(font1);
+        pushButton_ch1enable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
+"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
+"    border: 1px solid rgb(100, 100, 100);\n"
+"	border-radius: 5px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
+"                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"QPushButton:hover:!pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #FFFFFF;\n"
+"	color:#2f836a;\n"
+"}\n"
+"\n"
+"QPushButton:pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #AAAAAA;\n"
+"	color:white;\n"
+"}"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_ch1enable->setIcon(icon2);
+        pushButton_ch1enable->setIconSize(QSize(18, 18));
+        pushButton_ch1disable = new QPushButton(centralwidget);
+        pushButton_ch1disable->setObjectName(QString::fromUtf8("pushButton_ch1disable"));
+        pushButton_ch1disable->setGeometry(QRect(40, 355, 151, 41));
+        pushButton_ch1disable->setFont(font1);
+        pushButton_ch1disable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
+"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
+"    border: 1px solid rgb(100, 100, 100);\n"
+"	border-radius: 5px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
+"                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"QPushButton:hover:!pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #FFFFFF;\n"
+"	color:#2f836a;\n"
+"}\n"
+"\n"
+"QPushButton:pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #AAAAAA;\n"
+"	color:white;\n"
+"}"));
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-red.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_ch1disable->setIcon(icon3);
+        pushButton_ch1disable->setIconSize(QSize(18, 18));
+        pushButton_ch2enable = new QPushButton(centralwidget);
+        pushButton_ch2enable->setObjectName(QString::fromUtf8("pushButton_ch2enable"));
+        pushButton_ch2enable->setGeometry(QRect(220, 355, 151, 41));
+        pushButton_ch2enable->setFont(font1);
+        pushButton_ch2enable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
+"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
+"    border: 1px solid rgb(100, 100, 100);\n"
+"	border-radius: 5px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
+"                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"QPushButton:hover:!pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #FFFFFF;\n"
+"	color:#2f836a;\n"
+"}\n"
+"\n"
+"QPushButton:pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #AAAAAA;\n"
+"	color:white;\n"
+"}"));
+        pushButton_ch2enable->setIcon(icon2);
+        pushButton_ch2enable->setIconSize(QSize(18, 18));
+        pushButton_ch2disable = new QPushButton(centralwidget);
+        pushButton_ch2disable->setObjectName(QString::fromUtf8("pushButton_ch2disable"));
+        pushButton_ch2disable->setGeometry(QRect(220, 355, 151, 41));
+        QFont font2;
+        font2.setFamily(QString::fromUtf8("Roboto"));
+        font2.setPointSize(14);
+        font2.setBold(false);
+        font2.setWeight(50);
+        pushButton_ch2disable->setFont(font2);
+        pushButton_ch2disable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
+"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
+"    border: 1px solid rgb(100, 100, 100);\n"
+"	border-radius: 5px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
+"                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"QPushButton:hover:!pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #FFFFFF;\n"
+"	color:#2f836a;\n"
+"}\n"
+"\n"
+"QPushButton:pressed\n"
+"{\n"
+"	border: 1px solid black;\n"
+"	border-radius: 5px;\n"
+" 	background: #AAAAAA;\n"
+"	color:white;\n"
+"}"));
+        pushButton_ch2disable->setIcon(icon3);
+        pushButton_ch2disable->setIconSize(QSize(18, 18));
+        groupBox_1 = new QGroupBox(centralwidget);
+        groupBox_1->setObjectName(QString::fromUtf8("groupBox_1"));
+        groupBox_1->setGeometry(QRect(10, 1, 391, 120));
+        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(groupBox_1->sizePolicy().hasHeightForWidth());
+        groupBox_1->setSizePolicy(sizePolicy1);
+        QFont font3;
+        font3.setFamily(QString::fromUtf8("Roboto"));
+        font3.setPointSize(10);
+        font3.setBold(false);
+        font3.setItalic(false);
+        font3.setWeight(50);
+        font3.setKerning(true);
+        groupBox_1->setFont(font3);
+        groupBox_1->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        dial_freq = new QDial(groupBox_1);
+        dial_freq->setObjectName(QString::fromUtf8("dial_freq"));
+        dial_freq->setGeometry(QRect(10, 40, 50, 64));
+        dial_freq->setMaximum(5000000);
+        dial_freq->setOrientation(Qt::Horizontal);
+        dial_freq->setInvertedAppearance(false);
+        dial_freq->setWrapping(false);
+        dial_freq->setNotchTarget(50.000000000000000);
+        dial_freq->setNotchesVisible(true);
+        horizontalSlider_freq = new QSlider(groupBox_1);
+        horizontalSlider_freq->setObjectName(QString::fromUtf8("horizontalSlider_freq"));
+        horizontalSlider_freq->setGeometry(QRect(75, 12, 301, 31));
+        QFont font4;
+        font4.setBold(false);
+        font4.setWeight(50);
+        horizontalSlider_freq->setFont(font4);
+        horizontalSlider_freq->setStyleSheet(QString::fromUtf8("QSlider::handle:horizontal {\n"
+"    background-color: #449f84;\n"
+"    border: 1px solid;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal:hover {\n"
+"    background-color: #51bf9f;\n"
+"    border: 1px solid;\n"
+"}"));
+        horizontalSlider_freq->setMaximum(5000000);
+        horizontalSlider_freq->setValue(50);
+        horizontalSlider_freq->setOrientation(Qt::Horizontal);
+        horizontalSlider_freq->setTickPosition(QSlider::TicksBelow);
+        horizontalSlider_freq->setTickInterval(100000);
+        label_4 = new QLabel(groupBox_1);
+        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_4->setGeometry(QRect(85, 60, 111, 21));
+        QFont font5;
+        font5.setFamily(QString::fromUtf8("Roboto Thin"));
+        font5.setPointSize(16);
+        font5.setBold(false);
+        font5.setWeight(50);
+        label_4->setFont(font5);
+        spinBox_freq = new QSpinBox(groupBox_1);
+        spinBox_freq->setObjectName(QString::fromUtf8("spinBox_freq"));
+        spinBox_freq->setEnabled(true);
+        spinBox_freq->setGeometry(QRect(70, 50, 301, 41));
+        spinBox_freq->setStyleSheet(QString::fromUtf8("QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }\n"
+"\n"
+"QSpinBox::up-button { \n"
+"	height:22px; \n"
+"	width: 30px;\n"
+"	border: 0px;\n"
+"	image: url(:/main/resources/img/arrow_up4.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button {\n"
+"	height:22px; \n"
+"	width: 30px;\n"
+"	border: 0px;\n"
+"	image: url(:/main/resources/img/arrow_down4.png);\n"
+" }\n"
+"\n"
+"QSpinBox::up-button:hover { \n"
+"	image: url(:/main/resources/img/arrow_up4b.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button:hover {\n"
+"	image: url(:/main/resources/img/arrow_down4b.png);\n"
+" }\n"
+"\n"
+"QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;\n"
+"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
+"                                          text-align:right;font-family:'Ro"
+                        "boto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
+"\n"
+"QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"\n"
+"QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
+""));
+        spinBox_freq->setWrapping(false);
+        spinBox_freq->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        spinBox_freq->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        spinBox_freq->setAccelerated(false);
+        spinBox_freq->setProperty("showGroupSeparator", QVariant(false));
+        spinBox_freq->setMaximum(5000000);
+        spinBox_freq->setValue(5000000);
+        label_5 = new QLabel(groupBox_1);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setGeometry(QRect(85, 90, 121, 21));
+        QFont font6;
+        font6.setFamily(QString::fromUtf8("Roboto Thin"));
+        font6.setPointSize(13);
+        font6.setBold(false);
+        font6.setWeight(50);
+        label_5->setFont(font6);
+        label_realFreq = new QLabel(groupBox_1);
+        label_realFreq->setObjectName(QString::fromUtf8("label_realFreq"));
+        label_realFreq->setGeometry(QRect(195, 90, 141, 21));
+        QFont font7;
+        font7.setFamily(QString::fromUtf8("Roboto Mono Light"));
+        font7.setPointSize(13);
+        font7.setBold(false);
+        font7.setWeight(50);
+        label_realFreq->setFont(font7);
+        label_realFreq->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        dial_freq->raise();
+        horizontalSlider_freq->raise();
+        spinBox_freq->raise();
+        label_5->raise();
+        label_realFreq->raise();
+        label_4->raise();
+        groupBox_2 = new QGroupBox(centralwidget);
+        groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
+        groupBox_2->setGeometry(QRect(10, 122, 390, 135));
+        sizePolicy1.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
+        groupBox_2->setSizePolicy(sizePolicy1);
+        groupBox_2->setFont(font3);
+        groupBox_2->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        label_2 = new QLabel(groupBox_2);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+        label_2->setGeometry(QRect(85, 90, 111, 21));
+        label_2->setFont(font5);
+        label = new QLabel(groupBox_2);
+        label->setObjectName(QString::fromUtf8("label"));
+        label->setGeometry(QRect(85, 30, 111, 21));
+        label->setFont(font5);
+        spinBox_duty1 = new QSpinBox(groupBox_2);
+        spinBox_duty1->setObjectName(QString::fromUtf8("spinBox_duty1"));
+        spinBox_duty1->setGeometry(QRect(70, 20, 301, 41));
+        spinBox_duty1->setStyleSheet(QString::fromUtf8("QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }\n"
+"\n"
+"QSpinBox::up-button { height:22px; width: 30px; border: 0px;\n"
+"									 image: url(:/main/resources/img/arrow_up4.png); }\n"
+"\n"
+"QSpinBox::down-button { height:22px; width: 30px; border: 0px;\n"
+"										  image: url(:/main/resources/img/arrow_down4.png); }\n"
+"\n"
+"QSpinBox::up-button:hover { \n"
+"	image: url(:/main/resources/img/arrow_up4b.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button:hover {\n"
+"	image: url(:/main/resources/img/arrow_down4b.png);\n"
+" }\n"
+"\n"
+"QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;\n"
+"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
+"                                          text-align:right;font-family:'Roboto Mono Medium','Rob"
+                        "oto'; font-size:16pt; font-weight:500; }\n"
+"\n"
+"QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"\n"
+"QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
+""));
+        spinBox_duty1->setWrapping(false);
+        spinBox_duty1->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        spinBox_duty1->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        spinBox_duty1->setAccelerated(false);
+        spinBox_duty1->setProperty("showGroupSeparator", QVariant(false));
+        spinBox_duty1->setMaximum(100);
+        spinBox_duty1->setValue(50);
+        spinBox_duty2 = new QSpinBox(groupBox_2);
+        spinBox_duty2->setObjectName(QString::fromUtf8("spinBox_duty2"));
+        spinBox_duty2->setGeometry(QRect(70, 80, 301, 41));
+        spinBox_duty2->setStyleSheet(QString::fromUtf8("QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }\n"
+"\n"
+"QSpinBox::up-button { \n"
+"	height:22px; \n"
+"	width: 30px;\n"
+"	border: 0px;\n"
+"	image: url(:/main/resources/img/arrow_up4.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button {\n"
+"	height:22px; \n"
+"	width: 30px;\n"
+"	border: 0px;\n"
+"	image: url(:/main/resources/img/arrow_down4.png);\n"
+" }\n"
+"\n"
+"QSpinBox::up-button:hover { \n"
+"	image: url(:/main/resources/img/arrow_up4b.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button:hover {\n"
+"	image: url(:/main/resources/img/arrow_down4b.png);\n"
+" }\n"
+"\n"
+"QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;\n"
+"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
+"                                          text-align:right;font-family:'Ro"
+                        "boto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
+"\n"
+"QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"\n"
+"QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
+""));
+        spinBox_duty2->setWrapping(false);
+        spinBox_duty2->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        spinBox_duty2->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        spinBox_duty2->setAccelerated(false);
+        spinBox_duty2->setProperty("showGroupSeparator", QVariant(false));
+        spinBox_duty2->setMaximum(100);
+        spinBox_duty2->setValue(50);
+        dial_duty2 = new QDial(groupBox_2);
+        dial_duty2->setObjectName(QString::fromUtf8("dial_duty2"));
+        dial_duty2->setGeometry(QRect(10, 70, 50, 64));
+        dial_duty2->setMaximum(100);
+        dial_duty2->setOrientation(Qt::Horizontal);
+        dial_duty2->setInvertedAppearance(false);
+        dial_duty2->setWrapping(false);
+        dial_duty2->setNotchTarget(5.000000000000000);
+        dial_duty2->setNotchesVisible(true);
+        dial_duty1 = new QDial(groupBox_2);
+        dial_duty1->setObjectName(QString::fromUtf8("dial_duty1"));
+        dial_duty1->setGeometry(QRect(10, 10, 50, 64));
+        dial_duty1->setMaximum(100);
+        dial_duty1->setOrientation(Qt::Horizontal);
+        dial_duty1->setInvertedAppearance(false);
+        dial_duty1->setWrapping(false);
+        dial_duty1->setNotchTarget(5.000000000000000);
+        dial_duty1->setNotchesVisible(true);
+        spinBox_duty1->raise();
+        spinBox_duty2->raise();
+        dial_duty2->raise();
+        dial_duty1->raise();
+        label_2->raise();
+        label->raise();
+        groupBox_3 = new QGroupBox(centralwidget);
+        groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
+        groupBox_3->setGeometry(QRect(10, 259, 391, 75));
+        sizePolicy1.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
+        groupBox_3->setSizePolicy(sizePolicy1);
+        groupBox_3->setFont(font3);
+        groupBox_3->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        label_3 = new QLabel(groupBox_3);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setGeometry(QRect(85, 30, 111, 21));
+        label_3->setFont(font5);
+        dial_offset = new QDial(groupBox_3);
+        dial_offset->setObjectName(QString::fromUtf8("dial_offset"));
+        dial_offset->setGeometry(QRect(10, 10, 50, 64));
+        dial_offset->setMaximum(100);
+        dial_offset->setOrientation(Qt::Horizontal);
+        dial_offset->setInvertedAppearance(false);
+        dial_offset->setWrapping(false);
+        dial_offset->setNotchTarget(5.000000000000000);
+        dial_offset->setNotchesVisible(true);
+        spinBox_offset = new QSpinBox(groupBox_3);
+        spinBox_offset->setObjectName(QString::fromUtf8("spinBox_offset"));
+        spinBox_offset->setGeometry(QRect(70, 20, 301, 41));
+        spinBox_offset->setStyleSheet(QString::fromUtf8("QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }\n"
+"\n"
+"QSpinBox::up-button { \n"
+"	height:22px; \n"
+"	width: 30px;\n"
+"	border: 0px;\n"
+"	image: url(:/main/resources/img/arrow_up4.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button {\n"
+"	height:22px; \n"
+"	width: 30px;\n"
+"	border: 0px;\n"
+"	image: url(:/main/resources/img/arrow_down4.png);\n"
+" }\n"
+"\n"
+"QSpinBox::up-button:hover { \n"
+"	image: url(:/main/resources/img/arrow_up4b.png);\n"
+"}\n"
+"\n"
+"QSpinBox::down-button:hover {\n"
+"	image: url(:/main/resources/img/arrow_down4b.png);\n"
+" }\n"
+"\n"
+"QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;\n"
+"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
+"                                          text-align:right;font-family:'Ro"
+                        "boto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
+"\n"
+"QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"\n"
+"QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
+""));
+        spinBox_offset->setWrapping(false);
+        spinBox_offset->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        spinBox_offset->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
+        spinBox_offset->setAccelerated(false);
+        spinBox_offset->setProperty("showGroupSeparator", QVariant(false));
+        spinBox_offset->setMaximum(100);
+        spinBox_offset->setValue(50);
+        dial_offset->raise();
+        spinBox_offset->raise();
+        label_3->raise();
         WindowPwm->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowPwm);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
-        menuAbout = new QMenu(menubar);
-        menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
+        menubar->setGeometry(QRect(0, 0, 411, 21));
+        menuHelp = new QMenu(menubar);
+        menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowPwm->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowPwm);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setStyleSheet(QString::fromUtf8("background-color: rgb(230, 230, 230);"));
         WindowPwm->setStatusBar(statusbar);
 
-        menubar->addAction(menuAbout->menuAction());
-        menuAbout->addAction(actionHelp);
+        menubar->addAction(menuHelp->menuAction());
+        menuHelp->addAction(actionAbout);
 
         retranslateUi(WindowPwm);
 
@@ -72,8 +562,25 @@ public:
     void retranslateUi(QMainWindow *WindowPwm)
     {
         WindowPwm->setWindowTitle(QCoreApplication::translate("WindowPwm", "EMBO - PWM Generator", nullptr));
-        actionHelp->setText(QCoreApplication::translate("WindowPwm", "Help", nullptr));
-        menuAbout->setTitle(QCoreApplication::translate("WindowPwm", "About", nullptr));
+        actionAbout->setText(QCoreApplication::translate("WindowPwm", "About", nullptr));
+        pushButton_ch1enable->setText(QCoreApplication::translate("WindowPwm", " CH1 Enable", nullptr));
+        pushButton_ch1disable->setText(QCoreApplication::translate("WindowPwm", " CH1 Disable", nullptr));
+        pushButton_ch2enable->setText(QCoreApplication::translate("WindowPwm", " CH2 Enable", nullptr));
+        pushButton_ch2disable->setText(QCoreApplication::translate("WindowPwm", " CH2 Disable", nullptr));
+        groupBox_1->setTitle(QString());
+        label_4->setText(QCoreApplication::translate("WindowPwm", "Frequency:", nullptr));
+        spinBox_freq->setSuffix(QCoreApplication::translate("WindowPwm", " Hz", nullptr));
+        label_5->setText(QCoreApplication::translate("WindowPwm", "Real frequency:", nullptr));
+        label_realFreq->setText(QCoreApplication::translate("WindowPwm", "545.12 Hz", nullptr));
+        groupBox_2->setTitle(QString());
+        label_2->setText(QCoreApplication::translate("WindowPwm", "Duty CH2:", nullptr));
+        label->setText(QCoreApplication::translate("WindowPwm", "Duty CH1:", nullptr));
+        spinBox_duty1->setSuffix(QCoreApplication::translate("WindowPwm", " %", nullptr));
+        spinBox_duty2->setSuffix(QCoreApplication::translate("WindowPwm", " %", nullptr));
+        groupBox_3->setTitle(QString());
+        label_3->setText(QCoreApplication::translate("WindowPwm", "Offset CH2:", nullptr));
+        spinBox_offset->setSuffix(QCoreApplication::translate("WindowPwm", " %", nullptr));
+        menuHelp->setTitle(QCoreApplication::translate("WindowPwm", "Help", nullptr));
     } // retranslateUi
 
 };

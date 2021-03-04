@@ -81,7 +81,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
        <x>10</x>
        <y>30</y>
        <width>201</width>
-       <height>461</height>
+       <height>451</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -130,20 +130,46 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>500</y>
-       <width>81</width>
-       <height>31</height>
+       <y>490</y>
+       <width>71</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Roboto</family>
-       <pointsize>11</pointsize>
+       <pointsize>13</pointsize>
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(100, 100, 100);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
+                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid black;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 1px solid black;
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
      </property>
      <property name="text">
       <string>Scan</string>
@@ -159,21 +185,47 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      </property>
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>500</y>
-       <width>111</width>
-       <height>31</height>
+       <x>90</x>
+       <y>490</y>
+       <width>121</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Roboto</family>
-       <pointsize>11</pointsize>
+       <pointsize>13</pointsize>
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(100, 100, 100);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
+                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid black;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 1px solid black;
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
      </property>
      <property name="text">
       <string>Connect</string>
@@ -189,21 +241,47 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      </property>
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>500</y>
-       <width>111</width>
-       <height>31</height>
+       <x>90</x>
+       <y>490</y>
+       <width>121</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <family>Roboto</family>
-       <pointsize>11</pointsize>
+       <pointsize>13</pointsize>
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(100, 100, 100);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
+                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid black;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 1px solid black;
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
      </property>
      <property name="text">
       <string>Disconnect</string>
@@ -246,7 +324,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>370</y>
+       <y>360</y>
        <width>161</width>
        <height>110</height>
       </rect>
@@ -764,13 +842,14 @@ QPushButton:hover:!pressed
 	border: 1px solid black;
 	border-radius: 5px;
  	background: #FFFFFF;
+	color:#2f836a;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
 	border-radius: 5px;
- 	background: #888888;
+ 	background: #AAAAAA;
 	color:white;
 }</string>
       </property>
@@ -783,8 +862,8 @@ QPushButton:pressed
       </property>
       <property name="iconSize">
        <size>
-        <width>22</width>
-        <height>22</height>
+        <width>21</width>
+        <height>21</height>
        </size>
       </property>
      </widget>
@@ -1108,13 +1187,14 @@ QPushButton:hover:!pressed
 	border: 1px solid black;
 	border-radius: 5px;
  	background: #FFFFFF;
+	color:#2f836a;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
 	border-radius: 5px;
- 	background: #888888;
+ 	background: #AAAAAA;
 	color:white;
 }</string>
       </property>
@@ -1400,13 +1480,14 @@ QPushButton:hover:!pressed
 	border: 1px solid black;
 	border-radius: 5px;
  	background: #FFFFFF;
+	color:#2f836a;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
 	border-radius: 5px;
- 	background: #888888;
+ 	background: #AAAAAA;
 	color:white;
 }</string>
       </property>
@@ -1725,13 +1806,14 @@ QPushButton:hover:!pressed
 	border: 1px solid black;
 	border-radius: 5px;
  	background: #FFFFFF;
+	color:#2f836a;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
 	border-radius: 5px;
- 	background: #888888;
+ 	background: #AAAAAA;
 	color:white;
 }</string>
       </property>
@@ -1913,13 +1995,14 @@ QPushButton:hover:!pressed
 	border: 1px solid black;
 	border-radius: 5px;
  	background: #FFFFFF;
+	color:#2f836a;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
 	border-radius: 5px;
- 	background: #888888;
+ 	background: #AAAAAA;
 	color:white;
 }</string>
       </property>
@@ -1928,12 +2011,12 @@ QPushButton:pressed
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
-        <normaloff>:/main/resources/img/sgen.svg</normaloff>:/main/resources/img/sgen.svg</iconset>
+        <normaloff>:/main/resources/img/sgen2.png</normaloff>:/main/resources/img/sgen2.png</iconset>
       </property>
       <property name="iconSize">
        <size>
-        <width>20</width>
-        <height>21</height>
+        <width>22</width>
+        <height>22</height>
        </size>
       </property>
      </widget>
@@ -2009,7 +2092,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pins:</string>
+       <string>• Pin:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -2153,13 +2236,14 @@ QPushButton:hover:!pressed
 	border: 1px solid black;
 	border-radius: 5px;
  	background: #FFFFFF;
+	color:#2f836a;
 }
 
 QPushButton:pressed
 {
 	border: 1px solid black;
 	border-radius: 5px;
- 	background: #888888;
+ 	background: #AAAAAA;
 	color:white;
 }</string>
       </property>
@@ -2197,7 +2281,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pins:</string>
+       <string>• Pin:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -2382,6 +2466,9 @@ QPushButton:pressed
      <italic>false</italic>
      <kerning>true</kerning>
     </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(230, 230, 230);</string>
    </property>
   </widget>
   <action name="actionAbout">

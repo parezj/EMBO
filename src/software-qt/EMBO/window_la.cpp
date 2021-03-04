@@ -8,6 +8,7 @@
 #include "core.h"
 #include "utils.h"
 #include "settings.h"
+#include "css.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -24,12 +25,40 @@ WindowLa::~WindowLa()
     delete m_ui;
 }
 
+void WindowLa::on_actionAbout_triggered()
+{
+    QMessageBox::about(this, EMBO_TITLE, EMBO_ABOUT_TXT);
+}
+
+/* slots */
+
+void WindowLa::on_msg_err(QString text, MsgBoxType type, bool needClose)
+{
+    m_activeMsg = Q_NULLPTR;
+
+    if (type == INFO)
+        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
+    else if (type == QUESTION)
+        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
+    else if (type == WARNING)
+        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
+    else if (type == CRITICAL)
+        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
+
+    if (needClose)
+        this->close();
+}
+
+/* private */
+
 void WindowLa::closeEvent(QCloseEvent*)
 {
+    m_activeMsg = Q_NULLPTR;
     emit closing(WindowLa::staticMetaObject.className());
 }
 
-void WindowLa::on_actionHelp_triggered()
+void WindowLa::showEvent(QShowEvent*)
 {
-    QMessageBox::about(this, EMBO_TITLE, EMBO_ABOUT_TXT);
+    //m_msg_enable->setIsQuery(true);
+    //Core::getInstance()->msgAdd(m_msg_enable);
 }

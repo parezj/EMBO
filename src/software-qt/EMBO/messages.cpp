@@ -115,6 +115,10 @@ void Msg_SYS_Mode::on_dataRx()
     }
 }
 
+void Msg_Dummy::on_dataRx()
+{
+}
+
 /***************************** Messages - VM ****************************/
 
 void Msg_VM_Read::on_dataRx()
@@ -234,10 +238,10 @@ void Msg_CNTR_Read::on_dataRx()
 void Msg_SGEN_Set::on_dataRx()
 {
     qInfo() << "SGEN:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
+
+
 }
 
 /***************************** Messages - PWM ***************************/
@@ -245,8 +249,9 @@ void Msg_SGEN_Set::on_dataRx()
 void Msg_PWM_Set::on_dataRx()
 {
     qInfo() << "PWM:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
+
+
+
 }

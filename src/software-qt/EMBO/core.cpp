@@ -45,6 +45,7 @@ void Core::on_startThread()
 
     m_msg_idn = new Msg_Idn(this);
     m_msg_rst = new Msg_Rst(this);
+    m_msg_dummy = new Msg_Dummy(this);
     m_msg_sys_lims = new Msg_SYS_Lims(this);
     m_msg_sys_info = new Msg_SYS_Info(this);
     m_msg_sys_mode = new Msg_SYS_Mode(this);
@@ -87,12 +88,14 @@ bool Core::openComm(QString port)
         m_state = CONNECTING;
         emit stateChanged(m_state);
 
-        m_serial->flush();
+        m_serial->clear();
+
         m_mainBuffer.clear();
         m_waitingMsgs.clear();
         m_activeMsgs.clear();
 
         assert(m_activeMsgs.isEmpty());
+        m_activeMsgs.append(m_msg_dummy);
         m_activeMsgs.append(m_msg_idn);
         m_activeMsgs.append(m_msg_sys_lims);
         m_activeMsgs.append(m_msg_sys_info);
@@ -139,8 +142,14 @@ void Core::err(QString name, bool needClose)
         closeComm();
 }
 
-void Core::msgAdd(Msg* msg)
+void Core::msgAdd(Msg* msg, bool isQuery, QString params)
 {
+    assert(msg != Q_NULLPTR);
+
+    msg->setIsQuery(isQuery);
+    if (!params.isEmpty())
+        msg->setParams(params);
+
     m_waitingMsgs.append(msg);
 }
 
@@ -159,8 +168,8 @@ void Core::send()
             tx.append(EMBO_DELIM1);
 
         tx.append( msg->getCmd() +
-                  (msg->getIsQuery() ? "?" : "") +
-                  (msg->getParams().isEmpty() ? "" : " " + msg->getParams()));
+                  (msg->getIsQuery() ? "?" :
+                        (msg->getParams().isEmpty() ? "" : " " + msg->getParams())));
         it++;
     }
     tx.append(EMBO_NEWLINE);

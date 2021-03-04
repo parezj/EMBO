@@ -13,6 +13,7 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -26,6 +27,7 @@ class Ui_WindowVm
 public:
     QAction *actionAbout;
     QWidget *centralwidget;
+    QListView *listView;
     QMenuBar *menubar;
     QMenu *menuHelp;
     QStatusBar *statusbar;
@@ -34,7 +36,7 @@ public:
     {
         if (WindowVm->objectName().isEmpty())
             WindowVm->setObjectName(QString::fromUtf8("WindowVm"));
-        WindowVm->resize(800, 600);
+        WindowVm->resize(821, 292);
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -50,15 +52,19 @@ public:
         actionAbout->setFont(font);
         centralwidget = new QWidget(WindowVm);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        listView = new QListView(centralwidget);
+        listView->setObjectName(QString::fromUtf8("listView"));
+        listView->setGeometry(QRect(260, 30, 256, 192));
         WindowVm->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowVm);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
+        menubar->setGeometry(QRect(0, 0, 821, 21));
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowVm->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowVm);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setStyleSheet(QString::fromUtf8("background-color: rgb(230, 230, 230);"));
         WindowVm->setStatusBar(statusbar);
 
         menubar->addAction(menuHelp->menuAction());

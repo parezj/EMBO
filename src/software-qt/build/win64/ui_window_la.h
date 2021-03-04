@@ -24,17 +24,17 @@ QT_BEGIN_NAMESPACE
 class Ui_WindowLa
 {
 public:
-    QAction *actionHelp;
+    QAction *actionAbout;
     QWidget *centralwidget;
     QMenuBar *menubar;
-    QMenu *menuAbout;
+    QMenu *menuHelp;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *WindowLa)
     {
         if (WindowLa->objectName().isEmpty())
             WindowLa->setObjectName(QString::fromUtf8("WindowLa"));
-        WindowLa->resize(800, 600);
+        WindowLa->resize(411, 245);
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -42,27 +42,28 @@ public:
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/main/resources/img/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         WindowLa->setWindowIcon(icon);
-        actionHelp = new QAction(WindowLa);
-        actionHelp->setObjectName(QString::fromUtf8("actionHelp"));
+        actionAbout = new QAction(WindowLa);
+        actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
         QIcon icon1;
         icon1.addFile(QString::fromUtf8(":/main/resources/img/info.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHelp->setIcon(icon1);
-        actionHelp->setFont(font);
+        actionAbout->setIcon(icon1);
+        actionAbout->setFont(font);
         centralwidget = new QWidget(WindowLa);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         WindowLa->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowLa);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
-        menuAbout = new QMenu(menubar);
-        menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
+        menubar->setGeometry(QRect(0, 0, 411, 21));
+        menuHelp = new QMenu(menubar);
+        menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowLa->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowLa);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setStyleSheet(QString::fromUtf8("background-color: rgb(230, 230, 230);"));
         WindowLa->setStatusBar(statusbar);
 
-        menubar->addAction(menuAbout->menuAction());
-        menuAbout->addAction(actionHelp);
+        menubar->addAction(menuHelp->menuAction());
+        menuHelp->addAction(actionAbout);
 
         retranslateUi(WindowLa);
 
@@ -72,8 +73,8 @@ public:
     void retranslateUi(QMainWindow *WindowLa)
     {
         WindowLa->setWindowTitle(QCoreApplication::translate("WindowLa", "EMBO - Logic Analyzer", nullptr));
-        actionHelp->setText(QCoreApplication::translate("WindowLa", "Help", nullptr));
-        menuAbout->setTitle(QCoreApplication::translate("WindowLa", "About", nullptr));
+        actionAbout->setText(QCoreApplication::translate("WindowLa", "About", nullptr));
+        menuHelp->setTitle(QCoreApplication::translate("WindowLa", "Help", nullptr));
     } // retranslateUi
 
 };

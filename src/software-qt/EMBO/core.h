@@ -30,8 +30,8 @@
 #define COMM_FATAL_ERR  "Communication fatal error! "
 
 #define EMBO_TITLE      "EMBO"
-#define EMBO_TITLE2     "EMBedded Oscilloscope"
-#define EMBO_ABOUT_TXT  "<b>EMBO - EMBedded Oscilloscope</b><br><br> EMBO is useful tool for every electronics enthusiast.<br>\
+#define EMBO_TITLE2     "EMBO - EMBedded Oscilloscope"
+#define EMBO_ABOUT_TXT  "<b>EMBedded Oscilloscope</b><br><br> EMBO is useful tool for every electronics enthusiast.<br>\
 For just few dollar hardware (STM32 BluePill) can become a powerfull scope, logic analyzer, voltmeter, counter, \
 PWM and signal generator.<br>And of course, it's opensource!<br><br>\
 <a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
@@ -119,7 +119,7 @@ public:
     bool closeComm();
     void startComm();
     void err(QString name, bool needClose);
-    void msgAdd(Msg* msg);
+    void msgAdd(Msg* msg, bool isQuery, QString params = "");
 
     QVector<IEmboInstrument*> emboInstruments;
 
@@ -188,6 +188,7 @@ private:
     /* message objects */
     Msg_Idn* m_msg_idn;
     Msg_Rst* m_msg_rst;
+    Msg_Dummy* m_msg_dummy;
     Msg_SYS_Lims* m_msg_sys_lims;
     Msg_SYS_Info* m_msg_sys_info;
     Msg_SYS_Mode* m_msg_sys_mode;

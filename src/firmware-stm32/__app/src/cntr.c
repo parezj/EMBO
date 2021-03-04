@@ -49,7 +49,9 @@ void cntr_enable(cntr_data_t* self, uint8_t enable)
     self->enabled = enable;
 
     if (enable == EM_TRUE && !en)
-        ASSERT(xSemaphoreGive(sem3_cntr) == pdPASS);
+        xSemaphoreGive(sem3_cntr);
+    else if (enable == EM_FALSE && en)
+        xSemaphoreTake(sem3_cntr, 0);
 }
 
 void cntr_start(cntr_data_t* self, uint8_t start)

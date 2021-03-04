@@ -80,6 +80,14 @@ public:
     virtual void on_dataRx() override;
 };
 
+class Msg_Dummy : public Msg
+{
+    Q_OBJECT
+public:
+    explicit Msg_Dummy(QObject* parent=0) : Msg(EMBO_SYS_MODE, true, parent) {};
+    virtual void on_dataRx() override;
+};
+
 /***************************** Messages - VM ****************************/
 
 class Msg_VM_Read : public Msg
@@ -174,12 +182,24 @@ signals:
 
 /***************************** Messages - SGEN **************************/
 
+enum SgenMode
+{
+    CONST,
+    SINE,
+    TRIANGLE,
+    SAW,
+    SQUARE,
+    NOISE
+};
+
 class Msg_SGEN_Set : public Msg
 {
     Q_OBJECT
 public:
     explicit Msg_SGEN_Set(QObject* parent=0) : Msg(EMBO_SGEN_SET, true, parent) {};
     virtual void on_dataRx() override;
+signals:
+    void result(SgenMode mode, double freq, int ampl, int offset);
 };
 
 /***************************** Messages - PWM ***************************/
@@ -190,6 +210,8 @@ class Msg_PWM_Set : public Msg
 public:
     explicit Msg_PWM_Set(QObject* parent=0) : Msg(EMBO_PWM_SET, true, parent) {};
     virtual void on_dataRx() override;
+signals:
+    void result(double freq, int duty, int duty2, int offset, bool en1, bool en2);
 };
 
 #endif // MESSAGES_H

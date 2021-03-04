@@ -24,17 +24,17 @@ QT_BEGIN_NAMESPACE
 class Ui_WindowScope
 {
 public:
-    QAction *actionHelp;
+    QAction *actionAbout;
     QWidget *centralwidget;
     QMenuBar *menubar;
-    QMenu *menuAbout;
+    QMenu *menuHelp;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *WindowScope)
     {
         if (WindowScope->objectName().isEmpty())
             WindowScope->setObjectName(QString::fromUtf8("WindowScope"));
-        WindowScope->resize(800, 600);
+        WindowScope->resize(410, 299);
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -42,27 +42,28 @@ public:
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/main/resources/img/icon.png"), QSize(), QIcon::Normal, QIcon::Off);
         WindowScope->setWindowIcon(icon);
-        actionHelp = new QAction(WindowScope);
-        actionHelp->setObjectName(QString::fromUtf8("actionHelp"));
+        actionAbout = new QAction(WindowScope);
+        actionAbout->setObjectName(QString::fromUtf8("actionAbout"));
         QIcon icon1;
         icon1.addFile(QString::fromUtf8(":/main/resources/img/info.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        actionHelp->setIcon(icon1);
-        actionHelp->setFont(font);
+        actionAbout->setIcon(icon1);
+        actionAbout->setFont(font);
         centralwidget = new QWidget(WindowScope);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         WindowScope->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowScope);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 21));
-        menuAbout = new QMenu(menubar);
-        menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
+        menubar->setGeometry(QRect(0, 0, 410, 21));
+        menuHelp = new QMenu(menubar);
+        menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowScope->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowScope);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
+        statusbar->setStyleSheet(QString::fromUtf8("background-color: rgb(230, 230, 230);"));
         WindowScope->setStatusBar(statusbar);
 
-        menubar->addAction(menuAbout->menuAction());
-        menuAbout->addAction(actionHelp);
+        menubar->addAction(menuHelp->menuAction());
+        menuHelp->addAction(actionAbout);
 
         retranslateUi(WindowScope);
 
@@ -72,8 +73,8 @@ public:
     void retranslateUi(QMainWindow *WindowScope)
     {
         WindowScope->setWindowTitle(QCoreApplication::translate("WindowScope", "EMBO - Oscilloscope", nullptr));
-        actionHelp->setText(QCoreApplication::translate("WindowScope", "Help", nullptr));
-        menuAbout->setTitle(QCoreApplication::translate("WindowScope", "About", nullptr));
+        actionAbout->setText(QCoreApplication::translate("WindowScope", "About", nullptr));
+        menuHelp->setTitle(QCoreApplication::translate("WindowScope", "Help", nullptr));
     } // retranslateUi
 
 };

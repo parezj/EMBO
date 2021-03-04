@@ -21,6 +21,29 @@
         <file>resources/img/jp2.png</file>
         <file>resources/img/info.svg</file>
         <file>resources/img/ctu_meas_small.png</file>
+        <file>resources/img/arrow_down.png</file>
+        <file>resources/img/arrow_up.png</file>
+        <file>resources/img/arrow_down2.png</file>
+        <file>resources/img/arrow_up2.png</file>
+        <file>resources/img/arrow_down3.png</file>
+        <file>resources/img/arrow_up3.png</file>
+        <file>resources/img/radio_on1.png</file>
+        <file>resources/img/radio_off2.png</file>
+        <file>resources/img/radio_on2.png</file>
+        <file>resources/img/radio_off1.png</file>
+        <file>resources/img/arrow_down4.png</file>
+        <file>resources/img/arrow_up4.png</file>
+        <file>resources/img/sgen_const.png</file>
+        <file>resources/img/sgen_saw.png</file>
+        <file>resources/img/sgen_sine.png</file>
+        <file>resources/img/sgen_square.png</file>
+        <file>resources/img/sgen_triangle.png</file>
+        <file>resources/img/sgen2.png</file>
+        <file>resources/img/sgen_noise.png</file>
+        <file>resources/img/arrow_down4b.png</file>
+        <file>resources/img/arrow_up4b.png</file>
+        <file>resources/img/serial.png</file>
+        <file>resources/img/serial2.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.ttf</file>

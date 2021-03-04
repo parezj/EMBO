@@ -7,11 +7,15 @@
 #define WINDOW_CNTR_H
 
 #include "interfaces.h"
-
 #include "messages.h"
 
 #include <QString>
 #include <QMainWindow>
+#include <QLabel>
+
+
+#define FREQ_TIMEOUT    "? Hz "
+#define PERIOD_TIMEOUT  "? ms "
 
 
 QT_BEGIN_NAMESPACE
@@ -27,8 +31,7 @@ public:
     explicit WindowCntr(QWidget *parent = nullptr);
     ~WindowCntr();
 
-    bool getInstrEnabled() { return instrEnabled; };
-    void setInstrEnabled(bool enabled) { instrEnabled = enabled; };
+    bool getInstrEnabled() override { return m_instrEnabled; };
     Msg* getActiveMsg() override { return m_activeMsg; };
 
 signals:
@@ -45,13 +48,11 @@ private slots:
 
 private:
     void closeEvent(QCloseEvent *event) override;
+    void showEvent(QShowEvent* event) override;
 
-    bool instrEnabled = false;
+    QLabel* m_status_enabled;
 
     Ui::WindowCntr* m_ui;
-
-    /* active msg */
-    Msg* m_activeMsg = Q_NULLPTR;
 
     /* messages */
     Msg_CNTR_Enable* m_msg_enable;

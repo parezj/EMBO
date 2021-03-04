@@ -42,6 +42,7 @@ SOURCES += \
 
 HEADERS += \
     core.h \
+    css.h \
     interfaces.h \
     lib/qcustomplot.h \
     messages.h \
