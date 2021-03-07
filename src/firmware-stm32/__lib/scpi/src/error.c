@@ -96,7 +96,7 @@ void SCPI_ErrorClear(scpi_t * context) {
 #endif
     fifo_clear(&context->error_queue);
 
-    SCPI_ErrorEmitEmpty(context);
+    //SCPI_ErrorEmitEmpty(context); CHANGE !!
 }
 
 /**

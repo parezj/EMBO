@@ -43,14 +43,12 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     LL_TIM_DisableCounter(EM_TIM_PWM1);
     LL_TIM_DisableCounter(EM_TIM_PWM2);
 
-    if (enable1 == EM_FALSE)
-        return 0;
-
     int prescaler = 1;
     int reload = 0;
 
     self->ch1.enabled = enable1;
-    self->ch1.freq = get_freq(&prescaler, &reload, EM_TIM_PWM1_MAX, EM_TIM_PWM1_FREQ, freq);
+    self->ch1.freq = freq;
+    self->ch1.freq_real = get_freq(&prescaler, &reload, EM_TIM_PWM1_MAX, EM_TIM_PWM1_FREQ, freq);
     self->ch1.prescaler = prescaler;
     self->ch1.reload = reload;
     self->ch1.offset = 0;
@@ -66,14 +64,16 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     LL_TIM_SetPrescaler(EM_TIM_PWM1, prescaler);
     LL_TIM_SetPrescaler(EM_TIM_PWM2, prescaler);
 
-    int compare1 = (duty1 / (float)100) * reload;
-    float real_duty1 = ((float)compare1 / (float)reload) * (float)100;
+    int compare1 = (duty1 / (double)100) * reload;
+    //double real_duty1 = ((double)compare1 / (double)reload) * 100.0;
 
-    int compare2 = (duty2 / (float)100) * reload;
-    float real_duty2 = ((float)compare2 / (float)reload) * (float)100;
+    int compare2 = (duty2 / (double)100) * reload;
+    //double real_duty2 = ((double)compare2 / (double)reload) * 100.0;
 
-    self->ch1.duty = real_duty1;
-    self->ch2.duty = real_duty2;
+    //self->ch1.duty = real_duty1;
+    //self->ch2.duty = real_duty2;
+    self->ch1.duty = duty1;
+    self->ch2.duty = duty2;
 
     LL_TIM_OC_SetCompareCH1(EM_TIM_PWM1, compare1);
     LL_TIM_OC_SetCompareCH1(EM_TIM_PWM2, compare2);
@@ -83,13 +83,17 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
 
     // http://www.micromouseonline.com/2016/02/05/clock-pulses-with-variable-phase-stm32/
     if (offset2 > 0)
-        LL_TIM_SetCounter(EM_TIM_PWM2, (int)((float)offset2 / 100.0 * (float)reload));
+        LL_TIM_SetCounter(EM_TIM_PWM2, (int)((double)offset2 / 100.0 * (double)reload));
 
     if (enable1 == EM_TRUE)
         LL_TIM_CC_EnableChannel(EM_TIM_PWM1, EM_TIM_PWM1_CH);
+    else
+        LL_TIM_CC_DisableChannel(EM_TIM_PWM1, EM_TIM_PWM1_CH);
 
     if (enable2 == EM_TRUE)
         LL_TIM_CC_EnableChannel(EM_TIM_PWM2, EM_TIM_PWM2_CH);
+    else
+        LL_TIM_CC_DisableChannel(EM_TIM_PWM2, EM_TIM_PWM2_CH);
 
     LL_TIM_EnableCounter(EM_TIM_PWM1);
 

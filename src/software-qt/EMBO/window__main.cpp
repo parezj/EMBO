@@ -24,6 +24,7 @@
 #include <QFontDatabase>
 #include <QThread>
 #include <QSettings>
+#include <QCloseEvent>
 #include <QtSerialPort/QSerialPortInfo>
 
 
@@ -58,7 +59,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     qRegisterMetaType<Msg>("Msg");
     qRegisterMetaType<MsgBoxType>("MsgBoxType");
 
-    connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(on_close()));
+    //connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(on_close()));
 
     connect(core, &Core::stateChanged, this, &WindowMain::on_coreState_changed, Qt::QueuedConnection);
     connect(core, &Core::msgDisplay, this, &WindowMain::on_msgDisplay, Qt::QueuedConnection);
@@ -105,11 +106,18 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->groupBox_instr2->setStyleSheet(style2);
     m_ui->groupBox_ports->setStyleSheet(style2);
 
-    QString style3(CSS_BUTTON_ON);
+    QString style3(CSS_BUTTON);
 
     m_ui->pushButton_connect->setStyleSheet(style3);
     m_ui->pushButton_disconnect->setStyleSheet(style3);
     m_ui->pushButton_scan->setStyleSheet(style3);
+
+    m_ui->pushButton_scope->setStyleSheet(style3);
+    m_ui->pushButton_la->setStyleSheet(style3);
+    m_ui->pushButton_vm->setStyleSheet(style3);
+    m_ui->pushButton_cntr->setStyleSheet(style3);
+    m_ui->pushButton_pwm->setStyleSheet(style3);
+    m_ui->pushButton_sgen->setStyleSheet(style3);
 
     on_pushButton_scan_clicked();
 }
@@ -221,7 +229,9 @@ void WindowMain::setConnected()
     m_ui->pushButton_connect->hide();
     m_ui->pushButton_disconnect->show();
 
+    this->setWindowTitle(EMBO_TITLE2 " (" + Core::getInstance()->getPort()+ ")");
     m_status_comm->setText(" Connected (" + Core::getInstance()->getPort() + ")");
+
     m_status_icon_comm->setPixmap(m_icon_plugOn);
     m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
 
@@ -246,52 +256,55 @@ void WindowMain::setConnected()
     else if (info->name.toLower().contains("nucleo"))
         m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
 
-    m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps"));
-    m_ui->label_scope_mem->setText(format_unit((info->mem / 2) / (1 * 2), "B") +
-                                   (info->adc_bit8 ? " / " + format_unit(info->mem / (1 * 2), "B") : ""));
+    m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps", 0) + " / ch");
+    m_ui->label_scope_mem->setText(format_unit((info->mem / 2) / (1 * 2), "B", 0) +
+                                   (info->adc_bit8 ? " / " + format_unit(info->mem / (1 * 2), "B", 0) : ""));
     m_ui->label_scope_bits->setText(info->adc_bit8 ? "12 / 8 bit" : "12 bit");
     m_ui->label_scope_modes->setText("4ch " + QString::number(info->adc_num) + "ADC " + (info->adc_dualmode ? "D" : "") +
                                      (info->adc_dualmode && info->adc_interleaved ? "+" : "") + (info->adc_interleaved ? "I" : ""));
     m_ui->label_scope_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
-    m_ui->label_la_fs->setText(format_unit(info->la_fs, "Sps"));
-    m_ui->label_la_mem->setText(format_unit(info->mem, "B"));
+    m_ui->label_la_fs->setText(format_unit(info->la_fs, "Sps", 0) + " / ch");
+    m_ui->label_la_mem->setText(format_unit(info->mem, "B", 0));
     m_ui->label_la_protocols->setText("Serial, I2C, SPI");
     m_ui->label_la_pins->setText(info->pins_la.replace("-", ", "));
 
-    m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Sps"));
-    m_ui->label_vm_mem->setText(format_unit(info->vm_mem, "S"));
+    m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Sps", 0) + " / ch");
+    m_ui->label_vm_mem->setText(format_unit(info->vm_mem, "S", 0));
     m_ui->label_vm_bits->setText("12 bit");
     m_ui->label_vm_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
-    m_ui->label_cntr_freq->setText(format_unit(info->cntr_freq, "Hz"));
+    m_ui->label_cntr_mode->setText("Precise/Fast"); // format_unit(info->cntr_freq, "Hz", 0)
     m_ui->label_cntr_timeout->setText(QString::number(info->cntr_timeout) + " ms");
     m_ui->label_cntr_pins->setText(info->pins_cntr);
 
-    m_ui->label_pwm_freq->setText(format_unit(info->pwm_fs, "Hz"));
+    m_ui->label_pwm_mode->setText("2ch sync");
+    m_ui->label_pwm_freq->setText(format_unit(info->pwm_fs, "Hz", 0));
     m_ui->label_pwm_pins->setText(info->pins_pwm.replace("-", ", "));
 
     if (info->dac)
     {
-        m_ui->label_sgen_freq->setText(format_unit(info->sgen_maxf, "Hz"));
-        m_ui->label_sgen_mem->setText(format_unit(info->sgen_maxmem, "S"));
+        m_ui->label_sgen_freq->setText(format_unit(info->sgen_maxf, "Hz", 0));
+        m_ui->label_sgen_mem->setText(format_unit(info->sgen_maxmem, "S", 0));
         m_ui->label_sgen_pins->setText(info->pins_sgen);
         m_ui->groupBox_sgen->show();
     }
     //else m_ui->groupBox_sgen->hide(); // TODO DEBUG
 
-    m_w_scope->setWindowTitle("EMBO - Oscilloscope (Pins: " + m_ui->label_scope_pins->text() + ")");
-    m_w_la->setWindowTitle("EMBO - Logic Analyzer (Pins: " + m_ui->label_la_pins->text() + ")");
-    m_w_vm->setWindowTitle("EMBO - Voltmeter (Pins: " + m_ui->label_vm_pins->text() + ")");
-    m_w_cntr->setWindowTitle("EMBO - Counter (Pin: " + m_ui->label_cntr_pins->text() + ")");
-    m_w_pwm->setWindowTitle("EMBO - PWM Generator (Pins: " + m_ui->label_pwm_pins->text() + ")");
-    m_w_sgen->setWindowTitle("EMBO - Signal Generator (Pin: " + m_ui->label_sgen_pins->text() + ")");
+    m_w_scope->setWindowTitle("EMBO - Oscilloscope [4 channel] (pins: " + m_ui->label_scope_pins->text() + ")");
+    m_w_la->setWindowTitle("EMBO - Logic Analyzer [4 channel] (pins: " + m_ui->label_la_pins->text() + ")");
+    m_w_vm->setWindowTitle("EMBO - Voltmeter [4 channel] (Pins: " + m_ui->label_vm_pins->text() + ")");
+    m_w_cntr->setWindowTitle("EMBO - Counter (pin: " + m_ui->label_cntr_pins->text() + ")");
+    m_w_pwm->setWindowTitle("EMBO - PWM Generator [2 channel] (pins: " + m_ui->label_pwm_pins->text() + ")");
+    m_w_sgen->setWindowTitle("EMBO - Signal Generator (pin: " + m_ui->label_sgen_pins->text() + ")");
 
     m_connected = true;
 }
 
 void WindowMain::setDisconnected()
 {
+    this->setWindowTitle(EMBO_TITLE2);
+
     m_ui->pushButton_connect->setText("Connect");
     m_ui->pushButton_connect->setEnabled(true);
     m_ui->pushButton_disconnect->hide();
@@ -334,10 +347,11 @@ void WindowMain::setDisconnected()
     m_ui->label_vm_bits->setText("-");
     m_ui->label_vm_pins->setText("-");
 
-    m_ui->label_cntr_freq->setText("-");
+    m_ui->label_cntr_mode->setText("-");
     m_ui->label_cntr_timeout->setText("-");
     m_ui->label_cntr_pins->setText("-");
 
+    m_ui->label_pwm_mode->setText("-");
     m_ui->label_pwm_freq->setText("-");
     m_ui->label_pwm_pins->setText("-");
 
@@ -345,19 +359,39 @@ void WindowMain::setDisconnected()
     m_ui->label_sgen_mem->setText("-");
     m_ui->label_sgen_pins->setText("-");
 
-    on_instrClose(WindowScope::staticMetaObject.className());
-    on_instrClose(WindowCntr::staticMetaObject.className());
-    on_instrClose(WindowPwm::staticMetaObject.className());
-    on_instrClose(WindowSgen::staticMetaObject.className());
+    m_w_scope->close();
+    m_w_la->close();
+    m_w_vm->close();
+    m_w_cntr->close();
+    m_w_pwm->close();
+    m_w_sgen->close();
+
+    //on_instrClose(WindowScope::staticMetaObject.className());
+    //on_instrClose(WindowCntr::staticMetaObject.className());
+    //on_instrClose(WindowPwm::staticMetaObject.className());
+    //on_instrClose(WindowSgen::staticMetaObject.className());
 
     m_connected = false;
 }
 
 /* private slots */
 
-void WindowMain::on_close()
+void WindowMain::closeEvent(QCloseEvent* event)
 {
-    qInfo() << "CLOSING"; // TODO BUG
+    event->ignore();
+    if (m_connected)
+    {
+        this->activateWindow();
+        if (QMessageBox::Yes == QMessageBox::question(this, EMBO_TITLE, "Device is connected. Do you want to disconnect and exit anyway?",
+                                                      QMessageBox::Yes | QMessageBox::No))
+        {
+            m_close_init = true;
+            on_pushButton_disconnect_clicked();
+        }
+        return;
+    }
+
+    event->accept();
 
     m_w_scope->close();
     m_w_la->close();
@@ -370,6 +404,8 @@ void WindowMain::on_close()
     emit disposeCore();
     if (core != Q_NULLPTR)
         core->thread()->wait();
+
+    qInfo() << "Core thread quit and joined";
 }
 
 void WindowMain::on_actionAbout_triggered()
@@ -381,18 +417,27 @@ void WindowMain::on_pushButton_scan_clicked()
 {
     m_ui->listWidget_ports->clear();
 
-    for(const QSerialPortInfo port : QSerialPortInfo::availablePorts())
+    auto ports = QSerialPortInfo::availablePorts();
+    int ports_sz = ports.size();
+
+    m_ui->groupBox_ports->setTitle("Ports (" + QString::number(ports_sz) + ")");
+
+    if (ports_sz > 0)
     {
-        QListWidgetItem* item = new QListWidgetItem(m_ui->listWidget_ports);
-        item->setIcon(QIcon(":/main/resources/img/serial2.png"));
-        item->setText(port.portName());
-        m_ui->listWidget_ports->addItem(item);
-    }
-
-    if (m_ui->listWidget_ports->children().count() > 0)
+        for(auto port : ports)
+        {
+            QListWidgetItem* item = new QListWidgetItem(m_ui->listWidget_ports);
+            item->setIcon(QIcon(":/main/resources/img/serial2.png"));
+            item->setText(port.portName());
+            m_ui->listWidget_ports->addItem(item);
+        }
         m_ui->listWidget_ports->setCurrentRow(0);
-
-    m_ui->pushButton_connect->setEnabled(m_ui->listWidget_ports->children().count() > 0);
+        m_ui->pushButton_connect->setEnabled(true);
+    }
+    else
+    {
+        m_ui->pushButton_connect->setEnabled(false);
+    }
 
     loadSettings();
 }
@@ -401,7 +446,7 @@ void WindowMain::on_pushButton_connect_clicked()
 {
     m_ui->listWidget_ports->setEnabled(false);
     m_ui->pushButton_scan->setEnabled(false);
-    m_ui->pushButton_connect->setText("Wait...");
+    //m_ui->pushButton_connect->setText("Wait...");
     m_ui->pushButton_connect->setEnabled(false);
 
     m_status_comm->setText(" Connecting...");
@@ -436,6 +481,11 @@ void WindowMain::on_coreState_changed(const State newState)
     else if (newState == DISCONNECTED)
     {
         setDisconnected();
+        if (m_close_init)
+        {
+            m_close_init = false;
+            this->close();
+        }
     }
     m_state_old = newState;
 }
@@ -463,7 +513,7 @@ void WindowMain::on_instrClose(const char* className)
     else if (className == WindowCntr::staticMetaObject.className())
     {
         m_ui->pushButton_cntr->setEnabled(true);
-        m_ui->pushButton_cntr->setStyleSheet(QString(CSS_BUTTON_ON));
+        m_ui->pushButton_cntr->setStyleSheet(QString(CSS_BUTTON));
 
         m_ui->groupBox_cntr->setEnabled(true);
         m_ui->groupBox_cntr->setStyleSheet(QString(CSS_INSTR_GROUP_CNTR));
@@ -471,7 +521,7 @@ void WindowMain::on_instrClose(const char* className)
     else if (className == WindowPwm::staticMetaObject.className())
     {
         m_ui->pushButton_pwm->setEnabled(true);
-        m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON_ON));
+        m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON));
 
         m_ui->groupBox_pwm->setEnabled(true);
         m_ui->groupBox_pwm->setStyleSheet(QString(CSS_INSTR_GROUP_PWM));
@@ -479,7 +529,7 @@ void WindowMain::on_instrClose(const char* className)
     else if (className == WindowSgen::staticMetaObject.className())
     {
         m_ui->pushButton_sgen->setEnabled(true);
-        m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON_ON));
+        m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON));
 
         m_ui->groupBox_sgen->setEnabled(true);
         m_ui->groupBox_sgen->setStyleSheet(QString(CSS_INSTR_GROUP_SGEN));
@@ -490,21 +540,17 @@ void WindowMain::instrFirstRowEnable(bool enable)
 {
     if (enable)
     {
-        m_ui->groupBox_scope->setStyleSheet(QString(CSS_INSTR_GROUP_SCOPE));
-        m_ui->groupBox_la->setStyleSheet(QString(CSS_INSTR_GROUP_LA));
-        m_ui->groupBox_vm->setStyleSheet(QString(CSS_INSTR_GROUP_VM));
-
-        m_ui->groupBox_scope->setEnabled(true);
-        m_ui->groupBox_la->setEnabled(true);
-        m_ui->groupBox_vm->setEnabled(true);
-
         m_ui->pushButton_scope->setEnabled(true);
         m_ui->pushButton_la->setEnabled(true);
         m_ui->pushButton_vm->setEnabled(true);
 
-        m_ui->pushButton_scope->setStyleSheet(QString(CSS_BUTTON_ON));
-        m_ui->pushButton_la->setStyleSheet(QString(CSS_BUTTON_ON));
-        m_ui->pushButton_vm->setStyleSheet(QString(CSS_BUTTON_ON));
+        m_ui->groupBox_scope->setStyleSheet(QString(CSS_INSTR_GROUP_SCOPE));
+        m_ui->groupBox_la->setStyleSheet(QString(CSS_INSTR_GROUP_LA));
+        m_ui->groupBox_vm->setStyleSheet(QString(CSS_INSTR_GROUP_VM));
+
+        m_ui->pushButton_scope->setStyleSheet(QString(CSS_BUTTON));
+        m_ui->pushButton_la->setStyleSheet(QString(CSS_BUTTON));
+        m_ui->pushButton_vm->setStyleSheet(QString(CSS_BUTTON));
     }
     else
     {
@@ -512,23 +558,22 @@ void WindowMain::instrFirstRowEnable(bool enable)
         m_ui->groupBox_la->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
         m_ui->groupBox_vm->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
 
-        m_ui->groupBox_scope->setEnabled(false);
-        m_ui->groupBox_la->setEnabled(false);
-        m_ui->groupBox_vm->setEnabled(false);
-
-        m_ui->pushButton_scope->setEnabled(false);
-        m_ui->pushButton_la->setEnabled(false);
-        m_ui->pushButton_vm->setEnabled(false);
-
-        m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-        m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-        m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+        //m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+        //m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+        //m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
     }
 }
 
 void WindowMain::on_pushButton_scope_clicked()
 {
     m_w_scope->show();
+    m_w_scope->activateWindow();
+
+    m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+
+    m_ui->pushButton_la->setEnabled(false);
+    m_ui->pushButton_vm->setEnabled(false);
 
     instrFirstRowEnable(false);
 }
@@ -536,6 +581,13 @@ void WindowMain::on_pushButton_scope_clicked()
 void WindowMain::on_pushButton_la_clicked()
 {
     m_w_la->show();
+    m_w_la->activateWindow();
+
+    m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+
+    m_ui->pushButton_scope->setEnabled(false);
+    m_ui->pushButton_vm->setEnabled(false);
 
     instrFirstRowEnable(false);
 }
@@ -543,6 +595,13 @@ void WindowMain::on_pushButton_la_clicked()
 void WindowMain::on_pushButton_vm_clicked()
 {
     m_w_vm->show();
+    m_w_vm->activateWindow();
+
+    m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+
+    m_ui->pushButton_scope->setEnabled(false);
+    m_ui->pushButton_la->setEnabled(false);
 
     instrFirstRowEnable(false);
 }
@@ -550,32 +609,26 @@ void WindowMain::on_pushButton_vm_clicked()
 void WindowMain::on_pushButton_cntr_clicked()
 {
     m_w_cntr->show();
+    m_w_cntr->activateWindow();
 
-    m_ui->pushButton_cntr->setEnabled(false);
-    m_ui->pushButton_cntr->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-
-    m_ui->groupBox_cntr->setEnabled(false);
+    //m_ui->pushButton_cntr->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
     m_ui->groupBox_cntr->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
 }
 
 void WindowMain::on_pushButton_pwm_clicked()
 {
     m_w_pwm->show();
+    m_w_pwm->activateWindow();
 
-    m_ui->pushButton_pwm->setEnabled(false);
-    m_ui->pushButton_pwm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-
-    m_ui->groupBox_pwm->setEnabled(false);
+    //m_ui->pushButton_pwm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
     m_ui->groupBox_pwm->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
 }
 
 void WindowMain::on_pushButton_sgen_clicked()
 {
     m_w_sgen->show();
+    m_w_sgen->activateWindow();
 
-    m_ui->pushButton_sgen->setEnabled(false);
-    m_ui->pushButton_sgen->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-
-    m_ui->groupBox_sgen->setEnabled(false);
+    //m_ui->pushButton_sgen->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
     m_ui->groupBox_sgen->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
 }

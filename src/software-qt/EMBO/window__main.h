@@ -33,12 +33,13 @@ signals:
     void disposeCore();
 
 private slots:
+    void closeEvent(QCloseEvent *event);
+
     void on_actionAbout_triggered();
     void on_pushButton_scan_clicked();
     void on_pushButton_connect_clicked();
     void on_pushButton_disconnect_clicked();
 
-    void on_close();
     void on_coreState_changed(const State newState);
     void on_msgDisplay(const QString text, MsgBoxType type);
     void on_instrClose(const char* className);
@@ -60,6 +61,7 @@ private:
     void setDisconnected();
 
     bool m_connected = false;
+    bool m_close_init = false;
     State m_state_old = DISCONNECTED;
 
     QPixmap m_icon_plugOn;

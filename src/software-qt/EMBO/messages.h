@@ -12,6 +12,8 @@
 
 #define EMBO_IDN            "*IDN"
 #define EMBO_RST            "*RST"
+#define EMBO_STB            "*STB"
+#define EMBO_CLS            "*CLS"
 
 #define EMBO_SYS_LIMS       ":SYS:LIM"
 #define EMBO_SYS_INFO       ":SYS:INFO"
@@ -56,6 +58,22 @@ public:
     virtual void on_dataRx() override;
 };
 
+class Msg_Stb : public Msg
+{
+    Q_OBJECT
+public:
+    explicit Msg_Stb(QObject* parent=0) : Msg(EMBO_STB, true, parent) {};
+    virtual void on_dataRx() override;
+};
+
+class Msg_Cls : public Msg
+{
+    Q_OBJECT
+public:
+    explicit Msg_Cls(QObject* parent=0) : Msg(EMBO_CLS, false, parent) {};
+    virtual void on_dataRx() override;
+};
+
 class Msg_SYS_Lims : public Msg
 {
     Q_OBJECT
@@ -84,7 +102,7 @@ class Msg_Dummy : public Msg
 {
     Q_OBJECT
 public:
-    explicit Msg_Dummy(QObject* parent=0) : Msg(EMBO_SYS_MODE, true, parent) {};
+    explicit Msg_Dummy(QObject* parent=0) : Msg(EMBO_STB, true, parent) {};
     virtual void on_dataRx() override;
 };
 
@@ -167,7 +185,7 @@ public:
     explicit Msg_CNTR_Enable(QObject* parent=0) : Msg(EMBO_CNTR_ENABLE, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result(bool isQuery, bool enable);
+    void result(bool enabled, bool fastMode);
 };
 
 class Msg_CNTR_Read : public Msg
@@ -184,12 +202,12 @@ signals:
 
 enum SgenMode
 {
-    CONST,
-    SINE,
-    TRIANGLE,
-    SAW,
-    SQUARE,
-    NOISE
+    CONSTANT = 0,
+    SINE = 1,
+    TRIANGLE = 2,
+    SAWTOOTH = 3,
+    SQUARE = 4,
+    NOISE = 5
 };
 
 class Msg_SGEN_Set : public Msg
@@ -199,7 +217,7 @@ public:
     explicit Msg_SGEN_Set(QObject* parent=0) : Msg(EMBO_SGEN_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result(SgenMode mode, double freq, int ampl, int offset);
+    void result(SgenMode mode, double freq, int ampl, int offset, bool enabled);
 };
 
 /***************************** Messages - PWM ***************************/
@@ -211,7 +229,7 @@ public:
     explicit Msg_PWM_Set(QObject* parent=0) : Msg(EMBO_PWM_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result(double freq, int duty, int duty2, int offset, bool en1, bool en2);
+    void result(int freq, int duty1, int duty2, int offset, bool en1, bool en2, QString freq_real);
 };
 
 #endif // MESSAGES_H

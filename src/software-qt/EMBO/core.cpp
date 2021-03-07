@@ -45,6 +45,8 @@ void Core::on_startThread()
 
     m_msg_idn = new Msg_Idn(this);
     m_msg_rst = new Msg_Rst(this);
+    m_msg_stb = new Msg_Stb(this);
+    m_msg_cls = new Msg_Cls(this);
     m_msg_dummy = new Msg_Dummy(this);
     m_msg_sys_lims = new Msg_SYS_Lims(this);
     m_msg_sys_info = new Msg_SYS_Info(this);
@@ -85,7 +87,7 @@ bool Core::openComm(QString port)
 
     if (m_serial->open(QIODevice::ReadWrite))
     {
-        m_state = CONNECTING;
+        m_state = CONNECTING1;
         emit stateChanged(m_state);
 
         m_serial->clear();
@@ -96,11 +98,7 @@ bool Core::openComm(QString port)
 
         assert(m_activeMsgs.isEmpty());
         m_activeMsgs.append(m_msg_dummy);
-        m_activeMsgs.append(m_msg_idn);
-        m_activeMsgs.append(m_msg_sys_lims);
-        m_activeMsgs.append(m_msg_sys_info);
-        m_msg_sys_mode->setIsQuery(true);
-        m_activeMsgs.append(m_msg_sys_mode);
+
         send();
 
         return true;
@@ -112,6 +110,11 @@ bool Core::openComm(QString port)
         emit stateChanged(m_state);
         return false;
     }
+}
+
+void Core::openCommInit()
+{
+    m_open_comm = true;
 }
 
 bool Core::closeComm()
@@ -180,6 +183,20 @@ void Core::send()
     m_timer_rxTimeout->start(TIMER_RX);
 }
 
+void Core::openComm2()
+{
+    m_open_comm = false;
+    m_state = CONNECTING2;
+
+    m_activeMsgs.append(m_msg_idn);
+    m_activeMsgs.append(m_msg_sys_lims);
+    m_activeMsgs.append(m_msg_sys_info);
+    m_msg_sys_mode->setIsQuery(true);
+    m_activeMsgs.append(m_msg_sys_mode);
+
+    send();
+}
+
 /* slots */
 
 void Core::on_openComm(const QString port)
@@ -199,7 +216,7 @@ void Core::on_closeComm(bool force)
     if (force || m_state != CONNECTED)
         closeComm();
     else
-        close_init = true;
+        m_close_init = true;
 }
 
 void Core::on_dispose()
@@ -228,6 +245,8 @@ void Core::on_serial_readyRead()
         QStringList messages = m_mainBuffer.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
 
         //qInfo() << "rx buffer: " << m_mainBuffer;
+        m_timer_rxTimeout->stop();
+        m_timer_rxTimeout->start();
 
         for(int i = 0; i < m_mainBuffer.count(EMBO_NEWLINE); i++) // iterate all full msgs
         {
@@ -237,7 +256,7 @@ void Core::on_serial_readyRead()
 
             if (messages[i] == EMBO_READY_A || messages[i] == EMBO_READY_N || messages[i] == EMBO_READY_D)
             {
-                // emit READY signal
+                // emit READY signal                
                 continue;
             }
             QStringList submessages = messages[i].split(EMBO_DELIM1, Qt::SkipEmptyParts);
@@ -255,20 +274,23 @@ void Core::on_serial_readyRead()
                     return;
                 }
 
-                m_activeMsgs[m_submsgIt++]->fire(submessage); // do main actions
+                m_activeMsgs[m_submsgIt++]->fire(submessage); // do main virtual action
             }
+
             if (m_submsgIt == activeMsg_size) // success - do post actions
             {
                 m_submsgIt = 0;
                 m_timer_rxTimeout->stop();
                 m_activeMsgs.clear();
 
-                if (m_state == CONNECTING)
+                if (m_state == CONNECTING2)
                     startComm();
                 else if (m_state == CONNECTED)
                     m_timer_comm->start();
             }
         }
+        if (m_open_comm)
+            openComm2();
     }
     catch (const std::exception& ex)
     {
@@ -288,9 +310,9 @@ void Core::on_timer_rxTimeout()
 
 void Core::on_timer_comm()
 {
-    if (close_init)
+    if (m_close_init)
     {
-        close_init = false;
+        m_close_init = false;
         closeComm();
         return;
     }
@@ -324,7 +346,10 @@ void Core::on_timer_comm()
     }
 
     if (m_activeMsgs.isEmpty())
-        m_activeMsgs.append(m_msg_idn);
+    {
+        m_activeMsgs.append(m_msg_stb);
+        m_activeMsgs.append(m_msg_cls);
+    }
 
     send();
 }

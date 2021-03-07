@@ -53,6 +53,9 @@ public:
     QSpinBox *spinBox_freq;
     QLabel *label;
     QLabel *label_2;
+    QLabel *label_dial1;
+    QLabel *label_dial2;
+    QLabel *label_dial3;
     QMenuBar *menubar;
     QMenu *menuHelp;
     QStatusBar *statusbar;
@@ -86,23 +89,22 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         pushButton_disable = new QPushButton(centralwidget);
         pushButton_disable->setObjectName(QString::fromUtf8("pushButton_disable"));
-        pushButton_disable->setGeometry(QRect(210, 220, 131, 41));
+        pushButton_disable->setGeometry(QRect(200, 220, 171, 41));
         QFont font1;
         font1.setFamily(QString::fromUtf8("Roboto"));
-        font1.setPointSize(14);
+        font1.setPointSize(13);
         pushButton_disable->setFont(font1);
         pushButton_disable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
-"    border: 1px solid rgb(100, 100, 100);\n"
+"    border: 1px solid rgb(150, 150, 150);\n"
 "	border-radius: 5px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
-"                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
 "{\n"
-"	border: 1px solid black;\n"
+"	border: 1px solid rgb(150, 150, 150);\n"
 "	border-radius: 5px;\n"
 " 	background: #FFFFFF;\n"
 "	color:#2f836a;\n"
@@ -110,22 +112,23 @@ public:
 "\n"
 "QPushButton:pressed\n"
 "{\n"
-"	border: 1px solid black;\n"
+"	border: 2px solid rgb(150, 150, 150);\n"
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
         QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-red.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3_22x23.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3_22x23.png"), QSize(), QIcon::Disabled, QIcon::Off);
         pushButton_disable->setIcon(icon2);
-        pushButton_disable->setIconSize(QSize(18, 18));
+        pushButton_disable->setIconSize(QSize(23, 22));
         pushButton_enable = new QPushButton(centralwidget);
         pushButton_enable->setObjectName(QString::fromUtf8("pushButton_enable"));
-        pushButton_enable->setGeometry(QRect(210, 220, 131, 41));
+        pushButton_enable->setGeometry(QRect(200, 220, 171, 41));
         pushButton_enable->setFont(font1);
         pushButton_enable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
-"    border: 1px solid rgb(100, 100, 100);\n"
+"    border: 1px solid rgb(150, 150, 150);\n"
 "	border-radius: 5px;\n"
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
@@ -134,7 +137,7 @@ public:
 "\n"
 "QPushButton:hover:!pressed\n"
 "{\n"
-"	border: 1px solid black;\n"
+"	border: 1px solid rgb(150, 150, 150);\n"
 "	border-radius: 5px;\n"
 " 	background: #FFFFFF;\n"
 "	color:#2f836a;\n"
@@ -142,15 +145,16 @@ public:
 "\n"
 "QPushButton:pressed\n"
 "{\n"
-"	border: 1px solid black;\n"
+"	border: 2px solid rgb(150, 150, 150);\n"
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
         QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-gray2.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-gray2.png"), QSize(), QIcon::Disabled, QIcon::Off);
         pushButton_enable->setIcon(icon3);
-        pushButton_enable->setIconSize(QSize(18, 18));
+        pushButton_enable->setIconSize(QSize(22, 22));
         line = new QFrame(centralwidget);
         line->setObjectName(QString::fromUtf8("line"));
         line->setGeometry(QRect(0, 270, 581, 16));
@@ -177,7 +181,10 @@ public:
         radioButton_noise = new QRadioButton(groupBox_1);
         radioButton_noise->setObjectName(QString::fromUtf8("radioButton_noise"));
         radioButton_noise->setGeometry(QRect(10, 170, 131, 21));
-        radioButton_noise->setFont(font1);
+        QFont font3;
+        font3.setFamily(QString::fromUtf8("Roboto"));
+        font3.setPointSize(14);
+        radioButton_noise->setFont(font3);
         radioButton_noise->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
@@ -205,7 +212,7 @@ public:
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:hover {\n"
-"    image: url(:/main/resources/img/radio_off2.png);\n"
+"    image: url(:/main/resources/img/radio_off1.png);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator::checked {\n"
@@ -219,7 +226,7 @@ public:
         radioButton_triangle = new QRadioButton(groupBox_1);
         radioButton_triangle->setObjectName(QString::fromUtf8("radioButton_triangle"));
         radioButton_triangle->setGeometry(QRect(10, 80, 131, 21));
-        radioButton_triangle->setFont(font1);
+        radioButton_triangle->setFont(font3);
         radioButton_triangle->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
@@ -247,7 +254,7 @@ public:
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:hover {\n"
-"    image: url(:/main/resources/img/radio_off2.png);\n"
+"    image: url(:/main/resources/img/radio_off1.png);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator::checked {\n"
@@ -261,7 +268,7 @@ public:
         radioButton_const = new QRadioButton(groupBox_1);
         radioButton_const->setObjectName(QString::fromUtf8("radioButton_const"));
         radioButton_const->setGeometry(QRect(10, 20, 131, 21));
-        radioButton_const->setFont(font1);
+        radioButton_const->setFont(font3);
         radioButton_const->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
@@ -289,7 +296,7 @@ public:
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:hover {\n"
-"    image: url(:/main/resources/img/radio_off2.png);\n"
+"    image: url(:/main/resources/img/radio_off1.png);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator::checked {\n"
@@ -304,7 +311,7 @@ public:
         radioButton_saw = new QRadioButton(groupBox_1);
         radioButton_saw->setObjectName(QString::fromUtf8("radioButton_saw"));
         radioButton_saw->setGeometry(QRect(10, 110, 131, 21));
-        radioButton_saw->setFont(font1);
+        radioButton_saw->setFont(font3);
         radioButton_saw->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
@@ -332,7 +339,7 @@ public:
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:hover {\n"
-"    image: url(:/main/resources/img/radio_off2.png);\n"
+"    image: url(:/main/resources/img/radio_off1.png);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator::checked {\n"
@@ -346,7 +353,7 @@ public:
         radioButton_sine = new QRadioButton(groupBox_1);
         radioButton_sine->setObjectName(QString::fromUtf8("radioButton_sine"));
         radioButton_sine->setGeometry(QRect(10, 50, 131, 21));
-        radioButton_sine->setFont(font1);
+        radioButton_sine->setFont(font3);
         radioButton_sine->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
@@ -374,7 +381,7 @@ public:
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:hover {\n"
-"    image: url(:/main/resources/img/radio_off2.png);\n"
+"    image: url(:/main/resources/img/radio_off1.png);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator::checked {\n"
@@ -389,7 +396,7 @@ public:
         radioButton_square = new QRadioButton(groupBox_1);
         radioButton_square->setObjectName(QString::fromUtf8("radioButton_square"));
         radioButton_square->setGeometry(QRect(10, 140, 131, 21));
-        radioButton_square->setFont(font1);
+        radioButton_square->setFont(font3);
         radioButton_square->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
@@ -417,7 +424,7 @@ public:
 "}\n"
 "\n"
 "QRadioButton::indicator:unchecked:hover {\n"
-"    image: url(:/main/resources/img/radio_off2.png);\n"
+"    image: url(:/main/resources/img/radio_off1.png);\n"
 "}\n"
 "\n"
 "QRadioButton::indicator::checked {\n"
@@ -439,15 +446,15 @@ public:
         label_3 = new QLabel(groupBox_2);
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(80, 150, 111, 21));
-        QFont font3;
-        font3.setFamily(QString::fromUtf8("Roboto Thin"));
-        font3.setPointSize(16);
-        font3.setBold(false);
-        font3.setWeight(50);
-        label_3->setFont(font3);
+        QFont font4;
+        font4.setFamily(QString::fromUtf8("Roboto Light"));
+        font4.setPointSize(14);
+        font4.setBold(false);
+        font4.setWeight(50);
+        label_3->setFont(font4);
         dial_offset = new QDial(groupBox_2);
         dial_offset->setObjectName(QString::fromUtf8("dial_offset"));
-        dial_offset->setGeometry(QRect(10, 130, 50, 64));
+        dial_offset->setGeometry(QRect(10, 135, 51, 50));
         dial_offset->setMaximum(100);
         dial_offset->setOrientation(Qt::Horizontal);
         dial_offset->setInvertedAppearance(false);
@@ -494,12 +501,13 @@ public:
         spinBox_ampl->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox_ampl->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
         spinBox_ampl->setAccelerated(false);
+        spinBox_ampl->setKeyboardTracking(false);
         spinBox_ampl->setProperty("showGroupSeparator", QVariant(false));
         spinBox_ampl->setMaximum(100);
         spinBox_ampl->setValue(50);
         dial_freq = new QDial(groupBox_2);
         dial_freq->setObjectName(QString::fromUtf8("dial_freq"));
-        dial_freq->setGeometry(QRect(10, 10, 50, 64));
+        dial_freq->setGeometry(QRect(10, 15, 51, 50));
         dial_freq->setStyleSheet(QString::fromUtf8(""));
         dial_freq->setOrientation(Qt::Horizontal);
         dial_freq->setInvertedAppearance(false);
@@ -546,12 +554,13 @@ public:
         spinBox_offset->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox_offset->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
         spinBox_offset->setAccelerated(false);
+        spinBox_offset->setKeyboardTracking(false);
         spinBox_offset->setProperty("showGroupSeparator", QVariant(false));
         spinBox_offset->setMaximum(100);
         spinBox_offset->setValue(50);
         dial_ampl = new QDial(groupBox_2);
         dial_ampl->setObjectName(QString::fromUtf8("dial_ampl"));
-        dial_ampl->setGeometry(QRect(10, 70, 50, 64));
+        dial_ampl->setGeometry(QRect(10, 75, 51, 50));
         dial_ampl->setMaximum(100);
         dial_ampl->setOrientation(Qt::Horizontal);
         dial_ampl->setInvertedAppearance(false);
@@ -598,27 +607,51 @@ public:
         spinBox_freq->setAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
         spinBox_freq->setButtonSymbols(QAbstractSpinBox::UpDownArrows);
         spinBox_freq->setAccelerated(false);
+        spinBox_freq->setKeyboardTracking(false);
         spinBox_freq->setProperty("showGroupSeparator", QVariant(false));
         spinBox_freq->setMaximum(5000000);
         spinBox_freq->setValue(5000000);
         label = new QLabel(groupBox_2);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(80, 30, 111, 21));
-        label->setFont(font3);
+        label->setFont(font4);
         label_2 = new QLabel(groupBox_2);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setGeometry(QRect(80, 90, 111, 21));
-        label_2->setFont(font3);
-        dial_offset->raise();
+        label_2->setFont(font4);
+        label_dial1 = new QLabel(groupBox_2);
+        label_dial1->setObjectName(QString::fromUtf8("label_dial1"));
+        label_dial1->setGeometry(QRect(10, 15, 51, 50));
+        label_dial1->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/dial1.png")));
+        label_dial1->setScaledContents(false);
+        label_dial2 = new QLabel(groupBox_2);
+        label_dial2->setObjectName(QString::fromUtf8("label_dial2"));
+        label_dial2->setGeometry(QRect(10, 75, 51, 50));
+        label_dial2->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/dial1.png")));
+        label_dial2->setScaledContents(false);
+        label_dial3 = new QLabel(groupBox_2);
+        label_dial3->setObjectName(QString::fromUtf8("label_dial3"));
+        label_dial3->setGeometry(QRect(10, 135, 51, 50));
+        label_dial3->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/dial1.png")));
+        label_dial3->setScaledContents(false);
         spinBox_ampl->raise();
-        dial_freq->raise();
         spinBox_offset->raise();
-        dial_ampl->raise();
         spinBox_freq->raise();
         label->raise();
         label_2->raise();
         label_3->raise();
+        label_dial1->raise();
+        label_dial3->raise();
+        label_dial2->raise();
+        dial_ampl->raise();
+        dial_offset->raise();
+        dial_freq->raise();
         WindowSgen->setCentralWidget(centralwidget);
+        pushButton_enable->raise();
+        line->raise();
+        groupBox_1->raise();
+        groupBox_2->raise();
+        pushButton_disable->raise();
         menubar = new QMenuBar(WindowSgen);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 571, 21));
@@ -643,8 +676,8 @@ public:
     {
         WindowSgen->setWindowTitle(QCoreApplication::translate("WindowSgen", "EMBO - Signal Generator", nullptr));
         actionAbout->setText(QCoreApplication::translate("WindowSgen", "About", nullptr));
-        pushButton_disable->setText(QCoreApplication::translate("WindowSgen", " Disable", nullptr));
-        pushButton_enable->setText(QCoreApplication::translate("WindowSgen", " Enable", nullptr));
+        pushButton_disable->setText(QCoreApplication::translate("WindowSgen", " Generator ON  ", nullptr));
+        pushButton_enable->setText(QCoreApplication::translate("WindowSgen", " Generator OFF", nullptr));
         groupBox_1->setTitle(QString());
         radioButton_noise->setText(QCoreApplication::translate("WindowSgen", "Noise", nullptr));
         radioButton_triangle->setText(QCoreApplication::translate("WindowSgen", "Triangle", nullptr));
@@ -659,6 +692,9 @@ public:
         spinBox_freq->setSuffix(QCoreApplication::translate("WindowSgen", " Hz", nullptr));
         label->setText(QCoreApplication::translate("WindowSgen", "Frequency:", nullptr));
         label_2->setText(QCoreApplication::translate("WindowSgen", "Amplitude:", nullptr));
+        label_dial1->setText(QString());
+        label_dial2->setText(QString());
+        label_dial3->setText(QString());
         menuHelp->setTitle(QCoreApplication::translate("WindowSgen", "Help", nullptr));
     } // retranslateUi
 

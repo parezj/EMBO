@@ -250,7 +250,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
         if (self->trig.pos_trig >= self->trig.buff_trig->len)
             self->trig.pos_trig -= self->trig.buff_trig->len;
 
-        int post = (int)((float)self->set.mem * ((float)(100 - self->trig.set.pretrigger) / 100.0));
+        int post = (int)((double)self->set.mem * ((double)(100 - self->trig.set.pretrigger) / 100.0));
         self->trig.posttrig_size = post * self->trig.buff_trig->chans;
 
         self->trig.pos_last = self->trig.pos_trig + self->trig.posttrig_size;
@@ -266,7 +266,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
     else // mode == LA
     {
         self->trig.pos_trig = last_idx;
-        self->trig.posttrig_size = (int)((float)self->set.mem * ((float)(100 - self->trig.set.pretrigger) / 100.0));
+        self->trig.posttrig_size = (int)((double)self->set.mem * ((double)(100 - self->trig.set.pretrigger) / 100.0));
 
         self->trig.pos_last = self->trig.pos_trig + self->trig.posttrig_size;
         if (self->trig.pos_last >= self->trig.buff_trig->len)
@@ -457,8 +457,8 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 #endif
     }
 
-    self->trig.fullmem_val = (int)(((1.0 / (float)self->set.fs) * (float)self->set.mem) * (float)EM_SYSTICK_FREQ) + 1;
-    self->trig.auttrig_val = EM_AUTRIG_MIN_MS + (int)((float)self->trig.fullmem_val * 1.0);
+    self->trig.fullmem_val = (int)(((1.0 / (double)self->set.fs) * (double)self->set.mem) * (double)EM_SYSTICK_FREQ) + 1;
+    self->trig.auttrig_val = EM_AUTRIG_MIN_MS + (int)((double)self->trig.fullmem_val * 1.0);
     self->trig.adc_trig = adc;
 
     if (ch == 0 || mode == DISABLED)
@@ -548,7 +548,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             else if (ch == 4)
                 self->trig.awd_trig = EM_ADC_AWD4;
 
-            uint32_t level_raw = (int)(self->adc_max_val / 100.0 * (float)level);
+            uint32_t level_raw = (int)(self->adc_max_val / 100.0 * (double)level);
 
             if (edge == RISING)
             {
@@ -573,7 +573,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         else return -1;
     }
 
-    self->trig.pretrig_val = (int)((float)self->trig.fullmem_val * ((float)pretrigger / 100.0)) + 1;
+    self->trig.pretrig_val = (int)((double)self->trig.fullmem_val * ((double)pretrigger / 100.0)) + 1;
     self->trig.set.pretrigger = pretrigger;
     self->trig.set.mode = mode;
     self->trig.set.edge = edge;

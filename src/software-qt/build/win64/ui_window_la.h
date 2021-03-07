@@ -16,6 +16,7 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -26,6 +27,7 @@ class Ui_WindowLa
 public:
     QAction *actionAbout;
     QWidget *centralwidget;
+    QSlider *horizontalSlider_freq;
     QMenuBar *menubar;
     QMenu *menuHelp;
     QStatusBar *statusbar;
@@ -50,6 +52,27 @@ public:
         actionAbout->setFont(font);
         centralwidget = new QWidget(WindowLa);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        horizontalSlider_freq = new QSlider(centralwidget);
+        horizontalSlider_freq->setObjectName(QString::fromUtf8("horizontalSlider_freq"));
+        horizontalSlider_freq->setGeometry(QRect(60, 90, 301, 31));
+        QFont font1;
+        font1.setBold(false);
+        font1.setWeight(50);
+        horizontalSlider_freq->setFont(font1);
+        horizontalSlider_freq->setStyleSheet(QString::fromUtf8("QSlider::handle:horizontal {\n"
+"    background-color: #449f84;\n"
+"    border: 1px solid;\n"
+"}\n"
+"\n"
+"QSlider::handle:horizontal:hover {\n"
+"    background-color: #51bf9f;\n"
+"    border: 1px solid;\n"
+"}"));
+        horizontalSlider_freq->setMaximum(5000000);
+        horizontalSlider_freq->setValue(50);
+        horizontalSlider_freq->setOrientation(Qt::Horizontal);
+        horizontalSlider_freq->setTickPosition(QSlider::TicksBelow);
+        horizontalSlider_freq->setTickInterval(100000);
         WindowLa->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowLa);
         menubar->setObjectName(QString::fromUtf8("menubar"));

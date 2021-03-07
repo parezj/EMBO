@@ -10,8 +10,9 @@
 typedef struct
 {
     uint8_t enabled;
-    float freq;
-    float duty;
+    double freq_real;
+    int freq;
+    int duty;
     uint32_t prescaler;
     uint32_t reload;
     uint32_t offset;        // percentage of reload

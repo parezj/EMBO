@@ -121,6 +121,7 @@
 #define EM_TIM_CNTR_CC(a)      a##CC4 // direct input capture - cc name
 #define EM_TIM_CNTR_CC2(a)     a##CC3 // indirect input capture - cc name
 #define EM_TIM_CNTR_OVF(a)     a##CH1 // ovf store
+#define EM_TIM_CNTR_PSC_FAST   8      // prescaler for fast mode
 #define EM_TIM_SGEN            TIM6
 #define EM_TIM_SGEN_FREQ       EM_FREQ_PCLK1
 #define EM_TIM_SGEN_MAX        65535

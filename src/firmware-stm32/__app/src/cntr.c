@@ -22,6 +22,8 @@ void cntr_init(cntr_data_t* self)
 {
     self->freq = -1;
     self->enabled = EM_FALSE;
+    self->fast_mode = EM_FALSE;
+    self->fast_mode_now = 0;
     cntr_reset(self);
 }
 
@@ -41,12 +43,17 @@ static void cntr_reset(cntr_data_t* self)
     LL_TIM_EnableIT_UPDATE(EM_TIM_CNTR);
     EM_TIM_CNTR_OVF(LL_TIM_OC_SetCompare)(EM_TIM_CNTR, 0);
     LL_TIM_SetCounter(EM_TIM_CNTR, 0);
+
+    self->fast_mode_now = self->fast_mode == EM_TRUE;
+    LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, LL_TIM_CHANNEL_CH1, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
+    LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, LL_TIM_CHANNEL_CH2, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
 }
 
-void cntr_enable(cntr_data_t* self, uint8_t enable)
+void cntr_enable(cntr_data_t* self, uint8_t enable, uint8_t fast_mode)
 {
     uint8_t en = self->enabled;
     self->enabled = enable;
+    self->fast_mode = fast_mode;
 
     if (enable == EM_TRUE && !en)
         xSemaphoreGive(sem3_cntr);
@@ -126,14 +133,13 @@ void cntr_meas(cntr_data_t* self)
                 return;
         }
 
-        float total = (ovf * EM_TIM_CNTR_MAX) + ccr_sum;
-        total /= (float)(sz - 1);
-        float f = (float)EM_TIM_CNTR_FREQ / total;
-        self->freq = f;
+        double total = (ovf * EM_TIM_CNTR_MAX) + ccr_sum;
+        total /= (double)(sz - 1);
+        self->freq = ((double)EM_TIM_CNTR_FREQ / total) * (double)(self->fast_mode_now ? 8 : 1);
 
-        float diff = f - 1.6;
-        if (diff < 1 && diff > -1)
-            ASSERT(0);
+        //float diff = f - 1.6;
+        //if (diff < 1 && diff > -1)
+        //    ASSERT(0);
     }
     else
     {

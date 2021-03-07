@@ -35,6 +35,23 @@ void Msg_Rst::on_dataRx()
         core->err("Reset failed!", false);
 }
 
+
+void Msg_Stb::on_dataRx()
+{
+    qInfo() << "STB: " <<  m_rxData;
+    auto core = Core::getInstance(this);
+
+    if (m_rxData.isEmpty())
+    {
+        core->err(INVALID_MSG + m_rxData, true);
+        return;
+    }
+}
+
+void Msg_Cls::on_dataRx()
+{
+}
+
 void Msg_SYS_Lims::on_dataRx()
 {
     qInfo() << "SYS:LIM: " <<  m_rxData;
@@ -42,7 +59,7 @@ void Msg_SYS_Lims::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
-    if (tokens.size() != 14)
+    if (tokens.size() != 13)
     {
         core->err(INVALID_MSG + m_rxData, true);
         return;
@@ -60,10 +77,9 @@ void Msg_SYS_Lims::on_dataRx()
     core->getDevInfo()->dac = tokens[7] == '1';
     core->getDevInfo()->vm_fs = tokens[8].toInt();
     core->getDevInfo()->vm_mem = tokens[9].toInt();
-    core->getDevInfo()->cntr_freq = tokens[10].toInt();
-    core->getDevInfo()->cntr_timeout = tokens[11].toInt();
-    core->getDevInfo()->sgen_maxf = tokens[12].toInt();
-    core->getDevInfo()->sgen_maxmem = tokens[13].toInt();
+    core->getDevInfo()->cntr_timeout = tokens[10].toInt();
+    core->getDevInfo()->sgen_maxf = tokens[11].toInt();
+    core->getDevInfo()->sgen_maxmem = tokens[12].toInt();
 }
 
 
@@ -117,6 +133,9 @@ void Msg_SYS_Mode::on_dataRx()
 
 void Msg_Dummy::on_dataRx()
 {
+    qInfo() << "STB: " <<  m_rxData;
+
+    Core::getInstance()->openCommInit();
 }
 
 /***************************** Messages - VM ****************************/
@@ -205,17 +224,20 @@ void Msg_CNTR_Enable::on_dataRx()
 
     if (getIsQuery())
     {
-        if (m_rxData.contains(EMBO_TRUE))
-            emit result(true, true);
-        else if (m_rxData.contains(EMBO_FALSE))
-            emit result(true, false);
-        else
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+
+        if (tokens.size() != 2)
+        {
             emit err(INVALID_MSG + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        emit result(tokens[0].contains(EMBO_TRUE), tokens[1].contains(EMBO_TRUE));
     }
     else
     {
         if (m_rxData.contains(EMBO_OK))
-            emit result(false, true);
+            emit ok();
         else
             emit err("Counter enabling failed! " + m_rxData, CRITICAL, false);
     }
@@ -227,8 +249,11 @@ void Msg_CNTR_Read::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
-    int sz = tokens.size();
-    assert(sz > 0);
+    if (tokens.size() == 0)
+    {
+        emit err(INVALID_MSG + m_rxData, CRITICAL, true);
+        return;
+    }
 
     emit result(tokens[0], tokens.size() > 1 ? tokens[1] : "");
 }
@@ -241,7 +266,27 @@ void Msg_SGEN_Set::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
+    if (getIsQuery())
+    {
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
+        if (tokens.size() != 5)
+        {
+            emit err(INVALID_MSG + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        // TODO
+        emit result(SgenMode::CONSTANT, tokens[1].toDouble(), tokens[2].toInt(), tokens[3].toInt(),
+                    tokens[4] == "1");
+    }
+    else
+    {
+        if (m_rxData.contains(EMBO_OK))
+            emit ok();
+        else
+            emit err("Signal generator set failed! " + m_rxData, CRITICAL, false);
+    }
 }
 
 /***************************** Messages - PWM ***************************/
@@ -252,6 +297,27 @@ void Msg_PWM_Set::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
+    if (getIsQuery())
+    {
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
+        if (tokens.size() != 7)
+        {
+            emit err(INVALID_MSG + m_rxData, CRITICAL, true);
+            return;
+        }
 
+        emit result(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt(), tokens[3].toInt(),
+                    tokens[4] == "1", tokens[5] == "1", tokens[6]);
+    }
+    else
+    {
+        if (tokens.size() != 2 && !m_rxData.contains(EMBO_OK))
+        {
+            emit err("PWM Generator set failed! " + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        emit ok(tokens[1]);
+    }
 }

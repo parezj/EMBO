@@ -41,6 +41,7 @@ protected slots:
 
 signals:
     void rx();
+    void ok(QString val1 = "", QString val2 = "");
     void err(QString text, MsgBoxType type, bool needClose);
 
 protected:

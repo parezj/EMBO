@@ -22,7 +22,7 @@
 #include <QSerialPort>
 #include <QVector>
 
-#define TIMER_RX        2000
+#define TIMER_RX        1000
 #define TIMER_COMM      20
 #define TIMER_RENDER    25
 
@@ -42,8 +42,8 @@ PWM and signal generator.<br>And of course, it's opensource!<br><br>\
 #define EMBO_DELIM1         ";"
 #define EMBO_DELIM2         ","
 
-#define EMBO_TRUE           "\"1\""
-#define EMBO_FALSE          "\"0\""
+#define EMBO_TRUE           "1"
+#define EMBO_FALSE          "0"
 #define EMBO_OK             "\"OK\""
 
 #define EMBO_READY_A        "ReadyA"
@@ -54,17 +54,17 @@ enum State
 {
     DISCONNECTED,
     OPENING,
-    CONNECTING,
+    CONNECTING1,
+    CONNECTING2,
     CONNECTED
 };
 
 enum Mode
 {
-    VM,
-    SCOPE,
-    LA
+    VM = 0,
+    SCOPE = 1,
+    LA = 2
 };
-
 
 class DevInfo : public QObject
 {
@@ -101,7 +101,6 @@ public:
     bool dac;
     int vm_mem;
     int vm_fs;
-    int cntr_freq;
     int cntr_timeout;
     int sgen_maxf;
     int sgen_maxmem;
@@ -116,6 +115,7 @@ public:
 
     void setUp();
     bool openComm(QString port);
+    void openCommInit();
     bool closeComm();
     void startComm();
     void err(QString name, bool needClose);
@@ -159,6 +159,7 @@ private:
     explicit Core(QObject* parent = 0);
 
     void send();
+    void openComm2();
 
     /* instance */
     static Core* m_instance;
@@ -167,9 +168,10 @@ private:
     State m_state = DISCONNECTED;
 
     /* helpers */
-    bool close_init = false;
-    Mode m_mode;
-    Mode m_mode_last;
+    bool m_close_init = false;
+    bool m_open_comm = false;
+    Mode m_mode = Mode::VM;
+    Mode m_mode_last = Mode::VM;
 
     /* timers */
     QTimer* m_timer_rxTimeout;
@@ -188,6 +190,8 @@ private:
     /* message objects */
     Msg_Idn* m_msg_idn;
     Msg_Rst* m_msg_rst;
+    Msg_Stb* m_msg_stb;
+    Msg_Cls* m_msg_cls;
     Msg_Dummy* m_msg_dummy;
     Msg_SYS_Lims* m_msg_sys_lims;
     Msg_SYS_Info* m_msg_sys_info;

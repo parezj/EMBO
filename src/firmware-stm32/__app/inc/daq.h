@@ -107,7 +107,8 @@ typedef struct
     uint8_t ch4_en;         // channel 4 enabled
     //uint8_t ch_count;
 
-    float fs;               // sampling freq per 1 channel
+    double fs_real;         // sampling freq per 1 channel - real
+    int fs;                 // sampling freq per 1 channel
     uint16_t mem;           // memory per 1 channel;
     enum daq_bits bits;     // bits per 1 channel
 }daq_settings_t;
@@ -145,8 +146,8 @@ typedef struct
 void daq_init(daq_data_t* self);
 int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch);
 int daq_bit_set(daq_data_t* self, enum daq_bits bits);
-int daq_fs_set(daq_data_t* self, float fs);
-int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, float fs);
+int daq_fs_set(daq_data_t* self, int fs);
+int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, int fs);
 void daq_reset(daq_data_t* self);
 void daq_enable(daq_data_t* self, uint8_t enable);
 void daq_mode_set(daq_data_t* self, enum daq_mode mode);

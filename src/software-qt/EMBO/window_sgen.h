@@ -34,8 +34,9 @@ signals:
     void closing(const char* className);
 
 private slots:
+    void on_msg_ok(QString val1, QString val2);
     void on_msg_err(QString text, MsgBoxType type, bool needClose);
-    void on_msg_set(SgenMode mode, double freq, int ampl, int offset);
+    void on_msg_set(SgenMode mode, double freq, int ampl, int offset, bool enable);
 
     void on_actionAbout_triggered();
     void on_spinBox_freq_valueChanged(int arg1);
@@ -57,6 +58,11 @@ private slots:
 private:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
+
+    void enableAll(bool enable);
+    void sendSet(bool enable);
+
+    bool m_ignoreValuesChanged = false;
 
     QLabel* m_status_enabled;
 

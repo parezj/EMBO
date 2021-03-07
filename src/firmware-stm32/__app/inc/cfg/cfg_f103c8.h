@@ -114,6 +114,7 @@
 #define EM_TIM_CNTR_CC(a)      a##CC1 // direct input capture - cc name
 #define EM_TIM_CNTR_CC2(a)     a##CC2 // indirect input capture - cc name
 #define EM_TIM_CNTR_OVF(a)     a##CH3 // ovf store
+#define EM_TIM_CNTR_PSC_FAST   8      // prescaler for fast mode
 //#define EM_TIM_SGEN          TIM6
 //#define EM_TIM_SGEN_FREQ     EM_FREQ_PCLK1
 //#define EM_TIM_SGEN_MAX      65535
@@ -124,7 +125,6 @@
 #define EM_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq - TODO
-#define EM_CNTR_MAX_F          5000000   // Counter max input frequency
 #define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve
 

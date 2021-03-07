@@ -44,6 +44,12 @@
         <file>resources/img/arrow_up4b.png</file>
         <file>resources/img/serial.png</file>
         <file>resources/img/serial2.png</file>
+        <file>resources/img/power-off-embo.png</file>
+        <file>resources/img/power-off-gray.png</file>
+        <file>resources/img/power-off-gray2.png</file>
+        <file>resources/img/power-off-green3_22x23.png</file>
+        <file>resources/img/dial1.png</file>
+        <file>resources/img/dial2.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.ttf</file>

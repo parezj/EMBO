@@ -27,7 +27,7 @@ scpi_result_t EM_Reset(scpi_t * context)
     daq_settings_init(&daq);
     daq_mode_set(&daq, VM);
     daq_enable(&daq, EM_TRUE);
-    cntr_enable(&cntr, EM_FALSE);
+    cntr_enable(&cntr, EM_FALSE, EM_FALSE);
     pwm_disable(&pwm);
 #ifdef EM_DAC
     sgen_disable(&sgen);
@@ -112,8 +112,8 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t * context)
     inter[0] = 'I';
 #endif
 
-    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
-                      EM_LA_MAX_FS, EM_PWM_MAX_F, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MAX_F, EM_CNTR_MEAS_MS,
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
+                      EM_LA_MAX_FS, EM_PWM_MAX_F, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MEAS_MS,
                       EM_SGEN_MAX_F, EM_DAC_BUFF_LEN); // 78 chars
 
     SCPI_ResultCharacters(context, buff, len);
@@ -124,8 +124,8 @@ scpi_result_t EM_SYS_InfoQ(scpi_t * context)
 {
     char buff[100];
 
-    int len = sprintf(buff, "%s,%s,%s,%d,%d,%s,%s,%s,%s,%s", tskKERNEL_VERSION_NUMBER, EM_LL_VER, EM_DEV_COMM, EM_FREQ_HCLK/1000000, (int)daq.vcc_mv,
-                      EM_PINS_SCOPE_VM, EM_PINS_LA, EM_PINS_CNTR, EM_PINS_PWM, EM_PINS_SGEN);
+    int len = sprintf(buff, "%s,%s,%s,%d,%d,%s,%s,%s,%s,%s", tskKERNEL_VERSION_NUMBER, EM_LL_VER, EM_DEV_COMM,
+                      EM_FREQ_HCLK/1000000, (int)daq.vcc_mv, EM_PINS_SCOPE_VM, EM_PINS_LA, EM_PINS_CNTR, EM_PINS_PWM, EM_PINS_SGEN);
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -145,11 +145,11 @@ scpi_result_t EM_VM_ReadQ(scpi_t * context)
         else
             p1 = 1;
 
-        float vref_raw = 0;
-        float ch1_raw = 0;
-        float ch2_raw = 0;
-        float ch3_raw = 0;
-        float ch4_raw = 0;
+        double vref_raw = 0;
+        double ch1_raw = 0;
+        double ch2_raw = 0;
+        double ch3_raw = 0;
+        double ch4_raw = 0;
 
         int avg_num = 1;
         if (p1 > 0)
@@ -192,14 +192,14 @@ scpi_result_t EM_VM_ReadQ(scpi_t * context)
         char ch4_s[10];
 
 #ifdef VREFINT_CAL_ADDR
-        float vcc = 3.3 * EM_ADC_VREF_CAL / vref_raw;
+        double vcc = 3.3 * EM_ADC_VREF_CAL / vref_raw;
 #else
-        float vcc = daq.adc_max_val * EM_ADC_VREF_CAL / vref_raw / 1000;
+        double vcc = (double)daq.adc_max_val * EM_ADC_VREF_CAL / vref_raw / 1000.0;
 #endif
-        float ch1 = vcc * ch1_raw / daq.adc_max_val;
-        float ch2 = vcc * ch2_raw / daq.adc_max_val;
-        float ch3 = vcc * ch3_raw / daq.adc_max_val;
-        float ch4 = vcc * ch4_raw / daq.adc_max_val;
+        double ch1 = vcc * ch1_raw / (double)daq.adc_max_val;
+        double ch2 = vcc * ch2_raw / (double)daq.adc_max_val;
+        double ch3 = vcc * ch3_raw / (double)daq.adc_max_val;
+        double ch4 = vcc * ch4_raw / (double)daq.adc_max_val;
 
         daq.vref = vref_raw;
         daq.vcc_mv = vcc * 1000;
@@ -249,7 +249,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t * context)
             daq_enable(&daq, EM_FALSE);
 
 #ifdef VREFINT_CAL_ADDR
-        float cal = EM_ADC_VREF_CAL / daq.adc_max_val * EM_VREF;
+        float cal = (float)EM_ADC_VREF_CAL / (float)daq.adc_max_val * EM_VREF;
 #else
         float cal = EM_ADC_VREF_CAL;
 #endif
@@ -411,7 +411,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t * context)
         int ret2 = daq_bit_set(&daq, (int)p1);
         int ret4 = daq_ch_set(&daq, p4[0] == 'T' ? 1 : 0, p4[1] == 'T' ? 1 : 0,
                                     p4[2] == 'T' ? 1 : 0, p4[3] == 'T' ? 1 : 0, (int)p3);
-        int ret3 = daq_fs_set(&daq, (int)p3);
+        int ret3 = daq_fs_set(&daq, p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
         int ret5 = daq_trig_set(&daq, p5, p6, (p7[0] == 'R' ? RISING : FALLING),
             (p8[0] == 'A' ? AUTO : (p8[0] == 'N' ? NORMAL : (p8[0] == 'S' ? SINGLE : DISABLED))), (int)p9);
@@ -421,7 +421,17 @@ scpi_result_t EM_SCOPE_Set(scpi_t * context)
             daq.dis_hold = 0;
             daq_enable(&daq, EM_TRUE);
 
-            SCPI_ResultText(context, SCPI_OK);
+            char buff[40];
+            char maxZ_s[15];
+            double max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
+            sprint_fast(maxZ_s, "%s", max_Z, 1);
+
+            char freq_real_s[15];
+            sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+
+            int len = sprintf(buff, "\"OK\",%s,%s", maxZ_s, freq_real_s);
+
+            SCPI_ResultCharacters(context, buff, len);
             return SCPI_RES_OK;
         }
         else
@@ -446,13 +456,11 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t * context)
 {
     if (daq.mode == SCOPE)
     {
-        char buff[80];
-        char freq_s[30];
+        char buff[100];
         char chans_en[5];
         char edge_s[2];
         char mode_s[2];
 
-        sprint_fast(freq_s, "%s", daq.set.fs, 3);
         chans_en[0] = daq.set.ch1_en ? 'T' : 'F';
         chans_en[1] = daq.set.ch2_en ? 'T' : 'F';
         chans_en[2] = daq.set.ch3_en ? 'T' : 'F';
@@ -465,11 +473,14 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t * context)
         mode_s[1] = '\0';
 
         char maxZ_s[15];
-        float max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
-        sprint_fast(maxZ_s, "%skOhm", max_Z, 1);
+        double max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
+        sprint_fast(maxZ_s, "%s", max_Z, 1);
 
-        int len = sprintf(buff, "\"%d,%d,%s,%s,%d,%d,%s,%s,%d,%s\"", daq.set.bits, daq.set.mem, freq_s, chans_en,
-                          daq.trig.set.ch, daq.trig.set.val_percent, edge_s, mode_s, daq.trig.set.pretrigger, maxZ_s);
+        char freq_real_s[15];
+        sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+
+        int len = sprintf(buff, "%d,%d,%d,%s,%d,%d,%s,%s,%d,%s,%s", daq.set.bits, daq.set.mem, daq.set.fs, chans_en,
+                          daq.trig.set.ch, daq.trig.set.val_percent, edge_s, mode_s, daq.trig.set.pretrigger, maxZ_s, freq_real_s);
 
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;
@@ -593,7 +604,7 @@ scpi_result_t EM_LA_Set(scpi_t * context)
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, B1);
         int ret4 = daq_ch_set(&daq, 1, 1, 1, 1, (int)p3);
-        int ret3 = daq_fs_set(&daq, (int)p3);
+        int ret3 = daq_fs_set(&daq, p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
         int ret5 = daq_trig_set(&daq, p5, 0, (p7[0] == 'R' ? RISING : FALLING),
             (p8[0] == 'A' ? AUTO : (p8[0] == 'N' ? NORMAL : (p8[0] == 'S' ? SINGLE : DISABLED))), (int)p9);
@@ -603,7 +614,13 @@ scpi_result_t EM_LA_Set(scpi_t * context)
             daq.dis_hold = 0;
             daq_enable(&daq, EM_TRUE);
 
-            SCPI_ResultText(context, SCPI_OK);
+            char buff[25];
+            char freq_real_s[15];
+            sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+
+            int len = sprintf(buff, "\"OK\",%s", freq_real_s);
+
+            SCPI_ResultCharacters(context, buff, len);
             return SCPI_RES_OK;
         }
         else
@@ -628,20 +645,21 @@ scpi_result_t EM_LA_SetQ(scpi_t * context)
 {
     if (daq.mode == LA)
     {
-        char buff[80];
-        char freq_s[30];
+        char buff[100];
         char edge_s[2];
         char mode_s[2];
 
-        sprint_fast(freq_s, "%s", daq.set.fs, 3);
         edge_s[0] = daq.trig.set.edge == RISING ? 'R' : 'F';
         mode_s[0] = daq.trig.set.mode == AUTO ? 'A' : (daq.trig.set.mode == NORMAL ? 'N' :
             (daq.trig.set.mode == SINGLE ? 'S' : 'D'));
         edge_s[1] = '\0';
         mode_s[1] = '\0';
 
-        int len = sprintf(buff, "\"%d,%s,%d,%s,%s,%d\"", daq.set.mem, freq_s,
-                          daq.trig.set.ch, edge_s, mode_s, daq.trig.set.pretrigger);
+        char freq_real_s[15];
+        sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+
+        int len = sprintf(buff, "%d,%d,%d,%s,%s,%d,%s", daq.set.mem, daq.set.fs,
+                          daq.trig.set.ch, edge_s, mode_s, daq.trig.set.pretrigger, freq_real_s);
 
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;
@@ -679,26 +697,32 @@ scpi_result_t EM_LA_ForceTrig(scpi_t * context)
 
 scpi_result_t EM_CNTR_EnableQ(scpi_t * context)
 {
-    SCPI_ResultText(context, cntr.enabled ? "1" : "0");
+    char buff[3];
+    buff[0] = cntr.enabled ? '1' : '0';
+    buff[1] = ',';
+    buff[2] = cntr.fast_mode ? '1' : '0';
+
+    SCPI_ResultCharacters(context, buff, 3);
     return SCPI_RES_OK;
 }
 
 scpi_result_t EM_CNTR_Enable(scpi_t * context)
 {
-    uint32_t p1;
+    uint32_t p1, p2;
 
-    if (!SCPI_ParamUInt32(context, &p1, TRUE))
+    if (!SCPI_ParamUInt32(context, &p1, TRUE) ||
+        !SCPI_ParamUInt32(context, &p2, TRUE))
     {
         return SCPI_RES_ERR;
     }
 
-    if (p1 < 0 || p1 > 1)
+    if (p1 < 0 || p1 > 1 || p2 < 0 || p2 > 1)
     {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
 
-    cntr_enable(&cntr, p1);
+    cntr_enable(&cntr, p1, p2);
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;
@@ -712,14 +736,14 @@ scpi_result_t EM_CNTR_ReadQ(scpi_t * context)
         return SCPI_RES_ERR;
     }
 
-    float f = cntr.freq;
+    double f = cntr.freq;
 
     if (f > -1)
     {
         char f_s[20];
         char T_s[20];
 
-        float T = 1.0 / f;
+        double T = 1.0 / f;
 
         if (f < 1000)
             sprint_fast(f_s, "%s Hz", f, 3);
@@ -732,8 +756,10 @@ scpi_result_t EM_CNTR_ReadQ(scpi_t * context)
             sprint_fast(T_s, "%s s", T, 3);
         else if (T >= 0.001)
             sprint_fast(T_s, "%s ms", T * 1000.0, 3);
-        else //if (T >= 0.000001)
+        else if (T >= 0.000001)
             sprint_fast(T_s, "%s us", T * 1000000.0, 3);
+        else //if (T >= 0.000000001)
+            sprint_fast(T_s, "%s ns", T * 1000000000.0, 3);
 
         char buff[100];
         int len = sprintf(buff, "%s,%s", f_s, T_s);
@@ -786,21 +812,21 @@ scpi_result_t EM_SGEN_Set(scpi_t * context)
 scpi_result_t EM_PWM_SetQ(scpi_t * context)
 {
     char buff[60];
-    char buff_freq[10];
-    char buff_duty1[10];
-    char buff_duty2[10];
+    char buff_freq_real[15];
+    //char buff_duty1[10];
+    //char buff_duty2[10];
 
-    float freq = pwm.ch1.freq;
-    float duty1 = pwm.ch1.duty;
-    float duty2 = pwm.ch2.duty;
+    //double duty1 = pwm.ch1.duty;
+    //double duty2 = pwm.ch2.duty;
     int offset2 = pwm.ch2.offset;
     uint8_t en1 = pwm.ch1.enabled;
     uint8_t en2 = pwm.ch2.enabled;
 
-    sprint_fast(buff_freq, "%s", freq, 4);
-    sprint_fast(buff_duty1, "%s", duty1, 4);
-    sprint_fast(buff_duty2, "%s", duty2, 4);
-    int len = sprintf(buff, "%s,%s,%s,%d,%d,%d", buff_freq, buff_duty1, buff_duty2, offset2, en1, en2);
+    //sprint_fast(buff_duty1, "%s", duty1, 4);
+    //sprint_fast(buff_duty2, "%s", duty2, 4);
+    sprint_fast(buff_freq_real, "%s", pwm.ch1.freq_real, 3);
+
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d,%s", pwm.ch1.freq, (int)pwm.ch1.duty, (int)pwm.ch2.duty, offset2, en1, en2, buff_freq_real);
 
     SCPI_ResultCharacters(context, buff, len);
 
@@ -830,6 +856,12 @@ scpi_result_t EM_PWM_Set(scpi_t * context)
         return SCPI_RES_ERR;
     }
 
-    SCPI_ResultText(context, SCPI_OK);
+    char buff[25];
+    char freq_real_s[15];
+    sprint_fast(freq_real_s, "%s", pwm.ch1.freq_real, 3);
+
+    int len = sprintf(buff, "\"OK\",%s", freq_real_s);
+
+    SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
 }

@@ -387,15 +387,15 @@ int daq_bit_set(daq_data_t* self, enum daq_bits bits)
     return 0;
 }
 
-int daq_fs_set(daq_data_t* self, float fs)
+int daq_fs_set(daq_data_t* self, int fs)
 {
     uint8_t is_vcc = (self->mode == VM ? 1 : 0);
-    float fs2 = fs;
+    int fs2 = fs;
 
 #if defined(EM_ADC_MODE_ADC1)
     int channs = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + is_vcc;
-    //float scope_max_fs = 1.0 / (EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_MAX_N, (self->set.bits == B12 ? EM_ADC_TCONV12 : EM_ADC_TCONV8)) * (float)(channs));
-    float scope_max_fs = (self->set.bits == B12 ? EM_DAQ_MAX_B12_FS : EM_DAQ_MAX_B8_FS) / (float)(channs);
+    //double scope_max_fs = 1.0 / (EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_MAX_N, (self->set.bits == B12 ? EM_ADC_TCONV12 : EM_ADC_TCONV8)) * (float)(channs));
+    double scope_max_fs = (self->set.bits == B12 ? EM_DAQ_MAX_B12_FS : EM_DAQ_MAX_B8_FS) / (double)(channs);
 
 #if defined(EM_ADC_DUALMODE)
     if (channs == 2 || channs == 4)
@@ -411,14 +411,14 @@ int daq_fs_set(daq_data_t* self, float fs)
     int adc1 = self->set.ch1_en + self->set.ch2_en + is_vcc;
     int adc2 = self->set.ch3_en + self->set.ch4_en;
     int channs = adc1 + adc2;
-    float scope_max_fs = (self->set.bits == B12 ? EM_DAQ_MAX_B12_FS : EM_DAQ_MAX_B8_FS) / (float)(adc1 > adc2 ? adc1 : adc2);
+    double scope_max_fs = (self->set.bits == B12 ? EM_DAQ_MAX_B12_FS : EM_DAQ_MAX_B8_FS) / (double)(adc1 > adc2 ? adc1 : adc2);
 #if defined(EM_ADC_INTERLEAVED)
     if (channs == 1)
         fs2 /= 2.0;
 #endif
 
 #elif defined(EM_ADC_MODE_ADC1234)
-    float scope_max_fs = (self->set.bits == B12 ? EM_DAQ_MAX_B12_FS : EM_DAQ_MAX_B8_FS) / (float)(self->set.ch1_en ? 1 + is_vcc : 1);
+    double scope_max_fs = (self->set.bits == B12 ? EM_DAQ_MAX_B12_FS : EM_DAQ_MAX_B8_FS) / (double)(self->set.ch1_en ? 1 + is_vcc : 1);
 #if defined(EM_ADC_INTERLEAVED)
     if (channs == 1)
         fs2 /= 4.0;
@@ -436,7 +436,7 @@ int daq_fs_set(daq_data_t* self, float fs)
 
     int prescaler = 1;
     int reload = 1;
-    self->set.fs = get_freq(&prescaler, &reload, EM_TIM_DAQ_MAX, EM_TIM_DAQ_FREQ, fs2);
+    self->set.fs_real = get_freq(&prescaler, &reload, EM_TIM_DAQ_MAX, EM_TIM_DAQ_FREQ, fs2);
 
     LL_TIM_SetPrescaler(EM_TIM_DAQ, prescaler);
     LL_TIM_SetAutoReload(EM_TIM_DAQ, reload);
@@ -446,7 +446,7 @@ int daq_fs_set(daq_data_t* self, float fs)
     return 0;
 }
 
-int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, float fs)
+int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, int fs)
 {
     self->set.ch1_en = ch1;
     self->set.ch2_en = ch2;
@@ -490,10 +490,10 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
         channs = is_vcc ? 2 : 1;
 #endif
 
-        float T = 1.0 / fs;
+        double T = 1.0 / fs;
         for (int i = 0; i < EM_ADC_SMPLT_CNT; i++) // find best sample time
         {
-            if (((float)channs * EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_N[i] + 0.5, (self->set.bits == B12 ? EM_ADC_TCONV12 : EM_ADC_TCONV8))) < T)
+            if (((double)channs * EM_ADC_1CH_SMPL_TM(EM_ADC_SMPLT_N[i] + 0.5, (self->set.bits == B12 ? EM_ADC_TCONV12 : EM_ADC_TCONV8))) < T)
             {
                 smpl_time = EM_ADC_SMPLT[i];
                 smpl_time_n = EM_ADC_SMPLT_N[i];

@@ -22,10 +22,13 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
 
     m_msg_set = new Msg_PWM_Set(this);
 
+    connect(m_msg_set, &Msg_PWM_Set::ok, this, &WindowPwm::on_msg_ok);
     connect(m_msg_set, &Msg_PWM_Set::err, this, &WindowPwm::on_msg_err);
     connect(m_msg_set, &Msg_PWM_Set::result, this, &WindowPwm::on_msg_set);
 
-    m_status_enabled = new QLabel(" CH1: Disabled     CH2: Disabled");
+    m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">? Hz&nbsp;&nbsp;&nbsp;</p>");
+
+    m_status_enabled = new QLabel(" Wait...");
     QWidget* widget = new QWidget();
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_enabled->setFont(font1);
@@ -46,14 +49,21 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
 
-    QString style1(CSS_BUTTON_ON);
+    m_mode.addButton(m_ui->radioButton_coarse);
+    m_mode.addButton(m_ui->radioButton_fine);
+    m_mode.setExclusive(true);
+
+    m_ui->radioButton_fine->setChecked(true);
+    on_radioButton_fine_clicked();
+
+    QString style1(CSS_BUTTON_NODIS);
 
     m_ui->pushButton_ch1enable->setStyleSheet(style1);
     m_ui->pushButton_ch2enable->setStyleSheet(style1);
     m_ui->pushButton_ch1disable->setStyleSheet(style1);
     m_ui->pushButton_ch2disable->setStyleSheet(style1);
 
-    QString style2(CSS_SPINBOX);
+    QString style2(CSS_SPINBOX_NODIS);
 
     m_ui->spinBox_freq->setStyleSheet(style2);
     m_ui->spinBox_duty1->setStyleSheet(style2);
@@ -66,17 +76,26 @@ WindowPwm::~WindowPwm()
     delete m_ui;
 }
 
-void WindowPwm::on_actionAbout_triggered()
-{
-    QMessageBox::about(this, EMBO_TITLE, EMBO_ABOUT_TXT);
-}
-
-void WindowPwm::on_msg_set(double freq, int duty, int duty2, int offset, bool en1, bool en2)
-{
-
-}
-
 /* slots */
+
+void WindowPwm::on_msg_ok(QString val1, QString)
+{
+    if (m_ch1_wantSwitch)
+    {
+        m_ch1_wantSwitch = false;
+        m_ch1_enabled = !m_ch1_enabled;
+    }
+
+    if (m_ch2_wantSwitch)
+    {
+        m_ch2_wantSwitch = false;
+        m_ch2_enabled = !m_ch2_enabled;
+    }
+
+    m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">" + formatFreq(val1) + " Hz&nbsp;</p>");
+
+    enableAll(true);
+}
 
 void WindowPwm::on_msg_err(QString text, MsgBoxType type, bool needClose)
 {
@@ -93,74 +112,182 @@ void WindowPwm::on_msg_err(QString text, MsgBoxType type, bool needClose)
 
     if (needClose)
         this->close();
+    else
+        enableAll(true);
 }
 
-void WindowPwm::on_spinBox_freq_valueChanged(int arg1)
+void WindowPwm::on_msg_set(int freq, int duty1, int duty2, int offset, bool en1, bool en2, QString freq_real)
 {
-    m_ui->horizontalSlider_freq->setValue(arg1);
-    m_ui->dial_freq->setValue(arg1);
+    m_ignoreValuesChanged = true;
+
+    m_ui->spinBox_freq->setValue(freq);
+    m_ui->spinBox_duty1->setValue(duty1);
+    m_ui->spinBox_duty2->setValue(duty2);
+    m_ui->spinBox_offset->setValue(offset);
+
+    m_ui->dial_freq->setValue(freq);
+    m_ui->dial_duty1->setValue(duty1);
+    m_ui->dial_duty2->setValue(duty2);
+    m_ui->dial_offset->setValue(offset);
+
+    auto info = Core::getInstance()->getDevInfo();
+
+    m_ui->spinBox_freq->setRange(1, info->pwm_fs);
+    m_ui->dial_freq->setRange(1, info->pwm_fs);
+
+    m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">" + formatFreq(freq_real) + " Hz&nbsp;</p>");
+
+    m_ignoreValuesChanged = false;
+
+    m_ch1_enabled = en1;
+    m_ch2_enabled = en2;
+
+    enableAll(true);
 }
 
-void WindowPwm::on_horizontalSlider_freq_sliderMoved(int position)
+void WindowPwm::on_actionAbout_triggered()
 {
+    QMessageBox::about(this, EMBO_TITLE, EMBO_ABOUT_TXT);
+}
+
+void WindowPwm::on_spinBox_freq_valueChanged(int)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_freq->setValue(m_ui->spinBox_freq->value());
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
+}
+
+void WindowPwm::on_dial_freq_valueChanged(int position)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
     m_ui->spinBox_freq->setValue(position);
-    m_ui->dial_freq->setValue(position);
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
-void WindowPwm::on_dial_freq_sliderMoved(int position)
+void WindowPwm::on_spinBox_duty1_valueChanged(int)
 {
-    m_ui->spinBox_freq->setValue(position);
-    m_ui->horizontalSlider_freq->setValue(position);
-}
+    if (m_ignoreValuesChanged)
+        return;
 
-void WindowPwm::on_spinBox_duty1_valueChanged(int arg1)
-{
-    m_ui->dial_duty1->setValue(arg1);
+    m_ignoreValuesChanged = true;
+    m_ui->dial_duty1->setValue(m_ui->spinBox_duty1->value());
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
 void WindowPwm::on_dial_duty1_valueChanged(int value)
 {
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
     m_ui->spinBox_duty1->setValue(value);
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
-void WindowPwm::on_spinBox_duty2_valueChanged(int arg1)
+void WindowPwm::on_spinBox_duty2_valueChanged(int)
 {
-    m_ui->dial_duty2->setValue(arg1);
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_duty2->setValue(m_ui->spinBox_duty2->value());
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
 void WindowPwm::on_dial_duty2_valueChanged(int value)
 {
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
     m_ui->spinBox_duty2->setValue(value);
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
-void WindowPwm::on_spinBox_offset_valueChanged(int arg1)
+void WindowPwm::on_spinBox_offset_valueChanged(int)
 {
-    m_ui->dial_offset->setValue(arg1);
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_offset->setValue(m_ui->spinBox_offset->value());
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
 void WindowPwm::on_dial_offset_valueChanged(int value)
 {
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
     m_ui->spinBox_offset->setValue(value);
+    m_ignoreValuesChanged = false;
+
+    sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
 void WindowPwm::on_pushButton_ch2disable_clicked()
 {
-
+    m_ch2_wantSwitch = true;
+    sendSet(m_ch1_enabled, false);
 }
 
 void WindowPwm::on_pushButton_ch2enable_clicked()
 {
-
+    m_ch2_wantSwitch = true;
+    sendSet(m_ch1_enabled, true);
 }
 
 void WindowPwm::on_pushButton_ch1disable_clicked()
 {
-
+    m_ch1_wantSwitch = true;
+    sendSet(false, m_ch2_enabled);
 }
 
 void WindowPwm::on_pushButton_ch1enable_clicked()
 {
+    m_ch1_wantSwitch = true;
+    sendSet(true, m_ch2_enabled);
+}
 
+void WindowPwm::on_radioButton_coarse_clicked()
+{
+    m_ui->dial_freq->setSingleStep(100);
+    m_ui->dial_freq->setPageStep(1000);
+
+    m_ui->spinBox_freq->setSingleStep(100);
+
+    m_ui->dial_freq->setNotchTarget(0.5);
+}
+
+void WindowPwm::on_radioButton_fine_clicked()
+{
+    m_ui->dial_freq->setSingleStep(1);
+    m_ui->dial_freq->setPageStep(10);
+
+    m_ui->spinBox_freq->setSingleStep(1);
+
+    m_ui->dial_freq->setNotchTarget(25);
 }
 
 /* private */
@@ -179,26 +306,82 @@ void WindowPwm::showEvent(QShowEvent*)
     m_ui->pushButton_ch2enable->show();
     m_ui->pushButton_ch2disable->hide();
 
-    m_ui->pushButton_ch1enable->setText(" Wait...");
-    m_ui->pushButton_ch1enable->setEnabled(false);
+    enableAll(false);
 
-    m_ui->pushButton_ch2enable->setText(" Wait...");
-    m_ui->pushButton_ch2enable->setEnabled(false);
+    Core::getInstance()->msgAdd(m_msg_set, true);
+}
 
-    m_ui->spinBox_freq->setEnabled(false);
-    m_ui->spinBox_duty1->setEnabled(false);
-    m_ui->spinBox_duty2->setEnabled(false);
-    m_ui->spinBox_offset->setEnabled(false);
+void WindowPwm::enableAll(bool enable)
+{
+    m_ui->pushButton_ch1enable->setEnabled(enable);
+    m_ui->pushButton_ch2enable->setEnabled(enable);
 
-    m_ui->dial_freq->setEnabled(false);
-    m_ui->dial_duty1->setEnabled(false);
-    m_ui->dial_duty2->setEnabled(false);
-    m_ui->dial_offset->setEnabled(false);
+    m_ui->pushButton_ch1disable->setEnabled(enable);
+    m_ui->pushButton_ch2disable->setEnabled(enable);
 
-    m_ui->horizontalSlider_freq->setEnabled(false);
-    m_ui->label_realFreq->setEnabled(false);
-    m_ui->label_realFreq->setText("? Hz");
+    m_ui->spinBox_freq->setEnabled(enable);
+    m_ui->spinBox_duty1->setEnabled(enable);
+    m_ui->spinBox_duty2->setEnabled(enable);
+    m_ui->spinBox_offset->setEnabled(enable);
 
-    //m_msg_enable->setIsQuery(true);
-    //Core::getInstance()->msgAdd(m_msg_enable);
+    m_ui->dial_freq->setEnabled(enable);
+    m_ui->dial_duty1->setEnabled(enable);
+    m_ui->dial_duty2->setEnabled(enable);
+    m_ui->dial_offset->setEnabled(enable);
+
+    m_ui->textBrowser_realFreq->setEnabled(enable);
+
+    if (enable)
+    {
+        m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "Enabled" : "Disabled") +
+                                  "     Ch2: " + QString(m_ch2_enabled ? "Enabled" : "Disabled"));
+
+        if (m_ch1_enabled)
+        {
+            m_ui->pushButton_ch1enable->hide();
+            m_ui->pushButton_ch1disable->show();
+        }
+        else
+        {
+            m_ui->pushButton_ch1enable->show();
+            m_ui->pushButton_ch1disable->hide();
+        }
+
+        if (m_ch2_enabled)
+        {
+            m_ui->pushButton_ch2enable->hide();
+            m_ui->pushButton_ch2disable->show();
+        }
+        else
+        {
+            m_ui->pushButton_ch2enable->show();
+            m_ui->pushButton_ch2disable->hide();
+        }
+    }
+    else
+    {
+        m_status_enabled->setText(" Wait...");
+    }
+}
+
+void WindowPwm::sendSet(bool en1, bool en2)
+{
+    enableAll(false);
+
+    Core::getInstance()->msgAdd(m_msg_set, false, QString::number(m_ui->spinBox_freq->value()) + EMBO_DELIM2 +
+                                                  QString::number(m_ui->spinBox_duty1->value()) + EMBO_DELIM2 +
+                                                  QString::number(m_ui->spinBox_duty2->value()) + EMBO_DELIM2 +
+                                                  QString::number(m_ui->spinBox_offset->value()) + EMBO_DELIM2 +
+                                                  (en1 ? EMBO_SET_TRUE : EMBO_SET_FALSE) + EMBO_DELIM2 +
+                                                  (en2 ? EMBO_SET_TRUE : EMBO_SET_FALSE));
+}
+
+QString WindowPwm::formatFreq(QString freq)
+{
+    int w_size = freq.size();
+    if (w_size > 7)
+        freq.insert(freq.size() - 7, " ");
+    if (w_size > 10)
+        freq.insert(freq.size() - 11, " ");
+    return freq;
 }

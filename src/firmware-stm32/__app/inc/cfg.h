@@ -112,8 +112,8 @@
 
 // calc helpers ----------------------------------------------------
 #define EM_ADC_ADDR(x)           (uint32_t)LL_ADC_DMA_GetRegAddr(x, LL_ADC_DMA_REG_REGULAR_DATA) // ADC DMA address
-#define EM_ADC_1CH_SMPL_TM(T,B)  ((1.0 / (float)EM_FREQ_ADCCLK) * ((float)T + (B))) // ADC 1 channel sampling time in seconds (T - smpl ticks, B - Tconv)
-#define EM_ADC_MAXZ(T,L)         (((T) / ((float)EM_FREQ_ADCCLK * EM_ADC_C_F * (L))) - EM_ADC_R_KOHM) // ADC max input impedance (T - smpl ticks, L - ln2^(N+2))
+#define EM_ADC_1CH_SMPL_TM(T,B)  ((1.0 / (double)EM_FREQ_ADCCLK) * ((double)T + (B))) // ADC 1 channel sampling time in seconds (T - smpl ticks, B - Tconv)
+#define EM_ADC_MAXZ(T,L)         (((T) / ((double)EM_FREQ_ADCCLK * EM_ADC_C_F * (L))) - EM_ADC_R_KOHM) // ADC max input impedance (T - smpl ticks, L - ln2^(N+2))
 #define EM_DMA_LAST_IDX(x,y,z)   (get_last_circ_idx((x - LL_DMA_GetDataLength(z, y)), x)) // last DMA index from circular buffer (x - buff len, y - dma ch, z - dma)
 #define EM_MILIS(x)              (x / portTICK_PERIOD_MS) // FreeRTOS miliseconds
 

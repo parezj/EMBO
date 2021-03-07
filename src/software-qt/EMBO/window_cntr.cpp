@@ -24,6 +24,7 @@ WindowCntr::WindowCntr(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_msg_enable = new Msg_CNTR_Enable(this);
     m_msg_read = new Msg_CNTR_Read(this);
 
+    connect(m_msg_enable, &Msg_CNTR_Enable::ok, this, &WindowCntr::on_msg_ok);
     connect(m_msg_enable, &Msg_CNTR_Enable::err, this, &WindowCntr::on_msg_err);
     connect(m_msg_enable, &Msg_CNTR_Enable::result, this, &WindowCntr::on_msg_enable);
 
@@ -51,7 +52,11 @@ WindowCntr::WindowCntr(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
 
-    QString style1(CSS_BUTTON_ON);
+    m_mode.addButton(m_ui->radioButton_precise);
+    m_mode.addButton(m_ui->radioButton_fast);
+    m_mode.setExclusive(true);
+
+    QString style1(CSS_BUTTON_NODIS);
 
     m_ui->pushButton_enable->setStyleSheet(style1);
     m_ui->pushButton_disable->setStyleSheet(style1);
@@ -68,6 +73,22 @@ WindowCntr::~WindowCntr()
 }
 
 /* slots */
+
+void WindowCntr::on_msg_ok(QString, QString)
+{
+    if (m_enable_wantSwitch)
+    {
+        m_enable_wantSwitch = false;
+        m_instrEnabled = !m_instrEnabled;
+    }
+
+    if (m_instrEnabled)
+        m_activeMsg = m_msg_read;
+    else
+        m_activeMsg = Q_NULLPTR;
+
+    enableAll(true);
+}
 
 void WindowCntr::on_msg_err(QString text, MsgBoxType type, bool needClose)
 {
@@ -86,43 +107,20 @@ void WindowCntr::on_msg_err(QString text, MsgBoxType type, bool needClose)
         this->close();
 }
 
-void WindowCntr::on_msg_enable(bool isQuery, bool enable)
+void WindowCntr::on_msg_enable(bool enabled, bool fastMode)
 {
-    m_ui->pushButton_enable->setText(" Enable");
-    m_ui->pushButton_enable->setEnabled(true);
-
-    m_ui->pushButton_disable->setText(" Disable");
-    m_ui->pushButton_disable->setEnabled(true);
-
-    if (isQuery)
-        m_instrEnabled = enable;
-    else
-        m_instrEnabled = !m_instrEnabled;
+    m_instrEnabled = enabled;
+    m_fastMode = fastMode;
 
     if (m_instrEnabled)
-    {
-        m_status_enabled->setText(" Enabled");
-
-        m_ui->pushButton_disable->show();
-        m_ui->pushButton_enable->hide();
-
-        m_ui->textBrowser_freq->setEnabled(true);
-        m_ui->textBrowser_period->setEnabled(true);
-
         m_activeMsg = m_msg_read;
-    }
     else
-    {
-        m_status_enabled->setText(" Disabled");
-
-        m_ui->pushButton_enable->show();
-        m_ui->pushButton_disable->hide();
-
-        m_ui->textBrowser_freq->setEnabled(false);
-        m_ui->textBrowser_period->setEnabled(false);
-
         m_activeMsg = Q_NULLPTR;
-    }
+
+    m_ui->radioButton_fast->setChecked(m_fastMode);
+    m_ui->radioButton_precise->setChecked(!m_fastMode);
+
+    enableAll(true);
 }
 
 void WindowCntr::on_msg_read(QString freq, QString period)
@@ -133,6 +131,10 @@ void WindowCntr::on_msg_read(QString freq, QString period)
         {
             m_ui->textBrowser_freq->setHtml("<p align=\"right\"> " FREQ_TIMEOUT);
             m_ui->textBrowser_period->setHtml("<p align=\"right\"> " PERIOD_TIMEOUT);
+        }
+        else if (freq.contains("ERROR"))
+        {
+            m_status_enabled->setText(" " + freq);
         }
         else
         {
@@ -149,18 +151,28 @@ void WindowCntr::on_actionAbout_triggered()
 
 void WindowCntr::on_pushButton_disable_clicked()
 {
-    m_ui->pushButton_enable->setText(" Wait...");
-    m_ui->pushButton_enable->setEnabled(false);
-
-    Core::getInstance()->msgAdd(m_msg_enable, false, EMBO_SET_FALSE);
+    m_enable_wantSwitch = true;
+    enableAll(false);
+    sendEnable(false);
 }
 
 void WindowCntr::on_pushButton_enable_clicked()
 {
-    m_ui->pushButton_enable->setText(" Wait...");
-    m_ui->pushButton_enable->setEnabled(false);
+    m_enable_wantSwitch = true;
+    enableAll(false);
+    sendEnable(true);
+}
 
-    Core::getInstance()->msgAdd(m_msg_enable, false, EMBO_SET_TRUE);
+void WindowCntr::on_radioButton_precise_clicked()
+{
+    m_fastMode = false;
+    sendEnable(m_instrEnabled);
+}
+
+void WindowCntr::on_radioButton_fast_clicked()
+{
+    m_fastMode = true;
+    sendEnable(m_instrEnabled);
 }
 
 /* private */
@@ -173,20 +185,56 @@ void WindowCntr::closeEvent(QCloseEvent*)
 
 void WindowCntr::showEvent(QShowEvent*)
 {
-    m_ui->pushButton_enable->show();
-    m_ui->pushButton_disable->hide();
-
-    m_ui->pushButton_enable->setText(" Wait...");
-    m_ui->pushButton_enable->setEnabled(false);
+    m_ui->textBrowser_freq->setHtml("<p align=\"right\"> " FREQ_TIMEOUT);
+    m_ui->textBrowser_period->setHtml("<p align=\"right\"> " PERIOD_TIMEOUT);
 
     m_ui->textBrowser_freq->setEnabled(false);
     m_ui->textBrowser_period->setEnabled(false);
 
-    m_ui->textBrowser_freq->setText("");
-    m_ui->textBrowser_period->setText("");
-
-    m_ui->textBrowser_freq->setHtml("<p align=\"right\"> " FREQ_TIMEOUT);
-    m_ui->textBrowser_period->setHtml("<p align=\"right\"> " PERIOD_TIMEOUT);
+    enableAll(false);
 
     Core::getInstance()->msgAdd(m_msg_enable, true);
+}
+
+void WindowCntr::enableAll(bool enable)
+{
+    m_ui->pushButton_enable->setEnabled(enable);
+    m_ui->pushButton_disable->setEnabled(enable);
+
+    m_ui->radioButton_fast->setEnabled(enable);
+    m_ui->radioButton_precise->setEnabled(enable);
+
+    m_ui->textBrowser_freq->setEnabled(m_instrEnabled);
+    m_ui->textBrowser_period->setEnabled(m_instrEnabled);
+
+    if (enable)
+    {
+        if (m_instrEnabled)
+        {
+            m_ui->pushButton_enable->hide();
+            m_ui->pushButton_disable->show();
+
+            m_status_enabled->setText(" Enabled");
+        }
+        else
+        {
+            m_ui->pushButton_enable->show();
+            m_ui->pushButton_disable->hide();
+
+            m_status_enabled->setText(" Disabled");
+        }
+    }
+    else
+    {
+        m_status_enabled->setText(" Wait...");
+    }
+}
+
+void WindowCntr::sendEnable(bool enable)
+{
+    enableAll(false);
+
+    Core::getInstance()->msgAdd(m_msg_enable, false,
+                                (enable ? QString(EMBO_SET_TRUE) : QString(EMBO_SET_FALSE)) + EMBO_DELIM2 +
+                                (m_fastMode ? EMBO_SET_TRUE : EMBO_SET_FALSE));
 }

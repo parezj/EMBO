@@ -7,24 +7,24 @@
 
 #include <QString>
 
-QString format_unit(double value, QString unit)
+QString format_unit(double value, QString unit, int precision)
 {
     if (value < 0.000000001)
-        return(QString::number(value * 1000000000000) + " p" + unit);
+        return(QString::number(value * 1000000000000, 'd', precision) + " p" + unit);
     else if (value < 0.000001)
-        return(QString::number(value * 1000000000) + " n" + unit);
+        return(QString::number(value * 1000000000, 'd', precision) + " n" + unit);
     else if (value < 0.001)
-        return(QString::number(value * 1000000) + " u" + unit);
+        return(QString::number(value * 1000000, 'd', precision) + " u" + unit);
     else if (value < 1)
-        return(QString::number(value * 1000) + " m" + unit);
+        return(QString::number(value * 1000, 'd', precision) + " m" + unit);
     else if (value < 1000)
-        return(QString::number(value * 1) + " " + unit);
+        return(QString::number(value * 1, 'd', precision) + " " + unit);
     else if (value < 1000000)
-        return(QString::number(value * 0.001) + " k" + unit);
+        return(QString::number(value * 0.001, 'd', precision) + " k" + unit);
     else if (value < 1000000000)
-        return(QString::number(value * 0.000001) + " M" + unit);
+        return(QString::number(value * 0.000001, 'd', precision) + " M" + unit);
     else if (value < 1000000000000)
-        return(QString::number(value * 0.000000001) + " G" + unit);
+        return(QString::number(value * 0.000000001, 'd', precision) + " G" + unit);
     else
-        return(QString::number(value * 0.000000000001) + " T" + unit);
+        return(QString::number(value * 0.000000000001, 'd', precision) + " T" + unit);
 }

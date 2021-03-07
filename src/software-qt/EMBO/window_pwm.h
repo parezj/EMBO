@@ -11,6 +11,7 @@
 
 #include <QMainWindow>
 #include <QLabel>
+#include <QButtonGroup>
 
 
 QT_BEGIN_NAMESPACE
@@ -33,14 +34,14 @@ signals:
     void closing(const char* className);
 
 private slots:
+    void on_msg_ok(QString val1, QString val2);
     void on_msg_err(QString text, MsgBoxType type, bool needClose);
-    void on_msg_set(double freq, int duty, int duty2, int offset, bool en1, bool en2);
+    void on_msg_set(int freq, int duty1, int duty2, int offset, bool en1, bool en2, QString freq_real);
 
     void on_actionAbout_triggered();
     void on_spinBox_duty1_valueChanged(int arg1);
     void on_spinBox_freq_valueChanged(int arg1);
-    void on_horizontalSlider_freq_sliderMoved(int position);
-    void on_dial_freq_sliderMoved(int position);
+    void on_dial_freq_valueChanged(int position);
     void on_dial_duty1_valueChanged(int value);
     void on_spinBox_duty2_valueChanged(int arg1);
     void on_dial_duty2_valueChanged(int value);
@@ -51,11 +52,29 @@ private slots:
     void on_pushButton_ch1disable_clicked();
     void on_pushButton_ch1enable_clicked();
 
+    void on_radioButton_coarse_clicked();
+
+    void on_radioButton_fine_clicked();
+
 private:
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
 
+    void enableAll(bool enable);
+    void sendSet(bool en1, bool en2);
+    QString formatFreq(QString freq);
+
     QLabel* m_status_enabled;
+
+    QButtonGroup m_mode;
+
+    bool m_ignoreValuesChanged = false;
+
+    bool m_ch1_enabled = false;
+    bool m_ch2_enabled = false;
+
+    bool m_ch1_wantSwitch = false;
+    bool m_ch2_wantSwitch = false;
 
     Ui::WindowPwm* m_ui;
 

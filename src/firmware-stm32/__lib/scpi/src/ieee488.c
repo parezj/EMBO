@@ -220,6 +220,9 @@ scpi_result_t SCPI_CoreCls(scpi_t * context) {
     SCPI_ErrorClear(context);
     SCPI_RegSet(context, SCPI_REG_OPER, 0);
     SCPI_RegSet(context, SCPI_REG_QUES, 0);
+    SCPI_RegSet(context, SCPI_REG_STB, 0); // CHANGE !!!
+
+    SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;
 }
 

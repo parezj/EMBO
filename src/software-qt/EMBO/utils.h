@@ -8,6 +8,6 @@
 
 #include <QString>
 
-QString format_unit(double value, QString unit);
+QString format_unit(double value, QString unit, int precision);
 
 #endif // UTILS_H

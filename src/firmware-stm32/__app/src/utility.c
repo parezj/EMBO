@@ -19,7 +19,7 @@ void assert2(const char *file, uint32_t line)
 }
 
 void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void* buff, int daq_bits,
-                       float* v1, float* v2, float* v3, float* v4, float* v5)
+                       double* v1, double* v2, double* v3, double* v4, double* v5)
 {
     int total = ch_num * avg_num;
     ASSERT(v1 != NULL && total > 0 && buff != NULL);
@@ -29,11 +29,11 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void*
         if (i < 0)
             i = bufflen - 1;
 
-        float val;
+        double val;
         if (daq_bits == 12)
-            val = (float)(*((uint16_t*)(((uint8_t*)buff)+(i*2))));
+            val = (double)(*((uint16_t*)(((uint8_t*)buff)+(i*2))));
         else
-            val = (float)(((uint8_t*)buff)[i]);
+            val = (double)(((uint8_t*)buff)[i]);
 
         if (i % ch_num == 0)
             *v1 += val;
@@ -115,20 +115,20 @@ int get_1ch_from_circ(int from, int total, int bufflen, int ch, int ch_num, int 
 
 // freq_want = freq_osc/((prescaler+1)*(reload+1))
 // (prescaler+1)*(reload+1) = freq_osc/freq_want
-float get_freq(int* prescaler, int* reload, int max_reload, int freq_osc, int freq_want)
+double get_freq(int* prescaler, int* reload, int max_reload, int freq_osc, int freq_want)
 {
     ASSERT(freq_osc >= freq_want && freq_want > 0 && freq_osc > 0 && max_reload > 0);
     *prescaler = 0;
 
     do
     {
-        *reload = (int)((float)freq_osc / (float)(*prescaler + 1) / (float)freq_want) - 1; // TODO check negative reload?
+        *reload = (int)((double)freq_osc / (double)(*prescaler + 1) / (double)freq_want) - 1;
         if (*reload > max_reload)
             (*prescaler)++;
     }
     while (*reload > max_reload);
 
-    float ret  = (float)freq_osc / ((float)(*prescaler + 1) * (float)(*reload + 1));
+    double ret  = (double)freq_osc / ((double)(*prescaler + 1) * (double)(*reload + 1));
     return ret;
 }
 
@@ -217,7 +217,7 @@ void itoa_fast(char* s, int num, int radix)
 /* Author: Jakub Parez
  * Descr:  ultra fast float sprintf
  */
-void sprint_fast(char* s, const char* format, float fVal, int prec)
+void sprint_fast(char* s, const char* format, double fVal, int prec)
 {
     char result[100] = { '\0' };
     char result_rev[100] = { '\0' };
