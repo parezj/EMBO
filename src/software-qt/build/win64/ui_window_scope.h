@@ -13,9 +13,11 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
+#include <QtWidgets/QPushButton>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
@@ -26,6 +28,8 @@ class Ui_WindowScope
 public:
     QAction *actionAbout;
     QWidget *centralwidget;
+    QGridLayout *gridLayout;
+    QPushButton *pushButton_ch1disable;
     QMenuBar *menubar;
     QMenu *menuHelp;
     QStatusBar *statusbar;
@@ -50,6 +54,53 @@ public:
         actionAbout->setFont(font);
         centralwidget = new QWidget(WindowScope);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        gridLayout = new QGridLayout(centralwidget);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+        pushButton_ch1disable = new QPushButton(centralwidget);
+        pushButton_ch1disable->setObjectName(QString::fromUtf8("pushButton_ch1disable"));
+        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(pushButton_ch1disable->sizePolicy().hasHeightForWidth());
+        pushButton_ch1disable->setSizePolicy(sizePolicy);
+        QFont font1;
+        font1.setFamily(QString::fromUtf8("Roboto"));
+        font1.setPointSize(13);
+        font1.setBold(false);
+        font1.setWeight(50);
+        font1.setKerning(true);
+        pushButton_ch1disable->setFont(font1);
+        pushButton_ch1disable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
+"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
+"    border: 1px solid rgb(150, 150, 150);\n"
+"	border-radius: 5px;\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
+"    color: black;\n"
+"}\n"
+"\n"
+"QPushButton:hover:!pressed\n"
+"{\n"
+"	border: 1px solid rgb(150, 150, 150);;\n"
+"	border-radius: 5px;\n"
+" 	background: #FFFFFF;\n"
+"	color:#2f836a;\n"
+"}\n"
+"\n"
+"QPushButton:pressed\n"
+"{\n"
+"	border: 2px solid rgb(150, 150, 150);\n"
+"	border-radius: 5px;\n"
+" 	background: #AAAAAA;\n"
+"	color:white;\n"
+"}"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Disabled, QIcon::Off);
+        pushButton_ch1disable->setIcon(icon2);
+        pushButton_ch1disable->setIconSize(QSize(23, 22));
+
+        gridLayout->addWidget(pushButton_ch1disable, 0, 0, 1, 1);
+
         WindowScope->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowScope);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -74,6 +125,7 @@ public:
     {
         WindowScope->setWindowTitle(QCoreApplication::translate("WindowScope", "EMBO - Oscilloscope", nullptr));
         actionAbout->setText(QCoreApplication::translate("WindowScope", "About", nullptr));
+        pushButton_ch1disable->setText(QString());
         menuHelp->setTitle(QCoreApplication::translate("WindowScope", "Help", nullptr));
     } // retranslateUi
 

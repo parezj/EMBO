@@ -153,6 +153,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:7px
 }
 
 QPushButton:hover:!pressed
@@ -209,6 +211,8 @@ QPushButton:pressed
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:18px
 }
 
 QPushButton:hover:!pressed
@@ -265,6 +269,8 @@ QPushButton:pressed
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:7px
 }
 
 QPushButton:hover:!pressed
@@ -774,7 +780,10 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QGroupBox {background-color: rgb(190,220,240, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+      <string notr="true">QGroupBox {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(190,220,240, 0.5), stop:0.32  rgb(190,220,240, 0.5), stop:1  rgb(0,0,0,1.0));
+	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;
+}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
@@ -806,6 +815,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+    text-align:left;
+	padding-left:22px
 }
 
 QPushButton:hover:!pressed
@@ -1119,7 +1130,10 @@ QPushButton:pressed
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QGroupBox {background-color: rgb(240,190,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+      <string notr="true">QGroupBox {
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(240,190,190, 0.5), stop:0.32 rgb(240,190,190, 0.5), stop:1  rgb(0,0,0,1.0));
+	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;
+}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
@@ -1151,6 +1165,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+    text-align:left;
+	padding-left:17px
 }
 
 QPushButton:hover:!pressed
@@ -1412,7 +1428,10 @@ QPushButton:pressed
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QGroupBox {background-color: rgb(240,230,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+      <string notr="true">QGroupBox {
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(240,230,190, 0.5), stop:0.32 rgb(240,230,190, 0.5), stop:1  black);
+	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;
+}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
@@ -1444,6 +1463,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+    text-align:left;
+	padding-left:33px
 }
 
 QPushButton:hover:!pressed
@@ -1738,8 +1759,12 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QGroupBox {background-color: rgb(220,200,180, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+      <string notr="true">QGroupBox {
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(220,200,180, 0.5), stop:0.32 rgb(220,200,180, 0.5), stop:1  rgb(0,0,0,1.0));
+	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;
+}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}
+</string>
      </property>
      <property name="title">
       <string/>
@@ -1770,6 +1795,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+    text-align:left;
+	padding-left:11px
 }
 
 QPushButton:hover:!pressed
@@ -1979,7 +2006,10 @@ QPushButton:pressed
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QGroupBox {background-color: rgb(200,200,220, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
+      <string notr="true">QGroupBox {
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(200,200,220, 0.5), stop:0.32 rgb(200,200,220, 0.5), stop:1  rgb(0,0,0,1.0));
+	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;
+}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
      </property>
      <property name="title">
@@ -2011,6 +2041,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+    text-align:left;
+	padding-left:8px
 }
 
 QPushButton:hover:!pressed
@@ -2220,8 +2252,12 @@ QPushButton:pressed
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QGroupBox {background-color: rgb(200,220,200, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+      <string notr="true">QGroupBox {
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(200,220,200, 0.5), stop:0.32 rgb(200,220,200, 0.5), stop:1  rgb(0,0,0,1.0));
+	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;
+}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}
+</string>
      </property>
      <property name="title">
       <string/>
@@ -2252,6 +2288,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+    text-align:left;
+	padding-left:43px
 }
 
 QPushButton:hover:!pressed

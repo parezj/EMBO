@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>637</width>
-    <height>323</height>
+    <width>844</width>
+    <height>546</height>
    </rect>
   </property>
   <property name="font">
@@ -24,38 +24,302 @@
     <normaloff>:/main/resources/img/icon.png</normaloff>:/main/resources/img/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>601</width>
-      <height>251</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="gridLayout">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetMaximumSize</enum>
-     </property>
-     <item row="0" column="0">
-      <widget class="QCustomPlot" name="plot" native="true">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="2">
+     <widget class="QGroupBox" name="groupBox_rightPanel">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+      </property>
+      <property name="title">
+       <string/>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QPushButton" name="pushButton_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
+         </property>
+         <property name="text">
+          <string>Button 1</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_7">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
+         </property>
+         <property name="text">
+          <string>Button 2</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_6">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
+         </property>
+         <property name="text">
+          <string>Button 3</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
+         </property>
+         <property name="text">
+          <string>Button 4</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>40</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Roboto</family>
+           <pointsize>13</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);;
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
+         </property>
+         <property name="text">
+          <string>Button 5</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QCustomPlot" name="customPlot" native="true">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>637</width>
+     <width>844</width>
      <height>21</height>
     </rect>
    </property>

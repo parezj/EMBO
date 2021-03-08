@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>411</width>
+    <width>417</width>
     <height>245</height>
    </rect>
   </property>
@@ -24,23 +24,23 @@
     <normaloff>:/main/resources/img/icon.png</normaloff>:/main/resources/img/icon.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QSlider" name="horizontalSlider_freq">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>90</y>
-      <width>301</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QSlider::handle:horizontal {
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QSlider" name="horizontalSlider_freq">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QSlider::handle:horizontal {
     background-color: #449f84;
     border: 1px solid;
 }
@@ -49,30 +49,32 @@ QSlider::handle:horizontal:hover {
     background-color: #51bf9f;
     border: 1px solid;
 }</string>
-    </property>
-    <property name="maximum">
-     <number>5000000</number>
-    </property>
-    <property name="value">
-     <number>50</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-    <property name="tickPosition">
-     <enum>QSlider::TicksBelow</enum>
-    </property>
-    <property name="tickInterval">
-     <number>100000</number>
-    </property>
-   </widget>
+      </property>
+      <property name="maximum">
+       <number>5000000</number>
+      </property>
+      <property name="value">
+       <number>50</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>100000</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>411</width>
+     <width>417</width>
      <height>21</height>
     </rect>
    </property>

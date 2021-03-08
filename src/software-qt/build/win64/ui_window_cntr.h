@@ -94,6 +94,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:13px;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -144,9 +146,15 @@ public:
 "	border-radius: 5px;\n"
 "	color:#2f836a;\n"
 " 	background: #FFFFFF;\n"
+"}\n"
+"\n"
+"QPushButton { \n"
+"	text-align:left;\n"
+"	padding-left:13px;\n"
 "}"));
         QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3_22x23.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Disabled, QIcon::Off);
         pushButton_disable->setIcon(icon3);
         pushButton_disable->setIconSize(QSize(23, 22));
         line = new QFrame(centralwidget);
@@ -346,7 +354,7 @@ public:
         WindowCntr->setWindowTitle(QCoreApplication::translate("WindowCntr", "EMBO - Counter", nullptr));
         actionAbout->setText(QCoreApplication::translate("WindowCntr", "About", nullptr));
         pushButton_enable->setText(QCoreApplication::translate("WindowCntr", " Counter OFF", nullptr));
-        pushButton_disable->setText(QCoreApplication::translate("WindowCntr", " Counter ON  ", nullptr));
+        pushButton_disable->setText(QCoreApplication::translate("WindowCntr", " Counter ON", nullptr));
         groupBox_3->setTitle(QString());
         label_2->setText(QCoreApplication::translate("WindowCntr", "Period:", nullptr));
         textBrowser_period->setMarkdown(QCoreApplication::translate("WindowCntr", "`545.4456 ns`\n"

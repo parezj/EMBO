@@ -13,6 +13,7 @@
 #include <QtGui/QIcon>
 #include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
@@ -27,6 +28,7 @@ class Ui_WindowLa
 public:
     QAction *actionAbout;
     QWidget *centralwidget;
+    QGridLayout *gridLayout;
     QSlider *horizontalSlider_freq;
     QMenuBar *menubar;
     QMenu *menuHelp;
@@ -36,7 +38,7 @@ public:
     {
         if (WindowLa->objectName().isEmpty())
             WindowLa->setObjectName(QString::fromUtf8("WindowLa"));
-        WindowLa->resize(411, 245);
+        WindowLa->resize(417, 245);
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -52,9 +54,15 @@ public:
         actionAbout->setFont(font);
         centralwidget = new QWidget(WindowLa);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
+        gridLayout = new QGridLayout(centralwidget);
+        gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         horizontalSlider_freq = new QSlider(centralwidget);
         horizontalSlider_freq->setObjectName(QString::fromUtf8("horizontalSlider_freq"));
-        horizontalSlider_freq->setGeometry(QRect(60, 90, 301, 31));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(horizontalSlider_freq->sizePolicy().hasHeightForWidth());
+        horizontalSlider_freq->setSizePolicy(sizePolicy);
         QFont font1;
         font1.setBold(false);
         font1.setWeight(50);
@@ -73,10 +81,13 @@ public:
         horizontalSlider_freq->setOrientation(Qt::Horizontal);
         horizontalSlider_freq->setTickPosition(QSlider::TicksBelow);
         horizontalSlider_freq->setTickInterval(100000);
+
+        gridLayout->addWidget(horizontalSlider_freq, 0, 0, 1, 1);
+
         WindowLa->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowLa);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 411, 21));
+        menubar->setGeometry(QRect(0, 0, 417, 21));
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowLa->setMenuBar(menubar);

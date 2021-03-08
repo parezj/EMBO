@@ -145,7 +145,7 @@ void t4_comm_and_init(void* p)
 #endif
 
 #ifdef EM_DEBUG
-    pwm_set(&pwm, 1000, 25, 25, 50, EM_TRUE, EM_TRUE);
+    pwm_set(&pwm, 1000, 50, 25, 50, EM_TRUE, EM_TRUE);
     //LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
     //LL_IWDG_SetReloadCounter(IWDG, 0x0FFF);
 #ifdef EM_DAC
@@ -153,7 +153,7 @@ void t4_comm_and_init(void* p)
 #endif
 #endif
 
-    while (EM_VM_ReadQ(NULL) == SCPI_RES_ERR); // read vcc
+    while (EM_VM_ReadQ(NULL) == SCPI_RES_ERR) __asm("nop"); // read vcc
     init_done = 1;
 
     while(1)

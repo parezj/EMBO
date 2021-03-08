@@ -9,22 +9,28 @@
 /* groups */
 
 
-#define CSS_INSTR_GROUP_SCOPE "QGroupBox {background-color: rgba(190,220,240,0.5);border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
+#define CSS_INSTR_GROUP_SCOPE "QGroupBox {background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgba(190,220,240,0.5), stop:0.32 rgba(190,220,240,0.5), stop:1  black); \
+                                          border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
                                QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"
 
-#define CSS_INSTR_GROUP_LA    "QGroupBox {background-color: rgba(240,190,190,0.5);border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
+#define CSS_INSTR_GROUP_LA    "QGroupBox {background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgba(240,190,190,0.5), stop:0.32 rgba(240,190,190,0.5), stop:1  black); \
+                                          border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
                                QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"
 
-#define CSS_INSTR_GROUP_VM    "QGroupBox {background-color: rgba(240,230,190,0.5);border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
+#define CSS_INSTR_GROUP_VM    "QGroupBox {background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgba(240,230,190, 0.5), stop:0.32 rgba(240,230,190, 0.5), stop:1  black); \
+                                          border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
                                QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"
 
-#define CSS_INSTR_GROUP_CNTR  "QGroupBox {background-color: rgba(200,220,200,0.5);border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
+#define CSS_INSTR_GROUP_CNTR  "QGroupBox {background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgba(200,220,200,0.5), stop:0.32 rgba(200,220,200,0.5), stop:1  black); \
+                                          border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
                                QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"
 
-#define CSS_INSTR_GROUP_PWM   "QGroupBox {background-color: rgba(220,200,180,0.5);border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
+#define CSS_INSTR_GROUP_PWM   "QGroupBox {background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgba(220,200,180,0.5), stop:0.32 rgba(220,200,180,0.5), stop:1  black); \
+                                          border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
                                QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"
 
-#define CSS_INSTR_GROUP_SGEN  "QGroupBox {background-color: rgba(200,200,220,0.5);border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
+#define CSS_INSTR_GROUP_SGEN  "QGroupBox {background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgba(200,200,220,0.5), stop:0.32 rgba(200,200,220,0.5), stop:1  black); \
+                                          border: 1px solid gray; border-radius: 5px; margin-top: 0.5em;}; \
                                QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"
 
 /* MATLAB colors
@@ -57,6 +63,22 @@
 
 /* buttons */
 
+#define CSS_BUTTON_SCAN       " QPushButton { text-align:left; padding-left:7px  }"
+#define CSS_BUTTON_CONNECT    " QPushButton { text-align:left; padding-left:18px }"
+#define CSS_BUTTON_DISCONNECT " QPushButton { text-align:left; padding-left:7px  }"
+
+#define CSS_BUTTON_SCOPE      " QPushButton { text-align:left; padding-left:22px }"
+#define CSS_BUTTON_LA         " QPushButton { text-align:left; padding-left:17px }"
+#define CSS_BUTTON_VM         " QPushButton { text-align:left; padding-left:33px }"
+#define CSS_BUTTON_CNTR       " QPushButton { text-align:left; padding-left:43px }"
+#define CSS_BUTTON_PWM        " QPushButton { text-align:left; padding-left:11px }"
+#define CSS_BUTTON_SGEN       " QPushButton { text-align:left; padding-left:8px  }"
+
+#define CSS_BUTTON_CNTR_ON    " QPushButton { text-align:left; padding-left:13px }"
+#define CSS_BUTTON_PWM_ON     " QPushButton { text-align:left; padding-left:15px }"
+#define CSS_BUTTON_SGEN_ON    " QPushButton { text-align:left; padding-left:15px }"
+
+
 #define CSS_BUTTON            "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
                                              background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B); } \
                                QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
@@ -78,7 +100,7 @@
                                QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:black; }  \
                                QPushButton:disabled { color: black; }"
 
-#define CSS_INSTR_BUTTON_OFF  "QPushButton {padding: 0.2em 0.2em 0.3em 0.2em; border: 0px; color: gray;}"
+#define CSS_INSTR_BUTTON_OFF  "QPushButton {padding: 0.2em 0.2em 0.3em 0.2em; color: gray; border: 1px solid gray; border-radius: 5px;}"
 
 /* radio buttons */
 

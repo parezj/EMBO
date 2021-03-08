@@ -100,6 +100,8 @@ public:
 "	border-radius: 5px;\n"
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:15px;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -118,8 +120,8 @@ public:
 "	color:white;\n"
 "}"));
         QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3_22x23.png"), QSize(), QIcon::Normal, QIcon::Off);
-        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3_22x23.png"), QSize(), QIcon::Disabled, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Disabled, QIcon::Off);
         pushButton_disable->setIcon(icon2);
         pushButton_disable->setIconSize(QSize(23, 22));
         pushButton_enable = new QPushButton(centralwidget);
@@ -133,6 +135,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:15px;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"

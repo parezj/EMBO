@@ -79,6 +79,8 @@
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:15px;
 }
 
 QPushButton:hover:!pressed
@@ -138,6 +140,8 @@ QPushButton:pressed
 	border-radius: 5px;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:15px;
 }
 
 QPushButton:hover:!pressed
@@ -161,8 +165,8 @@ QPushButton:pressed
     </property>
     <property name="icon">
      <iconset resource="resources.qrc">
-      <normaloff>:/main/resources/img/power-off-green3_22x23.png</normaloff>
-      <disabledoff>:/main/resources/img/power-off-green3_22x23.png</disabledoff>:/main/resources/img/power-off-green3_22x23.png</iconset>
+      <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
+      <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -195,6 +199,8 @@ QPushButton:pressed
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2,
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:15px;
 }
 
 QPushButton:hover:!pressed
@@ -257,6 +263,8 @@ QPushButton:pressed
 	border-radius: 5px;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:15px;
 }
 
 QPushButton:hover:!pressed
@@ -280,8 +288,8 @@ QPushButton:pressed
     </property>
     <property name="icon">
      <iconset resource="resources.qrc">
-      <normaloff>:/main/resources/img/power-off-green3_22x23.png</normaloff>
-      <disabledoff>:/main/resources/img/power-off-green3_22x23.png</disabledoff>:/main/resources/img/power-off-green3_22x23.png</iconset>
+      <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
+      <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -590,13 +598,13 @@ QRadioButton::indicator::checked {
       <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
 	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;
-	color:black; cursor:text;
+	color:black; 
 }
 
 QTextBrowser:disabled {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
 	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;
-	color:black; cursor:text;
+	color:black;
 }</string>
      </property>
      <property name="html">

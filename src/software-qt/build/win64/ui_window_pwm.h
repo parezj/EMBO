@@ -113,6 +113,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:15px;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -152,6 +154,8 @@ public:
 "	border-radius: 5px;\n"
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:15px;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -171,8 +175,9 @@ public:
 "}"));
         QIcon icon3;
         icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Disabled, QIcon::Off);
         pushButton_ch1disable->setIcon(icon3);
-        pushButton_ch1disable->setIconSize(QSize(22, 22));
+        pushButton_ch1disable->setIconSize(QSize(23, 22));
         pushButton_ch2enable = new QPushButton(centralwidget);
         pushButton_ch2enable->setObjectName(QString::fromUtf8("pushButton_ch2enable"));
         pushButton_ch2enable->setGeometry(QRect(220, 355, 151, 41));
@@ -184,6 +189,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:15px;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -214,6 +221,8 @@ public:
 "	border-radius: 5px;\n"
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:15px;\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -231,10 +240,7 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3_22x23.png"), QSize(), QIcon::Normal, QIcon::Off);
-        icon4.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3_22x23.png"), QSize(), QIcon::Disabled, QIcon::Off);
-        pushButton_ch2disable->setIcon(icon4);
+        pushButton_ch2disable->setIcon(icon3);
         pushButton_ch2disable->setIconSize(QSize(23, 22));
         groupBox_1 = new QGroupBox(centralwidget);
         groupBox_1->setObjectName(QString::fromUtf8("groupBox_1"));
@@ -394,13 +400,13 @@ public:
         textBrowser_realFreq->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
 "	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
 "	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;\n"
-"	color:black; cursor:text;\n"
+"	color:black; \n"
 "}\n"
 "\n"
 "QTextBrowser:disabled {\n"
 "	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
 "	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;\n"
-"	color:black; cursor:text;\n"
+"	color:black;\n"
 "}"));
         label_5 = new QLabel(groupBox_1);
         label_5->setObjectName(QString::fromUtf8("label_5"));

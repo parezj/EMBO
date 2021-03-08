@@ -56,7 +56,7 @@ WindowCntr::WindowCntr(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_mode.addButton(m_ui->radioButton_fast);
     m_mode.setExclusive(true);
 
-    QString style1(CSS_BUTTON_NODIS);
+    QString style1(CSS_BUTTON_NODIS CSS_BUTTON_CNTR_ON);
 
     m_ui->pushButton_enable->setStyleSheet(style1);
     m_ui->pushButton_disable->setStyleSheet(style1);
@@ -136,8 +136,25 @@ void WindowCntr::on_msg_read(QString freq, QString period)
         {
             m_status_enabled->setText(" " + freq);
         }
-        else
+        else // ALL GOOD
         {
+            /*
+            double freq_d = freq.left(freq.indexOf(" ")).toDouble();
+            qInfo() << freq_d;
+            if (freq.contains("kHz"))
+                freq_d *= 1000;
+            else if (freq.contains("MHz"))
+                freq_d *= 1000000;
+
+            if (freq_d != 0) // EXPERIMENTAL
+            {
+                m_ui->textBrowser_freq->setHtml("<p align=\"right\">" + format_unit(freq_d, "Hz", 3) + " ");
+                m_ui->textBrowser_period->setHtml("<p align=\"right\">" + format_unit(1/freq_d, "Hz", 3) + " ");
+            }
+            else
+            {
+            */
+
             m_ui->textBrowser_freq->setHtml("<p align=\"right\">" + freq + " ");
             m_ui->textBrowser_period->setHtml("<p align=\"right\">" + period + " ");
         }

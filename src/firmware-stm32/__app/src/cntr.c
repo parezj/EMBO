@@ -55,9 +55,12 @@ void cntr_enable(cntr_data_t* self, uint8_t enable, uint8_t fast_mode)
     self->enabled = enable;
     self->fast_mode = fast_mode;
 
-    if (enable == EM_TRUE && !en)
+    if (en == EM_FALSE && enable == EM_TRUE)
+        self->freq = -1;
+
+    if (enable == EM_TRUE && en == EM_FALSE)
         xSemaphoreGive(sem3_cntr);
-    else if (enable == EM_FALSE && en)
+    else if (enable == EM_FALSE && en == EM_TRUE)
         xSemaphoreTake(sem3_cntr, 0);
 }
 

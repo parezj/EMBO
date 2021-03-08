@@ -199,6 +199,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:7px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -231,6 +233,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:18px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -263,6 +267,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"	text-align:left;\n"
+"	padding-left:7px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -423,7 +429,10 @@ public:
         font7.setWeight(50);
         font7.setKerning(true);
         groupBox_scope->setFont(font7);
-        groupBox_scope->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(190,220,240, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+        groupBox_scope->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
+"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(190,220,240, 0.5), stop:0.32  rgb(190,220,240, 0.5), stop:1  rgb(0,0,0,1.0));\n"
+"	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
+"}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_scope = new QPushButton(groupBox_scope);
         pushButton_scope->setObjectName(QString::fromUtf8("pushButton_scope"));
@@ -442,6 +451,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"    text-align:left;\n"
+"	padding-left:22px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -517,7 +528,10 @@ public:
         groupBox_la->setObjectName(QString::fromUtf8("groupBox_la"));
         groupBox_la->setGeometry(QRect(190, 20, 171, 151));
         groupBox_la->setFont(font7);
-        groupBox_la->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(240,190,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+        groupBox_la->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
+"	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(240,190,190, 0.5), stop:0.32 rgb(240,190,190, 0.5), stop:1  rgb(0,0,0,1.0));\n"
+"	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
+"}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_la = new QPushButton(groupBox_la);
         pushButton_la->setObjectName(QString::fromUtf8("pushButton_la"));
@@ -530,6 +544,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"    text-align:left;\n"
+"	padding-left:17px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -595,7 +611,10 @@ public:
         groupBox_vm->setObjectName(QString::fromUtf8("groupBox_vm"));
         groupBox_vm->setGeometry(QRect(370, 20, 171, 151));
         groupBox_vm->setFont(font7);
-        groupBox_vm->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(240,230,190, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+        groupBox_vm->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
+"	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(240,230,190, 0.5), stop:0.32 rgb(240,230,190, 0.5), stop:1  black);\n"
+"	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
+"}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_vm = new QPushButton(groupBox_vm);
         pushButton_vm->setObjectName(QString::fromUtf8("pushButton_vm"));
@@ -608,6 +627,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"    text-align:left;\n"
+"	padding-left:33px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -681,8 +702,12 @@ public:
         groupBox_pwm->setObjectName(QString::fromUtf8("groupBox_pwm"));
         groupBox_pwm->setGeometry(QRect(190, 20, 171, 151));
         groupBox_pwm->setFont(font7);
-        groupBox_pwm->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,200,180, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
-"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        groupBox_pwm->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
+"	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(220,200,180, 0.5), stop:0.32 rgb(220,200,180, 0.5), stop:1  rgb(0,0,0,1.0));\n"
+"	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
+"}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}\n"
+""));
         pushButton_pwm = new QPushButton(groupBox_pwm);
         pushButton_pwm->setObjectName(QString::fromUtf8("pushButton_pwm"));
         pushButton_pwm->setGeometry(QRect(0, 110, 171, 41));
@@ -694,6 +719,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"    text-align:left;\n"
+"	padding-left:11px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -749,7 +776,10 @@ public:
         groupBox_sgen->setObjectName(QString::fromUtf8("groupBox_sgen"));
         groupBox_sgen->setGeometry(QRect(370, 20, 171, 151));
         groupBox_sgen->setFont(font7);
-        groupBox_sgen->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,220, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
+        groupBox_sgen->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
+"	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(200,200,220, 0.5), stop:0.32 rgb(200,200,220, 0.5), stop:1  rgb(0,0,0,1.0));\n"
+"	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
+"}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         pushButton_sgen = new QPushButton(groupBox_sgen);
         pushButton_sgen->setObjectName(QString::fromUtf8("pushButton_sgen"));
@@ -762,6 +792,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"    text-align:left;\n"
+"	padding-left:8px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"
@@ -817,8 +849,12 @@ public:
         groupBox_cntr->setObjectName(QString::fromUtf8("groupBox_cntr"));
         groupBox_cntr->setGeometry(QRect(10, 20, 171, 151));
         groupBox_cntr->setFont(font7);
-        groupBox_cntr->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,220,200, 0.5);border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;}; \n"
-"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        groupBox_cntr->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
+"	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(200,220,200, 0.5), stop:0.32 rgb(200,220,200, 0.5), stop:1  rgb(0,0,0,1.0));\n"
+"	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
+"}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}\n"
+""));
         pushButton_cntr = new QPushButton(groupBox_cntr);
         pushButton_cntr->setObjectName(QString::fromUtf8("pushButton_cntr"));
         pushButton_cntr->setGeometry(QRect(0, 110, 171, 41));
@@ -830,6 +866,8 @@ public:
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2,\n"
 "                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
 "    color: black;\n"
+"    text-align:left;\n"
+"	padding-left:43px\n"
 "}\n"
 "\n"
 "QPushButton:hover:!pressed\n"

@@ -87,6 +87,7 @@ bool Core::openComm(QString port)
 
     if (m_serial->open(QIODevice::ReadWrite))
     {
+        qInfo() << ">>Connected1<<";
         m_state = CONNECTING1;
         emit stateChanged(m_state);
 
@@ -125,12 +126,14 @@ bool Core::closeComm()
     m_timer_comm->stop();
     m_timer_render->stop();
 
+    qInfo() << ">>Disconnected<<";
     emit stateChanged(m_state);
     return true;
 }
 
 void Core::startComm()
 {
+    qInfo() << ">>Connected2<<";
     m_state = CONNECTED;
     emit stateChanged(m_state);
     m_timer_comm->start(TIMER_COMM);
@@ -140,6 +143,7 @@ void Core::startComm()
 void Core::err(QString name, bool needClose)
 {
     emit msgDisplay(name, needClose ? CRITICAL : WARNING);
+    qInfo() << "ERR: " + name;
 
     if (needClose)
         closeComm();
@@ -221,7 +225,8 @@ void Core::on_closeComm(bool force)
 
 void Core::on_dispose()
 {
-    closeComm();
+    if (m_state == CONNECTED)
+        closeComm();
     emit finished();
     //this->thread()->quit();
 }

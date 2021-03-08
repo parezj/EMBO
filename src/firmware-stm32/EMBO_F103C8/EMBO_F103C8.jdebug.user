@@ -15,22 +15,22 @@ OpenDocument="list.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/list.
 OpenDocument="cfg.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/inc/cfg.h", Line=125
 OpenDocument="periph.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/inc/periph.h", Line=0
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=504, h=245, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=504, h=271, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=504, h=247, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=504, h=269, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
 OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=504, h=251, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=504, h=271, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
+OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=504, h=269, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
 OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=587, h=122, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x8004D20
-OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=504, h=271, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=504, h=271, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=504, h=271, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=504, h=269, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=504, h=269, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=504, h=269, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
 OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=338, h=785, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1015, h=122, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[196;121;84;44;185;200]
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
 TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;100]
 TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
 TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[144;147;224]
 TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;103;100;122]
-TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[196;121;84;44;185;100]
 TableHeader="Functions", SortCol="Size", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[130;64;44;57;176]
 TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;368]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]

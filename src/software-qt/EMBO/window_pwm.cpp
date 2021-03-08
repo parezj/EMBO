@@ -56,7 +56,7 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
     m_ui->radioButton_fine->setChecked(true);
     on_radioButton_fine_clicked();
 
-    QString style1(CSS_BUTTON_NODIS);
+    QString style1(CSS_BUTTON_NODIS CSS_BUTTON_PWM_ON);
 
     m_ui->pushButton_ch1enable->setStyleSheet(style1);
     m_ui->pushButton_ch2enable->setStyleSheet(style1);

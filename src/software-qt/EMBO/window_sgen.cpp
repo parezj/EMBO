@@ -58,7 +58,7 @@ WindowSgen::WindowSgen(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->radioButton_sine->setChecked(true);
     on_radioButton_sine_clicked();
 
-    QString style1(CSS_BUTTON_NODIS);
+    QString style1(CSS_BUTTON_NODIS CSS_BUTTON_SGEN_ON);
 
     m_ui->pushButton_enable->setStyleSheet(style1);
     m_ui->pushButton_disable->setStyleSheet(style1);

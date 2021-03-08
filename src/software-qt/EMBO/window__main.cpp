@@ -106,18 +106,16 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->groupBox_instr2->setStyleSheet(style2);
     m_ui->groupBox_ports->setStyleSheet(style2);
 
-    QString style3(CSS_BUTTON);
+    m_ui->pushButton_connect->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_CONNECT));
+    m_ui->pushButton_disconnect->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_DISCONNECT));
+    m_ui->pushButton_scan->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SCAN));
 
-    m_ui->pushButton_connect->setStyleSheet(style3);
-    m_ui->pushButton_disconnect->setStyleSheet(style3);
-    m_ui->pushButton_scan->setStyleSheet(style3);
-
-    m_ui->pushButton_scope->setStyleSheet(style3);
-    m_ui->pushButton_la->setStyleSheet(style3);
-    m_ui->pushButton_vm->setStyleSheet(style3);
-    m_ui->pushButton_cntr->setStyleSheet(style3);
-    m_ui->pushButton_pwm->setStyleSheet(style3);
-    m_ui->pushButton_sgen->setStyleSheet(style3);
+    m_ui->pushButton_scope->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SCOPE));
+    m_ui->pushButton_la->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_LA));
+    m_ui->pushButton_vm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_VM));
+    m_ui->pushButton_cntr->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_CNTR));
+    m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_PWM));
+    m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SGEN));
 
     on_pushButton_scan_clicked();
 }
@@ -378,7 +376,9 @@ void WindowMain::setDisconnected()
 
 void WindowMain::closeEvent(QCloseEvent* event)
 {
-    event->ignore();
+    if (event != Q_NULLPTR)
+        event->ignore();
+
     if (m_connected)
     {
         this->activateWindow();
@@ -390,8 +390,6 @@ void WindowMain::closeEvent(QCloseEvent* event)
         }
         return;
     }
-
-    event->accept();
 
     m_w_scope->close();
     m_w_la->close();
@@ -405,7 +403,13 @@ void WindowMain::closeEvent(QCloseEvent* event)
     if (core != Q_NULLPTR)
         core->thread()->wait();
 
-    qInfo() << "Core thread quit and joined";
+    qInfo() << "Core thread joined";
+
+    if (event != Q_NULLPTR)
+    {
+        event->accept();
+        qInfo() << "Quit1";
+    }
 }
 
 void WindowMain::on_actionAbout_triggered()
@@ -481,10 +485,13 @@ void WindowMain::on_coreState_changed(const State newState)
     else if (newState == DISCONNECTED)
     {
         setDisconnected();
+
         if (m_close_init)
         {
             m_close_init = false;
-            this->close();
+            closeEvent(Q_NULLPTR);
+            qInfo() << "Quit2";
+            QCoreApplication::quit();
         }
     }
     m_state_old = newState;
@@ -513,7 +520,7 @@ void WindowMain::on_instrClose(const char* className)
     else if (className == WindowCntr::staticMetaObject.className())
     {
         m_ui->pushButton_cntr->setEnabled(true);
-        m_ui->pushButton_cntr->setStyleSheet(QString(CSS_BUTTON));
+        m_ui->pushButton_cntr->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_CNTR));
 
         m_ui->groupBox_cntr->setEnabled(true);
         m_ui->groupBox_cntr->setStyleSheet(QString(CSS_INSTR_GROUP_CNTR));
@@ -521,7 +528,7 @@ void WindowMain::on_instrClose(const char* className)
     else if (className == WindowPwm::staticMetaObject.className())
     {
         m_ui->pushButton_pwm->setEnabled(true);
-        m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON));
+        m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_PWM));
 
         m_ui->groupBox_pwm->setEnabled(true);
         m_ui->groupBox_pwm->setStyleSheet(QString(CSS_INSTR_GROUP_PWM));
@@ -529,7 +536,7 @@ void WindowMain::on_instrClose(const char* className)
     else if (className == WindowSgen::staticMetaObject.className())
     {
         m_ui->pushButton_sgen->setEnabled(true);
-        m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON));
+        m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SGEN));
 
         m_ui->groupBox_sgen->setEnabled(true);
         m_ui->groupBox_sgen->setStyleSheet(QString(CSS_INSTR_GROUP_SGEN));
@@ -548,9 +555,9 @@ void WindowMain::instrFirstRowEnable(bool enable)
         m_ui->groupBox_la->setStyleSheet(QString(CSS_INSTR_GROUP_LA));
         m_ui->groupBox_vm->setStyleSheet(QString(CSS_INSTR_GROUP_VM));
 
-        m_ui->pushButton_scope->setStyleSheet(QString(CSS_BUTTON));
-        m_ui->pushButton_la->setStyleSheet(QString(CSS_BUTTON));
-        m_ui->pushButton_vm->setStyleSheet(QString(CSS_BUTTON));
+        m_ui->pushButton_scope->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SCOPE));
+        m_ui->pushButton_la->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_LA));
+        m_ui->pushButton_vm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_VM));
     }
     else
     {
@@ -569,8 +576,8 @@ void WindowMain::on_pushButton_scope_clicked()
     m_w_scope->show();
     m_w_scope->activateWindow();
 
-    m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    //m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    //m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
 
     m_ui->pushButton_la->setEnabled(false);
     m_ui->pushButton_vm->setEnabled(false);
@@ -583,8 +590,8 @@ void WindowMain::on_pushButton_la_clicked()
     m_w_la->show();
     m_w_la->activateWindow();
 
-    m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    //m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    //m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
 
     m_ui->pushButton_scope->setEnabled(false);
     m_ui->pushButton_vm->setEnabled(false);
@@ -597,8 +604,8 @@ void WindowMain::on_pushButton_vm_clicked()
     m_w_vm->show();
     m_w_vm->activateWindow();
 
-    m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    //m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    //m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
 
     m_ui->pushButton_scope->setEnabled(false);
     m_ui->pushButton_la->setEnabled(false);
