@@ -41,7 +41,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_spinBox_duty1_valueChanged(int arg1);
     void on_spinBox_freq_valueChanged(int arg1);
-    void on_dial_freq_valueChanged(int position);
+    void on_dial_freq_valueChanged(int value);
     void on_dial_duty1_valueChanged(int value);
     void on_spinBox_duty2_valueChanged(int arg1);
     void on_dial_duty2_valueChanged(int value);

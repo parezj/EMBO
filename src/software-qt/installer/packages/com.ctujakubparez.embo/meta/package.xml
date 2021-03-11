@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<Package>
+    <DisplayName>EMBO - EMBedded Oscilloscope</DisplayName>
+    <Description>Main GUI application</Description>
+    <Version>0.1.0</Version>
+    <ReleaseDate>2021-03-09</ReleaseDate>
+    <Name>com.ctujakubparez.embo</Name>
+    <Licenses>
+        <License name="License Agreement" file="license.txt" />
+    </Licenses>
+    <Default>true</Default>
+</Package>

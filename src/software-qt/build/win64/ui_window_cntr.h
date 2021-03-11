@@ -53,14 +53,14 @@ public:
         if (WindowCntr->objectName().isEmpty())
             WindowCntr->setObjectName(QString::fromUtf8("WindowCntr"));
         WindowCntr->setWindowModality(Qt::NonModal);
-        WindowCntr->resize(341, 295);
+        WindowCntr->resize(341, 289);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(WindowCntr->sizePolicy().hasHeightForWidth());
         WindowCntr->setSizePolicy(sizePolicy);
-        WindowCntr->setMinimumSize(QSize(341, 295));
-        WindowCntr->setMaximumSize(QSize(341, 295));
+        WindowCntr->setMinimumSize(QSize(341, 289));
+        WindowCntr->setMaximumSize(QSize(341, 289));
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -82,7 +82,7 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         pushButton_enable = new QPushButton(centralwidget);
         pushButton_enable->setObjectName(QString::fromUtf8("pushButton_enable"));
-        pushButton_enable->setGeometry(QRect(95, 190, 151, 41));
+        pushButton_enable->setGeometry(QRect(95, 186, 151, 41));
         QFont font2;
         font2.setFamily(QString::fromUtf8("Roboto"));
         font2.setPointSize(13);
@@ -122,7 +122,7 @@ public:
         pushButton_disable = new QPushButton(centralwidget);
         pushButton_disable->setObjectName(QString::fromUtf8("pushButton_disable"));
         pushButton_disable->setEnabled(true);
-        pushButton_disable->setGeometry(QRect(95, 190, 151, 41));
+        pushButton_disable->setGeometry(QRect(95, 186, 151, 41));
         pushButton_disable->setFont(font2);
         pushButton_disable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
@@ -159,7 +159,7 @@ public:
         pushButton_disable->setIconSize(QSize(23, 22));
         line = new QFrame(centralwidget);
         line->setObjectName(QString::fromUtf8("line"));
-        line->setGeometry(QRect(0, 240, 401, 20));
+        line->setGeometry(QRect(0, 234, 401, 20));
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
         groupBox_3 = new QGroupBox(centralwidget);
@@ -202,13 +202,13 @@ public:
         textBrowser_period->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
         textBrowser_period->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
 "	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
-"	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;\n"
 "}\n"
 "\n"
 "QTextBrowser:disabled {\n"
 "	background-color: transparent;\n"
 "	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
-"	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;\n"
 "}"));
         label = new QLabel(groupBox_3);
         label->setObjectName(QString::fromUtf8("label"));
@@ -222,13 +222,13 @@ public:
         textBrowser_freq->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
         textBrowser_freq->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
 "	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
-"	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;\n"
 "}\n"
 "\n"
 "QTextBrowser:disabled {\n"
 "	background-color: transparent;\n"
 "	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
-"	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;\n"
 "}"));
         textBrowser_period->raise();
         textBrowser_freq->raise();
@@ -236,7 +236,7 @@ public:
         label_2->raise();
         groupBox_4 = new QGroupBox(centralwidget);
         groupBox_4->setObjectName(QString::fromUtf8("groupBox_4"));
-        groupBox_4->setGeometry(QRect(10, 125, 321, 51));
+        groupBox_4->setGeometry(QRect(10, 125, 321, 45));
         sizePolicy1.setHeightForWidth(groupBox_4->sizePolicy().hasHeightForWidth());
         groupBox_4->setSizePolicy(sizePolicy1);
         groupBox_4->setFont(font3);
@@ -244,13 +244,13 @@ public:
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         radioButton_fast = new QRadioButton(groupBox_4);
         radioButton_fast->setObjectName(QString::fromUtf8("radioButton_fast"));
-        radioButton_fast->setGeometry(QRect(210, 20, 101, 21));
+        radioButton_fast->setGeometry(QRect(210, 16, 101, 21));
         QFont font6;
         font6.setFamily(QString::fromUtf8("Roboto"));
         font6.setPointSize(14);
         radioButton_fast->setFont(font6);
         radioButton_fast->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
-"	background-color: rgba(245,245,245, 0.0);\n"
+"	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
 "	border-radius:5px;\n"
 "}\n"
@@ -287,10 +287,10 @@ public:
         radioButton_fast->setAutoExclusive(false);
         radioButton_precise = new QRadioButton(groupBox_4);
         radioButton_precise->setObjectName(QString::fromUtf8("radioButton_precise"));
-        radioButton_precise->setGeometry(QRect(100, 20, 101, 21));
+        radioButton_precise->setGeometry(QRect(100, 16, 101, 21));
         radioButton_precise->setFont(font6);
         radioButton_precise->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
-"	background-color: rgba(245,245,245, 0.0);\n"
+"	background-color: rgba(245,245,245, 1.0);\n"
 "	border: 0px; \n"
 "	border-radius:5px;\n"
 "}\n"
@@ -327,7 +327,7 @@ public:
         radioButton_precise->setAutoExclusive(false);
         label_3 = new QLabel(groupBox_4);
         label_3->setObjectName(QString::fromUtf8("label_3"));
-        label_3->setGeometry(QRect(20, 20, 61, 21));
+        label_3->setGeometry(QRect(20, 16, 61, 21));
         label_3->setFont(font4);
         WindowCntr->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowCntr);
@@ -357,20 +357,20 @@ public:
         pushButton_disable->setText(QCoreApplication::translate("WindowCntr", " Counter ON", nullptr));
         groupBox_3->setTitle(QString());
         label_2->setText(QCoreApplication::translate("WindowCntr", "Period:", nullptr));
-        textBrowser_period->setMarkdown(QCoreApplication::translate("WindowCntr", "`545.4456 ns`\n"
+        textBrowser_period->setMarkdown(QCoreApplication::translate("WindowCntr", "**545.4456 ns**\n"
 "\n"
 "", nullptr));
         textBrowser_period->setHtml(QCoreApplication::translate("WindowCntr", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:496; font-style:normal;\">\n"
-"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">545.4456 ns</p></body></html>", nullptr));
+"</style></head><body style=\" font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:496; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Medium','Roboto';\">545.4456 ns</span></p></body></html>", nullptr));
         label->setText(QCoreApplication::translate("WindowCntr", "Frequency:", nullptr));
         textBrowser_freq->setHtml(QCoreApplication::translate("WindowCntr", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:496; font-style:normal;\">\n"
-"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">545.4456 MHz</p></body></html>", nullptr));
+"</style></head><body style=\" font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:496; font-style:normal;\">\n"
+"<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Medium','Roboto Mono Medium';\">545.4456 MHz</span></p></body></html>", nullptr));
         groupBox_4->setTitle(QString());
         radioButton_fast->setText(QCoreApplication::translate("WindowCntr", "Fast", nullptr));
         radioButton_precise->setText(QCoreApplication::translate("WindowCntr", "Precise", nullptr));

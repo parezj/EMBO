@@ -7,6 +7,7 @@
 #define WINDOW_VM_H
 
 #include "interfaces.h"
+#include "messages.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -33,6 +34,7 @@ signals:
 
 private slots:
     void on_msg_err(QString text, MsgBoxType type, bool needClose);
+    void on_msg_read(QString ch1, QString ch2, QString ch3, QString ch4, QString vcc);
 
     void on_actionAbout_triggered();
 
@@ -43,8 +45,7 @@ private:
     Ui::WindowVm* m_ui;
 
     /* messages */
-    //Msg_CNTR_Enable* m_msg_enable;
-   // Msg_CNTR_Read* m_msg_read;
+    Msg_VM_Read* m_msg_read;
 };
 
 #endif // WINDOW_VM_H

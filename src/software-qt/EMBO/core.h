@@ -18,22 +18,27 @@
 
 #include <QObject>
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QString>
 #include <QSerialPort>
 #include <QVector>
 
 #define TIMER_RX        1000
-#define TIMER_COMM      20
+#define TIMER_COMM      10
 #define TIMER_RENDER    25
+
+#define LATENCY_AVG    50
 
 #define INVALID_MSG     "Invalid message! "
 #define COMM_FATAL_ERR  "Communication fatal error! "
 
 #define EMBO_TITLE      "EMBO"
 #define EMBO_TITLE2     "EMBO - EMBedded Oscilloscope"
-#define EMBO_ABOUT_TXT  "<b>EMBedded Oscilloscope</b><br><br> EMBO is useful tool for every electronics enthusiast.<br>\
+#define EMBO_ABOUT_TXT  "<b>EMBedded Oscilloscope</b><br><br>CTU FEE © 2020-2021 Jakub Pařez<br><br>\
+EMBO is useful tool for every electronics enthusiast.<br>\
 For just few dollar hardware (STM32 BluePill) can become a powerfull scope, logic analyzer, voltmeter, counter, \
-PWM and signal generator.<br>And of course, it's opensource!<br><br>\
+PWM and signal generator.<br>And of course, it's opensource! \
+<br><br>Compiled " __DATE__ " " __TIME__ " with <b>Qt " QT_VERSION_STR "</b><br><br>\
 <a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
 
 #define CFG_MAIN_PORT   "main/port"
@@ -80,8 +85,8 @@ public:
     QString rtos;
     QString ll;
     QString comm;
-    int fcpu;
-    int ref_mv;
+    QString fcpu;
+    QString ref_mv;
     QString pins_scope_vm;
     QString pins_la;
     QString pins_cntr;
@@ -125,7 +130,10 @@ public:
 
      /* setters getters */
     const QString getPort() { return m_serial->portName(); }
-    DevInfo* getDevInfo() const { return devInfo; }
+    DevInfo* getDevInfo() const { return m_devInfo; }
+    int getLatencyMs();
+    QString getUptime() { return m_uptime; }
+    void setUptime(QString uptime) { m_uptime = uptime; }
     void setMode(Mode mode, bool alsoLast) { m_mode = mode; if (alsoLast) m_mode_last = mode; }
 
      /* singleton */
@@ -178,8 +186,16 @@ private:
     QTimer* m_timer_render;
     QTimer* m_timer_comm;
 
+    /* latency timer */
+    QElapsedTimer m_timer_latency;
+    int m_latency = 0;
+    int m_latencyVals[LATENCY_AVG];
+    int m_latencyCnt = 0;
+    int m_latencyIt = 0;
+
     /* data */
-    DevInfo* devInfo; // TODO const
+    DevInfo* m_devInfo; // const
+    QString m_uptime = "";
 
     /* message buffers */
     QVector<Msg*> m_waitingMsgs;
@@ -190,27 +206,13 @@ private:
     /* message objects */
     Msg_Idn* m_msg_idn;
     Msg_Rst* m_msg_rst;
-    Msg_Stb* m_msg_stb;
-    Msg_Cls* m_msg_cls;
+    //Msg_Stb* m_msg_stb;
+    //Msg_Cls* m_msg_cls;
     Msg_Dummy* m_msg_dummy;
     Msg_SYS_Lims* m_msg_sys_lims;
     Msg_SYS_Info* m_msg_sys_info;
     Msg_SYS_Mode* m_msg_sys_mode;
-
-    /*
-    Msg_VM_Read* m_msg_vm_read;
-    Msg_SCOP_Set* m_msg_scope_set;
-    Msg_SCOP_Read* m_msg_scope_read;
-    Msg_SCOP_ForceTrig* m_msg_scope_forcetrig;
-    Msg_SCOP_Average* m_msg_scope_average;
-    Msg_LA_Set* m_msg_la_set;
-    Msg_LA_Read* m_msg_la_read;
-    Msg_LA_ForceTrig* m_msg_la_forcetrig;
-    Msg_CNTR_Enable* m_msg_cntr_enable;
-    Msg_CNTR_Read* m_msg_cntr_read;
-    Msg_SGEN_Set* m_msg_sgen_set;
-    Msg_PWM_Set* m_msg_pwm_set;
-    */
+    Msg_SYS_Uptime* m_msg_sys_uptime;
 };
 
 #endif // CORE_H

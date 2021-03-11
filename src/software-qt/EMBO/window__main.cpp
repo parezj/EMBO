@@ -23,6 +23,7 @@
 #include <QSpacerItem>
 #include <QFontDatabase>
 #include <QThread>
+#include <QTimer>
 #include <QSettings>
 #include <QCloseEvent>
 #include <QtSerialPort/QSerialPortInfo>
@@ -48,6 +49,8 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_w_pwm = new WindowPwm();
     m_w_sgen = new WindowSgen();
 
+    m_render_timer = new QTimer();
+
     core->emboInstruments.append(m_w_scope);
     core->emboInstruments.append(m_w_la);
     core->emboInstruments.append(m_w_vm);
@@ -71,6 +74,8 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect(core, SIGNAL(finished()), t1, SLOT(quit()), Qt::DirectConnection);
     connect(core, SIGNAL(finished()), core, SLOT(deleteLater()));
     connect(t1, SIGNAL(finished()), t1, SLOT(deleteLater()));
+
+    connect(m_render_timer, &QTimer::timeout, this, &WindowMain::on_render_timeout);
 
     connect(m_w_scope, &WindowScope::closing, this, &WindowMain::on_instrClose);
     connect(m_w_la, &WindowLa::closing, this, &WindowMain::on_instrClose);
@@ -117,6 +122,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_PWM));
     m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SGEN));
 
+    setDisconnected();
     on_pushButton_scan_clicked();
 }
 
@@ -137,13 +143,18 @@ WindowMain::~WindowMain()
 void WindowMain::statusBarLoad()
 {
     m_status_icon_comm = new QLabel(this);
-    m_status_comm = new QLabel(" Disconnected ");
+    m_status_comm = new QLabel(" Disconnected ", this);
+    m_status_latency = new QLabel("", this);
+    m_status_uptime = new QLabel("", this);
+
     QSpacerItem* status_spacer1 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
-    QLabel* status_ctu = new QLabel("<a href='https://meas.fel.cvut.cz/' style='color: black; text-decoration:none'>CTU FEE&nbsp;-&nbsp;2021</a>");
-    QLabel* status_spacer2 = new QLabel("<span>&nbsp;&nbsp;</span>");
-    QLabel* status_spacer3 = new QLabel("<span>&nbsp;&nbsp;</span>");
+    QLabel* status_ctu = new QLabel("<a href='https://meas.fel.cvut.cz/' style='color: black; text-decoration:none'>&nbsp;CTU FEE&nbsp;©&nbsp;2021&nbsp;</a>", this);
+    QLabel* status_spacer2 = new QLabel("<span>&nbsp;</span>", this);
+    QLabel* status_spacer3 = new QLabel("<span>&nbsp;</span>", this);
+    m_status_spacer4 = new QLabel("<span>&nbsp;&nbsp;&nbsp;｜&nbsp;&nbsp;&nbsp;</span>", this);
+    m_status_spacer5 = new QLabel("<span>&nbsp;&nbsp;&nbsp;｜&nbsp;&nbsp;&nbsp;</span>", this);
     QLabel* status_icon_jp = new QLabel(this);
-    QLabel* status_author = new QLabel("<a href='https://www.jakubparez.com' style='color: black; text-decoration:none'>Jakub Pařez</a>&nbsp;");
+    QLabel* status_author = new QLabel("<a href='https://www.jakubparez.com' style='color: black; text-decoration:none'>&nbsp;Jakub Pařez&nbsp;</a>&nbsp;", this);
 
     status_ctu->connect(status_ctu, &QLabel::linkActivated, [](const QString &link) {
         QDesktopServices::openUrl(QUrl(link));
@@ -152,13 +163,15 @@ void WindowMain::statusBarLoad()
         QDesktopServices::openUrl(QUrl(link));
     });
 
-    status_ctu->setStyleSheet(":hover{background:#FFFFFF}");
-    status_author->setStyleSheet(":hover{background:#FFFFFF}");
+    status_ctu->setStyleSheet(":hover{background:#FFFFFF;border-radius:5px}");
+    status_author->setStyleSheet(":hover{background:#FFFFFF;border-radius:5px}");
 
     QWidget* widget = new QWidget();
     QFont font1("Roboto", 11, QFont::Normal);
 
     m_status_comm->setFont(font1);
+    m_status_latency->setFont(font1);
+    m_status_uptime->setFont(font1);
     status_ctu->setFont(font1);
     status_author->setFont(font1);
 
@@ -180,13 +193,17 @@ void WindowMain::statusBarLoad()
 
     QGridLayout * layout = new QGridLayout(widget);
     layout->addWidget(m_status_icon_comm,0,0,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_comm,0,1,1,1,Qt::AlignVCenter | Qt::AlignLeft);
-    layout->addItem(status_spacer1,0,2,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_ctu,0,3,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_spacer2,0,4,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_icon_jp,0,5,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_spacer3,0,6,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_author,0,7,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_comm,0,1,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_spacer4,0,2,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_latency,0,3,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_spacer5,0,4,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_uptime,0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addItem(status_spacer1,0,6,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_ctu,0,7,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer2,0,8,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_icon_jp,0,9,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer3,0,10,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_author,0,11,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
@@ -245,10 +262,10 @@ void WindowMain::setConnected()
     m_ui->label_deviceName->setText(info->name);
     m_ui->label_dev_fw->setText(info->fw);
     m_ui->label_dev_ll->setText(info->ll);
-    m_ui->label_dev_fcpu->setText(QString::number(info->fcpu) + " MHz");
+    m_ui->label_dev_fcpu->setText(info->fcpu + " MHz");
     m_ui->label_dev_rtos->setText(info->rtos);
     m_ui->label_dev_comm->setText(info->comm);
-    m_ui->label_dev_vref->setText(QString::number(info->ref_mv) + " mV");
+    m_ui->label_dev_vref->setText(info->ref_mv + " mV");
     if (info->name.toLower().contains("bluepill"))
         m_ui->label_boardImg->setPixmap(m_img_bluepill);
     else if (info->name.toLower().contains("nucleo"))
@@ -295,6 +312,12 @@ void WindowMain::setConnected()
     m_w_cntr->setWindowTitle("EMBO - Counter (pin: " + m_ui->label_cntr_pins->text() + ")");
     m_w_pwm->setWindowTitle("EMBO - PWM Generator [2 channel] (pins: " + m_ui->label_pwm_pins->text() + ")");
     m_w_sgen->setWindowTitle("EMBO - Signal Generator (pin: " + m_ui->label_sgen_pins->text() + ")");
+
+    m_render_timer->start(TIMER_RENDER_MS);
+    m_status_latency->setText("?");
+    m_status_uptime->setText("?");
+    m_status_spacer4->show();
+    m_status_spacer5->show();
 
     m_connected = true;
 }
@@ -364,6 +387,12 @@ void WindowMain::setDisconnected()
     m_w_pwm->close();
     m_w_sgen->close();
 
+    m_render_timer->stop();
+    m_status_latency->setText("");
+    m_status_uptime->setText("");
+    m_status_spacer4->hide();
+    m_status_spacer5->hide();
+
     //on_instrClose(WindowScope::staticMetaObject.className());
     //on_instrClose(WindowCntr::staticMetaObject.className());
     //on_instrClose(WindowPwm::staticMetaObject.className());
@@ -382,7 +411,7 @@ void WindowMain::closeEvent(QCloseEvent* event)
     if (m_connected)
     {
         this->activateWindow();
-        if (QMessageBox::Yes == QMessageBox::question(this, EMBO_TITLE, "Device is connected. Do you want to disconnect and exit anyway?",
+        if (QMessageBox::Yes == QMessageBox::question(this, EMBO_TITLE, "Device is connected! Do you want to disconnect and exit anyway?",
                                                       QMessageBox::Yes | QMessageBox::No))
         {
             m_close_init = true;
@@ -398,6 +427,8 @@ void WindowMain::closeEvent(QCloseEvent* event)
     m_w_pwm->close();
     m_w_sgen->close();
 
+    m_render_timer->deleteLater();
+
     auto core = Core::getInstance();
     emit disposeCore();
     if (core != Q_NULLPTR)
@@ -410,6 +441,17 @@ void WindowMain::closeEvent(QCloseEvent* event)
         event->accept();
         qInfo() << "Quit1";
     }
+}
+
+void WindowMain::on_render_timeout()
+{
+    auto core = Core::getInstance();
+
+    m_status_latency->setText("Latency: " + QString::number(TIMER_COMM) + "+" + QString::number(core->getLatencyMs()) + " ms");
+    m_status_uptime->setText("Uptime: " + core->getUptime());
+
+    if (m_w_vm->isVisible())
+        m_ui->label_dev_vref->setText(Core::getInstance()->getDevInfo()->ref_mv.replace(".", "").left(4) + " mV");
 }
 
 void WindowMain::on_actionAbout_triggered()

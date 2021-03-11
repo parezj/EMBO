@@ -21,6 +21,13 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 {
     m_ui->setupUi(this);
 
+    m_msg_read = new Msg_VM_Read(this);
+
+    connect(m_msg_read, &Msg_VM_Read::err, this, &WindowVm::on_msg_err);
+    connect(m_msg_read, &Msg_VM_Read::result, this, &WindowVm::on_msg_read);
+
+
+
 
 
     // add two new graphs and set their look:
@@ -87,6 +94,14 @@ void WindowVm::on_msg_err(QString text, MsgBoxType type, bool needClose)
         this->close();
 }
 
+void WindowVm::on_msg_read(QString ch1, QString ch2, QString ch3, QString ch4, QString vcc)
+{
+    m_ui->textBrowser_ch1->setText(ch1 + " V");
+    m_ui->textBrowser_ch2->setText(ch2 + " V");
+    m_ui->textBrowser_ch3->setText(ch3 + " V");
+    m_ui->textBrowser_ch4->setText(ch4 + " V");
+}
+
 /* private */
 
 void WindowVm::closeEvent(QCloseEvent*)
@@ -97,6 +112,17 @@ void WindowVm::closeEvent(QCloseEvent*)
 
 void WindowVm::showEvent(QShowEvent*)
 {
-    //m_msg_enable->setIsQuery(true);
-    //Core::getInstance()->msgAdd(m_msg_enable);
+    auto core = Core::getInstance()->getDevInfo();
+    QStringList pins = core->pins_scope_vm.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+
+    if (pins.size() == 4)
+    {
+        m_ui->groupBox_ch1->setTitle("Channel 1 (pin " + pins[0].trimmed() + ")");
+        m_ui->groupBox_ch2->setTitle("Channel 2 (pin " + pins[1].trimmed() + ")");
+        m_ui->groupBox_ch3->setTitle("Channel 3 (pin " + pins[2].trimmed() + ")");
+        m_ui->groupBox_ch4->setTitle("Channel 4 (pin " + pins[3].trimmed() + ")");
+    }
+
+    m_activeMsg = m_msg_read;
 }
+

@@ -365,7 +365,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
        <weight>75</weight>
        <italic>false</italic>
        <bold>true</bold>
-       <kerning>true</kerning>
+       <kerning>false</kerning>
       </font>
      </property>
      <property name="text">
@@ -804,6 +804,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
         <pointsize>13</pointsize>
         <weight>50</weight>
         <bold>false</bold>
+        <strikeout>false</strikeout>
         <kerning>false</kerning>
        </font>
       </property>
@@ -2277,6 +2278,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}
         <pointsize>13</pointsize>
         <weight>50</weight>
         <bold>false</bold>
+        <stylestrategy>PreferDefault</stylestrategy>
         <kerning>false</kerning>
        </font>
       </property>

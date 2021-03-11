@@ -395,7 +395,7 @@ public:
         icon8.addFile(QString::fromUtf8(":/main/resources/img/sgen_sine.png"), QSize(), QIcon::Normal, QIcon::Off);
         radioButton_sine->setIcon(icon8);
         radioButton_sine->setIconSize(QSize(20, 20));
-        radioButton_sine->setChecked(false);
+        radioButton_sine->setChecked(true);
         radioButton_sine->setAutoExclusive(false);
         radioButton_square = new QRadioButton(groupBox_1);
         radioButton_square->setObjectName(QString::fromUtf8("radioButton_square"));

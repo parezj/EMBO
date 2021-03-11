@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>411</width>
-    <height>463</height>
+    <height>481</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>411</width>
-    <height>463</height>
+    <height>481</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>411</width>
-    <height>463</height>
+    <height>481</height>
    </size>
   </property>
   <property name="font">
@@ -46,7 +46,7 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>410</y>
+      <y>428</y>
       <width>431</width>
       <height>16</height>
      </rect>
@@ -59,7 +59,7 @@
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>355</y>
+      <y>375</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -119,7 +119,7 @@ QPushButton:pressed
     <property name="geometry">
      <rect>
       <x>40</x>
-      <y>355</y>
+      <y>375</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -179,7 +179,7 @@ QPushButton:pressed
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>355</y>
+      <y>375</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -242,7 +242,7 @@ QPushButton:pressed
     <property name="geometry">
      <rect>
       <x>220</x>
-      <y>355</y>
+      <y>375</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -571,9 +571,9 @@ QRadioButton::indicator::checked {
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>69</y>
+       <y>70</y>
        <width>301</width>
-       <height>36</height>
+       <height>37</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -650,7 +650,7 @@ p, li { white-space: pre-wrap; }
       <x>10</x>
       <y>122</y>
       <width>391</width>
-      <height>135</height>
+      <height>91</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -661,8 +661,8 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="font">
      <font>
-      <family>Roboto</family>
-      <pointsize>10</pointsize>
+      <family>Roboto Medium</family>
+      <pointsize>11</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -674,34 +674,13 @@ p, li { white-space: pre-wrap; }
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string/>
+     <string>Channel 1</string>
     </property>
-    <widget class="QLabel" name="label_2">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>90</y>
-       <width>111</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <family>Roboto Light</family>
-       <pointsize>14</pointsize>
-       <weight>50</weight>
-       <bold>false</bold>
-      </font>
-     </property>
-     <property name="text">
-      <string>Duty Ch2:</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>30</y>
+       <y>45</y>
        <width>111</width>
        <height>21</height>
       </rect>
@@ -715,14 +694,14 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       </font>
      </property>
      <property name="text">
-      <string>Duty Ch1:</string>
+      <string>Duty:</string>
      </property>
     </widget>
     <widget class="QSpinBox" name="spinBox_duty1">
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>20</y>
+       <y>35</y>
        <width>301</width>
        <height>41</height>
       </rect>
@@ -782,109 +761,6 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <number>50</number>
      </property>
     </widget>
-    <widget class="QSpinBox" name="spinBox_duty2">
-     <property name="geometry">
-      <rect>
-       <x>70</x>
-       <y>80</y>
-       <width>301</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
-				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
-
-QSpinBox::up-button { 
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/resources/img/arrow_up4.png);
-}
-
-QSpinBox::down-button {
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/resources/img/arrow_down4.png);
- }
-
-QSpinBox::up-button:hover { 
-	image: url(:/main/resources/img/arrow_up4b.png);
-}
-
-QSpinBox::down-button:hover {
-	image: url(:/main/resources/img/arrow_down4b.png);
- }
-
-QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
-                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
-
-QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
-
-QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
-</string>
-     </property>
-     <property name="wrapping">
-      <bool>false</bool>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-     </property>
-     <property name="buttonSymbols">
-      <enum>QAbstractSpinBox::UpDownArrows</enum>
-     </property>
-     <property name="accelerated">
-      <bool>false</bool>
-     </property>
-     <property name="keyboardTracking">
-      <bool>false</bool>
-     </property>
-     <property name="showGroupSeparator" stdset="0">
-      <bool>false</bool>
-     </property>
-     <property name="suffix">
-      <string> %</string>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>50</number>
-     </property>
-    </widget>
-    <widget class="QDial" name="dial_duty2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>75</y>
-       <width>51</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="maximum">
-      <number>100</number>
-     </property>
-     <property name="value">
-      <number>100</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="invertedAppearance">
-      <bool>false</bool>
-     </property>
-     <property name="wrapping">
-      <bool>false</bool>
-     </property>
-     <property name="notchTarget">
-      <double>5.000000000000000</double>
-     </property>
-     <property name="notchesVisible">
-      <bool>true</bool>
-     </property>
-    </widget>
     <widget class="QDial" name="dial_duty1">
      <property name="enabled">
       <bool>false</bool>
@@ -892,7 +768,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>15</y>
+       <y>30</y>
        <width>51</width>
        <height>50</height>
       </rect>
@@ -920,26 +796,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>15</y>
-       <width>51</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>false</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_dial3">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>75</y>
+       <y>30</y>
        <width>51</width>
        <height>50</height>
       </rect>
@@ -955,21 +812,17 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
      </property>
     </widget>
     <zorder>spinBox_duty1</zorder>
-    <zorder>spinBox_duty2</zorder>
-    <zorder>label_2</zorder>
     <zorder>label</zorder>
     <zorder>label_dial2</zorder>
-    <zorder>label_dial3</zorder>
     <zorder>dial_duty1</zorder>
-    <zorder>dial_duty2</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>259</y>
+      <y>215</y>
       <width>391</width>
-      <height>75</height>
+      <height>141</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -980,8 +833,8 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
     </property>
     <property name="font">
      <font>
-      <family>Roboto</family>
-      <pointsize>10</pointsize>
+      <family>Roboto Medium</family>
+      <pointsize>11</pointsize>
       <weight>50</weight>
       <italic>false</italic>
       <bold>false</bold>
@@ -993,13 +846,13 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string/>
+     <string>Channel 2</string>
     </property>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>30</y>
+       <y>95</y>
        <width>111</width>
        <height>21</height>
       </rect>
@@ -1013,14 +866,14 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       </font>
      </property>
      <property name="text">
-      <string>Offset Ch2:</string>
+      <string>Offset:</string>
      </property>
     </widget>
     <widget class="QDial" name="dial_offset">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>15</y>
+       <y>80</y>
        <width>51</width>
        <height>50</height>
       </rect>
@@ -1048,7 +901,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="geometry">
       <rect>
        <x>70</x>
-       <y>20</y>
+       <y>85</y>
        <width>301</width>
        <height>41</height>
       </rect>
@@ -1120,7 +973,150 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>15</y>
+       <y>80</y>
+       <width>51</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="spinBox_duty2">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>35</y>
+       <width>301</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
+				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
+
+QSpinBox::up-button { 
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_up4.png);
+}
+
+QSpinBox::down-button {
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_down4.png);
+ }
+
+QSpinBox::up-button:hover { 
+	image: url(:/main/resources/img/arrow_up4b.png);
+}
+
+QSpinBox::down-button:hover {
+	image: url(:/main/resources/img/arrow_down4b.png);
+ }
+
+QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
+                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
+                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
+
+QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
+
+QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
+</string>
+     </property>
+     <property name="wrapping">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+     <property name="buttonSymbols">
+      <enum>QAbstractSpinBox::UpDownArrows</enum>
+     </property>
+     <property name="accelerated">
+      <bool>false</bool>
+     </property>
+     <property name="keyboardTracking">
+      <bool>false</bool>
+     </property>
+     <property name="showGroupSeparator" stdset="0">
+      <bool>false</bool>
+     </property>
+     <property name="suffix">
+      <string> %</string>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>50</number>
+     </property>
+    </widget>
+    <widget class="QDial" name="dial_duty2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>51</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="maximum">
+      <number>100</number>
+     </property>
+     <property name="value">
+      <number>100</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="invertedAppearance">
+      <bool>false</bool>
+     </property>
+     <property name="wrapping">
+      <bool>false</bool>
+     </property>
+     <property name="notchTarget">
+      <double>5.000000000000000</double>
+     </property>
+     <property name="notchesVisible">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>45</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto Light</family>
+       <pointsize>14</pointsize>
+       <weight>50</weight>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Duty:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_dial3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
        <width>51</width>
        <height>50</height>
       </rect>
@@ -1139,6 +1135,10 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
     <zorder>label_3</zorder>
     <zorder>label_dial4</zorder>
     <zorder>dial_offset</zorder>
+    <zorder>spinBox_duty2</zorder>
+    <zorder>label_2</zorder>
+    <zorder>label_dial3</zorder>
+    <zorder>dial_duty2</zorder>
    </widget>
    <widget class="QRadioButton" name="radioButton_fine">
     <property name="geometry">

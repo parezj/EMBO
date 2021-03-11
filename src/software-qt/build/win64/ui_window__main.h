@@ -321,7 +321,7 @@ public:
         font5.setBold(true);
         font5.setItalic(false);
         font5.setWeight(75);
-        font5.setKerning(true);
+        font5.setKerning(false);
         label_deviceName->setFont(font5);
         label_boardImg = new QLabel(groupBox_device);
         label_boardImg->setObjectName(QString::fromUtf8("label_boardImg"));
@@ -442,6 +442,7 @@ public:
         font8.setPointSize(13);
         font8.setBold(false);
         font8.setWeight(50);
+        font8.setStrikeOut(false);
         font8.setKerning(false);
         pushButton_scope->setFont(font8);
         pushButton_scope->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
@@ -536,7 +537,13 @@ public:
         pushButton_la = new QPushButton(groupBox_la);
         pushButton_la->setObjectName(QString::fromUtf8("pushButton_la"));
         pushButton_la->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_la->setFont(font8);
+        QFont font9;
+        font9.setFamily(QString::fromUtf8("Roboto"));
+        font9.setPointSize(13);
+        font9.setBold(false);
+        font9.setWeight(50);
+        font9.setKerning(false);
+        pushButton_la->setFont(font9);
         pushButton_la->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -619,7 +626,7 @@ public:
         pushButton_vm = new QPushButton(groupBox_vm);
         pushButton_vm->setObjectName(QString::fromUtf8("pushButton_vm"));
         pushButton_vm->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_vm->setFont(font8);
+        pushButton_vm->setFont(font9);
         pushButton_vm->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -711,7 +718,7 @@ public:
         pushButton_pwm = new QPushButton(groupBox_pwm);
         pushButton_pwm->setObjectName(QString::fromUtf8("pushButton_pwm"));
         pushButton_pwm->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_pwm->setFont(font8);
+        pushButton_pwm->setFont(font9);
         pushButton_pwm->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -784,7 +791,7 @@ public:
         pushButton_sgen = new QPushButton(groupBox_sgen);
         pushButton_sgen->setObjectName(QString::fromUtf8("pushButton_sgen"));
         pushButton_sgen->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_sgen->setFont(font8);
+        pushButton_sgen->setFont(font9);
         pushButton_sgen->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -858,7 +865,14 @@ public:
         pushButton_cntr = new QPushButton(groupBox_cntr);
         pushButton_cntr->setObjectName(QString::fromUtf8("pushButton_cntr"));
         pushButton_cntr->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_cntr->setFont(font8);
+        QFont font10;
+        font10.setFamily(QString::fromUtf8("Roboto"));
+        font10.setPointSize(13);
+        font10.setBold(false);
+        font10.setWeight(50);
+        font10.setKerning(false);
+        font10.setStyleStrategy(QFont::PreferDefault);
+        pushButton_cntr->setFont(font10);
         pushButton_cntr->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -928,23 +942,23 @@ public:
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 800, 20));
-        QFont font9;
-        font9.setFamily(QString::fromUtf8("Roboto"));
-        font9.setPointSize(9);
-        font9.setItalic(false);
-        font9.setKerning(true);
-        menubar->setFont(font9);
+        QFont font11;
+        font11.setFamily(QString::fromUtf8("Roboto"));
+        font11.setPointSize(9);
+        font11.setItalic(false);
+        font11.setKerning(true);
+        menubar->setFont(font11);
         menuAbout = new QMenu(menubar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
         WindowMain->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowMain);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        QFont font10;
-        font10.setFamily(QString::fromUtf8("Roboto"));
-        font10.setPointSize(8);
-        font10.setItalic(false);
-        font10.setKerning(true);
-        statusbar->setFont(font10);
+        QFont font12;
+        font12.setFamily(QString::fromUtf8("Roboto"));
+        font12.setPointSize(8);
+        font12.setItalic(false);
+        font12.setKerning(true);
+        statusbar->setFont(font12);
         statusbar->setStyleSheet(QString::fromUtf8("background-color: rgb(230, 230, 230);"));
         WindowMain->setStatusBar(statusbar);
 

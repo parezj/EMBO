@@ -11,7 +11,11 @@
 #include <QMainWindow>
 #include <QSerialPort>
 #include <QPixmap>
+#include <QTimer>
 #include <QLabel>
+
+
+#define TIMER_RENDER_MS     25
 
 
 QT_BEGIN_NAMESPACE
@@ -34,6 +38,8 @@ signals:
 
 private slots:
     void closeEvent(QCloseEvent *event);
+
+    void on_render_timeout();
 
     void on_actionAbout_triggered();
     void on_pushButton_scan_clicked();
@@ -64,13 +70,20 @@ private:
     bool m_close_init = false;
     State m_state_old = DISCONNECTED;
 
+    QTimer* m_render_timer;
+
     QPixmap m_icon_plugOn;
     QPixmap m_icon_plugOff;
     QPixmap m_img_bluepill;
     QPixmap m_img_nucleoF303;
     QPixmap m_img_unknown;
+
     QLabel* m_status_icon_comm;
     QLabel* m_status_comm;
+    QLabel* m_status_latency;
+    QLabel* m_status_uptime;
+    QLabel* m_status_spacer4;
+    QLabel* m_status_spacer5;
 
     /* windows */
     WindowScope* m_w_scope = Q_NULLPTR;

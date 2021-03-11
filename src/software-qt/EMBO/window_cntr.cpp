@@ -31,8 +31,8 @@ WindowCntr::WindowCntr(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect(m_msg_read, &Msg_CNTR_Read::err, this, &WindowCntr::on_msg_err);
     connect(m_msg_read, &Msg_CNTR_Read::result, this, &WindowCntr::on_msg_read);
 
-    m_status_enabled = new QLabel(" Disabled");
-    QWidget* widget = new QWidget();
+    m_status_enabled = new QLabel(" Disabled", this);
+    QWidget* widget = new QWidget(this);
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_enabled->setFont(font1);
 
@@ -154,6 +154,9 @@ void WindowCntr::on_msg_read(QString freq, QString period)
             else
             {
             */
+
+            if (freq.contains("kHz") || freq.contains("MHz"))
+                 period = period.replace(" ", "&nbsp;&nbsp;");
 
             m_ui->textBrowser_freq->setHtml("<p align=\"right\">" + freq + " ");
             m_ui->textBrowser_period->setHtml("<p align=\"right\">" + period + " ");

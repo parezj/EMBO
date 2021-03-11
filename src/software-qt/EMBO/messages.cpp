@@ -7,7 +7,7 @@
 #include "messages.h"
 #include "core.h"
 
-/****************************** Messages - SYS ******************************/
+/****************************** Messages - SCPI ******************************/
 
 void Msg_Idn::on_dataRx()
 {
@@ -51,6 +51,8 @@ void Msg_Stb::on_dataRx()
 void Msg_Cls::on_dataRx()
 {
 }
+
+/****************************** Messages - SYS ******************************/
 
 void Msg_SYS_Lims::on_dataRx()
 {
@@ -99,8 +101,8 @@ void Msg_SYS_Info::on_dataRx()
     core->getDevInfo()->rtos = tokens[0];
     core->getDevInfo()->ll = tokens[1];
     core->getDevInfo()->comm = tokens[2];
-    core->getDevInfo()->fcpu = tokens[3].toInt();
-    core->getDevInfo()->ref_mv = tokens[4].toInt();
+    core->getDevInfo()->fcpu = tokens[3];
+    core->getDevInfo()->ref_mv = tokens[4];
     core->getDevInfo()->pins_scope_vm = tokens[5];
     core->getDevInfo()->pins_la = tokens[6];
     core->getDevInfo()->pins_cntr = tokens[7];
@@ -131,6 +133,20 @@ void Msg_SYS_Mode::on_dataRx()
     }
 }
 
+void Msg_SYS_Uptime::on_dataRx()
+{
+    qInfo() << "SYS:UPT: " <<  m_rxData;
+    auto core = Core::getInstance(this);
+
+    if (m_rxData.size() != 12)
+    {
+        core->err(INVALID_MSG + m_rxData, true);
+        return;
+    }
+
+    core->setUptime(m_rxData);
+}
+
 void Msg_Dummy::on_dataRx()
 {
     qInfo() << "STB: " <<  m_rxData;
@@ -143,10 +159,18 @@ void Msg_Dummy::on_dataRx()
 void Msg_VM_Read::on_dataRx()
 {
     qInfo() << "VM:READ: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
+
+    if (tokens.size() != 5)
+    {
+        emit err(INVALID_MSG + m_rxData, CRITICAL, true);
+        return;
+    }
+
+    Core::getInstance()->getDevInfo()->ref_mv = tokens[4];
+
+    emit result(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
 }
 
 /***************************** Messages - SCOP **************************/

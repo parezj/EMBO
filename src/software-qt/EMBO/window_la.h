@@ -7,6 +7,7 @@
 #define WINDOW_LA_H
 
 #include "interfaces.h"
+#include "messages.h"
 
 #include <QMainWindow>
 #include <QLabel>

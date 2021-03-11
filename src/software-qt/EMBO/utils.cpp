@@ -6,6 +6,10 @@
 #include "utils.h"
 
 #include <QString>
+#include <QDebug>
+
+#include <math.h>
+
 
 QString format_unit(double value, QString unit, int precision)
 {
@@ -28,3 +32,15 @@ QString format_unit(double value, QString unit, int precision)
     else
         return(QString::number(value * 0.000000000001, 'd', precision) + " T" + unit);
 }
+
+double lin_to_exp_1to36M(double x, bool inverse)
+{
+    const double a = 0.999999516693728;
+    const double b = 0.0000004833063883257437;
+
+    double ret = inverse ? ((a * log(x)) / b) : (a * exp(b * x));
+    //qInfo() << ret;
+
+    return ret;
+}
+

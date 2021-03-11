@@ -103,6 +103,7 @@ OBJECTS       = release/core.o \
 		release/moc_window_vm.o
 
 DIST          = css/style.css \
+		icon.icns \
 		icon.ico ../../EMBO/core.h \
 		../../EMBO/css.h \
 		../../EMBO/interfaces.h \
@@ -184,32 +185,38 @@ compiler_rcc_clean:
 	-$(DEL_FILE) release/qrc_resources.cpp
 release/qrc_resources.cpp: ../../EMBO/resources.qrc \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/bin/rcc.exe \
-		../../EMBO/resources/fonts/Roboto-BlackItalic.ttf \
-		../../EMBO/resources/fonts/RobotoMono-ExtraLight.ttf \
-		../../EMBO/resources/fonts/RobotoMono-Italic.ttf \
-		../../EMBO/resources/fonts/RobotoMono-Thin.ttf \
-		../../EMBO/resources/fonts/Roboto-Light.ttf \
-		../../EMBO/resources/fonts/RobotoMono-Medium.ttf \
-		../../EMBO/resources/fonts/Roboto-Bold.ttf \
-		../../EMBO/resources/fonts/RobotoMono-SemiBoldItalic.ttf \
-		../../EMBO/resources/fonts/Roboto-Black.ttf \
-		../../EMBO/resources/fonts/RobotoMono-MediumItalic.ttf \
-		../../EMBO/resources/fonts/Roboto-BoldItalic.ttf \
-		../../EMBO/resources/fonts/RobotoMono-ExtraLightItalic.ttf \
-		../../EMBO/resources/fonts/RobotoMono-Regular.ttf \
-		../../EMBO/resources/fonts/Roboto-ThinItalic.ttf \
-		../../EMBO/resources/fonts/RobotoMono-Light.ttf \
-		../../EMBO/resources/fonts/Roboto-Thin.ttf \
-		../../EMBO/resources/fonts/Roboto-Italic.ttf \
-		../../EMBO/resources/fonts/Roboto-MediumItalic.ttf \
-		../../EMBO/resources/fonts/RobotoMono-Bold.ttf \
-		../../EMBO/resources/fonts/RobotoMono-BoldItalic.ttf \
-		../../EMBO/resources/fonts/RobotoMono-SemiBold.ttf \
-		../../EMBO/resources/fonts/RobotoMono-LightItalic.ttf \
-		../../EMBO/resources/fonts/Roboto-Regular.ttf \
-		../../EMBO/resources/fonts/RobotoMono-ThinItalic.ttf \
-		../../EMBO/resources/fonts/Roboto-LightItalic.ttf \
-		../../EMBO/resources/fonts/Roboto-Medium.ttf \
+		../../EMBO/resources/fonts/Roboto-LightItalic.otf \
+		../../EMBO/resources/fonts/RobotoCondensed-Regular.otf \
+		../../EMBO/resources/fonts/Roboto-Medium.otf \
+		../../EMBO/resources/fonts/Roboto-BlackItalic.otf \
+		../../EMBO/resources/fonts/RobotoCondensed-Light.otf \
+		../../EMBO/resources/fonts/RobotoCondensed-BoldItalic.otf \
+		../../EMBO/resources/fonts/RobotoMono-Italic.otf \
+		../../EMBO/resources/fonts/RobotoMono-Thin.otf \
+		../../EMBO/resources/fonts/RobotoSlab-Bold.otf \
+		../../EMBO/resources/fonts/RobotoCondensed-Bold.otf \
+		../../EMBO/resources/fonts/Roboto-Light.otf \
+		../../EMBO/resources/fonts/RobotoSlab-Regular.otf \
+		../../EMBO/resources/fonts/RobotoCondensed-LightItalic.otf \
+		../../EMBO/resources/fonts/RobotoMono-Medium.otf \
+		../../EMBO/resources/fonts/RobotoCondensed-Italic.otf \
+		../../EMBO/resources/fonts/Roboto-Bold.otf \
+		../../EMBO/resources/fonts/RobotoSlab-Thin.otf \
+		../../EMBO/resources/fonts/Roboto-Black.otf \
+		../../EMBO/resources/fonts/RobotoMono-MediumItalic.otf \
+		../../EMBO/resources/fonts/RobotoSlab-Light.otf \
+		../../EMBO/resources/fonts/Roboto-BoldItalic.otf \
+		../../EMBO/resources/fonts/RobotoMono-Regular.otf \
+		../../EMBO/resources/fonts/Roboto-ThinItalic.otf \
+		../../EMBO/resources/fonts/RobotoMono-Light.otf \
+		../../EMBO/resources/fonts/Roboto-Thin.otf \
+		../../EMBO/resources/fonts/Roboto-MediumItalic.otf \
+		../../EMBO/resources/fonts/Roboto-Italic.otf \
+		../../EMBO/resources/fonts/RobotoMono-Bold.otf \
+		../../EMBO/resources/fonts/RobotoMono-BoldItalic.otf \
+		../../EMBO/resources/fonts/RobotoMono-LightItalic.otf \
+		../../EMBO/resources/fonts/Roboto-Regular.otf \
+		../../EMBO/resources/fonts/RobotoMono-ThinItalic.otf \
 		../../EMBO/resources/img/power-off-red.png \
 		../../EMBO/resources/img/sgen.svg \
 		../../EMBO/resources/img/radio_on1.png \
@@ -341,6 +348,7 @@ release/moc_core.cpp: ../../EMBO/core.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -390,7 +398,6 @@ release/moc_core.cpp: ../../EMBO/core.h \
 		../../EMBO/window_la.h \
 		../../EMBO/window_vm.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		../../EMBO/window_pwm.h \
@@ -398,6 +405,8 @@ release/moc_core.cpp: ../../EMBO/core.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -1136,6 +1145,7 @@ release/moc_window__main.cpp: ../../EMBO/window__main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1185,7 +1195,6 @@ release/moc_window__main.cpp: ../../EMBO/window__main.h \
 		../../EMBO/window_la.h \
 		../../EMBO/window_vm.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		../../EMBO/window_pwm.h \
@@ -1193,6 +1202,8 @@ release/moc_window__main.cpp: ../../EMBO/window__main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -1395,6 +1406,7 @@ release/moc_window_la.cpp: ../../EMBO/window_la.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1638,6 +1650,7 @@ release/moc_window_scope.cpp: ../../EMBO/window_scope.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -1881,6 +1894,7 @@ release/moc_window_vm.cpp: ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -2558,6 +2572,7 @@ release/core.o: ../../EMBO/core.cpp ../../EMBO/core.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -2607,7 +2622,6 @@ release/core.o: ../../EMBO/core.cpp ../../EMBO/core.h \
 		../../EMBO/window_la.h \
 		../../EMBO/window_vm.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		../../EMBO/window_pwm.h \
@@ -2615,6 +2629,8 @@ release/core.o: ../../EMBO/core.cpp ../../EMBO/core.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -2658,7 +2674,6 @@ release/core.o: ../../EMBO/core.cpp ../../EMBO/core.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qconcatenatetablesproxymodel.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcryptographichash.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qdeadlinetimer.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qdir.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qfileinfo.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qdiriterator.h \
@@ -3332,6 +3347,7 @@ release/main.o: ../../EMBO/main.cpp ../../EMBO/window__main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -3381,7 +3397,6 @@ release/main.o: ../../EMBO/main.cpp ../../EMBO/window__main.h \
 		../../EMBO/window_la.h \
 		../../EMBO/window_vm.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		../../EMBO/window_pwm.h \
@@ -3389,6 +3404,8 @@ release/main.o: ../../EMBO/main.cpp ../../EMBO/window__main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -3534,6 +3551,8 @@ release/messages.o: ../../EMBO/messages.cpp ../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -3711,7 +3730,41 @@ release/utils.o: ../../EMBO/utils.cpp ../../EMBO/utils.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qstringliteral.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qstringalgorithms.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qstringview.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qstringbuilder.h
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qstringbuilder.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QDebug \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qdebug.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qalgorithms.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qhash.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qiterator.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qlist.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qhashfunctions.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qpair.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qvector.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontainertools_impl.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qpoint.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbytearraylist.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qstringlist.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qregexp.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qstringmatcher.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qmap.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtextstream.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qiodevice.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qobject.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qobjectdefs.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qobjectdefs_impl.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcoreevent.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qscopedpointer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qmetatype.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qvarlengtharray.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontainerfwd.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qobject_impl.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qlocale.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qvariant.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qshareddata.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qset.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release/utils.o ../../EMBO/utils.cpp
 
 release/window__main.o: ../../EMBO/window__main.cpp ../../EMBO/window__main.h \
@@ -3786,6 +3839,7 @@ release/window__main.o: ../../EMBO/window__main.cpp ../../EMBO/window__main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -3835,7 +3889,6 @@ release/window__main.o: ../../EMBO/window__main.cpp ../../EMBO/window__main.h \
 		../../EMBO/window_la.h \
 		../../EMBO/window_vm.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		../../EMBO/window_pwm.h \
@@ -3843,6 +3896,8 @@ release/window__main.o: ../../EMBO/window__main.cpp ../../EMBO/window__main.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -4089,6 +4144,8 @@ release/window_cntr.o: ../../EMBO/window_cntr.cpp ../../EMBO/window_cntr.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -4179,6 +4236,7 @@ release/window_la.o: ../../EMBO/window_la.cpp ../../EMBO/window_la.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -4238,6 +4296,11 @@ release/window_la.o: ../../EMBO/window_la.cpp ../../EMBO/window_la.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qdesktopwidget.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qguiapplication.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qinputmethod.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QGridLayout \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgridlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayoutitem.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qboxlayout.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenu \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmenu.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenuBar \
@@ -4252,7 +4315,6 @@ release/window_la.o: ../../EMBO/window_la.cpp ../../EMBO/window_la.h \
 		../../EMBO/window_scope.h \
 		../../EMBO/window_vm.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		../../EMBO/window_pwm.h \
@@ -4260,6 +4322,8 @@ release/window_la.o: ../../EMBO/window_la.cpp ../../EMBO/window_la.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -4447,6 +4511,8 @@ release/window_pwm.o: ../../EMBO/window_pwm.cpp ../../EMBO/window_pwm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -4536,6 +4602,7 @@ release/window_scope.o: ../../EMBO/window_scope.cpp ../../EMBO/window_scope.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -4595,10 +4662,18 @@ release/window_scope.o: ../../EMBO/window_scope.cpp ../../EMBO/window_scope.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qdesktopwidget.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qguiapplication.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qinputmethod.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QGridLayout \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgridlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayoutitem.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qboxlayout.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenu \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmenu.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenuBar \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmenubar.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QPushButton \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qpushbutton.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qabstractbutton.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QStatusBar \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qstatusbar.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QWidget \
@@ -4606,7 +4681,6 @@ release/window_scope.o: ../../EMBO/window_scope.cpp ../../EMBO/window_scope.h \
 		../../EMBO/window_la.h \
 		../../EMBO/window_vm.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		../../EMBO/window_pwm.h \
@@ -4614,6 +4688,8 @@ release/window_scope.o: ../../EMBO/window_scope.cpp ../../EMBO/window_scope.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -4792,6 +4868,8 @@ release/window_sgen.o: ../../EMBO/window_sgen.cpp ../../EMBO/window_sgen.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qelapsedtimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \
@@ -4881,6 +4959,7 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qcontiguouscache.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qsharedpointer_impl.h \
+		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMainWindow \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmainwindow.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtwidgetsglobal.h \
@@ -4945,12 +5024,25 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayout.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlayoutitem.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qboxlayout.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QGroupBox \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgroupbox.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenu \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmenu.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QMenuBar \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmenubar.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QSpacerItem \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QStatusBar \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qstatusbar.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QTextBrowser \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtextbrowser.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtextedit.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextdocument.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextoption.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextcursor.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextformat.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qpen.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QVBoxLayout \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QWidget \
 		../../EMBO/lib/qcustomplot.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QPointer \
@@ -4961,8 +5053,6 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/qbasictimer.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QPainter \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qpainter.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextoption.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qpen.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QPaintEvent \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QMouseEvent \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QWheelEvent \
@@ -5129,12 +5219,9 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QtGuiDepends \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qabstracttextdocumentlayout.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextlayout.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextformat.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qglyphrun.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qrawfont.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qfontdatabase.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextcursor.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qtextdocument.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qaccessible.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qaccessiblebridge.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/qaccessibleobject.h \
@@ -5215,7 +5302,6 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtabbar.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qrubberband.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qabstractitemview.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qabstractscrollarea.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qaccessiblewidget.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qbuttongroup.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qcalendarwidget.h \
@@ -5263,7 +5349,6 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtGui/QVector3D \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgraphicsview.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qscrollarea.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qgroupbox.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qheaderview.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qinputdialog.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qlineedit.h \
@@ -5280,7 +5365,6 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qmouseeventtransition.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qopenglwidget.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qplaintextedit.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtextedit.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qprogressbar.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qprogressdialog.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qproxystyle.h \
@@ -5306,7 +5390,6 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qsystemtrayicon.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtableview.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtablewidget.h \
-		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtextbrowser.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtoolbar.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtoolbox.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/qtoolbutton.h \
@@ -5337,10 +5420,10 @@ release/window_vm.o: ../../EMBO/window_vm.cpp ../../EMBO/window_vm.h \
 		../../EMBO/window_scope.h \
 		../../EMBO/window_la.h \
 		../../EMBO/window_cntr.h \
-		../../EMBO/messages.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtWidgets/QButtonGroup \
 		../../EMBO/window_pwm.h \
 		../../EMBO/window_sgen.h \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtCore/QElapsedTimer \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/QSerialPort \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialport.h \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/include/QtSerialPort/qserialportglobal.h \

@@ -18,6 +18,7 @@
 #define EMBO_SYS_LIMS       ":SYS:LIM"
 #define EMBO_SYS_INFO       ":SYS:INFO"
 #define EMBO_SYS_MODE       ":SYS:MODE"
+#define EMBO_SYS_UPTIME     ":SYS:UPT"
 
 #define EMBO_VM_READ        ":VM:READ"
 
@@ -40,7 +41,7 @@
 #define EMBO_SET_TRUE       "1"
 #define EMBO_SET_FALSE      "0"
 
-/***************************** Messages - SYS *****************************/
+/***************************** Messages - SCPI *****************************/
 
 class Msg_Idn : public Msg
 {
@@ -74,6 +75,8 @@ public:
     virtual void on_dataRx() override;
 };
 
+/***************************** Messages - SYS *****************************/
+
 class Msg_SYS_Lims : public Msg
 {
     Q_OBJECT
@@ -98,6 +101,14 @@ public:
     virtual void on_dataRx() override;
 };
 
+class Msg_SYS_Uptime : public Msg
+{
+    Q_OBJECT
+public:
+    explicit Msg_SYS_Uptime(QObject* parent=0) : Msg(EMBO_SYS_UPTIME, true, parent) {};
+    virtual void on_dataRx() override;
+};
+
 class Msg_Dummy : public Msg
 {
     Q_OBJECT
@@ -114,6 +125,8 @@ class Msg_VM_Read : public Msg
 public:
     explicit Msg_VM_Read(QObject* parent=0) : Msg(EMBO_VM_READ, true, parent) {};
     virtual void on_dataRx() override;
+signals:
+    void result(QString ch1, QString ch2, QString ch3, QString ch4, QString vcc);
 };
 
 /***************************** Messages - SCOP **************************/

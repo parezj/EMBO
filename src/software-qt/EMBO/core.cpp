@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QTimer>
+#include <QElapsedTimer>
 #include <QSettings>
 #include <QtSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
@@ -22,7 +23,7 @@ Core::Core(QObject* parent) : QObject(parent)
 }
 
 Core::~Core()
-{
+{   
     qInfo() << "Core destroyed";
 }
 
@@ -45,29 +46,15 @@ void Core::on_startThread()
 
     m_msg_idn = new Msg_Idn(this);
     m_msg_rst = new Msg_Rst(this);
-    m_msg_stb = new Msg_Stb(this);
-    m_msg_cls = new Msg_Cls(this);
+    //m_msg_stb = new Msg_Stb(this);
+    //m_msg_cls = new Msg_Cls(this);
     m_msg_dummy = new Msg_Dummy(this);
     m_msg_sys_lims = new Msg_SYS_Lims(this);
     m_msg_sys_info = new Msg_SYS_Info(this);
     m_msg_sys_mode = new Msg_SYS_Mode(this);
+    m_msg_sys_uptime = new Msg_SYS_Uptime(this);
 
-    /*
-    m_msg_vm_read = new Msg_VM_Read(this);
-    m_msg_scope_set = new Msg_SCOP_Set(this);
-    m_msg_scope_read = new Msg_SCOP_Read(this);
-    m_msg_scope_forcetrig = new Msg_SCOP_ForceTrig(this);
-    m_msg_scope_average = new Msg_SCOP_Average(this);
-    m_msg_la_set = new Msg_LA_Set(this);
-    m_msg_la_read = new Msg_LA_Read(this);
-    m_msg_la_forcetrig = new Msg_LA_ForceTrig(this);
-    m_msg_cntr_enable = new Msg_CNTR_Enable(this);
-    m_msg_cntr_read = new Msg_CNTR_Read(this);
-    m_msg_sgen_set = new Msg_SGEN_Set(this);
-    m_msg_pwm_set = new Msg_PWM_Set(this);
-    */
-
-    devInfo = new DevInfo(this);
+    m_devInfo = new DevInfo(this);
 
     connect(m_serial, &QSerialPort::errorOccurred, this, &Core::on_serial_errorOccurred);
     connect(m_serial, &QSerialPort::readyRead, this, &Core::on_serial_readyRead);
@@ -124,7 +111,7 @@ bool Core::closeComm()
     m_serial->close(); // TODO enque
     m_timer_rxTimeout->stop();
     m_timer_comm->stop();
-    m_timer_render->stop();
+    //m_timer_render->stop();
 
     qInfo() << ">>Disconnected<<";
     emit stateChanged(m_state);
@@ -137,7 +124,10 @@ void Core::startComm()
     m_state = CONNECTED;
     emit stateChanged(m_state);
     m_timer_comm->start(TIMER_COMM);
-    m_timer_render->start(TIMER_RENDER);
+    m_timer_latency.restart();
+    m_latencyIt = 0;
+    m_latencyCnt = 0;
+    //m_timer_render->start(TIMER_RENDER);
 }
 
 void Core::err(QString name, bool needClose)
@@ -158,6 +148,23 @@ void Core::msgAdd(Msg* msg, bool isQuery, QString params)
         msg->setParams(params);
 
     m_waitingMsgs.append(msg);
+}
+
+int Core::getLatencyMs()
+{
+    m_latencyVals[m_latencyIt++] = m_latency > TIMER_COMM ? m_latency - TIMER_COMM : 0;
+
+    if (m_latencyCnt < LATENCY_AVG)
+        m_latencyCnt++;
+
+    if (m_latencyIt >= LATENCY_AVG)
+        m_latencyIt = 0;
+
+    int ret = 0;
+    for (int i = 0; i < m_latencyCnt; i++)
+        ret += m_latencyVals[i];
+
+    return ret / m_latencyCnt;
 }
 
 /* private */
@@ -185,6 +192,7 @@ void Core::send()
 
     qInfo() << "sent: " << tx;
     m_timer_rxTimeout->start(TIMER_RX);
+    m_timer_comm->stop();
 }
 
 void Core::openComm2()
@@ -227,6 +235,11 @@ void Core::on_dispose()
 {
     if (m_state == CONNECTED)
         closeComm();
+
+    m_timer_rxTimeout->deleteLater();
+    m_timer_comm->deleteLater();
+    m_timer_render->deleteLater();
+
     emit finished();
     //this->thread()->quit();
 }
@@ -322,6 +335,9 @@ void Core::on_timer_comm()
         return;
     }
 
+    m_latency = m_timer_latency.elapsed();
+    m_timer_latency.restart();
+
     if (!m_activeMsgs.isEmpty())
     {
         qInfo() << "Communication is throttling!";
@@ -350,11 +366,7 @@ void Core::on_timer_comm()
             m_activeMsgs.append(activeMsg);
     }
 
-    if (m_activeMsgs.isEmpty())
-    {
-        m_activeMsgs.append(m_msg_stb);
-        m_activeMsgs.append(m_msg_cls);
-    }
+    m_activeMsgs.append(m_msg_sys_uptime);
 
     send();
 }

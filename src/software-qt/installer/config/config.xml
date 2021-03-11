@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<Installer>
+    <Name>EMBO - EMBedded Oscilloscope</Name>
+    <Version>0.1.0</Version>
+    <Title>EMBO - EMBedded Oscilloscope Installer</Title>
+    <Publisher>CTU Jakub Parez</Publisher>
+    <ProductUrl>http://github.com/parezj/EMBO</ProductUrl>
+    <InstallerWindowIcon>icon</InstallerWindowIcon>
+    <InstallerApplicationIcon>icon</InstallerApplicationIcon>
+    <Logo>icon2.png</Logo>
+    <Watermark>watermark.bmp</Watermark>
+    <WizardShowPageList>false</WizardShowPageList>
+    <RunProgramDescription>EMBedded Oscilloscope</RunProgramDescription>
+    <StartMenuDir>EMBO</StartMenuDir>
+    <MaintenanceToolName>CTU Jakub Parez</MaintenanceToolName>
+    <AllowNonAsciiCharacters>true</AllowNonAsciiCharacters>
+    <TargetDir>@ApplicationsDir@/EMBO</TargetDir>
+    <AdminTargetDir>@ApplicationsDir@/EMBO</AdminTargetDir>
+    <WizardStyle>Modern</WizardStyle>
+</Installer>

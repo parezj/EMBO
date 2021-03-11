@@ -14,6 +14,7 @@ scpi_result_t EM_SYS_Mode(scpi_t * context);
 scpi_result_t EM_SYS_ModeQ(scpi_t * context);
 scpi_result_t EM_SYS_LimitsQ(scpi_t * context);
 scpi_result_t EM_SYS_InfoQ(scpi_t * context);
+scpi_result_t EM_SYS_UptimeQ(scpi_t* context);
 
 scpi_result_t EM_VM_ReadQ(scpi_t * context);
 

@@ -63,6 +63,7 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "SYStem:MODE", .callback = EM_SYS_Mode,},
     {.pattern = "SYStem:LIMits?", .callback = EM_SYS_LimitsQ,},
     {.pattern = "SYStem:INFO?", .callback = EM_SYS_InfoQ,},
+    {.pattern = "SYStem:UPTime?", .callback = EM_SYS_UptimeQ,},
 
     /* EMBO - Voltmeter */
     {.pattern = "VM:READ?", .callback = EM_VM_ReadQ,},

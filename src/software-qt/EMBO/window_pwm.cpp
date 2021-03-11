@@ -28,8 +28,8 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
 
     m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">? Hz&nbsp;&nbsp;&nbsp;</p>");
 
-    m_status_enabled = new QLabel(" Wait...");
-    QWidget* widget = new QWidget();
+    m_status_enabled = new QLabel(" Wait...", this);
+    QWidget* widget = new QWidget(this);
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_enabled->setFont(font1);
 
@@ -125,7 +125,7 @@ void WindowPwm::on_msg_set(int freq, int duty1, int duty2, int offset, bool en1,
     m_ui->spinBox_duty2->setValue(duty2);
     m_ui->spinBox_offset->setValue(offset);
 
-    m_ui->dial_freq->setValue(freq);
+    m_ui->dial_freq->setValue((int)lin_to_exp_1to36M((int)freq, true));
     m_ui->dial_duty1->setValue(duty1);
     m_ui->dial_duty2->setValue(duty2);
     m_ui->dial_offset->setValue(offset);
@@ -156,19 +156,19 @@ void WindowPwm::on_spinBox_freq_valueChanged(int)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->dial_freq->setValue(m_ui->spinBox_freq->value());
+    m_ui->dial_freq->setValue((int)lin_to_exp_1to36M((int)m_ui->spinBox_freq->value(), true));
     m_ignoreValuesChanged = false;
 
     sendSet(m_ch1_enabled, m_ch2_enabled);
 }
 
-void WindowPwm::on_dial_freq_valueChanged(int position)
+void WindowPwm::on_dial_freq_valueChanged(int value)
 {
     if (m_ignoreValuesChanged)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->spinBox_freq->setValue(position);
+    m_ui->spinBox_freq->setValue((int)lin_to_exp_1to36M((int)value));
     m_ignoreValuesChanged = false;
 
     sendSet(m_ch1_enabled, m_ch2_enabled);

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>341</width>
-    <height>295</height>
+    <height>289</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>341</width>
-    <height>295</height>
+    <height>289</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>341</width>
-    <height>295</height>
+    <height>289</height>
    </size>
   </property>
   <property name="font">
@@ -49,7 +49,7 @@
     <property name="geometry">
      <rect>
       <x>95</x>
-      <y>190</y>
+      <y>186</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -111,7 +111,7 @@ QPushButton:pressed
     <property name="geometry">
      <rect>
       <x>95</x>
-      <y>190</y>
+      <y>186</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -171,7 +171,7 @@ QPushButton {
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>240</y>
+      <y>234</y>
       <width>401</width>
       <height>20</height>
      </rect>
@@ -257,17 +257,17 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="styleSheet">
       <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;
+	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;
 }
 
 QTextBrowser:disabled {
 	background-color: transparent;
 	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;
+	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;
 }</string>
      </property>
      <property name="markdown">
-      <string>`545.4456 ns`
+      <string>**545.4456 ns**
 
 </string>
      </property>
@@ -275,8 +275,8 @@ QTextBrowser:disabled {
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:496; font-style:normal;&quot;&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;545.4456 ns&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:496; font-style:normal;&quot;&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Medium','Roboto';&quot;&gt;545.4456 ns&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QLabel" name="label">
@@ -327,21 +327,21 @@ p, li { white-space: pre-wrap; }
      <property name="styleSheet">
       <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;
+	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;
 }
 
 QTextBrowser:disabled {
 	background-color: transparent;
 	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;
+	text-align:right;font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:500;
 }</string>
      </property>
      <property name="html">
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:496; font-style:normal;&quot;&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;545.4456 MHz&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium'; font-size:16pt; font-weight:496; font-style:normal;&quot;&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Medium','Roboto Mono Medium';&quot;&gt;545.4456 MHz&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <zorder>textBrowser_period</zorder>
@@ -355,7 +355,7 @@ p, li { white-space: pre-wrap; }
       <x>10</x>
       <y>125</y>
       <width>321</width>
-      <height>51</height>
+      <height>45</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -385,7 +385,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="geometry">
       <rect>
        <x>210</x>
-       <y>20</y>
+       <y>16</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -398,7 +398,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      </property>
      <property name="styleSheet">
       <string notr="true">QRadioButton:checked {
-	background-color: rgba(245,245,245, 0.0);
+	background-color: rgba(245,245,245, 1.0);
 	border: 0px; 
 	border-radius:5px;
 }
@@ -451,7 +451,7 @@ QRadioButton::indicator::checked {
      <property name="geometry">
       <rect>
        <x>100</x>
-       <y>20</y>
+       <y>16</y>
        <width>101</width>
        <height>21</height>
       </rect>
@@ -464,7 +464,7 @@ QRadioButton::indicator::checked {
      </property>
      <property name="styleSheet">
       <string notr="true">QRadioButton:checked {
-	background-color: rgba(245,245,245, 0.0);
+	background-color: rgba(245,245,245, 1.0);
 	border: 0px; 
 	border-radius:5px;
 }
@@ -517,7 +517,7 @@ QRadioButton::indicator::checked {
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>20</y>
+       <y>16</y>
        <width>61</width>
        <height>21</height>
       </rect>

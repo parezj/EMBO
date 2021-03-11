@@ -18,8 +18,9 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QPushButton>
+#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
+#include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "lib/qcustomplot.h"
@@ -34,11 +35,23 @@ public:
     QGridLayout *gridLayout;
     QGroupBox *groupBox_rightPanel;
     QVBoxLayout *verticalLayout_2;
-    QPushButton *pushButton_3;
-    QPushButton *pushButton_7;
-    QPushButton *pushButton_6;
-    QPushButton *pushButton_5;
-    QPushButton *pushButton_4;
+    QGroupBox *groupBox_ch1;
+    QVBoxLayout *verticalLayout_3;
+    QSpacerItem *verticalSpacer_2;
+    QTextBrowser *textBrowser_ch1;
+    QGroupBox *groupBox_ch2;
+    QVBoxLayout *verticalLayout_5;
+    QSpacerItem *verticalSpacer_5;
+    QTextBrowser *textBrowser_ch2;
+    QGroupBox *groupBox_ch3;
+    QVBoxLayout *verticalLayout_4;
+    QSpacerItem *verticalSpacer_3;
+    QTextBrowser *textBrowser_ch3;
+    QGroupBox *groupBox_ch4;
+    QVBoxLayout *verticalLayout;
+    QSpacerItem *verticalSpacer;
+    QTextBrowser *textBrowser_ch4;
+    QSpacerItem *verticalSpacer_4;
     QCustomPlot *customPlot;
     QMenuBar *menubar;
     QMenu *menuHelp;
@@ -48,7 +61,7 @@ public:
     {
         if (WindowVm->objectName().isEmpty())
             WindowVm->setObjectName(QString::fromUtf8("WindowVm"));
-        WindowVm->resize(844, 546);
+        WindowVm->resize(901, 757);
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -80,171 +93,167 @@ public:
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         verticalLayout_2 = new QVBoxLayout(groupBox_rightPanel);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        pushButton_3 = new QPushButton(groupBox_rightPanel);
-        pushButton_3->setObjectName(QString::fromUtf8("pushButton_3"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(pushButton_3->sizePolicy().hasHeightForWidth());
-        pushButton_3->setSizePolicy(sizePolicy1);
-        pushButton_3->setMinimumSize(QSize(100, 40));
+        groupBox_ch1 = new QGroupBox(groupBox_rightPanel);
+        groupBox_ch1->setObjectName(QString::fromUtf8("groupBox_ch1"));
+        groupBox_ch1->setMinimumSize(QSize(0, 120));
+        groupBox_ch1->setMaximumSize(QSize(16777215, 150));
         QFont font2;
-        font2.setFamily(QString::fromUtf8("Roboto"));
-        font2.setPointSize(13);
-        pushButton_3->setFont(font2);
-        pushButton_3->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
-"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
-"    border: 1px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
-"    color: black;\n"
+        font2.setFamily(QString::fromUtf8("Roboto Medium"));
+        font2.setPointSize(11);
+        groupBox_ch1->setFont(font2);
+        groupBox_ch1->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        verticalLayout_3 = new QVBoxLayout(groupBox_ch1);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalSpacer_2 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Preferred);
+
+        verticalLayout_3->addItem(verticalSpacer_2);
+
+        textBrowser_ch1 = new QTextBrowser(groupBox_ch1);
+        textBrowser_ch1->setObjectName(QString::fromUtf8("textBrowser_ch1"));
+        textBrowser_ch1->setEnabled(true);
+        sizePolicy.setHeightForWidth(textBrowser_ch1->sizePolicy().hasHeightForWidth());
+        textBrowser_ch1->setSizePolicy(sizePolicy);
+        textBrowser_ch1->setMaximumSize(QSize(16777215, 80));
+        QFont font3;
+        font3.setFamily(QString::fromUtf8("Roboto Mono Medium"));
+        font3.setPointSize(40);
+        font3.setBold(true);
+        font3.setItalic(false);
+        font3.setWeight(62);
+        textBrowser_ch1->setFont(font3);
+        textBrowser_ch1->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
+        textBrowser_ch1->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
+"	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}\n"
 "\n"
-"QPushButton:hover:!pressed\n"
-"{\n"
-"	border: 1px solid rgb(150, 150, 150);;\n"
-"	border-radius: 5px;\n"
-" 	background: #FFFFFF;\n"
-"	color:#2f836a;\n"
-"}\n"
-"\n"
-"QPushButton:pressed\n"
-"{\n"
-"	border: 2px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-" 	background: #AAAAAA;\n"
-"	color:white;\n"
+"QTextBrowser:disabled {\n"
+"	background-color: transparent;\n"
+"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}"));
 
-        verticalLayout_2->addWidget(pushButton_3);
+        verticalLayout_3->addWidget(textBrowser_ch1);
 
-        pushButton_7 = new QPushButton(groupBox_rightPanel);
-        pushButton_7->setObjectName(QString::fromUtf8("pushButton_7"));
-        sizePolicy1.setHeightForWidth(pushButton_7->sizePolicy().hasHeightForWidth());
-        pushButton_7->setSizePolicy(sizePolicy1);
-        pushButton_7->setMinimumSize(QSize(100, 40));
-        pushButton_7->setFont(font2);
-        pushButton_7->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
-"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
-"    border: 1px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
-"    color: black;\n"
+
+        verticalLayout_2->addWidget(groupBox_ch1);
+
+        groupBox_ch2 = new QGroupBox(groupBox_rightPanel);
+        groupBox_ch2->setObjectName(QString::fromUtf8("groupBox_ch2"));
+        groupBox_ch2->setMinimumSize(QSize(0, 120));
+        groupBox_ch2->setMaximumSize(QSize(16777215, 150));
+        groupBox_ch2->setFont(font2);
+        groupBox_ch2->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        verticalLayout_5 = new QVBoxLayout(groupBox_ch2);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        verticalSpacer_5 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Preferred);
+
+        verticalLayout_5->addItem(verticalSpacer_5);
+
+        textBrowser_ch2 = new QTextBrowser(groupBox_ch2);
+        textBrowser_ch2->setObjectName(QString::fromUtf8("textBrowser_ch2"));
+        textBrowser_ch2->setEnabled(true);
+        sizePolicy.setHeightForWidth(textBrowser_ch2->sizePolicy().hasHeightForWidth());
+        textBrowser_ch2->setSizePolicy(sizePolicy);
+        textBrowser_ch2->setMinimumSize(QSize(300, 0));
+        textBrowser_ch2->setMaximumSize(QSize(16777215, 80));
+        textBrowser_ch2->setFont(font3);
+        textBrowser_ch2->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
+        textBrowser_ch2->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
+"	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}\n"
 "\n"
-"QPushButton:hover:!pressed\n"
-"{\n"
-"	border: 1px solid rgb(150, 150, 150);;\n"
-"	border-radius: 5px;\n"
-" 	background: #FFFFFF;\n"
-"	color:#2f836a;\n"
-"}\n"
-"\n"
-"QPushButton:pressed\n"
-"{\n"
-"	border: 2px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-" 	background: #AAAAAA;\n"
-"	color:white;\n"
+"QTextBrowser:disabled {\n"
+"	background-color: transparent;\n"
+"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}"));
 
-        verticalLayout_2->addWidget(pushButton_7);
+        verticalLayout_5->addWidget(textBrowser_ch2);
 
-        pushButton_6 = new QPushButton(groupBox_rightPanel);
-        pushButton_6->setObjectName(QString::fromUtf8("pushButton_6"));
-        sizePolicy1.setHeightForWidth(pushButton_6->sizePolicy().hasHeightForWidth());
-        pushButton_6->setSizePolicy(sizePolicy1);
-        pushButton_6->setMinimumSize(QSize(100, 40));
-        pushButton_6->setFont(font2);
-        pushButton_6->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
-"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
-"    border: 1px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
-"    color: black;\n"
+
+        verticalLayout_2->addWidget(groupBox_ch2);
+
+        groupBox_ch3 = new QGroupBox(groupBox_rightPanel);
+        groupBox_ch3->setObjectName(QString::fromUtf8("groupBox_ch3"));
+        groupBox_ch3->setMinimumSize(QSize(0, 120));
+        groupBox_ch3->setMaximumSize(QSize(16777215, 150));
+        groupBox_ch3->setFont(font2);
+        groupBox_ch3->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        verticalLayout_4 = new QVBoxLayout(groupBox_ch3);
+        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        verticalSpacer_3 = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Preferred);
+
+        verticalLayout_4->addItem(verticalSpacer_3);
+
+        textBrowser_ch3 = new QTextBrowser(groupBox_ch3);
+        textBrowser_ch3->setObjectName(QString::fromUtf8("textBrowser_ch3"));
+        textBrowser_ch3->setEnabled(true);
+        sizePolicy.setHeightForWidth(textBrowser_ch3->sizePolicy().hasHeightForWidth());
+        textBrowser_ch3->setSizePolicy(sizePolicy);
+        textBrowser_ch3->setMaximumSize(QSize(16777215, 80));
+        textBrowser_ch3->setFont(font3);
+        textBrowser_ch3->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
+        textBrowser_ch3->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
+"	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}\n"
 "\n"
-"QPushButton:hover:!pressed\n"
-"{\n"
-"	border: 1px solid rgb(150, 150, 150);;\n"
-"	border-radius: 5px;\n"
-" 	background: #FFFFFF;\n"
-"	color:#2f836a;\n"
-"}\n"
-"\n"
-"QPushButton:pressed\n"
-"{\n"
-"	border: 2px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-" 	background: #AAAAAA;\n"
-"	color:white;\n"
+"QTextBrowser:disabled {\n"
+"	background-color: transparent;\n"
+"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}"));
 
-        verticalLayout_2->addWidget(pushButton_6);
+        verticalLayout_4->addWidget(textBrowser_ch3);
 
-        pushButton_5 = new QPushButton(groupBox_rightPanel);
-        pushButton_5->setObjectName(QString::fromUtf8("pushButton_5"));
-        sizePolicy1.setHeightForWidth(pushButton_5->sizePolicy().hasHeightForWidth());
-        pushButton_5->setSizePolicy(sizePolicy1);
-        pushButton_5->setMinimumSize(QSize(100, 40));
-        pushButton_5->setFont(font2);
-        pushButton_5->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
-"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
-"    border: 1px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
-"    color: black;\n"
+
+        verticalLayout_2->addWidget(groupBox_ch3);
+
+        groupBox_ch4 = new QGroupBox(groupBox_rightPanel);
+        groupBox_ch4->setObjectName(QString::fromUtf8("groupBox_ch4"));
+        groupBox_ch4->setMinimumSize(QSize(0, 120));
+        groupBox_ch4->setMaximumSize(QSize(16777215, 150));
+        groupBox_ch4->setFont(font2);
+        groupBox_ch4->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        verticalLayout = new QVBoxLayout(groupBox_ch4);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        verticalSpacer = new QSpacerItem(20, 10, QSizePolicy::Minimum, QSizePolicy::Preferred);
+
+        verticalLayout->addItem(verticalSpacer);
+
+        textBrowser_ch4 = new QTextBrowser(groupBox_ch4);
+        textBrowser_ch4->setObjectName(QString::fromUtf8("textBrowser_ch4"));
+        textBrowser_ch4->setEnabled(true);
+        sizePolicy.setHeightForWidth(textBrowser_ch4->sizePolicy().hasHeightForWidth());
+        textBrowser_ch4->setSizePolicy(sizePolicy);
+        textBrowser_ch4->setMaximumSize(QSize(16777215, 80));
+        textBrowser_ch4->setFont(font3);
+        textBrowser_ch4->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
+        textBrowser_ch4->setStyleSheet(QString::fromUtf8("QTextBrowser {\n"
+"	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}\n"
 "\n"
-"QPushButton:hover:!pressed\n"
-"{\n"
-"	border: 1px solid rgb(150, 150, 150);;\n"
-"	border-radius: 5px;\n"
-" 	background: #FFFFFF;\n"
-"	color:#2f836a;\n"
-"}\n"
-"\n"
-"QPushButton:pressed\n"
-"{\n"
-"	border: 2px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-" 	background: #AAAAAA;\n"
-"	color:white;\n"
+"QTextBrowser:disabled {\n"
+"	background-color: transparent;\n"
+"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	text-align:right;font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:500;\n"
 "}"));
 
-        verticalLayout_2->addWidget(pushButton_5);
+        verticalLayout->addWidget(textBrowser_ch4);
 
-        pushButton_4 = new QPushButton(groupBox_rightPanel);
-        pushButton_4->setObjectName(QString::fromUtf8("pushButton_4"));
-        sizePolicy1.setHeightForWidth(pushButton_4->sizePolicy().hasHeightForWidth());
-        pushButton_4->setSizePolicy(sizePolicy1);
-        pushButton_4->setMinimumSize(QSize(100, 40));
-        pushButton_4->setFont(font2);
-        pushButton_4->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
-"    padding: 0.2em 0.2em 0.3em 0.2em;\n"
-"    border: 1px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-"    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);\n"
-"    color: black;\n"
-"}\n"
-"\n"
-"QPushButton:hover:!pressed\n"
-"{\n"
-"	border: 1px solid rgb(150, 150, 150);;\n"
-"	border-radius: 5px;\n"
-" 	background: #FFFFFF;\n"
-"	color:#2f836a;\n"
-"}\n"
-"\n"
-"QPushButton:pressed\n"
-"{\n"
-"	border: 2px solid rgb(150, 150, 150);\n"
-"	border-radius: 5px;\n"
-" 	background: #AAAAAA;\n"
-"	color:white;\n"
-"}"));
 
-        verticalLayout_2->addWidget(pushButton_4);
+        verticalLayout_2->addWidget(groupBox_ch4);
+
+        verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_2->addItem(verticalSpacer_4);
 
 
         gridLayout->addWidget(groupBox_rightPanel, 0, 2, 1, 1);
@@ -252,18 +261,18 @@ public:
         customPlot = new QCustomPlot(centralwidget);
         customPlot->setObjectName(QString::fromUtf8("customPlot"));
         customPlot->setEnabled(true);
-        QSizePolicy sizePolicy2(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
-        customPlot->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
+        customPlot->setSizePolicy(sizePolicy1);
 
         gridLayout->addWidget(customPlot, 0, 1, 1, 1);
 
         WindowVm->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowVm);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 844, 21));
+        menubar->setGeometry(QRect(0, 0, 901, 21));
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowVm->setMenuBar(menubar);
@@ -285,11 +294,30 @@ public:
         WindowVm->setWindowTitle(QCoreApplication::translate("WindowVm", "EMBO - Voltmeter", nullptr));
         actionAbout->setText(QCoreApplication::translate("WindowVm", "About", nullptr));
         groupBox_rightPanel->setTitle(QString());
-        pushButton_3->setText(QCoreApplication::translate("WindowVm", "Button 1", nullptr));
-        pushButton_7->setText(QCoreApplication::translate("WindowVm", "Button 2", nullptr));
-        pushButton_6->setText(QCoreApplication::translate("WindowVm", "Button 3", nullptr));
-        pushButton_5->setText(QCoreApplication::translate("WindowVm", "Button 4", nullptr));
-        pushButton_4->setText(QCoreApplication::translate("WindowVm", "Button 5", nullptr));
+        groupBox_ch1->setTitle(QCoreApplication::translate("WindowVm", "Channel 1", nullptr));
+        textBrowser_ch1->setHtml(QCoreApplication::translate("WindowVm", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:496; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Medium','Roboto Mono Medium';\">3.124 V</span></p></body></html>", nullptr));
+        groupBox_ch2->setTitle(QCoreApplication::translate("WindowVm", "Channel 2", nullptr));
+        textBrowser_ch2->setHtml(QCoreApplication::translate("WindowVm", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:496; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Medium','Roboto Mono Medium';\">3.124 V</span></p></body></html>", nullptr));
+        groupBox_ch3->setTitle(QCoreApplication::translate("WindowVm", "Channel 3", nullptr));
+        textBrowser_ch3->setHtml(QCoreApplication::translate("WindowVm", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:496; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Medium','Roboto Mono Medium';\">3.124 V</span></p></body></html>", nullptr));
+        groupBox_ch4->setTitle(QCoreApplication::translate("WindowVm", "Channel 4", nullptr));
+        textBrowser_ch4->setHtml(QCoreApplication::translate("WindowVm", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:'Roboto Mono Medium'; font-size:40pt; font-weight:496; font-style:normal;\">\n"
+"<p align=\"center\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Medium','Roboto Mono Medium';\">3.124 V</span></p></body></html>", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("WindowVm", "Help", nullptr));
     } // retranslateUi
 

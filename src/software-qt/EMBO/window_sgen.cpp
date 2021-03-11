@@ -26,8 +26,8 @@ WindowSgen::WindowSgen(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect(m_msg_set, &Msg_SGEN_Set::err, this, &WindowSgen::on_msg_err);
     connect(m_msg_set, &Msg_SGEN_Set::result, this, &WindowSgen::on_msg_set);
 
-    m_status_enabled = new QLabel(" Disabled");
-    QWidget* widget = new QWidget();
+    m_status_enabled = new QLabel(" Disabled", this);
+    QWidget* widget = new QWidget(this);
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_enabled->setFont(font1);
 
@@ -131,7 +131,7 @@ void WindowSgen::on_msg_set(SgenMode mode, double freq, int ampl, int offset, bo
         case SgenMode::NOISE: m_ui->radioButton_noise->setChecked(true); break;
     }
 
-    m_ui->dial_freq->setValue(freq);
+    m_ui->dial_freq->setValue((int)lin_to_exp_1to36M((int)freq, true)); // TODO upper range
     m_ui->dial_ampl->setValue(ampl);
     m_ui->dial_offset->setValue(offset);
 
@@ -161,7 +161,7 @@ void WindowSgen::on_spinBox_freq_valueChanged(int)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->dial_freq->setValue(m_ui->spinBox_freq->value());
+    m_ui->dial_freq->setValue((int)lin_to_exp_1to36M((int)m_ui->spinBox_freq->value(), true)); // TODO upper range
     m_ignoreValuesChanged = false;
 
     sendSet(m_instrEnabled);
@@ -173,7 +173,7 @@ void WindowSgen::on_dial_freq_valueChanged(int value)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->spinBox_freq->setValue(value);
+    m_ui->spinBox_freq->setValue((int)lin_to_exp_1to36M((int)value));  // TODO upper range
     m_ignoreValuesChanged = false;
 
     sendSet(m_instrEnabled);

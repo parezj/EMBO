@@ -21,7 +21,7 @@
 
 /************************* [IEEE 488] *************************/
 
-scpi_result_t EM_Reset(scpi_t * context)
+scpi_result_t EM_Reset(scpi_t* context)
 {
     daq_enable(&daq, EM_FALSE);
     daq_settings_init(&daq);
@@ -46,7 +46,7 @@ scpi_result_t EM_Reset(scpi_t * context)
 
 /************************* [System Actions] *************************/
 
-scpi_result_t EM_SYS_Mode(scpi_t * context)
+scpi_result_t EM_SYS_Mode(scpi_t* context)
 {
     const char* p1;
     size_t p1l;
@@ -70,7 +70,7 @@ scpi_result_t EM_SYS_Mode(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_SYS_ModeQ(scpi_t * context)
+scpi_result_t EM_SYS_ModeQ(scpi_t* context)
 {
     if (daq.mode == SCOPE)
         SCPI_ResultText(context, "SCOPE");
@@ -82,7 +82,7 @@ scpi_result_t EM_SYS_ModeQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_SYS_LimitsQ(scpi_t * context)
+scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
 {
     char buff[100];
     char dual[2] = {'\0'};
@@ -120,7 +120,7 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_SYS_InfoQ(scpi_t * context)
+scpi_result_t EM_SYS_InfoQ(scpi_t* context)
 {
     char buff[100];
 
@@ -131,9 +131,29 @@ scpi_result_t EM_SYS_InfoQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
+scpi_result_t EM_SYS_UptimeQ(scpi_t* context)
+{
+    char buff[30];
+    int ms = daq.uwTick;
+
+    int h = daq.uwTick / 3600000;
+    ms -= 3600000 * h;
+
+    int m = ms / 60000;
+    ms -= 60000 * m;
+
+    int s = ms / 1000;
+    ms -= 1000 * s;
+
+    int len = sprintf(buff, "%02d:%02d:%02d.%03d", h, m, s, ms);
+
+    SCPI_ResultCharacters(context, buff, len);
+    return SCPI_RES_OK;
+}
+
 /************************* [VM Actions] *************************/
 
-scpi_result_t EM_VM_ReadQ(scpi_t * context)
+scpi_result_t EM_VM_ReadQ(scpi_t* context)
 {
     if (daq.mode == VM)
     {
@@ -235,7 +255,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t * context)
 
 /************************* [SCOPE Actions] *************************/
 
-scpi_result_t EM_SCOPE_ReadQ(scpi_t * context)
+scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
 {
     if (daq.mode == SCOPE)
     {
@@ -370,7 +390,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t * context)
     }
 }
 
-scpi_result_t EM_SCOPE_Set(scpi_t * context)
+scpi_result_t EM_SCOPE_Set(scpi_t* context)
 {
     if (daq.mode == SCOPE)
     {
@@ -452,7 +472,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t * context)
     }
 }
 
-scpi_result_t EM_SCOPE_SetQ(scpi_t * context)
+scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
 {
     if (daq.mode == SCOPE)
     {
@@ -492,7 +512,7 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t * context)
     }
 }
 
-scpi_result_t EM_SCOPE_ForceTrig(scpi_t * context)
+scpi_result_t EM_SCOPE_ForceTrig(scpi_t* context)
 {
     if (daq.mode != SCOPE)
     {
@@ -513,7 +533,7 @@ scpi_result_t EM_SCOPE_ForceTrig(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_SCOPE_Average(scpi_t * context)
+scpi_result_t EM_SCOPE_Average(scpi_t* context)
 {
     // TODO
     SCPI_ResultText(context, SCPI_OK);
@@ -522,7 +542,7 @@ scpi_result_t EM_SCOPE_Average(scpi_t * context)
 
 /************************* [LA Actions] *************************/
 
-scpi_result_t EM_LA_ReadQ(scpi_t * context)
+scpi_result_t EM_LA_ReadQ(scpi_t* context)
 {
     if (daq.mode == LA)
     {
@@ -569,7 +589,7 @@ scpi_result_t EM_LA_ReadQ(scpi_t * context)
     }
 }
 
-scpi_result_t EM_LA_Set(scpi_t * context)
+scpi_result_t EM_LA_Set(scpi_t* context)
 {
     if (daq.mode == LA)
     {
@@ -641,7 +661,7 @@ scpi_result_t EM_LA_Set(scpi_t * context)
     }
 }
 
-scpi_result_t EM_LA_SetQ(scpi_t * context)
+scpi_result_t EM_LA_SetQ(scpi_t* context)
 {
     if (daq.mode == LA)
     {
@@ -671,7 +691,7 @@ scpi_result_t EM_LA_SetQ(scpi_t * context)
     }
 }
 
-scpi_result_t EM_LA_ForceTrig(scpi_t * context)
+scpi_result_t EM_LA_ForceTrig(scpi_t* context)
 {
     if (daq.mode != LA)
     {
@@ -695,7 +715,7 @@ scpi_result_t EM_LA_ForceTrig(scpi_t * context)
 
 /************************* [CNTR Actions] *************************/
 
-scpi_result_t EM_CNTR_EnableQ(scpi_t * context)
+scpi_result_t EM_CNTR_EnableQ(scpi_t* context)
 {
     char buff[3];
     buff[0] = cntr.enabled ? '1' : '0';
@@ -706,7 +726,7 @@ scpi_result_t EM_CNTR_EnableQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_CNTR_Enable(scpi_t * context)
+scpi_result_t EM_CNTR_Enable(scpi_t* context)
 {
     uint32_t p1, p2;
 
@@ -728,7 +748,7 @@ scpi_result_t EM_CNTR_Enable(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_CNTR_ReadQ(scpi_t * context)
+scpi_result_t EM_CNTR_ReadQ(scpi_t* context)
 {
     if (!cntr.enabled)
     {
@@ -776,7 +796,7 @@ scpi_result_t EM_CNTR_ReadQ(scpi_t * context)
 
 /************************* [SGEN Actions] *************************/
 
-scpi_result_t EM_SGEN_SetQ(scpi_t * context)
+scpi_result_t EM_SGEN_SetQ(scpi_t* context)
 {
 #ifdef EM_DAC
     SCPI_ResultText(context, "0");
@@ -787,7 +807,7 @@ scpi_result_t EM_SGEN_SetQ(scpi_t * context)
 #endif
 }
 
-scpi_result_t EM_SGEN_Set(scpi_t * context)
+scpi_result_t EM_SGEN_Set(scpi_t* context)
 {
 #ifdef EM_DAC
     double p1;
@@ -809,7 +829,7 @@ scpi_result_t EM_SGEN_Set(scpi_t * context)
 
 /************************* [PWM Actions] *************************/
 
-scpi_result_t EM_PWM_SetQ(scpi_t * context)
+scpi_result_t EM_PWM_SetQ(scpi_t* context)
 {
     char buff[60];
     char buff_freq_real[15];
@@ -833,7 +853,7 @@ scpi_result_t EM_PWM_SetQ(scpi_t * context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_PWM_Set(scpi_t * context)
+scpi_result_t EM_PWM_Set(scpi_t* context)
 {
     uint32_t param1, param2, param3, param4, param5, param6;
 

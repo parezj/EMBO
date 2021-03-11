@@ -11,13 +11,14 @@ CONFIG += c++11
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-RC_ICONS = icon.ico
+win32:RC_ICONS = icon.ico
+macx: ICON = icon.icns
 
 VERSION = 0.0.2.0
-QMAKE_TARGET_COMPANY = CTU/Jakub Parez
+QMAKE_TARGET_COMPANY = CTU Jakub Parez
 QMAKE_TARGET_PRODUCT = EMBO
 QMAKE_TARGET_DESCRIPTION = EMBedded Oscilloscope
-QMAKE_TARGET_COPYRIGHT = Jakub Parez
+QMAKE_TARGET_COPYRIGHT = CTU Jakub Parez
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -76,4 +77,5 @@ RESOURCES += \
 
 DISTFILES += \
     css/style.css \
+    icon.icns \
     icon.ico
