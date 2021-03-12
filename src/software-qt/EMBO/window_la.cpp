@@ -32,7 +32,7 @@ void WindowLa::on_actionAbout_triggered()
 
 /* slots */
 
-void WindowLa::on_msg_err(QString text, MsgBoxType type, bool needClose)
+void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 

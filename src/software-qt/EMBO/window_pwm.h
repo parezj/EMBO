@@ -34,9 +34,9 @@ signals:
     void closing(const char* className);
 
 private slots:
-    void on_msg_ok(QString val1, QString val2);
-    void on_msg_err(QString text, MsgBoxType type, bool needClose);
-    void on_msg_set(int freq, int duty1, int duty2, int offset, bool en1, bool en2, QString freq_real);
+    void on_msg_ok(const QString val1, const QString val2);
+    void on_msg_err(const QString text, MsgBoxType type, bool needClose);
+    void on_msg_set(int freq, int duty1, int duty2, int offset, bool en1, bool en2, const QString freq_real);
 
     void on_actionAbout_triggered();
     void on_spinBox_duty1_valueChanged(int arg1);

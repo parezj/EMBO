@@ -13,6 +13,8 @@ release/window_scope.o
 release/window_sgen.o
 release/window_vm.o
 release/qrc_resources.o
+release/moc_QBreakpadHandler.o
+release/moc_QBreakpadHttpUploader.o
 release/moc_core.o
 release/moc_qcustomplot.o
 release/moc_messages.o

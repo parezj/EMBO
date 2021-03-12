@@ -249,6 +249,7 @@ Makefile: ../../EMBO/EMBO.pro F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/win32/default_pre.prf \
+		../../EMBO/crashhandler/qBreakpad.pri \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/resolve_config.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds_post.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_post.prf \
@@ -272,6 +273,7 @@ Makefile: ../../EMBO/EMBO.pro F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5PrintSupport.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Widgets.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Gui.prl \
+		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Network.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5SerialPort.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl \
@@ -457,6 +459,7 @@ F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/win32/default_pre.prf:
+../../EMBO/crashhandler/qBreakpad.pri:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/resolve_config.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds_post.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_post.prf:
@@ -480,6 +483,7 @@ F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/lex.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5PrintSupport.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Widgets.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Gui.prl:
+F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Network.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5SerialPort.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl:

@@ -30,13 +30,17 @@ void cntr_init(cntr_data_t* self)
 static void cntr_reset(cntr_data_t* self)
 {
     self->ovf = 0;
+    self->fast_mode_now = self->fast_mode == EM_TRUE;
+
     memset(self->data_ccr, 0, EM_CNTR_BUFF_SZ * sizeof(uint16_t));
     memset(self->data_ovf, 0, EM_CNTR_BUFF_SZ * sizeof(uint16_t));
 
-    dma_set((uint32_t)&EM_TIM_CNTR->EM_TIM_CNTR_CCR, EM_DMA_CNTR, EM_DMA_CH_CNTR, (uint32_t)&self->data_ccr, EM_CNTR_BUFF_SZ,
+    dma_set((uint32_t)&EM_TIM_CNTR->EM_TIM_CNTR_CCR, EM_DMA_CNTR, EM_DMA_CH_CNTR, (uint32_t)&self->data_ccr,
+            self->fast_mode_now ? EM_CNTR_BUFF_SZ : EM_CNTR_BUFF_SZ2,
             LL_DMA_PDATAALIGN_HALFWORD, LL_DMA_MDATAALIGN_HALFWORD, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
 
-    dma_set((uint32_t)&EM_TIM_CNTR->EM_TIM_CNTR_CCR2, EM_DMA_CNTR2, EM_DMA_CH_CNTR2, (uint32_t)&self->data_ovf, EM_CNTR_BUFF_SZ,
+    dma_set((uint32_t)&EM_TIM_CNTR->EM_TIM_CNTR_CCR2, EM_DMA_CNTR2, EM_DMA_CH_CNTR2, (uint32_t)&self->data_ovf,
+            self->fast_mode_now ? EM_CNTR_BUFF_SZ : EM_CNTR_BUFF_SZ2,
             LL_DMA_PDATAALIGN_HALFWORD, LL_DMA_MDATAALIGN_HALFWORD, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
 
     NVIC_SetPriority(TIM1_UP_TIM16_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
@@ -44,7 +48,6 @@ static void cntr_reset(cntr_data_t* self)
     EM_TIM_CNTR_OVF(LL_TIM_OC_SetCompare)(EM_TIM_CNTR, 0);
     LL_TIM_SetCounter(EM_TIM_CNTR, 0);
 
-    self->fast_mode_now = self->fast_mode == EM_TRUE;
     LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, LL_TIM_CHANNEL_CH1, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
     LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, LL_TIM_CHANNEL_CH2, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
 }
@@ -114,7 +117,7 @@ void cntr_meas(cntr_data_t* self)
 
     cntr_start(self, 0); // stop
 
-    sz = EM_CNTR_BUFF_SZ - sz;
+    sz = (self->fast_mode_now ? EM_CNTR_BUFF_SZ : EM_CNTR_BUFF_SZ2) - sz;
 
     if (sz >= 2)
     {

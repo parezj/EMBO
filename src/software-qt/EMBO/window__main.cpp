@@ -10,6 +10,8 @@
 #include "settings.h"
 #include "css.h"
 
+#include "QBreakpadHandler.h"
+
 #include <QDebug>
 #include <QDir>
 #include <QUrl>
@@ -39,6 +41,8 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     m_ui->setupUi(this);
 
+    QBreakpadInstance.setDumpPath(QLatin1String("crashes"));
+
     QThread* t1 = new QThread(this);
     auto core = Core::getInstance();
 
@@ -48,8 +52,6 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_w_cntr = new WindowCntr();
     m_w_pwm = new WindowPwm();
     m_w_sgen = new WindowSgen();
-
-    m_render_timer = new QTimer();
 
     core->emboInstruments.append(m_w_scope);
     core->emboInstruments.append(m_w_la);
@@ -64,6 +66,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     //connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(on_close()));
 
+    connect(core, &Core::latencyAndUptime, this, &WindowMain::on_latencyAndUptime, Qt::QueuedConnection);
     connect(core, &Core::stateChanged, this, &WindowMain::on_coreState_changed, Qt::QueuedConnection);
     connect(core, &Core::msgDisplay, this, &WindowMain::on_msgDisplay, Qt::QueuedConnection);
     connect(this, &WindowMain::openComm, core, &Core::on_openComm, Qt::QueuedConnection);
@@ -74,8 +77,6 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect(core, SIGNAL(finished()), t1, SLOT(quit()), Qt::DirectConnection);
     connect(core, SIGNAL(finished()), core, SLOT(deleteLater()));
     connect(t1, SIGNAL(finished()), t1, SLOT(deleteLater()));
-
-    connect(m_render_timer, &QTimer::timeout, this, &WindowMain::on_render_timeout);
 
     connect(m_w_scope, &WindowScope::closing, this, &WindowMain::on_instrClose);
     connect(m_w_la, &WindowLa::closing, this, &WindowMain::on_instrClose);
@@ -97,12 +98,12 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     statusBarLoad();
 
-    m_ui->groupBox_scope->setStyleSheet(QString(CSS_INSTR_GROUP_SCOPE));
-    m_ui->groupBox_la->setStyleSheet(QString(CSS_INSTR_GROUP_LA));
-    m_ui->groupBox_vm->setStyleSheet(QString(CSS_INSTR_GROUP_VM));
-    m_ui->groupBox_pwm->setStyleSheet(QString(CSS_INSTR_GROUP_PWM));
-    m_ui->groupBox_sgen->setStyleSheet(QString(CSS_INSTR_GROUP_SGEN));
-    m_ui->groupBox_cntr->setStyleSheet(QString(CSS_INSTR_GROUP_CNTR));
+    m_ui->groupBox_scope->setStyleSheet(CSS_INSTR_GROUP_SCOPE);
+    m_ui->groupBox_la->setStyleSheet(CSS_INSTR_GROUP_LA);
+    m_ui->groupBox_vm->setStyleSheet(CSS_INSTR_GROUP_VM);
+    m_ui->groupBox_pwm->setStyleSheet(CSS_INSTR_GROUP_PWM);
+    m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_SGEN);
+    m_ui->groupBox_cntr->setStyleSheet(CSS_INSTR_GROUP_CNTR);
 
     QString style2(CSS_GROUP2);
 
@@ -111,16 +112,16 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->groupBox_instr2->setStyleSheet(style2);
     m_ui->groupBox_ports->setStyleSheet(style2);
 
-    m_ui->pushButton_connect->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_CONNECT));
-    m_ui->pushButton_disconnect->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_DISCONNECT));
-    m_ui->pushButton_scan->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SCAN));
+    m_ui->pushButton_connect->setStyleSheet(CSS_BUTTON CSS_BUTTON_CONNECT);
+    m_ui->pushButton_disconnect->setStyleSheet(CSS_BUTTON CSS_BUTTON_DISCONNECT);
+    m_ui->pushButton_scan->setStyleSheet(CSS_BUTTON CSS_BUTTON_SCAN);
 
-    m_ui->pushButton_scope->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SCOPE));
-    m_ui->pushButton_la->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_LA));
-    m_ui->pushButton_vm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_VM));
-    m_ui->pushButton_cntr->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_CNTR));
-    m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_PWM));
-    m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SGEN));
+    m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON CSS_BUTTON_SCOPE);
+    m_ui->pushButton_la->setStyleSheet(CSS_BUTTON CSS_BUTTON_LA);
+    m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON CSS_BUTTON_VM);
+    m_ui->pushButton_cntr->setStyleSheet(CSS_BUTTON CSS_BUTTON_CNTR);
+    m_ui->pushButton_pwm->setStyleSheet(CSS_BUTTON CSS_BUTTON_PWM);
+    m_ui->pushButton_sgen->setStyleSheet(CSS_BUTTON CSS_BUTTON_SGEN);
 
     setDisconnected();
     on_pushButton_scan_clicked();
@@ -148,13 +149,16 @@ void WindowMain::statusBarLoad()
     m_status_uptime = new QLabel("", this);
 
     QSpacerItem* status_spacer1 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
-    QLabel* status_ctu = new QLabel("<a href='https://meas.fel.cvut.cz/' style='color: black; text-decoration:none'>&nbsp;CTU FEE&nbsp;©&nbsp;2021&nbsp;</a>", this);
-    QLabel* status_spacer2 = new QLabel("<span>&nbsp;</span>", this);
-    QLabel* status_spacer3 = new QLabel("<span>&nbsp;</span>", this);
-    m_status_spacer4 = new QLabel("<span>&nbsp;&nbsp;&nbsp;｜&nbsp;&nbsp;&nbsp;</span>", this);
-    m_status_spacer5 = new QLabel("<span>&nbsp;&nbsp;&nbsp;｜&nbsp;&nbsp;&nbsp;</span>", this);
-    QLabel* status_icon_jp = new QLabel(this);
-    QLabel* status_author = new QLabel("<a href='https://www.jakubparez.com' style='color: black; text-decoration:none'>&nbsp;Jakub Pařez&nbsp;</a>&nbsp;", this);
+    QLabel* status_spacer0   = new QLabel("<span>&nbsp;</span>", this);
+    QLabel* status_ctu       = new QLabel("<a href='https://meas.fel.cvut.cz/' style='color: black; text-decoration:none'>&nbsp;CTU FEE&nbsp;©&nbsp;2021&nbsp;</a>", this);
+    QLabel* status_spacer2   = new QLabel("<span>&nbsp;</span>", this);
+    QLabel* status_spacer3   = new QLabel("<span>&nbsp;</span>", this);
+    QLabel* m_status_spacer4 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* m_status_spacer5 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* m_status_spacer6 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* m_status_spacer7 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_icon_jp   = new QLabel(this);
+    QLabel* status_author    = new QLabel("<a href='https://www.jakubparez.com' style='color: black; text-decoration:none'>&nbsp;Jakub Pařez&nbsp;</a>&nbsp;", this);
 
     status_ctu->connect(status_ctu, &QLabel::linkActivated, [](const QString &link) {
         QDesktopServices::openUrl(QUrl(link));
@@ -191,19 +195,36 @@ void WindowMain::statusBarLoad()
     status_icon_jp->setFixedHeight(17);
     status_icon_jp->setScaledContents(true);
 
+    m_status_line1 = new QFrame(this);
+    m_status_line1->setFrameShape(QFrame::VLine);
+    m_status_line1->setFrameShadow(QFrame::Plain);
+    m_status_line1->setStyleSheet("color:gray;");
+    m_status_line1->setFixedHeight(18);
+
+    m_status_line2 = new QFrame(this);
+    m_status_line2->setFrameShape(QFrame::VLine);
+    m_status_line2->setFrameShadow(QFrame::Plain);
+    m_status_line2->setStyleSheet("color:gray;");
+    m_status_line2->setFixedHeight(18);
+
     QGridLayout * layout = new QGridLayout(widget);
-    layout->addWidget(m_status_icon_comm,0,0,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_comm,0,1,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_spacer4,0,2,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_latency,0,3,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_spacer5,0,4,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_uptime,0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
-    layout->addItem(status_spacer1,0,6,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_ctu,0,7,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_spacer2,0,8,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_icon_jp,0,9,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_spacer3,0,10,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_author,0,11,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer0,       0,0, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_icon_comm,   0,1, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_comm,        0,2, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_spacer4,     0,3, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line1,       0,4, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_spacer5,     0,5, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_latency,     0,6, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_spacer6,     0,7, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line2,       0,8, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_spacer7,     0,9, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_uptime,      0,10,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addItem(status_spacer1,         0,11,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_ctu,           0,12,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer2,       0,13,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_icon_jp,       0,14,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer3,       0,15,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_author,        0,16,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
@@ -229,14 +250,14 @@ void WindowMain::loadSettings()
 
   for(int i = 0; i < m_ui->listWidget_ports->count(); ++i)
   {
-      if (m_ui->listWidget_ports->item(i)->text() == port_saved)
+      if (m_ui->listWidget_ports->item(i)->data(Qt::UserRole) == port_saved)
           m_ui->listWidget_ports->setCurrentRow(i);
   }
 }
 
 void WindowMain::saveSettings()
 {
-    Settings::setValue(CFG_MAIN_PORT, m_ui->listWidget_ports->currentIndex().data().toString());
+    Settings::setValue(CFG_MAIN_PORT, m_ui->listWidget_ports->currentItem()->data(Qt::UserRole).toString());
 }
 
 void WindowMain::setConnected()
@@ -244,8 +265,9 @@ void WindowMain::setConnected()
     m_ui->pushButton_connect->hide();
     m_ui->pushButton_disconnect->show();
 
-    this->setWindowTitle(EMBO_TITLE2 " (" + Core::getInstance()->getPort()+ ")");
-    m_status_comm->setText(" Connected (" + Core::getInstance()->getPort() + ")");
+    this->setWindowTitle(EMBO_TITLE2 " (" + m_ui->listWidget_ports->currentItem()->toolTip()+ ")");
+    m_status_comm->setText(" Connected (" + m_ui->listWidget_ports->currentItem()->data(Qt::UserRole).toString() + ")");
+    m_ui->listWidget_ports->currentItem()->setIcon(QIcon(":/main/resources/img/serial2_busy.png"));
 
     m_status_icon_comm->setPixmap(m_icon_plugOn);
     m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
@@ -313,11 +335,10 @@ void WindowMain::setConnected()
     m_w_pwm->setWindowTitle("EMBO - PWM Generator [2 channel] (pins: " + m_ui->label_pwm_pins->text() + ")");
     m_w_sgen->setWindowTitle("EMBO - Signal Generator (pin: " + m_ui->label_sgen_pins->text() + ")");
 
-    m_render_timer->start(TIMER_RENDER_MS);
     m_status_latency->setText("?");
     m_status_uptime->setText("?");
-    m_status_spacer4->show();
-    m_status_spacer5->show();
+    m_status_line1->show();
+    m_status_line2->show();
 
     m_connected = true;
 }
@@ -333,6 +354,10 @@ void WindowMain::setDisconnected()
 
     m_status_comm->setText(" Disconnected");
     m_status_icon_comm->setPixmap(m_icon_plugOff);
+
+    auto item = m_ui->listWidget_ports->currentItem();
+    if (item != Q_NULLPTR)
+        item->setIcon(QIcon(":/main/resources/img/serial2.png"));
 
     m_ui->listWidget_ports->setEnabled(true);
     m_ui->pushButton_scan->setEnabled(true);
@@ -387,11 +412,10 @@ void WindowMain::setDisconnected()
     m_w_pwm->close();
     m_w_sgen->close();
 
-    m_render_timer->stop();
     m_status_latency->setText("");
     m_status_uptime->setText("");
-    m_status_spacer4->hide();
-    m_status_spacer5->hide();
+    m_status_line1->hide();
+    m_status_line2->hide();
 
     //on_instrClose(WindowScope::staticMetaObject.className());
     //on_instrClose(WindowCntr::staticMetaObject.className());
@@ -427,8 +451,6 @@ void WindowMain::closeEvent(QCloseEvent* event)
     m_w_pwm->close();
     m_w_sgen->close();
 
-    m_render_timer->deleteLater();
-
     auto core = Core::getInstance();
     emit disposeCore();
     if (core != Q_NULLPTR)
@@ -441,17 +463,6 @@ void WindowMain::closeEvent(QCloseEvent* event)
         event->accept();
         qInfo() << "Quit1";
     }
-}
-
-void WindowMain::on_render_timeout()
-{
-    auto core = Core::getInstance();
-
-    m_status_latency->setText("Latency: " + QString::number(TIMER_COMM) + "+" + QString::number(core->getLatencyMs()) + " ms");
-    m_status_uptime->setText("Uptime: " + core->getUptime());
-
-    if (m_w_vm->isVisible())
-        m_ui->label_dev_vref->setText(Core::getInstance()->getDevInfo()->ref_mv.replace(".", "").left(4) + " mV");
 }
 
 void WindowMain::on_actionAbout_triggered()
@@ -472,9 +483,15 @@ void WindowMain::on_pushButton_scan_clicked()
     {
         for(auto port : ports)
         {
+            qInfo() << port.portName() << " " << port.description() << " " << port.manufacturer() << " " << port.isBusy();
+
             QListWidgetItem* item = new QListWidgetItem(m_ui->listWidget_ports);
-            item->setIcon(QIcon(":/main/resources/img/serial2.png"));
-            item->setText(port.portName());
+            item->setIcon(port.isBusy() ? QIcon(":/main/resources/img/serial2_red.png") : QIcon(":/main/resources/img/serial2.png"));
+            QString val = port.portName() + (port.description().size() > 0 ? (" — " + port.description()) : "");
+            item->setText(val <= 20 ? val : val.left(16) + "...");
+            item->setToolTip(val + (port.manufacturer().size() > 0 ? (" (" + port.manufacturer() + ")") : ""));
+            item->setData(Qt::UserRole, port.portName());
+
             m_ui->listWidget_ports->addItem(item);
         }
         m_ui->listWidget_ports->setCurrentRow(0);
@@ -497,7 +514,8 @@ void WindowMain::on_pushButton_connect_clicked()
 
     m_status_comm->setText(" Connecting...");
 
-    QString selPort = m_ui->listWidget_ports->currentIndex().data().toString();
+    QString selPort = m_ui->listWidget_ports->currentItem()->data(Qt::UserRole).toString();
+
     saveSettings();
 
     emit openComm(selPort);
@@ -516,6 +534,15 @@ void WindowMain::on_pushButton_disconnect_clicked()
     m_w_sgen->hide();
 
     emit closeComm(false);
+}
+
+void WindowMain::on_latencyAndUptime(int latency, const QString uptime)
+{
+    m_status_latency->setText("Latency: " + QString::number(TIMER_COMM) + "+" + QString::number(latency) + " ms");
+    m_status_uptime->setText("Uptime: " + uptime);
+
+    if (m_w_vm->isVisible())
+        m_ui->label_dev_vref->setText(Core::getInstance()->getDevInfo()->ref_mv.replace(".", "").left(4) + " mV");
 }
 
 void WindowMain::on_coreState_changed(const State newState)
@@ -593,19 +620,19 @@ void WindowMain::instrFirstRowEnable(bool enable)
         m_ui->pushButton_la->setEnabled(true);
         m_ui->pushButton_vm->setEnabled(true);
 
-        m_ui->groupBox_scope->setStyleSheet(QString(CSS_INSTR_GROUP_SCOPE));
-        m_ui->groupBox_la->setStyleSheet(QString(CSS_INSTR_GROUP_LA));
-        m_ui->groupBox_vm->setStyleSheet(QString(CSS_INSTR_GROUP_VM));
+        m_ui->groupBox_scope->setStyleSheet(CSS_INSTR_GROUP_SCOPE);
+        m_ui->groupBox_la->setStyleSheet(CSS_INSTR_GROUP_LA);
+        m_ui->groupBox_vm->setStyleSheet(CSS_INSTR_GROUP_VM);
 
-        m_ui->pushButton_scope->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SCOPE));
-        m_ui->pushButton_la->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_LA));
-        m_ui->pushButton_vm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_VM));
+        m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON CSS_BUTTON_SCOPE);
+        m_ui->pushButton_la->setStyleSheet(CSS_BUTTON CSS_BUTTON_LA);
+        m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON CSS_BUTTON_VM);
     }
     else
     {
-        m_ui->groupBox_scope->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
-        m_ui->groupBox_la->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
-        m_ui->groupBox_vm->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
+        m_ui->groupBox_scope->setStyleSheet(CSS_INSTR_GROUP_OFF);
+        m_ui->groupBox_la->setStyleSheet(CSS_INSTR_GROUP_OFF);
+        m_ui->groupBox_vm->setStyleSheet(CSS_INSTR_GROUP_OFF);
 
         //m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
         //m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
@@ -661,7 +688,7 @@ void WindowMain::on_pushButton_cntr_clicked()
     m_w_cntr->activateWindow();
 
     //m_ui->pushButton_cntr->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    m_ui->groupBox_cntr->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
+    m_ui->groupBox_cntr->setStyleSheet(CSS_INSTR_GROUP_OFF);
 }
 
 void WindowMain::on_pushButton_pwm_clicked()
@@ -670,7 +697,7 @@ void WindowMain::on_pushButton_pwm_clicked()
     m_w_pwm->activateWindow();
 
     //m_ui->pushButton_pwm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    m_ui->groupBox_pwm->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
+    m_ui->groupBox_pwm->setStyleSheet(CSS_INSTR_GROUP_OFF);
 }
 
 void WindowMain::on_pushButton_sgen_clicked()
@@ -679,5 +706,5 @@ void WindowMain::on_pushButton_sgen_clicked()
     m_w_sgen->activateWindow();
 
     //m_ui->pushButton_sgen->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    m_ui->groupBox_sgen->setStyleSheet(QString(CSS_INSTR_GROUP_OFF));
+    m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_OFF);
 }

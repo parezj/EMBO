@@ -1,0 +1,27 @@
+Handler:
+	- minidump on demand
+	- crash-friendly start of reporter external program
+	- do we really need 'thread, exception, rtti' ?
+	- to check everything with non-latin1 dir and file names - QFile::encodeName
+
+Sender:
+	- to get information about environment (OS, hardware, software versions, etc.)
+	- to get information about crashed program (version, ...)
+	- send minidump with above-mentioned information and user's comment
+
+google-breakpad:
+	- *nix: Does it support debugging symbols which was stripped to other file? (libA.so and libA.so.debug)
+	- GNU/Linux: Add support for DWARF symbols.
+
+Build:
+	- 'make test'
+	- 'make install' - needed?
+
+Demo:
+	- GUI for search in minidump (for sensitive data like passwords); highlight words 'password', 'login', etc.
+
+Docs:
+	- "What do you expect to have in debug/release build?"
+	- debugging symbols
+	- special debugging code (#ifndef NDEBUG)
+	- linking with debug versions of libraries

@@ -15,21 +15,26 @@
 #include <QMessageBox>
 #include <QGridLayout>
 #include <QPixmap>
+#include <QTimer>
 
 
 WindowCntr::WindowCntr(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowCntr)
 {
     m_ui->setupUi(this);
 
+    m_timer_render = new QTimer(this);
+
     m_msg_enable = new Msg_CNTR_Enable(this);
     m_msg_read = new Msg_CNTR_Read(this);
 
-    connect(m_msg_enable, &Msg_CNTR_Enable::ok, this, &WindowCntr::on_msg_ok);
-    connect(m_msg_enable, &Msg_CNTR_Enable::err, this, &WindowCntr::on_msg_err);
-    connect(m_msg_enable, &Msg_CNTR_Enable::result, this, &WindowCntr::on_msg_enable);
+    connect(m_msg_enable, &Msg_CNTR_Enable::ok, this, &WindowCntr::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_enable, &Msg_CNTR_Enable::err, this, &WindowCntr::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_enable, &Msg_CNTR_Enable::result, this, &WindowCntr::on_msg_enable, Qt::DirectConnection);
 
-    connect(m_msg_read, &Msg_CNTR_Read::err, this, &WindowCntr::on_msg_err);
-    connect(m_msg_read, &Msg_CNTR_Read::result, this, &WindowCntr::on_msg_read);
+    connect(m_msg_read, &Msg_CNTR_Read::err, this, &WindowCntr::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_read, &Msg_CNTR_Read::result, this, &WindowCntr::on_msg_read, Qt::DirectConnection);
+
+    connect(m_timer_render, &QTimer::timeout, this, &WindowCntr::on_timer_render);
 
     m_status_enabled = new QLabel(" Disabled", this);
     QWidget* widget = new QWidget(this);
@@ -74,7 +79,7 @@ WindowCntr::~WindowCntr()
 
 /* slots */
 
-void WindowCntr::on_msg_ok(QString, QString)
+void WindowCntr::on_msg_ok(const QString, const QString)
 {
     if (m_enable_wantSwitch)
     {
@@ -90,7 +95,7 @@ void WindowCntr::on_msg_ok(QString, QString)
     enableAll(true);
 }
 
-void WindowCntr::on_msg_err(QString text, MsgBoxType type, bool needClose)
+void WindowCntr::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 
@@ -123,45 +128,11 @@ void WindowCntr::on_msg_enable(bool enabled, bool fastMode)
     enableAll(true);
 }
 
-void WindowCntr::on_msg_read(QString freq, QString period)
+void WindowCntr::on_msg_read(const QString freq, const QString period)
 {
-    if (m_instrEnabled)
-    {
-        if (freq.contains("Time out"))
-        {
-            m_ui->textBrowser_freq->setHtml("<p align=\"right\"> " FREQ_TIMEOUT);
-            m_ui->textBrowser_period->setHtml("<p align=\"right\"> " PERIOD_TIMEOUT);
-        }
-        else if (freq.contains("ERROR"))
-        {
-            m_status_enabled->setText(" " + freq);
-        }
-        else // ALL GOOD
-        {
-            /*
-            double freq_d = freq.left(freq.indexOf(" ")).toDouble();
-            qInfo() << freq_d;
-            if (freq.contains("kHz"))
-                freq_d *= 1000;
-            else if (freq.contains("MHz"))
-                freq_d *= 1000000;
-
-            if (freq_d != 0) // EXPERIMENTAL
-            {
-                m_ui->textBrowser_freq->setHtml("<p align=\"right\">" + format_unit(freq_d, "Hz", 3) + " ");
-                m_ui->textBrowser_period->setHtml("<p align=\"right\">" + format_unit(1/freq_d, "Hz", 3) + " ");
-            }
-            else
-            {
-            */
-
-            if (freq.contains("kHz") || freq.contains("MHz"))
-                 period = period.replace(" ", "&nbsp;&nbsp;");
-
-            m_ui->textBrowser_freq->setHtml("<p align=\"right\">" + freq + " ");
-            m_ui->textBrowser_period->setHtml("<p align=\"right\">" + period + " ");
-        }
-    }
+    m_data_freq = freq;
+    m_data_period = period;
+    m_data_fresh = true;
 }
 
 void WindowCntr::on_actionAbout_triggered()
@@ -193,6 +164,39 @@ void WindowCntr::on_radioButton_fast_clicked()
 {
     m_fastMode = true;
     sendEnable(m_instrEnabled);
+}
+
+void WindowCntr::on_timer_render()
+{
+    if (m_instrEnabled)
+    {
+        if (!m_data_fresh)
+            return;
+
+        QString freq = m_data_freq;
+        QString period = m_data_period;
+
+        if (freq.contains("Time out"))
+        {
+            m_ui->textBrowser_freq->setHtml("<p align=\"right\"> " FREQ_TIMEOUT);
+            m_ui->textBrowser_period->setHtml("<p align=\"right\"> " PERIOD_TIMEOUT);
+        }
+        else if (freq.contains("ERROR"))
+        {
+            m_status_enabled->setText(" " + freq);
+        }
+        else // ALL GOOD
+        {
+            QString period2 = period;
+            if (freq.contains("kHz") || freq.contains("MHz"))
+                 period2 = period2.replace(" ", "&nbsp;&nbsp;");
+
+            m_ui->textBrowser_freq->setHtml("<p align=\"right\">" + freq + " ");
+            m_ui->textBrowser_period->setHtml("<p align=\"right\">" + period + " ");
+        }
+
+        m_data_fresh = false;
+    }
 }
 
 /* private */
@@ -235,6 +239,7 @@ void WindowCntr::enableAll(bool enable)
             m_ui->pushButton_disable->show();
 
             m_status_enabled->setText(" Enabled");
+            m_timer_render->start(TIMER_CNTR_RENDER);
         }
         else
         {
@@ -242,6 +247,7 @@ void WindowCntr::enableAll(bool enable)
             m_ui->pushButton_disable->hide();
 
             m_status_enabled->setText(" Disabled");
+            m_timer_render->stop();
         }
     }
     else

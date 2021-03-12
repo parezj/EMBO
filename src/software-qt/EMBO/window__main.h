@@ -39,13 +39,12 @@ signals:
 private slots:
     void closeEvent(QCloseEvent *event);
 
-    void on_render_timeout();
-
     void on_actionAbout_triggered();
     void on_pushButton_scan_clicked();
     void on_pushButton_connect_clicked();
     void on_pushButton_disconnect_clicked();
 
+    void on_latencyAndUptime(int latency, const QString uptime);
     void on_coreState_changed(const State newState);
     void on_msgDisplay(const QString text, MsgBoxType type);
     void on_instrClose(const char* className);
@@ -70,8 +69,6 @@ private:
     bool m_close_init = false;
     State m_state_old = DISCONNECTED;
 
-    QTimer* m_render_timer;
-
     QPixmap m_icon_plugOn;
     QPixmap m_icon_plugOff;
     QPixmap m_img_bluepill;
@@ -82,8 +79,8 @@ private:
     QLabel* m_status_comm;
     QLabel* m_status_latency;
     QLabel* m_status_uptime;
-    QLabel* m_status_spacer4;
-    QLabel* m_status_spacer5;
+    QFrame* m_status_line1;
+    QFrame* m_status_line2;
 
     /* windows */
     WindowScope* m_w_scope = Q_NULLPTR;

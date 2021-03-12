@@ -32,7 +32,7 @@ void WindowScope::on_actionAbout_triggered()
 
 /* slots */
 
-void WindowScope::on_msg_err(QString text, MsgBoxType type, bool needClose)
+void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 

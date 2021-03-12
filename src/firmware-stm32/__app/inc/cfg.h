@@ -92,7 +92,8 @@
 #define EM_PRETRIG_MIN_MS      10    // pre trigger minimum ms
 
 // Counter common --------------------------------------------------
-#define EM_CNTR_BUFF_SZ        100   // counter buffer size
+#define EM_CNTR_BUFF_SZ        200   // buffer size for high frequencies - fast mode
+#define EM_CNTR_BUFF_SZ2       30    // buffer size for slow frequencies - precise mode
 #define EM_CNTR_MEAS_MS        2000  // counter max measure time ms
 #define EM_CNTR_INT_DELAY      10    // counter internal read delay
 

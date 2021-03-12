@@ -13,6 +13,8 @@ debug/window_scope.o
 debug/window_sgen.o
 debug/window_vm.o
 debug/qrc_resources.o
+debug/moc_QBreakpadHandler.o
+debug/moc_QBreakpadHttpUploader.o
 debug/moc_core.o
 debug/moc_qcustomplot.o
 debug/moc_messages.o

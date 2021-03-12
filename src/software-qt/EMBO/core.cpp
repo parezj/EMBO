@@ -111,7 +111,7 @@ bool Core::closeComm()
     m_serial->close(); // TODO enque
     m_timer_rxTimeout->stop();
     m_timer_comm->stop();
-    //m_timer_render->stop();
+    m_timer_render->stop();
 
     qInfo() << ">>Disconnected<<";
     emit stateChanged(m_state);
@@ -127,7 +127,7 @@ void Core::startComm()
     m_timer_latency.restart();
     m_latencyIt = 0;
     m_latencyCnt = 0;
-    //m_timer_render->start(TIMER_RENDER);
+    m_timer_render->start(TIMER_RENDER);
 }
 
 void Core::err(QString name, bool needClose)
@@ -373,5 +373,5 @@ void Core::on_timer_comm()
 
 void Core::on_timer_render()
 {
-
+    emit latencyAndUptime(getLatencyMs(), getUptime());
 }

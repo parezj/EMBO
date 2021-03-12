@@ -498,7 +498,7 @@ QRadioButton::indicator::checked {
 }</string>
      </property>
      <property name="text">
-      <string>Precise</string>
+      <string>Slow</string>
      </property>
      <property name="iconSize">
       <size>

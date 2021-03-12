@@ -42,13 +42,15 @@
         <file>resources/img/sgen_noise.png</file>
         <file>resources/img/arrow_down4b.png</file>
         <file>resources/img/arrow_up4b.png</file>
-        <file>resources/img/serial.png</file>
         <file>resources/img/serial2.png</file>
         <file>resources/img/power-off-embo.png</file>
         <file>resources/img/power-off-gray.png</file>
         <file>resources/img/power-off-gray2.png</file>
         <file>resources/img/dial1.png</file>
         <file>resources/img/dial2.png</file>
+        <file>resources/img/serial2_red.png</file>
+        <file>resources/img/serial2_green.png</file>
+        <file>resources/img/serial2_busy.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>

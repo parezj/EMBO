@@ -22,9 +22,9 @@ WindowSgen::WindowSgen(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     m_msg_set = new Msg_SGEN_Set(this);
 
-    connect(m_msg_set, &Msg_SGEN_Set::ok, this, &WindowSgen::on_msg_ok);
-    connect(m_msg_set, &Msg_SGEN_Set::err, this, &WindowSgen::on_msg_err);
-    connect(m_msg_set, &Msg_SGEN_Set::result, this, &WindowSgen::on_msg_set);
+    connect(m_msg_set, &Msg_SGEN_Set::ok, this, &WindowSgen::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_SGEN_Set::err, this, &WindowSgen::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_SGEN_Set::result, this, &WindowSgen::on_msg_set, Qt::DirectConnection);
 
     m_status_enabled = new QLabel(" Disabled", this);
     QWidget* widget = new QWidget(this);
@@ -86,14 +86,14 @@ WindowSgen::~WindowSgen()
 
 /* slots */
 
-void WindowSgen::on_msg_ok(QString, QString)
+void WindowSgen::on_msg_ok(const QString, const QString)
 {
     m_instrEnabled = !m_instrEnabled;
 
     enableAll(true);
 }
 
-void WindowSgen::on_msg_err(QString text, MsgBoxType type, bool needClose)
+void WindowSgen::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 

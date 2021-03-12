@@ -33,7 +33,7 @@ signals:
     void closing(const char* className);
 
 private slots:
-    void on_msg_err(QString text, MsgBoxType type, bool needClose);
+    void on_msg_err(const QString text, MsgBoxType type, bool needClose);
 
     void on_actionAbout_triggered();
 

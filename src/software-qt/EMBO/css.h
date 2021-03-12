@@ -142,4 +142,15 @@
                                 QSpinBox::down-button:hover { image: url(:/main/resources/img/arrow_down4b.png); } \
                                 QSpinBox:disabled { color: black; }"
 
+
+/* plot colors  */
+
+#define COLOR1      "#0072BD"
+#define COLOR2      "#D95319"
+#define COLOR3      "#EDB120"
+#define COLOR4      "#7E2F8E"
+#define COLOR5      "#77AC30"
+#define COLOR6      "#4DBEEE"
+#define COLOR7      "#A2142F"
+
 #endif // CSS_H

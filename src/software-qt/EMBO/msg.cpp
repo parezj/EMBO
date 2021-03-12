@@ -14,12 +14,12 @@ Msg::Msg(const Msg& msg) : QObject(msg.parent())
     m_params = msg.m_params;
 }
 
-Msg::Msg(QString cmd, bool isQuery, QObject* parent) : QObject(parent), m_cmd(cmd), m_isQuery(isQuery)
+Msg::Msg(const QString cmd, bool isQuery, QObject* parent) : QObject(parent), m_cmd(cmd), m_isQuery(isQuery)
 {
     connect(this, &Msg::rx, this, &Msg::on_dataRx);
 }
 
-void Msg::fire(QString data)
+void Msg::fire(const QString data)
 {
     m_rxData = data.isEmpty() ? "" : data;
     emit rx();

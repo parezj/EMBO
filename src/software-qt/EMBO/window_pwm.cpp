@@ -22,9 +22,9 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
 
     m_msg_set = new Msg_PWM_Set(this);
 
-    connect(m_msg_set, &Msg_PWM_Set::ok, this, &WindowPwm::on_msg_ok);
-    connect(m_msg_set, &Msg_PWM_Set::err, this, &WindowPwm::on_msg_err);
-    connect(m_msg_set, &Msg_PWM_Set::result, this, &WindowPwm::on_msg_set);
+    connect(m_msg_set, &Msg_PWM_Set::ok, this, &WindowPwm::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_PWM_Set::err, this, &WindowPwm::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_PWM_Set::result, this, &WindowPwm::on_msg_set, Qt::DirectConnection);
 
     m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">? Hz&nbsp;&nbsp;&nbsp;</p>");
 
@@ -78,7 +78,7 @@ WindowPwm::~WindowPwm()
 
 /* slots */
 
-void WindowPwm::on_msg_ok(QString val1, QString)
+void WindowPwm::on_msg_ok(const QString val1, const QString)
 {
     if (m_ch1_wantSwitch)
     {
@@ -97,7 +97,7 @@ void WindowPwm::on_msg_ok(QString val1, QString)
     enableAll(true);
 }
 
-void WindowPwm::on_msg_err(QString text, MsgBoxType type, bool needClose)
+void WindowPwm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 
@@ -116,7 +116,7 @@ void WindowPwm::on_msg_err(QString text, MsgBoxType type, bool needClose)
         enableAll(true);
 }
 
-void WindowPwm::on_msg_set(int freq, int duty1, int duty2, int offset, bool en1, bool en2, QString freq_real)
+void WindowPwm::on_msg_set(int freq, int duty1, int duty2, int offset, bool en1, bool en2, const QString freq_real)
 {
     m_ignoreValuesChanged = true;
 

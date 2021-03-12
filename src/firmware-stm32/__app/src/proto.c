@@ -133,7 +133,7 @@ scpi_result_t EM_SYS_InfoQ(scpi_t* context)
 
 scpi_result_t EM_SYS_UptimeQ(scpi_t* context)
 {
-    char buff[30];
+    char buff[20];
     int ms = daq.uwTick;
 
     int h = daq.uwTick / 3600000;
@@ -145,7 +145,7 @@ scpi_result_t EM_SYS_UptimeQ(scpi_t* context)
     int s = ms / 1000;
     ms -= 1000 * s;
 
-    int len = sprintf(buff, "%02d:%02d:%02d.%03d", h, m, s, ms);
+    int len = sprintf(buff, "%02d:%02d:%02d.%01d", h, (uint8_t)m, (uint8_t)s, (uint8_t)(ms / 100));
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;

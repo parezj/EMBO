@@ -373,7 +373,7 @@ public:
 "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Medium','Roboto Mono Medium';\">545.4456 MHz</span></p></body></html>", nullptr));
         groupBox_4->setTitle(QString());
         radioButton_fast->setText(QCoreApplication::translate("WindowCntr", "Fast", nullptr));
-        radioButton_precise->setText(QCoreApplication::translate("WindowCntr", "Precise", nullptr));
+        radioButton_precise->setText(QCoreApplication::translate("WindowCntr", "Slow", nullptr));
         label_3->setText(QCoreApplication::translate("WindowCntr", "Mode:", nullptr));
         menuHelp->setTitle(QCoreApplication::translate("WindowCntr", "Help", nullptr));
     } // retranslateUi

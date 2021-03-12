@@ -138,7 +138,7 @@ void Msg_SYS_Uptime::on_dataRx()
     qInfo() << "SYS:UPT: " <<  m_rxData;
     auto core = Core::getInstance(this);
 
-    if (m_rxData.size() != 12)
+    if (m_rxData.size() < 10)
     {
         core->err(INVALID_MSG + m_rxData, true);
         return;

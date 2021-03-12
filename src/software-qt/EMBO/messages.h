@@ -126,7 +126,7 @@ public:
     explicit Msg_VM_Read(QObject* parent=0) : Msg(EMBO_VM_READ, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result(QString ch1, QString ch2, QString ch3, QString ch4, QString vcc);
+    void result(const QString ch1, const QString ch2, const QString ch3, const QString ch4, const QString vcc);
 };
 
 /***************************** Messages - SCOP **************************/
@@ -208,7 +208,7 @@ public:
     explicit Msg_CNTR_Read(QObject* parent=0) : Msg(EMBO_CNTR_READ, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result(QString freq, QString period);
+    void result(const QString freq, const QString period);
 };
 
 /***************************** Messages - SGEN **************************/
@@ -242,7 +242,7 @@ public:
     explicit Msg_PWM_Set(QObject* parent=0) : Msg(EMBO_PWM_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result(int freq, int duty1, int duty2, int offset, bool en1, bool en2, QString freq_real);
+    void result(int freq, int duty1, int duty2, int offset, bool en1, bool en2, const QString freq_real);
 };
 
 #endif // MESSAGES_H

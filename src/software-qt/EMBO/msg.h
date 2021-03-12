@@ -25,10 +25,10 @@ class Msg : public QObject
 
 public:
     explicit Msg(const Msg& msg);
-    explicit Msg(QString cmd = "", bool isQuery = true, QObject* parent = 0);
+    explicit Msg(const QString cmd = "", bool isQuery = true, QObject* parent = 0);
     virtual ~Msg() {};
 
-    void fire(QString data);
+    void fire(const QString data);
 
     QString getCmd() { return this->m_cmd; }
     bool getIsQuery() { return this->m_isQuery; }
@@ -41,8 +41,8 @@ protected slots:
 
 signals:
     void rx();
-    void ok(QString val1 = "", QString val2 = "");
-    void err(QString text, MsgBoxType type, bool needClose);
+    void ok(const QString val1 = "", const QString val2 = "");
+    void err(const QString text, MsgBoxType type, bool needClose);
 
 protected:
     QString m_cmd;

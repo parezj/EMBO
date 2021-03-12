@@ -1,5 +1,4 @@
-QT       += core gui
-QT       += serialport
+QT       += core gui network serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -13,6 +12,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 win32:RC_ICONS = icon.ico
 macx: ICON = icon.icns
+
+
+greaterThan(QT_MAJOR_VERSION, 4){
+    TARGET_ARCH=$${QT_ARCH}
+}else{
+    TARGET_ARCH=$${QMAKE_HOST.arch}
+}
+
+include(crashhandler/qBreakpad.pri)
+
+contains(TARGET_ARCH, x86_64){
+    ARCHITECTURE = x64
+    QMAKE_LIBDIR += $$PWD/lib/x64
+}else{
+    QMAKE_LIBDIR += $$PWD/lib/x86
+    ARCHITECTURE = x86
+}
+
+macx: LIBS += -framework AppKit
+LIBS += -lqBreakpad
+
+
 
 VERSION = 0.0.2.0
 QMAKE_TARGET_COMPANY = CTU Jakub Parez
@@ -76,6 +97,5 @@ RESOURCES += \
     resources.qrc
 
 DISTFILES += \
-    css/style.css \
     icon.icns \
     icon.ico

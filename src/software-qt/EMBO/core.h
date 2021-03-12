@@ -25,7 +25,7 @@
 
 #define TIMER_RX        1000
 #define TIMER_COMM      10
-#define TIMER_RENDER    25
+#define TIMER_RENDER    100
 
 #define LATENCY_AVG    50
 
@@ -154,6 +154,7 @@ public slots:
 signals:
     void stateChanged(const State state);
     void msgDisplay(const QString name, MsgBoxType type);
+    void latencyAndUptime(int latency, const QString uptime);
     void finished();
 
 private slots:

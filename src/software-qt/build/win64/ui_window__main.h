@@ -178,20 +178,28 @@ public:
         listWidget_ports->setSizePolicy(sizePolicy1);
         QFont font3;
         font3.setFamily(QString::fromUtf8("Roboto"));
-        font3.setPointSize(13);
+        font3.setPointSize(12);
         font3.setBold(false);
         font3.setItalic(false);
         font3.setWeight(50);
         font3.setKerning(true);
         listWidget_ports->setFont(font3);
         listWidget_ports->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+        listWidget_ports->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
         listWidget_ports->setProperty("showDropIndicator", QVariant(false));
         listWidget_ports->setAlternatingRowColors(true);
         listWidget_ports->setSortingEnabled(false);
         pushButton_scan = new QPushButton(groupBox_ports);
         pushButton_scan->setObjectName(QString::fromUtf8("pushButton_scan"));
         pushButton_scan->setGeometry(QRect(10, 490, 71, 41));
-        pushButton_scan->setFont(font3);
+        QFont font4;
+        font4.setFamily(QString::fromUtf8("Roboto"));
+        font4.setPointSize(13);
+        font4.setBold(false);
+        font4.setItalic(false);
+        font4.setWeight(50);
+        font4.setKerning(true);
+        pushButton_scan->setFont(font4);
         pushButton_scan->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -225,7 +233,7 @@ public:
         pushButton_connect->setObjectName(QString::fromUtf8("pushButton_connect"));
         pushButton_connect->setEnabled(false);
         pushButton_connect->setGeometry(QRect(90, 490, 121, 41));
-        pushButton_connect->setFont(font3);
+        pushButton_connect->setFont(font4);
         pushButton_connect->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
@@ -259,7 +267,7 @@ public:
         pushButton_disconnect->setObjectName(QString::fromUtf8("pushButton_disconnect"));
         pushButton_disconnect->setEnabled(true);
         pushButton_disconnect->setGeometry(QRect(90, 490, 121, 41));
-        pushButton_disconnect->setFont(font3);
+        pushButton_disconnect->setFont(font4);
         pushButton_disconnect->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -302,99 +310,99 @@ public:
         sizePolicy2.setVerticalStretch(0);
         sizePolicy2.setHeightForWidth(groupBox_device->sizePolicy().hasHeightForWidth());
         groupBox_device->setSizePolicy(sizePolicy2);
-        QFont font4;
-        font4.setFamily(QString::fromUtf8("Roboto"));
-        font4.setPointSize(10);
-        font4.setBold(false);
-        font4.setItalic(false);
-        font4.setWeight(50);
-        font4.setKerning(true);
-        groupBox_device->setFont(font4);
+        QFont font5;
+        font5.setFamily(QString::fromUtf8("Roboto"));
+        font5.setPointSize(10);
+        font5.setBold(false);
+        font5.setItalic(false);
+        font5.setWeight(50);
+        font5.setKerning(true);
+        groupBox_device->setFont(font5);
         groupBox_device->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         label_deviceName = new QLabel(groupBox_device);
         label_deviceName->setObjectName(QString::fromUtf8("label_deviceName"));
         label_deviceName->setGeometry(QRect(10, 20, 361, 21));
-        QFont font5;
-        font5.setFamily(QString::fromUtf8("Roboto Black"));
-        font5.setPointSize(14);
-        font5.setBold(true);
-        font5.setItalic(false);
-        font5.setWeight(75);
-        font5.setKerning(false);
-        label_deviceName->setFont(font5);
-        label_boardImg = new QLabel(groupBox_device);
-        label_boardImg->setObjectName(QString::fromUtf8("label_boardImg"));
-        label_boardImg->setGeometry(QRect(360, 20, 181, 151));
         QFont font6;
-        font6.setFamily(QString::fromUtf8("Roboto"));
+        font6.setFamily(QString::fromUtf8("Roboto Black"));
         font6.setPointSize(14);
         font6.setBold(true);
         font6.setItalic(false);
         font6.setWeight(75);
-        font6.setKerning(true);
-        label_boardImg->setFont(font6);
+        font6.setKerning(false);
+        label_deviceName->setFont(font6);
+        label_boardImg = new QLabel(groupBox_device);
+        label_boardImg->setObjectName(QString::fromUtf8("label_boardImg"));
+        label_boardImg->setGeometry(QRect(360, 20, 181, 151));
+        QFont font7;
+        font7.setFamily(QString::fromUtf8("Roboto"));
+        font7.setPointSize(14);
+        font7.setBold(true);
+        font7.setItalic(false);
+        font7.setWeight(75);
+        font7.setKerning(true);
+        label_boardImg->setFont(font7);
         label_boardImg->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/unknown2.png")));
         label_boardImg->setScaledContents(true);
         label = new QLabel(groupBox_device);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(10, 50, 141, 16));
-        label->setFont(font4);
+        label->setFont(font5);
         label->setTextFormat(Qt::AutoText);
         label_2 = new QLabel(groupBox_device);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         label_2->setGeometry(QRect(10, 70, 141, 16));
-        label_2->setFont(font4);
+        label_2->setFont(font5);
         label_2->setTextFormat(Qt::AutoText);
         label_3 = new QLabel(groupBox_device);
         label_3->setObjectName(QString::fromUtf8("label_3"));
         label_3->setGeometry(QRect(10, 90, 141, 16));
-        label_3->setFont(font4);
+        label_3->setFont(font5);
         label_3->setTextFormat(Qt::AutoText);
         label_4 = new QLabel(groupBox_device);
         label_4->setObjectName(QString::fromUtf8("label_4"));
         label_4->setGeometry(QRect(10, 110, 141, 16));
-        label_4->setFont(font4);
+        label_4->setFont(font5);
         label_4->setTextFormat(Qt::AutoText);
         label_5 = new QLabel(groupBox_device);
         label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setGeometry(QRect(10, 130, 141, 16));
-        label_5->setFont(font4);
+        label_5->setFont(font5);
         label_5->setTextFormat(Qt::AutoText);
         label_dev_fw = new QLabel(groupBox_device);
         label_dev_fw->setObjectName(QString::fromUtf8("label_dev_fw"));
         label_dev_fw->setGeometry(QRect(160, 50, 191, 20));
-        label_dev_fw->setFont(font4);
+        label_dev_fw->setFont(font5);
         label_dev_fw->setTextFormat(Qt::AutoText);
         label_dev_fcpu = new QLabel(groupBox_device);
         label_dev_fcpu->setObjectName(QString::fromUtf8("label_dev_fcpu"));
         label_dev_fcpu->setGeometry(QRect(160, 110, 191, 20));
-        label_dev_fcpu->setFont(font4);
+        label_dev_fcpu->setFont(font5);
         label_dev_fcpu->setTextFormat(Qt::AutoText);
         label_dev_comm = new QLabel(groupBox_device);
         label_dev_comm->setObjectName(QString::fromUtf8("label_dev_comm"));
         label_dev_comm->setGeometry(QRect(160, 130, 191, 20));
-        label_dev_comm->setFont(font4);
+        label_dev_comm->setFont(font5);
         label_dev_comm->setTextFormat(Qt::AutoText);
         label_dev_rtos = new QLabel(groupBox_device);
         label_dev_rtos->setObjectName(QString::fromUtf8("label_dev_rtos"));
         label_dev_rtos->setGeometry(QRect(160, 90, 191, 20));
-        label_dev_rtos->setFont(font4);
+        label_dev_rtos->setFont(font5);
         label_dev_rtos->setTextFormat(Qt::AutoText);
         label_dev_ll = new QLabel(groupBox_device);
         label_dev_ll->setObjectName(QString::fromUtf8("label_dev_ll"));
         label_dev_ll->setGeometry(QRect(160, 70, 191, 20));
-        label_dev_ll->setFont(font4);
+        label_dev_ll->setFont(font5);
         label_dev_ll->setTextFormat(Qt::AutoText);
         label_7 = new QLabel(groupBox_device);
         label_7->setObjectName(QString::fromUtf8("label_7"));
         label_7->setGeometry(QRect(10, 150, 141, 16));
-        label_7->setFont(font4);
+        label_7->setFont(font5);
         label_7->setTextFormat(Qt::AutoText);
         label_dev_vref = new QLabel(groupBox_device);
         label_dev_vref->setObjectName(QString::fromUtf8("label_dev_vref"));
         label_dev_vref->setGeometry(QRect(160, 150, 191, 20));
-        label_dev_vref->setFont(font4);
+        label_dev_vref->setFont(font5);
         label_dev_vref->setTextFormat(Qt::AutoText);
         label_boardImg->raise();
         label->raise();
@@ -421,14 +429,14 @@ public:
         groupBox_scope = new QGroupBox(groupBox_instr1);
         groupBox_scope->setObjectName(QString::fromUtf8("groupBox_scope"));
         groupBox_scope->setGeometry(QRect(10, 20, 171, 151));
-        QFont font7;
-        font7.setFamily(QString::fromUtf8("Roboto"));
-        font7.setPointSize(11);
-        font7.setBold(false);
-        font7.setItalic(false);
-        font7.setWeight(50);
-        font7.setKerning(true);
-        groupBox_scope->setFont(font7);
+        QFont font8;
+        font8.setFamily(QString::fromUtf8("Roboto"));
+        font8.setPointSize(11);
+        font8.setBold(false);
+        font8.setItalic(false);
+        font8.setWeight(50);
+        font8.setKerning(true);
+        groupBox_scope->setFont(font8);
         groupBox_scope->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
 "    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(190,220,240, 0.5), stop:0.32  rgb(190,220,240, 0.5), stop:1  rgb(0,0,0,1.0));\n"
 "	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
@@ -437,14 +445,14 @@ public:
         pushButton_scope = new QPushButton(groupBox_scope);
         pushButton_scope->setObjectName(QString::fromUtf8("pushButton_scope"));
         pushButton_scope->setGeometry(QRect(0, 110, 171, 41));
-        QFont font8;
-        font8.setFamily(QString::fromUtf8("Roboto"));
-        font8.setPointSize(13);
-        font8.setBold(false);
-        font8.setWeight(50);
-        font8.setStrikeOut(false);
-        font8.setKerning(false);
-        pushButton_scope->setFont(font8);
+        QFont font9;
+        font9.setFamily(QString::fromUtf8("Roboto"));
+        font9.setPointSize(13);
+        font9.setBold(false);
+        font9.setWeight(50);
+        font9.setStrikeOut(false);
+        font9.setKerning(false);
+        pushButton_scope->setFont(font9);
         pushButton_scope->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -478,57 +486,57 @@ public:
         label_6 = new QLabel(groupBox_scope);
         label_6->setObjectName(QString::fromUtf8("label_6"));
         label_6->setGeometry(QRect(10, 10, 61, 16));
-        label_6->setFont(font4);
+        label_6->setFont(font5);
         label_6->setTextFormat(Qt::AutoText);
         label_8 = new QLabel(groupBox_scope);
         label_8->setObjectName(QString::fromUtf8("label_8"));
         label_8->setGeometry(QRect(10, 30, 61, 16));
-        label_8->setFont(font4);
+        label_8->setFont(font5);
         label_8->setTextFormat(Qt::AutoText);
         label_9 = new QLabel(groupBox_scope);
         label_9->setObjectName(QString::fromUtf8("label_9"));
         label_9->setGeometry(QRect(10, 50, 61, 16));
-        label_9->setFont(font4);
+        label_9->setFont(font5);
         label_9->setTextFormat(Qt::AutoText);
         label_10 = new QLabel(groupBox_scope);
         label_10->setObjectName(QString::fromUtf8("label_10"));
         label_10->setGeometry(QRect(10, 70, 61, 16));
-        label_10->setFont(font4);
+        label_10->setFont(font5);
         label_10->setTextFormat(Qt::AutoText);
         label_40 = new QLabel(groupBox_scope);
         label_40->setObjectName(QString::fromUtf8("label_40"));
         label_40->setGeometry(QRect(10, 90, 61, 16));
-        label_40->setFont(font4);
+        label_40->setFont(font5);
         label_40->setTextFormat(Qt::AutoText);
         label_scope_fs = new QLabel(groupBox_scope);
         label_scope_fs->setObjectName(QString::fromUtf8("label_scope_fs"));
         label_scope_fs->setGeometry(QRect(70, 10, 101, 16));
-        label_scope_fs->setFont(font4);
+        label_scope_fs->setFont(font5);
         label_scope_fs->setTextFormat(Qt::AutoText);
         label_scope_mem = new QLabel(groupBox_scope);
         label_scope_mem->setObjectName(QString::fromUtf8("label_scope_mem"));
         label_scope_mem->setGeometry(QRect(70, 30, 101, 16));
-        label_scope_mem->setFont(font4);
+        label_scope_mem->setFont(font5);
         label_scope_mem->setTextFormat(Qt::AutoText);
         label_scope_bits = new QLabel(groupBox_scope);
         label_scope_bits->setObjectName(QString::fromUtf8("label_scope_bits"));
         label_scope_bits->setGeometry(QRect(70, 50, 101, 16));
-        label_scope_bits->setFont(font4);
+        label_scope_bits->setFont(font5);
         label_scope_bits->setTextFormat(Qt::AutoText);
         label_scope_modes = new QLabel(groupBox_scope);
         label_scope_modes->setObjectName(QString::fromUtf8("label_scope_modes"));
         label_scope_modes->setGeometry(QRect(70, 70, 101, 16));
-        label_scope_modes->setFont(font4);
+        label_scope_modes->setFont(font5);
         label_scope_modes->setTextFormat(Qt::AutoText);
         label_scope_pins = new QLabel(groupBox_scope);
         label_scope_pins->setObjectName(QString::fromUtf8("label_scope_pins"));
         label_scope_pins->setGeometry(QRect(70, 90, 101, 16));
-        label_scope_pins->setFont(font4);
+        label_scope_pins->setFont(font5);
         label_scope_pins->setTextFormat(Qt::AutoText);
         groupBox_la = new QGroupBox(groupBox_instr1);
         groupBox_la->setObjectName(QString::fromUtf8("groupBox_la"));
         groupBox_la->setGeometry(QRect(190, 20, 171, 151));
-        groupBox_la->setFont(font7);
+        groupBox_la->setFont(font8);
         groupBox_la->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
 "	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(240,190,190, 0.5), stop:0.32 rgb(240,190,190, 0.5), stop:1  rgb(0,0,0,1.0));\n"
 "	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
@@ -537,13 +545,13 @@ public:
         pushButton_la = new QPushButton(groupBox_la);
         pushButton_la->setObjectName(QString::fromUtf8("pushButton_la"));
         pushButton_la->setGeometry(QRect(0, 110, 171, 41));
-        QFont font9;
-        font9.setFamily(QString::fromUtf8("Roboto"));
-        font9.setPointSize(13);
-        font9.setBold(false);
-        font9.setWeight(50);
-        font9.setKerning(false);
-        pushButton_la->setFont(font9);
+        QFont font10;
+        font10.setFamily(QString::fromUtf8("Roboto"));
+        font10.setPointSize(13);
+        font10.setBold(false);
+        font10.setWeight(50);
+        font10.setKerning(false);
+        pushButton_la->setFont(font10);
         pushButton_la->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -577,47 +585,47 @@ public:
         label_11 = new QLabel(groupBox_la);
         label_11->setObjectName(QString::fromUtf8("label_11"));
         label_11->setGeometry(QRect(10, 10, 61, 16));
-        label_11->setFont(font4);
+        label_11->setFont(font5);
         label_11->setTextFormat(Qt::AutoText);
         label_12 = new QLabel(groupBox_la);
         label_12->setObjectName(QString::fromUtf8("label_12"));
         label_12->setGeometry(QRect(10, 30, 61, 16));
-        label_12->setFont(font4);
+        label_12->setFont(font5);
         label_12->setTextFormat(Qt::AutoText);
         label_13 = new QLabel(groupBox_la);
         label_13->setObjectName(QString::fromUtf8("label_13"));
         label_13->setGeometry(QRect(10, 50, 71, 16));
-        label_13->setFont(font4);
+        label_13->setFont(font5);
         label_13->setTextFormat(Qt::AutoText);
         label_39 = new QLabel(groupBox_la);
         label_39->setObjectName(QString::fromUtf8("label_39"));
         label_39->setGeometry(QRect(10, 70, 61, 16));
-        label_39->setFont(font4);
+        label_39->setFont(font5);
         label_39->setTextFormat(Qt::AutoText);
         label_la_pins = new QLabel(groupBox_la);
         label_la_pins->setObjectName(QString::fromUtf8("label_la_pins"));
         label_la_pins->setGeometry(QRect(70, 70, 101, 20));
-        label_la_pins->setFont(font4);
+        label_la_pins->setFont(font5);
         label_la_pins->setTextFormat(Qt::AutoText);
         label_la_protocols = new QLabel(groupBox_la);
         label_la_protocols->setObjectName(QString::fromUtf8("label_la_protocols"));
         label_la_protocols->setGeometry(QRect(70, 50, 101, 16));
-        label_la_protocols->setFont(font4);
+        label_la_protocols->setFont(font5);
         label_la_protocols->setTextFormat(Qt::AutoText);
         label_la_fs = new QLabel(groupBox_la);
         label_la_fs->setObjectName(QString::fromUtf8("label_la_fs"));
         label_la_fs->setGeometry(QRect(70, 10, 101, 16));
-        label_la_fs->setFont(font4);
+        label_la_fs->setFont(font5);
         label_la_fs->setTextFormat(Qt::AutoText);
         label_la_mem = new QLabel(groupBox_la);
         label_la_mem->setObjectName(QString::fromUtf8("label_la_mem"));
         label_la_mem->setGeometry(QRect(70, 30, 101, 16));
-        label_la_mem->setFont(font4);
+        label_la_mem->setFont(font5);
         label_la_mem->setTextFormat(Qt::AutoText);
         groupBox_vm = new QGroupBox(groupBox_instr1);
         groupBox_vm->setObjectName(QString::fromUtf8("groupBox_vm"));
         groupBox_vm->setGeometry(QRect(370, 20, 171, 151));
-        groupBox_vm->setFont(font7);
+        groupBox_vm->setFont(font8);
         groupBox_vm->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
 "	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(240,230,190, 0.5), stop:0.32 rgb(240,230,190, 0.5), stop:1  black);\n"
 "	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
@@ -626,7 +634,7 @@ public:
         pushButton_vm = new QPushButton(groupBox_vm);
         pushButton_vm->setObjectName(QString::fromUtf8("pushButton_vm"));
         pushButton_vm->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_vm->setFont(font9);
+        pushButton_vm->setFont(font10);
         pushButton_vm->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -660,42 +668,42 @@ public:
         label_15 = new QLabel(groupBox_vm);
         label_15->setObjectName(QString::fromUtf8("label_15"));
         label_15->setGeometry(QRect(10, 10, 51, 16));
-        label_15->setFont(font4);
+        label_15->setFont(font5);
         label_15->setTextFormat(Qt::AutoText);
         label_16 = new QLabel(groupBox_vm);
         label_16->setObjectName(QString::fromUtf8("label_16"));
         label_16->setGeometry(QRect(10, 30, 51, 16));
-        label_16->setFont(font4);
+        label_16->setFont(font5);
         label_16->setTextFormat(Qt::AutoText);
         label_17 = new QLabel(groupBox_vm);
         label_17->setObjectName(QString::fromUtf8("label_17"));
         label_17->setGeometry(QRect(10, 50, 51, 16));
-        label_17->setFont(font4);
+        label_17->setFont(font5);
         label_17->setTextFormat(Qt::AutoText);
         label_38 = new QLabel(groupBox_vm);
         label_38->setObjectName(QString::fromUtf8("label_38"));
         label_38->setGeometry(QRect(10, 70, 51, 16));
-        label_38->setFont(font4);
+        label_38->setFont(font5);
         label_38->setTextFormat(Qt::AutoText);
         label_vm_fs = new QLabel(groupBox_vm);
         label_vm_fs->setObjectName(QString::fromUtf8("label_vm_fs"));
         label_vm_fs->setGeometry(QRect(70, 10, 91, 20));
-        label_vm_fs->setFont(font4);
+        label_vm_fs->setFont(font5);
         label_vm_fs->setTextFormat(Qt::AutoText);
         label_vm_mem = new QLabel(groupBox_vm);
         label_vm_mem->setObjectName(QString::fromUtf8("label_vm_mem"));
         label_vm_mem->setGeometry(QRect(70, 30, 91, 20));
-        label_vm_mem->setFont(font4);
+        label_vm_mem->setFont(font5);
         label_vm_mem->setTextFormat(Qt::AutoText);
         label_vm_bits = new QLabel(groupBox_vm);
         label_vm_bits->setObjectName(QString::fromUtf8("label_vm_bits"));
         label_vm_bits->setGeometry(QRect(70, 50, 91, 20));
-        label_vm_bits->setFont(font4);
+        label_vm_bits->setFont(font5);
         label_vm_bits->setTextFormat(Qt::AutoText);
         label_vm_pins = new QLabel(groupBox_vm);
         label_vm_pins->setObjectName(QString::fromUtf8("label_vm_pins"));
         label_vm_pins->setGeometry(QRect(70, 70, 91, 20));
-        label_vm_pins->setFont(font4);
+        label_vm_pins->setFont(font5);
         label_vm_pins->setTextFormat(Qt::AutoText);
         groupBox_instr2 = new QGroupBox(centralwidget);
         groupBox_instr2->setObjectName(QString::fromUtf8("groupBox_instr2"));
@@ -708,7 +716,7 @@ public:
         groupBox_pwm = new QGroupBox(groupBox_instr2);
         groupBox_pwm->setObjectName(QString::fromUtf8("groupBox_pwm"));
         groupBox_pwm->setGeometry(QRect(190, 20, 171, 151));
-        groupBox_pwm->setFont(font7);
+        groupBox_pwm->setFont(font8);
         groupBox_pwm->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
 "	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(220,200,180, 0.5), stop:0.32 rgb(220,200,180, 0.5), stop:1  rgb(0,0,0,1.0));\n"
 "	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
@@ -718,7 +726,7 @@ public:
         pushButton_pwm = new QPushButton(groupBox_pwm);
         pushButton_pwm->setObjectName(QString::fromUtf8("pushButton_pwm"));
         pushButton_pwm->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_pwm->setFont(font9);
+        pushButton_pwm->setFont(font10);
         pushButton_pwm->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -752,37 +760,37 @@ public:
         label_19 = new QLabel(groupBox_pwm);
         label_19->setObjectName(QString::fromUtf8("label_19"));
         label_19->setGeometry(QRect(10, 30, 71, 16));
-        label_19->setFont(font4);
+        label_19->setFont(font5);
         label_19->setTextFormat(Qt::AutoText);
         label_35 = new QLabel(groupBox_pwm);
         label_35->setObjectName(QString::fromUtf8("label_35"));
         label_35->setGeometry(QRect(10, 50, 71, 16));
-        label_35->setFont(font4);
+        label_35->setFont(font5);
         label_35->setTextFormat(Qt::AutoText);
         label_pwm_pins = new QLabel(groupBox_pwm);
         label_pwm_pins->setObjectName(QString::fromUtf8("label_pwm_pins"));
         label_pwm_pins->setGeometry(QRect(80, 50, 81, 16));
-        label_pwm_pins->setFont(font4);
+        label_pwm_pins->setFont(font5);
         label_pwm_pins->setTextFormat(Qt::AutoText);
         label_pwm_freq = new QLabel(groupBox_pwm);
         label_pwm_freq->setObjectName(QString::fromUtf8("label_pwm_freq"));
         label_pwm_freq->setGeometry(QRect(80, 30, 81, 16));
-        label_pwm_freq->setFont(font4);
+        label_pwm_freq->setFont(font5);
         label_pwm_freq->setTextFormat(Qt::AutoText);
         label_pwm_mode = new QLabel(groupBox_pwm);
         label_pwm_mode->setObjectName(QString::fromUtf8("label_pwm_mode"));
         label_pwm_mode->setGeometry(QRect(80, 10, 81, 20));
-        label_pwm_mode->setFont(font4);
+        label_pwm_mode->setFont(font5);
         label_pwm_mode->setTextFormat(Qt::AutoText);
         label_33 = new QLabel(groupBox_pwm);
         label_33->setObjectName(QString::fromUtf8("label_33"));
         label_33->setGeometry(QRect(10, 10, 71, 16));
-        label_33->setFont(font4);
+        label_33->setFont(font5);
         label_33->setTextFormat(Qt::AutoText);
         groupBox_sgen = new QGroupBox(groupBox_instr2);
         groupBox_sgen->setObjectName(QString::fromUtf8("groupBox_sgen"));
         groupBox_sgen->setGeometry(QRect(370, 20, 171, 151));
-        groupBox_sgen->setFont(font7);
+        groupBox_sgen->setFont(font8);
         groupBox_sgen->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
 "	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(200,200,220, 0.5), stop:0.32 rgb(200,200,220, 0.5), stop:1  rgb(0,0,0,1.0));\n"
 "	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
@@ -791,7 +799,7 @@ public:
         pushButton_sgen = new QPushButton(groupBox_sgen);
         pushButton_sgen->setObjectName(QString::fromUtf8("pushButton_sgen"));
         pushButton_sgen->setGeometry(QRect(0, 110, 171, 41));
-        pushButton_sgen->setFont(font9);
+        pushButton_sgen->setFont(font10);
         pushButton_sgen->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -825,37 +833,37 @@ public:
         label_27 = new QLabel(groupBox_sgen);
         label_27->setObjectName(QString::fromUtf8("label_27"));
         label_27->setGeometry(QRect(10, 10, 71, 16));
-        label_27->setFont(font4);
+        label_27->setFont(font5);
         label_27->setTextFormat(Qt::AutoText);
         label_28 = new QLabel(groupBox_sgen);
         label_28->setObjectName(QString::fromUtf8("label_28"));
         label_28->setGeometry(QRect(10, 30, 71, 16));
-        label_28->setFont(font4);
+        label_28->setFont(font5);
         label_28->setTextFormat(Qt::AutoText);
         label_36 = new QLabel(groupBox_sgen);
         label_36->setObjectName(QString::fromUtf8("label_36"));
         label_36->setGeometry(QRect(10, 50, 71, 16));
-        label_36->setFont(font4);
+        label_36->setFont(font5);
         label_36->setTextFormat(Qt::AutoText);
         label_sgen_pins = new QLabel(groupBox_sgen);
         label_sgen_pins->setObjectName(QString::fromUtf8("label_sgen_pins"));
         label_sgen_pins->setGeometry(QRect(90, 50, 71, 16));
-        label_sgen_pins->setFont(font4);
+        label_sgen_pins->setFont(font5);
         label_sgen_pins->setTextFormat(Qt::AutoText);
         label_sgen_mem = new QLabel(groupBox_sgen);
         label_sgen_mem->setObjectName(QString::fromUtf8("label_sgen_mem"));
         label_sgen_mem->setGeometry(QRect(90, 30, 71, 16));
-        label_sgen_mem->setFont(font4);
+        label_sgen_mem->setFont(font5);
         label_sgen_mem->setTextFormat(Qt::AutoText);
         label_sgen_freq = new QLabel(groupBox_sgen);
         label_sgen_freq->setObjectName(QString::fromUtf8("label_sgen_freq"));
         label_sgen_freq->setGeometry(QRect(90, 10, 71, 16));
-        label_sgen_freq->setFont(font4);
+        label_sgen_freq->setFont(font5);
         label_sgen_freq->setTextFormat(Qt::AutoText);
         groupBox_cntr = new QGroupBox(groupBox_instr2);
         groupBox_cntr->setObjectName(QString::fromUtf8("groupBox_cntr"));
         groupBox_cntr->setGeometry(QRect(10, 20, 171, 151));
-        groupBox_cntr->setFont(font7);
+        groupBox_cntr->setFont(font8);
         groupBox_cntr->setStyleSheet(QString::fromUtf8("QGroupBox {\n"
 "	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0  rgb(200,220,200, 0.5), stop:0.32 rgb(200,220,200, 0.5), stop:1  rgb(0,0,0,1.0));\n"
 "	border: 1px solid gray; border-radius: 5px;  margin-top: 0.5em;\n"
@@ -865,14 +873,14 @@ public:
         pushButton_cntr = new QPushButton(groupBox_cntr);
         pushButton_cntr->setObjectName(QString::fromUtf8("pushButton_cntr"));
         pushButton_cntr->setGeometry(QRect(0, 110, 171, 41));
-        QFont font10;
-        font10.setFamily(QString::fromUtf8("Roboto"));
-        font10.setPointSize(13);
-        font10.setBold(false);
-        font10.setWeight(50);
-        font10.setKerning(false);
-        font10.setStyleStrategy(QFont::PreferDefault);
-        pushButton_cntr->setFont(font10);
+        QFont font11;
+        font11.setFamily(QString::fromUtf8("Roboto"));
+        font11.setPointSize(13);
+        font11.setBold(false);
+        font11.setWeight(50);
+        font11.setKerning(false);
+        font11.setStyleStrategy(QFont::PreferDefault);
+        pushButton_cntr->setFont(font11);
         pushButton_cntr->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
 "    border: 1px solid rgb(150, 150, 150);\n"
@@ -906,32 +914,32 @@ public:
         label_37 = new QLabel(groupBox_cntr);
         label_37->setObjectName(QString::fromUtf8("label_37"));
         label_37->setGeometry(QRect(10, 50, 71, 16));
-        label_37->setFont(font4);
+        label_37->setFont(font5);
         label_37->setTextFormat(Qt::AutoText);
         label_32 = new QLabel(groupBox_cntr);
         label_32->setObjectName(QString::fromUtf8("label_32"));
         label_32->setGeometry(QRect(10, 10, 71, 16));
-        label_32->setFont(font4);
+        label_32->setFont(font5);
         label_32->setTextFormat(Qt::AutoText);
         label_34 = new QLabel(groupBox_cntr);
         label_34->setObjectName(QString::fromUtf8("label_34"));
         label_34->setGeometry(QRect(10, 30, 71, 16));
-        label_34->setFont(font4);
+        label_34->setFont(font5);
         label_34->setTextFormat(Qt::AutoText);
         label_cntr_mode = new QLabel(groupBox_cntr);
         label_cntr_mode->setObjectName(QString::fromUtf8("label_cntr_mode"));
         label_cntr_mode->setGeometry(QRect(80, 10, 91, 20));
-        label_cntr_mode->setFont(font4);
+        label_cntr_mode->setFont(font5);
         label_cntr_mode->setTextFormat(Qt::AutoText);
         label_cntr_pins = new QLabel(groupBox_cntr);
         label_cntr_pins->setObjectName(QString::fromUtf8("label_cntr_pins"));
         label_cntr_pins->setGeometry(QRect(80, 50, 81, 16));
-        label_cntr_pins->setFont(font4);
+        label_cntr_pins->setFont(font5);
         label_cntr_pins->setTextFormat(Qt::AutoText);
         label_cntr_timeout = new QLabel(groupBox_cntr);
         label_cntr_timeout->setObjectName(QString::fromUtf8("label_cntr_timeout"));
         label_cntr_timeout->setGeometry(QRect(80, 30, 81, 16));
-        label_cntr_timeout->setFont(font4);
+        label_cntr_timeout->setFont(font5);
         label_cntr_timeout->setTextFormat(Qt::AutoText);
         line = new QFrame(centralwidget);
         line->setObjectName(QString::fromUtf8("line"));
@@ -942,23 +950,23 @@ public:
         menubar = new QMenuBar(WindowMain);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 800, 20));
-        QFont font11;
-        font11.setFamily(QString::fromUtf8("Roboto"));
-        font11.setPointSize(9);
-        font11.setItalic(false);
-        font11.setKerning(true);
-        menubar->setFont(font11);
+        QFont font12;
+        font12.setFamily(QString::fromUtf8("Roboto"));
+        font12.setPointSize(9);
+        font12.setItalic(false);
+        font12.setKerning(true);
+        menubar->setFont(font12);
         menuAbout = new QMenu(menubar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
         WindowMain->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowMain);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
-        QFont font12;
-        font12.setFamily(QString::fromUtf8("Roboto"));
-        font12.setPointSize(8);
-        font12.setItalic(false);
-        font12.setKerning(true);
-        statusbar->setFont(font12);
+        QFont font13;
+        font13.setFamily(QString::fromUtf8("Roboto"));
+        font13.setPointSize(8);
+        font13.setItalic(false);
+        font13.setKerning(true);
+        statusbar->setFont(font13);
         statusbar->setStyleSheet(QString::fromUtf8("background-color: rgb(230, 230, 230);"));
         WindowMain->setStatusBar(statusbar);
 
