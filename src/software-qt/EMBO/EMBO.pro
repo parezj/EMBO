@@ -20,7 +20,8 @@ greaterThan(QT_MAJOR_VERSION, 4){
     TARGET_ARCH=$${QMAKE_HOST.arch}
 }
 
-include(crashhandler/qBreakpad.pri)
+include(__crashhandler/qBreakpad.pri)
+#include(__stm32programmer/STM32Programming.pri)
 
 contains(TARGET_ARCH, x86_64){
     ARCHITECTURE = x64
@@ -34,12 +35,12 @@ macx: LIBS += -framework AppKit
 LIBS += -lqBreakpad
 
 
-
 VERSION = 0.0.2.0
 QMAKE_TARGET_COMPANY = CTU Jakub Parez
 QMAKE_TARGET_PRODUCT = EMBO
 QMAKE_TARGET_DESCRIPTION = EMBedded Oscilloscope
 QMAKE_TARGET_COPYRIGHT = CTU Jakub Parez
+
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

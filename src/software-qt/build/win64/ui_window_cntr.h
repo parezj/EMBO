@@ -53,14 +53,14 @@ public:
         if (WindowCntr->objectName().isEmpty())
             WindowCntr->setObjectName(QString::fromUtf8("WindowCntr"));
         WindowCntr->setWindowModality(Qt::NonModal);
-        WindowCntr->resize(341, 289);
+        WindowCntr->resize(341, 290);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(WindowCntr->sizePolicy().hasHeightForWidth());
         WindowCntr->setSizePolicy(sizePolicy);
-        WindowCntr->setMinimumSize(QSize(341, 289));
-        WindowCntr->setMaximumSize(QSize(341, 289));
+        WindowCntr->setMinimumSize(QSize(341, 290));
+        WindowCntr->setMaximumSize(QSize(341, 290));
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -244,7 +244,7 @@ public:
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         radioButton_fast = new QRadioButton(groupBox_4);
         radioButton_fast->setObjectName(QString::fromUtf8("radioButton_fast"));
-        radioButton_fast->setGeometry(QRect(210, 16, 101, 21));
+        radioButton_fast->setGeometry(QRect(230, 16, 81, 21));
         QFont font6;
         font6.setFamily(QString::fromUtf8("Roboto"));
         font6.setPointSize(14);
@@ -287,7 +287,7 @@ public:
         radioButton_fast->setAutoExclusive(false);
         radioButton_precise = new QRadioButton(groupBox_4);
         radioButton_precise->setObjectName(QString::fromUtf8("radioButton_precise"));
-        radioButton_precise->setGeometry(QRect(100, 16, 101, 21));
+        radioButton_precise->setGeometry(QRect(140, 16, 81, 21));
         radioButton_precise->setFont(font6);
         radioButton_precise->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 1.0);\n"
@@ -332,9 +332,11 @@ public:
         WindowCntr->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowCntr);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 341, 21));
+        menubar->setGeometry(QRect(0, 0, 341, 22));
+        menubar->setFont(font);
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
+        menuHelp->setFont(font);
         WindowCntr->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowCntr);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));

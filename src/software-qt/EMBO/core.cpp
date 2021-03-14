@@ -182,8 +182,8 @@ void Core::send()
             tx.append(EMBO_DELIM1);
 
         tx.append( msg->getCmd() +
-                  (msg->getIsQuery() ? "?" :
-                        (msg->getParams().isEmpty() ? "" : " " + msg->getParams())));
+                  (msg->getIsQuery() ? "?" : "") +
+                  (msg->getParams().isEmpty() ? "" : " " + msg->getParams()));
         it++;
     }
     tx.append(EMBO_NEWLINE);
@@ -260,13 +260,53 @@ void Core::on_serial_readyRead()
         QString str = QString::fromUtf8(data);
 
         m_mainBuffer = m_mainBuffer.append(data);
-        QStringList messages = m_mainBuffer.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
+
+        int msg_cnt = 0;
+        QStringList messages;
+        int bin_header_len;
+        int hashIdx = m_mainBuffer.indexOf('#');
+
+        if (hashIdx > -1) // binary message
+        {
+            int buf_sz = m_mainBuffer.size();
+            auto left_part = m_mainBuffer.left(hashIdx);
+
+            messages = left_part.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
+            msg_cnt = left_part.count(EMBO_NEWLINE);
+
+            if (m_mainBuffer.size() > hashIdx + 5)
+            {
+                int n = (m_mainBuffer.data())[hashIdx + 1].digitValue();
+                int bin_len = m_mainBuffer.mid(hashIdx + 2, n).toInt();
+                int bin_len_total = 1 + n + bin_len;
+
+                if (buf_sz >= hashIdx + bin_len_total)
+                {
+                    bin_header_len = 2 + n;
+                    messages.append(m_mainBuffer.mid(hashIdx, 1 + bin_len_total));
+                    msg_cnt++;
+
+                    auto right_part = m_mainBuffer.right(hashIdx + 1 + bin_len_total);
+                    auto messages2 = right_part.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
+                    if (!messages2.isEmpty())
+                    {
+                        messages.append(messages2);
+                        msg_cnt += right_part.count(EMBO_NEWLINE);
+                    }
+                }
+            }
+        }
+        else // standard messages
+        {
+            messages = m_mainBuffer.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
+            msg_cnt = m_mainBuffer.count(EMBO_NEWLINE);
+        }
 
         //qInfo() << "rx buffer: " << m_mainBuffer;
         m_timer_rxTimeout->stop();
         m_timer_rxTimeout->start();
 
-        for(int i = 0; i < m_mainBuffer.count(EMBO_NEWLINE); i++) // iterate all full msgs
+        for(int i = 0; i < msg_cnt; i++) // iterate all full msgs
         {
             //qInfo() << "rx msg: " << messages[i];
 
@@ -274,6 +314,7 @@ void Core::on_serial_readyRead()
 
             if (messages[i] == EMBO_READY_A || messages[i] == EMBO_READY_N || messages[i] == EMBO_READY_D)
             {
+                qInfo() << messages[i];
                 // emit READY signal                
                 continue;
             }
@@ -292,7 +333,10 @@ void Core::on_serial_readyRead()
                     return;
                 }
 
-                m_activeMsgs[m_submsgIt++]->fire(submessage); // do main virtual action
+                if (submessage.at(0) == '#')
+                    m_activeMsgs[m_submsgIt++]->fire(submessage.right(submessage.size() - bin_header_len));
+                else
+                    m_activeMsgs[m_submsgIt++]->fire(submessage); // do main virtual action
             }
 
             if (m_submsgIt == activeMsg_size) // success - do post actions

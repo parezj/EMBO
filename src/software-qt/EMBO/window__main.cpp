@@ -146,6 +146,7 @@ void WindowMain::statusBarLoad()
     m_status_icon_comm = new QLabel(this);
     m_status_comm = new QLabel(" Disconnected ", this);
     m_status_latency = new QLabel("", this);
+    m_status_latency->setToolTip("fixed + real");
     m_status_uptime = new QLabel("", this);
 
     QSpacerItem* status_spacer1 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -311,7 +312,7 @@ void WindowMain::setConnected()
     m_ui->label_vm_bits->setText("12 bit");
     m_ui->label_vm_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
-    m_ui->label_cntr_mode->setText("Precise/Fast"); // format_unit(info->cntr_freq, "Hz", 0)
+    m_ui->label_cntr_mode->setText("Slow / Fast"); // format_unit(info->cntr_freq, "Hz", 0)
     m_ui->label_cntr_timeout->setText(QString::number(info->cntr_timeout) + " ms");
     m_ui->label_cntr_pins->setText(info->pins_cntr);
 
@@ -339,6 +340,20 @@ void WindowMain::setConnected()
     m_status_uptime->setText("?");
     m_status_line1->show();
     m_status_line2->show();
+
+    m_ui->label_dev1->show();
+    m_ui->label_dev2->show();
+    m_ui->label_dev3->show();
+    m_ui->label_dev4->show();
+    m_ui->label_dev5->show();
+    m_ui->label_dev6->show();
+
+    m_ui->label_dev_fw->show();
+    m_ui->label_dev_ll->show();
+    m_ui->label_dev_comm->show();
+    m_ui->label_dev_fcpu->show();
+    m_ui->label_dev_rtos->show();
+    m_ui->label_dev_vref->show();
 
     m_connected = true;
 }
@@ -416,6 +431,20 @@ void WindowMain::setDisconnected()
     m_status_uptime->setText("");
     m_status_line1->hide();
     m_status_line2->hide();
+
+    m_ui->label_dev1->hide();
+    m_ui->label_dev2->hide();
+    m_ui->label_dev3->hide();
+    m_ui->label_dev4->hide();
+    m_ui->label_dev5->hide();
+    m_ui->label_dev6->hide();
+
+    m_ui->label_dev_fw->hide();
+    m_ui->label_dev_ll->hide();
+    m_ui->label_dev_comm->hide();
+    m_ui->label_dev_fcpu->hide();
+    m_ui->label_dev_rtos->hide();
+    m_ui->label_dev_vref->hide();
 
     //on_instrClose(WindowScope::staticMetaObject.className());
     //on_instrClose(WindowCntr::staticMetaObject.className());
@@ -707,4 +736,8 @@ void WindowMain::on_pushButton_sgen_clicked()
 
     //m_ui->pushButton_sgen->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
     m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_OFF);
+}
+
+void WindowMain::on_actionOpenProgrammer_triggered()
+{
 }

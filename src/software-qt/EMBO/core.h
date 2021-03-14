@@ -38,10 +38,16 @@
 EMBO is useful tool for every electronics enthusiast.<br>\
 For just few dollar hardware (STM32 BluePill) can become a powerfull scope, logic analyzer, voltmeter, counter, \
 PWM and signal generator.<br>And of course, it's opensource! \
+<br><br>EMBO uses this free software:<br>\
+<a href='https://www.qcustomplot.com'>QCustomPlot</a><br>\
+<a href='https://github.com/yangfuyuan/STM32Programming'>yangfuyuan/STM32Programming</a><br>\
+<a href='https://github.com/buzzySmile/qBreakpad'>buzzySmile/qBreakpad</a><br>\
+<a href='https://chromium.googlesource.com/breakpad/breakpad'>Google Breakpad</a><br>\
+<a href='https://chromium.googlesource.com/linux-syscall-support'>buzzySmile/Linux Syscall Support</a>\
 <br><br>Compiled " __DATE__ " " __TIME__ " with <b>Qt " QT_VERSION_STR "</b><br><br>\
 <a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
 
-#define CFG_MAIN_PORT   "main/port"
+#define CFG_MAIN_PORT       "main/port"
 
 #define EMBO_NEWLINE        "\r\n"
 #define EMBO_DELIM1         ";"
@@ -177,6 +183,7 @@ private:
     State m_state = DISCONNECTED;
 
     /* helpers */
+    bool m_binary_mode = false;
     bool m_close_init = false;
     bool m_open_comm = false;
     Mode m_mode = Mode::VM;

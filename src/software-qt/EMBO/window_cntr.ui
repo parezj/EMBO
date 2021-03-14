@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>341</width>
-    <height>289</height>
+    <height>290</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,13 +22,13 @@
   <property name="minimumSize">
    <size>
     <width>341</width>
-    <height>289</height>
+    <height>290</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>341</width>
-    <height>289</height>
+    <height>290</height>
    </size>
   </property>
   <property name="font">
@@ -384,9 +384,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     <widget class="QRadioButton" name="radioButton_fast">
      <property name="geometry">
       <rect>
-       <x>210</x>
+       <x>230</x>
        <y>16</y>
-       <width>101</width>
+       <width>81</width>
        <height>21</height>
       </rect>
      </property>
@@ -450,9 +450,9 @@ QRadioButton::indicator::checked {
     <widget class="QRadioButton" name="radioButton_precise">
      <property name="geometry">
       <rect>
-       <x>100</x>
+       <x>140</x>
        <y>16</y>
-       <width>101</width>
+       <width>81</width>
        <height>21</height>
       </rect>
      </property>
@@ -542,10 +542,22 @@ QRadioButton::indicator::checked {
      <x>0</x>
      <y>0</y>
      <width>341</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <widget class="QMenu" name="menuHelp">
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Help</string>
     </property>

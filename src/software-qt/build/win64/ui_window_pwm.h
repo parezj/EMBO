@@ -70,14 +70,14 @@ public:
     {
         if (WindowPwm->objectName().isEmpty())
             WindowPwm->setObjectName(QString::fromUtf8("WindowPwm"));
-        WindowPwm->resize(411, 481);
+        WindowPwm->resize(411, 504);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(WindowPwm->sizePolicy().hasHeightForWidth());
         WindowPwm->setSizePolicy(sizePolicy);
-        WindowPwm->setMinimumSize(QSize(411, 481));
-        WindowPwm->setMaximumSize(QSize(411, 481));
+        WindowPwm->setMinimumSize(QSize(411, 504));
+        WindowPwm->setMaximumSize(QSize(411, 504));
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -95,12 +95,12 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         line = new QFrame(centralwidget);
         line->setObjectName(QString::fromUtf8("line"));
-        line->setGeometry(QRect(0, 428, 431, 16));
+        line->setGeometry(QRect(0, 450, 431, 16));
         line->setFrameShape(QFrame::HLine);
         line->setFrameShadow(QFrame::Sunken);
         pushButton_ch1enable = new QPushButton(centralwidget);
         pushButton_ch1enable->setObjectName(QString::fromUtf8("pushButton_ch1enable"));
-        pushButton_ch1enable->setGeometry(QRect(40, 375, 151, 41));
+        pushButton_ch1enable->setGeometry(QRect(40, 395, 151, 41));
         QFont font1;
         font1.setFamily(QString::fromUtf8("Roboto"));
         font1.setPointSize(13);
@@ -140,7 +140,7 @@ public:
         pushButton_ch1enable->setIconSize(QSize(22, 22));
         pushButton_ch1disable = new QPushButton(centralwidget);
         pushButton_ch1disable->setObjectName(QString::fromUtf8("pushButton_ch1disable"));
-        pushButton_ch1disable->setGeometry(QRect(40, 375, 151, 41));
+        pushButton_ch1disable->setGeometry(QRect(40, 395, 151, 41));
         QFont font2;
         font2.setFamily(QString::fromUtf8("Roboto"));
         font2.setPointSize(13);
@@ -180,7 +180,7 @@ public:
         pushButton_ch1disable->setIconSize(QSize(23, 22));
         pushButton_ch2enable = new QPushButton(centralwidget);
         pushButton_ch2enable->setObjectName(QString::fromUtf8("pushButton_ch2enable"));
-        pushButton_ch2enable->setGeometry(QRect(220, 375, 151, 41));
+        pushButton_ch2enable->setGeometry(QRect(220, 395, 151, 41));
         pushButton_ch2enable->setFont(font1);
         pushButton_ch2enable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
@@ -213,7 +213,7 @@ public:
         pushButton_ch2disable = new QPushButton(centralwidget);
         pushButton_ch2disable->setObjectName(QString::fromUtf8("pushButton_ch2disable"));
         pushButton_ch2disable->setEnabled(true);
-        pushButton_ch2disable->setGeometry(QRect(220, 375, 151, 41));
+        pushButton_ch2disable->setGeometry(QRect(220, 395, 151, 41));
         pushButton_ch2disable->setFont(font2);
         pushButton_ch2disable->setStyleSheet(QString::fromUtf8("QPushButton {    \n"
 "    padding: 0.2em 0.2em 0.3em 0.2em;\n"
@@ -244,15 +244,15 @@ public:
         pushButton_ch2disable->setIconSize(QSize(23, 22));
         groupBox_1 = new QGroupBox(centralwidget);
         groupBox_1->setObjectName(QString::fromUtf8("groupBox_1"));
-        groupBox_1->setGeometry(QRect(10, 1, 391, 120));
+        groupBox_1->setGeometry(QRect(10, 1, 391, 138));
         QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Expanding);
         sizePolicy1.setHorizontalStretch(0);
         sizePolicy1.setVerticalStretch(0);
         sizePolicy1.setHeightForWidth(groupBox_1->sizePolicy().hasHeightForWidth());
         groupBox_1->setSizePolicy(sizePolicy1);
         QFont font3;
-        font3.setFamily(QString::fromUtf8("Roboto"));
-        font3.setPointSize(10);
+        font3.setFamily(QString::fromUtf8("Roboto Medium"));
+        font3.setPointSize(11);
         font3.setBold(false);
         font3.setItalic(false);
         font3.setWeight(50);
@@ -263,7 +263,7 @@ public:
         dial_freq = new QDial(groupBox_1);
         dial_freq->setObjectName(QString::fromUtf8("dial_freq"));
         dial_freq->setEnabled(true);
-        dial_freq->setGeometry(QRect(10, 15, 51, 50));
+        dial_freq->setGeometry(QRect(10, 30, 51, 50));
         QPalette palette;
         dial_freq->setPalette(palette);
         dial_freq->setAutoFillBackground(false);
@@ -278,7 +278,7 @@ public:
         dial_freq->setNotchesVisible(true);
         label_4 = new QLabel(groupBox_1);
         label_4->setObjectName(QString::fromUtf8("label_4"));
-        label_4->setGeometry(QRect(80, 30, 111, 21));
+        label_4->setGeometry(QRect(80, 45, 111, 21));
         QFont font4;
         font4.setFamily(QString::fromUtf8("Roboto Light"));
         font4.setPointSize(14);
@@ -288,7 +288,7 @@ public:
         spinBox_freq = new QSpinBox(groupBox_1);
         spinBox_freq->setObjectName(QString::fromUtf8("spinBox_freq"));
         spinBox_freq->setEnabled(true);
-        spinBox_freq->setGeometry(QRect(70, 20, 301, 41));
+        spinBox_freq->setGeometry(QRect(70, 35, 301, 41));
         spinBox_freq->setStyleSheet(QString::fromUtf8("QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;\n"
 "				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }\n"
 "\n"
@@ -334,12 +334,12 @@ public:
         spinBox_freq->setValue(5000000);
         label_dial1 = new QLabel(groupBox_1);
         label_dial1->setObjectName(QString::fromUtf8("label_dial1"));
-        label_dial1->setGeometry(QRect(10, 15, 51, 50));
+        label_dial1->setGeometry(QRect(10, 30, 51, 50));
         label_dial1->setPixmap(QPixmap(QString::fromUtf8(":/main/resources/img/dial1.png")));
         label_dial1->setScaledContents(false);
         radioButton_coarse = new QRadioButton(groupBox_1);
         radioButton_coarse->setObjectName(QString::fromUtf8("radioButton_coarse"));
-        radioButton_coarse->setGeometry(QRect(7, 69, 61, 16));
+        radioButton_coarse->setGeometry(QRect(7, 86, 61, 16));
         QFont font5;
         font5.setFamily(QString::fromUtf8("Roboto Light"));
         font5.setPointSize(10);
@@ -383,7 +383,7 @@ public:
         textBrowser_realFreq = new QTextBrowser(groupBox_1);
         textBrowser_realFreq->setObjectName(QString::fromUtf8("textBrowser_realFreq"));
         textBrowser_realFreq->setEnabled(true);
-        textBrowser_realFreq->setGeometry(QRect(70, 70, 301, 37));
+        textBrowser_realFreq->setGeometry(QRect(70, 85, 301, 37));
         QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Fixed);
         sizePolicy2.setHorizontalStretch(0);
         sizePolicy2.setVerticalStretch(0);
@@ -410,7 +410,7 @@ public:
 "}"));
         label_5 = new QLabel(groupBox_1);
         label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setGeometry(QRect(80, 77, 91, 21));
+        label_5->setGeometry(QRect(80, 93, 91, 21));
         QFont font7;
         font7.setFamily(QString::fromUtf8("Roboto Light"));
         font7.setPointSize(13);
@@ -426,17 +426,10 @@ public:
         label_5->raise();
         groupBox_2 = new QGroupBox(centralwidget);
         groupBox_2->setObjectName(QString::fromUtf8("groupBox_2"));
-        groupBox_2->setGeometry(QRect(10, 122, 391, 91));
+        groupBox_2->setGeometry(QRect(10, 141, 391, 91));
         sizePolicy1.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
         groupBox_2->setSizePolicy(sizePolicy1);
-        QFont font8;
-        font8.setFamily(QString::fromUtf8("Roboto Medium"));
-        font8.setPointSize(11);
-        font8.setBold(false);
-        font8.setItalic(false);
-        font8.setWeight(50);
-        font8.setKerning(true);
-        groupBox_2->setFont(font8);
+        groupBox_2->setFont(font3);
         groupBox_2->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         label = new QLabel(groupBox_2);
@@ -501,10 +494,10 @@ public:
         dial_duty1->raise();
         groupBox_3 = new QGroupBox(centralwidget);
         groupBox_3->setObjectName(QString::fromUtf8("groupBox_3"));
-        groupBox_3->setGeometry(QRect(10, 215, 391, 141));
+        groupBox_3->setGeometry(QRect(10, 235, 391, 141));
         sizePolicy1.setHeightForWidth(groupBox_3->sizePolicy().hasHeightForWidth());
         groupBox_3->setSizePolicy(sizePolicy1);
-        groupBox_3->setFont(font8);
+        groupBox_3->setFont(font3);
         groupBox_3->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         label_3 = new QLabel(groupBox_3);
@@ -644,7 +637,7 @@ public:
         dial_duty2->raise();
         radioButton_fine = new QRadioButton(centralwidget);
         radioButton_fine->setObjectName(QString::fromUtf8("radioButton_fine"));
-        radioButton_fine->setGeometry(QRect(17, 87, 61, 16));
+        radioButton_fine->setGeometry(QRect(17, 104, 61, 16));
         radioButton_fine->setFont(font5);
         radioButton_fine->setStyleSheet(QString::fromUtf8("QRadioButton:checked {\n"
 "	background-color: rgba(245,245,245, 0.0);\n"
@@ -685,7 +678,8 @@ public:
         WindowPwm->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowPwm);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 411, 21));
+        menubar->setGeometry(QRect(0, 0, 411, 22));
+        menubar->setFont(font);
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowPwm->setMenuBar(menubar);
@@ -710,8 +704,8 @@ public:
         pushButton_ch1disable->setText(QCoreApplication::translate("WindowPwm", " PWM 1 ON  ", nullptr));
         pushButton_ch2enable->setText(QCoreApplication::translate("WindowPwm", " PWM 2 OFF", nullptr));
         pushButton_ch2disable->setText(QCoreApplication::translate("WindowPwm", " PWM 2 ON  ", nullptr));
-        groupBox_1->setTitle(QString());
-        label_4->setText(QCoreApplication::translate("WindowPwm", "Frequency:", nullptr));
+        groupBox_1->setTitle(QCoreApplication::translate("WindowPwm", "Frequency", nullptr));
+        label_4->setText(QCoreApplication::translate("WindowPwm", "Set:", nullptr));
         spinBox_freq->setSuffix(QCoreApplication::translate("WindowPwm", " Hz", nullptr));
         label_dial1->setText(QString());
         radioButton_coarse->setText(QCoreApplication::translate("WindowPwm", "Coarse", nullptr));
@@ -720,7 +714,7 @@ public:
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400; font-style:normal;\">\n"
 "<p align=\"right\" style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Roboto Mono Light','Roboto Mono Light'; font-weight:496;\">5000000.000 Hz  </span></p></body></html>", nullptr));
-        label_5->setText(QCoreApplication::translate("WindowPwm", "Real freq.:", nullptr));
+        label_5->setText(QCoreApplication::translate("WindowPwm", "Real:", nullptr));
         groupBox_2->setTitle(QCoreApplication::translate("WindowPwm", "Channel 1", nullptr));
         label->setText(QCoreApplication::translate("WindowPwm", "Duty:", nullptr));
         spinBox_duty1->setSuffix(QCoreApplication::translate("WindowPwm", " %", nullptr));

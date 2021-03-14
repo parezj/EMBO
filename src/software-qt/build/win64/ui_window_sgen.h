@@ -64,14 +64,14 @@ public:
     {
         if (WindowSgen->objectName().isEmpty())
             WindowSgen->setObjectName(QString::fromUtf8("WindowSgen"));
-        WindowSgen->resize(571, 323);
+        WindowSgen->resize(571, 324);
         QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(WindowSgen->sizePolicy().hasHeightForWidth());
         WindowSgen->setSizePolicy(sizePolicy);
-        WindowSgen->setMinimumSize(QSize(571, 323));
-        WindowSgen->setMaximumSize(QSize(571, 323));
+        WindowSgen->setMinimumSize(QSize(571, 324));
+        WindowSgen->setMaximumSize(QSize(571, 324));
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -658,7 +658,8 @@ public:
         pushButton_disable->raise();
         menubar = new QMenuBar(WindowSgen);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 571, 21));
+        menubar->setGeometry(QRect(0, 0, 571, 22));
+        menubar->setFont(font);
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         menuHelp->setFont(font);

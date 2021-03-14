@@ -249,7 +249,7 @@ Makefile: ../../EMBO/EMBO.pro F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/win32/default_pre.prf \
-		../../EMBO/crashhandler/qBreakpad.pri \
+		../../EMBO/__crashhandler/qBreakpad.pri \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/resolve_config.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds_post.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_post.prf \
@@ -459,7 +459,7 @@ F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/win32/default_pre.prf:
-../../EMBO/crashhandler/qBreakpad.pri:
+../../EMBO/__crashhandler/qBreakpad.pri:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/resolve_config.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds_post.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_post.prf:

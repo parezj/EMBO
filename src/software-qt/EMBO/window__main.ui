@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>594</height>
+    <height>596</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>800</width>
-    <height>594</height>
+    <height>596</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>800</width>
-    <height>594</height>
+    <height>596</height>
    </size>
   </property>
   <property name="font">
@@ -47,9 +47,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>0</y>
+      <y>180</y>
       <width>221</width>
-      <height>541</height>
+      <height>361</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -81,7 +81,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
        <x>10</x>
        <y>30</y>
        <width>201</width>
-       <height>451</height>
+       <height>271</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -102,6 +102,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      </property>
      <property name="accessibleName">
       <string/>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
      </property>
      <property name="verticalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOn</enum>
@@ -133,7 +136,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>490</y>
+       <y>310</y>
        <width>71</width>
        <height>41</height>
       </rect>
@@ -191,7 +194,7 @@ QPushButton:pressed
      <property name="geometry">
       <rect>
        <x>90</x>
-       <y>490</y>
+       <y>310</y>
        <width>121</width>
        <height>41</height>
       </rect>
@@ -249,7 +252,7 @@ QPushButton:pressed
      <property name="geometry">
       <rect>
        <x>90</x>
-       <y>490</y>
+       <y>310</y>
        <width>121</width>
        <height>41</height>
       </rect>
@@ -300,25 +303,6 @@ QPushButton:pressed
        <normaloff>:/main/resources/img/power-off-red.png</normaloff>:/main/resources/img/power-off-red.png</iconset>
      </property>
     </widget>
-    <widget class="QLabel" name="label_cvutlogo">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>360</y>
-       <width>161</width>
-       <height>110</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="pixmap">
-      <pixmap resource="resources.qrc">:/main/resources/img/ctu_meas_small.png</pixmap>
-     </property>
-     <property name="scaledContents">
-      <bool>true</bool>
-     </property>
-    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_device">
     <property name="geometry">
@@ -326,7 +310,7 @@ QPushButton:pressed
       <x>240</x>
       <y>0</y>
       <width>551</width>
-      <height>181</height>
+      <height>179</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -379,7 +363,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="geometry">
       <rect>
        <x>360</x>
-       <y>20</y>
+       <y>18</y>
        <width>181</width>
        <height>151</height>
       </rect>
@@ -404,7 +388,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="label_dev1">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -430,7 +414,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <enum>Qt::AutoText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="label_dev2">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -456,7 +440,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <enum>Qt::AutoText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="label_dev3">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -482,7 +466,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <enum>Qt::AutoText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="label_dev4">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -508,7 +492,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <enum>Qt::AutoText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label_5">
+    <widget class="QLabel" name="label_dev5">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -664,7 +648,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <enum>Qt::AutoText</enum>
      </property>
     </widget>
-    <widget class="QLabel" name="label_7">
+    <widget class="QLabel" name="label_dev6">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -717,17 +701,17 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      </property>
     </widget>
     <zorder>label_boardImg</zorder>
-    <zorder>label</zorder>
-    <zorder>label_2</zorder>
-    <zorder>label_3</zorder>
-    <zorder>label_4</zorder>
-    <zorder>label_5</zorder>
+    <zorder>label_dev1</zorder>
+    <zorder>label_dev2</zorder>
+    <zorder>label_dev3</zorder>
+    <zorder>label_dev4</zorder>
+    <zorder>label_dev5</zorder>
     <zorder>label_dev_fw</zorder>
     <zorder>label_dev_fcpu</zorder>
     <zorder>label_dev_comm</zorder>
     <zorder>label_dev_rtos</zorder>
     <zorder>label_dev_ll</zorder>
-    <zorder>label_7</zorder>
+    <zorder>label_dev6</zorder>
     <zorder>label_dev_vref</zorder>
     <zorder>label_deviceName</zorder>
    </widget>
@@ -737,7 +721,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <x>240</x>
       <y>180</y>
       <width>551</width>
-      <height>181</height>
+      <height>180</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -2498,6 +2482,69 @@ QPushButton:pressed
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
+   <widget class="QGroupBox" name="groupBox_logo">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>221</width>
+      <height>179</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="font">
+     <font>
+      <family>Roboto Medium</family>
+      <pointsize>11</pointsize>
+      <weight>50</weight>
+      <italic>false</italic>
+      <bold>false</bold>
+      <kerning>true</kerning>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+    </property>
+    <property name="title">
+     <string/>
+    </property>
+    <widget class="QLabel" name="label_cvutlogo">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>8</y>
+       <width>221</width>
+       <height>171</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel { border-image: url(:/main/resources/img/ctu_meas_small.png);}
+
+QLabel:hover {border-image: url(:/main/resources/img/ctu_meas_small2.png); }</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="scaledContents">
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </widget>
+   <zorder>groupBox_logo</zorder>
+   <zorder>groupBox_ports</zorder>
+   <zorder>groupBox_device</zorder>
+   <zorder>groupBox_instr1</zorder>
+   <zorder>groupBox_instr2</zorder>
+   <zorder>line</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -2505,24 +2552,44 @@ QPushButton:pressed
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="font">
     <font>
      <family>Roboto</family>
-     <pointsize>9</pointsize>
+     <pointsize>10</pointsize>
      <italic>false</italic>
      <kerning>true</kerning>
     </font>
    </property>
    <widget class="QMenu" name="menuAbout">
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
     <property name="title">
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
+    <addaction name="actionCheck_Updates"/>
+   </widget>
+   <widget class="QMenu" name="menuSTM32_Programmer">
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>STM32 Programmer</string>
+    </property>
+    <addaction name="actionOpenProgrammer"/>
    </widget>
    <addaction name="menuAbout"/>
+   <addaction name="menuSTM32_Programmer"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="font">
@@ -2565,6 +2632,28 @@ QPushButton:pressed
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionCheck_Updates">
+   <property name="text">
+    <string>Check Updates</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionOpenProgrammer">
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
  </widget>

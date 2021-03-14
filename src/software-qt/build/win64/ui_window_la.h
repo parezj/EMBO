@@ -87,7 +87,8 @@ public:
         WindowLa->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowLa);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 417, 21));
+        menubar->setGeometry(QRect(0, 0, 417, 22));
+        menubar->setFont(font);
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));
         WindowLa->setMenuBar(menubar);
