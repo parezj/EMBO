@@ -117,7 +117,6 @@ public:
     QLabel *label_cvutlogo;
     QMenuBar *menubar;
     QMenu *menuAbout;
-    QMenu *menuSTM32_Programmer;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *WindowMain)
@@ -155,6 +154,9 @@ public:
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
         actionCheck_Updates = new QAction(WindowMain);
         actionCheck_Updates->setObjectName(QString::fromUtf8("actionCheck_Updates"));
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/main/resources/img/refresh.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionCheck_Updates->setIcon(icon2);
         QFont font2;
         font2.setFamily(QString::fromUtf8("Roboto"));
         font2.setPointSize(10);
@@ -240,9 +242,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/main/resources/img/magnifying-glass.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_scan->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/main/resources/img/magnifying-glass.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_scan->setIcon(icon3);
         pushButton_connect = new QPushButton(groupBox_ports);
         pushButton_connect->setObjectName(QString::fromUtf8("pushButton_connect"));
         pushButton_connect->setEnabled(false);
@@ -274,9 +276,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_connect->setIcon(icon3);
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_connect->setIcon(icon4);
         pushButton_disconnect = new QPushButton(groupBox_ports);
         pushButton_disconnect->setObjectName(QString::fromUtf8("pushButton_disconnect"));
         pushButton_disconnect->setEnabled(true);
@@ -308,9 +310,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/main/resources/img/power-off-red.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_disconnect->setIcon(icon4);
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/main/resources/img/power-off-red.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_disconnect->setIcon(icon5);
         groupBox_device = new QGroupBox(centralwidget);
         groupBox_device->setObjectName(QString::fromUtf8("groupBox_device"));
         groupBox_device->setGeometry(QRect(240, 0, 551, 179));
@@ -488,9 +490,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/main/resources/img/scope.svg"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_scope->setIcon(icon5);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/main/resources/img/scope.svg"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_scope->setIcon(icon6);
         pushButton_scope->setIconSize(QSize(21, 21));
         label_6 = new QLabel(groupBox_scope);
         label_6->setObjectName(QString::fromUtf8("label_6"));
@@ -587,9 +589,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/main/resources/img/la.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_la->setIcon(icon6);
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/main/resources/img/la.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_la->setIcon(icon7);
         pushButton_la->setIconSize(QSize(21, 21));
         label_11 = new QLabel(groupBox_la);
         label_11->setObjectName(QString::fromUtf8("label_11"));
@@ -670,9 +672,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/main/resources/img/vm.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_vm->setIcon(icon7);
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/main/resources/img/vm.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_vm->setIcon(icon8);
         pushButton_vm->setIconSize(QSize(22, 22));
         label_15 = new QLabel(groupBox_vm);
         label_15->setObjectName(QString::fromUtf8("label_15"));
@@ -762,9 +764,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon8;
-        icon8.addFile(QString::fromUtf8(":/main/resources/img/pwm.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_pwm->setIcon(icon8);
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8(":/main/resources/img/pwm.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_pwm->setIcon(icon9);
         pushButton_pwm->setIconSize(QSize(21, 21));
         label_19 = new QLabel(groupBox_pwm);
         label_19->setObjectName(QString::fromUtf8("label_19"));
@@ -835,9 +837,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon9;
-        icon9.addFile(QString::fromUtf8(":/main/resources/img/sgen2.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_sgen->setIcon(icon9);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/main/resources/img/sgen2.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_sgen->setIcon(icon10);
         pushButton_sgen->setIconSize(QSize(22, 22));
         label_27 = new QLabel(groupBox_sgen);
         label_27->setObjectName(QString::fromUtf8("label_27"));
@@ -916,9 +918,9 @@ public:
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
 "}"));
-        QIcon icon10;
-        icon10.addFile(QString::fromUtf8(":/main/resources/img/cntr.png"), QSize(), QIcon::Normal, QIcon::Off);
-        pushButton_cntr->setIcon(icon10);
+        QIcon icon11;
+        icon11.addFile(QString::fromUtf8(":/main/resources/img/cntr.png"), QSize(), QIcon::Normal, QIcon::Off);
+        pushButton_cntr->setIcon(icon11);
         pushButton_cntr->setIconSize(QSize(21, 21));
         label_37 = new QLabel(groupBox_cntr);
         label_37->setObjectName(QString::fromUtf8("label_37"));
@@ -990,9 +992,6 @@ public:
         menuAbout = new QMenu(menubar);
         menuAbout->setObjectName(QString::fromUtf8("menuAbout"));
         menuAbout->setFont(font2);
-        menuSTM32_Programmer = new QMenu(menubar);
-        menuSTM32_Programmer->setObjectName(QString::fromUtf8("menuSTM32_Programmer"));
-        menuSTM32_Programmer->setFont(font2);
         WindowMain->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowMain);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -1006,10 +1005,8 @@ public:
         WindowMain->setStatusBar(statusbar);
 
         menubar->addAction(menuAbout->menuAction());
-        menubar->addAction(menuSTM32_Programmer->menuAction());
         menuAbout->addAction(actionAbout);
         menuAbout->addAction(actionCheck_Updates);
-        menuSTM32_Programmer->addAction(actionOpenProgrammer);
 
         retranslateUi(WindowMain);
 
@@ -1021,13 +1018,13 @@ public:
         WindowMain->setWindowTitle(QCoreApplication::translate("WindowMain", "EMBO - EMBedded Oscilloscope", nullptr));
         actionAbout->setText(QCoreApplication::translate("WindowMain", "About", nullptr));
 #if QT_CONFIG(shortcut)
-        actionAbout->setShortcut(QCoreApplication::translate("WindowMain", "Ctrl+A", nullptr));
+        actionAbout->setShortcut(QCoreApplication::translate("WindowMain", "Ctrl+H", nullptr));
 #endif // QT_CONFIG(shortcut)
         actionOpen->setText(QCoreApplication::translate("WindowMain", "Open", nullptr));
-#if QT_CONFIG(shortcut)
-        actionOpen->setShortcut(QCoreApplication::translate("WindowMain", "Ctrl+O", nullptr));
-#endif // QT_CONFIG(shortcut)
         actionCheck_Updates->setText(QCoreApplication::translate("WindowMain", "Check Updates", nullptr));
+#if QT_CONFIG(shortcut)
+        actionCheck_Updates->setShortcut(QCoreApplication::translate("WindowMain", "Ctrl+U", nullptr));
+#endif // QT_CONFIG(shortcut)
         actionOpenProgrammer->setText(QCoreApplication::translate("WindowMain", "Open", nullptr));
         groupBox_ports->setTitle(QCoreApplication::translate("WindowMain", "Ports", nullptr));
 
@@ -1121,7 +1118,6 @@ public:
         groupBox_logo->setTitle(QString());
         label_cvutlogo->setText(QString());
         menuAbout->setTitle(QCoreApplication::translate("WindowMain", "Help", nullptr));
-        menuSTM32_Programmer->setTitle(QCoreApplication::translate("WindowMain", "STM32 Programmer", nullptr));
     } // retranslateUi
 
 };

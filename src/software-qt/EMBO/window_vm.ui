@@ -31,7 +31,226 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="0" column="2">
+    <item row="0" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QGroupBox" name="groupBox_main">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.0em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+        </property>
+        <property name="title">
+         <string/>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QCustomPlot" name="customPlot" native="true">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: white;border: 0px;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <item>
+            <widget class="QGroupBox" name="groupBox_ch4_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>80</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>10000</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+             <widget class="QLabel" name="label_meas">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>8</y>
+                <width>71</width>
+                <height>16</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Medium</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Measure</string>
+              </property>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_ch4_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>80</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>10000</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+             <widget class="QLabel" name="label_meas_2">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>8</y>
+                <width>71</width>
+                <height>16</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Medium</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Cursors</string>
+              </property>
+             </widget>
+             <widget class="QDial" name="dial_average_2">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>30</y>
+                <width>51</width>
+                <height>50</height>
+               </rect>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>300</number>
+              </property>
+              <property name="value">
+               <number>1</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="invertedAppearance">
+               <bool>false</bool>
+              </property>
+              <property name="wrapping">
+               <bool>false</bool>
+              </property>
+              <property name="notchTarget">
+               <double>15.000000000000000</double>
+              </property>
+              <property name="notchesVisible">
+               <bool>true</bool>
+              </property>
+             </widget>
+             <widget class="QDial" name="dial_average_4">
+              <property name="geometry">
+               <rect>
+                <x>80</x>
+                <y>30</y>
+                <width>51</width>
+                <height>50</height>
+               </rect>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>300</number>
+              </property>
+              <property name="value">
+               <number>1</number>
+              </property>
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="invertedAppearance">
+               <bool>false</bool>
+              </property>
+              <property name="wrapping">
+               <bool>false</bool>
+              </property>
+              <property name="notchTarget">
+               <double>15.000000000000000</double>
+              </property>
+              <property name="notchesVisible">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="0" column="3">
      <widget class="QGroupBox" name="groupBox_rightPanel">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -123,7 +342,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
 
 QTextBrowser:disabled {
 	background-color: transparent;
-	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;
+	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }</string>
           </property>
@@ -136,6 +355,9 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
          <widget class="QDoubleSpinBox" name="doubleSpinBox_gain1">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="geometry">
            <rect>
             <x>240</x>
@@ -175,7 +397,6 @@ QDoubleSpinBox::down-button:hover {
  }
 
 QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
 QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
@@ -239,6 +460,9 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
           </property>
          </widget>
          <widget class="QPushButton" name="pushButton_disable1">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="geometry">
            <rect>
             <x>240</x>
@@ -276,7 +500,10 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -331,7 +558,10 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -445,7 +675,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
 
 QTextBrowser:disabled {
 	background-color: transparent;
-	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;
+	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }</string>
           </property>
@@ -458,6 +688,9 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
          <widget class="QDoubleSpinBox" name="doubleSpinBox_gain2">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="geometry">
            <rect>
             <x>240</x>
@@ -497,7 +730,6 @@ QDoubleSpinBox::down-button:hover {
  }
 
 QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
 QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
@@ -598,7 +830,11 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -653,7 +889,10 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -767,7 +1006,7 @@ QPushButton:pressed
 
 QTextBrowser:disabled {
 	background-color: transparent;
-	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;
+	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }</string>
           </property>
@@ -780,6 +1019,9 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
          <widget class="QDoubleSpinBox" name="doubleSpinBox_gain3">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="geometry">
            <rect>
             <x>240</x>
@@ -819,7 +1061,6 @@ QDoubleSpinBox::down-button:hover {
  }
 
 QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
 QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
@@ -920,7 +1161,10 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -975,7 +1219,10 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -1089,7 +1336,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
 
 QTextBrowser:disabled {
 	background-color: transparent;
-	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;
+	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }</string>
           </property>
@@ -1102,6 +1349,9 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
          <widget class="QDoubleSpinBox" name="doubleSpinBox_gain4">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="geometry">
            <rect>
             <x>240</x>
@@ -1141,7 +1391,6 @@ QDoubleSpinBox::down-button:hover {
  }
 
 QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
 QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
@@ -1242,7 +1491,10 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -1296,7 +1548,10 @@ QPushButton:pressed
 	border-radius: 5px;
  	background: #AAAAAA;
 	color:white;
-}</string>
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
           </property>
           <property name="text">
            <string/>
@@ -1405,7 +1660,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <number>1</number>
           </property>
           <property name="maximum">
-           <number>2000</number>
+           <number>3000</number>
           </property>
           <property name="value">
            <number>100</number>
@@ -1495,7 +1750,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
            <number>1</number>
           </property>
           <property name="maximum">
-           <number>2000</number>
+           <number>3000</number>
           </property>
           <property name="value">
            <number>300</number>
@@ -1521,6 +1776,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
           </property>
          </widget>
          <widget class="QSpinBox" name="spinBox_average">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="geometry">
            <rect>
             <x>70</x>
@@ -1832,22 +2090,6 @@ QPushButton:pressed
       </layout>
      </widget>
     </item>
-    <item row="0" column="1">
-     <widget class="QCustomPlot" name="customPlot" native="true">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(220,220,220);border: 0px; border-radius: 5px; margin-right:2px;</string>
-      </property>
-     </widget>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1947,15 +2189,44 @@ QPushButton:pressed
     <property name="title">
      <string>Measure</string>
     </property>
+    <widget class="QMenu" name="menuChannel">
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>Channel</string>
+     </property>
+     <addaction name="actionChannel_1"/>
+     <addaction name="actionChannel_2"/>
+     <addaction name="actionChannel_3"/>
+     <addaction name="actionChannel_4"/>
+    </widget>
     <addaction name="actionMax"/>
     <addaction name="actionMin"/>
     <addaction name="actionAverage"/>
     <addaction name="separator"/>
+    <addaction name="menuChannel"/>
+    <addaction name="separator"/>
     <addaction name="actionReset"/>
+   </widget>
+   <widget class="QMenu" name="menuCursors">
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>Cursors</string>
+    </property>
    </widget>
    <addaction name="menuRecord"/>
    <addaction name="menuView"/>
    <addaction name="menuMeasure"/>
+   <addaction name="menuCursors"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
@@ -2052,7 +2323,7 @@ QPushButton:pressed
     <bool>true</bool>
    </property>
    <property name="checked">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="text">
     <string>Linear</string>
@@ -2068,11 +2339,14 @@ QPushButton:pressed
    <property name="checkable">
     <bool>true</bool>
    </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="enabled">
-    <bool>false</bool>
+    <bool>true</bool>
    </property>
    <property name="text">
-    <string>Sinc</string>
+    <string>Spline</string>
    </property>
    <property name="font">
     <font>
@@ -2133,6 +2407,12 @@ QPushButton:pressed
    <property name="text">
     <string>Max</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionMin">
    <property name="checkable">
@@ -2140,6 +2420,12 @@ QPushButton:pressed
    </property>
    <property name="text">
     <string>Min</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
   <action name="actionAverage">
@@ -2149,10 +2435,81 @@ QPushButton:pressed
    <property name="text">
     <string>Average</string>
    </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
   </action>
   <action name="actionReset">
    <property name="text">
     <string>Reset</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionChannel_1">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 1</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionChannel_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 2</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionChannel_3">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 3</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionChannel_4">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 4</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
  </widget>

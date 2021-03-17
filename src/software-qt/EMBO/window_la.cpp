@@ -1,5 +1,5 @@
 /*
- * CTU/EMBO - EMBedded Oscilloscope <github.com/parezj/EMBO>
+ * CTU/EMBO - EMBedded OscilloLAe <github.com/parezj/EMBO>
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
@@ -18,6 +18,22 @@
 WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa)
 {
     m_ui->setupUi(this);
+
+    m_msg_set = new Msg_LA_Set(this);
+    m_msg_read = new Msg_LA_Read(this);
+    m_msg_forceTrig = new Msg_LA_ForceTrig(this);
+
+    connect(m_msg_set, &Msg_LA_Set::ok, this, &WindowLa::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_LA_Set::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_LA_Set::result, this, &WindowLa::on_msg_set, Qt::DirectConnection);
+
+    connect(m_msg_read, &Msg_LA_Read::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_read, &Msg_LA_Read::result, this, &WindowLa::on_msg_read, Qt::DirectConnection);
+
+    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::ok, this, &WindowLa::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
+
+    connect(Core::getInstance(), &Core::daqReady, this, &WindowLa::on_msg_daqReady, Qt::QueuedConnection);
 }
 
 WindowLa::~WindowLa()
@@ -31,6 +47,11 @@ void WindowLa::on_actionAbout_triggered()
 }
 
 /* slots */
+
+void WindowLa::on_msg_ok(const QString val1, const QString val2)
+{
+
+}
 
 void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
@@ -49,16 +70,37 @@ void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
         this->close();
 }
 
+void WindowLa::on_msg_set()
+{
+
+}
+
+void WindowLa::on_msg_read(const QString data)
+{
+    // PLOT DATA
+}
+
+void WindowLa::on_msg_daqReady(Ready ready)
+{
+    if (m_instrEnabled)
+        Core::getInstance()->msgAdd(m_msg_read, true);
+}
+
 /* private */
 
 void WindowLa::closeEvent(QCloseEvent*)
 {
     m_activeMsg = Q_NULLPTR;
+    m_instrEnabled = false;
+
+    Core::getInstance()->setMode(NO_MODE);
     emit closing(WindowLa::staticMetaObject.className());
 }
 
 void WindowLa::showEvent(QShowEvent*)
 {
-    //m_msg_enable->setIsQuery(true);
-    //Core::getInstance()->msgAdd(m_msg_enable);
+    Core::getInstance()->setMode(LA);
+    m_instrEnabled = true;
+
+    Core::getInstance()->msgAdd(m_msg_set, true, "");
 }

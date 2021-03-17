@@ -17,6 +17,7 @@
 #include <QtWidgets/QDoubleSpinBox>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
@@ -51,8 +52,23 @@ public:
     QAction *actionMin;
     QAction *actionAverage;
     QAction *actionReset;
+    QAction *actionChannel_1;
+    QAction *actionChannel_2;
+    QAction *actionChannel_3;
+    QAction *actionChannel_4;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
+    QVBoxLayout *verticalLayout;
+    QGroupBox *groupBox_main;
+    QVBoxLayout *verticalLayout_3;
+    QCustomPlot *customPlot;
+    QHBoxLayout *horizontalLayout_3;
+    QGroupBox *groupBox_ch4_2;
+    QLabel *label_meas;
+    QGroupBox *groupBox_ch4_3;
+    QLabel *label_meas_2;
+    QDial *dial_average_2;
+    QDial *dial_average_4;
     QGroupBox *groupBox_rightPanel;
     QVBoxLayout *verticalLayout_2;
     QGroupBox *groupBox_ch1;
@@ -96,7 +112,6 @@ public:
     QPushButton *pushButton_enable;
     QLabel *label_13;
     QSpacerItem *verticalSpacer_4;
-    QCustomPlot *customPlot;
     QMenuBar *menubar;
     QMenu *menuHelp;
     QMenu *menuRecord;
@@ -104,6 +119,8 @@ public:
     QMenu *menuView;
     QMenu *menuInterpolation;
     QMenu *menuMeasure;
+    QMenu *menuChannel;
+    QMenu *menuCursors;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *WindowVm)
@@ -148,12 +165,13 @@ public:
         actionLinear = new QAction(WindowVm);
         actionLinear->setObjectName(QString::fromUtf8("actionLinear"));
         actionLinear->setCheckable(true);
-        actionLinear->setChecked(true);
+        actionLinear->setChecked(false);
         actionLinear->setFont(font);
         actionSinc = new QAction(WindowVm);
         actionSinc->setObjectName(QString::fromUtf8("actionSinc"));
         actionSinc->setCheckable(true);
-        actionSinc->setEnabled(false);
+        actionSinc->setChecked(true);
+        actionSinc->setEnabled(true);
         actionSinc->setFont(font);
         actionCSV = new QAction(WindowVm);
         actionCSV->setObjectName(QString::fromUtf8("actionCSV"));
@@ -171,28 +189,144 @@ public:
         actionMax = new QAction(WindowVm);
         actionMax->setObjectName(QString::fromUtf8("actionMax"));
         actionMax->setCheckable(true);
+        actionMax->setFont(font);
         actionMin = new QAction(WindowVm);
         actionMin->setObjectName(QString::fromUtf8("actionMin"));
         actionMin->setCheckable(true);
+        actionMin->setFont(font);
         actionAverage = new QAction(WindowVm);
         actionAverage->setObjectName(QString::fromUtf8("actionAverage"));
         actionAverage->setCheckable(true);
+        actionAverage->setFont(font);
         actionReset = new QAction(WindowVm);
         actionReset->setObjectName(QString::fromUtf8("actionReset"));
+        actionReset->setFont(font);
+        actionChannel_1 = new QAction(WindowVm);
+        actionChannel_1->setObjectName(QString::fromUtf8("actionChannel_1"));
+        actionChannel_1->setCheckable(true);
+        actionChannel_1->setChecked(true);
+        actionChannel_1->setFont(font);
+        actionChannel_2 = new QAction(WindowVm);
+        actionChannel_2->setObjectName(QString::fromUtf8("actionChannel_2"));
+        actionChannel_2->setCheckable(true);
+        actionChannel_2->setFont(font);
+        actionChannel_3 = new QAction(WindowVm);
+        actionChannel_3->setObjectName(QString::fromUtf8("actionChannel_3"));
+        actionChannel_3->setCheckable(true);
+        actionChannel_3->setFont(font);
+        actionChannel_4 = new QAction(WindowVm);
+        actionChannel_4->setObjectName(QString::fromUtf8("actionChannel_4"));
+        actionChannel_4->setCheckable(true);
+        actionChannel_4->setFont(font);
         centralwidget = new QWidget(WindowVm);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        groupBox_rightPanel = new QGroupBox(centralwidget);
-        groupBox_rightPanel->setObjectName(QString::fromUtf8("groupBox_rightPanel"));
-        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        groupBox_main = new QGroupBox(centralwidget);
+        groupBox_main->setObjectName(QString::fromUtf8("groupBox_main"));
+        groupBox_main->setMinimumSize(QSize(0, 100));
+        groupBox_main->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.0em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        verticalLayout_3 = new QVBoxLayout(groupBox_main);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        customPlot = new QCustomPlot(groupBox_main);
+        customPlot->setObjectName(QString::fromUtf8("customPlot"));
+        customPlot->setEnabled(true);
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(groupBox_rightPanel->sizePolicy().hasHeightForWidth());
-        groupBox_rightPanel->setSizePolicy(sizePolicy);
+        sizePolicy.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
+        customPlot->setSizePolicy(sizePolicy);
+        customPlot->setStyleSheet(QString::fromUtf8("background-color: white;border: 0px;"));
+
+        verticalLayout_3->addWidget(customPlot);
+
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        groupBox_ch4_2 = new QGroupBox(groupBox_main);
+        groupBox_ch4_2->setObjectName(QString::fromUtf8("groupBox_ch4_2"));
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(groupBox_ch4_2->sizePolicy().hasHeightForWidth());
+        groupBox_ch4_2->setSizePolicy(sizePolicy1);
+        groupBox_ch4_2->setMinimumSize(QSize(100, 80));
+        groupBox_ch4_2->setMaximumSize(QSize(16777215, 10000));
         QFont font1;
-        font1.setFamily(QString::fromUtf8("Roboto"));
-        groupBox_rightPanel->setFont(font1);
+        font1.setFamily(QString::fromUtf8("Roboto Medium"));
+        font1.setPointSize(11);
+        groupBox_ch4_2->setFont(font1);
+        groupBox_ch4_2->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        label_meas = new QLabel(groupBox_ch4_2);
+        label_meas->setObjectName(QString::fromUtf8("label_meas"));
+        label_meas->setGeometry(QRect(10, 8, 71, 16));
+        label_meas->setFont(font1);
+
+        horizontalLayout_3->addWidget(groupBox_ch4_2);
+
+        groupBox_ch4_3 = new QGroupBox(groupBox_main);
+        groupBox_ch4_3->setObjectName(QString::fromUtf8("groupBox_ch4_3"));
+        QSizePolicy sizePolicy2(QSizePolicy::Minimum, QSizePolicy::Preferred);
+        sizePolicy2.setHorizontalStretch(0);
+        sizePolicy2.setVerticalStretch(0);
+        sizePolicy2.setHeightForWidth(groupBox_ch4_3->sizePolicy().hasHeightForWidth());
+        groupBox_ch4_3->setSizePolicy(sizePolicy2);
+        groupBox_ch4_3->setMinimumSize(QSize(150, 80));
+        groupBox_ch4_3->setMaximumSize(QSize(16777215, 10000));
+        groupBox_ch4_3->setFont(font1);
+        groupBox_ch4_3->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; \n"
+"QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
+        label_meas_2 = new QLabel(groupBox_ch4_3);
+        label_meas_2->setObjectName(QString::fromUtf8("label_meas_2"));
+        label_meas_2->setGeometry(QRect(10, 8, 71, 16));
+        label_meas_2->setFont(font1);
+        dial_average_2 = new QDial(groupBox_ch4_3);
+        dial_average_2->setObjectName(QString::fromUtf8("dial_average_2"));
+        dial_average_2->setGeometry(QRect(10, 30, 51, 50));
+        dial_average_2->setMinimum(1);
+        dial_average_2->setMaximum(300);
+        dial_average_2->setValue(1);
+        dial_average_2->setOrientation(Qt::Horizontal);
+        dial_average_2->setInvertedAppearance(false);
+        dial_average_2->setWrapping(false);
+        dial_average_2->setNotchTarget(15.000000000000000);
+        dial_average_2->setNotchesVisible(true);
+        dial_average_4 = new QDial(groupBox_ch4_3);
+        dial_average_4->setObjectName(QString::fromUtf8("dial_average_4"));
+        dial_average_4->setGeometry(QRect(80, 30, 51, 50));
+        dial_average_4->setMinimum(1);
+        dial_average_4->setMaximum(300);
+        dial_average_4->setValue(1);
+        dial_average_4->setOrientation(Qt::Horizontal);
+        dial_average_4->setInvertedAppearance(false);
+        dial_average_4->setWrapping(false);
+        dial_average_4->setNotchTarget(15.000000000000000);
+        dial_average_4->setNotchesVisible(true);
+
+        horizontalLayout_3->addWidget(groupBox_ch4_3);
+
+
+        verticalLayout_3->addLayout(horizontalLayout_3);
+
+
+        verticalLayout->addWidget(groupBox_main);
+
+
+        gridLayout->addLayout(verticalLayout, 0, 1, 1, 1);
+
+        groupBox_rightPanel = new QGroupBox(centralwidget);
+        groupBox_rightPanel->setObjectName(QString::fromUtf8("groupBox_rightPanel"));
+        QSizePolicy sizePolicy3(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(groupBox_rightPanel->sizePolicy().hasHeightForWidth());
+        groupBox_rightPanel->setSizePolicy(sizePolicy3);
+        QFont font2;
+        font2.setFamily(QString::fromUtf8("Roboto"));
+        groupBox_rightPanel->setFont(font2);
         groupBox_rightPanel->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.0em;}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         verticalLayout_2 = new QVBoxLayout(groupBox_rightPanel);
@@ -201,18 +335,15 @@ public:
         groupBox_ch1->setObjectName(QString::fromUtf8("groupBox_ch1"));
         groupBox_ch1->setMinimumSize(QSize(370, 100));
         groupBox_ch1->setMaximumSize(QSize(16777215, 150));
-        QFont font2;
-        font2.setFamily(QString::fromUtf8("Roboto Medium"));
-        font2.setPointSize(11);
-        groupBox_ch1->setFont(font2);
+        groupBox_ch1->setFont(font1);
         groupBox_ch1->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         textBrowser_ch1 = new QTextBrowser(groupBox_ch1);
         textBrowser_ch1->setObjectName(QString::fromUtf8("textBrowser_ch1"));
         textBrowser_ch1->setEnabled(true);
         textBrowser_ch1->setGeometry(QRect(9, 26, 225, 65));
-        sizePolicy.setHeightForWidth(textBrowser_ch1->sizePolicy().hasHeightForWidth());
-        textBrowser_ch1->setSizePolicy(sizePolicy);
+        sizePolicy3.setHeightForWidth(textBrowser_ch1->sizePolicy().hasHeightForWidth());
+        textBrowser_ch1->setSizePolicy(sizePolicy3);
         textBrowser_ch1->setMaximumSize(QSize(225, 65));
         QFont font3;
         font3.setFamily(QString::fromUtf8("Roboto Mono Medium"));
@@ -229,11 +360,12 @@ public:
 "\n"
 "QTextBrowser:disabled {\n"
 "	background-color: transparent;\n"
-"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	border: 1px solid gray; border-radius:10px;\n"
 "	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;\n"
 "}"));
         doubleSpinBox_gain1 = new QDoubleSpinBox(groupBox_ch1);
         doubleSpinBox_gain1->setObjectName(QString::fromUtf8("doubleSpinBox_gain1"));
+        doubleSpinBox_gain1->setEnabled(true);
         doubleSpinBox_gain1->setGeometry(QRect(240, 61, 121, 30));
         doubleSpinBox_gain1->setMinimumSize(QSize(121, 0));
         doubleSpinBox_gain1->setMaximumSize(QSize(120, 16777215));
@@ -255,11 +387,10 @@ public:
 " }\n"
 "\n"
 "QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;\n"
-"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
-"                                          text-align:right;fon"
-                        "t-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
+"                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
 "\n"
-"QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"QDoubleSpinBox::up-button:disabled { height:22px"
+                        "; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
 "\n"
 "QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
 ""));
@@ -284,6 +415,7 @@ public:
         label_7->setFont(font4);
         pushButton_disable1 = new QPushButton(groupBox_ch1);
         pushButton_disable1->setObjectName(QString::fromUtf8("pushButton_disable1"));
+        pushButton_disable1->setEnabled(true);
         pushButton_disable1->setGeometry(QRect(240, 26, 121, 30));
         QFont font5;
         font5.setFamily(QString::fromUtf8("Roboto"));
@@ -311,7 +443,10 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         QIcon icon2;
         icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Normal, QIcon::Off);
         icon2.addFile(QString::fromUtf8(":/main/resources/img/power-off-green3.png"), QSize(), QIcon::Disabled, QIcon::Off);
@@ -343,7 +478,10 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         QIcon icon3;
         icon3.addFile(QString::fromUtf8(":/main/resources/img/power-off-gray2.png"), QSize(), QIcon::Normal, QIcon::Off);
         pushButton_enable1->setIcon(icon3);
@@ -351,7 +489,7 @@ public:
         label_ch1 = new QLabel(groupBox_ch1);
         label_ch1->setObjectName(QString::fromUtf8("label_ch1"));
         label_ch1->setGeometry(QRect(10, 8, 221, 16));
-        label_ch1->setFont(font2);
+        label_ch1->setFont(font1);
         textBrowser_ch1->raise();
         doubleSpinBox_gain1->raise();
         label_7->raise();
@@ -365,15 +503,15 @@ public:
         groupBox_ch2->setObjectName(QString::fromUtf8("groupBox_ch2"));
         groupBox_ch2->setMinimumSize(QSize(370, 100));
         groupBox_ch2->setMaximumSize(QSize(16777215, 150));
-        groupBox_ch2->setFont(font2);
+        groupBox_ch2->setFont(font1);
         groupBox_ch2->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         textBrowser_ch2 = new QTextBrowser(groupBox_ch2);
         textBrowser_ch2->setObjectName(QString::fromUtf8("textBrowser_ch2"));
         textBrowser_ch2->setEnabled(true);
         textBrowser_ch2->setGeometry(QRect(9, 26, 225, 65));
-        sizePolicy.setHeightForWidth(textBrowser_ch2->sizePolicy().hasHeightForWidth());
-        textBrowser_ch2->setSizePolicy(sizePolicy);
+        sizePolicy3.setHeightForWidth(textBrowser_ch2->sizePolicy().hasHeightForWidth());
+        textBrowser_ch2->setSizePolicy(sizePolicy3);
         textBrowser_ch2->setMaximumSize(QSize(225, 65));
         textBrowser_ch2->setFont(font3);
         textBrowser_ch2->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
@@ -384,11 +522,12 @@ public:
 "\n"
 "QTextBrowser:disabled {\n"
 "	background-color: transparent;\n"
-"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	border: 1px solid gray; border-radius:10px;\n"
 "	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;\n"
 "}"));
         doubleSpinBox_gain2 = new QDoubleSpinBox(groupBox_ch2);
         doubleSpinBox_gain2->setObjectName(QString::fromUtf8("doubleSpinBox_gain2"));
+        doubleSpinBox_gain2->setEnabled(true);
         doubleSpinBox_gain2->setGeometry(QRect(240, 61, 121, 30));
         doubleSpinBox_gain2->setMinimumSize(QSize(121, 0));
         doubleSpinBox_gain2->setMaximumSize(QSize(120, 16777215));
@@ -410,11 +549,10 @@ public:
 " }\n"
 "\n"
 "QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;\n"
-"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
-"                                          text-align:right;fon"
-                        "t-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
+"                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
 "\n"
-"QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"QDoubleSpinBox::up-button:disabled { height:22px"
+                        "; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
 "\n"
 "QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
 ""));
@@ -458,7 +596,11 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         pushButton_disable2->setIcon(icon2);
         pushButton_disable2->setIconSize(QSize(23, 22));
         pushButton_enable2 = new QPushButton(groupBox_ch2);
@@ -487,13 +629,16 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         pushButton_enable2->setIcon(icon3);
         pushButton_enable2->setIconSize(QSize(23, 22));
         label_ch2 = new QLabel(groupBox_ch2);
         label_ch2->setObjectName(QString::fromUtf8("label_ch2"));
         label_ch2->setGeometry(QRect(10, 8, 221, 16));
-        label_ch2->setFont(font2);
+        label_ch2->setFont(font1);
         textBrowser_ch2->raise();
         doubleSpinBox_gain2->raise();
         label_6->raise();
@@ -507,15 +652,15 @@ public:
         groupBox_ch3->setObjectName(QString::fromUtf8("groupBox_ch3"));
         groupBox_ch3->setMinimumSize(QSize(370, 100));
         groupBox_ch3->setMaximumSize(QSize(16777215, 150));
-        groupBox_ch3->setFont(font2);
+        groupBox_ch3->setFont(font1);
         groupBox_ch3->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; \n"
 ""));
         textBrowser_ch3 = new QTextBrowser(groupBox_ch3);
         textBrowser_ch3->setObjectName(QString::fromUtf8("textBrowser_ch3"));
         textBrowser_ch3->setEnabled(true);
         textBrowser_ch3->setGeometry(QRect(9, 26, 225, 65));
-        sizePolicy.setHeightForWidth(textBrowser_ch3->sizePolicy().hasHeightForWidth());
-        textBrowser_ch3->setSizePolicy(sizePolicy);
+        sizePolicy3.setHeightForWidth(textBrowser_ch3->sizePolicy().hasHeightForWidth());
+        textBrowser_ch3->setSizePolicy(sizePolicy3);
         textBrowser_ch3->setMaximumSize(QSize(225, 65));
         textBrowser_ch3->setFont(font3);
         textBrowser_ch3->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
@@ -526,11 +671,12 @@ public:
 "\n"
 "QTextBrowser:disabled {\n"
 "	background-color: transparent;\n"
-"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	border: 1px solid gray; border-radius:10px;\n"
 "	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;\n"
 "}"));
         doubleSpinBox_gain3 = new QDoubleSpinBox(groupBox_ch3);
         doubleSpinBox_gain3->setObjectName(QString::fromUtf8("doubleSpinBox_gain3"));
+        doubleSpinBox_gain3->setEnabled(true);
         doubleSpinBox_gain3->setGeometry(QRect(240, 61, 121, 30));
         doubleSpinBox_gain3->setMinimumSize(QSize(121, 0));
         doubleSpinBox_gain3->setMaximumSize(QSize(120, 16777215));
@@ -552,11 +698,10 @@ public:
 " }\n"
 "\n"
 "QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;\n"
-"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
-"                                          text-align:right;fon"
-                        "t-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
+"                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
 "\n"
-"QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"QDoubleSpinBox::up-button:disabled { height:22px"
+                        "; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
 "\n"
 "QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
 ""));
@@ -600,7 +745,10 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         pushButton_disable3->setIcon(icon2);
         pushButton_disable3->setIconSize(QSize(23, 22));
         pushButton_enable3 = new QPushButton(groupBox_ch3);
@@ -629,13 +777,16 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         pushButton_enable3->setIcon(icon3);
         pushButton_enable3->setIconSize(QSize(23, 22));
         label_ch3 = new QLabel(groupBox_ch3);
         label_ch3->setObjectName(QString::fromUtf8("label_ch3"));
         label_ch3->setGeometry(QRect(10, 8, 221, 16));
-        label_ch3->setFont(font2);
+        label_ch3->setFont(font1);
         textBrowser_ch3->raise();
         doubleSpinBox_gain3->raise();
         label_5->raise();
@@ -649,15 +800,15 @@ public:
         groupBox_ch4->setObjectName(QString::fromUtf8("groupBox_ch4"));
         groupBox_ch4->setMinimumSize(QSize(370, 100));
         groupBox_ch4->setMaximumSize(QSize(16777215, 150));
-        groupBox_ch4->setFont(font2);
+        groupBox_ch4->setFont(font1);
         groupBox_ch4->setStyleSheet(QString::fromUtf8("QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; \n"
 "QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}"));
         textBrowser_ch4 = new QTextBrowser(groupBox_ch4);
         textBrowser_ch4->setObjectName(QString::fromUtf8("textBrowser_ch4"));
         textBrowser_ch4->setEnabled(true);
         textBrowser_ch4->setGeometry(QRect(9, 26, 225, 65));
-        sizePolicy.setHeightForWidth(textBrowser_ch4->sizePolicy().hasHeightForWidth());
-        textBrowser_ch4->setSizePolicy(sizePolicy);
+        sizePolicy3.setHeightForWidth(textBrowser_ch4->sizePolicy().hasHeightForWidth());
+        textBrowser_ch4->setSizePolicy(sizePolicy3);
         textBrowser_ch4->setMaximumSize(QSize(225, 65));
         textBrowser_ch4->setFont(font3);
         textBrowser_ch4->viewport()->setProperty("cursor", QVariant(QCursor(Qt::IBeamCursor)));
@@ -668,11 +819,12 @@ public:
 "\n"
 "QTextBrowser:disabled {\n"
 "	background-color: transparent;\n"
-"	border-color: transparent; border-width: 1px solid gray; border-style:inset; border-radius:10px;\n"
+"	border: 1px solid gray; border-radius:10px;\n"
 "	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;\n"
 "}"));
         doubleSpinBox_gain4 = new QDoubleSpinBox(groupBox_ch4);
         doubleSpinBox_gain4->setObjectName(QString::fromUtf8("doubleSpinBox_gain4"));
+        doubleSpinBox_gain4->setEnabled(true);
         doubleSpinBox_gain4->setGeometry(QRect(240, 61, 121, 30));
         doubleSpinBox_gain4->setMinimumSize(QSize(121, 0));
         doubleSpinBox_gain4->setMaximumSize(QSize(120, 16777215));
@@ -694,11 +846,10 @@ public:
 " }\n"
 "\n"
 "QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:5px;\n"
-"                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;\n"
-"                                          text-align:right;fon"
-                        "t-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
+"                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }\n"
 "\n"
-"QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
+"QDoubleSpinBox::up-button:disabled { height:22px"
+                        "; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }\n"
 "\n"
 "QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }\n"
 ""));
@@ -742,7 +893,10 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         pushButton_enable4->setIcon(icon3);
         pushButton_enable4->setIconSize(QSize(23, 22));
         pushButton_disable4 = new QPushButton(groupBox_ch4);
@@ -771,23 +925,26 @@ public:
 "	border-radius: 5px;\n"
 " 	background: #AAAAAA;\n"
 "	color:white;\n"
-"}"));
+"}\n"
+"\n"
+"QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \n"
+"                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"));
         pushButton_disable4->setIcon(icon2);
         pushButton_disable4->setIconSize(QSize(23, 22));
         label_ch4 = new QLabel(groupBox_ch4);
         label_ch4->setObjectName(QString::fromUtf8("label_ch4"));
         label_ch4->setGeometry(QRect(10, 8, 221, 16));
-        label_ch4->setFont(font2);
+        label_ch4->setFont(font1);
 
         verticalLayout_2->addWidget(groupBox_ch4);
 
         groupBox_settigns = new QGroupBox(groupBox_rightPanel);
         groupBox_settigns->setObjectName(QString::fromUtf8("groupBox_settigns"));
-        QSizePolicy sizePolicy1(QSizePolicy::Preferred, QSizePolicy::Expanding);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(groupBox_settigns->sizePolicy().hasHeightForWidth());
-        groupBox_settigns->setSizePolicy(sizePolicy1);
+        QSizePolicy sizePolicy4(QSizePolicy::Preferred, QSizePolicy::Expanding);
+        sizePolicy4.setHorizontalStretch(0);
+        sizePolicy4.setVerticalStretch(0);
+        sizePolicy4.setHeightForWidth(groupBox_settigns->sizePolicy().hasHeightForWidth());
+        groupBox_settigns->setSizePolicy(sizePolicy4);
         groupBox_settigns->setMinimumSize(QSize(0, 140));
         groupBox_settigns->setMaximumSize(QSize(16777215, 140));
         QFont font6;
@@ -808,7 +965,7 @@ public:
         dial_display->setObjectName(QString::fromUtf8("dial_display"));
         dial_display->setGeometry(QRect(10, 80, 51, 50));
         dial_display->setMinimum(1);
-        dial_display->setMaximum(2000);
+        dial_display->setMaximum(3000);
         dial_display->setValue(100);
         dial_display->setOrientation(Qt::Horizontal);
         dial_display->setInvertedAppearance(false);
@@ -859,7 +1016,7 @@ public:
         spinBox_display->setKeyboardTracking(false);
         spinBox_display->setProperty("showGroupSeparator", QVariant(false));
         spinBox_display->setMinimum(1);
-        spinBox_display->setMaximum(2000);
+        spinBox_display->setMaximum(3000);
         spinBox_display->setValue(300);
         label_dial4 = new QLabel(groupBox_settigns);
         label_dial4->setObjectName(QString::fromUtf8("label_dial4"));
@@ -868,12 +1025,13 @@ public:
         label_dial4->setScaledContents(false);
         spinBox_average = new QSpinBox(groupBox_settigns);
         spinBox_average->setObjectName(QString::fromUtf8("spinBox_average"));
+        spinBox_average->setEnabled(true);
         spinBox_average->setGeometry(QRect(70, 35, 231, 41));
-        QSizePolicy sizePolicy2(QSizePolicy::Preferred, QSizePolicy::Fixed);
-        sizePolicy2.setHorizontalStretch(0);
-        sizePolicy2.setVerticalStretch(0);
-        sizePolicy2.setHeightForWidth(spinBox_average->sizePolicy().hasHeightForWidth());
-        spinBox_average->setSizePolicy(sizePolicy2);
+        QSizePolicy sizePolicy5(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy5.setHorizontalStretch(0);
+        sizePolicy5.setVerticalStretch(0);
+        sizePolicy5.setHeightForWidth(spinBox_average->sizePolicy().hasHeightForWidth());
+        spinBox_average->setSizePolicy(sizePolicy5);
         spinBox_average->setStyleSheet(QString::fromUtf8("QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;\n"
 "				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }\n"
 "\n"
@@ -998,7 +1156,7 @@ public:
         label_13 = new QLabel(groupBox_settigns);
         label_13->setObjectName(QString::fromUtf8("label_13"));
         label_13->setGeometry(QRect(10, 8, 81, 16));
-        label_13->setFont(font2);
+        label_13->setFont(font1);
         spinBox_display->raise();
         label_3->raise();
         label_dial4->raise();
@@ -1018,19 +1176,7 @@ public:
         verticalLayout_2->addItem(verticalSpacer_4);
 
 
-        gridLayout->addWidget(groupBox_rightPanel, 0, 2, 1, 1);
-
-        customPlot = new QCustomPlot(centralwidget);
-        customPlot->setObjectName(QString::fromUtf8("customPlot"));
-        customPlot->setEnabled(true);
-        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Expanding);
-        sizePolicy3.setHorizontalStretch(0);
-        sizePolicy3.setVerticalStretch(0);
-        sizePolicy3.setHeightForWidth(customPlot->sizePolicy().hasHeightForWidth());
-        customPlot->setSizePolicy(sizePolicy3);
-        customPlot->setStyleSheet(QString::fromUtf8("background-color: rgb(220,220,220);border: 0px; border-radius: 5px; margin-right:2px;"));
-
-        gridLayout->addWidget(customPlot, 0, 1, 1, 1);
+        gridLayout->addWidget(groupBox_rightPanel, 0, 3, 1, 1);
 
         WindowVm->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowVm);
@@ -1058,6 +1204,12 @@ public:
         menuMeasure = new QMenu(menubar);
         menuMeasure->setObjectName(QString::fromUtf8("menuMeasure"));
         menuMeasure->setFont(font);
+        menuChannel = new QMenu(menuMeasure);
+        menuChannel->setObjectName(QString::fromUtf8("menuChannel"));
+        menuChannel->setFont(font);
+        menuCursors = new QMenu(menubar);
+        menuCursors->setObjectName(QString::fromUtf8("menuCursors"));
+        menuCursors->setFont(font);
         WindowVm->setMenuBar(menubar);
         statusbar = new QStatusBar(WindowVm);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -1067,6 +1219,7 @@ public:
         menubar->addAction(menuRecord->menuAction());
         menubar->addAction(menuView->menuAction());
         menubar->addAction(menuMeasure->menuAction());
+        menubar->addAction(menuCursors->menuAction());
         menubar->addAction(menuHelp->menuAction());
         menuHelp->addAction(actionAbout);
         menuRecord->addAction(actionStart);
@@ -1089,7 +1242,13 @@ public:
         menuMeasure->addAction(actionMin);
         menuMeasure->addAction(actionAverage);
         menuMeasure->addSeparator();
+        menuMeasure->addAction(menuChannel->menuAction());
+        menuMeasure->addSeparator();
         menuMeasure->addAction(actionReset);
+        menuChannel->addAction(actionChannel_1);
+        menuChannel->addAction(actionChannel_2);
+        menuChannel->addAction(actionChannel_3);
+        menuChannel->addAction(actionChannel_4);
 
         retranslateUi(WindowVm);
 
@@ -1107,7 +1266,7 @@ public:
         actionLines->setText(QCoreApplication::translate("WindowVm", "Lines", nullptr));
         actionPoints->setText(QCoreApplication::translate("WindowVm", "Points", nullptr));
         actionLinear->setText(QCoreApplication::translate("WindowVm", "Linear", nullptr));
-        actionSinc->setText(QCoreApplication::translate("WindowVm", "Sinc", nullptr));
+        actionSinc->setText(QCoreApplication::translate("WindowVm", "Spline", nullptr));
         actionCSV->setText(QCoreApplication::translate("WindowVm", "CSV", nullptr));
         actionTXT_Tabs->setText(QCoreApplication::translate("WindowVm", "TXT (Tabs)", nullptr));
         actionMAT->setText(QCoreApplication::translate("WindowVm", "MAT", nullptr));
@@ -1115,6 +1274,15 @@ public:
         actionMin->setText(QCoreApplication::translate("WindowVm", "Min", nullptr));
         actionAverage->setText(QCoreApplication::translate("WindowVm", "Average", nullptr));
         actionReset->setText(QCoreApplication::translate("WindowVm", "Reset", nullptr));
+        actionChannel_1->setText(QCoreApplication::translate("WindowVm", "Channel 1", nullptr));
+        actionChannel_2->setText(QCoreApplication::translate("WindowVm", "Channel 2", nullptr));
+        actionChannel_3->setText(QCoreApplication::translate("WindowVm", "Channel 3", nullptr));
+        actionChannel_4->setText(QCoreApplication::translate("WindowVm", "Channel 4", nullptr));
+        groupBox_main->setTitle(QString());
+        groupBox_ch4_2->setTitle(QString());
+        label_meas->setText(QCoreApplication::translate("WindowVm", "Measure", nullptr));
+        groupBox_ch4_3->setTitle(QString());
+        label_meas_2->setText(QCoreApplication::translate("WindowVm", "Cursors", nullptr));
         groupBox_rightPanel->setTitle(QString());
         groupBox_ch1->setTitle(QString());
         textBrowser_ch1->setHtml(QCoreApplication::translate("WindowVm", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
@@ -1176,6 +1344,8 @@ public:
         menuView->setTitle(QCoreApplication::translate("WindowVm", "View", nullptr));
         menuInterpolation->setTitle(QCoreApplication::translate("WindowVm", "Interpolation", nullptr));
         menuMeasure->setTitle(QCoreApplication::translate("WindowVm", "Measure", nullptr));
+        menuChannel->setTitle(QCoreApplication::translate("WindowVm", "Channel", nullptr));
+        menuCursors->setTitle(QCoreApplication::translate("WindowVm", "Cursors", nullptr));
     } // retranslateUi
 
 };

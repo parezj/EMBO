@@ -40,6 +40,9 @@ void Core::on_startThread()
     m_timer_render = new QTimer();
     m_timer_comm = new QTimer();
 
+    m_timer_rxTimeout->setSingleShot(true);
+    m_timer_comm->setSingleShot(true);
+
     m_timer_rxTimeout->setTimerType(Qt::PreciseTimer);
     m_timer_comm->setTimerType(Qt::PreciseTimer);
     m_timer_render->setTimerType(Qt::PreciseTimer);
@@ -144,8 +147,8 @@ void Core::msgAdd(Msg* msg, bool isQuery, QString params)
     assert(msg != Q_NULLPTR);
 
     msg->setIsQuery(isQuery);
-    if (!params.isEmpty())
-        msg->setParams(params);
+    //if (!params.isEmpty())
+    msg->setParams(params);
 
     m_waitingMsgs.append(msg);
 }
@@ -203,8 +206,9 @@ void Core::openComm2()
     m_activeMsgs.append(m_msg_idn);
     m_activeMsgs.append(m_msg_sys_lims);
     m_activeMsgs.append(m_msg_sys_info);
-    m_msg_sys_mode->setIsQuery(true);
-    m_activeMsgs.append(m_msg_sys_mode);
+    //m_msg_sys_mode->setIsQuery(true);
+    //m_msg_sys_mode->setParams("");
+    //m_activeMsgs.append(m_msg_sys_mode);
 
     send();
 }
@@ -254,79 +258,163 @@ void Core::on_serial_errorOccurred(QSerialPort::SerialPortError error)
 
 void Core::on_serial_readyRead()
 {
-    try // exceptions DO NOT work
+    try // exceptions DO NOT work !
     {
-        const QByteArray data = m_serial->readAll();
-        QString str = QString::fromUtf8(data);
+        m_mainBuffer.append(m_serial->readAll());
 
-        m_mainBuffer = m_mainBuffer.append(data);
+        /*
+        QByteArray rx_buffer = m_mainBuffer.left(m_mainBuffer.size());
+        for (int o = 0; o < rx_buffer.length(); o++)
+            if (rx_buffer[o] != '\n' && rx_buffer[o] != '\r' && (rx_buffer[o] < '0' || rx_buffer[o] > 'z'))
+                rx_buffer[o] = 'x';
+        qInfo() << "rx buffer: " << rx_buffer;
+        */
 
         int msg_cnt = 0;
-        QStringList messages;
-        int bin_header_len;
+        QByteArrayList messages;
+        int bin_header_len = 0;
+        int bin_len_total = 0;
+        int bin_msg_it = -1;
         int hashIdx = m_mainBuffer.indexOf('#');
 
-        if (hashIdx > -1) // binary message
+        if (hashIdx > -1) // binary message, find it and exclude it from delim split
         {
             int buf_sz = m_mainBuffer.size();
             auto left_part = m_mainBuffer.left(hashIdx);
 
-            messages = left_part.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
-            msg_cnt = left_part.count(EMBO_NEWLINE);
-
             if (m_mainBuffer.size() > hashIdx + 5)
             {
-                int n = (m_mainBuffer.data())[hashIdx + 1].digitValue();
+                int n = m_mainBuffer[hashIdx + 1] - '0';
                 int bin_len = m_mainBuffer.mid(hashIdx + 2, n).toInt();
-                int bin_len_total = 1 + n + bin_len;
+                bin_len_total = 1 + n + bin_len;
+                int bin_msg_start = 0;
+                int bin_msg_end = 0;
+
+                /*
+                qInfo() << "hashIdx: " <<  hashIdx;
+                qInfo() << "buf_sz: " <<  buf_sz;
+                qInfo() << "n: " <<  n;
+                qInfo() << "bin_len: " <<  bin_len;
+                qInfo() << "bin_len_total: " <<  bin_len_total;
+                */
 
                 if (buf_sz >= hashIdx + bin_len_total)
                 {
                     bin_header_len = 2 + n;
-                    messages.append(m_mainBuffer.mid(hashIdx, 1 + bin_len_total));
-                    msg_cnt++;
+                    bin_msg_start = hashIdx;
+                    bin_msg_end = hashIdx + 1 + bin_len_total;
+                    bin_msg_it = 0;
 
-                    auto right_part = m_mainBuffer.right(hashIdx + 1 + bin_len_total);
-                    auto messages2 = right_part.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
-                    if (!messages2.isEmpty())
-                    {
-                        messages.append(messages2);
-                        msg_cnt += right_part.count(EMBO_NEWLINE);
+                    // split for message skipping binary message
+                    int j = 0;
+                    for(int i = 0; i < bin_msg_start; i++) {
+                        if (m_mainBuffer.at(i) == '\n') {
+                            messages.append(m_mainBuffer.mid(j, (i - 1) - j));
+                            msg_cnt++;
+                            bin_msg_it++;
+                            j = i + 1;
+                        }
+                    }
+                    for(int i = bin_msg_end + 1; i < m_mainBuffer.length(); i++) {
+                        if (m_mainBuffer.at(i) == '\n') {
+                            messages.append(m_mainBuffer.mid(j, (i - 1) - j));
+                            msg_cnt++;
+                            j = i + 1;
+                        }
                     }
                 }
             }
         }
         else // standard messages
         {
-            messages = m_mainBuffer.split(EMBO_NEWLINE, Qt::SkipEmptyParts);
-            msg_cnt = m_mainBuffer.count(EMBO_NEWLINE);
+            // split for message
+            messages = m_mainBuffer.split('\n');
+            msg_cnt = m_mainBuffer.count('\n');
+
+            for (int r = 0; r < messages.size(); r++) // remove \r
+                if (!messages[r].isEmpty())
+                    messages[r] = messages[r].remove(messages[r].size() - 1, 1);
         }
 
-        //qInfo() << "rx buffer: " << m_mainBuffer;
-        m_timer_rxTimeout->stop();
-        m_timer_rxTimeout->start();
+        //qInfo() << "MSG CNT: " << msg_cnt;
+
+        m_timer_rxTimeout->start(); // restart
 
         for(int i = 0; i < msg_cnt; i++) // iterate all full msgs
         {
+            if (messages[i].isEmpty())
+                continue;
+
             //qInfo() << "rx msg: " << messages[i];
 
             m_mainBuffer = m_mainBuffer.right(m_mainBuffer.size() - (messages[i].size() + 2));
 
-            if (messages[i] == EMBO_READY_A || messages[i] == EMBO_READY_N || messages[i] == EMBO_READY_D)
+            Ready ready = Ready::NOT_READY;
+
+            if (messages[i].contains(EMBO_READY_A)) ready = Ready::READY_AUTO;
+            if (messages[i].contains(EMBO_READY_N)) ready = Ready::READY_NORMAL;
+            if (messages[i].contains(EMBO_READY_D)) ready = Ready::READY_DISABLED;
+
+            if (ready != Ready::NOT_READY)
             {
                 qInfo() << messages[i];
-                // emit READY signal                
+                emit daqReady(ready);
                 continue;
             }
-            QStringList submessages = messages[i].split(EMBO_DELIM1, Qt::SkipEmptyParts);
+
+            QByteArrayList submessages;
+
+            if (i == bin_msg_it)
+            {
+                int bin_msg_start = messages[i].indexOf('#');
+                int bin_msg_end = bin_msg_start + bin_len_total;
+
+                /*
+                qInfo() << " bin_msg_start: " << bin_msg_start;
+                qInfo() << " bin_msg_end: " << bin_msg_end;
+                qInfo() << " bin msg len: " << messages[i].length();
+                */
+
+                // split for submessage skipping binary message
+                int j = 0;
+                int msg_len = messages[i].length();
+
+                for(int k = 0; k < bin_msg_start; k++) {
+                    if (messages[i].at(k) == ';') {
+                        submessages.append(messages[i].mid(j, k - j));
+                        j = k + 1;
+                    }
+                }
+                for(int k = bin_msg_end + 1; k < msg_len; k++) {
+                    if (messages[i].at(k) == ';') {
+                        submessages.append(messages[i].mid(j, k - j));
+                        j = k + 1;
+                    }
+                }
+                if (j < msg_len)
+                    submessages.append(messages[i].mid(j, msg_len));
+
+                //qInfo() << "BIN MSG submsg cnt: " << submessages.size();
+            }
+            else
+            {
+                // split for submessage
+                submessages = messages[i].split(';');
+
+                //qInfo() << "TXT MSG submsg cnt:" << submessages.size();
+            }
 
             m_submsgIt = 0;
             int activeMsg_size = m_activeMsgs.size();
 
-            for(const QString submessage : submessages)
+            for(const QByteArray submessage : submessages)
             {
+                if (submessage.isEmpty())
+                    continue;
+
                 if (m_state == DISCONNECTED)
                     return;
+
                 if (m_submsgIt >= activeMsg_size)
                 {
                     err(COMM_FATAL_ERR + messages[i] + m_mainBuffer, true);
@@ -334,9 +422,9 @@ void Core::on_serial_readyRead()
                 }
 
                 if (submessage.at(0) == '#')
-                    m_activeMsgs[m_submsgIt++]->fire(submessage.right(submessage.size() - bin_header_len));
+                    m_activeMsgs[m_submsgIt++]->fire(submessage.right(submessage.size() - bin_header_len)); // fire binary data
                 else
-                    m_activeMsgs[m_submsgIt++]->fire(submessage); // do main virtual action
+                    m_activeMsgs[m_submsgIt++]->fire(QString(submessage)); // fire standard text message
             }
 
             if (m_submsgIt == activeMsg_size) // success - do post actions
@@ -345,10 +433,14 @@ void Core::on_serial_readyRead()
                 m_timer_rxTimeout->stop();
                 m_activeMsgs.clear();
 
+                m_commTimeoutMs = TIMER_COMM - m_latencyAvgMs;
+                if (m_commTimeoutMs < TIMER_COMM_MIN)
+                    m_commTimeoutMs = TIMER_COMM_MIN;
+
                 if (m_state == CONNECTING2)
                     startComm();
                 else if (m_state == CONNECTED)
-                    m_timer_comm->start();
+                    m_timer_comm->start(m_commTimeoutMs);
             }
         }
         if (m_open_comm)
@@ -388,7 +480,7 @@ void Core::on_timer_comm()
         return;
     }
 
-    if (m_mode != m_mode_last)
+    if (m_mode != NO_MODE && m_mode != m_mode_last)
     {
         m_msg_sys_mode->setIsQuery(false);
         m_msg_sys_mode->setParams(m_mode == LA ? "LA" : (m_mode == SCOPE ? "SCOPE" : "VM"));
@@ -417,5 +509,6 @@ void Core::on_timer_comm()
 
 void Core::on_timer_render()
 {
-    emit latencyAndUptime(getLatencyMs(), getUptime());
+    m_latencyAvgMs = getLatencyMs();
+    emit latencyAndUptime(m_latencyAvgMs, m_commTimeoutMs, getUptime());
 }

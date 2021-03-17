@@ -250,6 +250,7 @@ Makefile: ../../EMBO/EMBO.pro F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/win32/default_pre.prf \
 		../../EMBO/__crashhandler/qBreakpad.pri \
+		../../EMBO/__updater/QSimpleUpdater.pri \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/resolve_config.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds_post.prf \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_post.prf \
@@ -278,6 +279,7 @@ Makefile: ../../EMBO/EMBO.pro F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl \
 		F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/build_pass.prf \
+		../../EMBO/__updater/etc/resources/qsimpleupdater.qrc \
 		../../EMBO/resources.qrc
 	$(QMAKE) -o Makefile ../../EMBO/EMBO.pro -spec win32-g++ CONFIG+=qtquickcompiler
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/spec_pre.prf:
@@ -460,6 +462,7 @@ F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/toolchain.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_pre.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/win32/default_pre.prf:
 ../../EMBO/__crashhandler/qBreakpad.pri:
+../../EMBO/__updater/QSimpleUpdater.pri:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/resolve_config.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/exclusive_builds_post.prf:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/default_post.prf:
@@ -488,6 +491,7 @@ F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5SerialPort.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/Qt5Core.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/lib/qtmain.prl:
 F:/Programs/Qt/Qt5.14.2/5.14.2/mingw73_64/mkspecs/features/build_pass.prf:
+../../EMBO/__updater/etc/resources/qsimpleupdater.qrc:
 ../../EMBO/resources.qrc:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../../EMBO/EMBO.pro -spec win32-g++ CONFIG+=qtquickcompiler

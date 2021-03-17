@@ -44,7 +44,7 @@ private slots:
     void on_pushButton_connect_clicked();
     void on_pushButton_disconnect_clicked();
 
-    void on_latencyAndUptime(int latency, const QString uptime);
+    void on_latencyAndUptime(int latency, int commTimeout, const QString uptime);
     void on_coreState_changed(const State newState);
     void on_msgDisplay(const QString text, MsgBoxType type);
     void on_instrClose(const char* className);
@@ -55,8 +55,7 @@ private slots:
     void on_pushButton_cntr_clicked();
     void on_pushButton_pwm_clicked();
     void on_pushButton_sgen_clicked();
-
-    void on_actionOpenProgrammer_triggered();
+    void on_actionCheck_Updates_triggered();
 
 private:
     void instrFirstRowEnable(bool enable);
@@ -66,6 +65,8 @@ private:
     void saveSettings();
     void setConnected();
     void setDisconnected();
+    void updateChangelog (const QString& url);
+    void displayAppcast (const QString& url, const QByteArray& reply);
 
     bool m_connected = false;
     bool m_close_init = false;

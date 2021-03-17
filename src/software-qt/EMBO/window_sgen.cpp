@@ -346,7 +346,7 @@ void WindowSgen::showEvent(QShowEvent*)
     m_ui->dial_offset->setValue(0);
     */
 
-    //Core::getInstance()->msgAdd(m_msg_set, true);
+    //Core::getInstance()->msgAdd(m_msg_set, true, "");
 }
 
 void WindowSgen::enableAll(bool enable)

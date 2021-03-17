@@ -11,6 +11,7 @@
 #include "css.h"
 
 #include "QBreakpadHandler.h"
+#include "QSimpleUpdater.h"
 
 #include <QDebug>
 #include <QDir>
@@ -63,6 +64,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     qRegisterMetaType<State>("State");
     qRegisterMetaType<Msg>("Msg");
     qRegisterMetaType<MsgBoxType>("MsgBoxType");
+    qRegisterMetaType<Ready>("Ready");
 
     //connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(on_close()));
 
@@ -122,6 +124,17 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->pushButton_cntr->setStyleSheet(CSS_BUTTON CSS_BUTTON_CNTR);
     m_ui->pushButton_pwm->setStyleSheet(CSS_BUTTON CSS_BUTTON_PWM);
     m_ui->pushButton_sgen->setStyleSheet(CSS_BUTTON CSS_BUTTON_SGEN);
+
+    auto updater = QSimpleUpdater::getInstance();
+
+    updater->setNotifyOnUpdate(UPDATE_URL, true);
+    updater->setNotifyOnFinish(UPDATE_URL, true);
+    updater->setDownloaderEnabled(UPDATE_URL, true);
+
+    connect (updater, SIGNAL (checkingFinished  (QString)), this, SLOT(updateChangelog(QString)));
+    connect (updater, SIGNAL (appcastDownloaded (QString, QByteArray)), this,  SLOT(displayAppcast(QString, QByteArray)));
+
+    qInfo() << APP_VERSION;
 
     setDisconnected();
     on_pushButton_scan_clicked();
@@ -565,9 +578,9 @@ void WindowMain::on_pushButton_disconnect_clicked()
     emit closeComm(false);
 }
 
-void WindowMain::on_latencyAndUptime(int latency, const QString uptime)
+void WindowMain::on_latencyAndUptime(int latency, int commTimeout, const QString uptime)
 {
-    m_status_latency->setText("Latency: " + QString::number(TIMER_COMM) + "+" + QString::number(latency) + " ms");
+    m_status_latency->setText("Latency: " + QString::number(commTimeout) + "+" + QString::number(latency) + " ms");
     m_status_uptime->setText("Uptime: " + uptime);
 
     if (m_w_vm->isVisible())
@@ -738,6 +751,43 @@ void WindowMain::on_pushButton_sgen_clicked()
     m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_OFF);
 }
 
-void WindowMain::on_actionOpenProgrammer_triggered()
+void WindowMain::on_actionCheck_Updates_triggered()
 {
+    auto updater = QSimpleUpdater::getInstance();
+
+    updater->setModuleVersion (UPDATE_URL, APP_VERSION);
+    updater->setNotifyOnFinish (UPDATE_URL, true);
+    updater->setNotifyOnUpdate (UPDATE_URL, true);
+    updater->setUseCustomAppcast (UPDATE_URL, false);
+    updater->setDownloaderEnabled (UPDATE_URL, true);
+    updater->setMandatoryUpdate (UPDATE_URL, false);
+    //updater->setModuleName(UPDATE_URL, "EMBO");
+
+    /*
+    if (QSysInfo::productType().toLower().contains("windows"))
+        updater->setModuleName(UPDATE_URL, "EMBO-Windows");
+    else if (QSysInfo::productType().toLower().contains("mac"))
+        updater->setModuleName(UPDATE_URL, "EMBO-macOS");
+    else if (QSysInfo::productType().toLower().contains("ubuntu"))
+        updater->setModuleName(UPDATE_URL, "EMBO-Ubunut");
+    */
+
+    updater->checkForUpdates(UPDATE_URL);
+}
+
+void WindowMain::updateChangelog (const QString& url)
+{
+    qInfo() << url;
+}
+
+void WindowMain::displayAppcast (const QString& url, const QByteArray& reply)
+{
+    QString text = "This is the downloaded appcast: <p><pre>" +
+                   QString::fromUtf8 (reply) +
+                   "</pre></p><p> If you need to store more information on the "
+                   "appcast (or use another format), just use the "
+                   "<b>QSimpleUpdater::setCustomAppcast()</b> function. "
+                   "It allows your application to interpret the appcast "
+                   "using your code and not QSU's code.</p>";
+    qInfo() << text;
 }

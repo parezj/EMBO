@@ -29,6 +29,7 @@ public:
     virtual ~Msg() {};
 
     void fire(const QString data);
+    void fire(const QByteArray data);
 
     QString getCmd() { return this->m_cmd; }
     bool getIsQuery() { return this->m_isQuery; }
@@ -41,12 +42,15 @@ protected slots:
 
 signals:
     void rx();
+    void rx_bin();
+
     void ok(const QString val1 = "", const QString val2 = "");
     void err(const QString text, MsgBoxType type, bool needClose);
 
 protected:
     QString m_cmd;
     QString m_rxData;
+    QByteArray m_rxDataBin;
     bool m_isQuery;
     QString m_params = "";
 };

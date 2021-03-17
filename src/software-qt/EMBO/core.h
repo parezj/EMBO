@@ -23,11 +23,14 @@
 #include <QSerialPort>
 #include <QVector>
 
-#define TIMER_RX        1000
+#define UPDATE_URL      "http://embo.jakubparez.com/updates.json"
+
 #define TIMER_COMM      10
+#define TIMER_COMM_MIN  1
+#define TIMER_RX        1000
 #define TIMER_RENDER    100
 
-#define LATENCY_AVG    50
+#define LATENCY_AVG     25
 
 #define INVALID_MSG     "Invalid message! "
 #define COMM_FATAL_ERR  "Communication fatal error! "
@@ -40,10 +43,10 @@ For just few dollar hardware (STM32 BluePill) can become a powerfull scope, logi
 PWM and signal generator.<br>And of course, it's opensource! \
 <br><br>EMBO uses this free software:<br>\
 <a href='https://www.qcustomplot.com'>QCustomPlot</a><br>\
-<a href='https://github.com/yangfuyuan/STM32Programming'>yangfuyuan/STM32Programming</a><br>\
-<a href='https://github.com/buzzySmile/qBreakpad'>buzzySmile/qBreakpad</a><br>\
+<a href='https://github.com/alex-spataru/QSimpleUpdater'>alex-spataru / QSimpleUpdater </a><br>\
+<a href='https://github.com/buzzySmile/qBreakpad'>buzzySmile / qBreakpad</a><br>\
 <a href='https://chromium.googlesource.com/breakpad/breakpad'>Google Breakpad</a><br>\
-<a href='https://chromium.googlesource.com/linux-syscall-support'>buzzySmile/Linux Syscall Support</a>\
+<a href='https://chromium.googlesource.com/linux-syscall-support'>Linux Syscall Support</a>\
 <br><br>Compiled " __DATE__ " " __TIME__ " with <b>Qt " QT_VERSION_STR "</b><br><br>\
 <a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
 
@@ -58,8 +61,8 @@ PWM and signal generator.<br>And of course, it's opensource! \
 #define EMBO_OK             "\"OK\""
 
 #define EMBO_READY_A        "ReadyA"
-#define EMBO_READY_N        "ReadyD"
-#define EMBO_READY_D        "ReadyA"
+#define EMBO_READY_N        "ReadyN"
+#define EMBO_READY_D        "ReadyD"
 
 enum State
 {
@@ -68,13 +71,6 @@ enum State
     CONNECTING1,
     CONNECTING2,
     CONNECTED
-};
-
-enum Mode
-{
-    VM = 0,
-    SCOPE = 1,
-    LA = 2
 };
 
 class DevInfo : public QObject
@@ -140,7 +136,7 @@ public:
     int getLatencyMs();
     QString getUptime() { return m_uptime; }
     void setUptime(QString uptime) { m_uptime = uptime; }
-    void setMode(Mode mode, bool alsoLast) { m_mode = mode; if (alsoLast) m_mode_last = mode; }
+    void setMode(Mode mode, bool alsoLast = false) { m_mode = mode; if (alsoLast) m_mode_last = mode; }
 
      /* singleton */
     static Core* getInstance(QObject* parent = 0)
@@ -158,9 +154,10 @@ public slots:
     void on_dispose();
 
 signals:
+    void daqReady(Ready ready);
     void stateChanged(const State state);
     void msgDisplay(const QString name, MsgBoxType type);
-    void latencyAndUptime(int latency, const QString uptime);
+    void latencyAndUptime(int latency, int commTimeout, const QString uptime);
     void finished();
 
 private slots:
@@ -186,8 +183,8 @@ private:
     bool m_binary_mode = false;
     bool m_close_init = false;
     bool m_open_comm = false;
-    Mode m_mode = Mode::VM;
-    Mode m_mode_last = Mode::VM;
+    Mode m_mode = Mode::NO_MODE;
+    Mode m_mode_last = Mode::NO_MODE;
 
     /* timers */
     QTimer* m_timer_rxTimeout;
@@ -201,6 +198,10 @@ private:
     int m_latencyCnt = 0;
     int m_latencyIt = 0;
 
+    /* latency avg val and rx timeout */
+    int m_latencyAvgMs = 0;
+    int m_commTimeoutMs = 0;
+
     /* data */
     DevInfo* m_devInfo; // const
     QString m_uptime = "";
@@ -208,7 +209,7 @@ private:
     /* message buffers */
     QVector<Msg*> m_waitingMsgs;
     QVector<Msg*> m_activeMsgs;
-    QString m_mainBuffer = "";
+    QByteArray m_mainBuffer;
     int m_submsgIt = 0;
 
     /* message objects */

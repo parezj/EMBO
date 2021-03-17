@@ -22,12 +22,16 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->setupUi(this);
 
     m_timer_render = new QTimer(this);
+    m_timer_render->setTimerType(Qt::PreciseTimer);
+
     m_msg_read = new Msg_VM_Read(this);
 
     connect(m_msg_read, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
     connect(m_msg_read, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
 
     connect(m_timer_render, &QTimer::timeout, this, &WindowVm::on_timer_render);
+
+    /* QCP */
 
     m_ui->customPlot->addGraph();
     m_ui->customPlot->addGraph();
@@ -39,8 +43,10 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR3)));
     m_ui->customPlot->graph(GRAPH_CH4)->setPen(QPen(QColor(COLOR4)));
 
+    m_spline = false;
+
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
-    timeTicker->setTimeFormat("%h:%m:%s.%z");
+    timeTicker->setTimeFormat("%h:%m:%s");
     m_ui->customPlot->xAxis->setTicker(timeTicker);
     m_ui->customPlot->axisRect()->setupFullAxesBox();
 
@@ -49,15 +55,21 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->customPlot->yAxis->setVisible(true);
     m_ui->customPlot->yAxis->setTickLabels(true);
 
-    m_ui->customPlot->xAxis2->setVisible(true);
-    m_ui->customPlot->xAxis2->setTickLabels(true);
-    m_ui->customPlot->yAxis2->setVisible(true);
-    m_ui->customPlot->yAxis2->setTickLabels(true);
+    //m_ui->customPlot->xAxis2->setVisible(true);
+    //m_ui->customPlot->xAxis2->setTickLabels(true);
+    //m_ui->customPlot->yAxis2->setVisible(true);
+    //m_ui->customPlot->yAxis2->setTickLabels(true);
 
     m_ui->customPlot->yAxis->setLabel("Voltage [V]");
     m_ui->customPlot->xAxis->setLabel("Time [s]");
 
-    //m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+    QFont font2("Roboto", 12, QFont::Normal);
+    m_ui->customPlot->xAxis->setTickLabelFont(font2);
+    m_ui->customPlot->yAxis->setTickLabelFont(font2);
+    m_ui->customPlot->xAxis->setLabelFont(font2);
+    m_ui->customPlot->yAxis->setLabelFont(font2);
+
+    m_ui->customPlot->setInteractions(0);
 
     connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
@@ -84,6 +96,26 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
+
+    /* styles */
+
+    QString style1(CSS_BUTTON_ONOFF);
+
+    m_ui->pushButton_enable->setStyleSheet(style1);
+    m_ui->pushButton_disable->setStyleSheet(style1);
+    m_ui->pushButton_enable1->setStyleSheet(style1);
+    m_ui->pushButton_disable1->setStyleSheet(style1);
+    m_ui->pushButton_enable2->setStyleSheet(style1);
+    m_ui->pushButton_disable2->setStyleSheet(style1);
+    m_ui->pushButton_enable3->setStyleSheet(style1);
+    m_ui->pushButton_disable3->setStyleSheet(style1);
+    m_ui->pushButton_enable4->setStyleSheet(style1);
+    m_ui->pushButton_disable4->setStyleSheet(style1);
+
+    QString style2(CSS_SPINBOX);
+
+    m_ui->spinBox_average->setStyleSheet(style2);
+    m_ui->spinBox_display->setStyleSheet(style2);
 
     m_instrEnabled = true;
 }
@@ -149,24 +181,39 @@ void WindowVm::on_timer_render()
         ch3_s = ch1_s.asprintf(ch3 >= 100 ? "%.2f" : (ch3 >= 10 ? "%.3f" : "%.4f"), ch3);
         ch4_s = ch1_s.asprintf(ch4 >= 100 ? "%.2f" : (ch4 >= 10 ? "%.3f" : "%.4f"), ch4);
 
-        m_ui->textBrowser_ch1->setHtml("<p align=\"center\">" + ch1_s + " V</p>");
-        m_ui->textBrowser_ch2->setHtml("<p align=\"center\">" + ch2_s + " V</p>");
-        m_ui->textBrowser_ch3->setHtml("<p align=\"center\">" + ch3_s + " V</p>");
-        m_ui->textBrowser_ch4->setHtml("<p align=\"center\">" + ch4_s + " V</p>");
+        if (m_en1)
+            m_ui->textBrowser_ch1->setHtml("<p align=\"center\">" + ch1_s + " V</p>");
+        if (m_en2)
+            m_ui->textBrowser_ch2->setHtml("<p align=\"center\">" + ch2_s + " V</p>");
+        if (m_en3)
+            m_ui->textBrowser_ch3->setHtml("<p align=\"center\">" + ch3_s + " V</p>");
+        if (m_en4)
+            m_ui->textBrowser_ch4->setHtml("<p align=\"center\">" + ch4_s + " V</p>");
+
         m_status_vcc->setText(" Vcc: " + vcc + " V");
 
-        m_ui->customPlot->graph(0)->addData(key, ch1);
-        m_ui->customPlot->graph(1)->addData(key, ch2);
-        m_ui->customPlot->graph(2)->addData(key, ch3);
-        m_ui->customPlot->graph(3)->addData(key, ch4);
+        m_ui->customPlot->graph(GRAPH_CH1)->addData(key, ch1);
+        m_ui->customPlot->graph(GRAPH_CH2)->addData(key, ch2);
+        m_ui->customPlot->graph(GRAPH_CH3)->addData(key, ch3);
+        m_ui->customPlot->graph(GRAPH_CH4)->addData(key, ch4);
 
         double maxRng = m_gain1;
         if (m_gain2 > maxRng) maxRng = m_gain2;
         if (m_gain3 > maxRng) maxRng = m_gain3;
         if (m_gain4 > maxRng) maxRng = m_gain4;
 
-        m_ui->customPlot->yAxis->setRange(-0.1, (maxRng * 3.3) + 0.1);
+        m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
         m_ui->customPlot->xAxis->setRange(key, m_display, Qt::AlignRight);
+
+        m_ui->customPlot->graph(GRAPH_CH1)->data()->removeBefore(key - m_display);
+        m_ui->customPlot->graph(GRAPH_CH2)->data()->removeBefore(key - m_display);
+        m_ui->customPlot->graph(GRAPH_CH3)->data()->removeBefore(key - m_display);
+        m_ui->customPlot->graph(GRAPH_CH4)->data()->removeBefore(key - m_display);
+
+        //m_ui->customPlot->graph(GRAPH_CH1)->rescaleValueAxis(false); // RESCALE TO MAX FROM MEAS
+        //m_ui->customPlot->graph(GRAPH_CH2)->rescaleValueAxis(false);
+        //m_ui->customPlot->graph(GRAPH_CH3)->rescaleValueAxis(false);
+        //m_ui->customPlot->graph(GRAPH_CH4)->rescaleValueAxis(false);
 
         m_ui->customPlot->replot();
 
@@ -211,6 +258,8 @@ void WindowVm::on_actionLines_triggered(bool checked)
     if (checked)
         style = QCPGraph::lsLine;
 
+    m_lines = checked;
+
     m_ui->customPlot->graph(GRAPH_CH1)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH2)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH3)->setLineStyle(style);
@@ -224,6 +273,8 @@ void WindowVm::on_actionPoints_triggered(bool checked)
     if (checked)
         style = QCPScatterStyle(QCPScatterStyle::ssDisc, 5);
 
+    m_points = checked;
+
     m_ui->customPlot->graph(GRAPH_CH1)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH2)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH3)->setScatterStyle(style);
@@ -232,17 +283,37 @@ void WindowVm::on_actionPoints_triggered(bool checked)
 
 void WindowVm::on_actionSinc_triggered(bool checked)
 {
-    // TODO
+    if (checked)
+    {
+        m_spline = true;
+
+        m_ui->actionLinear->setChecked(false);
+    }
+    else
+    {
+        m_ui->actionLinear->setChecked(true);
+    }
 }
 
 void WindowVm::on_actionLinear_triggered(bool checked)
 {
-    // TODO
+    if (checked)
+    {
+        m_spline = false;
+
+        m_ui->actionSinc->setChecked(false);
+    }
+    else
+    {
+        m_ui->actionSinc->setChecked(true);
+    }
 }
 
 void WindowVm::on_pushButton_disable1_clicked()
 {
+    m_en1 = false;
     m_ui->customPlot->graph(GRAPH_CH1)->setVisible(false);
+    m_ui->textBrowser_ch1->setText("");
 
     m_ui->pushButton_enable1->show();
     m_ui->pushButton_disable1->hide();
@@ -250,6 +321,7 @@ void WindowVm::on_pushButton_disable1_clicked()
 
 void WindowVm::on_pushButton_enable1_clicked()
 {
+    m_en1 = true;
     m_ui->customPlot->graph(GRAPH_CH1)->setVisible(true);
 
     m_ui->pushButton_enable1->hide();
@@ -258,7 +330,9 @@ void WindowVm::on_pushButton_enable1_clicked()
 
 void WindowVm::on_pushButton_disable2_clicked()
 {
+    m_en2 = false;
     m_ui->customPlot->graph(GRAPH_CH2)->setVisible(false);
+    m_ui->textBrowser_ch2->setText("");
 
     m_ui->pushButton_enable2->show();
     m_ui->pushButton_disable2->hide();
@@ -266,6 +340,7 @@ void WindowVm::on_pushButton_disable2_clicked()
 
 void WindowVm::on_pushButton_enable2_clicked()
 {
+    m_en2 = true;
     m_ui->customPlot->graph(GRAPH_CH2)->setVisible(true);
 
     m_ui->pushButton_enable2->hide();
@@ -274,7 +349,9 @@ void WindowVm::on_pushButton_enable2_clicked()
 
 void WindowVm::on_pushButton_disable3_clicked()
 {
+    m_en3 = false;
     m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
+    m_ui->textBrowser_ch3->setText("");
 
     m_ui->pushButton_enable3->show();
     m_ui->pushButton_disable3->hide();
@@ -282,6 +359,7 @@ void WindowVm::on_pushButton_disable3_clicked()
 
 void WindowVm::on_pushButton_enable3_clicked()
 {
+    m_en3 = true;
     m_ui->customPlot->graph(GRAPH_CH3)->setVisible(true);
 
     m_ui->pushButton_enable3->hide();
@@ -290,7 +368,9 @@ void WindowVm::on_pushButton_enable3_clicked()
 
 void WindowVm::on_pushButton_disable4_clicked()
 {
+    m_en4 = false;
     m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
+    m_ui->textBrowser_ch4->setText("");
 
     m_ui->pushButton_enable4->show();
     m_ui->pushButton_disable4->hide();
@@ -298,6 +378,7 @@ void WindowVm::on_pushButton_disable4_clicked()
 
 void WindowVm::on_pushButton_enable4_clicked()
 {
+    m_en4 = true;
     m_ui->customPlot->graph(GRAPH_CH4)->setVisible(true);
 
     m_ui->pushButton_enable4->hide();
@@ -331,6 +412,33 @@ void WindowVm::on_pushButton_disable_clicked()
 
     m_ui->pushButton_enable->show();
     m_ui->pushButton_disable->hide();
+
+    m_ui->textBrowser_ch1->setEnabled(false);
+    m_ui->textBrowser_ch2->setEnabled(false);
+    m_ui->textBrowser_ch3->setEnabled(false);
+    m_ui->textBrowser_ch4->setEnabled(false);
+
+    m_ui->pushButton_disable1->setEnabled(false);
+    m_ui->pushButton_enable1->setEnabled(false);
+    m_ui->pushButton_disable2->setEnabled(false);
+    m_ui->pushButton_enable2->setEnabled(false);
+    m_ui->pushButton_disable3->setEnabled(false);
+    m_ui->pushButton_enable3->setEnabled(false);
+    m_ui->pushButton_disable4->setEnabled(false);
+    m_ui->pushButton_enable4->setEnabled(false);
+
+    m_ui->doubleSpinBox_gain1->setEnabled(false);
+    m_ui->doubleSpinBox_gain2->setEnabled(false);
+    m_ui->doubleSpinBox_gain3->setEnabled(false);
+    m_ui->doubleSpinBox_gain4->setEnabled(false);
+
+    m_ui->spinBox_average->setEnabled(false);
+    m_ui->dial_average->setEnabled(false);
+
+    m_ui->spinBox_display->setEnabled(false);
+    m_ui->dial_display->setEnabled(false);
+
+    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 }
 
 void WindowVm::on_pushButton_enable_clicked()
@@ -340,11 +448,39 @@ void WindowVm::on_pushButton_enable_clicked()
 
     m_ui->pushButton_enable->hide();
     m_ui->pushButton_disable->show();
+
+    m_ui->textBrowser_ch1->setEnabled(true);
+    m_ui->textBrowser_ch2->setEnabled(true);
+    m_ui->textBrowser_ch3->setEnabled(true);
+    m_ui->textBrowser_ch4->setEnabled(true);
+
+    m_ui->pushButton_disable1->setEnabled(true);
+    m_ui->pushButton_enable1->setEnabled(true);
+    m_ui->pushButton_disable2->setEnabled(true);
+    m_ui->pushButton_enable2->setEnabled(true);
+    m_ui->pushButton_disable3->setEnabled(true);
+    m_ui->pushButton_enable3->setEnabled(true);
+    m_ui->pushButton_disable4->setEnabled(true);
+    m_ui->pushButton_enable4->setEnabled(true);
+
+    m_ui->doubleSpinBox_gain1->setEnabled(true);
+    m_ui->doubleSpinBox_gain2->setEnabled(true);
+    m_ui->doubleSpinBox_gain3->setEnabled(true);
+    m_ui->doubleSpinBox_gain4->setEnabled(true);
+
+    m_ui->spinBox_average->setEnabled(true);
+    m_ui->dial_average->setEnabled(true);
+
+    m_ui->spinBox_display->setEnabled(true);
+    m_ui->dial_display->setEnabled(true);
+
+    m_ui->customPlot->setInteractions(0);
 }
 
 void WindowVm::on_spinBox_average_valueChanged(int arg1)
 {
     m_ui->dial_average->setValue(arg1);
+
     m_average = arg1;
     m_msg_read->setParams(QString::number(m_average));
 }
@@ -357,7 +493,8 @@ void WindowVm::on_dial_average_valueChanged(int value)
 void WindowVm::on_spinBox_display_valueChanged(int arg1)
 {
     m_ui->dial_display->setValue(arg1);
-    m_display = (double)arg1 / (double)TIMER_VM_RENDER;
+
+    m_display = (double)arg1 / ((double)TIMER_VM_RENDER);
 }
 
 void WindowVm::on_dial_display_valueChanged(int value)
@@ -385,11 +522,33 @@ void WindowVm::on_actionReset_triggered()
     // TODO - measure
 }
 
+void WindowVm::on_actionChannel_1_triggered(bool checked)
+{
+    // TODO - measure
+}
+
+void WindowVm::on_actionChannel_2_triggered(bool checked)
+{
+    // TODO - measure
+}
+
+void WindowVm::on_actionChannel_3_triggered(bool checked)
+{
+    // TODO - measure
+}
+
+void WindowVm::on_actionChannel_4_triggered(bool checked)
+{
+    // TODO - measure
+}
+
 /* private */
 
 void WindowVm::closeEvent(QCloseEvent*)
 {
     m_activeMsg = Q_NULLPTR;
+
+    Core::getInstance()->setMode(NO_MODE);
     emit closing(WindowVm::staticMetaObject.className());
 
     m_timer_render->stop();
@@ -397,25 +556,31 @@ void WindowVm::closeEvent(QCloseEvent*)
 
 void WindowVm::showEvent(QShowEvent*)
 {
-    auto core = Core::getInstance()->getDevInfo();
-    QStringList pins = core->pins_scope_vm.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    auto info = Core::getInstance()->getDevInfo();
+    QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
     if (pins.size() == 4)
     {
-        m_ui->label_ch1->setText("Channel 1 (pin " + pins[0].trimmed() + ")");
-        m_ui->label_ch2->setText("Channel 2 (pin " + pins[1].trimmed() + ")");
-        m_ui->label_ch3->setText("Channel 3 (pin " + pins[2].trimmed() + ")");
-        m_ui->label_ch4->setText("Channel 4 (pin " + pins[3].trimmed() + ")");
+        m_ui->label_ch1->setText("Channel 1 (" + pins[0].trimmed() + ")");
+        m_ui->label_ch2->setText("Channel 2 (" + pins[1].trimmed() + ")");
+        m_ui->label_ch3->setText("Channel 3 (" + pins[2].trimmed() + ")");
+        m_ui->label_ch4->setText("Channel 4 (" + pins[3].trimmed() + ")");
     }
+
+    m_ui->dial_average->setMaximum(info->vm_mem);
+    m_ui->spinBox_average->setMaximum(info->vm_mem);
 
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
+    m_ui->customPlot->replot();
+
+    Core::getInstance()->setMode(VM);
+
     m_activeMsg = m_msg_read;
 
     m_timer_elapsed.restart();
     m_timer_render->start(TIMER_VM_RENDER);
 }
-

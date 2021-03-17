@@ -106,7 +106,7 @@ void daq_settings_init(daq_data_t* self)
     self->trig.save_s.val = 2047;
     self->trig.save_s.ch = 1;
     self->trig.save_s.edge = RISING;
-    self->trig.save_s.mode = DISABLED;
+    self->trig.save_s.mode = AUTO;
     self->trig.save_s.pretrigger = 50;
 
     // LA
@@ -123,7 +123,7 @@ void daq_settings_init(daq_data_t* self)
     self->trig.save_l.val = 0;
     self->trig.save_l.ch = 1;
     self->trig.save_l.edge = RISING;
-    self->trig.save_l.mode = DISABLED;
+    self->trig.save_l.mode = AUTO;
     self->trig.save_l.pretrigger = 50;
 }
 

@@ -217,7 +217,7 @@ void WindowCntr::showEvent(QShowEvent*)
 
     enableAll(false);
 
-    Core::getInstance()->msgAdd(m_msg_enable, true);
+    Core::getInstance()->msgAdd(m_msg_enable, true, "");
 }
 
 void WindowCntr::enableAll(bool enable)

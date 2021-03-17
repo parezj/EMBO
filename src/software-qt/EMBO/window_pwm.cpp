@@ -295,6 +295,8 @@ void WindowPwm::on_radioButton_fine_clicked()
 void WindowPwm::closeEvent(QCloseEvent*)
 {
     m_activeMsg = Q_NULLPTR;
+    m_instrEnabled = false;
+
     emit closing(WindowPwm::staticMetaObject.className());
 }
 
@@ -307,8 +309,9 @@ void WindowPwm::showEvent(QShowEvent*)
     m_ui->pushButton_ch2disable->hide();
 
     enableAll(false);
+    m_instrEnabled = true;
 
-    Core::getInstance()->msgAdd(m_msg_set, true);
+    Core::getInstance()->msgAdd(m_msg_set, true, "");
 }
 
 void WindowPwm::enableAll(bool enable)

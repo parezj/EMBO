@@ -352,7 +352,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
     else
     {
         int ch2 = ch;
-        if (ch == 0 || mode == DISABLED)
+        if (mode == DISABLED)
         {
             if (self->set.ch1_en) ch2 = 1;
             else if (self->set.ch2_en) ch2 = 2;
@@ -461,14 +461,13 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
     self->trig.auttrig_val = EM_AUTRIG_MIN_MS + (int)((double)self->trig.fullmem_val * 1.0);
     self->trig.adc_trig = adc;
 
-    if (ch == 0 || mode == DISABLED)
+    if (mode == DISABLED)
     {
         ASSERT(self->trig.exti_trig != 0);
 
         NVIC_DisableIRQ(self->trig.exti_trig);
         LL_ADC_SetAnalogWDMonitChannels(adc, EM_ADC_AWD LL_ADC_AWD_DISABLE);
 
-        self->trig.set.ch = 0;
         self->trig.set.mode = DISABLED;
 
         daq_enable(self, EM_TRUE);

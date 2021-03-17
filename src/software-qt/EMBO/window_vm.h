@@ -15,12 +15,14 @@
 #include <QElapsedTimer>
 
 
-#define TIMER_VM_RENDER   33
+#define TIMER_VM_RENDER     33
 
-#define GRAPH_CH1   0
-#define GRAPH_CH2   1
-#define GRAPH_CH3   2
-#define GRAPH_CH4   3
+#define LIM_OFFSET          0.5
+
+#define GRAPH_CH1           0
+#define GRAPH_CH2           1
+#define GRAPH_CH3           2
+#define GRAPH_CH4           3
 
 
 QT_BEGIN_NAMESPACE
@@ -81,6 +83,10 @@ private slots:
     void on_actionMin_triggered(bool checked);
     void on_actionAverage_triggered(bool checked);
     void on_actionReset_triggered();
+    void on_actionChannel_1_triggered(bool checked);
+    void on_actionChannel_2_triggered(bool checked);
+    void on_actionChannel_3_triggered(bool checked);
+    void on_actionChannel_4_triggered(bool checked);
 
 private:
     void closeEvent(QCloseEvent *event) override;
@@ -104,6 +110,15 @@ private:
     double m_gain2 = 1;
     double m_gain3 = 1;
     double m_gain4 = 1;
+
+    bool m_en1 = true;
+    bool m_en2 = true;
+    bool m_en3 = true;
+    bool m_en4 = true;
+
+    bool m_spline = true;
+    bool m_lines = true;
+    bool m_points = false;
 
     int m_elapsed_saved = 0;
     int m_elapsed_diff = 0;

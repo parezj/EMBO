@@ -51,6 +51,7 @@
         <file>resources/img/serial2_green.png</file>
         <file>resources/img/serial2_busy.png</file>
         <file>resources/img/ctu_meas_small2.png</file>
+        <file>resources/img/refresh.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>

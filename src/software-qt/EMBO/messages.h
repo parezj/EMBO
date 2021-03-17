@@ -41,6 +41,22 @@
 #define EMBO_SET_TRUE       "1"
 #define EMBO_SET_FALSE      "0"
 
+enum Mode
+{
+    NO_MODE = 0,
+    VM = 1,
+    SCOPE = 2,
+    LA = 3
+};
+
+enum Ready
+{
+    NOT_READY = 0,
+    READY_AUTO = 1,
+    READY_NORMAL = 2,
+    READY_DISABLED = 3
+};
+
 /***************************** Messages - SCPI *****************************/
 
 class Msg_Idn : public Msg
@@ -137,6 +153,8 @@ class Msg_SCOP_Read : public Msg
 public:
     explicit Msg_SCOP_Read(QObject* parent=0) : Msg(EMBO_SCOP_READ, true, parent) {};
     virtual void on_dataRx() override;
+signals:
+    void result(const QByteArray data);
 };
 
 class Msg_SCOP_Set : public Msg
@@ -145,6 +163,8 @@ class Msg_SCOP_Set : public Msg
 public:
     explicit Msg_SCOP_Set(QObject* parent=0) : Msg(EMBO_SCOP_SET, true, parent) {};
     virtual void on_dataRx() override;
+signals:
+    void result();
 };
 
 class Msg_SCOP_ForceTrig : public Msg
@@ -171,6 +191,8 @@ class Msg_LA_Read : public Msg
 public:
     explicit Msg_LA_Read(QObject* parent=0) : Msg(EMBO_LA_READ, true, parent) {};
     virtual void on_dataRx() override;
+signals:
+    void result(const QByteArray data);
 };
 
 class Msg_LA_Set : public Msg
@@ -179,6 +201,8 @@ class Msg_LA_Set : public Msg
 public:
     explicit Msg_LA_Set(QObject* parent=0) : Msg(EMBO_LA_SET, true, parent) {};
     virtual void on_dataRx() override;
+signals:
+    void result();
 };
 
 class Msg_LA_ForceTrig : public Msg

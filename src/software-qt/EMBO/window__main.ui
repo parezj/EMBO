@@ -2576,20 +2576,7 @@ QLabel:hover {border-image: url(:/main/resources/img/ctu_meas_small2.png); }</st
     <addaction name="actionAbout"/>
     <addaction name="actionCheck_Updates"/>
    </widget>
-   <widget class="QMenu" name="menuSTM32_Programmer">
-    <property name="font">
-     <font>
-      <family>Roboto</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>STM32 Programmer</string>
-    </property>
-    <addaction name="actionOpenProgrammer"/>
-   </widget>
    <addaction name="menuAbout"/>
-   <addaction name="menuSTM32_Programmer"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="font">
@@ -2623,18 +2610,19 @@ QLabel:hover {border-image: url(:/main/resources/img/ctu_meas_small2.png); }</st
     </font>
    </property>
    <property name="shortcut">
-    <string>Ctrl+A</string>
+    <string>Ctrl+H</string>
    </property>
   </action>
   <action name="actionOpen">
    <property name="text">
     <string>Open</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
   </action>
   <action name="actionCheck_Updates">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/main/resources/img/refresh.png</normaloff>:/main/resources/img/refresh.png</iconset>
+   </property>
    <property name="text">
     <string>Check Updates</string>
    </property>
@@ -2643,6 +2631,9 @@ QLabel:hover {border-image: url(:/main/resources/img/ctu_meas_small2.png); }</st
      <family>Roboto</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
    </property>
   </action>
   <action name="actionOpenProgrammer">

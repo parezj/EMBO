@@ -91,6 +91,8 @@
 #  include <QtPrintSupport/QtPrintSupport>
 #endif
 
+#include "utils.h"
+
 class QCPPainter;
 class QCustomPlot;
 class QCPLayerable;
@@ -4374,6 +4376,8 @@ void QCPAbstractPlottable1D<DataType>::getDataSegments(QList<QCPDataRange> &sele
   }
 }
 
+
+
 /*!
   A helper method which draws a line with the passed \a painter, according to the pixel data in \a
   lineData. NaN points create gaps in the line, as expected from QCustomPlot's plottables (this is
@@ -4393,12 +4397,16 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
       !painter->modes().testFlag(QCPPainter::pmVectorized) &&
       !painter->modes().testFlag(QCPPainter::pmNoCaching))
   {
+      qWarning() << "NOT SUPPROTED !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
+      assert(0);
+
     int i = 0;
     bool lastIsNan = false;
     const int lineDataSize = lineData.size();
     while (i < lineDataSize && (qIsNaN(lineData.at(i).y()) || qIsNaN(lineData.at(i).x()))) // make sure first point is not NaN
       ++i;
     ++i; // because drawing works in 1 point retrospect
+
     while (i < lineDataSize)
     {
       if (!qIsNaN(lineData.at(i).y()) && !qIsNaN(lineData.at(i).x())) // NaNs create a gap in the line
@@ -4416,17 +4424,54 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
     int segmentStart = 0;
     int i = 0;
     const int lineDataSize = lineData.size();
+
+    qInfo() << "====start draw====";
     while (i < lineDataSize)
     {
       if (qIsNaN(lineData.at(i).y()) || qIsNaN(lineData.at(i).x()) || qIsInf(lineData.at(i).y())) // NaNs create a gap in the line. Also filter Infs which make drawPolyline block
       {
-        painter->drawPolyline(lineData.constData()+segmentStart, i-segmentStart); // i, because we don't want to include the current NaN point
+        qWarning() << "NOT SUPPROTED2 !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
+        assert(0);
+
+        //painter->drawPolyline(lineData.constData()+segmentStart, i-segmentStart); // i, because we don't want to include the current NaN point
         segmentStart = i+1;
       }
       ++i;
     }
     // draw last segment:
-    painter->drawPolyline(lineData.constData()+segmentStart, lineDataSize-segmentStart);
+
+    auto poly_start = lineData.constData()+segmentStart;
+    int poly_count = lineDataSize-segmentStart;
+    assert(segmentStart == 0);
+    //qInfo() << " start: " << poly_start->x() << " y: " << poly_start->y() << " count: " << poly_count;
+
+    bool spline = true;
+
+    if (poly_count > 1 && spline)
+    {
+        /*
+        QPainterPath bezierPath;
+        bezierPath.moveTo(poly_start[0]);
+
+        for (int p = 1; p < poly_count; p++)
+        {
+            QPointF c1 = QPointF((poly_start[p].x() + poly_start[p - 1].x()) / 2, poly_start[p - 1].y());
+            QPointF c2 = QPointF((poly_start[p].x() + poly_start[p - 1].x()) / 2, poly_start[p].y());
+
+            bezierPath.cubicTo(c1, c2, poly_start[p]);
+
+        }
+
+        painter->drawPath(bezierPath);
+        */
+
+        painter->drawPath(splineFromPoints(lineData, 1));
+
+    }
+    else
+    {
+        //painter->drawPolyline(poly_start, poly_count);
+    }
   }
 }
 /* end of 'src/plottable1d.cpp' */

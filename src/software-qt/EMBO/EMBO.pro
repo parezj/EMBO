@@ -21,7 +21,7 @@ greaterThan(QT_MAJOR_VERSION, 4){
 }
 
 include(__crashhandler/qBreakpad.pri)
-#include(__stm32programmer/STM32Programming.pri)
+include(__updater/QSimpleUpdater.pri)
 
 contains(TARGET_ARCH, x86_64){
     ARCHITECTURE = x64
@@ -35,7 +35,9 @@ macx: LIBS += -framework AppKit
 LIBS += -lqBreakpad
 
 
-VERSION = 0.0.2.0
+VERSION = 0.0.2
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+
 QMAKE_TARGET_COMPANY = CTU Jakub Parez
 QMAKE_TARGET_PRODUCT = EMBO
 QMAKE_TARGET_DESCRIPTION = EMBedded Oscilloscope
