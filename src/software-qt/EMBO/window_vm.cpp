@@ -11,6 +11,7 @@
 #include "css.h"
 
 #include "lib/qcustomplot.h"
+#include "lib/ctkrangeslider.h"
 
 #include <QDebug>
 #include <QLabel>
@@ -31,23 +32,31 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     connect(m_timer_render, &QTimer::timeout, this, &WindowVm::on_timer_render);
 
+    m_ui->dial_display->setValue(DISPLAY_DEFAULT);
+
     /* QCP */
 
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
+    m_ui->customPlot->addGraph();  // ch1
+    m_ui->customPlot->addGraph();  // ch2
+    m_ui->customPlot->addGraph();  // ch3
+    m_ui->customPlot->addGraph();  // ch4
 
     m_ui->customPlot->graph(GRAPH_CH1)->setPen(QPen(QColor(COLOR1)));
     m_ui->customPlot->graph(GRAPH_CH2)->setPen(QPen(QColor(COLOR2)));
-    m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR3)));
+    m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR5)));
     m_ui->customPlot->graph(GRAPH_CH4)->setPen(QPen(QColor(COLOR4)));
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(true);
+    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(true);
+    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(true);
+    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(true);
 
     m_spline = false;
 
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
     timeTicker->setTimeFormat("%h:%m:%s");
     m_ui->customPlot->xAxis->setTicker(timeTicker);
+    //m_ui->customPlot->xAxis2->setTicker(timeTicker);
     m_ui->customPlot->axisRect()->setupFullAxesBox();
 
     m_ui->customPlot->xAxis->setVisible(true);
@@ -60,8 +69,8 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     //m_ui->customPlot->yAxis2->setVisible(true);
     //m_ui->customPlot->yAxis2->setTickLabels(true);
 
-    m_ui->customPlot->yAxis->setLabel("Voltage [V]");
-    m_ui->customPlot->xAxis->setLabel("Time [s]");
+    //m_ui->customPlot->yAxis->setLabel("Voltage [V]");
+    //m_ui->customPlot->xAxis->setLabel("Time [s]");
 
     QFont font2("Roboto", 12, QFont::Normal);
     m_ui->customPlot->xAxis->setTickLabelFont(font2);
@@ -69,10 +78,28 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->customPlot->xAxis->setLabelFont(font2);
     m_ui->customPlot->yAxis->setLabelFont(font2);
 
+    //m_ui->customPlot->xAxis2->setTickLabelFont(font2);
+    //m_ui->customPlot->yAxis2->setTickLabelFont(font2);
+    //m_ui->customPlot->xAxis2->setLabelFont(font2);
+    //m_ui->customPlot->yAxis2->setLabelFont(font2);
+
     m_ui->customPlot->setInteractions(0);
 
     connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
+
+    /* cursors */
+
+    m_ui->horizontalSlider_cursorH->setValues(m_cursorH_min, m_cursorH_max);
+    m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
+
+    m_ui->horizontalSlider_cursorH->hide();
+    m_ui->horizontalSlider_cursorV->hide();
+
+    connect(this, &WindowVm::on_cursorH_valuesChanged, m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged);
+    connect(this, &WindowVm::on_cursorV_valuesChanged, m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged);
+
+    m_cursors = new QCPCursors(m_ui->customPlot);
 
     /* statusbar */
 
@@ -151,13 +178,20 @@ void WindowVm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 
 void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString ch3, const QString ch4, const QString vcc)
 {
-    m_data_ch1 = ch1.toDouble() * m_gain1;
-    m_data_ch2 = ch2.toDouble() * m_gain2;
-    m_data_ch3 = ch3.toDouble() * m_gain3;
-    m_data_ch4 = ch4.toDouble() * m_gain4;
-    m_data_vcc = vcc;
+    if (m_instrEnabled)
+    {
+        double t = (m_timer_elapsed.elapsed() - m_elapsed_diff) / 1000.0;
 
-    m_data_fresh = true;
+        m_data_ch1 = ch1.toDouble() * m_gain1;
+        m_data_ch2 = ch2.toDouble() * m_gain2;
+        m_data_ch3 = ch3.toDouble() * m_gain3;
+        m_data_ch4 = ch4.toDouble() * m_gain4;
+        m_data_vcc = vcc;
+
+        m_smplBuff.push_back(VmSample {t, m_data_ch1, m_data_ch2, m_data_ch3, m_data_ch4});
+
+        m_data_fresh = true;
+    }
 }
 
 void WindowVm::on_timer_render()
@@ -168,14 +202,13 @@ void WindowVm::on_timer_render()
         double ch2 = m_data_ch2;
         double ch3 = m_data_ch3;
         double ch4 = m_data_ch4;
+
         QString vcc = m_data_vcc;
-
-        double key = (m_timer_elapsed.elapsed() - m_elapsed_diff) / 1000.0;
-
         QString ch1_s;
         QString ch2_s;
         QString ch3_s;
         QString ch4_s;
+
         ch1_s = ch1_s.asprintf(ch1 >= 100 ? "%.2f" : (ch1 >= 10 ? "%.3f" : "%.4f"), ch1);
         ch2_s = ch1_s.asprintf(ch2 >= 100 ? "%.2f" : (ch2 >= 10 ? "%.3f" : "%.4f"), ch2);
         ch3_s = ch1_s.asprintf(ch3 >= 100 ? "%.2f" : (ch3 >= 10 ? "%.3f" : "%.4f"), ch3);
@@ -192,15 +225,25 @@ void WindowVm::on_timer_render()
 
         m_status_vcc->setText(" Vcc: " + vcc + " V");
 
-        m_ui->customPlot->graph(GRAPH_CH1)->addData(key, ch1);
-        m_ui->customPlot->graph(GRAPH_CH2)->addData(key, ch2);
-        m_ui->customPlot->graph(GRAPH_CH3)->addData(key, ch3);
-        m_ui->customPlot->graph(GRAPH_CH4)->addData(key, ch4);
+        double maxRng = 0;
+        double key = 0;
 
-        double maxRng = m_gain1;
-        if (m_gain2 > maxRng) maxRng = m_gain2;
-        if (m_gain3 > maxRng) maxRng = m_gain3;
-        if (m_gain4 > maxRng) maxRng = m_gain4;
+        for (auto smpl : m_smplBuff)
+        {
+            key = smpl.t;
+
+            m_ui->customPlot->graph(GRAPH_CH1)->addData(key, smpl.ch1);
+            m_ui->customPlot->graph(GRAPH_CH2)->addData(key, smpl.ch2);
+            m_ui->customPlot->graph(GRAPH_CH3)->addData(key, smpl.ch3);
+            m_ui->customPlot->graph(GRAPH_CH4)->addData(key, smpl.ch4);
+
+            if (m_gain1 > maxRng) maxRng = m_gain1;
+            if (m_gain2 > maxRng) maxRng = m_gain2;
+            if (m_gain3 > maxRng) maxRng = m_gain3;
+            if (m_gain4 > maxRng) maxRng = m_gain4;
+        }
+
+        m_smplBuff.clear();
 
         m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
         m_ui->customPlot->xAxis->setRange(key, m_display, Qt::AlignRight);
@@ -264,6 +307,9 @@ void WindowVm::on_actionLines_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH2)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH3)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setLineStyle(style);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_actionPoints_triggered(bool checked)
@@ -279,34 +325,30 @@ void WindowVm::on_actionPoints_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH2)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH3)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setScatterStyle(style);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
-void WindowVm::on_actionSinc_triggered(bool checked)
+void WindowVm::on_actionSinc_triggered(bool checked) // exclusive with - actionLinear
 {
-    if (checked)
-    {
-        m_spline = true;
+    m_spline = checked;
 
-        m_ui->actionLinear->setChecked(false);
-    }
-    else
-    {
-        m_ui->actionLinear->setChecked(true);
-    }
+    m_ui->actionLinear->setChecked(!checked);
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(checked);
+    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(checked);
+    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
+    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
-void WindowVm::on_actionLinear_triggered(bool checked)
+void WindowVm::on_actionLinear_triggered(bool checked) // exclusive with - actionSinc
 {
-    if (checked)
-    {
-        m_spline = false;
-
-        m_ui->actionSinc->setChecked(false);
-    }
-    else
-    {
-        m_ui->actionSinc->setChecked(true);
-    }
+    m_ui->actionSinc->setChecked(!checked);
+    on_actionSinc_triggered(!checked);
 }
 
 void WindowVm::on_pushButton_disable1_clicked()
@@ -443,6 +485,8 @@ void WindowVm::on_pushButton_disable_clicked()
 
 void WindowVm::on_pushButton_enable_clicked()
 {
+    m_smplBuff.clear();
+
     m_instrEnabled = true;
     m_elapsed_diff += m_timer_elapsed.elapsed() - m_elapsed_saved;
 
@@ -542,6 +586,44 @@ void WindowVm::on_actionChannel_4_triggered(bool checked)
     // TODO - measure
 }
 
+void WindowVm::on_pushButton_cursorsOn_clicked()
+{
+    m_ui->horizontalSlider_cursorH->show();
+    m_ui->horizontalSlider_cursorV->show();
+
+    m_ui->pushButton_cursorsOn->hide();
+    m_ui->pushButton_cursorsOff->show();
+
+    //m_cursors->show(true);
+}
+
+void WindowVm::on_pushButton_cursorsOff_clicked()
+{
+    m_ui->horizontalSlider_cursorH->hide();
+    m_ui->horizontalSlider_cursorV->hide();
+
+    m_ui->pushButton_cursorsOn->show();
+    m_ui->pushButton_cursorsOff->hide();
+
+    //m_cursors->show(false);
+}
+
+void WindowVm::on_cursorH_valuesChanged(int min, int max)
+{
+    m_cursorH_min = min;
+    m_cursorH_max = max;
+
+    qInfo() << " min: " << min << "  max: " << max;
+}
+
+void WindowVm::on_cursorV_valuesChanged(int min, int max)
+{
+    m_cursorV_min = min;
+    m_cursorV_max = max;
+
+    qInfo() << " min: " << min << "  max: " << max;
+}
+
 /* private */
 
 void WindowVm::closeEvent(QCloseEvent*)
@@ -583,4 +665,6 @@ void WindowVm::showEvent(QShowEvent*)
 
     m_timer_elapsed.restart();
     m_timer_render->start(TIMER_VM_RENDER);
+
+    m_smplBuff.clear();
 }

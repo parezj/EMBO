@@ -5316,8 +5316,8 @@ void QCPColorScale::gradientChanged(const QCPColorGradient & _t1)
     QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 struct qt_meta_stringdata_QCPGraph_t {
-    QByteArrayData data[15];
-    char stringdata0[174];
+    QByteArrayData data[16];
+    char stringdata0[181];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -5335,19 +5335,20 @@ QT_MOC_LITERAL(5, 58, 11), // "scatterSkip"
 QT_MOC_LITERAL(6, 70, 16), // "channelFillGraph"
 QT_MOC_LITERAL(7, 87, 9), // "QCPGraph*"
 QT_MOC_LITERAL(8, 97, 16), // "adaptiveSampling"
-QT_MOC_LITERAL(9, 114, 6), // "lsNone"
-QT_MOC_LITERAL(10, 121, 6), // "lsLine"
-QT_MOC_LITERAL(11, 128, 10), // "lsStepLeft"
-QT_MOC_LITERAL(12, 139, 11), // "lsStepRight"
-QT_MOC_LITERAL(13, 151, 12), // "lsStepCenter"
-QT_MOC_LITERAL(14, 164, 9) // "lsImpulse"
+QT_MOC_LITERAL(9, 114, 6), // "spline"
+QT_MOC_LITERAL(10, 121, 6), // "lsNone"
+QT_MOC_LITERAL(11, 128, 6), // "lsLine"
+QT_MOC_LITERAL(12, 135, 10), // "lsStepLeft"
+QT_MOC_LITERAL(13, 146, 11), // "lsStepRight"
+QT_MOC_LITERAL(14, 158, 12), // "lsStepCenter"
+QT_MOC_LITERAL(15, 171, 9) // "lsImpulse"
 
     },
     "QCPGraph\0lineStyle\0LineStyle\0scatterStyle\0"
     "QCPScatterStyle\0scatterSkip\0"
     "channelFillGraph\0QCPGraph*\0adaptiveSampling\0"
-    "lsNone\0lsLine\0lsStepLeft\0lsStepRight\0"
-    "lsStepCenter\0lsImpulse"
+    "spline\0lsNone\0lsLine\0lsStepLeft\0"
+    "lsStepRight\0lsStepCenter\0lsImpulse"
 };
 #undef QT_MOC_LITERAL
 
@@ -5358,8 +5359,8 @@ static const uint qt_meta_data_QCPGraph[] = {
        0,       // classname
        0,    0, // classinfo
        0,    0, // methods
-       5,   14, // properties
-       1,   29, // enums/sets
+       6,   14, // properties
+       1,   32, // enums/sets
        0,    0, // constructors
        0,       // flags
        0,       // signalCount
@@ -5370,17 +5371,18 @@ static const uint qt_meta_data_QCPGraph[] = {
        5, QMetaType::Int, 0x00095103,
        6, 0x80000000 | 7, 0x0009510b,
        8, QMetaType::Bool, 0x00095103,
+       9, QMetaType::Bool, 0x00095103,
 
  // enums: name, alias, flags, count, data
-       2,    2, 0x0,    6,   34,
+       2,    2, 0x0,    6,   37,
 
  // enum data: key, value
-       9, uint(QCPGraph::lsNone),
-      10, uint(QCPGraph::lsLine),
-      11, uint(QCPGraph::lsStepLeft),
-      12, uint(QCPGraph::lsStepRight),
-      13, uint(QCPGraph::lsStepCenter),
-      14, uint(QCPGraph::lsImpulse),
+      10, uint(QCPGraph::lsNone),
+      11, uint(QCPGraph::lsLine),
+      12, uint(QCPGraph::lsStepLeft),
+      13, uint(QCPGraph::lsStepRight),
+      14, uint(QCPGraph::lsStepCenter),
+      15, uint(QCPGraph::lsImpulse),
 
        0        // eod
 };
@@ -5406,6 +5408,7 @@ void QCPGraph::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 2: *reinterpret_cast< int*>(_v) = _t->scatterSkip(); break;
         case 3: *reinterpret_cast< QCPGraph**>(_v) = _t->channelFillGraph(); break;
         case 4: *reinterpret_cast< bool*>(_v) = _t->adaptiveSampling(); break;
+        case 5: *reinterpret_cast< bool*>(_v) = _t->spline(); break;
         default: break;
         }
     } else if (_c == QMetaObject::WriteProperty) {
@@ -5418,6 +5421,7 @@ void QCPGraph::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 2: _t->setScatterSkip(*reinterpret_cast< int*>(_v)); break;
         case 3: _t->setChannelFillGraph(*reinterpret_cast< QCPGraph**>(_v)); break;
         case 4: _t->setAdaptiveSampling(*reinterpret_cast< bool*>(_v)); break;
+        case 5: _t->setSpline(*reinterpret_cast< bool*>(_v)); break;
         default: break;
         }
     } else if (_c == QMetaObject::ResetProperty) {
@@ -5459,17 +5463,17 @@ int QCPGraph::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_c == QMetaObject::ReadProperty || _c == QMetaObject::WriteProperty
             || _c == QMetaObject::ResetProperty || _c == QMetaObject::RegisterPropertyMetaType) {
         qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::QueryPropertyDesignable) {
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::QueryPropertyScriptable) {
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::QueryPropertyStored) {
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::QueryPropertyEditable) {
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::QueryPropertyUser) {
-        _id -= 5;
+        _id -= 6;
     }
 #endif // QT_NO_PROPERTIES
     return _id;

@@ -34,6 +34,64 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowLa::on_msg_daqReady, Qt::QueuedConnection);
+
+    /* QCP */
+
+    m_ui->customPlot->addGraph();  // ch1
+    m_ui->customPlot->addGraph();  // ch2
+    m_ui->customPlot->addGraph();  // ch3
+    m_ui->customPlot->addGraph();  // ch4
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setPen(QPen(QColor(COLOR1)));
+    m_ui->customPlot->graph(GRAPH_CH2)->setPen(QPen(QColor(COLOR2)));
+    m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR5)));
+    m_ui->customPlot->graph(GRAPH_CH4)->setPen(QPen(QColor(COLOR4)));
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(false);
+    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(false);
+    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(false);
+    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(false);
+
+    m_ui->customPlot->xAxis->setVisible(true);
+    m_ui->customPlot->xAxis->setTickLabels(true);
+    m_ui->customPlot->yAxis->setVisible(true);
+    m_ui->customPlot->yAxis->setTickLabels(true);
+
+    //m_ui->customPlot->xAxis2->setVisible(true);
+    //m_ui->customPlot->xAxis2->setTickLabels(true);
+    //m_ui->customPlot->yAxis2->setVisible(true);
+    //m_ui->customPlot->yAxis2->setTickLabels(true);
+
+    QFont font2("Roboto", 12, QFont::Normal);
+    m_ui->customPlot->xAxis->setTickLabelFont(font2);
+    m_ui->customPlot->yAxis->setTickLabelFont(font2);
+    m_ui->customPlot->xAxis->setLabelFont(font2);
+    m_ui->customPlot->yAxis->setLabelFont(font2);
+
+    m_ui->customPlot->setInteractions(0);
+    //m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+
+    connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
+    connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
+
+    /* cursors */
+
+    /*
+    m_ui->horizontalSlider_cursorH->setValues(m_cursorH_min, m_cursorH_max);
+    m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
+
+    m_ui->horizontalSlider_cursorH->hide();
+    m_ui->horizontalSlider_cursorV->hide();
+
+    connect(this, &WindowVm::on_cursorH_valuesChanged, m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged);
+    connect(this, &WindowVm::on_cursorV_valuesChanged, m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged);
+    */
+
+    m_cursors = new QCPCursors(m_ui->customPlot);
+
+    /* statusbar */
+
+    /* styles */
 }
 
 WindowLa::~WindowLa()
@@ -75,9 +133,49 @@ void WindowLa::on_msg_set()
 
 }
 
-void WindowLa::on_msg_read(const QString data)
+void WindowLa::on_msg_read(const QByteArray data)
 {
-    // PLOT DATA
+    bool ch1_en = true;
+    bool ch2_en = true;
+    bool ch3_en = true;
+    bool ch4_en = true;
+
+    int data_sz = data.size();
+
+    std::vector<qreal> buff(data_sz);
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    for (int i = 0; i < data_sz; i++)
+    {
+        bool ch1 = (data[i] & 2) != 0;
+        bool ch2 = (data[i] & 4) != 0;
+        bool ch3 = (data[i] & 8) != 0;
+        bool ch4 = (data[i] & 16) != 0;
+
+        if (ch1_en)
+            m_ui->customPlot->graph(GRAPH_CH1)->addData(i, (qreal)ch1);
+        if (ch2_en)
+            m_ui->customPlot->graph(GRAPH_CH2)->addData(i, (qreal)ch2);
+        if (ch3_en)
+            m_ui->customPlot->graph(GRAPH_CH3)->addData(i, (qreal)ch3);
+        if (ch4_en)
+            m_ui->customPlot->graph(GRAPH_CH4)->addData(i, (qreal)ch4);
+    }
+
+    //m_ui->customPlot->graph(GRAPH_CH1)->rescaleValueAxis(false);
+    //m_ui->customPlot->graph(GRAPH_CH2)->rescaleValueAxis(false);
+    //m_ui->customPlot->graph(GRAPH_CH3)->rescaleValueAxis(false);
+    //m_ui->customPlot->graph(GRAPH_CH4)->rescaleValueAxis(false);
+
+    //m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
+    m_ui->customPlot->yAxis->setRange(-0.1, 1.1);
+    m_ui->customPlot->xAxis->setRange(0, data_sz);
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_msg_daqReady(Ready ready)

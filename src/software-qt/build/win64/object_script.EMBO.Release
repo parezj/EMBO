@@ -2,10 +2,12 @@ release/Updater.o
 release/Downloader.o
 release/QSimpleUpdater.o
 release/core.o
+release/ctkrangeslider.o
 release/qcustomplot.o
 release/main.o
 release/messages.o
 release/msg.o
+release/qcpcursors.o
 release/settings.o
 release/utils.o
 release/window__main.o
@@ -23,6 +25,7 @@ release/moc_QSimpleUpdater.o
 release/moc_Updater.o
 release/moc_Downloader.o
 release/moc_core.o
+release/moc_ctkrangeslider.o
 release/moc_qcustomplot.o
 release/moc_messages.o
 release/moc_msg.o

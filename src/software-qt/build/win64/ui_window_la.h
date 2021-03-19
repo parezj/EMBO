@@ -17,9 +17,9 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QSlider>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
+#include "lib/qcustomplot.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -29,7 +29,7 @@ public:
     QAction *actionAbout;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    QSlider *horizontalSlider_freq;
+    QCustomPlot *customPlot;
     QMenuBar *menubar;
     QMenu *menuHelp;
     QStatusBar *statusbar;
@@ -38,7 +38,7 @@ public:
     {
         if (WindowLa->objectName().isEmpty())
             WindowLa->setObjectName(QString::fromUtf8("WindowLa"));
-        WindowLa->resize(417, 245);
+        WindowLa->resize(730, 401);
         QFont font;
         font.setFamily(QString::fromUtf8("Roboto"));
         font.setPointSize(10);
@@ -56,38 +56,15 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        horizontalSlider_freq = new QSlider(centralwidget);
-        horizontalSlider_freq->setObjectName(QString::fromUtf8("horizontalSlider_freq"));
-        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(horizontalSlider_freq->sizePolicy().hasHeightForWidth());
-        horizontalSlider_freq->setSizePolicy(sizePolicy);
-        QFont font1;
-        font1.setBold(false);
-        font1.setWeight(50);
-        horizontalSlider_freq->setFont(font1);
-        horizontalSlider_freq->setStyleSheet(QString::fromUtf8("QSlider::handle:horizontal {\n"
-"    background-color: #449f84;\n"
-"    border: 1px solid;\n"
-"}\n"
-"\n"
-"QSlider::handle:horizontal:hover {\n"
-"    background-color: #51bf9f;\n"
-"    border: 1px solid;\n"
-"}"));
-        horizontalSlider_freq->setMaximum(5000000);
-        horizontalSlider_freq->setValue(50);
-        horizontalSlider_freq->setOrientation(Qt::Horizontal);
-        horizontalSlider_freq->setTickPosition(QSlider::TicksBelow);
-        horizontalSlider_freq->setTickInterval(100000);
+        customPlot = new QCustomPlot(centralwidget);
+        customPlot->setObjectName(QString::fromUtf8("customPlot"));
 
-        gridLayout->addWidget(horizontalSlider_freq, 0, 0, 1, 1);
+        gridLayout->addWidget(customPlot, 0, 0, 1, 1);
 
         WindowLa->setCentralWidget(centralwidget);
         menubar = new QMenuBar(WindowLa);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 417, 22));
+        menubar->setGeometry(QRect(0, 0, 730, 22));
         menubar->setFont(font);
         menuHelp = new QMenu(menubar);
         menuHelp->setObjectName(QString::fromUtf8("menuHelp"));

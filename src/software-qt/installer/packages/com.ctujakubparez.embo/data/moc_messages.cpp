@@ -511,6 +511,76 @@ int Msg_SYS_Mode::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     _id = Msg::qt_metacall(_c, _id, _a);
     return _id;
 }
+struct qt_meta_stringdata_Msg_SYS_Uptime_t {
+    QByteArrayData data[1];
+    char stringdata0[15];
+};
+#define QT_MOC_LITERAL(idx, ofs, len) \
+    Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
+    qptrdiff(offsetof(qt_meta_stringdata_Msg_SYS_Uptime_t, stringdata0) + ofs \
+        - idx * sizeof(QByteArrayData)) \
+    )
+static const qt_meta_stringdata_Msg_SYS_Uptime_t qt_meta_stringdata_Msg_SYS_Uptime = {
+    {
+QT_MOC_LITERAL(0, 0, 14) // "Msg_SYS_Uptime"
+
+    },
+    "Msg_SYS_Uptime"
+};
+#undef QT_MOC_LITERAL
+
+static const uint qt_meta_data_Msg_SYS_Uptime[] = {
+
+ // content:
+       8,       // revision
+       0,       // classname
+       0,    0, // classinfo
+       0,    0, // methods
+       0,    0, // properties
+       0,    0, // enums/sets
+       0,    0, // constructors
+       0,       // flags
+       0,       // signalCount
+
+       0        // eod
+};
+
+void Msg_SYS_Uptime::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
+{
+    Q_UNUSED(_o);
+    Q_UNUSED(_id);
+    Q_UNUSED(_c);
+    Q_UNUSED(_a);
+}
+
+QT_INIT_METAOBJECT const QMetaObject Msg_SYS_Uptime::staticMetaObject = { {
+    QMetaObject::SuperData::link<Msg::staticMetaObject>(),
+    qt_meta_stringdata_Msg_SYS_Uptime.data,
+    qt_meta_data_Msg_SYS_Uptime,
+    qt_static_metacall,
+    nullptr,
+    nullptr
+} };
+
+
+const QMetaObject *Msg_SYS_Uptime::metaObject() const
+{
+    return QObject::d_ptr->metaObject ? QObject::d_ptr->dynamicMetaObject() : &staticMetaObject;
+}
+
+void *Msg_SYS_Uptime::qt_metacast(const char *_clname)
+{
+    if (!_clname) return nullptr;
+    if (!strcmp(_clname, qt_meta_stringdata_Msg_SYS_Uptime.stringdata0))
+        return static_cast<void*>(this);
+    return Msg::qt_metacast(_clname);
+}
+
+int Msg_SYS_Uptime::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
+{
+    _id = Msg::qt_metacall(_c, _id, _a);
+    return _id;
+}
 struct qt_meta_stringdata_Msg_Dummy_t {
     QByteArrayData data[1];
     char stringdata0[10];
@@ -582,8 +652,8 @@ int Msg_Dummy::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 struct qt_meta_stringdata_Msg_VM_Read_t {
-    QByteArrayData data[1];
-    char stringdata0[12];
+    QByteArrayData data[8];
+    char stringdata0[40];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -592,10 +662,18 @@ struct qt_meta_stringdata_Msg_VM_Read_t {
     )
 static const qt_meta_stringdata_Msg_VM_Read_t qt_meta_stringdata_Msg_VM_Read = {
     {
-QT_MOC_LITERAL(0, 0, 11) // "Msg_VM_Read"
+QT_MOC_LITERAL(0, 0, 11), // "Msg_VM_Read"
+QT_MOC_LITERAL(1, 12, 6), // "result"
+QT_MOC_LITERAL(2, 19, 0), // ""
+QT_MOC_LITERAL(3, 20, 3), // "ch1"
+QT_MOC_LITERAL(4, 24, 3), // "ch2"
+QT_MOC_LITERAL(5, 28, 3), // "ch3"
+QT_MOC_LITERAL(6, 32, 3), // "ch4"
+QT_MOC_LITERAL(7, 36, 3) // "vcc"
 
     },
-    "Msg_VM_Read"
+    "Msg_VM_Read\0result\0\0ch1\0ch2\0ch3\0ch4\0"
+    "vcc"
 };
 #undef QT_MOC_LITERAL
 
@@ -605,22 +683,41 @@ static const uint qt_meta_data_Msg_VM_Read[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    5,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString, QMetaType::QString,    3,    4,    5,    6,    7,
 
        0        // eod
 };
 
 void Msg_VM_Read::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
-    Q_UNUSED(_a);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<Msg_VM_Read *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->result((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2])),(*reinterpret_cast< const QString(*)>(_a[3])),(*reinterpret_cast< const QString(*)>(_a[4])),(*reinterpret_cast< const QString(*)>(_a[5]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (Msg_VM_Read::*)(const QString , const QString , const QString , const QString , const QString );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Msg_VM_Read::result)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
 }
 
 QT_INIT_METAOBJECT const QMetaObject Msg_VM_Read::staticMetaObject = { {
@@ -649,11 +746,29 @@ void *Msg_VM_Read::qt_metacast(const char *_clname)
 int Msg_VM_Read::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = Msg::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
     return _id;
 }
+
+// SIGNAL 0
+void Msg_VM_Read::result(const QString _t1, const QString _t2, const QString _t3, const QString _t4, const QString _t5)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
 struct qt_meta_stringdata_Msg_SCOP_Read_t {
-    QByteArrayData data[1];
-    char stringdata0[14];
+    QByteArrayData data[4];
+    char stringdata0[27];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -662,10 +777,13 @@ struct qt_meta_stringdata_Msg_SCOP_Read_t {
     )
 static const qt_meta_stringdata_Msg_SCOP_Read_t qt_meta_stringdata_Msg_SCOP_Read = {
     {
-QT_MOC_LITERAL(0, 0, 13) // "Msg_SCOP_Read"
+QT_MOC_LITERAL(0, 0, 13), // "Msg_SCOP_Read"
+QT_MOC_LITERAL(1, 14, 6), // "result"
+QT_MOC_LITERAL(2, 21, 0), // ""
+QT_MOC_LITERAL(3, 22, 4) // "data"
 
     },
-    "Msg_SCOP_Read"
+    "Msg_SCOP_Read\0result\0\0data"
 };
 #undef QT_MOC_LITERAL
 
@@ -675,22 +793,41 @@ static const uint qt_meta_data_Msg_SCOP_Read[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QByteArray,    3,
 
        0        // eod
 };
 
 void Msg_SCOP_Read::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
-    Q_UNUSED(_a);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<Msg_SCOP_Read *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->result((*reinterpret_cast< const QByteArray(*)>(_a[1]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (Msg_SCOP_Read::*)(const QByteArray );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Msg_SCOP_Read::result)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
 }
 
 QT_INIT_METAOBJECT const QMetaObject Msg_SCOP_Read::staticMetaObject = { {
@@ -719,11 +856,29 @@ void *Msg_SCOP_Read::qt_metacast(const char *_clname)
 int Msg_SCOP_Read::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = Msg::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
     return _id;
 }
+
+// SIGNAL 0
+void Msg_SCOP_Read::result(const QByteArray _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
 struct qt_meta_stringdata_Msg_SCOP_Set_t {
-    QByteArrayData data[1];
-    char stringdata0[13];
+    QByteArrayData data[3];
+    char stringdata0[21];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -732,10 +887,12 @@ struct qt_meta_stringdata_Msg_SCOP_Set_t {
     )
 static const qt_meta_stringdata_Msg_SCOP_Set_t qt_meta_stringdata_Msg_SCOP_Set = {
     {
-QT_MOC_LITERAL(0, 0, 12) // "Msg_SCOP_Set"
+QT_MOC_LITERAL(0, 0, 12), // "Msg_SCOP_Set"
+QT_MOC_LITERAL(1, 13, 6), // "result"
+QT_MOC_LITERAL(2, 20, 0) // ""
 
     },
-    "Msg_SCOP_Set"
+    "Msg_SCOP_Set\0result\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -745,21 +902,41 @@ static const uint qt_meta_data_Msg_SCOP_Set[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    0,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void,
 
        0        // eod
 };
 
 void Msg_SCOP_Set::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<Msg_SCOP_Set *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->result(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (Msg_SCOP_Set::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Msg_SCOP_Set::result)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
     Q_UNUSED(_a);
 }
 
@@ -789,7 +966,24 @@ void *Msg_SCOP_Set::qt_metacast(const char *_clname)
 int Msg_SCOP_Set::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = Msg::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
     return _id;
+}
+
+// SIGNAL 0
+void Msg_SCOP_Set::result()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 struct qt_meta_stringdata_Msg_SCOP_ForceTrig_t {
     QByteArrayData data[1];
@@ -932,8 +1126,8 @@ int Msg_SCOP_Average::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     return _id;
 }
 struct qt_meta_stringdata_Msg_LA_Read_t {
-    QByteArrayData data[1];
-    char stringdata0[12];
+    QByteArrayData data[4];
+    char stringdata0[25];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -942,10 +1136,13 @@ struct qt_meta_stringdata_Msg_LA_Read_t {
     )
 static const qt_meta_stringdata_Msg_LA_Read_t qt_meta_stringdata_Msg_LA_Read = {
     {
-QT_MOC_LITERAL(0, 0, 11) // "Msg_LA_Read"
+QT_MOC_LITERAL(0, 0, 11), // "Msg_LA_Read"
+QT_MOC_LITERAL(1, 12, 6), // "result"
+QT_MOC_LITERAL(2, 19, 0), // ""
+QT_MOC_LITERAL(3, 20, 4) // "data"
 
     },
-    "Msg_LA_Read"
+    "Msg_LA_Read\0result\0\0data"
 };
 #undef QT_MOC_LITERAL
 
@@ -955,22 +1152,41 @@ static const uint qt_meta_data_Msg_LA_Read[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    1,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void, QMetaType::QByteArray,    3,
 
        0        // eod
 };
 
 void Msg_LA_Read::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
-    Q_UNUSED(_a);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<Msg_LA_Read *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->result((*reinterpret_cast< const QByteArray(*)>(_a[1]))); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (Msg_LA_Read::*)(const QByteArray );
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Msg_LA_Read::result)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
 }
 
 QT_INIT_METAOBJECT const QMetaObject Msg_LA_Read::staticMetaObject = { {
@@ -999,11 +1215,29 @@ void *Msg_LA_Read::qt_metacast(const char *_clname)
 int Msg_LA_Read::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = Msg::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
     return _id;
 }
+
+// SIGNAL 0
+void Msg_LA_Read::result(const QByteArray _t1)
+{
+    void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))) };
+    QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
 struct qt_meta_stringdata_Msg_LA_Set_t {
-    QByteArrayData data[1];
-    char stringdata0[11];
+    QByteArrayData data[3];
+    char stringdata0[19];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -1012,10 +1246,12 @@ struct qt_meta_stringdata_Msg_LA_Set_t {
     )
 static const qt_meta_stringdata_Msg_LA_Set_t qt_meta_stringdata_Msg_LA_Set = {
     {
-QT_MOC_LITERAL(0, 0, 10) // "Msg_LA_Set"
+QT_MOC_LITERAL(0, 0, 10), // "Msg_LA_Set"
+QT_MOC_LITERAL(1, 11, 6), // "result"
+QT_MOC_LITERAL(2, 18, 0) // ""
 
     },
-    "Msg_LA_Set"
+    "Msg_LA_Set\0result\0"
 };
 #undef QT_MOC_LITERAL
 
@@ -1025,21 +1261,41 @@ static const uint qt_meta_data_Msg_LA_Set[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       1,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       0,       // signalCount
+       1,       // signalCount
+
+ // signals: name, argc, parameters, tag, flags
+       1,    0,   19,    2, 0x06 /* Public */,
+
+ // signals: parameters
+    QMetaType::Void,
 
        0        // eod
 };
 
 void Msg_LA_Set::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    Q_UNUSED(_o);
-    Q_UNUSED(_id);
-    Q_UNUSED(_c);
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<Msg_LA_Set *>(_o);
+        Q_UNUSED(_t)
+        switch (_id) {
+        case 0: _t->result(); break;
+        default: ;
+        }
+    } else if (_c == QMetaObject::IndexOfMethod) {
+        int *result = reinterpret_cast<int *>(_a[0]);
+        {
+            using _t = void (Msg_LA_Set::*)();
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Msg_LA_Set::result)) {
+                *result = 0;
+                return;
+            }
+        }
+    }
     Q_UNUSED(_a);
 }
 
@@ -1069,7 +1325,24 @@ void *Msg_LA_Set::qt_metacast(const char *_clname)
 int Msg_LA_Set::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = Msg::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 1)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 1;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 1)
+            *reinterpret_cast<int*>(_a[0]) = -1;
+        _id -= 1;
+    }
     return _id;
+}
+
+// SIGNAL 0
+void Msg_LA_Set::result()
+{
+    QMetaObject::activate(this, &staticMetaObject, 0, nullptr);
 }
 struct qt_meta_stringdata_Msg_LA_ForceTrig_t {
     QByteArrayData data[1];
@@ -1303,13 +1576,13 @@ void Msg_CNTR_Read::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _i
         auto *_t = static_cast<Msg_CNTR_Read *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->result((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
+        case 0: _t->result((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (Msg_CNTR_Read::*)(QString , QString );
+            using _t = void (Msg_CNTR_Read::*)(const QString , const QString );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Msg_CNTR_Read::result)) {
                 *result = 0;
                 return;
@@ -1359,7 +1632,7 @@ int Msg_CNTR_Read::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Msg_CNTR_Read::result(QString _t1, QString _t2)
+void Msg_CNTR_Read::result(const QString _t1, const QString _t2)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
@@ -1536,13 +1809,13 @@ void Msg_PWM_Set::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         auto *_t = static_cast<Msg_PWM_Set *>(_o);
         Q_UNUSED(_t)
         switch (_id) {
-        case 0: _t->result((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])),(*reinterpret_cast< bool(*)>(_a[5])),(*reinterpret_cast< bool(*)>(_a[6])),(*reinterpret_cast< QString(*)>(_a[7]))); break;
+        case 0: _t->result((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])),(*reinterpret_cast< bool(*)>(_a[5])),(*reinterpret_cast< bool(*)>(_a[6])),(*reinterpret_cast< const QString(*)>(_a[7]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
         int *result = reinterpret_cast<int *>(_a[0]);
         {
-            using _t = void (Msg_PWM_Set::*)(int , int , int , int , bool , bool , QString );
+            using _t = void (Msg_PWM_Set::*)(int , int , int , int , bool , bool , const QString );
             if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&Msg_PWM_Set::result)) {
                 *result = 0;
                 return;
@@ -1592,7 +1865,7 @@ int Msg_PWM_Set::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 }
 
 // SIGNAL 0
-void Msg_PWM_Set::result(int _t1, int _t2, int _t3, int _t4, bool _t5, bool _t6, QString _t7)
+void Msg_PWM_Set::result(int _t1, int _t2, int _t3, int _t4, bool _t5, bool _t6, const QString _t7)
 {
     void *_a[] = { nullptr, const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t1))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t2))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t3))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t4))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t5))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t6))), const_cast<void*>(reinterpret_cast<const void*>(std::addressof(_t7))) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);

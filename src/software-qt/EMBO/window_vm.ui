@@ -48,25 +48,168 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
         <property name="title">
          <string/>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <widget class="QCustomPlot" name="customPlot" native="true">
-           <property name="enabled">
-            <bool>true</bool>
+        <layout class="QGridLayout" name="gridLayout_2">
+         <property name="verticalSpacing">
+          <number>3</number>
+         </property>
+         <item row="1" column="0">
+          <layout class="QGridLayout" name="gridLayout_plot">
+           <property name="spacing">
+            <number>0</number>
            </property>
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: white;border: 0px;</string>
-           </property>
-          </widget>
+           <item row="0" column="1">
+            <widget class="QCustomPlot" name="customPlot" native="true">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: white;border: 0px;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="ctkRangeSlider" name="horizontalSlider_cursorV">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>25</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">ctkRangeSlider::groove:vertical {
+   background-color: transparent;
+}
+
+ctkRangeSlider::handle:vertical {
+	 image: url(:/main/resources/img/range_left.png);
+}
+
+ctkRangeSlider::handle:vertical:hover {
+	 image: url(:/main/resources/img/range_left2.png);
+}
+
+QSlider::groove:vertical {
+   background-color: transparent;
+}
+
+QSlider::handle:vertical {
+	 image: url(:/main/resources/img/range_left.png);
+}
+
+QSlider::handle:vertical:hover {
+	 image: url(:/main/resources/img/range_left2.png);
+}</string>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="value">
+              <number>500</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksBelow</enum>
+             </property>
+             <property name="tickInterval">
+              <number>100000</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="ctkRangeSlider" name="horizontalSlider_cursorH">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">ctkRangeSlider::groove:horizontal {
+   background-color: transparent;
+}
+
+ctkRangeSlider::handle:horizontal {
+	 image: url(:/main/resources/img/range_down.png);
+}
+
+ctkRangeSlider::handle:horizontal:hover {
+	 image: url(:/main/resources/img/range_down2.png);
+}
+
+QSlider::groove:horizontal {
+   background-color: transparent;
+}
+
+QSlider::handle:horizontal {
+	 image: url(:/main/resources/img/range_down.png);
+}
+
+QSlider::handle:horizontal:hover {
+	 image: url(:/main/resources/img/range_down2.png);
+}</string>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="singleStep">
+              <number>1</number>
+             </property>
+             <property name="value">
+              <number>500</number>
+             </property>
+             <property name="sliderPosition">
+              <number>500</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="tickPosition">
+              <enum>QSlider::TicksAbove</enum>
+             </property>
+             <property name="tickInterval">
+              <number>100000</number>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item row="2" column="0">
+          <layout class="QHBoxLayout" name="horizontalLayout_bot">
+           <property name="spacing">
+            <number>6</number>
+           </property>
            <item>
             <widget class="QGroupBox" name="groupBox_ch4_2">
              <property name="sizePolicy">
@@ -78,7 +221,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <property name="minimumSize">
               <size>
                <width>100</width>
-               <height>80</height>
+               <height>60</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -94,7 +237,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+              <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px; margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
              </property>
              <property name="title">
@@ -104,8 +247,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
               <property name="geometry">
                <rect>
                 <x>10</x>
-                <y>8</y>
-                <width>71</width>
+                <y>0</y>
+                <width>151</width>
                 <height>16</height>
                </rect>
               </property>
@@ -116,9 +259,150 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                </font>
               </property>
               <property name="text">
-               <string>Measure</string>
+               <string>Measure (Channel 1)</string>
               </property>
              </widget>
+             <widget class="QLabel" name="label_8">
+              <property name="geometry">
+               <rect>
+                <x>20</x>
+                <y>30</y>
+                <width>31</width>
+                <height>20</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Light</family>
+                <pointsize>13</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Vpp:</string>
+              </property>
+             </widget>
+             <widget class="QTextBrowser" name="textBrowser_realFreq">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>161</width>
+                <height>37</height>
+               </rect>
+              </property>
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Mono Light</family>
+                <pointsize>14</pointsize>
+                <weight>50</weight>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="cursor" stdset="0">
+               <cursorShape>IBeamCursor</cursorShape>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QTextBrowser {
+	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
+	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;
+	color:black; 
+}
+
+QTextBrowser:disabled {
+	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
+	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;
+	color:black;
+}</string>
+              </property>
+              <property name="html">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Light','Roboto Mono Light'; font-weight:496;&quot;&gt;10.1245 V&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_9">
+              <property name="geometry">
+               <rect>
+                <x>230</x>
+                <y>20</y>
+                <width>51</width>
+                <height>20</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Light</family>
+                <pointsize>13</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Avg:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_10">
+              <property name="geometry">
+               <rect>
+                <x>300</x>
+                <y>20</y>
+                <width>51</width>
+                <height>20</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Light</family>
+                <pointsize>13</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Max:</string>
+              </property>
+             </widget>
+             <widget class="QLabel" name="label_11">
+              <property name="geometry">
+               <rect>
+                <x>380</x>
+                <y>20</y>
+                <width>51</width>
+                <height>20</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Light</family>
+                <pointsize>13</pointsize>
+                <weight>50</weight>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Min:</string>
+              </property>
+             </widget>
+             <zorder>label_meas</zorder>
+             <zorder>textBrowser_realFreq</zorder>
+             <zorder>label_8</zorder>
+             <zorder>label_9</zorder>
+             <zorder>label_10</zorder>
+             <zorder>label_11</zorder>
             </widget>
            </item>
            <item>
@@ -132,7 +416,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <property name="minimumSize">
               <size>
                <width>150</width>
-               <height>80</height>
+               <height>60</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -148,17 +432,215 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+              <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px; margin-top: 0.5em; }; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
              </property>
              <property name="title">
               <string/>
              </property>
+             <widget class="QPushButton" name="pushButton_cursorsOff">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>51</width>
+                <height>31</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto</family>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
+                <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>23</width>
+                <height>22</height>
+               </size>
+              </property>
+             </widget>
+             <widget class="QPushButton" name="pushButton_cursorsOn">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>51</width>
+                <height>30</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto</family>
+                <pointsize>13</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}
+
+QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
+                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset resource="resources.qrc">
+                <normaloff>:/main/resources/img/power-off-gray2.png</normaloff>:/main/resources/img/power-off-gray2.png</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>23</width>
+                <height>22</height>
+               </size>
+              </property>
+             </widget>
+             <widget class="QSpinBox" name="spinBox_cursors">
+              <property name="geometry">
+               <rect>
+                <x>80</x>
+                <y>10</y>
+                <width>61</width>
+                <height>41</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Roboto Mono Medium</family>
+                <pointsize>14</pointsize>
+                <weight>62</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
+				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:14pt; font-weight:500;  }
+
+QSpinBox::up-button { 
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_up4.png);
+}
+
+QSpinBox::down-button {
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_down4.png);
+ }
+
+QSpinBox::up-button:hover { 
+	image: url(:/main/resources/img/arrow_up4b.png);
+}
+
+QSpinBox::down-button:hover {
+	image: url(:/main/resources/img/arrow_down4b.png);
+ }
+
+QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
+                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
+                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
+
+QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
+
+QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
+</string>
+              </property>
+              <property name="wrapping">
+               <bool>false</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::UpDownArrows</enum>
+              </property>
+              <property name="accelerated">
+               <bool>false</bool>
+              </property>
+              <property name="keyboardTracking">
+               <bool>false</bool>
+              </property>
+              <property name="showGroupSeparator" stdset="0">
+               <bool>false</bool>
+              </property>
+              <property name="suffix">
+               <string/>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>4</number>
+              </property>
+              <property name="value">
+               <number>1</number>
+              </property>
+             </widget>
              <widget class="QLabel" name="label_meas_2">
               <property name="geometry">
                <rect>
                 <x>10</x>
-                <y>8</y>
+                <y>0</y>
                 <width>71</width>
                 <height>16</height>
                </rect>
@@ -171,74 +653,6 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
               </property>
               <property name="text">
                <string>Cursors</string>
-              </property>
-             </widget>
-             <widget class="QDial" name="dial_average_2">
-              <property name="geometry">
-               <rect>
-                <x>10</x>
-                <y>30</y>
-                <width>51</width>
-                <height>50</height>
-               </rect>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>300</number>
-              </property>
-              <property name="value">
-               <number>1</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="invertedAppearance">
-               <bool>false</bool>
-              </property>
-              <property name="wrapping">
-               <bool>false</bool>
-              </property>
-              <property name="notchTarget">
-               <double>15.000000000000000</double>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
-              </property>
-             </widget>
-             <widget class="QDial" name="dial_average_4">
-              <property name="geometry">
-               <rect>
-                <x>80</x>
-                <y>30</y>
-                <width>51</width>
-                <height>50</height>
-               </rect>
-              </property>
-              <property name="minimum">
-               <number>1</number>
-              </property>
-              <property name="maximum">
-               <number>300</number>
-              </property>
-              <property name="value">
-               <number>1</number>
-              </property>
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="invertedAppearance">
-               <bool>false</bool>
-              </property>
-              <property name="wrapping">
-               <bool>false</bool>
-              </property>
-              <property name="notchTarget">
-               <double>15.000000000000000</double>
-              </property>
-              <property name="notchesVisible">
-               <bool>true</bool>
               </property>
              </widget>
             </widget>
@@ -336,15 +750,17 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
           </property>
           <property name="styleSheet">
            <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
+	border-color: #0072BD;
 }
 
 QTextBrowser:disabled {
 	background-color: transparent;
 	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
-}</string>
+}
+</string>
           </property>
           <property name="html">
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -432,7 +848,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
            <number>2</number>
           </property>
           <property name="minimum">
-           <double>0.010000000000000</double>
+           <double>-9.900000000000000</double>
           </property>
           <property name="value">
            <double>1.000000000000000</double>
@@ -669,15 +1085,17 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
           </property>
           <property name="styleSheet">
            <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
+	border-color: #D95319;
 }
 
 QTextBrowser:disabled {
 	background-color: transparent;
 	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
-}</string>
+}
+</string>
           </property>
           <property name="html">
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -765,7 +1183,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
            <number>2</number>
           </property>
           <property name="minimum">
-           <double>0.010000000000000</double>
+           <double>-9.900000000000000</double>
           </property>
           <property name="value">
            <double>1.000000000000000</double>
@@ -1000,15 +1418,17 @@ QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray;
           </property>
           <property name="styleSheet">
            <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
+	border-color: #77AC30;
 }
 
 QTextBrowser:disabled {
 	background-color: transparent;
 	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
-}</string>
+}
+</string>
           </property>
           <property name="html">
            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -1096,7 +1516,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
            <number>2</number>
           </property>
           <property name="minimum">
-           <double>0.010000000000000</double>
+           <double>-9.900000000000000</double>
           </property>
           <property name="value">
            <double>1.000000000000000</double>
@@ -1330,8 +1750,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
           </property>
           <property name="styleSheet">
            <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
+	border-color: #7E2F8E;
 }
 
 QTextBrowser:disabled {
@@ -1426,7 +1847,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
            <number>2</number>
           </property>
           <property name="minimum">
-           <double>0.010000000000000</double>
+           <double>-9.900000000000000</double>
           </property>
           <property name="value">
            <double>1.000000000000000</double>
@@ -2158,7 +2579,7 @@ QPushButton:pressed
      </font>
     </property>
     <property name="title">
-     <string>View</string>
+     <string>Plot</string>
     </property>
     <widget class="QMenu" name="menuInterpolation">
      <property name="font">
@@ -2519,6 +2940,11 @@ QPushButton:pressed
    <extends>QWidget</extends>
    <header>lib/qcustomplot.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ctkRangeSlider</class>
+   <extends>QSlider</extends>
+   <header>lib/ctkrangeslider.h</header>
   </customwidget>
  </customwidgets>
  <resources>

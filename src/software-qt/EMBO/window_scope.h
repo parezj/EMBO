@@ -8,19 +8,15 @@
 
 #include "interfaces.h"
 #include "messages.h"
+#include "qcpcursors.h"
 
 #include <QMainWindow>
 #include <QLabel>
 
-#define GRAPH_CH1   0
-#define GRAPH_CH2   1
-#define GRAPH_CH3   2
-#define GRAPH_CH4   3
-
-#define GRAPH_CH1_SPLINE   4
-#define GRAPH_CH2_SPLINE   5
-#define GRAPH_CH3_SPLINE   6
-#define GRAPH_CH4_SPLINE   7
+#define GRAPH_CH1       0
+#define GRAPH_CH2       1
+#define GRAPH_CH3       2
+#define GRAPH_CH4       3
 
 
 QT_BEGIN_NAMESPACE
@@ -46,7 +42,7 @@ private slots:
     void on_msg_ok(const QString val1, const QString val2);
     void on_msg_err(const QString text, MsgBoxType type, bool needClose);
     void on_msg_set();
-    void on_msg_read(const QString data);
+    void on_msg_read(const QByteArray data);
     void on_msg_daqReady(Ready ready);
 
     void on_actionAbout_triggered();
@@ -56,6 +52,8 @@ private:
     void showEvent(QShowEvent* event) override;
 
     Ui::WindowScope* m_ui;
+
+    QCPCursors* m_cursors;
 
     bool m_spline = false;
 

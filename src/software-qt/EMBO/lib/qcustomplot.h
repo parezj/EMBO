@@ -114,6 +114,13 @@ class QCPColorMap;
 class QCPColorScale;
 class QCPBars;
 
+class SplineUtils {
+public:
+    static QVector<qreal> firstControlPoints(const QVector<qreal>& vector);
+    static QVector<QPointF> calculateControlPoints(const QVector<QPointF> &points);
+    static QPainterPath splineFromPoints(const QVector<QPointF> &points);
+};
+
 /* including file 'src/global.h', size 16357                                 */
 /* commit ce344b3f96a62e5f652585e55f1ae7c7883cd45b 2018-06-25 01:03:39 +0200 */
 
@@ -481,10 +488,12 @@ public:
   explicit QCPPainter(QPaintDevice *device);
   
   // getters:
+  bool spline() const { return mSpline; }
   bool antialiasing() const { return testRenderHint(QPainter::Antialiasing); }
   PainterModes modes() const { return mModes; }
 
   // setters:
+  void setSpline(bool spline) { mSpline = spline; }
   void setAntialiasing(bool enabled);
   void setMode(PainterMode mode, bool enabled=true);
   void setModes(PainterModes modes);
@@ -506,6 +515,7 @@ protected:
   // property members:
   PainterModes mModes;
   bool mIsAntialiasing;
+  bool mSpline = true;
   
   // non-property members:
   QStack<bool> mAntialiasingStack;
@@ -4398,7 +4408,7 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
       !painter->modes().testFlag(QCPPainter::pmNoCaching))
   {
       qWarning() << "NOT SUPPROTED !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
-      assert(0);
+      //assert(0);
 
     int i = 0;
     bool lastIsNan = false;
@@ -4431,9 +4441,9 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
       if (qIsNaN(lineData.at(i).y()) || qIsNaN(lineData.at(i).x()) || qIsInf(lineData.at(i).y())) // NaNs create a gap in the line. Also filter Infs which make drawPolyline block
       {
         qWarning() << "NOT SUPPROTED2 !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
-        assert(0);
+        //assert(0);
 
-        //painter->drawPolyline(lineData.constData()+segmentStart, i-segmentStart); // i, because we don't want to include the current NaN point
+        painter->drawPolyline(lineData.constData()+segmentStart, i-segmentStart); // i, because we don't want to include the current NaN point
         segmentStart = i+1;
       }
       ++i;
@@ -4445,9 +4455,7 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
     assert(segmentStart == 0);
     //qInfo() << " start: " << poly_start->x() << " y: " << poly_start->y() << " count: " << poly_count;
 
-    bool spline = true;
-
-    if (poly_count > 1 && spline)
+    if (poly_count > 1 && painter->spline())
     {
         /*
         QPainterPath bezierPath;
@@ -4465,12 +4473,12 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
         painter->drawPath(bezierPath);
         */
 
-        painter->drawPath(splineFromPoints(lineData, 1));
+        painter->drawPath(SplineUtils::splineFromPoints(lineData));
 
     }
     else
     {
-        //painter->drawPolyline(poly_start, poly_count);
+        painter->drawPolyline(poly_start, poly_count);
     }
   }
 }
@@ -5214,6 +5222,7 @@ class QCP_LIB_DECL QCPGraph : public QCPAbstractPlottable1D<QCPGraphData>
   Q_PROPERTY(int scatterSkip READ scatterSkip WRITE setScatterSkip)
   Q_PROPERTY(QCPGraph* channelFillGraph READ channelFillGraph WRITE setChannelFillGraph)
   Q_PROPERTY(bool adaptiveSampling READ adaptiveSampling WRITE setAdaptiveSampling)
+  Q_PROPERTY(bool spline READ spline WRITE setSpline)
   /// \endcond
 public:
   /*!
@@ -5241,6 +5250,7 @@ public:
   int scatterSkip() const { return mScatterSkip; }
   QCPGraph *channelFillGraph() const { return mChannelFillGraph.data(); }
   bool adaptiveSampling() const { return mAdaptiveSampling; }
+  bool spline() const { return mSpline; }
   
   // setters:
   void setData(QSharedPointer<QCPGraphDataContainer> data);
@@ -5250,6 +5260,7 @@ public:
   void setScatterSkip(int skip);
   void setChannelFillGraph(QCPGraph *targetGraph);
   void setAdaptiveSampling(bool enabled);
+  void setSpline(bool spline) { mSpline = spline; }
   
   // non-property methods:
   void addData(const QVector<double> &keys, const QVector<double> &values, bool alreadySorted=false);
@@ -5267,6 +5278,7 @@ protected:
   int mScatterSkip;
   QPointer<QCPGraph> mChannelFillGraph;
   bool mAdaptiveSampling;
+  bool mSpline = true;
   
   // reimplemented virtual methods:
   virtual void draw(QCPPainter *painter) Q_DECL_OVERRIDE;
@@ -6712,6 +6724,7 @@ protected:
 Q_DECLARE_METATYPE(QCPItemBracket::BracketStyle)
 
 /* end of 'src/items/item-bracket.h' */
+
 
 
 #endif // QCUSTOMPLOT_H

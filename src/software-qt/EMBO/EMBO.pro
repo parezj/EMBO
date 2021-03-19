@@ -51,10 +51,12 @@ QMAKE_TARGET_COPYRIGHT = CTU Jakub Parez
 
 SOURCES += \
     core.cpp \
+    lib/ctkrangeslider.cpp \
     lib/qcustomplot.cpp \
     main.cpp \
     messages.cpp \
     msg.cpp \
+    qcpcursors.cpp \
     settings.cpp \
     utils.cpp \
     window__main.cpp \
@@ -69,9 +71,11 @@ HEADERS += \
     core.h \
     css.h \
     interfaces.h \
+    lib/ctkrangeslider.h \
     lib/qcustomplot.h \
     messages.h \
     msg.h \
+    qcpcursors.h \
     settings.h \
     utils.h \
     window__main.h \

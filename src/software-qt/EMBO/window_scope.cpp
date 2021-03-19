@@ -41,30 +41,20 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
 
     /* QCP */
 
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
-
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
-    m_ui->customPlot->addGraph();
+    m_ui->customPlot->addGraph();  // ch1
+    m_ui->customPlot->addGraph();  // ch2
+    m_ui->customPlot->addGraph();  // ch3
+    m_ui->customPlot->addGraph();  // ch4
 
     m_ui->customPlot->graph(GRAPH_CH1)->setPen(QPen(QColor(COLOR1)));
     m_ui->customPlot->graph(GRAPH_CH2)->setPen(QPen(QColor(COLOR2)));
-    m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR3)));
+    m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR5)));
     m_ui->customPlot->graph(GRAPH_CH4)->setPen(QPen(QColor(COLOR4)));
 
-    m_ui->customPlot->graph(GRAPH_CH1_SPLINE)->setPen(QPen(QColor(COLOR1)));
-    m_ui->customPlot->graph(GRAPH_CH2_SPLINE)->setPen(QPen(QColor(COLOR2)));
-    m_ui->customPlot->graph(GRAPH_CH3_SPLINE)->setPen(QPen(QColor(COLOR3)));
-    m_ui->customPlot->graph(GRAPH_CH4_SPLINE)->setPen(QPen(QColor(COLOR4)));
-
-    m_ui->customPlot->graph(GRAPH_CH1_SPLINE)->setVisible(false);
-    m_ui->customPlot->graph(GRAPH_CH2_SPLINE)->setVisible(false);
-    m_ui->customPlot->graph(GRAPH_CH3_SPLINE)->setVisible(false);
-    m_ui->customPlot->graph(GRAPH_CH4_SPLINE)->setVisible(false);
+    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(true);
+    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(true);
+    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(true);
+    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(true);
 
     m_ui->customPlot->xAxis->setVisible(true);
     m_ui->customPlot->xAxis->setTickLabels(true);
@@ -76,19 +66,32 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     //m_ui->customPlot->yAxis2->setVisible(true);
     //m_ui->customPlot->yAxis2->setTickLabels(true);
 
-    m_ui->customPlot->yAxis->setLabel("Voltage [V]");
-    m_ui->customPlot->xAxis->setLabel("Time [s]");
-
     QFont font2("Roboto", 12, QFont::Normal);
     m_ui->customPlot->xAxis->setTickLabelFont(font2);
     m_ui->customPlot->yAxis->setTickLabelFont(font2);
     m_ui->customPlot->xAxis->setLabelFont(font2);
     m_ui->customPlot->yAxis->setLabelFont(font2);
 
+    m_ui->customPlot->setInteractions(0);
     //m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 
     connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
+
+    /* cursors */
+
+    /*
+    m_ui->horizontalSlider_cursorH->setValues(m_cursorH_min, m_cursorH_max);
+    m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
+
+    m_ui->horizontalSlider_cursorH->hide();
+    m_ui->horizontalSlider_cursorV->hide();
+
+    connect(this, &WindowVm::on_cursorH_valuesChanged, m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged);
+    connect(this, &WindowVm::on_cursorV_valuesChanged, m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged);
+    */
+
+    m_cursors = new QCPCursors(m_ui->customPlot);
 
     /* statusbar */
 
@@ -134,9 +137,72 @@ void WindowScope::on_msg_set()
 
 }
 
-void WindowScope::on_msg_read(const QString data)
+void WindowScope::on_msg_read(const QByteArray data)
 {
-    // PLOT DATA
+    int ch_num = 2;
+    bool ch1_en = true;
+    bool ch2_en = true;
+    bool ch3_en = false;
+    bool ch4_en = false;
+    bool bit8 = false;
+
+    const unsigned char *dataU8 = reinterpret_cast<const unsigned char*>(data.constData());
+
+    int data_sz = data.size();
+    int real_sz = data_sz;
+
+    std::vector<qreal> buff(data_sz);
+
+    if (bit8)
+    {
+        for (int i = 0; i < data_sz; i++)
+            buff[i] = (((qreal)(dataU8[i]) / 100.0));
+    }
+    else
+    {
+        real_sz = data_sz / 2;
+        buff.resize(real_sz);
+        for (int i = 0, j = 0; i < data_sz; i += 2, j++)
+        {
+            buff[j] = (((qreal)(dataU8[i + 1] << 8 | dataU8[i]) / 10000.0));
+        }
+
+    }
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    for (int i = 0, j = 0, k = 0; i < real_sz; i++)
+    {
+        if (i % ch_num == 0 && ch1_en)
+            m_ui->customPlot->graph(GRAPH_CH1)->addData(j, buff[i]);
+        else if (ch_num > 1 && i % ch_num == 1 && ch2_en)
+            m_ui->customPlot->graph(GRAPH_CH2)->addData(j, buff[i]);
+        else if (ch_num > 2 && i % ch_num == 2 && ch3_en)
+            m_ui->customPlot->graph(GRAPH_CH3)->addData(j, buff[i]);
+        else if (ch_num > 3 && ch4_en)
+            m_ui->customPlot->graph(GRAPH_CH4)->addData(j, buff[i]);
+
+        k++;
+        if (k == ch_num)
+        {
+            j++;
+            k = 0;
+        }
+    }
+
+    //m_ui->customPlot->graph(GRAPH_CH1)->rescaleValueAxis(false);
+    //m_ui->customPlot->graph(GRAPH_CH2)->rescaleValueAxis(false);
+    //m_ui->customPlot->graph(GRAPH_CH3)->rescaleValueAxis(false);
+    //m_ui->customPlot->graph(GRAPH_CH4)->rescaleValueAxis(false);
+
+    //m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
+    m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, 3.3 + LIM_OFFSET);
+    m_ui->customPlot->xAxis->setRange(0, real_sz / ch_num);
+
+    m_ui->customPlot->replot();
 }
 
 void WindowScope::on_msg_daqReady(Ready ready)

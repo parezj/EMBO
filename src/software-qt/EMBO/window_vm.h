@@ -8,6 +8,7 @@
 
 #include "interfaces.h"
 #include "messages.h"
+#include "qcpcursors.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -16,18 +17,31 @@
 
 
 #define TIMER_VM_RENDER     33
+#define DISPLAY_DEFAULT     300
 
 #define LIM_OFFSET          0.5
 
-#define GRAPH_CH1           0
-#define GRAPH_CH2           1
-#define GRAPH_CH3           2
-#define GRAPH_CH4           3
+#define GRAPH_CH1       0
+#define GRAPH_CH2       1
+#define GRAPH_CH3       2
+#define GRAPH_CH4       3
 
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class WindowVm; }
 QT_END_NAMESPACE
+
+
+class VmSample
+{
+public:
+    double t;
+
+    double ch1;
+    double ch2;
+    double ch3;
+    double ch4;
+};
 
 
 class WindowVm : public QMainWindow, public IEmboInstrument
@@ -87,6 +101,11 @@ private slots:
     void on_actionChannel_2_triggered(bool checked);
     void on_actionChannel_3_triggered(bool checked);
     void on_actionChannel_4_triggered(bool checked);
+    void on_pushButton_cursorsOn_clicked();
+    void on_pushButton_cursorsOff_clicked();
+
+    void on_cursorH_valuesChanged(int min, int max);
+    void on_cursorV_valuesChanged(int min, int max);
 
 private:
     void closeEvent(QCloseEvent *event) override;
@@ -98,6 +117,10 @@ private:
     QTimer* m_timer_render;
 
     QLabel* m_status_vcc;
+
+    std::vector<VmSample> m_smplBuff;
+
+    QCPCursors* m_cursors;
 
     double m_data_ch1;
     double m_data_ch2;
@@ -116,13 +139,19 @@ private:
     bool m_en3 = true;
     bool m_en4 = true;
 
+    double m_cursorV_min = 250;
+    double m_cursorV_max = 750;
+
+    double m_cursorH_min = 250;
+    double m_cursorH_max = 750;
+
     bool m_spline = true;
     bool m_lines = true;
     bool m_points = false;
 
     int m_elapsed_saved = 0;
     int m_elapsed_diff = 0;
-    double m_display = 300 / TIMER_VM_RENDER;
+    double m_display = DISPLAY_DEFAULT / TIMER_VM_RENDER;
     int m_average = 1;
 
     /* messages */

@@ -162,8 +162,8 @@ void WindowSgen::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->closing((*reinterpret_cast< const char*(*)>(_a[1]))); break;
-        case 1: _t->on_msg_ok((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< QString(*)>(_a[2]))); break;
-        case 2: _t->on_msg_err((*reinterpret_cast< QString(*)>(_a[1])),(*reinterpret_cast< MsgBoxType(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
+        case 1: _t->on_msg_ok((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< const QString(*)>(_a[2]))); break;
+        case 2: _t->on_msg_err((*reinterpret_cast< const QString(*)>(_a[1])),(*reinterpret_cast< MsgBoxType(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3]))); break;
         case 3: _t->on_msg_set((*reinterpret_cast< SgenMode(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< int(*)>(_a[3])),(*reinterpret_cast< int(*)>(_a[4])),(*reinterpret_cast< bool(*)>(_a[5]))); break;
         case 4: _t->on_actionAbout_triggered(); break;
         case 5: _t->on_spinBox_freq_valueChanged((*reinterpret_cast< int(*)>(_a[1]))); break;

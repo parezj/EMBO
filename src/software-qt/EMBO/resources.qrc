@@ -52,6 +52,14 @@
         <file>resources/img/serial2_busy.png</file>
         <file>resources/img/ctu_meas_small2.png</file>
         <file>resources/img/refresh.png</file>
+        <file>resources/img/range_down.png</file>
+        <file>resources/img/range_down2.png</file>
+        <file>resources/img/range_left.png</file>
+        <file>resources/img/range_left2.png</file>
+        <file>resources/img/range_right.png</file>
+        <file>resources/img/range_right2.png</file>
+        <file>resources/img/range_up.png</file>
+        <file>resources/img/range_up2.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>
