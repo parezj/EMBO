@@ -57,11 +57,6 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     m_ui->customPlot->yAxis->setVisible(true);
     m_ui->customPlot->yAxis->setTickLabels(true);
 
-    //m_ui->customPlot->xAxis2->setVisible(true);
-    //m_ui->customPlot->xAxis2->setTickLabels(true);
-    //m_ui->customPlot->yAxis2->setVisible(true);
-    //m_ui->customPlot->yAxis2->setTickLabels(true);
-
     QFont font2("Roboto", 12, QFont::Normal);
     m_ui->customPlot->xAxis->setTickLabelFont(font2);
     m_ui->customPlot->yAxis->setTickLabelFont(font2);
@@ -87,7 +82,9 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     connect(this, &WindowVm::on_cursorV_valuesChanged, m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged);
     */
 
-    m_cursors = new QCPCursors(m_ui->customPlot);
+    m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, true);
+    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, false);
 
     /* statusbar */
 

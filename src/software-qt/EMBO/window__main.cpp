@@ -134,7 +134,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect (updater, SIGNAL (checkingFinished  (QString)), this, SLOT(updateChangelog(QString)));
     connect (updater, SIGNAL (appcastDownloaded (QString, QByteArray)), this,  SLOT(displayAppcast(QString, QByteArray)));
 
-    qInfo() << APP_VERSION;
+    qInfo() << "EMBO version: " << APP_VERSION;
 
     setDisconnected();
     on_pushButton_scan_clicked();
@@ -301,7 +301,7 @@ void WindowMain::setConnected()
     m_ui->label_dev_fcpu->setText(info->fcpu + " MHz");
     m_ui->label_dev_rtos->setText(info->rtos);
     m_ui->label_dev_comm->setText(info->comm);
-    m_ui->label_dev_vref->setText(info->ref_mv + " mV");
+    m_ui->label_dev_vref->setText(QString::number(info->ref_mv) + " mV");
     if (info->name.toLower().contains("bluepill"))
         m_ui->label_boardImg->setPixmap(m_img_bluepill);
     else if (info->name.toLower().contains("nucleo"))
@@ -584,7 +584,7 @@ void WindowMain::on_latencyAndUptime(int latency, int commTimeout, const QString
     m_status_uptime->setText("Uptime: " + uptime);
 
     if (m_w_vm->isVisible())
-        m_ui->label_dev_vref->setText(Core::getInstance()->getDevInfo()->ref_mv.replace(".", "").left(4) + " mV");
+        m_ui->label_dev_vref->setText(QString::number(Core::getInstance()->getDevInfo()->ref_mv) + " mV");
 }
 
 void WindowMain::on_coreState_changed(const State newState)

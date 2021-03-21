@@ -33,6 +33,8 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     connect(m_timer_render, &QTimer::timeout, this, &WindowVm::on_timer_render);
 
     m_ui->dial_display->setValue(DISPLAY_DEFAULT);
+    m_ui->horizontalSlider_trigPre->setVisible(false);
+    m_ui->horizontalSlider_trigVal->setVisible(false);
 
     /* QCP */
 
@@ -51,7 +53,9 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(true);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(true);
 
-    m_spline = false;
+    m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,15));
+
+    m_spline = true;
 
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
     timeTicker->setTimeFormat("%h:%m:%s");
@@ -64,24 +68,11 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->customPlot->yAxis->setVisible(true);
     m_ui->customPlot->yAxis->setTickLabels(true);
 
-    //m_ui->customPlot->xAxis2->setVisible(true);
-    //m_ui->customPlot->xAxis2->setTickLabels(true);
-    //m_ui->customPlot->yAxis2->setVisible(true);
-    //m_ui->customPlot->yAxis2->setTickLabels(true);
-
-    //m_ui->customPlot->yAxis->setLabel("Voltage [V]");
-    //m_ui->customPlot->xAxis->setLabel("Time [s]");
-
     QFont font2("Roboto", 12, QFont::Normal);
     m_ui->customPlot->xAxis->setTickLabelFont(font2);
     m_ui->customPlot->yAxis->setTickLabelFont(font2);
     m_ui->customPlot->xAxis->setLabelFont(font2);
     m_ui->customPlot->yAxis->setLabelFont(font2);
-
-    //m_ui->customPlot->xAxis2->setTickLabelFont(font2);
-    //m_ui->customPlot->yAxis2->setTickLabelFont(font2);
-    //m_ui->customPlot->xAxis2->setLabelFont(font2);
-    //m_ui->customPlot->yAxis2->setLabelFont(font2);
 
     m_ui->customPlot->setInteractions(0);
 
@@ -90,16 +81,13 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     /* cursors */
 
-    m_ui->horizontalSlider_cursorH->setValues(m_cursorH_min, m_cursorH_max);
-    m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
-
     m_ui->horizontalSlider_cursorH->hide();
     m_ui->horizontalSlider_cursorV->hide();
 
-    connect(this, &WindowVm::on_cursorH_valuesChanged, m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged);
-    connect(this, &WindowVm::on_cursorV_valuesChanged, m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged);
+    connect(m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged, this, &WindowVm::on_cursorH_valuesChanged);
+    connect(m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged, this, &WindowVm::on_cursorV_valuesChanged);
 
-    m_cursors = new QCPCursors(m_ui->customPlot);
+    m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
 
     /* statusbar */
 
@@ -178,7 +166,7 @@ void WindowVm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 
 void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString ch3, const QString ch4, const QString vcc)
 {
-    if (m_instrEnabled)
+    if (m_instrEnabled && m_activeMsg != Q_NULLPTR)
     {
         double t = (m_timer_elapsed.elapsed() - m_elapsed_diff) / 1000.0;
 
@@ -186,11 +174,38 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
         m_data_ch2 = ch2.toDouble() * m_gain2;
         m_data_ch3 = ch3.toDouble() * m_gain3;
         m_data_ch4 = ch4.toDouble() * m_gain4;
+
         m_data_vcc = vcc;
+        m_data_vcc = m_data_vcc.replace(".", "").left(4);
+
+        int vcc_n = m_data_vcc.toInt();
+        m_vref = (double)vcc_n / 1000.0;
+        Core::getInstance()->getDevInfo()->ref_mv = vcc_n;
 
         m_smplBuff.push_back(VmSample {t, m_data_ch1, m_data_ch2, m_data_ch3, m_data_ch4});
 
         m_data_fresh = true;
+
+        if (m_meas_ch == GRAPH_CH1)
+        {
+            if (m_data_ch1 > m_meas_max) m_meas_max = m_data_ch1;
+            if (m_data_ch1 < m_meas_min) m_meas_min = m_data_ch1;
+        }
+        if (m_meas_ch == GRAPH_CH2)
+        {
+            if (m_data_ch2 > m_meas_max) m_meas_max = m_data_ch2;
+            if (m_data_ch2 < m_meas_min) m_meas_min = m_data_ch2;
+        }
+        if (m_meas_ch == GRAPH_CH3)
+        {
+            if (m_data_ch3 > m_meas_max) m_meas_max = m_data_ch3;
+            if (m_data_ch3 < m_meas_min) m_meas_min = m_data_ch3;
+        }
+        if (m_meas_ch == GRAPH_CH4)
+        {
+            if (m_data_ch4 > m_meas_max) m_meas_max = m_data_ch4;
+            if (m_data_ch4 < m_meas_min) m_meas_min = m_data_ch4;
+        }
     }
 }
 
@@ -215,15 +230,27 @@ void WindowVm::on_timer_render()
         ch4_s = ch1_s.asprintf(ch4 >= 100 ? "%.2f" : (ch4 >= 10 ? "%.3f" : "%.4f"), ch4);
 
         if (m_en1)
+        {
             m_ui->textBrowser_ch1->setHtml("<p align=\"center\">" + ch1_s + " V</p>");
+            m_ui->progressBar_ch1->setValue((ch1 / (m_vref * m_gain1)) * 100.0);
+        }
         if (m_en2)
+        {
             m_ui->textBrowser_ch2->setHtml("<p align=\"center\">" + ch2_s + " V</p>");
+            m_ui->progressBar_ch2->setValue((ch2 / (m_vref * m_gain2)) * 100.0);
+        }
         if (m_en3)
+        {
             m_ui->textBrowser_ch3->setHtml("<p align=\"center\">" + ch3_s + " V</p>");
+            m_ui->progressBar_ch3->setValue((ch3 / (m_vref * m_gain3)) * 100.0);
+        }
         if (m_en4)
+        {
             m_ui->textBrowser_ch4->setHtml("<p align=\"center\">" + ch4_s + " V</p>");
+            m_ui->progressBar_ch4->setValue((ch4 / (m_vref * m_gain4)) * 100.0);
+        }
 
-        m_status_vcc->setText(" Vcc: " + vcc + " V");
+        m_status_vcc->setText(" Vcc: " + vcc + " mV");
 
         double maxRng = 0;
         double key = 0;
@@ -245,22 +272,61 @@ void WindowVm::on_timer_render()
 
         m_smplBuff.clear();
 
-        m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
+        old_range = m_ui->customPlot->yAxis->range();
+        m_ui->customPlot->yAxis->rescale();
         m_ui->customPlot->xAxis->setRange(key, m_display, Qt::AlignRight);
+
+        if (old_range != m_ui->customPlot->yAxis->range())
+        {
+            auto low_range = m_ui->customPlot->yAxis->range().lower;
+            auto up_range = m_ui->customPlot->yAxis->range().upper;
+            auto hysteris = (up_range - low_range) * 0.05;
+
+            m_ui->customPlot->yAxis->setRange(low_range - hysteris,up_range + hysteris);
+        }
+
+        if (m_cursorsV_en || m_cursorsH_en)
+        {
+            auto rngV = m_ui->customPlot->yAxis->range();
+            auto rngH = m_ui->customPlot->xAxis->range();
+
+            m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, true);
+        }
 
         m_ui->customPlot->graph(GRAPH_CH1)->data()->removeBefore(key - m_display);
         m_ui->customPlot->graph(GRAPH_CH2)->data()->removeBefore(key - m_display);
         m_ui->customPlot->graph(GRAPH_CH3)->data()->removeBefore(key - m_display);
         m_ui->customPlot->graph(GRAPH_CH4)->data()->removeBefore(key - m_display);
 
-        //m_ui->customPlot->graph(GRAPH_CH1)->rescaleValueAxis(false); // RESCALE TO MAX FROM MEAS
-        //m_ui->customPlot->graph(GRAPH_CH2)->rescaleValueAxis(false);
-        //m_ui->customPlot->graph(GRAPH_CH3)->rescaleValueAxis(false);
-        //m_ui->customPlot->graph(GRAPH_CH4)->rescaleValueAxis(false);
-
         m_ui->customPlot->replot();
 
         m_data_fresh = false;
+
+        if (m_meas_en && m_meas_max > -1000 && m_meas_min < 1000)
+        {
+            QString meas_vpp_s;
+            QString meas_avg_s;
+            QString meas_min_s;
+            QString meas_max_s;
+
+            auto data_begin = m_ui->customPlot->graph(m_meas_ch)->data()->begin();
+            auto data_end = m_ui->customPlot->graph(m_meas_ch)->data()->end();
+
+            double vpp = m_meas_max - m_meas_min;
+            double avg = std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + b.value;}) / std::distance(data_begin, data_end);
+            double min = m_meas_min;
+            double max = m_meas_max;
+
+            meas_vpp_s = meas_vpp_s.asprintf(vpp >= 100 ? "%.2f" : (vpp >= 10 ? "%.3f" : "%.4f"), vpp);
+            meas_avg_s = meas_avg_s.asprintf(avg >= 100 ? "%.2f" : (avg >= 10 ? "%.3f" : "%.4f"), avg);
+            meas_min_s = meas_min_s.asprintf(min >= 100 ? "%.2f" : (min >= 10 ? "%.3f" : "%.4f"), min);
+            meas_max_s = meas_max_s.asprintf(max >= 100 ? "%.2f" : (max >= 10 ? "%.3f" : "%.4f"), max);
+
+            m_ui->textBrowser_measVpp->setHtml("<p align=\"right\">" + meas_vpp_s + " </p>");
+            m_ui->textBrowser_measAvg->setHtml("<p align=\"right\">" + meas_avg_s + " </p>");
+            m_ui->textBrowser_measMin->setHtml("<p align=\"right\">" + meas_min_s + " </p>");
+            m_ui->textBrowser_measMax->setHtml("<p align=\"right\">" + meas_max_s + " </p>");
+        }
     }
 }
 
@@ -356,6 +422,7 @@ void WindowVm::on_pushButton_disable1_clicked()
     m_en1 = false;
     m_ui->customPlot->graph(GRAPH_CH1)->setVisible(false);
     m_ui->textBrowser_ch1->setText("");
+    m_ui->progressBar_ch1->setValue(0);
 
     m_ui->pushButton_enable1->show();
     m_ui->pushButton_disable1->hide();
@@ -375,6 +442,7 @@ void WindowVm::on_pushButton_disable2_clicked()
     m_en2 = false;
     m_ui->customPlot->graph(GRAPH_CH2)->setVisible(false);
     m_ui->textBrowser_ch2->setText("");
+    m_ui->progressBar_ch2->setValue(0);
 
     m_ui->pushButton_enable2->show();
     m_ui->pushButton_disable2->hide();
@@ -394,6 +462,7 @@ void WindowVm::on_pushButton_disable3_clicked()
     m_en3 = false;
     m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
     m_ui->textBrowser_ch3->setText("");
+    m_ui->progressBar_ch3->setValue(0);
 
     m_ui->pushButton_enable3->show();
     m_ui->pushButton_disable3->hide();
@@ -413,6 +482,7 @@ void WindowVm::on_pushButton_disable4_clicked()
     m_en4 = false;
     m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
     m_ui->textBrowser_ch4->setText("");
+    m_ui->progressBar_ch4->setValue(0);
 
     m_ui->pushButton_enable4->show();
     m_ui->pushButton_disable4->hide();
@@ -474,11 +544,21 @@ void WindowVm::on_pushButton_disable_clicked()
     m_ui->doubleSpinBox_gain3->setEnabled(false);
     m_ui->doubleSpinBox_gain4->setEnabled(false);
 
+    m_ui->progressBar_ch1->setEnabled(false);
+    m_ui->progressBar_ch2->setEnabled(false);
+    m_ui->progressBar_ch3->setEnabled(false);
+    m_ui->progressBar_ch4->setEnabled(false);
+
     m_ui->spinBox_average->setEnabled(false);
     m_ui->dial_average->setEnabled(false);
 
     m_ui->spinBox_display->setEnabled(false);
     m_ui->dial_display->setEnabled(false);
+
+    m_ui->textBrowser_measVpp->setEnabled(false);
+    m_ui->textBrowser_measAvg->setEnabled(false);
+    m_ui->textBrowser_measMax->setEnabled(false);
+    m_ui->textBrowser_measMin->setEnabled(false);
 
     m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 }
@@ -512,11 +592,21 @@ void WindowVm::on_pushButton_enable_clicked()
     m_ui->doubleSpinBox_gain3->setEnabled(true);
     m_ui->doubleSpinBox_gain4->setEnabled(true);
 
+    m_ui->progressBar_ch1->setEnabled(true);
+    m_ui->progressBar_ch2->setEnabled(true);
+    m_ui->progressBar_ch3->setEnabled(true);
+    m_ui->progressBar_ch4->setEnabled(true);
+
     m_ui->spinBox_average->setEnabled(true);
     m_ui->dial_average->setEnabled(true);
 
     m_ui->spinBox_display->setEnabled(true);
     m_ui->dial_display->setEnabled(true);
+
+    m_ui->textBrowser_measVpp->setEnabled(true);
+    m_ui->textBrowser_measAvg->setEnabled(true);
+    m_ui->textBrowser_measMax->setEnabled(true);
+    m_ui->textBrowser_measMin->setEnabled(true);
 
     m_ui->customPlot->setInteractions(0);
 }
@@ -546,66 +636,150 @@ void WindowVm::on_dial_display_valueChanged(int value)
     m_ui->spinBox_display->setValue(value);
 }
 
-void WindowVm::on_actionMax_triggered(bool checked)
+void WindowVm::on_actionEnabled_triggered(bool checked)
 {
-    // TODO - measure
-}
+    m_meas_en = checked;
+    on_actionReset_triggered();
 
-void WindowVm::on_actionMin_triggered(bool checked)
-{
-    // TODO - measure
-}
-
-void WindowVm::on_actionAverage_triggered(bool checked)
-{
-    // TODO - measure
+    m_ui->textBrowser_measVpp->setEnabled(checked);
+    m_ui->textBrowser_measAvg->setEnabled(checked);
+    m_ui->textBrowser_measMin->setEnabled(checked);
+    m_ui->textBrowser_measMax->setEnabled(checked);
 }
 
 void WindowVm::on_actionReset_triggered()
 {
-    // TODO - measure
+    m_meas_max = -1000;
+    m_meas_min = 1000;
+
+    m_ui->textBrowser_measVpp->setText("");
+    m_ui->textBrowser_measAvg->setText("");
+    m_ui->textBrowser_measMin->setText("");
+    m_ui->textBrowser_measMax->setText("");
 }
 
 void WindowVm::on_actionChannel_1_triggered(bool checked)
 {
-    // TODO - measure
+    if (checked)
+    {
+        on_actionReset_triggered();
+        m_meas_ch = GRAPH_CH1;
+
+        m_ui->actionChannel_2->setChecked(false);
+        m_ui->actionChannel_3->setChecked(false);
+        m_ui->actionChannel_4->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 1)");
+    }
 }
 
 void WindowVm::on_actionChannel_2_triggered(bool checked)
 {
-    // TODO - measure
+    if (checked)
+    {
+        on_actionReset_triggered();
+        m_meas_ch = GRAPH_CH2;
+
+        m_ui->actionChannel_1->setChecked(false);
+        m_ui->actionChannel_3->setChecked(false);
+        m_ui->actionChannel_4->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 2)");
+    }
 }
 
 void WindowVm::on_actionChannel_3_triggered(bool checked)
 {
-    // TODO - measure
+    if (checked)
+    {
+        on_actionReset_triggered();
+        m_meas_ch = GRAPH_CH3;
+
+        m_ui->actionChannel_1->setChecked(false);
+        m_ui->actionChannel_2->setChecked(false);
+        m_ui->actionChannel_4->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 3)");
+    }
 }
 
 void WindowVm::on_actionChannel_4_triggered(bool checked)
 {
-    // TODO - measure
+    if (checked)
+    {
+        on_actionReset_triggered();
+        m_meas_ch = GRAPH_CH4;
+
+        m_ui->actionChannel_1->setChecked(false);
+        m_ui->actionChannel_2->setChecked(false);
+        m_ui->actionChannel_3->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 4)");
+    }
 }
 
-void WindowVm::on_pushButton_cursorsOn_clicked()
-{
-    m_ui->horizontalSlider_cursorH->show();
-    m_ui->horizontalSlider_cursorV->show();
-
-    m_ui->pushButton_cursorsOn->hide();
-    m_ui->pushButton_cursorsOff->show();
-
-    //m_cursors->show(true);
-}
-
-void WindowVm::on_pushButton_cursorsOff_clicked()
+void WindowVm::on_pushButton_cursorsHoff_clicked()
 {
     m_ui->horizontalSlider_cursorH->hide();
+
+    m_ui->pushButton_cursorsHon->show();
+    m_ui->pushButton_cursorsHoff->hide();
+
+    m_cursors->showH(false);
+    m_cursorsH_en = false;
+}
+
+void WindowVm::on_pushButton_cursorsHon_clicked()
+{
+    m_ui->horizontalSlider_cursorH->setValues(m_cursorH_min, m_cursorH_max);
+    m_ui->horizontalSlider_cursorH->show();
+
+    m_ui->pushButton_cursorsHon->hide();
+    m_ui->pushButton_cursorsHoff->show();
+
+    auto rngH = m_ui->customPlot->xAxis->range();
+    auto rngV = m_ui->customPlot->yAxis->range();
+
+    m_cursors->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
+    m_cursors->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+
+    m_cursors->setV_min(m_cursorV_min, rngV.lower, rngV.upper);
+    m_cursors->setV_max(m_cursorV_max, rngV.lower, rngV.upper);
+
+    m_cursors->showH(true);
+    m_cursorsH_en = true;
+}
+
+void WindowVm::on_pushButton_cursorsVoff_clicked()
+{
     m_ui->horizontalSlider_cursorV->hide();
 
-    m_ui->pushButton_cursorsOn->show();
-    m_ui->pushButton_cursorsOff->hide();
+    m_ui->pushButton_cursorsVon->show();
+    m_ui->pushButton_cursorsVoff->hide();
 
-    //m_cursors->show(false);
+    m_cursors->showV(false);
+    m_cursorsV_en = false;
+}
+
+void WindowVm::on_pushButton_cursorsVon_clicked()
+{
+    m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
+    m_ui->horizontalSlider_cursorV->show();
+
+    m_ui->pushButton_cursorsVon->hide();
+    m_ui->pushButton_cursorsVoff->show();
+
+    auto rngH = m_ui->customPlot->xAxis->range();
+    auto rngV = m_ui->customPlot->yAxis->range();
+
+    m_cursors->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
+    m_cursors->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+
+    m_cursors->setV_min(m_cursorV_min, rngV.lower, rngV.upper);
+    m_cursors->setV_max(m_cursorV_max, rngV.lower, rngV.upper);
+
+    m_cursors->showV(true);
+    m_cursorsV_en = true;
 }
 
 void WindowVm::on_cursorH_valuesChanged(int min, int max)
@@ -613,7 +787,10 @@ void WindowVm::on_cursorH_valuesChanged(int min, int max)
     m_cursorH_min = min;
     m_cursorH_max = max;
 
-    qInfo() << " min: " << min << "  max: " << max;
+    auto rng = m_ui->customPlot->xAxis->range();
+
+    m_cursors->setH_min(m_cursorH_min, rng.lower, rng.upper);
+    m_cursors->setH_max(m_cursorH_max, rng.lower, rng.upper);
 }
 
 void WindowVm::on_cursorV_valuesChanged(int min, int max)
@@ -621,7 +798,10 @@ void WindowVm::on_cursorV_valuesChanged(int min, int max)
     m_cursorV_min = min;
     m_cursorV_max = max;
 
-    qInfo() << " min: " << min << "  max: " << max;
+    auto rng = m_ui->customPlot->yAxis->range();
+
+    m_cursors->setV_min(m_cursorV_min, rng.lower, rng.upper);
+    m_cursors->setV_max(m_cursorV_max, rng.lower, rng.upper);
 }
 
 /* private */
@@ -652,6 +832,8 @@ void WindowVm::showEvent(QShowEvent*)
     m_ui->dial_average->setMaximum(info->vm_mem);
     m_ui->spinBox_average->setMaximum(info->vm_mem);
 
+    m_vref = info->ref_mv / 1000;
+
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
@@ -663,8 +845,10 @@ void WindowVm::showEvent(QShowEvent*)
 
     m_activeMsg = m_msg_read;
 
+    m_smplBuff.clear();
+    m_data_fresh = false;
+    on_actionReset_triggered();
+
     m_timer_elapsed.restart();
     m_timer_render->start(TIMER_VM_RENDER);
-
-    m_smplBuff.clear();
 }

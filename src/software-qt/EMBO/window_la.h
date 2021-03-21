@@ -54,7 +54,11 @@ private:
 
     Ui::WindowLa* m_ui;
 
+    QCPLayer* m_dataLayer;
+
     QCPCursors* m_cursors;
+    QCPCursor* m_cursorTrigVal;
+    QCPCursor* m_cursorTrigPre;
 
     /* messages */
     Msg_LA_Set* m_msg_set;

@@ -10,21 +10,28 @@
 #include "messages.h"
 #include "qcpcursors.h"
 
+#include "lib/qcustomplot.h"
+
 #include <QMainWindow>
 #include <QLabel>
 #include <QTimer>
 #include <QElapsedTimer>
 
 
-#define TIMER_VM_RENDER     33
-#define DISPLAY_DEFAULT     300
+#define TIMER_VM_RENDER         33
+#define DISPLAY_DEFAULT         300
 
-#define LIM_OFFSET          0.5
+#define LIM_OFFSET              0.5
 
-#define GRAPH_CH1       0
-#define GRAPH_CH2       1
-#define GRAPH_CH3       2
-#define GRAPH_CH4       3
+#define GRAPH_CH1               0
+#define GRAPH_CH2               1
+#define GRAPH_CH3               2
+#define GRAPH_CH4               3
+
+#define CURSOR_DEFAULT_H_MIN    250
+#define CURSOR_DEFAULT_H_MAX    750
+#define CURSOR_DEFAULT_V_MIN    250
+#define CURSOR_DEFAULT_V_MAX    750
 
 
 QT_BEGIN_NAMESPACE
@@ -93,19 +100,18 @@ private slots:
     void on_dial_average_valueChanged(int value);
     void on_spinBox_display_valueChanged(int arg1);
     void on_dial_display_valueChanged(int value);
-    void on_actionMax_triggered(bool checked);
-    void on_actionMin_triggered(bool checked);
-    void on_actionAverage_triggered(bool checked);
+    void on_actionEnabled_triggered(bool checked);
     void on_actionReset_triggered();
     void on_actionChannel_1_triggered(bool checked);
     void on_actionChannel_2_triggered(bool checked);
     void on_actionChannel_3_triggered(bool checked);
     void on_actionChannel_4_triggered(bool checked);
-    void on_pushButton_cursorsOn_clicked();
-    void on_pushButton_cursorsOff_clicked();
-
     void on_cursorH_valuesChanged(int min, int max);
     void on_cursorV_valuesChanged(int min, int max);
+    void on_pushButton_cursorsHoff_clicked();
+    void on_pushButton_cursorsHon_clicked();
+    void on_pushButton_cursorsVoff_clicked();
+    void on_pushButton_cursorsVon_clicked();
 
 private:
     void closeEvent(QCloseEvent *event) override;
@@ -120,6 +126,7 @@ private:
 
     std::vector<VmSample> m_smplBuff;
 
+    QCPLayer* m_dataLayer;
     QCPCursors* m_cursors;
 
     double m_data_ch1;
@@ -133,21 +140,30 @@ private:
     double m_gain2 = 1;
     double m_gain3 = 1;
     double m_gain4 = 1;
+    double m_vref = 3.3;
 
     bool m_en1 = true;
     bool m_en2 = true;
     bool m_en3 = true;
     bool m_en4 = true;
 
-    double m_cursorV_min = 250;
-    double m_cursorV_max = 750;
-
-    double m_cursorH_min = 250;
-    double m_cursorH_max = 750;
+    double m_cursorV_min = CURSOR_DEFAULT_V_MIN;
+    double m_cursorV_max = CURSOR_DEFAULT_V_MAX;
+    double m_cursorH_min = CURSOR_DEFAULT_H_MIN;
+    double m_cursorH_max = CURSOR_DEFAULT_H_MAX;
 
     bool m_spline = true;
     bool m_lines = true;
     bool m_points = false;
+    bool m_cursorsV_en = false;
+    bool m_cursorsH_en = false;
+
+    QCPRange old_range;
+
+    bool m_meas_en = true;
+    int m_meas_ch = GRAPH_CH1;
+    double m_meas_max = -1000;
+    double m_meas_min = 1000;
 
     int m_elapsed_saved = 0;
     int m_elapsed_diff = 0;

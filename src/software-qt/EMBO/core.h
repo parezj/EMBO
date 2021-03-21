@@ -88,7 +88,7 @@ public:
     QString ll;
     QString comm;
     QString fcpu;
-    QString ref_mv;
+    int ref_mv;
     QString pins_scope_vm;
     QString pins_la;
     QString pins_cntr;

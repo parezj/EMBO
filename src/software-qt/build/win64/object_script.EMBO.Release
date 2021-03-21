@@ -29,6 +29,7 @@ release/moc_ctkrangeslider.o
 release/moc_qcustomplot.o
 release/moc_messages.o
 release/moc_msg.o
+release/moc_qcpcursors.o
 release/moc_window__main.o
 release/moc_window_cntr.o
 release/moc_window_la.o

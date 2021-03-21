@@ -4407,8 +4407,8 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
       !painter->modes().testFlag(QCPPainter::pmVectorized) &&
       !painter->modes().testFlag(QCPPainter::pmNoCaching))
   {
-      qWarning() << "NOT SUPPROTED !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
-      //assert(0);
+      if (painter->spline())
+        qWarning() << "NOT SUPPROTED !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
 
     int i = 0;
     bool lastIsNan = false;
@@ -4435,13 +4435,13 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
     int i = 0;
     const int lineDataSize = lineData.size();
 
-    qInfo() << "====start draw====";
+    //qInfo() << "====start draw====";
     while (i < lineDataSize)
     {
       if (qIsNaN(lineData.at(i).y()) || qIsNaN(lineData.at(i).x()) || qIsInf(lineData.at(i).y())) // NaNs create a gap in the line. Also filter Infs which make drawPolyline block
       {
-        qWarning() << "NOT SUPPROTED2 !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
-        //assert(0);
+        if (painter->spline())
+            qWarning() << "NOT SUPPROTED2 !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
 
         painter->drawPolyline(lineData.constData()+segmentStart, i-segmentStart); // i, because we don't want to include the current NaN point
         segmentStart = i+1;
@@ -4467,7 +4467,6 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
             QPointF c2 = QPointF((poly_start[p].x() + poly_start[p - 1].x()) / 2, poly_start[p].y());
 
             bezierPath.cubicTo(c1, c2, poly_start[p]);
-
         }
 
         painter->drawPath(bezierPath);

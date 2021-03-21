@@ -102,7 +102,7 @@ void Msg_SYS_Info::on_dataRx()
     core->getDevInfo()->ll = tokens[1];
     core->getDevInfo()->comm = tokens[2];
     core->getDevInfo()->fcpu = tokens[3];
-    core->getDevInfo()->ref_mv = tokens[4];
+    core->getDevInfo()->ref_mv = tokens[4].toInt();
     core->getDevInfo()->pins_scope_vm = tokens[5];
     core->getDevInfo()->pins_la = tokens[6];
     core->getDevInfo()->pins_cntr = tokens[7];
@@ -167,8 +167,6 @@ void Msg_VM_Read::on_dataRx()
         emit err(INVALID_MSG + m_rxData, CRITICAL, true);
         return;
     }
-
-    Core::getInstance()->getDevInfo()->ref_mv = tokens[4];
 
     emit result(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4]);
 }

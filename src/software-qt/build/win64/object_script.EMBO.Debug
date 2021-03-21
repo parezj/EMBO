@@ -29,6 +29,7 @@ debug/moc_ctkrangeslider.o
 debug/moc_qcustomplot.o
 debug/moc_messages.o
 debug/moc_msg.o
+debug/moc_qcpcursors.o
 debug/moc_window__main.o
 debug/moc_window_cntr.o
 debug/moc_window_la.o

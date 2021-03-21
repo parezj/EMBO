@@ -53,7 +53,11 @@ private:
 
     Ui::WindowScope* m_ui;
 
+    QCPLayer* m_dataLayer;
+
     QCPCursors* m_cursors;
+    QCPCursor* m_cursorTrigVal;
+    QCPCursor* m_cursorTrigPre;
 
     bool m_spline = false;
 
