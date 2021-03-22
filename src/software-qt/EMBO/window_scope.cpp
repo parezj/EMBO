@@ -198,7 +198,7 @@ void WindowScope::on_msg_read(const QByteArray data)
     //m_ui->customPlot->graph(GRAPH_CH4)->rescaleValueAxis(false);
 
     //m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
-    m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, 3.3 + LIM_OFFSET);
+    m_ui->customPlot->yAxis->setRange(-0.5, 3.3 + 0.5);
     m_ui->customPlot->xAxis->setRange(0, real_sz / ch_num);
 
     m_ui->customPlot->replot();

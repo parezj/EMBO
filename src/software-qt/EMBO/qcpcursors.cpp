@@ -7,8 +7,12 @@
 #include "css.h"
 
 #define PERCENT_MAX         1000.0
-#define HCUROSR_DIFF_POS    900.0
-#define VCUROSR_DIFF_POS    100.0
+#define HCUROSR_DIFF_POS    180.0
+#define VCUROSR_DIFF_POS    170.0
+#define HCUROSR_DIFF_POS2   180.0
+#define VCUROSR_DIFF_POS2   200.0
+#define HCUROSR_DIFF_POS3   900.0
+#define VCUROSR_DIFF_POS3   850.0
 
 int QCPCursors::uniqueNum = 0;
 
@@ -41,6 +45,7 @@ QCPCursors::QCPCursors(QObject* parent, QCustomPlot* plot,
     m_textH_min= new QCPItemText(m_plot);
     m_textH_max = new QCPItemText(m_plot);
     m_textH_diff = new QCPItemText(m_plot);
+    m_textH_diff2 = new QCPItemText(m_plot);
 
     m_textV_min= new QCPItemText(m_plot);
     m_textV_max = new QCPItemText(m_plot);
@@ -57,6 +62,7 @@ QCPCursors::QCPCursors(QObject* parent, QCustomPlot* plot,
     m_textH_min->setLayer(m_cursorsLayerH);
     m_textH_max->setLayer(m_cursorsLayerH);
     m_textH_diff->setLayer(m_cursorsLayerH);
+    m_textH_diff2->setLayer(m_cursorsLayerH);
 
     m_textV_min->setLayer(m_cursorsLayerV);
     m_textV_max->setLayer(m_cursorsLayerV);
@@ -67,6 +73,9 @@ QCPCursors::QCPCursors(QObject* parent, QCustomPlot* plot,
     m_textH_max->setFont(font1);
     m_textH_diff->setFont(font1);
 
+    QFont font2("Roboto", 10, QFont::Normal);
+    m_textH_diff2->setFont(font2);
+
     m_textV_min->setFont(font1);
     m_textV_max->setFont(font1);
     m_textV_diff->setFont(font1);
@@ -74,6 +83,7 @@ QCPCursors::QCPCursors(QObject* parent, QCustomPlot* plot,
     m_textH_min->setColor(colorText);
     m_textH_max->setColor(colorText);
     m_textH_diff->setColor(colorText);
+    m_textH_diff2->setColor(colorText);
 
     m_textV_min->setColor(colorText);
     m_textV_max->setColor(colorText);
@@ -160,20 +170,19 @@ void QCPCursors::refresh(double vRangeMin, double vRangeMax, double hRangeMin, d
 void QCPCursors::showH(bool val)
 {
     m_cursorsLayerH->setVisible(val);
+    m_cursorsLayerH->replot();
 }
 
 void QCPCursors::showV(bool val)
 {
     m_cursorsLayerV->setVisible(val);
+    m_cursorsLayerV->replot();
 }
 
 void QCPCursors::reCalc()
 {
     double dH = m_hRangeMax - m_hRangeMin;
     double dV = m_vRangeMax - m_vRangeMin;
-
-    qInfo() << "dH:" << dH;
-    qInfo() << "dV:" << dV;
 
     double valHmax = ((double)(m_hMaxVal / PERCENT_MAX) * dH) + m_hRangeMin;
     double valHmin = ((double)(m_hMinVal / PERCENT_MAX) * dH) + m_hRangeMin;
@@ -192,73 +201,110 @@ void QCPCursors::reCalc()
     m_cursorV_max->start->setCoords(-QCPRange::maxRange, valVmax);
     m_cursorV_max->end->setCoords(QCPRange::maxRange, valVmax);
 
-    double valHdiff = ((double)(HCUROSR_DIFF_POS / PERCENT_MAX) * dV) + m_vRangeMin;
-    double valVdiff = ((double)(VCUROSR_DIFF_POS / PERCENT_MAX) * dH) + m_hRangeMin;
+    double valHdiff = valHmax - valHmin;
+    double valVdiff = valVmax - valVmin;
 
-    qInfo() << "HDIF:" << valHdiff;
-    qInfo() << "VDIF:" << valVdiff;
+    m_textH_min->setText(QCPCursors::formatUnitS(valHmin));
+    m_textH_max->setText(QCPCursors::formatUnitS(valHmax));
+    m_textH_diff->setText("Δ " + QCPCursors::formatUnitS(valHdiff));
+    m_textH_diff2->setText("Δ " + QCPCursors::formatUnitHz(1/valHdiff));
 
-    qInfo() << "hMin:" << valHmin;
-    qInfo() << "hMax:" << valHmax;
-    qInfo() << "vMin:" << valVmin;
-    qInfo() << "vMax:" << valVmax;
+    m_textV_min->setText(QCPCursors::formatUnitV(valVmin));
+    m_textV_max->setText(QCPCursors::formatUnitV(valVmax));
+    m_textV_diff->setText("Δ " + QCPCursors::formatUnitV(valVdiff));
 
-    m_cursorH_diff->start->setCoords(valHmin, valHdiff);
-    m_cursorH_diff->end->setCoords(valHmax, valHdiff);
+    double valHdiffPos = ((double)(HCUROSR_DIFF_POS / PERCENT_MAX) * dV) + m_vRangeMin;
+    double valVdiffPos = ((double)(VCUROSR_DIFF_POS / PERCENT_MAX) * dH) + m_hRangeMin;
 
-    m_cursorV_diff->start->setCoords(valVdiff, valVmin);
-    m_cursorV_diff->end->setCoords(valVdiff, valVmax);
+    double valHminMaxPos = ((double)(HCUROSR_DIFF_POS2 / PERCENT_MAX) * dV) + m_vRangeMin;
+    double valVminMaxPos = ((double)(VCUROSR_DIFF_POS2 / PERCENT_MAX) * dH) + m_hRangeMin;
 
-    const double margin_diff = 10;
+    double m_textV_min_sz = m_textV_min->bottomRight->pixelPosition().x() - m_textV_min->bottomLeft->pixelPosition().x();
+    double m_textV_max_sz = m_textV_max->bottomRight->pixelPosition().x() - m_textV_max->bottomLeft->pixelPosition().x();
+    double m_textV_diff_sz = m_textV_diff->bottomRight->pixelPosition().x() - m_textV_diff->bottomLeft->pixelPosition().x();
+    double m_textH_min_sz = m_textH_min->bottomRight->pixelPosition().x() - m_textH_min->bottomLeft->pixelPosition().x();
+    double m_textH_max_sz = m_textH_max->bottomRight->pixelPosition().x() - m_textH_max->bottomLeft->pixelPosition().x();
 
-    m_textH_min->position->setCoords(QPointF(valHmin, valHdiff));
-    m_textH_min->position->setPixelPosition(m_textH_min->position->pixelPosition() + QPointF(10.0, margin_diff));
+    m_cursorH_diff->start->setCoords(valHmin, valHdiffPos);
+    m_cursorH_diff->end->setCoords(valHmax, valHdiffPos);
 
-    m_textH_max->position->setCoords(QPointF(valHmax, valHdiff));
-    m_textH_max->position->setPixelPosition(m_textH_max->position->pixelPosition() + QPointF(-10.0, margin_diff));
+    m_cursorV_diff->start->setCoords(valVdiffPos, valVmin);
+    m_cursorV_diff->end->setCoords(valVdiffPos, valVmax);
 
-    m_textH_diff->position->setCoords(QPointF(((valHmax - valHmin) / 2.0) + valHmin, valHdiff));
-    m_textH_diff->position->setPixelPosition(m_textH_diff->position->pixelPosition() + QPointF(0, margin_diff));
+    m_textH_min->position->setCoords(QPointF(valHmin, valHminMaxPos));
+    m_textH_min->position->setPixelPosition(m_textH_min->position->pixelPosition() + QPointF(-(m_textH_min_sz / 2) - 10, -20.0));
 
-    m_textV_min->position->setCoords(QPointF(valVdiff, valVmin));
-    m_textV_min->position->setPixelPosition(m_textV_min->position->pixelPosition() + QPointF(margin_diff, 10.0));
+    m_textH_max->position->setCoords(QPointF(valHmax, valHminMaxPos));
+    m_textH_max->position->setPixelPosition(m_textH_max->position->pixelPosition() + QPointF((m_textH_max_sz / 2) + 10, -20.0));
 
-    m_textV_max->position->setCoords(QPointF(valVdiff, valVmax));
-    m_textV_max->position->setPixelPosition(m_textV_max->position->pixelPosition() + QPointF(margin_diff, -10.0));
+    m_textH_diff->position->setCoords(QPointF(((valHmax - valHmin) / 2.0) + valHmin, valHdiffPos));
+    m_textH_diff->position->setPixelPosition(m_textH_diff->position->pixelPosition() + QPointF(0, 20.0));
 
-    m_textV_diff->position->setCoords(QPointF(valVdiff, ((valVmax - valVmin) / 2.0) + valVmin));
-    m_textV_diff->position->setPixelPosition(m_textV_diff->position->pixelPosition() + QPointF(margin_diff, 0));
+    m_textH_diff2->position->setCoords(QPointF(((valHmax - valHmin) / 2.0) + valHmin, valHdiffPos));
+    m_textH_diff2->position->setPixelPosition(m_textH_diff->position->pixelPosition() + QPointF(0, 20.0));
 
-    QString valHmin_s;
-    QString valHmax_s;
-    QString valHdiff_s;
+    m_textV_min->position->setCoords(QPointF(valVminMaxPos, valVmin));
+    m_textV_min->position->setPixelPosition(m_textV_min->position->pixelPosition() + QPointF((m_textV_min_sz / 2), 15.0));
 
-    QString valVmin_s;
-    QString valVmax_s;
-    QString valVdiff_s;
+    m_textV_max->position->setCoords(QPointF(valVminMaxPos, valVmax));
+    m_textV_max->position->setPixelPosition(m_textV_max->position->pixelPosition() + QPointF((m_textV_max_sz / 2), -15.0));
 
-    valHmin_s = valHmin_s.asprintf("%.3f", valHmin);
-    valHmax_s = valHmin_s.asprintf("%.3f", valHmax);
-    valHdiff_s = valHmin_s.asprintf("%.3f", valHmax - valHmin);
+    m_textV_diff->position->setCoords(QPointF(valVdiffPos, ((valVmax - valVmin) / 2.0) + valVmin));
+    m_textV_diff->position->setPixelPosition(m_textV_diff->position->pixelPosition() + QPointF(-(m_textV_diff_sz / 2) - 10, 0));
+}
 
-    valVmin_s = valVmin_s.asprintf("%.3f", valVmin);
-    valVmax_s = valVmin_s.asprintf("%.3f", valVmax);
-    valVdiff_s = valVmin_s.asprintf("%.3f", valVmax - valVmin);
+const QString QCPCursors::formatUnitV(double value)
+{
+    const char unit = 'V';
 
+    if (value == 0)
+        return "0 V";
+    else if (value < 1)
+        return(QString::number(value * 1000, 'd', 1) + " m" + unit);
+    else // if (value < 1000)
+        return(QString::number(value * 1, 'd', 3) + " " + unit);
+}
 
-    m_textH_min->setText(valHmin_s);
-    m_textH_max->setText(valHmax_s);
-    m_textH_diff->setText("Δ " + valHdiff_s);
+const QString QCPCursors::formatUnitHz(double value)
+{
+    const QString unit = "Hz";
 
-    m_textV_min->setText(valVmin_s);
-    m_textV_max->setText(valVmax_s);
-    m_textV_diff->setText("Δ " + valVdiff_s);
+    if (value == 0)
+        return "0 Hz";
+    else if (value < 1000)
+        return(QString::number(value * 1, 'd', 3).left(5) + " " + unit);
+    else if (value < 1000000)
+        return(QString::number(value * 0.001, 'd', 3).left(5) + " k" + unit);
+    else if (value < 1000000000)
+        return(QString::number(value * 0.000001, 'd', 3).left(5) + " M" + unit);
+    else if (value < 1000000000000)
+        return(QString::number(value * 0.000000001, 'd', 3).left(5) + " G" + unit);
+    else // if (value < 1000000000000)
+        return(QString::number(value * 0.000000001, 'd', 3).left(5) + " " + unit);
+}
+
+const QString QCPCursors::formatUnitS(double value)
+{
+    const char unit = 's';
+
+    if (value < 0.000000001)
+        return "0 s";
+    else if (value < 0.000001)
+        return(QString::number(value * 1000000000, 'd', 3).left(5) + " n" + unit);
+    else if (value < 0.001)
+        return(QString::number(value * 1000000, 'd', 3).left(5) + " u" + unit);
+    else if (value < 1)
+        return(QString::number(value * 1000, 'd', 3).left(5) + " m" + unit);
+    else if (value < 1000)
+        return(QString::number(value * 1, 'd', 3).left(6) + " " + unit);
+    else // if (value < 1000000)
+        return(QString::number(value * 1, 'd', 1) + " " + unit);
 }
 
 /* single cursor */
 
 QCPCursor::QCPCursor(QObject* parent, QCustomPlot* plot, bool horizontal,
-                     QColor color, Qt::PenStyle style) : QObject(parent)
+                     QColor colorLine, QColor colorText, Qt::PenStyle style) : QObject(parent)
 {
     m_plot = plot;
     m_horizontal = horizontal;
@@ -273,7 +319,14 @@ QCPCursor::QCPCursor(QObject* parent, QCustomPlot* plot, bool horizontal,
     m_cursor = new QCPItemLine(m_plot);
     m_cursor->setLayer(m_cursorLayer);
 
-    m_cursor->setPen(QPen(color, 1, style, Qt::RoundCap, Qt::RoundJoin));
+    m_cursor->setPen(QPen(colorLine, 1, style, Qt::RoundCap, Qt::RoundJoin));
+
+    m_text= new QCPItemText(m_plot);
+    m_text->setLayer(m_cursorLayer);
+
+    QFont font1("Roboto", 12, QFont::Normal);
+    m_text->setFont(font1);
+    m_text->setColor(colorText);
 
     m_cursorLayer->setVisible(false);
 }
@@ -303,6 +356,7 @@ void QCPCursor::refresh(double rangeMin, double rangeMax, bool replot)
 void QCPCursor::show(bool val)
 {
     m_cursorLayer->setVisible(val);
+    m_cursorLayer->replot();
 }
 
 void QCPCursor::reCalc()
@@ -310,13 +364,26 @@ void QCPCursor::reCalc()
     double d = m_rangeMax - m_rangeMin;
     double val = ((double)(m_value / PERCENT_MAX) * d) + m_rangeMin;
 
+    double textPos = ((double)(m_horizontal ? HCUROSR_DIFF_POS3 : VCUROSR_DIFF_POS3 / PERCENT_MAX) * d) + m_rangeMin;
+    double m_text_sz = m_text->bottomRight->pixelPosition().x() - m_text->bottomLeft->pixelPosition().x();
+
     if (m_horizontal)
     {
+        m_text->setText(QCPCursors::formatUnitS(val));
+
+        m_text->position->setCoords(QPointF(val, textPos));
+        m_text->position->setPixelPosition(m_text->position->pixelPosition() + QPointF(-(m_text_sz / 2) - 10, 0));
+
         m_cursor->start->setCoords(val, -QCPRange::maxRange);
         m_cursor->end->setCoords(val, QCPRange::maxRange);
     }
     else
     {
+        m_text->setText(QCPCursors::formatUnitV(val));
+
+        m_text->position->setCoords(QPointF(textPos, val));
+        m_text->position->setPixelPosition(m_text->position->pixelPosition() + QPointF(0, 10.0));
+
         m_cursor->start->setCoords(-QCPRange::maxRange, val);
         m_cursor->end->setCoords(QCPRange::maxRange, val);
     }

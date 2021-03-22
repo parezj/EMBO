@@ -31,6 +31,9 @@ public:
     void showV(bool val);
 
     static int getUniqueNum() { return uniqueNum++; };
+    static const QString formatUnitV(double value);
+    static const QString formatUnitHz(double value);
+    static const QString formatUnitS(double value);
 
 private:
     void reCalc();
@@ -38,7 +41,6 @@ private:
     static int uniqueNum;
 
     QCustomPlot* m_plot;
-    QCPGraph* m_graph;
 
     QCPLayer* m_cursorsLayerH;
     QCPLayer* m_cursorsLayerV;
@@ -54,6 +56,7 @@ private:
     QCPItemText* m_textH_min;
     QCPItemText* m_textH_max;
     QCPItemText* m_textH_diff;
+    QCPItemText* m_textH_diff2;
 
     QCPItemText* m_textV_min;
     QCPItemText* m_textV_max;
@@ -78,7 +81,7 @@ class QCPCursor : public QObject
 
 public:
     QCPCursor(QObject* parent, QCustomPlot* plot, bool horizontal = true,
-              QColor color = Qt::black, Qt::PenStyle style = Qt::DashLine);
+              QColor colorLine = Qt::black, QColor colorText = Qt::black, Qt::PenStyle style = Qt::DashLine);
 
     void setValue(int percent, double rangeMin, double rangeMax);
     void refresh(double rangeMin, double rangeMax, bool replot = true);
@@ -88,10 +91,10 @@ private:
     void reCalc();
 
     QCustomPlot* m_plot;
-    QCPGraph* m_graph;
-
     QCPLayer* m_cursorLayer;
+
     QCPItemLine* m_cursor;
+    QCPItemText* m_text;
 
     int m_value;
     double m_rangeMin;

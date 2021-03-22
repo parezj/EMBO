@@ -21,17 +21,15 @@
 #define TIMER_VM_RENDER         33
 #define DISPLAY_DEFAULT         300
 
-#define LIM_OFFSET              0.5
-
 #define GRAPH_CH1               0
 #define GRAPH_CH2               1
 #define GRAPH_CH3               2
 #define GRAPH_CH4               3
 
-#define CURSOR_DEFAULT_H_MIN    250
-#define CURSOR_DEFAULT_H_MAX    750
-#define CURSOR_DEFAULT_V_MIN    250
-#define CURSOR_DEFAULT_V_MAX    750
+#define CURSOR_DEFAULT_H_MIN    400
+#define CURSOR_DEFAULT_H_MAX    600
+#define CURSOR_DEFAULT_V_MIN    400
+#define CURSOR_DEFAULT_V_MAX    600
 
 
 QT_BEGIN_NAMESPACE
@@ -112,6 +110,8 @@ private slots:
     void on_pushButton_cursorsHon_clicked();
     void on_pushButton_cursorsVoff_clicked();
     void on_pushButton_cursorsVon_clicked();
+    void on_actionMath_1_2_triggered(bool checked);
+    void on_actionMath_3_4_triggered(bool checked);
 
 private:
     void closeEvent(QCloseEvent *event) override;
@@ -157,8 +157,15 @@ private:
     bool m_points = false;
     bool m_cursorsV_en = false;
     bool m_cursorsH_en = false;
+    bool m_math_1minus2 = false;
+    bool m_math_3minus4 = false;
 
-    QCPRange old_range;
+    QString m_pin1 = "?";
+    QString m_pin2 = "?";
+    QString m_pin3 = "?";
+    QString m_pin4 = "?";
+
+    QCPRange m_old_range;
 
     bool m_meas_en = true;
     int m_meas_ch = GRAPH_CH1;

@@ -114,10 +114,13 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     /* styles */
 
-    QString style1(CSS_BUTTON_ONOFF);
+    QString style0(CSS_BUTTON_ONOFF);
 
-    m_ui->pushButton_enable->setStyleSheet(style1);
-    m_ui->pushButton_disable->setStyleSheet(style1);
+    m_ui->pushButton_enable->setStyleSheet(style0);
+    m_ui->pushButton_disable->setStyleSheet(style0);
+
+    QString style1(CSS_BUTTON_ONOFF CSS_BUTTON_VM_ON);
+
     m_ui->pushButton_enable1->setStyleSheet(style1);
     m_ui->pushButton_disable1->setStyleSheet(style1);
     m_ui->pushButton_enable2->setStyleSheet(style1);
@@ -126,6 +129,11 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->pushButton_disable3->setStyleSheet(style1);
     m_ui->pushButton_enable4->setStyleSheet(style1);
     m_ui->pushButton_disable4->setStyleSheet(style1);
+
+    m_ui->pushButton_cursorsHon->setStyleSheet(style1);
+    m_ui->pushButton_cursorsHoff->setStyleSheet(style1);
+    m_ui->pushButton_cursorsVon->setStyleSheet(style1);
+    m_ui->pushButton_cursorsVoff->setStyleSheet(style1);
 
     QString style2(CSS_SPINBOX);
 
@@ -170,10 +178,23 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
     {
         double t = (m_timer_elapsed.elapsed() - m_elapsed_diff) / 1000.0;
 
-        m_data_ch1 = ch1.toDouble() * m_gain1;
-        m_data_ch2 = ch2.toDouble() * m_gain2;
-        m_data_ch3 = ch3.toDouble() * m_gain3;
-        m_data_ch4 = ch4.toDouble() * m_gain4;
+        double _ch1 = ch1.toDouble() * m_gain1;
+        double _ch2 = ch2.toDouble() * m_gain2;
+        double _ch3 = ch3.toDouble() * m_gain3;
+        double _ch4 = ch4.toDouble() * m_gain4;
+
+        m_data_ch1 = _ch1;
+        m_data_ch2 = _ch2;
+
+        if (m_math_1minus2)
+            m_data_ch3 = _ch1 - _ch2;
+        else
+            m_data_ch3 = _ch3;
+
+        if (m_math_3minus4)
+            m_data_ch4 = _ch3 - _ch4;
+        else
+            m_data_ch4 = _ch4;
 
         m_data_vcc = vcc;
         m_data_vcc = m_data_vcc.replace(".", "").left(4);
@@ -224,10 +245,10 @@ void WindowVm::on_timer_render()
         QString ch3_s;
         QString ch4_s;
 
-        ch1_s = ch1_s.asprintf(ch1 >= 100 ? "%.2f" : (ch1 >= 10 ? "%.3f" : "%.4f"), ch1);
-        ch2_s = ch1_s.asprintf(ch2 >= 100 ? "%.2f" : (ch2 >= 10 ? "%.3f" : "%.4f"), ch2);
-        ch3_s = ch1_s.asprintf(ch3 >= 100 ? "%.2f" : (ch3 >= 10 ? "%.3f" : "%.4f"), ch3);
-        ch4_s = ch1_s.asprintf(ch4 >= 100 ? "%.2f" : (ch4 >= 10 ? "%.3f" : "%.4f"), ch4);
+        ch1_s = ch1_s.asprintf(ch1 >= 100 || ch1 <= -10 ? "%.2f" : (ch1 >= 10 || ch1 < 0 ? "%.3f" : "%.4f"), ch1);
+        ch2_s = ch1_s.asprintf(ch2 >= 100 || ch2 <= -10 ? "%.2f" : (ch2 >= 10 || ch2 < 0 ? "%.3f" : "%.4f"), ch2);
+        ch3_s = ch1_s.asprintf(ch3 >= 100 || ch3 <= -10 ? "%.2f" : (ch3 >= 10 || ch3 < 0 ? "%.3f" : "%.4f"), ch3);
+        ch4_s = ch1_s.asprintf(ch4 >= 100 || ch4 <= -10 ? "%.2f" : (ch4 >= 10 || ch4 < 0 ? "%.3f" : "%.4f"), ch4);
 
         if (m_en1)
         {
@@ -272,11 +293,11 @@ void WindowVm::on_timer_render()
 
         m_smplBuff.clear();
 
-        old_range = m_ui->customPlot->yAxis->range();
+        m_old_range = m_ui->customPlot->yAxis->range();
         m_ui->customPlot->yAxis->rescale();
         m_ui->customPlot->xAxis->setRange(key, m_display, Qt::AlignRight);
 
-        if (old_range != m_ui->customPlot->yAxis->range())
+        if (m_old_range != m_ui->customPlot->yAxis->range())
         {
             auto low_range = m_ui->customPlot->yAxis->range().lower;
             auto up_range = m_ui->customPlot->yAxis->range().upper;
@@ -317,10 +338,10 @@ void WindowVm::on_timer_render()
             double min = m_meas_min;
             double max = m_meas_max;
 
-            meas_vpp_s = meas_vpp_s.asprintf(vpp >= 100 ? "%.2f" : (vpp >= 10 ? "%.3f" : "%.4f"), vpp);
-            meas_avg_s = meas_avg_s.asprintf(avg >= 100 ? "%.2f" : (avg >= 10 ? "%.3f" : "%.4f"), avg);
-            meas_min_s = meas_min_s.asprintf(min >= 100 ? "%.2f" : (min >= 10 ? "%.3f" : "%.4f"), min);
-            meas_max_s = meas_max_s.asprintf(max >= 100 ? "%.2f" : (max >= 10 ? "%.3f" : "%.4f"), max);
+            meas_vpp_s = meas_vpp_s.asprintf(vpp >= 100 || vpp <= -10  ? "%.2f" : (vpp >= 10 || vpp < 0 ? "%.3f" : "%.4f"), vpp);
+            meas_avg_s = meas_avg_s.asprintf(avg >= 100 || avg <= -10  ? "%.2f" : (avg >= 10 || avg < 0 ? "%.3f" : "%.4f"), avg);
+            meas_min_s = meas_min_s.asprintf(min >= 100 || min <= -10  ? "%.2f" : (min >= 10 || min < 0 ? "%.3f" : "%.4f"), min);
+            meas_max_s = meas_max_s.asprintf(max >= 100 || max <= -10  ? "%.2f" : (max >= 10 || max < 0 ? "%.3f" : "%.4f"), max);
 
             m_ui->textBrowser_measVpp->setHtml("<p align=\"right\">" + meas_vpp_s + " </p>");
             m_ui->textBrowser_measAvg->setHtml("<p align=\"right\">" + meas_avg_s + " </p>");
@@ -426,6 +447,7 @@ void WindowVm::on_pushButton_disable1_clicked()
 
     m_ui->pushButton_enable1->show();
     m_ui->pushButton_disable1->hide();
+    m_ui->doubleSpinBox_gain1->setEnabled(false);
 }
 
 void WindowVm::on_pushButton_enable1_clicked()
@@ -435,6 +457,7 @@ void WindowVm::on_pushButton_enable1_clicked()
 
     m_ui->pushButton_enable1->hide();
     m_ui->pushButton_disable1->show();
+    m_ui->doubleSpinBox_gain1->setEnabled(true);
 }
 
 void WindowVm::on_pushButton_disable2_clicked()
@@ -446,6 +469,7 @@ void WindowVm::on_pushButton_disable2_clicked()
 
     m_ui->pushButton_enable2->show();
     m_ui->pushButton_disable2->hide();
+    m_ui->doubleSpinBox_gain2->setEnabled(false);
 }
 
 void WindowVm::on_pushButton_enable2_clicked()
@@ -455,6 +479,7 @@ void WindowVm::on_pushButton_enable2_clicked()
 
     m_ui->pushButton_enable2->hide();
     m_ui->pushButton_disable2->show();
+    m_ui->doubleSpinBox_gain2->setEnabled(true);
 }
 
 void WindowVm::on_pushButton_disable3_clicked()
@@ -466,6 +491,7 @@ void WindowVm::on_pushButton_disable3_clicked()
 
     m_ui->pushButton_enable3->show();
     m_ui->pushButton_disable3->hide();
+    m_ui->doubleSpinBox_gain3->setEnabled(false);
 }
 
 void WindowVm::on_pushButton_enable3_clicked()
@@ -475,6 +501,7 @@ void WindowVm::on_pushButton_enable3_clicked()
 
     m_ui->pushButton_enable3->hide();
     m_ui->pushButton_disable3->show();
+    m_ui->doubleSpinBox_gain3->setEnabled(true);
 }
 
 void WindowVm::on_pushButton_disable4_clicked()
@@ -486,6 +513,7 @@ void WindowVm::on_pushButton_disable4_clicked()
 
     m_ui->pushButton_enable4->show();
     m_ui->pushButton_disable4->hide();
+    m_ui->doubleSpinBox_gain4->setEnabled(false);
 }
 
 void WindowVm::on_pushButton_enable4_clicked()
@@ -495,6 +523,7 @@ void WindowVm::on_pushButton_enable4_clicked()
 
     m_ui->pushButton_enable4->hide();
     m_ui->pushButton_disable4->show();
+    m_ui->doubleSpinBox_gain4->setEnabled(true);
 }
 
 void WindowVm::on_doubleSpinBox_gain1_valueChanged(double arg1)
@@ -748,6 +777,12 @@ void WindowVm::on_pushButton_cursorsHon_clicked()
 
     m_cursors->showH(true);
     m_cursorsH_en = true;
+
+
+
+
+
+    //m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, true);
 }
 
 void WindowVm::on_pushButton_cursorsVoff_clicked()
@@ -780,6 +815,10 @@ void WindowVm::on_pushButton_cursorsVon_clicked()
 
     m_cursors->showV(true);
     m_cursorsV_en = true;
+
+
+
+    //m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, true); // ???,
 }
 
 void WindowVm::on_cursorH_valuesChanged(int min, int max)
@@ -804,6 +843,50 @@ void WindowVm::on_cursorV_valuesChanged(int min, int max)
     m_cursors->setV_max(m_cursorV_max, rng.lower, rng.upper);
 }
 
+void WindowVm::on_actionMath_1_2_triggered(bool checked)
+{
+    m_math_1minus2 = checked;
+
+    if (checked)
+    {
+        m_ui->label_ch3->setText("Channel 1—2 (" + m_pin1 + "—" + m_pin2 + ")");
+        m_ui->label_ch3->setStyleSheet("color:red");
+
+        m_ui->pushButton_enable3->setText("1—2 ON  ");
+        m_ui->pushButton_disable3->setText("1—2 OFF");
+    }
+    else
+    {
+        m_ui->label_ch3->setText("Channel 3 (" + m_pin3 + ")");
+        m_ui->label_ch3->setStyleSheet("color:black");
+
+        m_ui->pushButton_enable3->setText("CH3 ON  ");
+        m_ui->pushButton_disable3->setText("CH3 OFF");
+    }
+}
+
+void WindowVm::on_actionMath_3_4_triggered(bool checked)
+{
+    m_math_3minus4 = checked;
+
+    if (checked)
+    {
+        m_ui->label_ch4->setText("Channel 3—4 (" + m_pin3 + "—" + m_pin4 + ")");
+        m_ui->label_ch4->setStyleSheet("color:red");
+
+        m_ui->pushButton_enable4->setText("3—4 ON  ");
+        m_ui->pushButton_disable4->setText("3—4 OFF");
+    }
+    else
+    {
+        m_ui->label_ch4->setText("Channel 4 (" + m_pin4 + ")");
+        m_ui->label_ch4->setStyleSheet("color:black");
+
+        m_ui->pushButton_enable4->setText("CH4 ON  ");
+        m_ui->pushButton_disable4->setText("CH4 OFF");
+    }
+}
+
 /* private */
 
 void WindowVm::closeEvent(QCloseEvent*)
@@ -823,10 +906,15 @@ void WindowVm::showEvent(QShowEvent*)
 
     if (pins.size() == 4)
     {
-        m_ui->label_ch1->setText("Channel 1 (" + pins[0].trimmed() + ")");
-        m_ui->label_ch2->setText("Channel 2 (" + pins[1].trimmed() + ")");
-        m_ui->label_ch3->setText("Channel 3 (" + pins[2].trimmed() + ")");
-        m_ui->label_ch4->setText("Channel 4 (" + pins[3].trimmed() + ")");
+        m_pin1 = pins[0].trimmed();
+        m_pin2 = pins[1].trimmed();
+        m_pin3 = pins[2].trimmed();
+        m_pin4 = pins[3].trimmed();
+
+        m_ui->label_ch1->setText("Channel 1 (" + m_pin1 + ")");
+        m_ui->label_ch2->setText("Channel 2 (" + m_pin2 + ")");
+        m_ui->label_ch3->setText("Channel 3 (" + m_pin3 + ")");
+        m_ui->label_ch4->setText("Channel 4 (" + m_pin4 + ")");
     }
 
     m_ui->dial_average->setMaximum(info->vm_mem);
@@ -852,3 +940,4 @@ void WindowVm::showEvent(QShowEvent*)
     m_timer_elapsed.restart();
     m_timer_render->start(TIMER_VM_RENDER);
 }
+
