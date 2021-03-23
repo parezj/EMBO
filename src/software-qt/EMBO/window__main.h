@@ -6,6 +6,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "window_scope.h"
+#include "window_la.h"
+#include "window_vm.h"
+#include "window_cntr.h"
+#include "window_pwm.h"
+#include "window_sgen.h"
+
 #include "core.h"
 
 #include <QMainWindow>

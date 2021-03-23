@@ -49,12 +49,11 @@ private slots:
     void on_actionAbout_triggered();
 
 private:
+    void initQcp();
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
 
     Ui::WindowLa* m_ui;
-
-    QCPLayer* m_dataLayer;
 
     QCPCursors* m_cursors;
     QCPCursor* m_cursorTrigVal;

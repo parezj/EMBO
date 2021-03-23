@@ -176,11 +176,9 @@ void Msg_VM_Read::on_dataRx()
 void Msg_SCOP_Read::on_dataRx()
 {
     qInfo() << "SCOP:READ: size: " <<  m_rxDataBin.size();
-    //auto core = Core::getInstance(this);
+    //qInfo () << m_rxDataBin.toHex();
 
-    qInfo () << m_rxDataBin.toHex();
     emit result(m_rxDataBin);
-    // TODO parse
 }
 
 void Msg_SCOP_Set::on_dataRx()
@@ -215,11 +213,9 @@ void Msg_SCOP_Average::on_dataRx()
 void Msg_LA_Read::on_dataRx()
 {
     qInfo() << "LA:READ: size: " <<  m_rxDataBin.size();
-    //auto core = Core::getInstance(this);
+    //qInfo () << m_rxDataBin.toHex();
 
-    qInfo () << m_rxDataBin.toHex();
     emit result(m_rxDataBin);
-    // TODO parse
 }
 
 void Msg_LA_Set::on_dataRx()

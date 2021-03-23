@@ -119,7 +119,7 @@ void daq_settings_init(daq_data_t* self)
     self->save_l.ch3_en = 1;
     self->save_l.ch4_en = 1;
 
-    self->trig.save_s.val_percent = 0;
+    self->trig.save_l.val_percent = 0;
     self->trig.save_l.val = 0;
     self->trig.save_l.ch = 1;
     self->trig.save_l.edge = RISING;
@@ -788,7 +788,7 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
         daq_ch_set(self, self->save_s.ch1_en, self->save_s.ch2_en, self->save_s.ch3_en, self->save_s.ch4_en, self->save_s.fs);
         daq_fs_set(self, self->save_s.fs);
         daq_mem_set(self, self->save_s.mem);
-        daq_trig_set(self, self->trig.save_s.ch, self->trig.save_s.val, self->trig.save_s.edge,
+        daq_trig_set(self, self->trig.save_s.ch, self->trig.save_s.val_percent, self->trig.save_s.edge,
                      self->trig.save_s.mode, self->trig.save_s.pretrigger);
     }
     else if (mode == VM)
@@ -807,7 +807,7 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
         daq_ch_set(self, self->save_l.ch1_en, self->save_l.ch2_en, self->save_l.ch3_en, self->save_l.ch4_en, self->save_l.fs);
         daq_fs_set(self, self->save_l.fs);
         daq_mem_set(self, self->save_l.mem);
-        daq_trig_set(self, self->trig.save_l.ch, self->trig.save_l.val, self->trig.save_l.edge,
+        daq_trig_set(self, self->trig.save_l.ch, self->trig.save_l.val_percent, self->trig.save_l.edge,
                      self->trig.save_l.mode, self->trig.save_l.pretrigger);
     }
 

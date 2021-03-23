@@ -16,10 +16,19 @@
 #include <QtSerialPort/QSerialPortInfo>
 
 
+#define TIMER_COMM          10
+#define TIMER_COMM_MIN      1
+#define TIMER_RX            1000
+#define TIMER_RENDER        100
+
+#define MOVEMEAN_LATENCY    25
+
+
 Core* Core::m_instance = Q_NULLPTR;
 
 Core::Core(QObject* parent) : QObject(parent)
 {
+    m_meanLatency.setSize(MOVEMEAN_LATENCY);
 }
 
 Core::~Core()
@@ -128,8 +137,7 @@ void Core::startComm()
     emit stateChanged(m_state);
     m_timer_comm->start(TIMER_COMM);
     m_timer_latency.restart();
-    m_latencyIt = 0;
-    m_latencyCnt = 0;
+    m_meanLatency.reset();
     m_timer_render->start(TIMER_RENDER);
 }
 
@@ -155,19 +163,8 @@ void Core::msgAdd(Msg* msg, bool isQuery, QString params)
 
 int Core::getLatencyMs()
 {
-    m_latencyVals[m_latencyIt++] = m_latency > TIMER_COMM ? m_latency - TIMER_COMM : 0;
-
-    if (m_latencyCnt < LATENCY_AVG)
-        m_latencyCnt++;
-
-    if (m_latencyIt >= LATENCY_AVG)
-        m_latencyIt = 0;
-
-    int ret = 0;
-    for (int i = 0; i < m_latencyCnt; i++)
-        ret += m_latencyVals[i];
-
-    return ret / m_latencyCnt;
+    m_meanLatency.addVal(m_latency > TIMER_COMM ? m_latency - TIMER_COMM : 0);
+    return m_meanLatency.getMean();
 }
 
 /* private */

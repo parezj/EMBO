@@ -6,15 +6,10 @@
 #ifndef CORE_H
 #define CORE_H
 
-#include "window_scope.h"
-#include "window_la.h"
-#include "window_vm.h"
-#include "window_cntr.h"
-#include "window_pwm.h"
-#include "window_sgen.h"
-
 #include "msg.h"
 #include "messages.h"
+#include "interfaces.h"
+#include "movemean.h"
 
 #include <QObject>
 #include <QTimer>
@@ -24,13 +19,6 @@
 #include <QVector>
 
 #define UPDATE_URL      "http://embo.jakubparez.com/updates.json"
-
-#define TIMER_COMM      10
-#define TIMER_COMM_MIN  1
-#define TIMER_RX        1000
-#define TIMER_RENDER    100
-
-#define LATENCY_AVG     25
 
 #define INVALID_MSG     "Invalid message! "
 #define COMM_FATAL_ERR  "Communication fatal error! "
@@ -51,6 +39,13 @@ PWM and signal generator.<br>And of course, it's opensource! \
 <a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
 
 #define CFG_MAIN_PORT       "main/port"
+
+#define CFG_VM_CH1_EN       "vm/ch1_en"
+#define CFG_VM_CH2_EN       "vm/ch2_en"
+#define CFG_VM_CH3_EN       "vm/ch3_en"
+#define CFG_VM_CH4_EN       "vm/ch4_en"
+#define CFG_VM_AVG          "vm/avg"
+#define CFG_VM_PLT          "vm/plt"
 
 #define EMBO_NEWLINE        "\r\n"
 #define EMBO_DELIM1         ";"
@@ -131,10 +126,10 @@ public:
     QVector<IEmboInstrument*> emboInstruments;
 
      /* setters getters */
-    const QString getPort() { return m_serial->portName(); }
+    const QString getPort() const { return m_serial->portName(); }
     DevInfo* getDevInfo() const { return m_devInfo; }
     int getLatencyMs();
-    QString getUptime() { return m_uptime; }
+    QString getUptime() const { return m_uptime; }
     void setUptime(QString uptime) { m_uptime = uptime; }
     void setMode(Mode mode, bool alsoLast = false) { m_mode = mode; if (alsoLast) m_mode_last = mode; }
 
@@ -194,9 +189,7 @@ private:
     /* latency timer */
     QElapsedTimer m_timer_latency;
     int m_latency = 0;
-    int m_latencyVals[LATENCY_AVG];
-    int m_latencyCnt = 0;
-    int m_latencyIt = 0;
+    MoveMean<int> m_meanLatency;
 
     /* latency avg val and rx timeout */
     int m_latencyAvgMs = 0;

@@ -2661,7 +2661,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <rect>
             <x>80</x>
             <y>95</y>
-            <width>141</width>
+            <width>101</width>
             <height>21</height>
            </rect>
           </property>
@@ -2674,7 +2674,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            </font>
           </property>
           <property name="text">
-           <string>Display Points:</string>
+           <string>Plot Points:</string>
           </property>
          </widget>
          <widget class="QDial" name="dial_display">
@@ -2716,7 +2716,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <rect>
             <x>70</x>
             <y>85</y>
-            <width>231</width>
+            <width>201</width>
             <height>41</height>
            </rect>
           </property>
@@ -2813,7 +2813,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
            <rect>
             <x>70</x>
             <y>35</y>
-            <width>231</width>
+            <width>201</width>
             <height>41</height>
            </rect>
           </property>
@@ -2928,7 +2928,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
            <rect>
             <x>80</x>
             <y>45</y>
-            <width>141</width>
+            <width>91</width>
             <height>21</height>
            </rect>
           </property>
@@ -2966,9 +2966,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
          <widget class="QPushButton" name="pushButton_disable">
           <property name="geometry">
            <rect>
-            <x>309</x>
+            <x>279</x>
             <y>36</y>
-            <width>71</width>
+            <width>101</width>
             <height>90</height>
            </rect>
           </property>
@@ -2985,6 +2985,8 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
 	border-radius: 5px;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:22px;
 }
 
 QPushButton:hover:!pressed
@@ -3004,7 +3006,7 @@ QPushButton:pressed
 }</string>
           </property>
           <property name="text">
-           <string/>
+           <string> ON  </string>
           </property>
           <property name="icon">
            <iconset resource="resources.qrc">
@@ -3021,9 +3023,9 @@ QPushButton:pressed
          <widget class="QPushButton" name="pushButton_enable">
           <property name="geometry">
            <rect>
-            <x>309</x>
+            <x>279</x>
             <y>36</y>
-            <width>71</width>
+            <width>101</width>
             <height>90</height>
            </rect>
           </property>
@@ -3040,6 +3042,8 @@ QPushButton:pressed
 	border-radius: 5px;
     background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
+	text-align:left;
+	padding-left:22px;
 }
 
 QPushButton:hover:!pressed
@@ -3059,7 +3063,7 @@ QPushButton:pressed
 }</string>
           </property>
           <property name="text">
-           <string/>
+           <string> OFF</string>
           </property>
           <property name="icon">
            <iconset resource="resources.qrc">

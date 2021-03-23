@@ -74,6 +74,7 @@ HEADERS += \
     lib/ctkrangeslider.h \
     lib/qcustomplot.h \
     messages.h \
+    movemean.h \
     msg.h \
     qcpcursors.h \
     settings.h \

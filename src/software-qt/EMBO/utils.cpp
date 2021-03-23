@@ -44,3 +44,4 @@ double lin_to_exp_1to36M(double x, bool inverse)
     return ret;
 }
 
+

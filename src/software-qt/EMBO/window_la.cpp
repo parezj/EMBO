@@ -37,6 +37,15 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
 
     /* QCP */
 
+    initQcp();
+
+    /* statusbar */
+
+    /* styles */
+}
+
+void WindowLa::initQcp()
+{
     m_ui->customPlot->addGraph();  // ch1
     m_ui->customPlot->addGraph();  // ch2
     m_ui->customPlot->addGraph();  // ch3
@@ -85,10 +94,6 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
     m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, true);
     m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, false);
-
-    /* statusbar */
-
-    /* styles */
 }
 
 WindowLa::~WindowLa()

@@ -12,5 +12,4 @@
 QString format_unit(double value, QString unit, int precision);
 double lin_to_exp_1to36M(double x, bool inverse = false);
 
-
 #endif // UTILS_H

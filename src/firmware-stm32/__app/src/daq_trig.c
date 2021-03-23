@@ -130,12 +130,10 @@ void daq_trig_trigger_scope(daq_data_t* self)
 
     if (self->set.bits == B8)
     {
-        //last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[self->trig.dma_pos_catched]);
         prev_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev_last_idx]);
     }
     else //(self->set.bits == B12)
     {
-        //last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(self->trig.dma_pos_catched * 2))));
         prev_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev_last_idx * 2))));
     }
 
@@ -153,6 +151,7 @@ void daq_trig_trigger_scope(daq_data_t* self)
             (self->trig.set.edge == FALLING && prev_last_val >= self->trig.set.val))  // last_val < self->trig.set.val &&
         {
             daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
+            return;
         }
         else // false trig, switch edges and wait for another window
         {
@@ -166,14 +165,10 @@ void daq_trig_trigger_scope(daq_data_t* self)
         uint32_t awd_h = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH);
         uint32_t awd_l = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW);
 
-        //LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
         LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, awd_l);
         LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, awd_h);
-        //LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig);
     }
-    
-    return;
-    
+
     invalid_trigger:  // if any code gets here, means that trigger is invalid
     LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig); // reenable irq
 }
@@ -188,35 +183,9 @@ void daq_trig_trigger_la(daq_data_t* self)
 
     if (self->trig.pretrig_cntr > self->trig.pretrig_val)
     {
-        /*
-        int ch_num = 0;
-        switch (self->trig.set.ch)
-        {
-            case 1: ch_num = EM_GPIO_LA_CH1_NUM; break;
-            case 2: ch_num = EM_GPIO_LA_CH2_NUM; break;
-            case 3: ch_num = EM_GPIO_LA_CH3_NUM; break;
-            case 4: ch_num = EM_GPIO_LA_CH4_NUM; break;
-            default: ASSERT(0);
-        }
-
-        uint8_t la_last = ((uint8_t*)self->trig.buff_trig->data)[self->trig.dma_pos_catched] & (1 << ch_num);
-
-        if ((self->trig.set.edge == RISING && !la_last) || // IRQ faster than DMA
-            (self->trig.set.edge == FALLING && la_last))
-        {
-            self->trig.dma_pos_catched--;
-
-            if (self->trig.dma_pos_catched >= self->trig.buff_trig->len)
-                self->trig.dma_pos_catched -= self->trig.buff_trig->len;
-            if (self->trig.dma_pos_catched < 0)
-                self->trig.dma_pos_catched += self->trig.buff_trig->len;
-        }
-        */
-
         daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
+        return;
     }
-    
-    return;
     
     invalid_trigger: // if any code gets here, means that trigger is invalid
     NVIC_ClearPendingIRQ(self->trig.exti_trig);
@@ -258,8 +227,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             self->trig.pos_last -= self->trig.buff_trig->len;
 
         self->trig.pos_frst = self->trig.pos_trig - ((self->set.mem - post + 1) * self->trig.buff_trig->chans) + 1;
-        //if (self->trig.pos_frst >= self->trig.buff_trig->len)
-        //    self->trig.pos_frst -= self->trig.buff_trig->len;
+
         if (self->trig.pos_frst < 0)
             self->trig.pos_frst += self->trig.buff_trig->len;
     }

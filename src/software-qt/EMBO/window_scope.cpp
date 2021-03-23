@@ -41,6 +41,14 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
 
     /* QCP */
 
+    initQcp();
+
+    /* statusbar */
+
+    /* styles */
+}
+void WindowScope::initQcp()
+{
     m_ui->customPlot->addGraph();  // ch1
     m_ui->customPlot->addGraph();  // ch2
     m_ui->customPlot->addGraph();  // ch3
@@ -91,10 +99,6 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
     m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, true);
     m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, false);
-
-    /* statusbar */
-
-    /* styles */
 }
 
 WindowScope::~WindowScope()
@@ -167,39 +171,50 @@ void WindowScope::on_msg_read(const QByteArray data)
         }
 
     }
+    int ch_sz = real_sz / ch_num;
 
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
-    for (int i = 0, j = 0, k = 0; i < real_sz; i++)
+    for (int i = 0, k = 0; k < ch_num; k++)
     {
-        if (i % ch_num == 0 && ch1_en)
-            m_ui->customPlot->graph(GRAPH_CH1)->addData(j, buff[i]);
-        else if (ch_num > 1 && i % ch_num == 1 && ch2_en)
-            m_ui->customPlot->graph(GRAPH_CH2)->addData(j, buff[i]);
-        else if (ch_num > 2 && i % ch_num == 2 && ch3_en)
-            m_ui->customPlot->graph(GRAPH_CH3)->addData(j, buff[i]);
-        else if (ch_num > 3 && ch4_en)
-            m_ui->customPlot->graph(GRAPH_CH4)->addData(j, buff[i]);
-
-        k++;
-        if (k == ch_num)
+        for (int j = 1; j <= ch_sz; j++, i++) // plot from 1 to ch_sz
         {
-            j++;
-            k = 0;
+            if (k == 0 && ch1_en)
+                m_ui->customPlot->graph(GRAPH_CH1)->addData(j, buff[i]);
+            else if (k == 1 && ch2_en)
+                m_ui->customPlot->graph(GRAPH_CH2)->addData(j, buff[i]);
+            else if (k == 2 && ch3_en)
+                m_ui->customPlot->graph(GRAPH_CH3)->addData(j, buff[i]);
+            else if (k == 3 && ch4_en)
+                m_ui->customPlot->graph(GRAPH_CH4)->addData(j, buff[i]);
         }
     }
 
-    //m_ui->customPlot->graph(GRAPH_CH1)->rescaleValueAxis(false);
-    //m_ui->customPlot->graph(GRAPH_CH2)->rescaleValueAxis(false);
-    //m_ui->customPlot->graph(GRAPH_CH3)->rescaleValueAxis(false);
-    //m_ui->customPlot->graph(GRAPH_CH4)->rescaleValueAxis(false);
+    m_old_range = m_ui->customPlot->yAxis->range();
+    m_ui->customPlot->xAxis->setRange(1, ch_sz);
+    m_ui->customPlot->yAxis->rescale();
 
-    //m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
-    m_ui->customPlot->yAxis->setRange(-0.5, 3.3 + 0.5);
-    m_ui->customPlot->xAxis->setRange(0, real_sz / ch_num);
+    if (m_old_range != m_ui->customPlot->yAxis->range())
+    {
+        auto low_range = m_ui->customPlot->yAxis->range().lower;
+        auto up_range = m_ui->customPlot->yAxis->range().upper;
+        auto hysteris = (up_range - low_range) * 0.05;
+
+        m_ui->customPlot->yAxis->setRange(low_range - hysteris,up_range + hysteris);
+    }
+
+    /*
+    if (m_cursorsV_en || m_cursorsH_en)
+    {
+        auto rngV = m_ui->customPlot->yAxis->range();
+        auto rngH = m_ui->customPlot->xAxis->range();
+
+        m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, true);
+    }
+    */
 
     m_ui->customPlot->replot();
 }

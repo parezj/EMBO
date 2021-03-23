@@ -9,6 +9,7 @@
 #include "interfaces.h"
 #include "messages.h"
 #include "qcpcursors.h"
+#include "movemean.h"
 
 #include "lib/qcustomplot.h"
 
@@ -18,8 +19,9 @@
 #include <QElapsedTimer>
 
 
-#define TIMER_VM_RENDER         33
-#define DISPLAY_DEFAULT         300
+#define TIMER_VM_RENDER         33  // graph refresh rate = 33 ms = 30 FPS
+#define DISPLAY_VALS_RATE       3   // values refresh rate = 100 ms = 10 Hz
+#define MOVEMEAN_VM             10  // values moving average 20 * 10 ms = 100 ms
 
 #define GRAPH_CH1               0
 #define GRAPH_CH2               1
@@ -30,6 +32,8 @@
 #define CURSOR_DEFAULT_H_MAX    600
 #define CURSOR_DEFAULT_V_MIN    400
 #define CURSOR_DEFAULT_V_MAX    600
+
+#define DISPLAY_VM_DEFAULT      300
 
 
 QT_BEGIN_NAMESPACE
@@ -114,6 +118,9 @@ private slots:
     void on_actionMath_3_4_triggered(bool checked);
 
 private:
+    void initQcp();
+    void updatePlotData();
+
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
 
@@ -133,14 +140,21 @@ private:
     double m_data_ch2;
     double m_data_ch3;
     double m_data_ch4;
-    QString m_data_vcc;
+    double m_data_vcc;
     bool m_data_fresh = false;
+
+    MoveMean<double> m_meanCh1;
+    MoveMean<double> m_meanCh2;
+    MoveMean<double> m_meanCh3;
+    MoveMean<double> m_meanCh4;
+    MoveMean<double> m_meanVcc;
+    MoveMean<double> m_meanAvg;
 
     double m_gain1 = 1;
     double m_gain2 = 1;
     double m_gain3 = 1;
     double m_gain4 = 1;
-    double m_vref = 3.3;
+    double m_ref_v = 3.3;
 
     bool m_en1 = true;
     bool m_en2 = true;
@@ -159,6 +173,7 @@ private:
     bool m_cursorsH_en = false;
     bool m_math_1minus2 = false;
     bool m_math_3minus4 = false;
+    int m_display_vals = DISPLAY_VALS_RATE;
 
     QString m_pin1 = "?";
     QString m_pin2 = "?";
@@ -174,7 +189,7 @@ private:
 
     int m_elapsed_saved = 0;
     int m_elapsed_diff = 0;
-    double m_display = DISPLAY_DEFAULT / TIMER_VM_RENDER;
+    double m_display = DISPLAY_VM_DEFAULT / TIMER_VM_RENDER;
     int m_average = 1;
 
     /* messages */

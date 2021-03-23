@@ -17,7 +17,7 @@ class Embo(object):
 
     def __init__(self):
         if __name__ == '__main__':
-            com = self.input2("Select COM port:", "COM15")
+            com = self.input2("Select COM port:", "COM16")
             self.ser = serial.Serial(com, 115200, timeout=0, 
                 parity=serial.PARITY_NONE, 
                 stopbits=serial.STOPBITS_ONE, 
