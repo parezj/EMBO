@@ -9,6 +9,7 @@
 #include "interfaces.h"
 #include "messages.h"
 #include "qcpcursors.h"
+#include "containers.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -40,10 +41,16 @@ signals:
     void closing(const char* className);
 
 private slots:
-    void on_msg_ok(const QString val1, const QString val2);
-    void on_msg_err(const QString text, MsgBoxType type, bool needClose);
-    void on_msg_set();
+    /* data msg */
+    void on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real);
     void on_msg_read(const QByteArray data);
+
+    /* ok-err msg */
+    void on_msg_err(const QString text, MsgBoxType type, bool needClose);
+    void on_msg_ok_set(const QString fs_real, const QString);
+    void on_msg_ok_forceTrig(const QString, const QString);
+
+     /* async ready msg */
     void on_msg_daqReady(Ready ready);
 
     void on_actionAbout_triggered();
@@ -58,6 +65,9 @@ private:
     QCPCursors* m_cursors;
     QCPCursor* m_cursorTrigVal;
     QCPCursor* m_cursorTrigPre;
+
+    /* data */
+    DaqSettings m_daqSet;
 
     /* messages */
     Msg_LA_Set* m_msg_set;

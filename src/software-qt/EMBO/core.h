@@ -10,6 +10,7 @@
 #include "messages.h"
 #include "interfaces.h"
 #include "movemean.h"
+#include "containers.h"
 
 #include <QObject>
 #include <QTimer>
@@ -59,54 +60,7 @@ PWM and signal generator.<br>And of course, it's opensource! \
 #define EMBO_READY_N        "ReadyN"
 #define EMBO_READY_D        "ReadyD"
 
-enum State
-{
-    DISCONNECTED,
-    OPENING,
-    CONNECTING1,
-    CONNECTING2,
-    CONNECTED
-};
 
-class DevInfo : public QObject
-{
-Q_OBJECT
-public:
-    DevInfo(QObject* parent) : QObject(parent) { }
-
-    /* IDN */
-    QString name;
-    QString fw;
-
-    /* SYS:INFO */
-    QString rtos;
-    QString ll;
-    QString comm;
-    QString fcpu;
-    int ref_mv;
-    QString pins_scope_vm;
-    QString pins_la;
-    QString pins_cntr;
-    QString pins_pwm;
-    QString pins_sgen;
-
-    /* SYS:LIM */
-    int adc_fs_12b;
-    int adc_fs_8b;
-    int mem;
-    int la_fs;
-    int pwm_fs;
-    int adc_num;
-    bool adc_dualmode;
-    bool adc_interleaved;
-    bool adc_bit8;
-    bool dac;
-    int vm_mem;
-    int vm_fs;
-    int cntr_timeout;
-    int sgen_maxf;
-    int sgen_maxmem;
-};
 
 class Core : public QObject
 {
@@ -127,8 +81,8 @@ public:
 
      /* setters getters */
     const QString getPort() const { return m_serial->portName(); }
-    DevInfo* getDevInfo() const { return m_devInfo; }
-    int getLatencyMs();
+    DevInfo* getDevInfo() { return &m_devInfo; }
+    void getLatencyMs(double& mean, double& max);
     QString getUptime() const { return m_uptime; }
     void setUptime(QString uptime) { m_uptime = uptime; }
     void setMode(Mode mode, bool alsoLast = false) { m_mode = mode; if (alsoLast) m_mode_last = mode; }
@@ -152,7 +106,7 @@ signals:
     void daqReady(Ready ready);
     void stateChanged(const State state);
     void msgDisplay(const QString name, MsgBoxType type);
-    void latencyAndUptime(int latency, int commTimeout, const QString uptime);
+    void latencyAndUptime(int latency_fix, int latency_mean, int latency_max, const QString uptime);
     void finished();
 
 private slots:
@@ -196,7 +150,7 @@ private:
     int m_commTimeoutMs = 0;
 
     /* data */
-    DevInfo* m_devInfo; // const
+    DevInfo m_devInfo;
     QString m_uptime = "";
 
     /* message buffers */

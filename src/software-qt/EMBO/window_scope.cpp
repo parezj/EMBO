@@ -21,20 +21,16 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
 
     m_msg_set = new Msg_SCOP_Set(this);
     m_msg_read = new Msg_SCOP_Read(this);
-    m_msg_average = new Msg_SCOP_Average(this);
     m_msg_forceTrig = new Msg_SCOP_ForceTrig(this);
 
-    connect(m_msg_set, &Msg_SCOP_Set::ok, this, &WindowScope::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_SCOP_Set::ok, this, &WindowScope::on_msg_ok_set, Qt::DirectConnection);
     connect(m_msg_set, &Msg_SCOP_Set::err, this, &WindowScope::on_msg_err, Qt::DirectConnection);
     connect(m_msg_set, &Msg_SCOP_Set::result, this, &WindowScope::on_msg_set, Qt::DirectConnection);
 
     connect(m_msg_read, &Msg_SCOP_Read::err, this, &WindowScope::on_msg_err, Qt::DirectConnection);
     connect(m_msg_read, &Msg_SCOP_Read::result, this, &WindowScope::on_msg_read, Qt::DirectConnection);
 
-    connect(m_msg_average, &Msg_SCOP_Average::ok, this, &WindowScope::on_msg_ok, Qt::DirectConnection);
-    connect(m_msg_average, &Msg_SCOP_Average::err, this, &WindowScope::on_msg_err, Qt::DirectConnection);
-
-    connect(m_msg_forceTrig, &Msg_SCOP_ForceTrig::ok, this, &WindowScope::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_forceTrig, &Msg_SCOP_ForceTrig::ok, this, &WindowScope::on_msg_ok_forceTrig, Qt::DirectConnection);
     connect(m_msg_forceTrig, &Msg_SCOP_ForceTrig::err, this, &WindowScope::on_msg_err, Qt::DirectConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowScope::on_msg_daqReady, Qt::QueuedConnection);
@@ -113,11 +109,6 @@ void WindowScope::on_actionAbout_triggered()
 
 /* slots */
 
-void WindowScope::on_msg_ok(const QString val1, const QString val2)
-{
-
-}
-
 void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
@@ -135,20 +126,34 @@ void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose
         this->close();
 }
 
-void WindowScope::on_msg_set()
+void WindowScope::on_msg_ok_set(const QString maxZ, const QString fs_real)
 {
+    m_daqSet.maxZ_kohm = maxZ.toDouble();
+    m_daqSet.fs_real = fs_real.toDouble();
+}
 
+void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
+                             DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real)
+{
+    m_daqSet.bits = bits;
+    m_daqSet.mem = mem;
+    m_daqSet.fs = fs;
+    m_daqSet.ch1_en = ch1;
+    m_daqSet.ch2_en = ch2;
+    m_daqSet.ch3_en = ch3;
+    m_daqSet.ch4_en = ch4;
+    m_daqSet.trig_ch = trig_ch;
+    m_daqSet.trig_val = trig_val;
+    m_daqSet.trig_edge = trig_edge;
+    m_daqSet.trig_mode = trig_mode;
+    m_daqSet.trig_pre = trig_pre;
+    m_daqSet.maxZ_kohm = maxZ;
+    m_daqSet.fs_real = fs_real;
 }
 
 void WindowScope::on_msg_read(const QByteArray data)
 {
-    int ch_num = 2;
-    bool ch1_en = true;
-    bool ch2_en = true;
-    bool ch3_en = false;
-    bool ch4_en = false;
-    bool bit8 = false;
-
+    int ch_num = m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en;
     const unsigned char *dataU8 = reinterpret_cast<const unsigned char*>(data.constData());
 
     int data_sz = data.size();
@@ -156,7 +161,7 @@ void WindowScope::on_msg_read(const QByteArray data)
 
     std::vector<qreal> buff(data_sz);
 
-    if (bit8)
+    if (m_daqSet.bits == B8)
     {
         for (int i = 0; i < data_sz; i++)
             buff[i] = (((qreal)(dataU8[i]) / 100.0));
@@ -166,12 +171,15 @@ void WindowScope::on_msg_read(const QByteArray data)
         real_sz = data_sz / 2;
         buff.resize(real_sz);
         for (int i = 0, j = 0; i < data_sz; i += 2, j++)
-        {
             buff[j] = (((qreal)(dataU8[i + 1] << 8 | dataU8[i]) / 10000.0));
-        }
-
     }
     int ch_sz = real_sz / ch_num;
+
+    if (ch_sz != m_daqSet.mem) // wrong data size
+    {
+        on_msg_err(INVALID_MSG, CRITICAL, true);
+        return;
+    }
 
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
@@ -182,13 +190,13 @@ void WindowScope::on_msg_read(const QByteArray data)
     {
         for (int j = 1; j <= ch_sz; j++, i++) // plot from 1 to ch_sz
         {
-            if (k == 0 && ch1_en)
+            if (k == 0 && m_daqSet.ch1_en)
                 m_ui->customPlot->graph(GRAPH_CH1)->addData(j, buff[i]);
-            else if (k == 1 && ch2_en)
+            else if (k == 1 && m_daqSet.ch2_en)
                 m_ui->customPlot->graph(GRAPH_CH2)->addData(j, buff[i]);
-            else if (k == 2 && ch3_en)
+            else if (k == 2 && m_daqSet.ch3_en)
                 m_ui->customPlot->graph(GRAPH_CH3)->addData(j, buff[i]);
-            else if (k == 3 && ch4_en)
+            else if (k == 3 && m_daqSet.ch4_en)
                 m_ui->customPlot->graph(GRAPH_CH4)->addData(j, buff[i]);
         }
     }
@@ -217,6 +225,11 @@ void WindowScope::on_msg_read(const QByteArray data)
     */
 
     m_ui->customPlot->replot();
+}
+
+void WindowScope::on_msg_ok_forceTrig(const QString, const QString)
+{
+
 }
 
 void WindowScope::on_msg_daqReady(Ready ready)

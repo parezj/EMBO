@@ -376,7 +376,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         //ASSERT(added == daq.buff_out.len);
         if (added != daq.buff_out.len)
         {
-            SCPI_ResultText(context, "ERROR: invalid buffer size"); // TODO DEBUG
+            SCPI_ResultText(context, "ERROR: invalid buffer size");
             return SCPI_RES_OK;
         }
 
@@ -529,13 +529,6 @@ scpi_result_t EM_SCOPE_ForceTrig(scpi_t* context)
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
     daq_trig_trigger_scope(&daq);
 
-    SCPI_ResultText(context, SCPI_OK);
-    return SCPI_RES_OK;
-}
-
-scpi_result_t EM_SCOPE_Average(scpi_t* context)
-{
-    // TODO
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;
 }
@@ -750,6 +743,7 @@ scpi_result_t EM_CNTR_Enable(scpi_t* context)
 
 scpi_result_t EM_CNTR_ReadQ(scpi_t* context)
 {
+
     if (!cntr.enabled)
     {
         SCPI_ErrorPush(context, SCPI_ERROR_CNTR_NOT_ENABLED);

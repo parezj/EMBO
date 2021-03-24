@@ -159,7 +159,8 @@ void WindowMain::statusBarLoad()
     m_status_icon_comm = new QLabel(this);
     m_status_comm = new QLabel(" Disconnected ", this);
     m_status_latency = new QLabel("", this);
-    m_status_latency->setToolTip("fixed + real");
+    m_status_latency->setToolTip("[fixed spacing + real mean] (real peak)");
+    m_status_latency->setMinimumWidth(220);
     m_status_uptime = new QLabel("", this);
 
     QSpacerItem* status_spacer1 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -167,10 +168,11 @@ void WindowMain::statusBarLoad()
     QLabel* status_ctu       = new QLabel("<a href='https://meas.fel.cvut.cz/' style='color: black; text-decoration:none'>&nbsp;CTU FEE&nbsp;©&nbsp;2021&nbsp;</a>", this);
     QLabel* status_spacer2   = new QLabel("<span>&nbsp;</span>", this);
     QLabel* status_spacer3   = new QLabel("<span>&nbsp;</span>", this);
-    QLabel* m_status_spacer4 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
-    QLabel* m_status_spacer5 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
-    QLabel* m_status_spacer6 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
-    QLabel* m_status_spacer7 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer4   = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer5   = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer6   = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer7   = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer8   = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
     QLabel* status_icon_jp   = new QLabel(this);
     QLabel* status_author    = new QLabel("<a href='https://www.jakubparez.com' style='color: black; text-decoration:none'>&nbsp;Jakub Pařez&nbsp;</a>&nbsp;", this);
 
@@ -221,24 +223,32 @@ void WindowMain::statusBarLoad()
     m_status_line2->setStyleSheet("color:gray;");
     m_status_line2->setFixedHeight(18);
 
+    m_status_line3 = new QFrame(this);
+    m_status_line3->setFrameShape(QFrame::VLine);
+    m_status_line3->setFrameShadow(QFrame::Plain);
+    m_status_line3->setStyleSheet("color:gray;");
+    m_status_line3->setFixedHeight(18);
+
     QGridLayout * layout = new QGridLayout(widget);
-    layout->addWidget(status_spacer0,       0,0, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_icon_comm,   0,1, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_comm,        0,2, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_spacer4,     0,3, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_line1,       0,4, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_spacer5,     0,5, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_latency,     0,6, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_spacer6,     0,7, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_line2,       0,8, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_spacer7,     0,9, 1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_uptime,      0,10,1,1,Qt::AlignVCenter | Qt::AlignLeft);
-    layout->addItem(status_spacer1,         0,11,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_ctu,           0,12,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_spacer2,       0,13,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_icon_jp,       0,14,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_spacer3,       0,15,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_author,        0,16,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer0,     0,0, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_icon_comm, 0,1, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_comm,      0,2, 1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer4,     0,3, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line1,     0,4, 1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer5,     0,5, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_latency,   0,6, 1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer6,     0,7, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line2,     0,8, 1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer7,     0,9, 1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_uptime,    0,10,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer8,     0,11, 1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addWidget(m_status_line3,     0,12,1,1,Qt::AlignVCenter);
+    layout->addItem(status_spacer1,       0,13,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_ctu,         0,14,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer2,     0,15,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_icon_jp,     0,16,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer3,     0,17,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_author,      0,18,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
@@ -353,6 +363,7 @@ void WindowMain::setConnected()
     m_status_uptime->setText("?");
     m_status_line1->show();
     m_status_line2->show();
+    m_status_line3->show();
 
     m_ui->label_dev1->show();
     m_ui->label_dev2->show();
@@ -444,6 +455,7 @@ void WindowMain::setDisconnected()
     m_status_uptime->setText("");
     m_status_line1->hide();
     m_status_line2->hide();
+    m_status_line3->hide();
 
     m_ui->label_dev1->hide();
     m_ui->label_dev2->hide();
@@ -578,9 +590,10 @@ void WindowMain::on_pushButton_disconnect_clicked()
     emit closeComm(false);
 }
 
-void WindowMain::on_latencyAndUptime(int latency, int commTimeout, const QString uptime)
+void WindowMain::on_latencyAndUptime(int latency_fix, int latency_mean, int latency_max, const QString uptime)
 {
-    m_status_latency->setText("Latency: " + QString::number(commTimeout) + "+" + QString::number(latency) + " ms");
+    m_status_latency->setText("Latency: " + QString::number(latency_fix) + "+" + QString::number(latency_mean) +
+                              " ms (max " + QString::number(latency_max) + " ms)");
     m_status_uptime->setText("Uptime: " + uptime);
 
     if (m_w_vm->isVisible())

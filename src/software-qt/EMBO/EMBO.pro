@@ -68,6 +68,7 @@ SOURCES += \
     window_vm.cpp
 
 HEADERS += \
+    containers.h \
     core.h \
     css.h \
     interfaces.h \

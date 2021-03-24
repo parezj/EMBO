@@ -66,8 +66,6 @@ void Core::on_startThread()
     m_msg_sys_mode = new Msg_SYS_Mode(this);
     m_msg_sys_uptime = new Msg_SYS_Uptime(this);
 
-    m_devInfo = new DevInfo(this);
-
     connect(m_serial, &QSerialPort::errorOccurred, this, &Core::on_serial_errorOccurred);
     connect(m_serial, &QSerialPort::readyRead, this, &Core::on_serial_readyRead);
 
@@ -161,10 +159,10 @@ void Core::msgAdd(Msg* msg, bool isQuery, QString params)
     m_waitingMsgs.append(msg);
 }
 
-int Core::getLatencyMs()
+void Core::getLatencyMs(double& mean, double& max)
 {
-    m_meanLatency.addVal(m_latency > TIMER_COMM ? m_latency - TIMER_COMM : 0);
-    return m_meanLatency.getMean();
+    mean = m_meanLatency.getMean(m_latency > TIMER_COMM ? m_latency - TIMER_COMM : 0);
+    max = m_meanLatency.getMax();
 }
 
 /* private */
@@ -259,14 +257,6 @@ void Core::on_serial_readyRead()
     {
         m_mainBuffer.append(m_serial->readAll());
 
-        /*
-        QByteArray rx_buffer = m_mainBuffer.left(m_mainBuffer.size());
-        for (int o = 0; o < rx_buffer.length(); o++)
-            if (rx_buffer[o] != '\n' && rx_buffer[o] != '\r' && (rx_buffer[o] < '0' || rx_buffer[o] > 'z'))
-                rx_buffer[o] = 'x';
-        qInfo() << "rx buffer: " << rx_buffer;
-        */
-
         int msg_cnt = 0;
         QByteArrayList messages;
         int bin_header_len = 0;
@@ -286,14 +276,6 @@ void Core::on_serial_readyRead()
                 bin_len_total = 1 + n + bin_len;
                 int bin_msg_start = 0;
                 int bin_msg_end = 0;
-
-                /*
-                qInfo() << "hashIdx: " <<  hashIdx;
-                qInfo() << "buf_sz: " <<  buf_sz;
-                qInfo() << "n: " <<  n;
-                qInfo() << "bin_len: " <<  bin_len;
-                qInfo() << "bin_len_total: " <<  bin_len_total;
-                */
 
                 if (buf_sz >= hashIdx + bin_len_total)
                 {
@@ -365,12 +347,6 @@ void Core::on_serial_readyRead()
             {
                 int bin_msg_start = messages[i].indexOf('#');
                 int bin_msg_end = bin_msg_start + bin_len_total;
-
-                /*
-                qInfo() << " bin_msg_start: " << bin_msg_start;
-                qInfo() << " bin_msg_end: " << bin_msg_end;
-                qInfo() << " bin msg len: " << messages[i].length();
-                */
 
                 // split for submessage skipping binary message
                 int j = 0;
@@ -506,6 +482,12 @@ void Core::on_timer_comm()
 
 void Core::on_timer_render()
 {
-    m_latencyAvgMs = getLatencyMs();
-    emit latencyAndUptime(m_latencyAvgMs, m_commTimeoutMs, getUptime());
+    double latency_mean;
+    double latency_max;
+
+    getLatencyMs(latency_mean, latency_max);
+
+    m_latencyAvgMs = (int)latency_mean;
+
+    emit latencyAndUptime(m_commTimeoutMs, (int)latency_mean, (int)latency_max, getUptime());
 }

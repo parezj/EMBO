@@ -4,6 +4,7 @@
  */
 
 #include <vector>
+#include <limits>
 
 #ifndef MOVEMEAN_H
 #define MOVEMEAN_H
@@ -17,6 +18,8 @@ public:
     void addVal(T const& val);
     double getMean();
     double getMean(T const& val);
+    double getMax();
+    double getMin();
     void reset();
 
 private:
@@ -73,6 +76,30 @@ void MoveMean<T>::reset()
     m_it = 0;
     m_cnt = 0;
     m_buff.clear();
+}
+
+template <class T>
+double MoveMean<T>::getMax()
+{
+    double ret = std::numeric_limits<double>::min();
+    for (int i = 0; i < m_cnt; i++)
+    {
+        if (m_buff[i] > ret)
+            ret = m_buff[i];
+    }
+    return ret;
+}
+
+template <class T>
+double MoveMean<T>::getMin()
+{
+    double ret = std::numeric_limits<double>::max();
+    for (int i = 0; i < m_cnt; i++)
+    {
+        if (m_buff[i] < ret)
+            ret = m_buff[i];
+    }
+    return ret;
 }
 
 #endif // MOVEMEAN_H

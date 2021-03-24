@@ -184,24 +184,52 @@ void Msg_SCOP_Read::on_dataRx()
 void Msg_SCOP_Set::on_dataRx()
 {
     qInfo() << "SCOP:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
+
+    if (getIsQuery())
+    {
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+
+        if (tokens.size() != 11)
+        {
+            emit err(INVALID_MSG + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        DaqBits bits = B1;
+        DaqTrigEdge edge = RISING;
+        DaqTrigMode mode = DISABLED;
+
+        if (tokens[0] == "8") bits = B8;
+        else if (tokens[0] == "12") bits = B12;
+
+        if (tokens[6] == "F") edge = FALLING;
+
+        if (tokens[7] == "A") mode = AUTO;
+        else if (tokens[7] == "N") mode = NORMAL;
+        else if (tokens[7] == "S") mode = SINGLE;
+
+        emit result(bits, tokens[1].toInt(), tokens[2].toInt(),
+                    tokens[3][0] == 'T', tokens[3][1] == 'T', tokens[3][2] == 'T', tokens[3][3] == 'T',
+                    tokens[4].toInt(), tokens[5].toInt(), edge, mode, tokens[8].toInt(),
+                    tokens[9].toDouble() ,tokens[10].toDouble());
+    }
+    else
+    {
+        if (tokens.size() != 3 && !m_rxData.contains(EMBO_OK))
+        {
+            emit err("SCOPE set failed! " + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        emit ok(tokens[1], tokens[2]);
+    }
 }
 
 void Msg_SCOP_ForceTrig::on_dataRx()
 {
     qInfo() << "SCOP:FORC: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
-
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
-}
-
-void Msg_SCOP_Average::on_dataRx()
-{
-    qInfo() << "SCOP:AVER: " <<  m_rxData;
     //auto core = Core::getInstance(this);
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
@@ -221,10 +249,41 @@ void Msg_LA_Read::on_dataRx()
 void Msg_LA_Set::on_dataRx()
 {
     qInfo() << "LA:SET: " <<  m_rxData;
-    //auto core = Core::getInstance(this);
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
+
+    if (getIsQuery())
+    {
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+
+        if (tokens.size() != 7)
+        {
+            emit err(INVALID_MSG + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        DaqTrigEdge edge = RISING;
+        DaqTrigMode mode = DISABLED;
+
+        if (tokens[3] == "F") edge = FALLING;
+
+        if (tokens[4] == "A") mode = AUTO;
+        else if (tokens[4] == "N") mode = NORMAL;
+        else if (tokens[4] == "S") mode = SINGLE;
+
+        emit result(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt(),
+                    edge, mode, tokens[5].toInt(), tokens[6].toDouble());
+    }
+    else
+    {
+        if (tokens.size() != 2 && !m_rxData.contains(EMBO_OK))
+        {
+            emit err("SCOPE set failed! " + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        emit ok(tokens[1]);
+    }
 }
 
 void Msg_LA_ForceTrig::on_dataRx()

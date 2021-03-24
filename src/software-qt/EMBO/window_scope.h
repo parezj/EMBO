@@ -9,6 +9,7 @@
 #include "interfaces.h"
 #include "messages.h"
 #include "qcpcursors.h"
+#include "containers.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -39,10 +40,17 @@ signals:
     void closing(const char* className);
 
 private slots:
-    void on_msg_ok(const QString val1, const QString val2);
-    void on_msg_err(const QString text, MsgBoxType type, bool needClose);
-    void on_msg_set();
+    /* data msg */
+    void on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
+                    DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real);
     void on_msg_read(const QByteArray data);
+
+    /* ok-err msg */
+    void on_msg_err(const QString text, MsgBoxType type, bool needClose);
+    void on_msg_ok_set(const QString maxZ, const QString fs_real);
+    void on_msg_ok_forceTrig(const QString, const QString);
+
+     /* async ready msg */
     void on_msg_daqReady(Ready ready);
 
     void on_actionAbout_triggered();
@@ -60,12 +68,14 @@ private:
     QCPCursor* m_cursorTrigVal;
     QCPCursor* m_cursorTrigPre;
 
-    bool m_spline = false;
+    bool m_spline = true;
+
+    /* data */
+    DaqSettings m_daqSet;
 
     /* messages */
     Msg_SCOP_Set* m_msg_set;
     Msg_SCOP_Read* m_msg_read;
-    Msg_SCOP_Average* m_msg_average;
     Msg_SCOP_ForceTrig* m_msg_forceTrig;
 };
 

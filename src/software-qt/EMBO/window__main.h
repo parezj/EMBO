@@ -51,7 +51,7 @@ private slots:
     void on_pushButton_connect_clicked();
     void on_pushButton_disconnect_clicked();
 
-    void on_latencyAndUptime(int latency, int commTimeout, const QString uptime);
+    void on_latencyAndUptime(int latency_fix, int latency_mean, int latency_max, const QString uptime);
     void on_coreState_changed(const State newState);
     void on_msgDisplay(const QString text, MsgBoxType type);
     void on_instrClose(const char* className);
@@ -91,6 +91,7 @@ private:
     QLabel* m_status_uptime;
     QFrame* m_status_line1;
     QFrame* m_status_line2;
+    QFrame* m_status_line3;
 
     /* windows */
     WindowScope* m_w_scope = Q_NULLPTR;

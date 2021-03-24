@@ -22,7 +22,6 @@ scpi_result_t EM_SCOPE_Set(scpi_t * context);
 scpi_result_t EM_SCOPE_SetQ(scpi_t * context);
 scpi_result_t EM_SCOPE_ReadQ(scpi_t * context);
 scpi_result_t EM_SCOPE_ForceTrig(scpi_t * context);
-scpi_result_t EM_SCOPE_Average(scpi_t * context);
 
 scpi_result_t EM_LA_Set(scpi_t * context);
 scpi_result_t EM_LA_SetQ(scpi_t * context);

@@ -23,14 +23,14 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     m_msg_read = new Msg_LA_Read(this);
     m_msg_forceTrig = new Msg_LA_ForceTrig(this);
 
-    connect(m_msg_set, &Msg_LA_Set::ok, this, &WindowLa::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_LA_Set::ok, this, &WindowLa::on_msg_ok_set, Qt::DirectConnection);
     connect(m_msg_set, &Msg_LA_Set::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
     connect(m_msg_set, &Msg_LA_Set::result, this, &WindowLa::on_msg_set, Qt::DirectConnection);
 
     connect(m_msg_read, &Msg_LA_Read::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
     connect(m_msg_read, &Msg_LA_Read::result, this, &WindowLa::on_msg_read, Qt::DirectConnection);
 
-    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::ok, this, &WindowLa::on_msg_ok, Qt::DirectConnection);
+    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::ok, this, &WindowLa::on_msg_ok_forceTrig, Qt::DirectConnection);
     connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowLa::on_msg_daqReady, Qt::QueuedConnection);
@@ -108,11 +108,6 @@ void WindowLa::on_actionAbout_triggered()
 
 /* slots */
 
-void WindowLa::on_msg_ok(const QString val1, const QString val2)
-{
-
-}
-
 void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
@@ -130,9 +125,27 @@ void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
         this->close();
 }
 
-void WindowLa::on_msg_set()
+void WindowLa::on_msg_ok_set(const QString fs_real, const QString)
 {
+    m_daqSet.fs_real = fs_real.toDouble();
+}
 
+void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real)
+{
+    m_daqSet.bits = B1;
+    m_daqSet.mem = mem;
+    m_daqSet.fs = fs;
+    m_daqSet.ch1_en = true;
+    m_daqSet.ch2_en = true;
+    m_daqSet.ch3_en = true;
+    m_daqSet.ch4_en = true;
+    m_daqSet.trig_ch = trig_ch;
+    m_daqSet.trig_val = 0;
+    m_daqSet.trig_edge = trig_edge;
+    m_daqSet.trig_mode = trig_mode;
+    m_daqSet.trig_pre = trig_pre;
+    m_daqSet.maxZ_kohm = 0;
+    m_daqSet.fs_real = fs_real;
 }
 
 void WindowLa::on_msg_read(const QByteArray data)
@@ -143,6 +156,12 @@ void WindowLa::on_msg_read(const QByteArray data)
     bool ch4_en = true;
 
     int data_sz = data.size();
+
+    if (data_sz != m_daqSet.mem) // wrong data size
+    {
+        on_msg_err(INVALID_MSG, CRITICAL, true);
+        return;
+    }
 
     std::vector<qreal> buff(data_sz);
 
@@ -178,6 +197,11 @@ void WindowLa::on_msg_read(const QByteArray data)
     m_ui->customPlot->xAxis->setRange(0, data_sz);
 
     m_ui->customPlot->replot();
+}
+
+void WindowLa::on_msg_ok_forceTrig(const QString, const QString)
+{
+
 }
 
 void WindowLa::on_msg_daqReady(Ready ready)

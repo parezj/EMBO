@@ -7,6 +7,7 @@
 #define MESSAGES_H
 
 #include "msg.h"
+#include "containers.h"
 
 #include <QObject>
 
@@ -25,7 +26,6 @@
 #define EMBO_SCOP_READ      ":SCOP:READ"
 #define EMBO_SCOP_SET       ":SCOP:SET"
 #define EMBO_SCOP_FORCETRIG ":SCOP:FORC"
-#define EMBO_SCOP_AVERAGE   ":SCOP:AVER"
 
 #define EMBO_LA_READ        ":LA:READ"
 #define EMBO_LA_SET         ":LA:SET"
@@ -40,22 +40,6 @@
 
 #define EMBO_SET_TRUE       "1"
 #define EMBO_SET_FALSE      "0"
-
-enum Mode
-{
-    NO_MODE = 0,
-    VM = 1,
-    SCOPE = 2,
-    LA = 3
-};
-
-enum Ready
-{
-    NOT_READY = 0,
-    READY_AUTO = 1,
-    READY_NORMAL = 2,
-    READY_DISABLED = 3
-};
 
 /***************************** Messages - SCPI *****************************/
 
@@ -164,7 +148,8 @@ public:
     explicit Msg_SCOP_Set(QObject* parent=0) : Msg(EMBO_SCOP_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result();
+    void result(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
+                DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real);
 };
 
 class Msg_SCOP_ForceTrig : public Msg
@@ -172,14 +157,6 @@ class Msg_SCOP_ForceTrig : public Msg
     Q_OBJECT
 public:
     explicit Msg_SCOP_ForceTrig(QObject* parent=0) : Msg(EMBO_SCOP_FORCETRIG, false, parent) {};
-    virtual void on_dataRx() override;
-};
-
-class Msg_SCOP_Average : public Msg
-{
-    Q_OBJECT
-public:
-    explicit Msg_SCOP_Average(QObject* parent=0) : Msg(EMBO_SCOP_AVERAGE, false, parent) {};
     virtual void on_dataRx() override;
 };
 
@@ -202,7 +179,7 @@ public:
     explicit Msg_LA_Set(QObject* parent=0) : Msg(EMBO_LA_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result();
+    void result(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real);
 };
 
 class Msg_LA_ForceTrig : public Msg
@@ -236,16 +213,6 @@ signals:
 };
 
 /***************************** Messages - SGEN **************************/
-
-enum SgenMode
-{
-    CONSTANT = 0,
-    SINE = 1,
-    TRIANGLE = 2,
-    SAWTOOTH = 3,
-    SQUARE = 4,
-    NOISE = 5
-};
 
 class Msg_SGEN_Set : public Msg
 {

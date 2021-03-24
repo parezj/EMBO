@@ -715,8 +715,8 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     else
         for (int i = 0; i < 10000; i++) __asm("nop"); // let DMA and ADC finish their jobs
 
-    self->enabled = enable;
     self->trig.uwtick_first = self->uwTick;
+    self->enabled = enable;
 }
 
 static void daq_enable_adc(daq_data_t* self, ADC_TypeDef* adc, uint8_t enable, uint32_t dma_ch)

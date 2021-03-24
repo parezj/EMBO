@@ -73,7 +73,6 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "SCOPe:SET?", .callback = EM_SCOPE_SetQ,},
     {.pattern = "SCOPe:SET", .callback = EM_SCOPE_Set,},
     {.pattern = "SCOPe:FORCetrig", .callback = EM_SCOPE_ForceTrig,},
-    {.pattern = "SCOPe:AVERage", .callback = EM_SCOPE_Average,},
 
     /* EMBO - Logic Analyzer */
     {.pattern = "LA:READ?", .callback = EM_LA_ReadQ,},
