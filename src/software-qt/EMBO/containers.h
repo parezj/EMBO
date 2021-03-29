@@ -8,6 +8,14 @@
 
 #include <QString>
 
+enum MsgBoxType
+{
+    INFO,
+    QUESTION,
+    WARNING,
+    CRITICAL
+};
+
 enum State
 {
     DISCONNECTED,

@@ -180,6 +180,24 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
         }
+        else if (avg_num > 1) // handle starts, when buffer is not full
+        {
+            uint32_t ms_elapsed = daq.uwTick - daq.uwTick_start;
+            if (ms_elapsed < 0)
+                ms_elapsed += EM_UWTICK_MAX;
+
+            uint32_t ms_full = (EM_VM_MEM / (float)EM_VM_FS) * 1000.0;
+            if (ms_elapsed < ms_full)
+            {
+                /*
+                int avg_max = (ms_elapsed / (float)ms_full) * (float)daq.set.mem;
+                avg_num = (avg_num > avg_max ? avg_max : avg_num) - 1;
+                if (avg_num < 1)
+                    avg_num = 1;
+                */
+                avg_num = 1;
+            }
+        }
 
 #if defined(EM_ADC_MODE_ADC1)
         int last1 = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);

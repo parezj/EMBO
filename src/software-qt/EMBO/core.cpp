@@ -21,7 +21,7 @@
 #define TIMER_RX            1000
 #define TIMER_RENDER        100
 
-#define MOVEMEAN_LATENCY    25
+#define MOVEMEAN_LATENCY    100
 
 
 Core* Core::m_instance = Q_NULLPTR;
@@ -161,7 +161,7 @@ void Core::msgAdd(Msg* msg, bool isQuery, QString params)
 
 void Core::getLatencyMs(double& mean, double& max)
 {
-    mean = m_meanLatency.getMean(m_latency > TIMER_COMM ? m_latency - TIMER_COMM : 0);
+    mean = m_meanLatency.getMean(); // m_latency > TIMER_COMM ? m_latency - TIMER_COMM : 0);
     max = m_meanLatency.getMax();
 }
 
@@ -191,6 +191,10 @@ void Core::send()
     qInfo() << "sent: " << tx;
     m_timer_rxTimeout->start(TIMER_RX);
     m_timer_comm->stop();
+
+    m_latency = m_timer_latency.elapsed();
+    m_meanLatency.addVal(m_latency);
+    m_timer_latency.restart();
 }
 
 void Core::openComm2()
@@ -444,9 +448,6 @@ void Core::on_timer_comm()
         return;
     }
 
-    m_latency = m_timer_latency.elapsed();
-    m_timer_latency.restart();
-
     if (!m_activeMsgs.isEmpty())
     {
         qInfo() << "Communication is throttling!";
@@ -490,4 +491,5 @@ void Core::on_timer_render()
     m_latencyAvgMs = (int)latency_mean;
 
     emit latencyAndUptime(m_commTimeoutMs, (int)latency_mean, (int)latency_max, getUptime());
+    //emit coreRender();
 }

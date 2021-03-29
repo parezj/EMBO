@@ -7,6 +7,7 @@
 
 #include <QString>
 #include <QDebug>
+#include <QMessageBox>
 
 #include <math.h>
 
@@ -44,4 +45,39 @@ double lin_to_exp_1to36M(double x, bool inverse)
     return ret;
 }
 
+void msgBox(QMainWindow* window, QString text, MsgBoxType type)
+{
+   QMessageBox* msgBox = new QMessageBox(window);
+   msgBox->setAttribute(Qt::WA_DeleteOnClose);
+   msgBox->setText(text);
+   msgBox->setMinimumWidth(200);
+   msgBox->setMinimumHeight(60);
 
+   if (type == INFO)
+   {
+       msgBox->setIcon(QMessageBox::Information);
+       msgBox->setStandardButtons(QMessageBox::Ok);
+       msgBox->setWindowTitle("EMBO - Information");
+   }
+   else if (type == QUESTION)
+   {
+       msgBox->setIcon(QMessageBox::Question);
+       msgBox->setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+       msgBox->setWindowTitle("EMBO - Question");
+   }
+   else if (type == WARNING)
+   {
+       msgBox->setIcon(QMessageBox::Warning);
+       msgBox->setStandardButtons(QMessageBox::Ok);
+       msgBox->setWindowTitle("EMBO - Warning");
+   }
+   else if (type == CRITICAL)
+   {
+       msgBox->setIcon(QMessageBox::Critical);
+       msgBox->setStandardButtons(QMessageBox::Ok);
+       msgBox->setWindowTitle("EMBO - Error");
+   }
+
+   msgBox->setModal( false );
+   msgBox->open(window, SLOT(msgBoxClosed(QAbstractButton*)));
+}

@@ -40,6 +40,7 @@ PWM and signal generator.<br>And of course, it's opensource! \
 <a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
 
 #define CFG_MAIN_PORT       "main/port"
+#define CFG_REC_DIR         "rec/dir"
 
 #define CFG_VM_CH1_EN       "vm/ch1_en"
 #define CFG_VM_CH2_EN       "vm/ch2_en"
@@ -108,6 +109,7 @@ signals:
     void msgDisplay(const QString name, MsgBoxType type);
     void latencyAndUptime(int latency_fix, int latency_mean, int latency_max, const QString uptime);
     void finished();
+    void coreRender();
 
 private slots:
     void on_serial_errorOccurred(QSerialPort::SerialPortError error);

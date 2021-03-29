@@ -65,13 +65,13 @@
 
 #define CSS_BUTTON_SCAN       " QPushButton { text-align:left; padding-left:7px  }"
 #define CSS_BUTTON_CONNECT    " QPushButton { text-align:left; padding-left:18px }"
-#define CSS_BUTTON_DISCONNECT " QPushButton { text-align:left; padding-left:7px  }"
+#define CSS_BUTTON_DISCONNECT " QPushButton { text-align:left; padding-left:8px  }"
 
-#define CSS_BUTTON_SCOPE      " QPushButton { text-align:left; padding-left:22px }"
-#define CSS_BUTTON_LA         " QPushButton { text-align:left; padding-left:17px }"
-#define CSS_BUTTON_VM         " QPushButton { text-align:left; padding-left:33px }"
-#define CSS_BUTTON_CNTR       " QPushButton { text-align:left; padding-left:43px }"
-#define CSS_BUTTON_PWM        " QPushButton { text-align:left; padding-left:11px }"
+#define CSS_BUTTON_SCOPE      " QPushButton { text-align:left; padding-left:20px }"
+#define CSS_BUTTON_LA         " QPushButton { text-align:left; padding-left:15px }"
+#define CSS_BUTTON_VM         " QPushButton { text-align:left; padding-left:31px }"
+#define CSS_BUTTON_CNTR       " QPushButton { text-align:left; padding-left:41px }"
+#define CSS_BUTTON_PWM        " QPushButton { text-align:left; padding-left:10px }"
 #define CSS_BUTTON_SGEN       " QPushButton { text-align:left; padding-left:8px  }"
 
 #define CSS_BUTTON_CNTR_ON    " QPushButton { text-align:left; padding-left:13px }"
@@ -79,27 +79,38 @@
 #define CSS_BUTTON_SGEN_ON    " QPushButton { text-align:left; padding-left:15px }"
 #define CSS_BUTTON_VM_ON      " QPushButton { text-align:left; padding-left:13px }"
 #define CSS_BUTTON_VM_MAIN    " QPushButton { text-align:left; padding-left:22px }"
+#define CSS_BUTTON_VM_RESET   " QPushButton { text-align:left; padding-left:28px }"
 
 
-#define CSS_BUTTON            "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+#define CSS_BUTTON_ON         "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
                                              background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B); } \
-                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA); } \
                                QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
                                QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \
                                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"
 
-#define CSS_BUTTON_ONOFF      "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
-                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B); } \
-                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:black; } \
-                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:black; } \
+#define CSS_BUTTON_OFF        "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #69D769); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
                                QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \
                                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"
 
 
-#define CSS_BUTTON_NODIS      "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+#define CSS_BUTTON_ON_NODIS   "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
                                              background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B); } \
-                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:black; } \
-                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:black; }  \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; }  \
+                               QPushButton:disabled { color: black; }"
+
+#define CSS_BUTTON_OFF_NODIS  "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #69D769); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; }  \
                                QPushButton:disabled { color: black; }"
 
 #define CSS_INSTR_BUTTON_OFF  "QPushButton {padding: 0.2em 0.2em 0.3em 0.2em; color: gray; border: 1px solid gray; border-radius: 5px;}"

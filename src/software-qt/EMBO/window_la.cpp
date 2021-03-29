@@ -112,17 +112,10 @@ void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 
-    if (type == INFO)
-        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == QUESTION)
-        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
-    else if (type == WARNING)
-        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == CRITICAL)
-        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-
     if (needClose)
         this->close();
+
+    msgBox(this, text, type);
 }
 
 void WindowLa::on_msg_ok_set(const QString fs_real, const QString)

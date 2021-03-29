@@ -15,7 +15,15 @@
 
 #include <QDebug>
 #include <QLabel>
+#include <QInputDialog>
 #include <QMessageBox>
+
+#include <algorithm>
+
+
+#define Y_LIM           0.20
+#define DEFAULT_PLT     300
+#define DEFAULT_AVG     1
 
 
 WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm)
@@ -50,9 +58,11 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     /* statusbar */
 
     m_status_vcc = new QLabel(" ", this);
+    m_status_rec = new QLabel(" ", this);
     QWidget* widget = new QWidget(this);
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_vcc->setFont(font1);
+    m_status_rec->setFont(font1);
 
     QLabel* status_img = new QLabel(this);
     QPixmap status_img_icon = QPixmap(":/main/resources/img/vm.png");
@@ -62,9 +72,26 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     status_img->setFixedHeight(17);
     status_img->setScaledContents(true);
 
+    m_status_line1 = new QFrame(this);
+    m_status_line1->setFrameShape(QFrame::VLine);
+    m_status_line1->setFrameShadow(QFrame::Plain);
+    m_status_line1->setStyleSheet("color:gray;");
+    m_status_line1->setFixedHeight(18);
+    m_status_line1->setVisible(false);
+
+    QLabel* status_spacer2 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer3 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+
+    QSpacerItem* status_spacer0 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
+
     QGridLayout * layout = new QGridLayout(widget);
-    layout->addWidget(status_img,0,0,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_vcc,0,1,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addWidget(status_img,     0,0,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_vcc,   0,1,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer2, 0,2,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line1, 0,3,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer3, 0,4,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_rec,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addItem(status_spacer0,   0,6,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
@@ -72,31 +99,29 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     /* styles */
 
-    QString style0(CSS_BUTTON_ONOFF CSS_BUTTON_VM_MAIN);
+    m_ui->pushButton_enable->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_MAIN);
+    m_ui->pushButton_disable->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_MAIN);
 
-    m_ui->pushButton_enable->setStyleSheet(style0);
-    m_ui->pushButton_disable->setStyleSheet(style0);
+    m_ui->pushButton_enable1->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_enable2->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_enable3->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_enable4->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
 
-    QString style1(CSS_BUTTON_ONOFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_disable1->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_disable2->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_disable3->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_disable4->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
 
-    m_ui->pushButton_enable1->setStyleSheet(style1);
-    m_ui->pushButton_disable1->setStyleSheet(style1);
-    m_ui->pushButton_enable2->setStyleSheet(style1);
-    m_ui->pushButton_disable2->setStyleSheet(style1);
-    m_ui->pushButton_enable3->setStyleSheet(style1);
-    m_ui->pushButton_disable3->setStyleSheet(style1);
-    m_ui->pushButton_enable4->setStyleSheet(style1);
-    m_ui->pushButton_disable4->setStyleSheet(style1);
+    m_ui->pushButton_cursorsHon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_cursorsVon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
 
-    m_ui->pushButton_cursorsHon->setStyleSheet(style1);
-    m_ui->pushButton_cursorsHoff->setStyleSheet(style1);
-    m_ui->pushButton_cursorsVon->setStyleSheet(style1);
-    m_ui->pushButton_cursorsVoff->setStyleSheet(style1);
+    m_ui->pushButton_cursorsHoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_cursorsVoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
 
-    QString style2(CSS_SPINBOX);
+    m_ui->pushButton_reset->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESET);
 
-    m_ui->spinBox_average->setStyleSheet(style2);
-    m_ui->spinBox_display->setStyleSheet(style2);
+    m_ui->spinBox_average->setStyleSheet(CSS_SPINBOX);
+    m_ui->spinBox_display->setStyleSheet(CSS_SPINBOX);
 
     /* settings */
 
@@ -105,8 +130,8 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     Settings::getValue(CFG_VM_CH3_EN, false).toBool() ? on_pushButton_enable3_clicked() : on_pushButton_disable3_clicked();
     Settings::getValue(CFG_VM_CH4_EN, false).toBool() ? on_pushButton_enable4_clicked() : on_pushButton_disable4_clicked();
 
-    on_spinBox_average_valueChanged(Settings::getValue(CFG_VM_AVG, 1).toInt());
-    on_spinBox_display_valueChanged(Settings::getValue(CFG_VM_PLT, 300).toInt());
+    on_spinBox_average_valueChanged(Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
+    on_spinBox_display_valueChanged(Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
 
     m_instrEnabled = true;
 }
@@ -123,14 +148,14 @@ void WindowVm::initQcp()
     m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR5)));
     m_ui->customPlot->graph(GRAPH_CH4)->setPen(QPen(QColor(COLOR4)));
 
-    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(true);
-    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(true);
-    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(true);
-    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(true);
+    m_spline = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(m_spline);
+    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(m_spline);
+    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(m_spline);
+    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(m_spline);
 
     m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,15));
-
-    m_spline = true;
 
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
     timeTicker->setTimeFormat("%h:%m:%s");
@@ -181,24 +206,18 @@ void WindowVm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 
-    if (type == INFO)
-        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == QUESTION)
-        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
-    else if (type == WARNING)
-        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == CRITICAL)
-        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-
     if (needClose)
         this->close();
+
+    msgBox(this, text, type);
 }
 
 void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString ch3, const QString ch4, const QString vcc) // 100 Hz idealy
 {
     if (m_instrEnabled && m_activeMsg != Q_NULLPTR)
     {
-        double t = (m_timer_elapsed.elapsed() - m_elapsed_diff) / 1000.0;
+        double t_ms = (m_timer_elapsed.elapsed() - m_elapsed_diff);
+        double t = t_ms / 1000.0;
 
         double _ch1 = ch1.toDouble() * m_gain1;
         double _ch2 = ch2.toDouble() * m_gain2;
@@ -230,6 +249,7 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
 
         m_data_fresh = true;
 
+        /*
         if (m_meas_ch == GRAPH_CH1)
         {
             if (m_data_ch1 > m_meas_max) m_meas_max = m_data_ch1;
@@ -249,6 +269,22 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
         {
             if (m_data_ch4 > m_meas_max) m_meas_max = m_data_ch4;
             if (m_data_ch4 < m_meas_min) m_meas_min = m_data_ch4;
+        }
+        */
+
+        if (m_recording)
+        {
+            rec << t_ms;
+            if (m_en1)
+                rec << m_data_ch1;
+            if (m_en2)
+                rec << m_data_ch2;
+            if (m_en3)
+                rec << m_data_ch3;
+            if (m_en4)
+                rec << m_data_ch4;
+            if (m_en1 + m_en2 + m_en3 + m_en4 > 0)
+                rec << ENDL;
         }
     }
 }
@@ -308,21 +344,21 @@ void WindowVm::on_timer_render() // 30 FPS
             Core::getInstance()->getDevInfo()->ref_mv = vcc_mv;
             m_status_vcc->setText(" Vcc: " + vcc_mv_s + " mV");
 
-            if (m_meas_en && m_meas_max > -1000 && m_meas_min < 1000)
+            if (m_meas_en) //&& m_meas_max > -1000 && m_meas_min < 1000)
             {
                 QString meas_vpp_s;
                 QString meas_avg_s;
                 QString meas_min_s;
                 QString meas_max_s;
 
-                auto data_begin = m_ui->customPlot->graph(m_meas_ch)->data()->begin();
-                auto data_end = m_ui->customPlot->graph(m_meas_ch)->data()->end();
+                auto data_begin = m_ui->customPlot->graph(m_meas_ch)->data()->constBegin();
+                auto data_end = m_ui->customPlot->graph(m_meas_ch)->data()->constEnd();
 
-                double vpp = m_meas_max - m_meas_min;
                 double _avg = std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + b.value;}) / std::distance(data_begin, data_end);
                 double avg = m_meanAvg.getMean(_avg);
-                double min = m_meas_min;
-                double max = m_meas_max;
+                double min = std::min_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_min;
+                double max = std::max_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_max;
+                double vpp = max - min;
 
                 meas_vpp_s = meas_vpp_s.asprintf(vpp >= 100 || vpp <= -10  ? "%.2f" : (vpp >= 10 || vpp < 0 ? "%.3f" : "%.4f"), vpp);
                 meas_avg_s = meas_avg_s.asprintf(avg >= 100 || avg <= -10  ? "%.2f" : (avg >= 10 || avg < 0 ? "%.3f" : "%.4f"), avg);
@@ -358,6 +394,20 @@ void WindowVm::updatePlotData()
     m_ui->customPlot->yAxis->rescale();
     m_ui->customPlot->xAxis->setRange(key, m_display, Qt::AlignRight);
 
+    double max_scale = 0;
+    double min_scale = 0;
+    if (m_en1 && m_gain1 > max_scale) max_scale = m_gain1;
+    else if (m_en1 && m_gain1 < min_scale) min_scale = m_gain1;
+    if (m_en2 && m_gain2 > max_scale) max_scale = m_gain2;
+    else if (m_en2 && m_gain2 < min_scale) min_scale = m_gain2;
+    if (m_en3 && m_gain3 > max_scale) max_scale = m_gain3;
+    else if (m_en3 && m_gain3 < min_scale) min_scale = m_gain3;
+    if (m_en4 && m_gain4 > max_scale) max_scale = m_gain4;
+    else if (m_en4 && m_gain4 < min_scale) min_scale = m_gain4;
+
+    m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
+
+    /*
     if (m_old_range != m_ui->customPlot->yAxis->range())
     {
         auto low_range = m_ui->customPlot->yAxis->range().lower;
@@ -366,6 +416,7 @@ void WindowVm::updatePlotData()
 
         m_ui->customPlot->yAxis->setRange(low_range - hysteris,up_range + hysteris);
     }
+    */
 
     if (m_cursorsV_en || m_cursorsH_en)
     {
@@ -385,32 +436,139 @@ void WindowVm::updatePlotData()
 
 void WindowVm::on_actionStart_triggered()
 {
-    // REC - TODO CLASS
+    auto info = Core::getInstance()->getDevInfo();
+    auto sys = QSysInfo();
+
+    QMap<QString, QString> header {
+        {"Common.Created",  {QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz")}},
+        {"Common.Version",  "EMBO " + QString(APP_VERSION)},
+        {"Common.System",   {sys.prettyProductName() + " [" + sys.currentCpuArchitecture() + "]"}},
+        {"Common.Device",   info->name},
+        {"Common.Firmware", info->fw},
+        {"Common.Vcc",      QString::number(info->ref_mv) + " mV"},
+        {"Common.Mode",     "VM"},
+        {"VM.PlotPoints",   QString::number(m_display_pts)},
+        {"VM.Average",      QString::number(m_average)},
+    };
+    bool ret = rec.createFile("VM", header);
+
+    if (!ret)
+    {
+        msgBox(this, "Write file at: " + rec.getDir() + " failed!", CRITICAL);
+    }
+    else
+    {
+        rec << "t(ms)";
+        if (m_en1) rec << "CH1(V)";
+        if (m_en2) rec << "CH2(V)";
+        if (m_en3) rec << "CH3(V)";
+        if (m_en4) rec << "CH4(V)";
+        rec << ENDL;
+
+        m_recording = true;
+
+        m_ui->actionStart->setEnabled(false);
+        m_ui->actionStop->setEnabled(true);
+
+        m_ui->actionFormat->setEnabled(false);
+        m_ui->actionFolder->setEnabled(false);
+
+        m_status_rec->setText("Recording to: " + rec.getFilePath());
+
+        m_status_rec->setVisible(true);
+        m_status_line1->setVisible(true);
+    }
 }
 
 void WindowVm::on_actionStop_triggered()
 {
-    // REC - TODO CLASS
+    m_recording = false;
+
+    m_ui->actionStart->setEnabled(true);
+    m_ui->actionStop->setEnabled(false);
+
+    m_ui->actionFormat->setEnabled(true);
+    m_ui->actionFolder->setEnabled(true);
+
+    m_status_rec->setVisible(false);
+    m_status_line1->setVisible(false);
+
+    QString ret = rec.closeFile();
+
+    msgBox(this, "File saved at: " + ret, INFO);
+}
+
+void WindowVm::on_actionScreenshot_triggered()
+{
+     QString ret = rec.takeScreenshot("VM", m_ui->customPlot);
+
+     if (ret.isEmpty())
+         msgBox(this, "Write file at: " + rec.getDir() + " failed!", CRITICAL);
+     else
+         msgBox(this, "File saved at: " + ret, INFO);
 }
 
 void WindowVm::on_actionFolder_triggered()
 {
-    // REC - TODO CLASS
+    bool ok;
+    QString dir_saved = Settings::getValue(CFG_REC_DIR, rec.getDir()).toString();
+    QString dir = QInputDialog::getText(this, "EMBO - Recordings", "Directory path:", QLineEdit::Normal, dir_saved, &ok);
+
+    if (ok && !dir.isEmpty())
+    {
+        if (!rec.setDir(dir))
+            msgBox(this, "Directory create failed!", CRITICAL);
+        else
+            Settings::setValue(CFG_REC_DIR, dir);
+    }
 }
 
 void WindowVm::on_actionCSV_triggered(bool checked)
 {
-    // REC - TODO CLASS
+    if (checked)
+    {
+        rec.setDelim(CSV);
+
+        m_ui->actionTXT_Tabs->setChecked(false);
+        m_ui->actionTXT_Semicolon->setChecked(false);
+        m_ui->actionMAT->setChecked(false);
+    }
 }
 
 void WindowVm::on_actionTXT_Tabs_triggered(bool checked)
 {
-    // REC - TODO CLASS
+    if (checked)
+    {
+        rec.setDelim(CSV);
+
+        m_ui->actionCSV->setChecked(false);
+        m_ui->actionTXT_Semicolon->setChecked(false);
+        m_ui->actionMAT->setChecked(false);
+    }
+}
+
+void WindowVm::on_actionTXT_Semicolon_triggered(bool checked)
+{
+    if (checked)
+    {
+        rec.setDelim(CSV);
+
+        m_ui->actionCSV->setChecked(false);
+        m_ui->actionTXT_Tabs->setChecked(false);
+        m_ui->actionMAT->setChecked(false);
+    }
 }
 
 void WindowVm::on_actionMAT_triggered(bool checked)
 {
-    // REC - TODO CLASS
+    if (checked)
+    {
+        //rec.setDelim(MAT); // not implemented yet
+
+        m_ui->actionCSV->setChecked(false);
+        m_ui->actionTXT_Tabs->setChecked(false);
+        m_ui->actionTXT_Semicolon->setChecked(false);
+    }
 }
 
 void WindowVm::on_actionLines_triggered(bool checked)
@@ -482,6 +640,9 @@ void WindowVm::on_pushButton_disable1_clicked()
     m_ui->doubleSpinBox_gain1->setEnabled(false);
 
     Settings::setValue(CFG_VM_CH1_EN, false);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_enable1_clicked()
@@ -494,6 +655,9 @@ void WindowVm::on_pushButton_enable1_clicked()
     m_ui->doubleSpinBox_gain1->setEnabled(true);
 
     Settings::setValue(CFG_VM_CH1_EN, true);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_disable2_clicked()
@@ -508,6 +672,9 @@ void WindowVm::on_pushButton_disable2_clicked()
     m_ui->doubleSpinBox_gain2->setEnabled(false);
 
     Settings::setValue(CFG_VM_CH2_EN, false);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_enable2_clicked()
@@ -520,6 +687,9 @@ void WindowVm::on_pushButton_enable2_clicked()
     m_ui->doubleSpinBox_gain2->setEnabled(true);
 
     Settings::setValue(CFG_VM_CH2_EN, true);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_disable3_clicked()
@@ -534,6 +704,9 @@ void WindowVm::on_pushButton_disable3_clicked()
     m_ui->doubleSpinBox_gain3->setEnabled(false);
 
     Settings::setValue(CFG_VM_CH3_EN, false);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_enable3_clicked()
@@ -546,6 +719,9 @@ void WindowVm::on_pushButton_enable3_clicked()
     m_ui->doubleSpinBox_gain3->setEnabled(true);
 
     Settings::setValue(CFG_VM_CH3_EN, true);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_disable4_clicked()
@@ -560,6 +736,9 @@ void WindowVm::on_pushButton_disable4_clicked()
     m_ui->doubleSpinBox_gain4->setEnabled(false);
 
     Settings::setValue(CFG_VM_CH4_EN, false);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_enable4_clicked()
@@ -572,6 +751,9 @@ void WindowVm::on_pushButton_enable4_clicked()
     m_ui->doubleSpinBox_gain4->setEnabled(true);
 
     Settings::setValue(CFG_VM_CH4_EN, true);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_doubleSpinBox_gain1_valueChanged(double arg1)
@@ -607,6 +789,7 @@ void WindowVm::on_pushButton_disable_clicked()
     m_ui->textBrowser_ch3->setEnabled(false);
     m_ui->textBrowser_ch4->setEnabled(false);
 
+    /*
     m_ui->pushButton_disable1->setEnabled(false);
     m_ui->pushButton_enable1->setEnabled(false);
     m_ui->pushButton_disable2->setEnabled(false);
@@ -615,6 +798,7 @@ void WindowVm::on_pushButton_disable_clicked()
     m_ui->pushButton_enable3->setEnabled(false);
     m_ui->pushButton_disable4->setEnabled(false);
     m_ui->pushButton_enable4->setEnabled(false);
+    */
 
     m_ui->doubleSpinBox_gain1->setEnabled(false);
     m_ui->doubleSpinBox_gain2->setEnabled(false);
@@ -655,6 +839,7 @@ void WindowVm::on_pushButton_enable_clicked()
     m_ui->textBrowser_ch3->setEnabled(true);
     m_ui->textBrowser_ch4->setEnabled(true);
 
+    /*
     m_ui->pushButton_disable1->setEnabled(true);
     m_ui->pushButton_enable1->setEnabled(true);
     m_ui->pushButton_disable2->setEnabled(true);
@@ -663,6 +848,7 @@ void WindowVm::on_pushButton_enable_clicked()
     m_ui->pushButton_enable3->setEnabled(true);
     m_ui->pushButton_disable4->setEnabled(true);
     m_ui->pushButton_enable4->setEnabled(true);
+    */
 
     m_ui->doubleSpinBox_gain1->setEnabled(true);
     m_ui->doubleSpinBox_gain2->setEnabled(true);
@@ -707,6 +893,7 @@ void WindowVm::on_spinBox_display_valueChanged(int arg1)
 {
     m_ui->dial_display->setValue(arg1);
 
+    m_display_pts = arg1;
     m_display = (double)arg1 / ((double)TIMER_VM_RENDER);
 
     Settings::setValue(CFG_VM_PLT, arg1);
@@ -929,6 +1116,57 @@ void WindowVm::on_actionMath_3_4_triggered(bool checked)
         m_ui->pushButton_enable4->setText("CH4 ON  ");
         m_ui->pushButton_disable4->setText("CH4 OFF");
     }
+}
+
+void WindowVm::on_pushButton_reset_clicked()
+{
+    bool en = m_instrEnabled;
+
+    on_pushButton_disable_clicked();
+
+    on_actionChannel_1_triggered(true);
+    on_actionEnabled_triggered(true);
+    on_actionReset_triggered();
+
+    on_actionMath_1_2_triggered(false);
+    on_actionMath_3_4_triggered(false);
+
+    on_pushButton_cursorsVoff_clicked();
+    on_pushButton_cursorsHoff_clicked();
+
+    on_pushButton_disable1_clicked();
+    on_pushButton_disable2_clicked();
+    on_pushButton_disable3_clicked();
+    on_pushButton_disable4_clicked();
+    on_pushButton_enable1_clicked();
+    on_pushButton_enable2_clicked();
+
+    m_ui->spinBox_average->setValue(DEFAULT_AVG);
+    m_ui->spinBox_display->setValue(DEFAULT_PLT);
+
+    if (m_recording)
+        on_actionStop_triggered();
+    rec.reset();
+    Settings::setValue(CFG_REC_DIR, rec.getDir());
+    on_actionCSV_triggered(true);
+
+    m_ui->doubleSpinBox_gain1->setValue(1);
+    m_ui->doubleSpinBox_gain2->setValue(1);
+    m_ui->doubleSpinBox_gain3->setValue(1);
+    m_ui->doubleSpinBox_gain4->setValue(1);
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    m_smplBuff.clear();
+    m_data_fresh = false;
+
+    if (en)
+        on_pushButton_enable_clicked();
+    else
+        m_ui->customPlot->replot();
 }
 
 /* private */

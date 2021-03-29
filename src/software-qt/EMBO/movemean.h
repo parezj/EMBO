@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <limits>
+#include <algorithm>
 
 #ifndef MOVEMEAN_H
 #define MOVEMEAN_H
@@ -88,6 +89,8 @@ double MoveMean<T>::getMax()
             ret = m_buff[i];
     }
     return ret;
+
+    //return (double)*std::max_element(std::begin(m_buff), std::end(m_buff));
 }
 
 template <class T>
@@ -100,6 +103,8 @@ double MoveMean<T>::getMin()
             ret = m_buff[i];
     }
     return ret;
+
+    //return (double)*std::min_element(std::begin(m_buff), std::end(m_buff));
 }
 
 #endif // MOVEMEAN_H

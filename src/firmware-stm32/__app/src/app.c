@@ -17,12 +17,12 @@
 #include "task.h"
 #include "semphr.h"
 
-
-#define EM_STACK_T1     64
-#define EM_STACK_T2     64
-#define EM_STACK_T3     64
-#define EM_STACK_T4     512
-#define EM_STACK_T5     64
+// units = uint32_t
+#define EM_STACK_T1     40
+#define EM_STACK_T2     50
+#define EM_STACK_T3     40
+#define EM_STACK_T4     300
+#define EM_STACK_T5     50
 
 #define EM_PRI_T1       3
 #define EM_PRI_T2       1
@@ -54,6 +54,14 @@ StaticSemaphore_t buff_sem3_cntr; // counter enable
 StaticSemaphore_t buff_mtx1;      // mutex for comm and trig
 
 volatile uint8_t init_done = 0;   // system initialized
+
+#ifdef EM_DEBUG
+volatile UBaseType_t watermark_t1;
+volatile UBaseType_t watermark_t2;
+volatile UBaseType_t watermark_t3;
+volatile UBaseType_t watermark_t4;
+volatile UBaseType_t watermark_t5;
+#endif
 
 
 void app_main(void)
@@ -94,6 +102,10 @@ void t1_wd(void* p)
         led_blink_do(&led, daq.uwTick);
 
         vTaskDelay(10);
+
+#ifdef EM_DEBUG
+        watermark_t1 = uxTaskGetStackHighWaterMark(NULL);
+#endif
     }
 }
 
@@ -111,6 +123,10 @@ void t2_trig_check(void* p)
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
         vTaskDelay(5);
+
+#ifdef EM_DEBUG
+        watermark_t2 = uxTaskGetStackHighWaterMark(NULL);
+#endif
     }
 }
 
@@ -127,6 +143,10 @@ void t3_trig_post_count(void* p)
         daq_trig_postcount(&daq);
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
+
+#ifdef EM_DEBUG
+        watermark_t3 = uxTaskGetStackHighWaterMark(NULL);
+#endif
     }
 }
 
@@ -166,6 +186,10 @@ void t4_comm_and_init(void* p)
             led_blink_set(&led, 1, EM_BLINK_SHORT_MS, daq.uwTick);
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
+
+#ifdef EM_DEBUG
+        watermark_t4 = uxTaskGetStackHighWaterMark(NULL);
+#endif
     }
 }
 
@@ -182,6 +206,10 @@ void t5_cntr(void* p)
         {
             cntr_meas(&cntr);
             vTaskDelay(50);
+
+#ifdef EM_DEBUG
+        watermark_t5 = uxTaskGetStackHighWaterMark(NULL);
+#endif
         }
     }
 }

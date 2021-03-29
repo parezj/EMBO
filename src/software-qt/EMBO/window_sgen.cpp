@@ -58,25 +58,19 @@ WindowSgen::WindowSgen(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->radioButton_sine->setChecked(true);
     on_radioButton_sine_clicked();
 
-    QString style1(CSS_BUTTON_NODIS CSS_BUTTON_SGEN_ON);
+    m_ui->pushButton_enable->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_SGEN_ON);
+    m_ui->pushButton_disable->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_SGEN_ON);
 
-    m_ui->pushButton_enable->setStyleSheet(style1);
-    m_ui->pushButton_disable->setStyleSheet(style1);
+    m_ui->radioButton_const->setStyleSheet(CSS_RADIOBUTTON);
+    m_ui->radioButton_sine->setStyleSheet(CSS_RADIOBUTTON);
+    m_ui->radioButton_triangle->setStyleSheet(CSS_RADIOBUTTON);
+    m_ui->radioButton_saw->setStyleSheet(CSS_RADIOBUTTON);
+    m_ui->radioButton_square->setStyleSheet(CSS_RADIOBUTTON);
+    m_ui->radioButton_noise->setStyleSheet(CSS_RADIOBUTTON);
 
-    QString style2(CSS_RADIOBUTTON);
-
-    m_ui->radioButton_const->setStyleSheet(style2);
-    m_ui->radioButton_sine->setStyleSheet(style2);
-    m_ui->radioButton_triangle->setStyleSheet(style2);
-    m_ui->radioButton_saw->setStyleSheet(style2);
-    m_ui->radioButton_square->setStyleSheet(style2);
-    m_ui->radioButton_noise->setStyleSheet(style2);
-
-    QString style3(CSS_SPINBOX_NODIS);
-
-    m_ui->spinBox_freq->setStyleSheet(style3);
-    m_ui->spinBox_ampl->setStyleSheet(style3);
-    m_ui->spinBox_offset->setStyleSheet(style3);
+    m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX_NODIS);
+    m_ui->spinBox_ampl->setStyleSheet(CSS_SPINBOX_NODIS);
+    m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
 }
 
 WindowSgen::~WindowSgen()
@@ -97,19 +91,12 @@ void WindowSgen::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 
-    if (type == INFO)
-        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == QUESTION)
-        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
-    else if (type == WARNING)
-        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == CRITICAL)
-        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-
     if (needClose)
         this->close();
     else
         enableAll(true);
+
+    msgBox(this, text, type);
 }
 
 void WindowSgen::on_msg_set(SgenMode mode, double freq, int ampl, int offset, bool enable)

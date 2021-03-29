@@ -189,7 +189,7 @@ QPushButton:pressed
     </widget>
     <widget class="QPushButton" name="pushButton_connect">
      <property name="enabled">
-      <bool>false</bool>
+      <bool>true</bool>
      </property>
      <property name="geometry">
       <rect>
@@ -242,7 +242,7 @@ QPushButton:pressed
      </property>
      <property name="icon">
       <iconset resource="resources.qrc">
-       <normaloff>:/main/resources/img/power-off-green3.png</normaloff>:/main/resources/img/power-off-green3.png</iconset>
+       <normaloff>:/main/resources/img/power-off-red.png</normaloff>:/main/resources/img/power-off-red.png</iconset>
      </property>
     </widget>
     <widget class="QPushButton" name="pushButton_disconnect">
@@ -276,7 +276,7 @@ QPushButton:pressed
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
 	text-align:left;
-	padding-left:7px
+	padding-left:8px
 }
 
 QPushButton:hover:!pressed
@@ -296,11 +296,11 @@ QPushButton:pressed
 }</string>
      </property>
      <property name="text">
-      <string>Disconnect</string>
+      <string>Connected</string>
      </property>
      <property name="icon">
       <iconset resource="resources.qrc">
-       <normaloff>:/main/resources/img/power-off-red.png</normaloff>:/main/resources/img/power-off-red.png</iconset>
+       <normaloff>:/main/resources/img/power-off-green3.png</normaloff>:/main/resources/img/power-off-green3.png</iconset>
      </property>
     </widget>
    </widget>
@@ -804,7 +804,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
     text-align:left;
-	padding-left:22px
+	padding-left:20px
 }
 
 QPushButton:hover:!pressed
@@ -824,7 +824,7 @@ QPushButton:pressed
 }</string>
       </property>
       <property name="text">
-       <string>Oscilloscope</string>
+       <string> Oscilloscope</string>
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
@@ -1154,7 +1154,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
     text-align:left;
-	padding-left:17px
+	padding-left:15px
 }
 
 QPushButton:hover:!pressed
@@ -1174,7 +1174,7 @@ QPushButton:pressed
 }</string>
       </property>
       <property name="text">
-       <string>Logic Analyzer</string>
+       <string> Logic Analyzer</string>
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
@@ -1452,7 +1452,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
     text-align:left;
-	padding-left:33px
+	padding-left:31px
 }
 
 QPushButton:hover:!pressed
@@ -1472,7 +1472,7 @@ QPushButton:pressed
 }</string>
       </property>
       <property name="text">
-       <string>Voltmeter</string>
+       <string> Voltmeter</string>
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
@@ -1784,7 +1784,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
     text-align:left;
-	padding-left:11px
+	padding-left:10px
 }
 
 QPushButton:hover:!pressed
@@ -1804,7 +1804,7 @@ QPushButton:pressed
 }</string>
       </property>
       <property name="text">
-       <string>PWM Generator</string>
+       <string> PWM Generator</string>
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
@@ -2278,7 +2278,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}
                                   stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
     color: black;
     text-align:left;
-	padding-left:43px
+	padding-left:41px
 }
 
 QPushButton:hover:!pressed
@@ -2298,7 +2298,7 @@ QPushButton:pressed
 }</string>
       </property>
       <property name="text">
-       <string>Counter</string>
+       <string> Counter</string>
       </property>
       <property name="icon">
        <iconset resource="resources.qrc">
@@ -2573,8 +2573,9 @@ QLabel:hover {border-image: url(:/main/resources/img/ctu_meas_small2.png); }</st
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionAbout"/>
+    <addaction name="actionDocumentation"/>
     <addaction name="actionCheck_Updates"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuAbout"/>
   </widget>
@@ -2639,6 +2640,17 @@ QLabel:hover {border-image: url(:/main/resources/img/ctu_meas_small2.png); }</st
   <action name="actionOpenProgrammer">
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionDocumentation">
+   <property name="text">
+    <string>Documentation</string>
    </property>
    <property name="font">
     <font>

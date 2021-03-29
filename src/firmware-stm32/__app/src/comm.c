@@ -20,7 +20,7 @@
 
 
 #define SCPI_INPUT_BUFFER_LENGTH    256
-#define SCPI_ERROR_QUEUE_SIZE       17
+#define SCPI_ERROR_QUEUE_SIZE       1
 
 
 // respond

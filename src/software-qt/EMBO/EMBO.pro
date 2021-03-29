@@ -1,4 +1,4 @@
-QT       += core gui network serialport
+QT       += core gui network serialport help
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -57,6 +57,7 @@ SOURCES += \
     messages.cpp \
     msg.cpp \
     qcpcursors.cpp \
+    recorder.cpp \
     settings.cpp \
     utils.cpp \
     window__main.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     movemean.h \
     msg.h \
     qcpcursors.h \
+    recorder.h \
     settings.h \
     utils.h \
     window__main.h \

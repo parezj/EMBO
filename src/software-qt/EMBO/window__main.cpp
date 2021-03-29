@@ -107,23 +107,21 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_SGEN);
     m_ui->groupBox_cntr->setStyleSheet(CSS_INSTR_GROUP_CNTR);
 
-    QString style2(CSS_GROUP2);
+    m_ui->groupBox_device->setStyleSheet(CSS_GROUP2);
+    m_ui->groupBox_instr1->setStyleSheet(CSS_GROUP2);
+    m_ui->groupBox_instr2->setStyleSheet(CSS_GROUP2);
+    m_ui->groupBox_ports->setStyleSheet(CSS_GROUP2);
 
-    m_ui->groupBox_device->setStyleSheet(style2);
-    m_ui->groupBox_instr1->setStyleSheet(style2);
-    m_ui->groupBox_instr2->setStyleSheet(style2);
-    m_ui->groupBox_ports->setStyleSheet(style2);
+    m_ui->pushButton_connect->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_CONNECT);
+    m_ui->pushButton_disconnect->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_DISCONNECT);
+    m_ui->pushButton_scan->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_SCAN);
 
-    m_ui->pushButton_connect->setStyleSheet(CSS_BUTTON CSS_BUTTON_CONNECT);
-    m_ui->pushButton_disconnect->setStyleSheet(CSS_BUTTON CSS_BUTTON_DISCONNECT);
-    m_ui->pushButton_scan->setStyleSheet(CSS_BUTTON CSS_BUTTON_SCAN);
-
-    m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON CSS_BUTTON_SCOPE);
-    m_ui->pushButton_la->setStyleSheet(CSS_BUTTON CSS_BUTTON_LA);
-    m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON CSS_BUTTON_VM);
-    m_ui->pushButton_cntr->setStyleSheet(CSS_BUTTON CSS_BUTTON_CNTR);
-    m_ui->pushButton_pwm->setStyleSheet(CSS_BUTTON CSS_BUTTON_PWM);
-    m_ui->pushButton_sgen->setStyleSheet(CSS_BUTTON CSS_BUTTON_SGEN);
+    m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_SCOPE);
+    m_ui->pushButton_la->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_LA);
+    m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM);
+    m_ui->pushButton_cntr->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_CNTR);
+    m_ui->pushButton_pwm->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_PWM);
+    m_ui->pushButton_sgen->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_SGEN);
 
     auto updater = QSimpleUpdater::getInstance();
 
@@ -623,14 +621,7 @@ void WindowMain::on_coreState_changed(const State newState)
 
 void WindowMain::on_msgDisplay(const QString text, MsgBoxType type)
 {
-    if (type == INFO)
-        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == QUESTION)
-        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
-    else if (type == WARNING)
-        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == CRITICAL)
-        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
+    msgBox(this, text, type);
 }
 
 void WindowMain::on_instrClose(const char* className)
@@ -644,26 +635,26 @@ void WindowMain::on_instrClose(const char* className)
     else if (className == WindowCntr::staticMetaObject.className())
     {
         m_ui->pushButton_cntr->setEnabled(true);
-        m_ui->pushButton_cntr->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_CNTR));
+        m_ui->pushButton_cntr->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_CNTR);
 
         m_ui->groupBox_cntr->setEnabled(true);
-        m_ui->groupBox_cntr->setStyleSheet(QString(CSS_INSTR_GROUP_CNTR));
+        m_ui->groupBox_cntr->setStyleSheet(CSS_INSTR_GROUP_CNTR);
     }
     else if (className == WindowPwm::staticMetaObject.className())
     {
         m_ui->pushButton_pwm->setEnabled(true);
-        m_ui->pushButton_pwm->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_PWM));
+        m_ui->pushButton_pwm->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_PWM);
 
         m_ui->groupBox_pwm->setEnabled(true);
-        m_ui->groupBox_pwm->setStyleSheet(QString(CSS_INSTR_GROUP_PWM));
+        m_ui->groupBox_pwm->setStyleSheet(CSS_INSTR_GROUP_PWM);
     }
     else if (className == WindowSgen::staticMetaObject.className())
     {
         m_ui->pushButton_sgen->setEnabled(true);
-        m_ui->pushButton_sgen->setStyleSheet(QString(CSS_BUTTON CSS_BUTTON_SGEN));
+        m_ui->pushButton_sgen->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_SGEN);
 
         m_ui->groupBox_sgen->setEnabled(true);
-        m_ui->groupBox_sgen->setStyleSheet(QString(CSS_INSTR_GROUP_SGEN));
+        m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_SGEN);
     }
 }
 
@@ -679,19 +670,15 @@ void WindowMain::instrFirstRowEnable(bool enable)
         m_ui->groupBox_la->setStyleSheet(CSS_INSTR_GROUP_LA);
         m_ui->groupBox_vm->setStyleSheet(CSS_INSTR_GROUP_VM);
 
-        m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON CSS_BUTTON_SCOPE);
-        m_ui->pushButton_la->setStyleSheet(CSS_BUTTON CSS_BUTTON_LA);
-        m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON CSS_BUTTON_VM);
+        m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_SCOPE);
+        m_ui->pushButton_la->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_LA);
+        m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM);
     }
     else
     {
         m_ui->groupBox_scope->setStyleSheet(CSS_INSTR_GROUP_OFF);
         m_ui->groupBox_la->setStyleSheet(CSS_INSTR_GROUP_OFF);
         m_ui->groupBox_vm->setStyleSheet(CSS_INSTR_GROUP_OFF);
-
-        //m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-        //m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-        //m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
     }
 }
 
@@ -700,8 +687,10 @@ void WindowMain::on_pushButton_scope_clicked()
     m_w_scope->show();
     m_w_scope->activateWindow();
 
-    //m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    //m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_SCOPE);
+
+    m_ui->groupBox_la->setStyleSheet(CSS_INSTR_GROUP_OFF);
+    m_ui->groupBox_vm->setStyleSheet(CSS_INSTR_GROUP_OFF);
 
     m_ui->pushButton_la->setEnabled(false);
     m_ui->pushButton_vm->setEnabled(false);
@@ -714,8 +703,10 @@ void WindowMain::on_pushButton_la_clicked()
     m_w_la->show();
     m_w_la->activateWindow();
 
-    //m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    //m_ui->pushButton_vm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_la->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_LA);
+
+    m_ui->groupBox_scope->setStyleSheet(CSS_INSTR_GROUP_OFF);
+    m_ui->groupBox_vm->setStyleSheet(CSS_INSTR_GROUP_OFF);
 
     m_ui->pushButton_scope->setEnabled(false);
     m_ui->pushButton_vm->setEnabled(false);
@@ -728,8 +719,10 @@ void WindowMain::on_pushButton_vm_clicked()
     m_w_vm->show();
     m_w_vm->activateWindow();
 
-    //m_ui->pushButton_scope->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
-    //m_ui->pushButton_la->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM);
+
+    m_ui->groupBox_scope->setStyleSheet(CSS_INSTR_GROUP_OFF);
+    m_ui->groupBox_la->setStyleSheet(CSS_INSTR_GROUP_OFF);
 
     m_ui->pushButton_scope->setEnabled(false);
     m_ui->pushButton_la->setEnabled(false);
@@ -742,7 +735,7 @@ void WindowMain::on_pushButton_cntr_clicked()
     m_w_cntr->show();
     m_w_cntr->activateWindow();
 
-    //m_ui->pushButton_cntr->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_cntr->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_CNTR);
     m_ui->groupBox_cntr->setStyleSheet(CSS_INSTR_GROUP_OFF);
 }
 
@@ -751,7 +744,7 @@ void WindowMain::on_pushButton_pwm_clicked()
     m_w_pwm->show();
     m_w_pwm->activateWindow();
 
-    //m_ui->pushButton_pwm->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_pwm->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_PWM);
     m_ui->groupBox_pwm->setStyleSheet(CSS_INSTR_GROUP_OFF);
 }
 
@@ -760,7 +753,7 @@ void WindowMain::on_pushButton_sgen_clicked()
     m_w_sgen->show();
     m_w_sgen->activateWindow();
 
-    //m_ui->pushButton_sgen->setStyleSheet(QString(CSS_INSTR_BUTTON_OFF));
+    m_ui->pushButton_sgen->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_SGEN);
     m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_OFF);
 }
 

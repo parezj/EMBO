@@ -6,17 +6,11 @@
 #ifndef MSG_H
 #define MSG_H
 
+#include "containers.h"
+
 #include <QObject>
 #include <QString>
 #include <QDebug>
-
-enum MsgBoxType
-{
-    INFO,
-    QUESTION,
-    WARNING,
-    CRITICAL
-};
 
 
 class Msg : public QObject

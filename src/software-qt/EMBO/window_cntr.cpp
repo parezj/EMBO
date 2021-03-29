@@ -61,15 +61,11 @@ WindowCntr::WindowCntr(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_mode.addButton(m_ui->radioButton_fast);
     m_mode.setExclusive(true);
 
-    QString style1(CSS_BUTTON_NODIS CSS_BUTTON_CNTR_ON);
+    m_ui->pushButton_enable->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_CNTR_ON);
+    m_ui->pushButton_disable->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_CNTR_ON);
 
-    m_ui->pushButton_enable->setStyleSheet(style1);
-    m_ui->pushButton_disable->setStyleSheet(style1);
-
-    QString style2(CSS_TEXTBOX);
-
-    m_ui->textBrowser_freq->setStyleSheet(style2);
-    m_ui->textBrowser_period->setStyleSheet(style2);
+    m_ui->textBrowser_freq->setStyleSheet(CSS_TEXTBOX);
+    m_ui->textBrowser_period->setStyleSheet(CSS_TEXTBOX);
 }
 
 WindowCntr::~WindowCntr()
@@ -99,17 +95,10 @@ void WindowCntr::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 
-    if (type == INFO)
-        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == QUESTION)
-        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
-    else if (type == WARNING)
-        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == CRITICAL)
-        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-
     if (needClose)
         this->close();
+
+    msgBox(this, text, type);
 }
 
 void WindowCntr::on_msg_enable(bool enabled, bool fastMode)

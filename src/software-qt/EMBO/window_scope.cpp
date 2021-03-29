@@ -55,12 +55,12 @@ void WindowScope::initQcp()
     m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR5)));
     m_ui->customPlot->graph(GRAPH_CH4)->setPen(QPen(QColor(COLOR4)));
 
-    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(true);
-    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(true);
-    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(true);
-    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(true);
-
     m_spline = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(m_spline);
+    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(m_spline);
+    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(m_spline);
+    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(m_spline);
 
     m_ui->customPlot->xAxis->setVisible(true);
     m_ui->customPlot->xAxis->setTickLabels(true);
@@ -113,17 +113,10 @@ void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose
 {
     m_activeMsg = Q_NULLPTR;
 
-    if (type == INFO)
-        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == QUESTION)
-        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
-    else if (type == WARNING)
-        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == CRITICAL)
-        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-
     if (needClose)
         this->close();
+
+    msgBox(this, text, type);
 }
 
 void WindowScope::on_msg_ok_set(const QString maxZ, const QString fs_real)
@@ -203,6 +196,9 @@ void WindowScope::on_msg_read(const QByteArray data)
 
     m_old_range = m_ui->customPlot->yAxis->range();
     m_ui->customPlot->xAxis->setRange(1, ch_sz);
+    m_ui->customPlot->yAxis->setRange(-0.1, 3.4);
+
+    /*
     m_ui->customPlot->yAxis->rescale();
 
     if (m_old_range != m_ui->customPlot->yAxis->range())
@@ -213,6 +209,7 @@ void WindowScope::on_msg_read(const QByteArray data)
 
         m_ui->customPlot->yAxis->setRange(low_range - hysteris,up_range + hysteris);
     }
+    */
 
     /*
     if (m_cursorsV_en || m_cursorsH_en)

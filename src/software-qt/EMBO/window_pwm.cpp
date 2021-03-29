@@ -56,19 +56,16 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
     m_ui->radioButton_fine->setChecked(true);
     on_radioButton_fine_clicked();
 
-    QString style1(CSS_BUTTON_NODIS CSS_BUTTON_PWM_ON);
+    m_ui->pushButton_ch1enable->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_PWM_ON);
+    m_ui->pushButton_ch2enable->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_PWM_ON);
 
-    m_ui->pushButton_ch1enable->setStyleSheet(style1);
-    m_ui->pushButton_ch2enable->setStyleSheet(style1);
-    m_ui->pushButton_ch1disable->setStyleSheet(style1);
-    m_ui->pushButton_ch2disable->setStyleSheet(style1);
+    m_ui->pushButton_ch1disable->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_PWM_ON);
+    m_ui->pushButton_ch2disable->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_PWM_ON);
 
-    QString style2(CSS_SPINBOX_NODIS);
-
-    m_ui->spinBox_freq->setStyleSheet(style2);
-    m_ui->spinBox_duty1->setStyleSheet(style2);
-    m_ui->spinBox_duty2->setStyleSheet(style2);
-    m_ui->spinBox_offset->setStyleSheet(style2);
+    m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX_NODIS);
+    m_ui->spinBox_duty1->setStyleSheet(CSS_SPINBOX_NODIS);
+    m_ui->spinBox_duty2->setStyleSheet(CSS_SPINBOX_NODIS);
+    m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
 }
 
 WindowPwm::~WindowPwm()
@@ -101,19 +98,12 @@ void WindowPwm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
     m_activeMsg = Q_NULLPTR;
 
-    if (type == INFO)
-        QMessageBox::information(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == QUESTION)
-        QMessageBox::question(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::Yes | QMessageBox::No);
-    else if (type == WARNING)
-        QMessageBox::warning(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-    else if (type == CRITICAL)
-        QMessageBox::critical(this, EMBO_TITLE, text, QMessageBox::Ok, QMessageBox::NoButton);
-
     if (needClose)
         this->close();
     else
         enableAll(true);
+
+    msgBox(this, text, type);
 }
 
 void WindowPwm::on_msg_set(int freq, int duty1, int duty2, int offset, bool en1, bool en2, const QString freq_real)

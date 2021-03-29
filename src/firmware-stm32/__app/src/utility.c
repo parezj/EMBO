@@ -24,6 +24,8 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void*
     int total = ch_num * avg_num;
     ASSERT(v1 != NULL && total > 0 && buff != NULL);
 
+    //double vcc = -1;
+
     for (int i = last_idx, j = 0; j < total; j++, i--)
     {
         if (i < 0)
@@ -36,7 +38,10 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void*
             val = (double)(((uint8_t*)buff)[i]);
 
         if (i % ch_num == 0)
+        {
+            //if (vcc == -1) vcc = val;
             *v1 += val;
+        }
         else if (ch_num > 1 && i % ch_num == 1)
             *v2 += val;
         else if (ch_num > 2 && i % ch_num == 2)
@@ -46,6 +51,10 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void*
         else if (ch_num > 4)  // && i % ch_num == 4)
             *v5 += val;
     }
+
+    //if (v2 == NULL) *v1 /= avg_num;
+    //else *v1 = vcc;
+
     *v1 /= avg_num;
     if (v2 != NULL) *v2 /= avg_num;
     if (v3 != NULL) *v3 /= avg_num;

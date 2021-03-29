@@ -75,16 +75,22 @@ private:
     void updateChangelog (const QString& url);
     void displayAppcast (const QString& url, const QByteArray& reply);
 
+    /* main window */
+    Ui::WindowMain* m_ui = Q_NULLPTR;
+
+    /* state flags */
     bool m_connected = false;
     bool m_close_init = false;
     State m_state_old = DISCONNECTED;
 
+    /* images */
     QPixmap m_icon_plugOn;
     QPixmap m_icon_plugOff;
     QPixmap m_img_bluepill;
     QPixmap m_img_nucleoF303;
     QPixmap m_img_unknown;
 
+    /* status bar */
     QLabel* m_status_icon_comm;
     QLabel* m_status_comm;
     QLabel* m_status_latency;
@@ -100,7 +106,5 @@ private:
     WindowCntr* m_w_cntr = Q_NULLPTR;
     WindowPwm* m_w_pwm = Q_NULLPTR;
     WindowSgen* m_w_sgen = Q_NULLPTR;
-
-    Ui::WindowMain* m_ui = Q_NULLPTR;
 };
 #endif // MAINWINDOW_H

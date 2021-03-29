@@ -49,6 +49,7 @@ void daq_init(daq_data_t* self)
     self->interleaved = 0;
     self->dualmode = 0;
     self->uwTick = 0;
+    self->uwTick_start = 0;
 
 #if defined(EM_ADC_MODE_ADC1) || defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
     NVIC_SetPriority(EM_IRQN_ADC12, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
@@ -710,10 +711,16 @@ void daq_enable(daq_data_t* self, uint8_t enable)
             NVIC_DisableIRQ(self->trig.exti_trig);
         }
     }
-    if (enable == EM_TRUE)
+
+    if (enable == EM_TRUE) // start the timer
+    {
         LL_TIM_EnableCounter(EM_TIM_DAQ);
-    else
-        for (int i = 0; i < 10000; i++) __asm("nop"); // let DMA and ADC finish their jobs
+    }
+    else // let DMA and ADC finish their jobs
+    {
+        for (int i = 0; i < 10000; i++)
+            __asm("nop");
+    }
 
     self->trig.uwtick_first = self->uwTick;
     self->enabled = enable;
@@ -813,4 +820,5 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
 
     self->dis_hold = 0;
     daq_enable(self, EM_TRUE);
+    self->uwTick_start = self->uwTick;
 }
