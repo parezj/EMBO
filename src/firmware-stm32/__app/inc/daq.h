@@ -49,7 +49,7 @@ typedef struct
 {
     void* data;             // data storage
     uint16_t chans;         // number of channels in this buffer
-    uint16_t len;           // total length of this buffer
+    uint16_t len;           // total length of this buffer in bytes
     uint16_t reserve;       // additional length (to compensate DMA stop)
 }daq_buff_t;
 
@@ -91,10 +91,11 @@ typedef struct
     DMA_TypeDef* dma_trig;  // DMA, which is triggered
     uint32_t exti_trig;     // EXTI channel, which is triggered
     ADC_TypeDef* adc_trig;  // ADC, which is triggered
-    int order;              // order from bottom of triggered ch in circular buffer
 
     // helpers
-    int post_start;         // flag when set, posttrigger counting starts
+    uint8_t forced;         // flag when set forced trigger is responded instead normal/single
+    uint8_t order;          // order from bottom of triggered ch in circular buffer
+    uint8_t post_start;     // flag when set posttrigger counting starts
     int post_from;          // position from where start counting posttrigger
     int dma_pos_catched;    // catched actual DMA circular buffer position
 }daq_trig_data_t;
@@ -109,7 +110,7 @@ typedef struct
 
     double fs_real;         // sampling freq per 1 channel - real
     int fs;                 // sampling freq per 1 channel
-    uint16_t mem;           // memory per 1 channel;
+    uint16_t mem;           // memory per 1 channel in samples
     enum daq_bits bits;     // bits per 1 channel
 }daq_settings_t;
 

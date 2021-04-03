@@ -2524,12 +2524,13 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       </rect>
      </property>
      <property name="styleSheet">
-      <string notr="true">QLabel { border-image: url(:/main/resources/img/ctu_meas_small.png);}
-
-QLabel:hover {border-image: url(:/main/resources/img/ctu_meas_small2.png); }</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="resources.qrc">:/main/resources/img/ctu_meas_small.gif</pixmap>
      </property>
      <property name="scaledContents">
       <bool>false</bool>

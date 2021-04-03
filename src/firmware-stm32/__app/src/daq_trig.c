@@ -24,8 +24,8 @@
 
 void daq_trig_init(daq_data_t* self)
 {
-    self->trig.ignore = 0;
-    self->trig.ready = 0;
+    self->trig.ignore = EM_FALSE;
+    self->trig.ready = EM_FALSE;
     self->trig.cntr = 0;
     self->trig.awd_trig = 0;
     self->trig.all_cntr = 0;
@@ -35,7 +35,7 @@ void daq_trig_init(daq_data_t* self)
     self->trig.pos_diff = 0;
     self->trig.uwtick_first = 0;
     self->trig.pretrig_cntr = 0;
-    self->trig.is_post = 0;
+    self->trig.is_post = EM_FALSE;
     self->trig.posttrig_size = 0;
     self->trig.auttrig_val = 0;
     self->trig.pretrig_val = 0;
@@ -46,10 +46,11 @@ void daq_trig_init(daq_data_t* self)
     self->trig.adc_trig = ADC1;
     self->trig.dma_trig = EM_DMA_ADC1;
     self->trig.order = 0;
-    self->trig.ready_last = 0;
-    self->trig.post_start = 0;
+    self->trig.ready_last = EM_FALSE;
+    self->trig.post_start = EM_FALSE;
     self->trig.post_from = 0;
     self->trig.dma_pos_catched = 0;
+    self->trig.forced = EM_FALSE;
 }
 
 void daq_trig_check(daq_data_t* self)
@@ -78,24 +79,29 @@ void daq_trig_check(daq_data_t* self)
     {
         if (self->enabled == EM_TRUE &&
             self->trig.set.mode == AUTO &&
-            self->trig.is_post == 0 &&
-            self->trig.ready == 0 &&
+            self->trig.is_post == EM_FALSE &&
+            self->trig.ready == EM_FALSE &&
             self->trig.pretrig_cntr > self->trig.auttrig_val)
         {
             daq_enable(self, EM_FALSE);
             self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
 
-            self->trig.ready = 1;
-            self->trig.is_post = 0;
+            self->trig.ready = EM_TRUE;
+            self->trig.is_post = EM_FALSE;
 
-            comm_respond(comm_ptr, EM_RESP_RDY_A, 10);
+            comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst); // data ready - trig auto
         }
         else if (self->trig.set.mode == DISABLED &&  // trigger is disabled
                  self->trig.pretrig_cntr > self->trig.fullmem_val)
         {
-            self->trig.ready = 1;
-            if (self->trig.ready_last == 0)
-                comm_respond(comm_ptr, EM_RESP_RDY_D, 10);
+            self->trig.ready = EM_TRUE;
+            if (self->trig.ready_last == EM_FALSE)
+            {
+                daq_enable(self, EM_FALSE);
+                self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
+
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst); // data ready - trig disabled
+            }
         }
     }
     self->trig.ready_last = self->trig.ready;
@@ -106,7 +112,7 @@ void daq_trig_trigger_scope(daq_data_t* self)
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_ch_trig != 0);
 
-    if (self->trig.ready || self->trig.post_start)
+    if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE)
         goto invalid_trigger;
 
     int ch_cnt = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en;
@@ -139,9 +145,9 @@ void daq_trig_trigger_scope(daq_data_t* self)
 
     self->trig.all_cntr++;
     uint8_t switch_awd = 0;
-    if (self->trig.ignore)
+    if (self->trig.ignore == EM_TRUE)
     {
-        self->trig.ignore = 0;
+        self->trig.ignore = EM_FALSE;
         switch_awd = 1;
     }
     else
@@ -155,7 +161,7 @@ void daq_trig_trigger_scope(daq_data_t* self)
         }
         else // false trig, switch edges and wait for another window
         {
-            self->trig.ignore = 1;
+            self->trig.ignore = EM_TRUE;
             switch_awd = 1;
         }
     }
@@ -178,15 +184,17 @@ void daq_trig_trigger_la(daq_data_t* self)
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_ch_trig != 0);
 
-    if (self->trig.ready || self->trig.post_start)
+    if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE)
         goto invalid_trigger;
 
     if (self->trig.pretrig_cntr > self->trig.pretrig_val)
     {
         daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
-        return;
+        //return; here fails
     }
     
+    return; // why need to be here?
+
     invalid_trigger: // if any code gets here, means that trigger is invalid
     NVIC_ClearPendingIRQ(self->trig.exti_trig);
     NVIC_EnableIRQ(self->trig.exti_trig); // reenable irq
@@ -194,7 +202,7 @@ void daq_trig_trigger_la(daq_data_t* self)
 
 void daq_trig_poststart(daq_data_t* self, int pos)
 {
-    self->trig.post_start = 1;
+    self->trig.post_start = EM_TRUE;
     self->trig.post_from = pos;
     self->trig.pretrig_cntr = 0;
 
@@ -210,7 +218,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
 
     ASSERT(self->trig.buff_trig != NULL);
 
-    self->trig.is_post = 1;
+    self->trig.is_post = EM_TRUE;
     self->trig.cntr++;
 
     if (self->mode == SCOPE)
@@ -267,24 +275,25 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
 
         if (target_sum >= self->trig.posttrig_size) // pos_last_len == target
         {
-            //ASSERT(pos_last_len == target);
-
             LL_TIM_DisableCounter(EM_TIM_DAQ);
 
             daq_enable(self, EM_FALSE);
-            self->trig.ready = 1;
-            self->trig.is_post = 0;
+            self->trig.ready = EM_TRUE;
+            self->trig.is_post = EM_FALSE;
 
             self->trig.pos_diff = self->trig.pos_last - self->trig.pos_trig;
             if (self->trig.pos_diff < 0)
                 self->trig.pos_diff += self->trig.buff_trig->len;
 
-            comm_respond(comm_ptr, EM_RESP_RDY_N, 10); // data ready
+            comm_daq_ready(comm_ptr, self->trig.forced == EM_TRUE  ? EM_RESP_RDY_F :                        // data ready - trig forced
+                                   ((self->trig.set.mode == SINGLE ? EM_RESP_RDY_S :                        // data ready - trig single
+                                                                     EM_RESP_RDY_N)), self->trig.pos_frst); // data ready - trig normal
 
+            self->trig.forced = EM_FALSE;
             break;
         }
     }
-    self->trig.post_start = 0;
+    self->trig.post_start = EM_FALSE;
 }
 
 void daq_trig_update(daq_data_t* self)
@@ -444,7 +453,6 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 
     if (self->mode == LA)
     {
-
         LL_ADC_SetAnalogWDMonitChannels(adc, EM_ADC_AWD LL_ADC_AWD_DISABLE);
 
         LL_EXTI_InitTypeDef EXTI_InitStruct = {0};

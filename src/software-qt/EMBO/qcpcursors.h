@@ -36,7 +36,8 @@ public:
     static const QString formatUnitS(double value);
 
 private:
-    void reCalc();
+    void reCalcH();
+    void reCalcV();
 
     static int uniqueNum;
 
@@ -62,15 +63,15 @@ private:
     QCPItemText* m_textV_max;
     QCPItemText* m_textV_diff;
 
-    int m_hMinVal;
-    int m_hMaxVal;
-    int m_vMinVal;
-    int m_vMaxVal;
+    int m_hMinVal = 4;
+    int m_hMaxVal = 6;
+    int m_vMinVal = 4;
+    int m_vMaxVal = 6;
 
-    double m_hRangeMin;
-    double m_hRangeMax;
-    double m_vRangeMin;
-    double m_vRangeMax;
+    double m_hRangeMin = 0;
+    double m_hRangeMax = 10;
+    double m_vRangeMin = 0;
+    double m_vRangeMax = 10;
 };
 
 /* single cursor without text */
@@ -96,10 +97,10 @@ private:
     QCPItemLine* m_cursor;
     QCPItemText* m_text;
 
-    int m_value;
-    double m_rangeMin;
-    double m_rangeMax;
-    bool m_horizontal;
+    int m_value = 5;
+    double m_rangeMin = 0;
+    double m_rangeMax = 10;
+    bool m_horizontal = true;
 };
 
 

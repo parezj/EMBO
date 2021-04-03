@@ -32,8 +32,8 @@
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
     <size>
-     <width>940</width>
-     <height>608</height>
+     <width>0</width>
+     <height>606</height>
     </size>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -72,7 +72,7 @@
       <item row="0" column="0">
        <layout class="QVBoxLayout" name="layout_screen">
         <item>
-         <widget class="QGroupBox" name="groupBox_main">
+         <widget class="QGroupBox" name="groupBox_screen">
           <property name="minimumSize">
            <size>
             <width>0</width>
@@ -3186,6 +3186,58 @@ QPushButton:pressed
              </size>
             </property>
            </widget>
+           <widget class="QPushButton" name="pushButton_resetZoom">
+            <property name="geometry">
+             <rect>
+              <x>280</x>
+              <y>35</y>
+              <width>101</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {    
+    padding: 0.2em 0.2em 0.3em 0.2em;
+    border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
+    color: black;
+	text-align:left;
+	padding-left:4px;
+}
+
+QPushButton:hover:!pressed
+{
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #FFFFFF;
+	color:#2f836a;
+}
+
+QPushButton:pressed
+{
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+ 	background: #AAAAAA;
+	color:white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Reset Zoom</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>23</width>
+              <height>22</height>
+             </size>
+            </property>
+           </widget>
            <zorder>spinBox_display</zorder>
            <zorder>label_3</zorder>
            <zorder>label_dial4</zorder>
@@ -3197,6 +3249,7 @@ QPushButton:pressed
            <zorder>pushButton_enable</zorder>
            <zorder>pushButton_disable</zorder>
            <zorder>label_13</zorder>
+           <zorder>pushButton_resetZoom</zorder>
            <zorder>pushButton_reset</zorder>
           </widget>
          </item>
@@ -3339,6 +3392,7 @@ QPushButton:pressed
     <addaction name="separator"/>
     <addaction name="menuInterpolation"/>
     <addaction name="separator"/>
+    <addaction name="actionShow_Plot"/>
    </widget>
    <widget class="QMenu" name="menuMeasure">
     <property name="font">
@@ -3687,7 +3741,7 @@ QPushButton:pressed
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Channel 1—2</string>
+    <string>Channel 2—1</string>
    </property>
    <property name="font">
     <font>
@@ -3701,7 +3755,7 @@ QPushButton:pressed
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Channel 3—4</string>
+    <string>Channel 4—3</string>
    </property>
    <property name="font">
     <font>
@@ -3726,6 +3780,23 @@ QPushButton:pressed
   <action name="actionScreenshot">
    <property name="text">
     <string>Screenshot</string>
+   </property>
+  </action>
+  <action name="actionShow_Plot">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show Plot</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
    </property>
   </action>
  </widget>

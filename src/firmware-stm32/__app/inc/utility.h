@@ -36,11 +36,11 @@ float fastlog2 (float x);
 float fastlog(float x);
 float fastexp(float p);
 float fastpow2(float p);
-void itoa_fast(char* s, int num, int radix);
+int itoa_fast(char* s, int num, int radix);
 
 /* Author: Jakub Parez
  * Descr:  ultra fast float sprintf
  */
-void sprint_fast(char* s, const char* format, double fVal, int prec);
+int sprint_fast(char* s, const char* format, double fVal, int prec);
 
 #endif /* UTILS_H */

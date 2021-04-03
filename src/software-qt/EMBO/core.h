@@ -48,6 +48,7 @@ PWM and signal generator.<br>And of course, it's opensource! \
 #define CFG_VM_CH4_EN       "vm/ch4_en"
 #define CFG_VM_AVG          "vm/avg"
 #define CFG_VM_PLT          "vm/plt"
+#define CFG_VM_SHOW_PLOT    "vm/show_plot"
 
 #define EMBO_NEWLINE        "\r\n"
 #define EMBO_DELIM1         ";"

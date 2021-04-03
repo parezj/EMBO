@@ -20,7 +20,7 @@
 // units = uint32_t
 #define EM_STACK_T1     40
 #define EM_STACK_T2     50
-#define EM_STACK_T3     40
+#define EM_STACK_T3     50
 #define EM_STACK_T4     300
 #define EM_STACK_T5     50
 
@@ -56,11 +56,11 @@ StaticSemaphore_t buff_mtx1;      // mutex for comm and trig
 volatile uint8_t init_done = 0;   // system initialized
 
 #ifdef EM_DEBUG
-volatile UBaseType_t watermark_t1;
-volatile UBaseType_t watermark_t2;
-volatile UBaseType_t watermark_t3;
-volatile UBaseType_t watermark_t4;
-volatile UBaseType_t watermark_t5;
+volatile UBaseType_t watermark_t1 = -1;
+volatile UBaseType_t watermark_t2 = -1;
+volatile UBaseType_t watermark_t3 = -1;
+volatile UBaseType_t watermark_t4 = -1;
+volatile UBaseType_t watermark_t5 = -1;
 #endif
 
 

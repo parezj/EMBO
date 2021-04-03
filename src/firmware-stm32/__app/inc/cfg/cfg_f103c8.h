@@ -79,8 +79,8 @@
 #define EM_ADC_SMPLT_MAX_N     1.5                             // max smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit
 #define EM_ADC_TCONV12         12.5                            // ADC Tconversion ticks for 12-bit
-#define EM_ADC_C_F             0.000000008 // 8pF              // ADC internal capacitance in F
-#define EM_ADC_R_KOHM          1.0                             // ADC internal impedance in kOhm
+#define EM_ADC_C_F             0.000000000008 // 8pF           // ADC internal capacitance in F
+#define EM_ADC_R_OHM           1000.0                          // ADC internal impedance in Ohm
 #define EM_ADC_SMPLT_CNT       8                               // count of available smpl times
 #define EM_ADC_CAL_EN                                          // calibration while enabled
 #define LL_ADC_SPEC_START                                      // special start stop methods needed
@@ -120,9 +120,9 @@
 //#define EM_TIM_SGEN_MAX      65535
 
 // Max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         11500     // DAQ max total memory
-#define EM_LA_MAX_FS           5000000   // Logic Analyzer max FS
-#define EM_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
+#define EM_DAQ_MAX_MEM         11300     // DAQ max total memory
+#define EM_LA_MAX_FS           10000000   // Logic Analyzer max FS - TODO
+#define EM_DAQ_MAX_B12_FS      857142    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq - TODO
 #define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO

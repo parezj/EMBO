@@ -5,6 +5,7 @@
  
 #include "cfg.h"
 #include "comm.h"
+#include "utility.h"
 #include "build_defs.h"
 
 #include "proto.h"
@@ -197,6 +198,27 @@ static void uart_put_str(const char* data, int len)
 {
     for (int i = 0; i < len; i++)
         uart_put_char(data[i]);
+}
+
+/************************* Write Async Msg *************************/
+
+void comm_daq_ready(comm_data_t* self, const char* rdy, uint32_t pos_frst)
+{
+    int i;
+    char buff[25];
+
+    for (i = 0; i < 8; i++)
+        buff[i] = rdy[i];
+
+    buff[i] = ',';
+
+    int len = itoa_fast(buff + i + 1, pos_frst, 10);
+    int suffix = i + 1 + len;
+
+    buff[suffix] = '\r';
+    buff[suffix + 1] = '\n';
+
+    comm_respond(self, buff, suffix + 2);
 }
 
 /************************* Main Comm *************************/

@@ -134,6 +134,11 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     qInfo() << "EMBO version: " << APP_VERSION;
 
+    m_movie_logo = new QMovie(":/main/resources/img/ctu_meas_small.gif");
+    m_ui->label_cvutlogo->setMovie(m_movie_logo);
+    m_movie_logo->start();
+    m_movie_logo->stop();
+
     setDisconnected();
     on_pushButton_scan_clicked();
 }
@@ -315,7 +320,7 @@ void WindowMain::setConnected()
     else if (info->name.toLower().contains("nucleo"))
         m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
 
-    m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps", 0) + " / ch");
+    m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps", 3));
     m_ui->label_scope_mem->setText(format_unit((info->mem / 2) / (1 * 2), "B", 0) +
                                    (info->adc_bit8 ? " / " + format_unit(info->mem / (1 * 2), "B", 0) : ""));
     m_ui->label_scope_bits->setText(info->adc_bit8 ? "12 / 8 bit" : "12 bit");
@@ -323,17 +328,17 @@ void WindowMain::setConnected()
                                      (info->adc_dualmode && info->adc_interleaved ? "+" : "") + (info->adc_interleaved ? "I" : ""));
     m_ui->label_scope_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
-    m_ui->label_la_fs->setText(format_unit(info->la_fs, "Sps", 0) + " / ch");
+    m_ui->label_la_fs->setText(format_unit(info->la_fs, "Sps", 3));
     m_ui->label_la_mem->setText(format_unit(info->mem, "B", 0));
     m_ui->label_la_protocols->setText("Serial, I2C, SPI");
     m_ui->label_la_pins->setText(info->pins_la.replace("-", ", "));
 
-    m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Sps", 0) + " / ch");
+    m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Hz", 0));
     m_ui->label_vm_mem->setText(format_unit(info->vm_mem, "S", 0));
     m_ui->label_vm_bits->setText("12 bit");
     m_ui->label_vm_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
-    m_ui->label_cntr_mode->setText("Slow / Fast"); // format_unit(info->cntr_freq, "Hz", 0)
+    m_ui->label_cntr_mode->setText("Slow / Fast");
     m_ui->label_cntr_timeout->setText(QString::number(info->cntr_timeout) + " ms");
     m_ui->label_cntr_pins->setText(info->pins_cntr);
 
@@ -376,6 +381,8 @@ void WindowMain::setConnected()
     m_ui->label_dev_fcpu->show();
     m_ui->label_dev_rtos->show();
     m_ui->label_dev_vref->show();
+
+    m_movie_logo->start();
 
     m_connected = true;
 }
@@ -468,6 +475,10 @@ void WindowMain::setDisconnected()
     m_ui->label_dev_fcpu->hide();
     m_ui->label_dev_rtos->hide();
     m_ui->label_dev_vref->hide();
+
+    m_movie_logo->stop();
+    m_movie_logo->start();
+    m_movie_logo->stop();
 
     //on_instrClose(WindowScope::staticMetaObject.className());
     //on_instrClose(WindowCntr::staticMetaObject.className());

@@ -21,8 +21,8 @@
 
 
 #define TIMER_VM_RENDER         33  // graph refresh rate = 33 ms = 30 FPS
-#define DISPLAY_VALS_RATE       3   // values refresh rate = 100 ms = 10 Hz
-#define MOVEMEAN_VM             10  // values moving average 20 * 10 ms = 100 ms
+#define DISPLAY_VALS_RATE       6   // values refresh rate = 200 ms = 5 Hz
+#define MOVEMEAN_VM             20  // values moving average 20 * 10 ms = 200 ms
 
 #define GRAPH_CH1               0
 #define GRAPH_CH2               1
@@ -120,10 +120,16 @@ private slots:
     void on_actionMath_1_2_triggered(bool checked);
     void on_actionMath_3_4_triggered(bool checked);
     void on_pushButton_reset_clicked();
+    void on_pushButton_resetZoom_clicked();
+    void on_qcpMouseWheel(QWheelEvent*);
+    void on_qcpMousePress(QMouseEvent*);
+    void on_actionShow_Plot_triggered(bool checked);
 
 private:
     void initQcp();
     void updatePlotData();
+    void rescaleYAxis();
+    void rescaleXAxis();
 
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
@@ -152,7 +158,10 @@ private:
     double m_data_ch3;
     double m_data_ch4;
     double m_data_vcc;
+
+    /* data helpers */
     bool m_data_fresh = false;
+    double m_key_last = 0;
 
     /* mean buffers */
     MoveMean<double> m_meanCh1;

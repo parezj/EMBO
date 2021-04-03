@@ -84,8 +84,8 @@
 #define EM_ADC_SMPLT_MAX_N     1.5                             // max smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit
 #define EM_ADC_TCONV12         12.5                            // ADC Tconversion ticks for 12-bit
-#define EM_ADC_C_F             0.000000008 // 8pF              // ADC internal capacitance in F
-#define EM_ADC_R_KOHM          1.0                             // ADC internal impedance in kOhm
+#define EM_ADC_C_F             0.000000000008 // 8pF           // ADC internal capacitance in F
+#define EM_ADC_R_OHM           6000.0                          // ADC internal impedance in Ohm
 #define EM_ADC_SMPLT_CNT       8                               // count of available smpl times
 #define EM_ADC_CAL_EN                                          // calibration while enabled
 //#define LL_ADC_SPEC_START                                    // special start stop methods needed

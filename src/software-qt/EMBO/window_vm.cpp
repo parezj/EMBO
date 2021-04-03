@@ -119,6 +119,7 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->pushButton_cursorsVoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
 
     m_ui->pushButton_reset->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESET);
+    m_ui->pushButton_resetZoom->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESETZ);
 
     m_ui->spinBox_average->setStyleSheet(CSS_SPINBOX);
     m_ui->spinBox_display->setStyleSheet(CSS_SPINBOX);
@@ -130,8 +131,11 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     Settings::getValue(CFG_VM_CH3_EN, false).toBool() ? on_pushButton_enable3_clicked() : on_pushButton_disable3_clicked();
     Settings::getValue(CFG_VM_CH4_EN, false).toBool() ? on_pushButton_enable4_clicked() : on_pushButton_disable4_clicked();
 
-    on_spinBox_average_valueChanged(Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
-    on_spinBox_display_valueChanged(Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
+    m_ui->spinBox_average->setValue(Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
+    m_ui->spinBox_display->setValue(Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
+
+    m_ui->actionShow_Plot->setChecked(Settings::getValue(CFG_VM_SHOW_PLOT, true).toBool());
+    on_actionShow_Plot_triggered(m_ui->actionShow_Plot->isChecked());
 
     m_instrEnabled = true;
 }
@@ -174,10 +178,13 @@ void WindowVm::initQcp()
     m_ui->customPlot->xAxis->setLabelFont(font2);
     m_ui->customPlot->yAxis->setLabelFont(font2);
 
-    m_ui->customPlot->setInteractions(0);
+    //m_ui->customPlot->setInteractions(0);
+    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
+    connect(m_ui->customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(on_qcpMouseWheel(QWheelEvent*)));
+    connect(m_ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(on_qcpMousePress(QMouseEvent*)));
 
     /* cursors */
 
@@ -228,12 +235,12 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
         m_data_ch2 = _ch2;
 
         if (m_math_1minus2)
-            m_data_ch3 = _ch1 - _ch2;
+            m_data_ch3 = _ch2 - _ch1;
         else
             m_data_ch3 = _ch3;
 
         if (m_math_3minus4)
-            m_data_ch4 = _ch3 - _ch4;
+            m_data_ch4 = _ch4 - _ch3;
         else
             m_data_ch4 = _ch4;
 
@@ -376,38 +383,23 @@ void WindowVm::on_timer_render() // 30 FPS
 
 void WindowVm::updatePlotData()
 {
-    double key = 0;
-
     for (auto smpl : m_smplBuff)
     {
-        key = smpl.t;
+        m_key_last = smpl.t;
 
-        m_ui->customPlot->graph(GRAPH_CH1)->addData(key, smpl.ch1);
-        m_ui->customPlot->graph(GRAPH_CH2)->addData(key, smpl.ch2);
-        m_ui->customPlot->graph(GRAPH_CH3)->addData(key, smpl.ch3);
-        m_ui->customPlot->graph(GRAPH_CH4)->addData(key, smpl.ch4);
+        m_ui->customPlot->graph(GRAPH_CH1)->addData(m_key_last, smpl.ch1);
+        m_ui->customPlot->graph(GRAPH_CH2)->addData(m_key_last, smpl.ch2);
+        m_ui->customPlot->graph(GRAPH_CH3)->addData(m_key_last, smpl.ch3);
+        m_ui->customPlot->graph(GRAPH_CH4)->addData(m_key_last, smpl.ch4);
     }
 
     m_smplBuff.clear();
 
-    m_old_range = m_ui->customPlot->yAxis->range();
-    m_ui->customPlot->yAxis->rescale();
-    m_ui->customPlot->xAxis->setRange(key, m_display, Qt::AlignRight);
-
-    double max_scale = 0;
-    double min_scale = 0;
-    if (m_en1 && m_gain1 > max_scale) max_scale = m_gain1;
-    else if (m_en1 && m_gain1 < min_scale) min_scale = m_gain1;
-    if (m_en2 && m_gain2 > max_scale) max_scale = m_gain2;
-    else if (m_en2 && m_gain2 < min_scale) min_scale = m_gain2;
-    if (m_en3 && m_gain3 > max_scale) max_scale = m_gain3;
-    else if (m_en3 && m_gain3 < min_scale) min_scale = m_gain3;
-    if (m_en4 && m_gain4 > max_scale) max_scale = m_gain4;
-    else if (m_en4 && m_gain4 < min_scale) min_scale = m_gain4;
-
-    m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
+    rescaleXAxis();
 
     /*
+    m_old_range = m_ui->customPlot->yAxis->range();
+
     if (m_old_range != m_ui->customPlot->yAxis->range())
     {
         auto low_range = m_ui->customPlot->yAxis->range().lower;
@@ -426,10 +418,10 @@ void WindowVm::updatePlotData()
         m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, true);
     }
 
-    m_ui->customPlot->graph(GRAPH_CH1)->data()->removeBefore(key - m_display);
-    m_ui->customPlot->graph(GRAPH_CH2)->data()->removeBefore(key - m_display);
-    m_ui->customPlot->graph(GRAPH_CH3)->data()->removeBefore(key - m_display);
-    m_ui->customPlot->graph(GRAPH_CH4)->data()->removeBefore(key - m_display);
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->removeBefore(m_key_last - m_display);
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->removeBefore(m_key_last - m_display);
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->removeBefore(m_key_last - m_display);
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->removeBefore(m_key_last - m_display);
 
     m_ui->customPlot->replot();
 }
@@ -641,8 +633,7 @@ void WindowVm::on_pushButton_disable1_clicked()
 
     Settings::setValue(CFG_VM_CH1_EN, false);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_enable1_clicked()
@@ -656,8 +647,7 @@ void WindowVm::on_pushButton_enable1_clicked()
 
     Settings::setValue(CFG_VM_CH1_EN, true);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_disable2_clicked()
@@ -673,8 +663,7 @@ void WindowVm::on_pushButton_disable2_clicked()
 
     Settings::setValue(CFG_VM_CH2_EN, false);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_enable2_clicked()
@@ -688,8 +677,7 @@ void WindowVm::on_pushButton_enable2_clicked()
 
     Settings::setValue(CFG_VM_CH2_EN, true);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_disable3_clicked()
@@ -705,8 +693,7 @@ void WindowVm::on_pushButton_disable3_clicked()
 
     Settings::setValue(CFG_VM_CH3_EN, false);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_enable3_clicked()
@@ -720,8 +707,7 @@ void WindowVm::on_pushButton_enable3_clicked()
 
     Settings::setValue(CFG_VM_CH3_EN, true);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_disable4_clicked()
@@ -737,8 +723,7 @@ void WindowVm::on_pushButton_disable4_clicked()
 
     Settings::setValue(CFG_VM_CH4_EN, false);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_enable4_clicked()
@@ -752,6 +737,7 @@ void WindowVm::on_pushButton_enable4_clicked()
 
     Settings::setValue(CFG_VM_CH4_EN, true);
 
+    rescaleYAxis();
     if (!m_instrEnabled)
         m_ui->customPlot->replot();
 }
@@ -759,21 +745,29 @@ void WindowVm::on_pushButton_enable4_clicked()
 void WindowVm::on_doubleSpinBox_gain1_valueChanged(double arg1)
 {
     m_gain1 = arg1;
+
+    rescaleYAxis();
 }
 
 void WindowVm::on_doubleSpinBox_gain2_valueChanged(double arg1)
 {
     m_gain2 = arg1;
+
+    rescaleYAxis();
 }
 
 void WindowVm::on_doubleSpinBox_gain3_valueChanged(double arg1)
 {
     m_gain3 = arg1;
+
+    rescaleYAxis();
 }
 
 void WindowVm::on_doubleSpinBox_gain4_valueChanged(double arg1)
 {
     m_gain4 = arg1;
+
+    rescaleYAxis();
 }
 
 void WindowVm::on_pushButton_disable_clicked()
@@ -821,7 +815,7 @@ void WindowVm::on_pushButton_disable_clicked()
     m_ui->textBrowser_measMax->setEnabled(false);
     m_ui->textBrowser_measMin->setEnabled(false);
 
-    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 }
 
 void WindowVm::on_pushButton_enable_clicked()
@@ -871,7 +865,8 @@ void WindowVm::on_pushButton_enable_clicked()
     m_ui->textBrowser_measMax->setEnabled(true);
     m_ui->textBrowser_measMin->setEnabled(true);
 
-    m_ui->customPlot->setInteractions(0);
+    //m_ui->customPlot->setInteractions(0);
+    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 }
 
 void WindowVm::on_spinBox_average_valueChanged(int arg1)
@@ -1008,11 +1003,10 @@ void WindowVm::on_pushButton_cursorsHon_clicked()
     auto rngH = m_ui->customPlot->xAxis->range();
     auto rngV = m_ui->customPlot->yAxis->range();
 
+    m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+
     m_cursors->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
     m_cursors->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
-
-    m_cursors->setV_min(m_cursorV_min, rngV.lower, rngV.upper);
-    m_cursors->setV_max(m_cursorV_max, rngV.lower, rngV.upper);
 
     m_cursors->showH(true);
     m_cursorsH_en = true;
@@ -1040,8 +1034,7 @@ void WindowVm::on_pushButton_cursorsVon_clicked()
     auto rngH = m_ui->customPlot->xAxis->range();
     auto rngV = m_ui->customPlot->yAxis->range();
 
-    m_cursors->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
-    m_cursors->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+    m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 
     m_cursors->setV_min(m_cursorV_min, rngV.lower, rngV.upper);
     m_cursors->setV_max(m_cursorV_max, rngV.lower, rngV.upper);
@@ -1080,11 +1073,11 @@ void WindowVm::on_actionMath_1_2_triggered(bool checked)
 
     if (checked)
     {
-        m_ui->label_ch3->setText("Channel 1—2 (" + m_pin1 + "—" + m_pin2 + ")");
+        m_ui->label_ch3->setText("Channel 2—1 (" + m_pin2 + "—" + m_pin1 + ")");
         m_ui->label_ch3->setStyleSheet("color:red");
 
-        m_ui->pushButton_enable3->setText("1—2 ON  ");
-        m_ui->pushButton_disable3->setText("1—2 OFF");
+        m_ui->pushButton_enable3->setText("2—1 ON  ");
+        m_ui->pushButton_disable3->setText("2—1 OFF");
     }
     else
     {
@@ -1102,11 +1095,11 @@ void WindowVm::on_actionMath_3_4_triggered(bool checked)
 
     if (checked)
     {
-        m_ui->label_ch4->setText("Channel 3—4 (" + m_pin3 + "—" + m_pin4 + ")");
+        m_ui->label_ch4->setText("Channel 4—3 (" + m_pin4 + "—" + m_pin3 + ")");
         m_ui->label_ch4->setStyleSheet("color:red");
 
-        m_ui->pushButton_enable4->setText("3—4 ON  ");
-        m_ui->pushButton_disable4->setText("3—4 OFF");
+        m_ui->pushButton_enable4->setText("4—3 ON  ");
+        m_ui->pushButton_disable4->setText("4—3 OFF");
     }
     else
     {
@@ -1134,12 +1127,18 @@ void WindowVm::on_pushButton_reset_clicked()
     on_pushButton_cursorsVoff_clicked();
     on_pushButton_cursorsHoff_clicked();
 
+    on_actionLines_triggered(true);
+    on_actionPoints_triggered(false);
+    on_actionSinc_triggered(true);
+
     on_pushButton_disable1_clicked();
     on_pushButton_disable2_clicked();
     on_pushButton_disable3_clicked();
     on_pushButton_disable4_clicked();
     on_pushButton_enable1_clicked();
     on_pushButton_enable2_clicked();
+
+    on_actionShow_Plot_triggered(true);
 
     m_ui->spinBox_average->setValue(DEFAULT_AVG);
     m_ui->spinBox_display->setValue(DEFAULT_PLT);
@@ -1161,12 +1160,63 @@ void WindowVm::on_pushButton_reset_clicked()
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
     m_smplBuff.clear();
+    m_timer_elapsed.restart();
+
+    m_elapsed_diff = 0;
+    m_elapsed_saved = 0;
     m_data_fresh = false;
 
     if (en)
         on_pushButton_enable_clicked();
     else
         m_ui->customPlot->replot();
+}
+
+void WindowVm::on_pushButton_resetZoom_clicked()
+{
+    //m_ui->customPlot->setInteractions(0);
+    //m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+    rescaleYAxis();
+
+    m_ui->pushButton_reset->show();
+    m_ui->pushButton_resetZoom->hide();
+}
+
+void WindowVm::on_qcpMouseWheel(QWheelEvent*)
+{
+    m_ui->pushButton_reset->hide();
+    m_ui->pushButton_resetZoom->show();
+}
+
+void WindowVm::on_qcpMousePress(QMouseEvent*)
+{
+    m_ui->pushButton_reset->hide();
+    m_ui->pushButton_resetZoom->show();
+}
+
+void WindowVm::on_actionShow_Plot_triggered(bool checked)
+{
+    Settings::setValue(CFG_VM_SHOW_PLOT, checked);
+
+    if (checked)
+    {
+        this->setMinimumWidth(1244);
+        this->setMinimumHeight(653);
+
+        this->setMaximumWidth(QWIDGETSIZE_MAX);
+        this->setMaximumHeight(QWIDGETSIZE_MAX);
+
+        m_ui->groupBox_screen->show();
+
+        this->setMinimumWidth(940);
+    }
+    else
+    {
+        this->setFixedWidth(426);
+        this->setFixedHeight(653);
+
+        m_ui->groupBox_screen->hide();
+    }
 }
 
 /* private */
@@ -1230,3 +1280,29 @@ void WindowVm::showEvent(QShowEvent*)
     m_timer_render->start(TIMER_VM_RENDER);
 }
 
+void WindowVm::rescaleYAxis()
+{
+    double max_scale = 0;
+    double min_scale = 0;
+    if (m_en1 && m_gain1 > max_scale) max_scale = m_gain1;
+    else if (m_en1 && m_gain1 < min_scale) min_scale = m_gain1;
+    if (m_en2 && m_gain2 > max_scale) max_scale = m_gain2;
+    else if (m_en2 && m_gain2 < min_scale) min_scale = m_gain2;
+    if (m_en3 && m_gain3 > max_scale) max_scale = m_gain3;
+    else if (m_en3 && m_gain3 < min_scale) min_scale = m_gain3;
+    if (m_en4 && m_gain4 > max_scale) max_scale = m_gain4;
+    else if (m_en4 && m_gain4 < min_scale) min_scale = m_gain4;
+
+    m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
+}
+
+void WindowVm::rescaleXAxis()
+{
+    m_ui->customPlot->xAxis->setRange(m_key_last, m_display, Qt::AlignRight);
+
+    if (!m_instrEnabled)
+        m_ui->customPlot->replot();
+}

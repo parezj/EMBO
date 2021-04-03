@@ -79,9 +79,11 @@
 
 // Async respond strings -------------------------------------------
 #define EM_RESP_NRDY           "Not ready!"
-#define EM_RESP_RDY_N          "\"ReadyN\"\r\n"  // normal trigger data ready (+ single)
-#define EM_RESP_RDY_A          "\"ReadyA\"\r\n"  // auto trigger data ready
-#define EM_RESP_RDY_D          "\"ReadyD\"\r\n"  // disabled trigger data ready
+#define EM_RESP_RDY_N          "\"ReadyN\""  // normal trigger data ready
+#define EM_RESP_RDY_S          "\"ReadyS\""  // normal trigger data ready (single)
+#define EM_RESP_RDY_A          "\"ReadyA\""  // auto trigger data ready
+#define EM_RESP_RDY_D          "\"ReadyD\""  // disabled trigger data ready
+#define EM_RESP_RDY_F          "\"ReadyF\""  // forced trigger
 
 // IWDG ------------------------------------------------------------
 #define EM_IWDG_RST_VAL        0xAAAA  // watchdog reset key value
@@ -114,7 +116,7 @@
 // calc helpers ----------------------------------------------------
 #define EM_ADC_ADDR(x)           (uint32_t)LL_ADC_DMA_GetRegAddr(x, LL_ADC_DMA_REG_REGULAR_DATA) // ADC DMA address
 #define EM_ADC_1CH_SMPL_TM(T,B)  ((1.0 / (double)EM_FREQ_ADCCLK) * ((double)T + (B))) // ADC 1 channel sampling time in seconds (T - smpl ticks, B - Tconv)
-#define EM_ADC_MAXZ(T,L)         (((T) / ((double)EM_FREQ_ADCCLK * EM_ADC_C_F * (L))) - EM_ADC_R_KOHM) // ADC max input impedance (T - smpl ticks, L - ln2^(N+2))
+#define EM_ADC_MAXZ(k,L)         (((k - 0.5) / ((double)EM_FREQ_ADCCLK * EM_ADC_C_F * (L))) - EM_ADC_R_OHM) // ADC max input impedance (k - smpl ticks, L - ln2^(N+2))
 #define EM_DMA_LAST_IDX(x,y,z)   (get_last_circ_idx((x - LL_DMA_GetDataLength(z, y)), x)) // last DMA index from circular buffer (x - buff len, y - dma ch, z - dma)
 #define EM_MILIS(x)              (x / portTICK_PERIOD_MS) // FreeRTOS miliseconds
 
@@ -152,15 +154,19 @@ extern const float EM_ADC_SMPLT_N[EM_ADC_SMPLT_CNT];
 #define EM_TRUE                       1
 #define EM_FALSE                      0
 #define PI                            3.14159265359
-#define J(a,b)                        a##b // join two tokens
+#define J(a,b)                        a##b
 #define WTF                           assert(0)
 #define NUMARGS8(...)                 (sizeof((uint8_t[]){__VA_ARGS__})/sizeof(uint8_t))
 #define BITMAP_GET_BIT(m,b,s)         (*(m + (b / s)) &  (uint8_t)(1 << (b % s)))
 #define BITMAP_SET_BIT(m,b,s)         (*(m + (b / s)) |= (uint8_t)(1 << (b % s)))
-#define LO_BYTE16(x)                  ((uint8_t) ((x) & 0xFF))
-#define HI_BYTE16(x)                  ((uint8_t) ((x) >> 8u ))
 #define U8_TO_U16(h,l)                ((uint16_t)(h << 8u) | l)
 #define U8_TO_U32(h,a,b,l)            ((uint32_t)(h << 24u) | (uint32_t)(a << 16u) | (uint32_t)(b << 8u) | l)
+#define U16_TO_U8_L(x)                ((uint8_t)(((x) & 0x00FF)))
+#define U16_TO_U8_H(x)                ((uint8_t)(((x) & 0xFF00) >> 8))
+#define U32_TO_U8_L(x)                ((uint8_t)(((x) & 0x000000FF)))
+#define U32_TO_U8_B(x)                ((uint8_t)(((x) & 0x0000FF00) >> 8))
+#define U32_TO_U8_A(x)                ((uint8_t)(((x) & 0x00FF0000) >> 16))
+#define U32_TO_U8_H(x)                ((uint8_t)(((x) & 0xFF000000) >> 24))
 
 #define Pu8 "hu"
 #define Pd8 "hd"

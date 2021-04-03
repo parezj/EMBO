@@ -60,6 +60,7 @@
         <file>resources/img/range_right2.png</file>
         <file>resources/img/range_up.png</file>
         <file>resources/img/range_up2.png</file>
+        <file>resources/img/ctu_meas_small.gif</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>

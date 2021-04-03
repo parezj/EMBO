@@ -41,13 +41,13 @@ void daq_init(daq_data_t* self)
     self->trig.buff_trig = NULL;
     self->buff_out.reserve = 0;
     self->enabled = EM_FALSE;
-    self->dis_hold = 0;
+    self->dis_hold = EM_FALSE;
     self->vref = 0;
     self->vcc_mv = 0;
     self->adc_max_val = 0;
     self->smpl_time = 0;
-    self->interleaved = 0;
-    self->dualmode = 0;
+    self->interleaved = EM_FALSE;
+    self->dualmode = EM_FALSE;
     self->uwTick = 0;
     self->uwTick_start = 0;
 
@@ -458,7 +458,7 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
         return -1;
 
     int reen = 0;
-    if (self->enabled)
+    if (self->enabled == EM_TRUE)
     {
         reen = 1;
         daq_enable(self, EM_FALSE);
@@ -550,10 +550,10 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
             LL_ADC_REG_SetTriggerSource(ADC2, LL_ADC_REG_TRIG_SOFTWARE);
             LL_ADC_REG_SetDMATransfer(ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
 
-            self->dualmode = 1;
+            self->dualmode = EM_TRUE;
         }
         else
-            self->dualmode = 0;
+            self->dualmode = EM_FALSE;
 
 #endif
 
@@ -567,10 +567,10 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
             LL_ADC_REG_SetTriggerSource(ADC2, LL_ADC_REG_TRIG_SOFTWARE);
             LL_ADC_REG_SetDMATransfer(ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
 
-            self->interleaved = 1;
+            self->interleaved = EM_TRUE;
         }
         else
-            self->interleaved = 0;
+            self->interleaved = EM_FALSE;
 #endif
 
 #elif defined(EM_ADC_MODE_ADC12) /* --------------------------------------------------------------------------*/
@@ -587,10 +587,10 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
             LL_ADC_REG_SetTriggerSource(ADC2, LL_ADC_REG_TRIG_SOFTWARE);
             LL_ADC_REG_SetDMATransfer(ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
 
-            self->interleaved = 1;
+            self->interleaved = EM_TRUE;
         }
         else
-            self->interleaved = 0;
+            self->interleaved = EM_FALSE;
 #endif
 
 #elif defined(EM_ADC_MODE_ADC1234) /* --------------------------------------------------------------------------*/
@@ -615,10 +615,10 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
             LL_ADC_REG_SetTriggerSource(ADC4, LL_ADC_REG_TRIG_SOFTWARE);
             LL_ADC_REG_SetDMATransfer(ADC4, LL_ADC_REG_DMA_TRANSFER_NONE);
 
-            self->interleaved = 1;
+            self->interleaved = EM_TRUE;
         }
         else
-            self->interleaved = 0;
+            self->interleaved = EM_FALSE;
 #endif
 
 #endif
@@ -636,8 +636,8 @@ void daq_reset(daq_data_t* self)
     self->trig.uwtick_first = 0;
     self->trig.pretrig_cntr = 0;
     self->trig.posttrig_size = 0;
-    self->trig.ready_last = 0;
-    self->trig.ready = 0;
+    self->trig.ready_last = EM_FALSE;
+    self->trig.ready = EM_FALSE;
     self->trig.cntr = 0;
     self->trig.all_cntr = 0;
     //self->trig.pos_frst = 0;
@@ -645,7 +645,7 @@ void daq_reset(daq_data_t* self)
     //self->trig.pos_last = 0;
     //self->trig.pos_diff = 0;
     self->trig.pretrig_cntr = 0;
-    self->trig.is_post = 0;
+    self->trig.is_post = EM_FALSE;
 
     if (self->buff1.len > 0)
         memset(self->buff1.data, 0, self->buff1.len);
@@ -665,13 +665,13 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         //for (int i = 0; i < 1000; i++) __asm("nop");
     }
 
-    if (self->enabled == EM_TRUE && self->dis_hold)
+    if (self->enabled == EM_TRUE && self->dis_hold == EM_TRUE)
         return;
 
     self->trig.pretrig_cntr = 0;
     self->trig.all_cntr = 0;
     self->trig.cntr = 0;
-    self->trig.ignore = 0;
+    self->trig.ignore = EM_FALSE;
 
     if (self->mode == SCOPE || self->mode == VM)
     {
@@ -680,7 +680,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         daq_enable_adc(self, ADC1, enable, EM_DMA_CH_ADC1);
 #endif
 
-        if (!self->interleaved)
+        if (self->interleaved == EM_FALSE)
         {
 #if defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
         daq_enable_adc(self, ADC2, enable, EM_DMA_CH_ADC2);
@@ -756,7 +756,7 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
 
     daq_enable(self, EM_FALSE);
     daq_reset(self);
-    self->dis_hold = 1;
+    self->dis_hold = EM_TRUE;
     self->mode = mode;
 
     // GPIO init
@@ -818,7 +818,7 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
                      self->trig.save_l.mode, self->trig.save_l.pretrigger);
     }
 
-    self->dis_hold = 0;
+    self->dis_hold = EM_FALSE;
     daq_enable(self, EM_TRUE);
     self->uwTick_start = self->uwTick;
 }

@@ -99,6 +99,9 @@ private:
     QFrame* m_status_line2;
     QFrame* m_status_line3;
 
+    /* animated logo */
+    QMovie* m_movie_logo;
+
     /* windows */
     WindowScope* m_w_scope = Q_NULLPTR;
     WindowLa* m_w_la = Q_NULLPTR;

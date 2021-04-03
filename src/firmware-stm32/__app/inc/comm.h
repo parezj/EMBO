@@ -51,5 +51,6 @@ comm_data_t* comm_ptr;
 void comm_init(comm_data_t* self);
 uint8_t comm_main(comm_data_t* self);
 int comm_respond(comm_data_t* self, const char* data, int len);
+void comm_daq_ready(comm_data_t* self, const char* rdy, uint32_t pos_frst);
 
 #endif

@@ -35,7 +35,7 @@ macx: LIBS += -framework AppKit
 LIBS += -lqBreakpad
 
 
-VERSION = 0.0.2
+VERSION = 0.0.4
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 QMAKE_TARGET_COMPANY = CTU Jakub Parez

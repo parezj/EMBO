@@ -80,6 +80,7 @@
 #define CSS_BUTTON_VM_ON      " QPushButton { text-align:left; padding-left:13px }"
 #define CSS_BUTTON_VM_MAIN    " QPushButton { text-align:left; padding-left:22px }"
 #define CSS_BUTTON_VM_RESET   " QPushButton { text-align:left; padding-left:28px }"
+#define CSS_BUTTON_VM_RESETZ  " QPushButton { text-align:left; padding-left:4px  }"
 
 
 #define CSS_BUTTON_ON         "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \

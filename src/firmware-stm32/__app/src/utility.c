@@ -107,8 +107,8 @@ int get_1ch_from_circ(int from, int total, int bufflen, int ch, int ch_num, int 
             {
                 val = (float) (*((uint16_t*)(((uint8_t*)buff)+(i*2))));
                 uint16_t ret = (uint16_t)(vref_cal * (val / vcc)); // 0.8 mV precision rounded (output in mV*10)
-                out[(*idx)++] = LO_BYTE16(ret);
-                out[(*idx)++] = HI_BYTE16(ret);
+                out[(*idx)++] = U16_TO_U8_L(ret);
+                out[(*idx)++] = U16_TO_U8_H(ret);
                 found++;
             }
             else // (daq_bits == 8)
@@ -182,7 +182,7 @@ float fastpow2(float p)
     return v.f;
 }
 
-void itoa_fast(char* s, int num, int radix)
+int itoa_fast(char* s, int num, int radix)
 {
     char sign = 0;
     char temp[17];  //an int can only be 16 bits long
@@ -221,12 +221,13 @@ void itoa_fast(char* s, int num, int radix)
         s[str_loc++] = temp[temp_loc--];
     }
     s[str_loc] = 0; // add null termination.
+    return str_loc;
 }
 
 /* Author: Jakub Parez
  * Descr:  ultra fast float sprintf
  */
-void sprint_fast(char* s, const char* format, double fVal, int prec)
+int sprint_fast(char* s, const char* format, double fVal, int prec)
 {
     char result[100] = { '\0' };
     char result_rev[100] = { '\0' };
@@ -271,4 +272,6 @@ void sprint_fast(char* s, const char* format, double fVal, int prec)
         result_rev[j] = result[i];
 
     sprintf(s, format, result_rev);
+
+    return j;
 }
