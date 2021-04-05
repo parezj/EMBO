@@ -111,7 +111,7 @@ void WindowScope::on_actionAbout_triggered()
 
 void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
 
     if (needClose)
         this->close();
@@ -239,7 +239,7 @@ void WindowScope::on_msg_daqReady(Ready ready)
 
 void WindowScope::closeEvent(QCloseEvent*)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
     m_instrEnabled = false;
 
     Core::getInstance()->setMode(NO_MODE);

@@ -96,7 +96,7 @@ void WindowPwm::on_msg_ok(const QString val1, const QString)
 
 void WindowPwm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
 
     if (needClose)
         this->close();
@@ -284,7 +284,7 @@ void WindowPwm::on_radioButton_fine_clicked()
 
 void WindowPwm::closeEvent(QCloseEvent*)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
     m_instrEnabled = false;
 
     emit closing(WindowPwm::staticMetaObject.className());

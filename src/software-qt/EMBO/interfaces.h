@@ -14,11 +14,11 @@ class IEmboInstrument
 public :
     virtual ~IEmboInstrument() {}
 
-    virtual Msg* getActiveMsg() = 0;
+    virtual std::vector<Msg*>& getActiveMsgs() = 0;
     virtual bool getInstrEnabled() = 0;
 
     bool m_instrEnabled = false;
-    Msg* m_activeMsg = Q_NULLPTR;
+    std::vector<Msg*> m_activeMsgs;
 };
 
 #endif // INTERFACES_H

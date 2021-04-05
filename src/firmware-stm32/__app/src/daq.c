@@ -50,6 +50,7 @@ void daq_init(daq_data_t* self)
     self->dualmode = EM_FALSE;
     self->uwTick = 0;
     self->uwTick_start = 0;
+    self->vm_seq = -1;
 
 #if defined(EM_ADC_MODE_ADC1) || defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
     NVIC_SetPriority(EM_IRQN_ADC12, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
@@ -806,6 +807,7 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
         daq_mem_set(self, EM_VM_MEM);
         daq_fs_set(self, EM_VM_FS);
         daq_trig_set(self, 0, 0, RISING, DISABLED, 50);
+        self->vm_seq = -1;
     }
     else // if (mode == LA)
     {

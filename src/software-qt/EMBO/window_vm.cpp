@@ -22,34 +22,62 @@
 
 
 #define Y_LIM           0.20
-#define DEFAULT_PLT     300
+#define DEFAULT_PLT     DISPLAY_VM_DEFAULT
 #define DEFAULT_AVG     1
 
 
-WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm)
+WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm) // TODO nasekat na funkce
 {
     m_ui->setupUi(this);
 
-    m_timer_render = new QTimer(this);
-    m_timer_render->setTimerType(Qt::PreciseTimer);
+    m_timer_plot = new QTimer(this);
+    m_timer_digits = new QTimer(this);
 
-    m_msg_read = new Msg_VM_Read(this);
+    m_timer_plot->setTimerType(Qt::PreciseTimer);
+    m_timer_digits->setTimerType(Qt::PreciseTimer);
 
-    connect(m_msg_read, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+    m_msg_read1 = new Msg_VM_Read(this);
+    m_msg_read2 = new Msg_VM_Read(this);
+    m_msg_read3 = new Msg_VM_Read(this);
+    m_msg_read4 = new Msg_VM_Read(this);
+    m_msg_read5 = new Msg_VM_Read(this);
 
-    connect(m_timer_render, &QTimer::timeout, this, &WindowVm::on_timer_render);
+    m_msg_read1->setParams("1");
+    m_msg_read2->setParams("1");
+    m_msg_read3->setParams("1");
+    m_msg_read4->setParams("1");
+    m_msg_read5->setParams("1");
+
+    connect(m_msg_read1, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_read1, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+
+    connect(m_msg_read2, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_read2, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+
+    connect(m_msg_read3, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_read3, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+
+    connect(m_msg_read4, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_read4, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+
+    connect(m_msg_read5, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_read5, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+
+    connect(m_timer_plot, &QTimer::timeout, this, &WindowVm::on_timer_plot);
+    connect(m_timer_digits, &QTimer::timeout, this, &WindowVm::on_timer_digits);
 
     m_ui->dial_display->setValue(DISPLAY_VM_DEFAULT);
     m_ui->horizontalSlider_trigPre->setVisible(false);
     m_ui->horizontalSlider_trigVal->setVisible(false);
 
+    /*
     m_meanCh1.setSize(MOVEMEAN_VM);
     m_meanCh2.setSize(MOVEMEAN_VM);
     m_meanCh3.setSize(MOVEMEAN_VM);
     m_meanCh4.setSize(MOVEMEAN_VM);
     m_meanVcc.setSize(MOVEMEAN_VM);
     m_meanAvg.setSize(MOVEMEAN_VM);
+    */
 
     /* QCP */
 
@@ -133,8 +161,10 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     m_ui->spinBox_average->setValue(Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
     m_ui->spinBox_display->setValue(Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
-
     m_ui->actionShow_Plot->setChecked(Settings::getValue(CFG_VM_SHOW_PLOT, true).toBool());
+
+    on_spinBox_average_valueChanged(m_ui->spinBox_average->value());
+    on_spinBox_display_valueChanged(m_ui->spinBox_display->value());
     on_actionShow_Plot_triggered(m_ui->actionShow_Plot->isChecked());
 
     m_instrEnabled = true;
@@ -211,7 +241,7 @@ void WindowVm::on_actionAbout_triggered()
 
 void WindowVm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
 
     if (needClose)
         this->close();
@@ -221,9 +251,10 @@ void WindowVm::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 
 void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString ch3, const QString ch4, const QString vcc) // 100 Hz idealy
 {
-    if (m_instrEnabled && m_activeMsg != Q_NULLPTR)
+    if (m_instrEnabled && !m_activeMsgs.empty())
     {
-        double t_ms = (m_timer_elapsed.elapsed() - m_elapsed_diff);
+        double t_ms = m_timer_elapsed;
+        m_timer_elapsed += 10;
         double t = t_ms / 1000.0;
 
         double _ch1 = ch1.toDouble() * m_gain1;
@@ -231,84 +262,123 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
         double _ch3 = ch3.toDouble() * m_gain3;
         double _ch4 = ch4.toDouble() * m_gain4;
 
-        m_data_ch1 = _ch1;
-        m_data_ch2 = _ch2;
+        double data_ch1 = _ch1;
+        double data_ch2 = _ch2;
+        double data_ch3 = _ch3;
+        double data_ch4 = _ch4;
+        double data_vcc = vcc.toDouble();
 
         if (m_math_1minus2)
-            m_data_ch3 = _ch2 - _ch1;
-        else
-            m_data_ch3 = _ch3;
+            data_ch3 = _ch2 - _ch1;
 
         if (m_math_3minus4)
-            m_data_ch4 = _ch4 - _ch3;
-        else
-            m_data_ch4 = _ch4;
+            data_ch4 = _ch4 - _ch3;
 
-        m_data_vcc = vcc.toDouble();
+        bool data_fresh = false;
 
-        m_meanCh1.addVal(m_data_ch1);
-        m_meanCh2.addVal(m_data_ch2);
-        m_meanCh3.addVal(m_data_ch3);
-        m_meanCh4.addVal(m_data_ch4);
-        m_meanVcc.addVal(m_data_vcc);
-
-        m_smplBuff.push_back(VmSample {t, m_data_ch1, m_data_ch2, m_data_ch3, m_data_ch4});
-
-        m_data_fresh = true;
-
-        /*
-        if (m_meas_ch == GRAPH_CH1)
+        if (m_average > 1) // average enabled
         {
-            if (m_data_ch1 > m_meas_max) m_meas_max = m_data_ch1;
-            if (m_data_ch1 < m_meas_min) m_meas_min = m_data_ch1;
+            m_avg_it++;
+
+            m_avg1_val += data_ch1;
+            m_avg2_val += data_ch2;
+            m_avg3_val += data_ch3;
+            m_avg4_val += data_ch4;
+            m_avgVcc_val += data_vcc;
+
+            if (m_avg_it == m_average) // average is ready
+            {
+                m_data_ch1 = m_avg1_val / m_average;
+                m_data_ch2 = m_avg2_val / m_average;
+                m_data_ch3 = m_avg3_val / m_average;
+                m_data_ch4 = m_avg4_val / m_average;
+                m_data_vcc = m_avgVcc_val / m_average;
+
+                m_avg1_val = 0;
+                m_avg2_val = 0;
+                m_avg3_val = 0;
+                m_avg4_val = 0;
+                m_avgVcc_val = 0;
+
+                m_avg_it = 0;
+
+                data_fresh = true;
+                m_data_fresh = true;
+            }
         }
-        if (m_meas_ch == GRAPH_CH2)
+        else // average disabled
         {
-            if (m_data_ch2 > m_meas_max) m_meas_max = m_data_ch2;
-            if (m_data_ch2 < m_meas_min) m_meas_min = m_data_ch2;
-        }
-        if (m_meas_ch == GRAPH_CH3)
-        {
-            if (m_data_ch3 > m_meas_max) m_meas_max = m_data_ch3;
-            if (m_data_ch3 < m_meas_min) m_meas_min = m_data_ch3;
-        }
-        if (m_meas_ch == GRAPH_CH4)
-        {
-            if (m_data_ch4 > m_meas_max) m_meas_max = m_data_ch4;
-            if (m_data_ch4 < m_meas_min) m_meas_min = m_data_ch4;
-        }
-        */
+            data_fresh = true;
+            m_data_fresh = true;
 
-        if (m_recording)
+            m_data_ch1 = data_ch1;
+            m_data_ch2 = data_ch2;
+            m_data_ch3 = data_ch3;
+            m_data_ch4 = data_ch4;
+            m_data_vcc = data_vcc;
+        }
+
+        if (data_fresh)
         {
-            rec << t_ms;
-            if (m_en1)
-                rec << m_data_ch1;
-            if (m_en2)
-                rec << m_data_ch2;
-            if (m_en3)
-                rec << m_data_ch3;
-            if (m_en4)
-                rec << m_data_ch4;
-            if (m_en1 + m_en2 + m_en3 + m_en4 > 0)
-                rec << ENDL;
+            data_fresh = false;
+
+            /*
+            m_meanCh1.addVal(m_data_ch1);
+            m_meanCh2.addVal(m_data_ch2);
+            m_meanCh3.addVal(m_data_ch3);
+            m_meanCh4.addVal(m_data_ch4);
+            m_meanVcc.addVal(m_data_vcc);
+            */
+
+            m_smplBuff.push_back(VmSample {t, m_data_ch1, m_data_ch2, m_data_ch3, m_data_ch4});
+
+            if (m_recording)
+            {
+                rec << t_ms;
+                if (m_en1)
+                    rec << m_data_ch1;
+                if (m_en2)
+                    rec << m_data_ch2;
+                if (m_en3)
+                    rec << m_data_ch3;
+                if (m_en4)
+                    rec << m_data_ch4;
+                if (m_en1 + m_en2 + m_en3 + m_en4 > 0)
+                    rec << ENDL;
+            }
         }
     }
 }
 
-void WindowVm::on_timer_render() // 30 FPS
+void WindowVm::on_timer_plot() // 60 FPS
 {
-    if (m_data_fresh && m_instrEnabled)
+    if (m_instrEnabled)
+    {
+        if (updatePlotData()) // add values to graph
+        {
+            if (m_en1)
+                m_ui->progressBar_ch1->setValue((m_data_ch1 / (m_ref_v * m_gain1)) * 100.0);
+            if (m_en2)
+                m_ui->progressBar_ch2->setValue((m_data_ch2 / (m_ref_v * m_gain2)) * 100.0);
+            if (m_en3)
+                m_ui->progressBar_ch3->setValue((m_data_ch3 / (m_ref_v * m_gain3)) * 100.0);
+            if (m_en4)
+                m_ui->progressBar_ch4->setValue((m_data_ch4 / (m_ref_v * m_gain4)) * 100.0);
+        }
+    }
+}
+
+void WindowVm::on_timer_digits() // 4 FPS
+{
+    if (m_instrEnabled && m_data_fresh)
     {
         m_data_fresh = false;
 
-        updatePlotData(); // add values to graph
-
-        double ch1 = m_meanCh1.getMean();
-        double ch2 = m_meanCh2.getMean();
-        double ch3 = m_meanCh3.getMean();
-        double ch4 = m_meanCh4.getMean();
-        double vcc = m_meanVcc.getMean();
+        double ch1 = m_data_ch1; //m_meanCh1.getMean();
+        double ch2 = m_data_ch2; //m_meanCh2.getMean();
+        double ch3 = m_data_ch3; //m_meanCh3.getMean();
+        double ch4 = m_data_ch4; //m_meanCh4.getMean();
+        double vcc = m_data_vcc; //m_meanVcc.getMean();
         int vcc_mv = (int)(vcc * 1000);
 
         QString ch1_s;
@@ -324,65 +394,51 @@ void WindowVm::on_timer_render() // 30 FPS
         vcc_mv_s = vcc_mv_s.asprintf("%d", vcc_mv);
 
         if (m_en1)
-            m_ui->progressBar_ch1->setValue((m_data_ch1 / (m_ref_v * m_gain1)) * 100.0);
+            m_ui->textBrowser_ch1->setHtml("<p align=\"center\">" + ch1_s + " V</p>");
         if (m_en2)
-            m_ui->progressBar_ch2->setValue((m_data_ch2 / (m_ref_v * m_gain2)) * 100.0);
+            m_ui->textBrowser_ch2->setHtml("<p align=\"center\">" + ch2_s + " V</p>");
         if (m_en3)
-            m_ui->progressBar_ch3->setValue((m_data_ch3 / (m_ref_v * m_gain3)) * 100.0);
+            m_ui->textBrowser_ch3->setHtml("<p align=\"center\">" + ch3_s + " V</p>");
         if (m_en4)
-            m_ui->progressBar_ch4->setValue((m_data_ch4 / (m_ref_v * m_gain4)) * 100.0);
+            m_ui->textBrowser_ch4->setHtml("<p align=\"center\">" + ch4_s + " V</p>");
 
-        m_display_vals--;
+        m_ref_v = vcc;
+        Core::getInstance()->getDevInfo()->ref_mv = vcc_mv;
+        m_status_vcc->setText(" Vcc: " + vcc_mv_s + " mV");
 
-        if (m_display_vals <= 0) // a little bit slower values displaying - for better readability
+        if (m_meas_en) //&& m_meas_max > -1000 && m_meas_min < 1000)
         {
-            m_display_vals = DISPLAY_VALS_RATE;
+            QString meas_vpp_s;
+            QString meas_avg_s;
+            QString meas_min_s;
+            QString meas_max_s;
 
-            if (m_en1)
-                m_ui->textBrowser_ch1->setHtml("<p align=\"center\">" + ch1_s + " V</p>");
-            if (m_en2)
-                m_ui->textBrowser_ch2->setHtml("<p align=\"center\">" + ch2_s + " V</p>");
-            if (m_en3)
-                m_ui->textBrowser_ch3->setHtml("<p align=\"center\">" + ch3_s + " V</p>");
-            if (m_en4)
-                m_ui->textBrowser_ch4->setHtml("<p align=\"center\">" + ch4_s + " V</p>");
+            auto data_begin = m_ui->customPlot->graph(m_meas_ch)->data()->constBegin();
+            auto data_end = m_ui->customPlot->graph(m_meas_ch)->data()->constEnd();
 
-            m_ref_v = vcc;
-            Core::getInstance()->getDevInfo()->ref_mv = vcc_mv;
-            m_status_vcc->setText(" Vcc: " + vcc_mv_s + " mV");
+            double avg = std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + b.value;}) / std::distance(data_begin, data_end);
+            double min = std::min_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_min;
+            double max = std::max_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_max;
+            double vpp = max - min;
 
-            if (m_meas_en) //&& m_meas_max > -1000 && m_meas_min < 1000)
-            {
-                QString meas_vpp_s;
-                QString meas_avg_s;
-                QString meas_min_s;
-                QString meas_max_s;
+            meas_vpp_s = meas_vpp_s.asprintf(vpp >= 100 || vpp <= -10  ? "%.2f" : (vpp >= 10 || vpp < 0 ? "%.3f" : "%.4f"), vpp);
+            meas_avg_s = meas_avg_s.asprintf(avg >= 100 || avg <= -10  ? "%.2f" : (avg >= 10 || avg < 0 ? "%.3f" : "%.4f"), avg);
+            meas_min_s = meas_min_s.asprintf(min >= 100 || min <= -10  ? "%.2f" : (min >= 10 || min < 0 ? "%.3f" : "%.4f"), min);
+            meas_max_s = meas_max_s.asprintf(max >= 100 || max <= -10  ? "%.2f" : (max >= 10 || max < 0 ? "%.3f" : "%.4f"), max);
 
-                auto data_begin = m_ui->customPlot->graph(m_meas_ch)->data()->constBegin();
-                auto data_end = m_ui->customPlot->graph(m_meas_ch)->data()->constEnd();
-
-                double _avg = std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + b.value;}) / std::distance(data_begin, data_end);
-                double avg = m_meanAvg.getMean(_avg);
-                double min = std::min_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_min;
-                double max = std::max_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_max;
-                double vpp = max - min;
-
-                meas_vpp_s = meas_vpp_s.asprintf(vpp >= 100 || vpp <= -10  ? "%.2f" : (vpp >= 10 || vpp < 0 ? "%.3f" : "%.4f"), vpp);
-                meas_avg_s = meas_avg_s.asprintf(avg >= 100 || avg <= -10  ? "%.2f" : (avg >= 10 || avg < 0 ? "%.3f" : "%.4f"), avg);
-                meas_min_s = meas_min_s.asprintf(min >= 100 || min <= -10  ? "%.2f" : (min >= 10 || min < 0 ? "%.3f" : "%.4f"), min);
-                meas_max_s = meas_max_s.asprintf(max >= 100 || max <= -10  ? "%.2f" : (max >= 10 || max < 0 ? "%.3f" : "%.4f"), max);
-
-                m_ui->textBrowser_measVpp->setHtml("<p align=\"right\">" + meas_vpp_s + " </p>");
-                m_ui->textBrowser_measAvg->setHtml("<p align=\"right\">" + meas_avg_s + " </p>");
-                m_ui->textBrowser_measMin->setHtml("<p align=\"right\">" + meas_min_s + " </p>");
-                m_ui->textBrowser_measMax->setHtml("<p align=\"right\">" + meas_max_s + " </p>");
-            }
+            m_ui->textBrowser_measVpp->setHtml("<p align=\"right\">" + meas_vpp_s + " </p>");
+            m_ui->textBrowser_measAvg->setHtml("<p align=\"right\">" + meas_avg_s + " </p>");
+            m_ui->textBrowser_measMin->setHtml("<p align=\"right\">" + meas_min_s + " </p>");
+            m_ui->textBrowser_measMax->setHtml("<p align=\"right\">" + meas_max_s + " </p>");
         }
     }
 }
 
-void WindowVm::updatePlotData()
+bool WindowVm::updatePlotData()
 {
+    if (m_smplBuff.empty())
+        return false;
+
     for (auto smpl : m_smplBuff)
     {
         m_key_last = smpl.t;
@@ -424,6 +480,8 @@ void WindowVm::updatePlotData()
     m_ui->customPlot->graph(GRAPH_CH4)->data()->removeBefore(m_key_last - m_display);
 
     m_ui->customPlot->replot();
+
+    return true;
 }
 
 void WindowVm::on_actionStart_triggered()
@@ -773,7 +831,6 @@ void WindowVm::on_doubleSpinBox_gain4_valueChanged(double arg1)
 void WindowVm::on_pushButton_disable_clicked()
 {
     m_instrEnabled = false;
-    m_elapsed_saved = m_timer_elapsed.elapsed();
 
     m_ui->pushButton_enable->show();
     m_ui->pushButton_disable->hide();
@@ -822,8 +879,15 @@ void WindowVm::on_pushButton_enable_clicked()
 {
     m_smplBuff.clear();
 
+    m_avg1_val = 0;
+    m_avg2_val = 0;
+    m_avg3_val = 0;
+    m_avg4_val = 0;
+    m_avgVcc_val = 0;
+    m_avg_it = 0;
+
     m_instrEnabled = true;
-    m_elapsed_diff += m_timer_elapsed.elapsed() - m_elapsed_saved;
+    //m_elapsed_diff += m_timer_elapsed.elapsed() - m_elapsed_saved;
 
     m_ui->pushButton_enable->hide();
     m_ui->pushButton_disable->show();
@@ -874,9 +938,25 @@ void WindowVm::on_spinBox_average_valueChanged(int arg1)
     m_ui->dial_average->setValue(arg1);
 
     m_average = arg1;
-    m_msg_read->setParams(QString::number(m_average));
+
+    m_smplBuff.clear();
+
+    m_avg1_val = 0;
+    m_avg2_val = 0;
+    m_avg3_val = 0;
+    m_avg4_val = 0;
+    m_avgVcc_val = 0;
+    m_avg_it = 0;
+
+    double nplc = m_average / 2.0;
+    m_ui->label_nplc->setText(QString::number(nplc, 'f', 1) + " NPLC");
 
     Settings::setValue(CFG_VM_AVG, arg1);
+
+    if (m_average > 1)
+        m_ui->label_avg->setText("Average:");
+    else
+        m_ui->label_avg->setText("Average (OFF):");
 }
 
 void WindowVm::on_dial_average_valueChanged(int value)
@@ -889,7 +969,7 @@ void WindowVm::on_spinBox_display_valueChanged(int arg1)
     m_ui->dial_display->setValue(arg1);
 
     m_display_pts = arg1;
-    m_display = (double)arg1 / ((double)TIMER_VM_RENDER);
+    m_display = ((double)arg1 + 1) / ((double)TIMER_VM_PLOT);
 
     Settings::setValue(CFG_VM_PLT, arg1);
 }
@@ -1160,7 +1240,7 @@ void WindowVm::on_pushButton_reset_clicked()
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
     m_smplBuff.clear();
-    m_timer_elapsed.restart();
+    m_timer_elapsed = 0;
 
     m_elapsed_diff = 0;
     m_elapsed_saved = 0;
@@ -1223,12 +1303,13 @@ void WindowVm::on_actionShow_Plot_triggered(bool checked)
 
 void WindowVm::closeEvent(QCloseEvent*)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
 
     Core::getInstance()->setMode(NO_MODE);
     emit closing(WindowVm::staticMetaObject.className());
 
-    m_timer_render->stop();
+    m_timer_plot->stop();
+    m_timer_digits->stop();
 }
 
 void WindowVm::showEvent(QShowEvent*)
@@ -1259,25 +1340,32 @@ void WindowVm::showEvent(QShowEvent*)
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
+    /*
     m_meanCh1.reset();
     m_meanCh2.reset();
     m_meanCh3.reset();
     m_meanCh4.reset();
     m_meanVcc.reset();
     m_meanAvg.reset();
+    */
 
     m_ui->customPlot->replot();
 
     Core::getInstance()->setMode(VM);
 
-    m_activeMsg = m_msg_read;
+    m_activeMsgs.push_back(m_msg_read1);
+    m_activeMsgs.push_back(m_msg_read2);
+    m_activeMsgs.push_back(m_msg_read3);
+    m_activeMsgs.push_back(m_msg_read4); // TODO is this needed?
+    //m_activeMsgs.push_back(m_msg_read5);
 
     m_smplBuff.clear();
     m_data_fresh = false;
     on_actionReset_triggered();
 
-    m_timer_elapsed.restart();
-    m_timer_render->start(TIMER_VM_RENDER);
+    m_timer_elapsed = 0;
+    m_timer_plot->start(TIMER_VM_PLOT);
+    m_timer_digits->start(TIMER_VM_DIGITS);
 }
 
 void WindowVm::rescaleYAxis()

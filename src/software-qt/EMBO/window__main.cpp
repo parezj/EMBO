@@ -333,7 +333,7 @@ void WindowMain::setConnected()
     m_ui->label_la_protocols->setText("Serial, I2C, SPI");
     m_ui->label_la_pins->setText(info->pins_la.replace("-", ", "));
 
-    m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Hz", 0));
+    m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Sps", 0));
     m_ui->label_vm_mem->setText(format_unit(info->vm_mem, "S", 0));
     m_ui->label_vm_bits->setText("12 bit");
     m_ui->label_vm_pins->setText(info->pins_scope_vm.replace("-", ", "));

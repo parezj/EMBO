@@ -27,8 +27,9 @@ public:
 
     QString getCmd() { return this->m_cmd; }
     bool getIsQuery() { return this->m_isQuery; }
-    void setIsQuery(bool val) { this->m_isQuery = val; }
     QString getParams() { return this->m_params; }
+
+    void setIsQuery(bool val) { this->m_isQuery = val; }
     void setParams(QString val) { this->m_params = val; }
 
 protected slots:

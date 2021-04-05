@@ -157,7 +157,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
 {
     if (daq.mode == VM)
     {
-        daq_enable(&daq, EM_FALSE);
+        //daq_enable(&daq, EM_FALSE);
 
         uint32_t p1 = 0;
         if (context != NULL)
@@ -171,56 +171,81 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
         double ch3_raw = 0;
         double ch4_raw = 0;
 
-        int avg_num = 1;
-        if (p1 > 0)
-            avg_num = (int)p1;
+        uint8_t seq_mode = EM_FALSE;
 
-        if (avg_num > daq.set.mem)
+        if (p1 == 1)
+            seq_mode = EM_TRUE;
+        else if (p1 == 0)
+            daq.vm_seq = -1;
+        else
         {
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
         }
-        else if (avg_num > 1) // handle starts, when buffer is not full
-        {
-            uint32_t ms_elapsed = daq.uwTick - daq.uwTick_start;
-            if (ms_elapsed < 0)
-                ms_elapsed += EM_UWTICK_MAX;
 
-            uint32_t ms_full = (EM_VM_MEM / (float)EM_VM_FS) * 1000.0;
-            if (ms_elapsed < ms_full)
+        int last_idx = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
+
+#if defined(EM_ADC_MODE_ADC1)
+        int buff1_size = 5;
+#elif defined(EM_ADC_MODE_ADC12)
+        int buff1_size = 3;
+#elif defined(EM_ADC_MODE_ADC1234)
+        int buff1_size = 2;
+#endif
+
+        for (int x = 0; x < buff1_size; x++) // normalize index to mem size
+        {
+            if (last_idx % buff1_size == buff1_size - 1)
+                break;
+
+            last_idx--;
+            if (last_idx < 0)
+                last_idx = daq.buff1.len - 1;
+        }
+
+        int last_mem = last_idx / buff1_size; // normalized index can be truncated to mem size
+        //ASSERT(last_idx % buff1_size == buff1_size - 1);
+
+        if (seq_mode == EM_TRUE)
+        {
+            if (daq.vm_seq == -1) // start seq. transfer
             {
-                /*
-                int avg_max = (ms_elapsed / (float)ms_full) * (float)daq.set.mem;
-                avg_num = (avg_num > avg_max ? avg_max : avg_num) - 1;
-                if (avg_num < 1)
-                    avg_num = 1;
-                */
-                avg_num = 1;
+                daq.vm_seq = last_mem;
+            }
+            else // continue seq. transfer
+            {
+                if (daq.vm_seq == last_mem)
+                {
+                    //daq_enable(&daq, EM_TRUE);
+
+                    SCPI_ResultText(context, "Empty");
+                    return SCPI_RES_OK;
+                }
+                else
+                {
+                    daq.vm_seq++;
+                    if (daq.vm_seq >= daq.set.mem + (daq.buff1.reserve / buff1_size))
+                        daq.vm_seq = 0;
+                    last_idx = (daq.vm_seq * buff1_size) + (buff1_size - 1);
+                }
             }
         }
 
 #if defined(EM_ADC_MODE_ADC1)
-        int last1 = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
 
-        get_avg_from_circ(last1, 5, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
+        get_1val_from_circ(last_idx, 5, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
 
 #elif defined(EM_ADC_MODE_ADC12)
-        int last1 = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
-        int last2 = EM_DMA_LAST_IDX(daq.buff2.len, EM_DMA_CH_ADC2, EM_DMA_ADC2);
 
-        get_avg_from_circ(last1, 3, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
-        get_avg_from_circ(last2, 2, avg_num, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
+        get_1val_from_circ(last_idx, 3, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
+        get_1val_from_circ((last_mem * 2) + 1, 2, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
 
 #elif defined(EM_ADC_MODE_ADC1234)
-        int last1 = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
-        int last2 = EM_DMA_LAST_IDX(daq.buff2.len, EM_DMA_CH_ADC2, EM_DMA_ADC2);
-        int last3 = EM_DMA_LAST_IDX(daq.buff3.len, EM_DMA_CH_ADC3, EM_DMA_ADC3);
-        int last4 = EM_DMA_LAST_IDX(daq.buff4.len, EM_DMA_CH_ADC4, EM_DMA_ADC4);
 
-        get_avg_from_circ(last1, 2, avg_num, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
-        get_avg_from_circ(last2, 1, avg_num, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
-        get_avg_from_circ(last3, 1, avg_num, daq.buff3.len, daq.buff3.data, daq.set.bits, &ch3_raw, NULL, NULL, NULL, NULL);
-        get_avg_from_circ(last4, 1, avg_num, daq.buff4.len, daq.buff4.data, daq.set.bits, &ch4_raw, NULL, NULL, NULL, NULL);
+        get_1val_from_circ(last_idx, 2, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
+        get_1val_from_circ(last_mem, 1, daq.buff2.len, daq.buff2.data, daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
+        get_1val_from_circ(last_mem, 1, daq.buff3.len, daq.buff3.data, daq.set.bits, &ch3_raw, NULL, NULL, NULL, NULL);
+        get_1val_from_circ(last_mem, 1, daq.buff4.len, daq.buff4.data, daq.set.bits, &ch4_raw, NULL, NULL, NULL, NULL);
 #endif
 
         char vcc_s[10];
@@ -259,7 +284,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
         char buff[100];
         int len = sprintf(buff, "%s,%s,%s,%s,%s", ch1_s, ch2_s, ch3_s, ch4_s, vcc_s);
 
-        daq_enable(&daq, EM_TRUE);
+        //daq_enable(&daq, EM_TRUE);
 
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;

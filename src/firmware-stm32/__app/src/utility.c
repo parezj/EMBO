@@ -24,7 +24,41 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void*
     int total = ch_num * avg_num;
     ASSERT(v1 != NULL && total > 0 && buff != NULL);
 
-    //double vcc = -1;
+    for (int i = last_idx, j = 0; j < total; j++, i--)
+    {
+        if (i < 0)
+            i = bufflen - 1;
+
+        double val;
+        if (daq_bits == 12)
+            val = (double)(*((uint16_t*)(((uint8_t*)buff)+(i*2))));
+        else
+            val = (double)(((uint8_t*)buff)[i]);
+
+        if (i % ch_num == 0)
+            *v1 += val;
+        else if (ch_num > 1 && i % ch_num == 1)
+            *v2 += val;
+        else if (ch_num > 2 && i % ch_num == 2)
+            *v3 += val;
+        else if (ch_num > 3 && i % ch_num == 3)
+            *v4 += val;
+        else if (ch_num > 4)  // && i % ch_num == 4)
+            *v5 += val;
+    }
+
+    *v1 /= avg_num;
+    if (v2 != NULL) *v2 /= avg_num;
+    if (v3 != NULL) *v3 /= avg_num;
+    if (v4 != NULL) *v4 /= avg_num;
+    if (v5 != NULL) *v5 /= avg_num;
+}
+
+void get_1val_from_circ(int last_idx, int ch_num, int bufflen, void* buff, int daq_bits,
+                        double* v1, double* v2, double* v3, double* v4, double* v5)
+{
+    int total = ch_num;
+    ASSERT(v1 != NULL && total > 0 && buff != NULL);
 
     for (int i = last_idx, j = 0; j < total; j++, i--)
     {
@@ -38,28 +72,16 @@ void get_avg_from_circ(int last_idx, int ch_num, int avg_num, int bufflen, void*
             val = (double)(((uint8_t*)buff)[i]);
 
         if (i % ch_num == 0)
-        {
-            //if (vcc == -1) vcc = val;
-            *v1 += val;
-        }
+            *v1 = val;
         else if (ch_num > 1 && i % ch_num == 1)
-            *v2 += val;
+            *v2 = val;
         else if (ch_num > 2 && i % ch_num == 2)
-            *v3 += val;
+            *v3 = val;
         else if (ch_num > 3 && i % ch_num == 3)
-            *v4 += val;
+            *v4 = val;
         else if (ch_num > 4)  // && i % ch_num == 4)
-            *v5 += val;
+            *v5 = val;
     }
-
-    //if (v2 == NULL) *v1 /= avg_num;
-    //else *v1 = vcc;
-
-    *v1 /= avg_num;
-    if (v2 != NULL) *v2 /= avg_num;
-    if (v3 != NULL) *v3 /= avg_num;
-    if (v4 != NULL) *v4 /= avg_num;
-    if (v5 != NULL) *v5 /= avg_num;
 }
 
 int get_vcc_from_circ(int from, int total, int bufflen, int ch_num, int daq_bits, void* buff)

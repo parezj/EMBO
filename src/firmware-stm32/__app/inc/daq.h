@@ -135,6 +135,7 @@ typedef struct
     float adc_max_val;      // max adc value
     uint32_t uwTick;        // 1 kHz counter
     uint32_t uwTick_start;  // tick count when mode start
+    int vm_seq;             // VM sequential number
 
     enum daq_mode mode;     // main system mode
     uint8_t dis_hold;       // keep disabled until is 0

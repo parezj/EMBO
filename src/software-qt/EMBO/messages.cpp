@@ -160,6 +160,9 @@ void Msg_VM_Read::on_dataRx()
 {
     qInfo() << "VM:READ: " <<  m_rxData;
 
+    if (m_rxData.contains("Empty"))
+        return;
+
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
     if (tokens.size() != 5)

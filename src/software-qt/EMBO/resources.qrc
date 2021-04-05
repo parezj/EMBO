@@ -61,6 +61,11 @@
         <file>resources/img/range_up.png</file>
         <file>resources/img/range_up2.png</file>
         <file>resources/img/ctu_meas_small.gif</file>
+        <file>resources/img/doc.png</file>
+        <file>resources/img/range_down3.png</file>
+        <file>resources/img/range_down4.png</file>
+        <file>resources/img/range_left3.png</file>
+        <file>resources/img/range_left4.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>

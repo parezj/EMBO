@@ -20,9 +20,9 @@
 #include <QElapsedTimer>
 
 
-#define TIMER_VM_RENDER         33  // graph refresh rate = 33 ms = 30 FPS
-#define DISPLAY_VALS_RATE       6   // values refresh rate = 200 ms = 5 Hz
-#define MOVEMEAN_VM             20  // values moving average 20 * 10 ms = 200 ms
+#define TIMER_VM_PLOT           16    // graph refresh rate = 16 ms = 60 FPS
+#define TIMER_VM_DIGITS         250   // values refresh rate = 250 ms = 4 FPS
+//#define MOVEMEAN_VM           1     // values moving average 20 * 10 ms = 200 ms
 
 #define GRAPH_CH1               0
 #define GRAPH_CH2               1
@@ -34,7 +34,7 @@
 #define CURSOR_DEFAULT_V_MIN    400
 #define CURSOR_DEFAULT_V_MAX    600
 
-#define DISPLAY_VM_DEFAULT      300
+#define DISPLAY_VM_DEFAULT      150
 
 
 QT_BEGIN_NAMESPACE
@@ -63,7 +63,7 @@ public:
     ~WindowVm();
 
     bool getInstrEnabled() override { return m_instrEnabled; };
-    Msg* getActiveMsg() override { return m_activeMsg; };
+    std::vector<Msg*>& getActiveMsgs() override { return m_activeMsgs; };
 
 signals:
     void closing(const char* className);
@@ -72,7 +72,8 @@ private slots:
     void on_msg_err(const QString text, MsgBoxType type, bool needClose);
     void on_msg_read(const QString ch1, const QString ch2, const QString ch3, const QString ch4, const QString vcc);
 
-    void on_timer_render();
+    void on_timer_plot();
+    void on_timer_digits();
 
     void on_actionAbout_triggered();
     void on_actionPoints_triggered(bool checked);
@@ -127,7 +128,7 @@ private slots:
 
 private:
     void initQcp();
-    void updatePlotData();
+    bool updatePlotData();
     void rescaleYAxis();
     void rescaleXAxis();
 
@@ -138,8 +139,9 @@ private:
     Ui::WindowVm* m_ui;
 
     /* timers */
-    QElapsedTimer m_timer_elapsed;
-    QTimer* m_timer_render;
+    double m_timer_elapsed = 0;
+    QTimer* m_timer_plot;
+    QTimer* m_timer_digits;
 
     /* status bar */
     QLabel* m_status_vcc;
@@ -164,12 +166,22 @@ private:
     double m_key_last = 0;
 
     /* mean buffers */
+    /*
     MoveMean<double> m_meanCh1;
     MoveMean<double> m_meanCh2;
     MoveMean<double> m_meanCh3;
     MoveMean<double> m_meanCh4;
     MoveMean<double> m_meanVcc;
     MoveMean<double> m_meanAvg;
+    */
+
+    /* average vars */
+    double m_avg1_val = 0;
+    double m_avg2_val = 0;
+    double m_avg3_val = 0;
+    double m_avg4_val = 0;
+    double m_avgVcc_val = 0;
+    int m_avg_it = 0;
 
     /* gain */
     double m_gain1 = 1;
@@ -200,7 +212,6 @@ private:
     bool m_cursorsH_en = false;
     bool m_math_1minus2 = false;
     bool m_math_3minus4 = false;
-    int m_display_vals = DISPLAY_VALS_RATE;
 
     /* stm32 pins */
     QString m_pin1 = "?";
@@ -219,12 +230,16 @@ private:
     /* elapsed helpers */
     int m_elapsed_saved = 0;
     int m_elapsed_diff = 0;
-    double m_display = DISPLAY_VM_DEFAULT / TIMER_VM_RENDER;
+    double m_display = DISPLAY_VM_DEFAULT / TIMER_VM_PLOT;
     double m_display_pts = DISPLAY_VM_DEFAULT;
     int m_average = 1;
 
     /* messages */
-    Msg_VM_Read* m_msg_read;
+    Msg_VM_Read* m_msg_read1;
+    Msg_VM_Read* m_msg_read2;
+    Msg_VM_Read* m_msg_read3;
+    Msg_VM_Read* m_msg_read4;
+    Msg_VM_Read* m_msg_read5;
 };
 
 #endif // WINDOW_VM_H

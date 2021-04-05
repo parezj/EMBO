@@ -36,7 +36,7 @@ public:
     ~WindowCntr();
 
     bool getInstrEnabled() override { return m_instrEnabled; };
-    Msg* getActiveMsg() override { return m_activeMsg; };
+    std::vector<Msg*>& getActiveMsgs() override { return m_activeMsgs; };
 
 signals:
     void closing(const char* className);

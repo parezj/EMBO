@@ -93,21 +93,35 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <property name="font">
       <font>
        <family>Roboto</family>
-       <pointsize>12</pointsize>
+       <pointsize>13</pointsize>
        <weight>50</weight>
        <italic>false</italic>
        <bold>false</bold>
        <kerning>true</kerning>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="accessibleName">
       <string/>
      </property>
      <property name="styleSheet">
-      <string notr="true"/>
+      <string notr="true">QListWidget { background: white; border:1px solid rgb(100, 100, 100); border-radius: 5px; } 
+
+QListWidget::item { background:  qlineargradient(x1:0, y1:0, x2:0, y2:2.5,
+                                  stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);  border: 1px solid transparent; border-radius: 0px; padding:3px;margin:1px  } 
+
+QListWidget::item:hover:!selected { color:black; background: qlineargradient(x1:0, y1:0, x2:0, y2:2.5, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA); }
+
+QListWidget::item:selected { color: black; background: qlineargradient(x1:1, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #85b8cc); }
+
+QListWidget::item:selected:disabled { color: black; background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #69D769); }
+
+</string>
      </property>
      <property name="verticalScrollBarPolicy">
-      <enum>Qt::ScrollBarAlwaysOn</enum>
+      <enum>Qt::ScrollBarAsNeeded</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
       <enum>Qt::ScrollBarAlwaysOff</enum>
@@ -129,6 +143,16 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <item>
       <property name="text">
        <string>COM15</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>COM8</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>COM14</string>
       </property>
      </item>
     </widget>
@@ -2576,6 +2600,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     </property>
     <addaction name="actionDocumentation"/>
     <addaction name="actionCheck_Updates"/>
+    <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuAbout"/>
@@ -2650,8 +2675,12 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
    </property>
   </action>
   <action name="actionDocumentation">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/main/resources/img/doc.png</normaloff>:/main/resources/img/doc.png</iconset>
+   </property>
    <property name="text">
-    <string>Documentation</string>
+    <string>EMBO Help</string>
    </property>
    <property name="font">
     <font>

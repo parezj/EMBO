@@ -295,12 +295,12 @@ ctkRangeSlider::groove:vertical {
 
 ctkRangeSlider::handle:vertical {
      height: 25px;
-	 image: url(:/main/resources/img/range_down.png);
+	 image: url(:/main/resources/img/range_left.png);
 }
 
 ctkRangeSlider::handle:vertical:hover {
      height: 25px;
-	 image: url(:/main/resources/img/range_down2.png);
+	 image: url(:/main/resources/img/range_left2.png);
 }
 
 QSlider {
@@ -2707,7 +2707,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="font">
              <font>
               <family>Roboto Light</family>
-              <pointsize>14</pointsize>
+              <pointsize>13</pointsize>
               <weight>50</weight>
               <bold>false</bold>
              </font>
@@ -2922,7 +2922,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>300</number>
+             <number>500</number>
             </property>
             <property name="value">
              <number>1</number>
@@ -2941,7 +2941,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>300</number>
+             <number>500</number>
             </property>
             <property name="value">
              <number>1</number>
@@ -2962,25 +2962,25 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              <bool>true</bool>
             </property>
            </widget>
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="label_avg">
             <property name="geometry">
              <rect>
               <x>80</x>
               <y>45</y>
-              <width>91</width>
+              <width>111</width>
               <height>21</height>
              </rect>
             </property>
             <property name="font">
              <font>
               <family>Roboto Light</family>
-              <pointsize>14</pointsize>
+              <pointsize>13</pointsize>
               <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
             <property name="text">
-             <string>Average:</string>
+             <string>Average (OFF):</string>
             </property>
            </widget>
            <widget class="QLabel" name="label_dial3">
@@ -3238,12 +3238,60 @@ QPushButton:pressed
              </size>
             </property>
            </widget>
+           <widget class="QLabel" name="label_nplc">
+            <property name="geometry">
+             <rect>
+              <x>170</x>
+              <y>10</y>
+              <width>61</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>10</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="layoutDirection">
+             <enum>Qt::LeftToRight</enum>
+            </property>
+            <property name="text">
+             <string>10.5 NPLC</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_fs">
+            <property name="geometry">
+             <rect>
+              <x>110</x>
+              <y>10</y>
+              <width>61</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>10</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>100 Sps</string>
+            </property>
+           </widget>
            <zorder>spinBox_display</zorder>
            <zorder>label_3</zorder>
            <zorder>label_dial4</zorder>
            <zorder>dial_display</zorder>
            <zorder>spinBox_average</zorder>
-           <zorder>label_2</zorder>
+           <zorder>label_avg</zorder>
            <zorder>label_dial3</zorder>
            <zorder>dial_average</zorder>
            <zorder>pushButton_enable</zorder>
@@ -3251,6 +3299,8 @@ QPushButton:pressed
            <zorder>label_13</zorder>
            <zorder>pushButton_resetZoom</zorder>
            <zorder>pushButton_reset</zorder>
+           <zorder>label_nplc</zorder>
+           <zorder>label_fs</zorder>
           </widget>
          </item>
          <item>

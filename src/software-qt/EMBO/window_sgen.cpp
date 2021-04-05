@@ -89,7 +89,7 @@ void WindowSgen::on_msg_ok(const QString, const QString)
 
 void WindowSgen::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
 
     if (needClose)
         this->close();
@@ -312,7 +312,7 @@ void WindowSgen::on_radioButton_noise_clicked()
 
 void WindowSgen::closeEvent(QCloseEvent*)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
     emit closing(WindowSgen::staticMetaObject.className());
 }
 

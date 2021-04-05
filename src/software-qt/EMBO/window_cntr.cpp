@@ -84,16 +84,16 @@ void WindowCntr::on_msg_ok(const QString, const QString)
     }
 
     if (m_instrEnabled)
-        m_activeMsg = m_msg_read;
+        m_activeMsgs.push_back(m_msg_read);
     else
-        m_activeMsg = Q_NULLPTR;
+        m_activeMsgs.clear();
 
     enableAll(true);
 }
 
 void WindowCntr::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
 
     if (needClose)
         this->close();
@@ -107,9 +107,9 @@ void WindowCntr::on_msg_enable(bool enabled, bool fastMode)
     m_fastMode = fastMode;
 
     if (m_instrEnabled)
-        m_activeMsg = m_msg_read;
+        m_activeMsgs.push_back(m_msg_read);
     else
-        m_activeMsg = Q_NULLPTR;
+        m_activeMsgs.clear();
 
     m_ui->radioButton_fast->setChecked(m_fastMode);
     m_ui->radioButton_precise->setChecked(!m_fastMode);
@@ -192,7 +192,7 @@ void WindowCntr::on_timer_render()
 
 void WindowCntr::closeEvent(QCloseEvent*)
 {
-    m_activeMsg = Q_NULLPTR;
+    m_activeMsgs.clear();
     emit closing(WindowCntr::staticMetaObject.className());
 }
 

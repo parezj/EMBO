@@ -257,181 +257,186 @@ void Core::on_serial_errorOccurred(QSerialPort::SerialPortError error)
 
 void Core::on_serial_readyRead()
 {
-    try // exceptions DO NOT work !
+    /************************************* 1. READ ALL - APPEND TO BUFFER  *************************************/
+
+    m_mainBuffer.append(m_serial->readAll());
+
+    /************************************* 2. SPLIT BUFFER INTO MESSAGES  **************************************/
+
+    int msg_cnt = 0;
+    QByteArrayList messages;
+    int bin_header_len = 0;
+    int bin_len_total = 0;
+    int bin_msg_it = -1;
+    int hashIdx = m_mainBuffer.indexOf('#');
+
+    if (hashIdx > -1) // binary message is somewhere in the buffer
     {
-        m_mainBuffer.append(m_serial->readAll());
+        int buf_sz = m_mainBuffer.size();
+        auto left_part = m_mainBuffer.left(hashIdx);
 
-        int msg_cnt = 0;
-        QByteArrayList messages;
-        int bin_header_len = 0;
-        int bin_len_total = 0;
-        int bin_msg_it = -1;
-        int hashIdx = m_mainBuffer.indexOf('#');
-
-        if (hashIdx > -1) // binary message, find it and exclude it from delim split
+        if (m_mainBuffer.size() > hashIdx + 5)
         {
-            int buf_sz = m_mainBuffer.size();
-            auto left_part = m_mainBuffer.left(hashIdx);
+            int n = m_mainBuffer[hashIdx + 1] - '0';
+            int bin_len = m_mainBuffer.mid(hashIdx + 2, n).toInt();
+            bin_len_total = 1 + n + bin_len;
+            int bin_msg_start = 0;
+            int bin_msg_end = 0;
 
-            if (m_mainBuffer.size() > hashIdx + 5)
+            if (buf_sz >= hashIdx + bin_len_total) // binary message is complete into messages
             {
-                int n = m_mainBuffer[hashIdx + 1] - '0';
-                int bin_len = m_mainBuffer.mid(hashIdx + 2, n).toInt();
-                bin_len_total = 1 + n + bin_len;
-                int bin_msg_start = 0;
-                int bin_msg_end = 0;
+                bin_header_len = 2 + n;
+                bin_msg_start = hashIdx;
+                bin_msg_end = hashIdx + 1 + bin_len_total;
+                bin_msg_it = 0;
 
-                if (buf_sz >= hashIdx + bin_len_total)
-                {
-                    bin_header_len = 2 + n;
-                    bin_msg_start = hashIdx;
-                    bin_msg_end = hashIdx + 1 + bin_len_total;
-                    bin_msg_it = 0;
-
-                    // split for message skipping binary message
-                    int j = 0;
-                    for(int i = 0; i < bin_msg_start; i++) {
-                        if (m_mainBuffer.at(i) == '\n') {
-                            messages.append(m_mainBuffer.mid(j, (i - 1) - j));
-                            msg_cnt++;
-                            bin_msg_it++;
-                            j = i + 1;
-                        }
-                    }
-                    for(int i = bin_msg_end + 1; i < m_mainBuffer.length(); i++) {
-                        if (m_mainBuffer.at(i) == '\n') {
-                            messages.append(m_mainBuffer.mid(j, (i - 1) - j));
-                            msg_cnt++;
-                            j = i + 1;
-                        }
-                    }
-                }
-            }
-        }
-        else // standard messages
-        {
-            // split for message
-            messages = m_mainBuffer.split('\n');
-            msg_cnt = m_mainBuffer.count('\n');
-
-            for (int r = 0; r < messages.size(); r++) // remove \r
-                if (!messages[r].isEmpty())
-                    messages[r] = messages[r].remove(messages[r].size() - 1, 1);
-        }
-
-        //qInfo() << "MSG CNT: " << msg_cnt;
-
-        m_timer_rxTimeout->start(); // restart
-
-        for(int i = 0; i < msg_cnt; i++) // iterate all full msgs
-        {
-            if (messages[i].isEmpty())
-                continue;
-
-            //qInfo() << "rx msg: " << messages[i];
-
-            m_mainBuffer = m_mainBuffer.right(m_mainBuffer.size() - (messages[i].size() + 2));
-
-            Ready ready = Ready::NOT_READY;
-
-            if (messages[i].contains(EMBO_READY_A)) ready = Ready::READY_AUTO;
-            if (messages[i].contains(EMBO_READY_N)) ready = Ready::READY_NORMAL;
-            if (messages[i].contains(EMBO_READY_D)) ready = Ready::READY_DISABLED;
-
-            if (ready != Ready::NOT_READY)
-            {
-                qInfo() << messages[i];
-                emit daqReady(ready);
-                continue;
-            }
-
-            QByteArrayList submessages;
-
-            if (i == bin_msg_it)
-            {
-                int bin_msg_start = messages[i].indexOf('#');
-                int bin_msg_end = bin_msg_start + bin_len_total;
-
-                // split for submessage skipping binary message
+                // split for message skipping binary message
                 int j = 0;
-                int msg_len = messages[i].length();
-
-                for(int k = 0; k < bin_msg_start; k++) {
-                    if (messages[i].at(k) == ';') {
-                        submessages.append(messages[i].mid(j, k - j));
-                        j = k + 1;
+                for(int i = 0; i < bin_msg_start; i++) { // split left side of buffer into messages
+                    if (m_mainBuffer.at(i) == '\n') {
+                        messages.append(m_mainBuffer.mid(j, (i - 1) - j));
+                        msg_cnt++;
+                        bin_msg_it++;
+                        j = i + 1;
                     }
                 }
-                for(int k = bin_msg_end + 1; k < msg_len; k++) {
-                    if (messages[i].at(k) == ';') {
-                        submessages.append(messages[i].mid(j, k - j));
-                        j = k + 1;
+                for(int i = bin_msg_end + 1; i < m_mainBuffer.length(); i++) { // split right side of buffer
+                    if (m_mainBuffer.at(i) == '\n') {
+                        messages.append(m_mainBuffer.mid(j, (i - 1) - j));
+                        msg_cnt++;
+                        j = i + 1;
                     }
                 }
-                if (j < msg_len)
-                    submessages.append(messages[i].mid(j, msg_len));
-
-                //qInfo() << "BIN MSG submsg cnt: " << submessages.size();
-            }
-            else
-            {
-                // split for submessage
-                submessages = messages[i].split(';');
-
-                //qInfo() << "TXT MSG submsg cnt:" << submessages.size();
-            }
-
-            m_submsgIt = 0;
-            int activeMsg_size = m_activeMsgs.size();
-
-            for(const QByteArray submessage : submessages)
-            {
-                if (submessage.isEmpty())
-                    continue;
-
-                if (m_state == DISCONNECTED)
-                    return;
-
-                if (m_submsgIt >= activeMsg_size)
-                {
-                    err(COMM_FATAL_ERR + messages[i] + m_mainBuffer, true);
-                    return;
-                }
-
-                if (submessage.at(0) == '#')
-                    m_activeMsgs[m_submsgIt++]->fire(submessage.right(submessage.size() - bin_header_len)); // fire binary data
-                else
-                    m_activeMsgs[m_submsgIt++]->fire(QString(submessage)); // fire standard text message
-            }
-
-            if (m_submsgIt == activeMsg_size) // success - do post actions
-            {
-                m_submsgIt = 0;
-                m_timer_rxTimeout->stop();
-                m_activeMsgs.clear();
-
-                m_commTimeoutMs = TIMER_COMM - m_latencyAvgMs;
-                if (m_commTimeoutMs < TIMER_COMM_MIN)
-                    m_commTimeoutMs = TIMER_COMM_MIN;
-
-                if (m_state == CONNECTING2)
-                    startComm();
-                else if (m_state == CONNECTED)
-                    m_timer_comm->start(m_commTimeoutMs);
             }
         }
-        if (m_open_comm)
-            openComm2();
     }
-    catch (const std::exception& ex)
+    else // standard text messages only
     {
-        std::exception_ptr p = std::current_exception();
-        err((p ? p.__cxa_exception_type()->name() : " exception raised"), true);
+        // split for message
+        messages = m_mainBuffer.split('\n');
+        msg_cnt = m_mainBuffer.count('\n');
+
+        for (int r = 0; r < messages.size(); r++) // remove \r
+            if (!messages[r].isEmpty())
+                messages[r] = messages[r].remove(messages[r].size() - 1, 1);
     }
-    catch (...)
+
+    //qInfo() << "MSG CNT: " << msg_cnt;
+
+    m_timer_rxTimeout->start(); // restart timeout timer
+
+
+    /***************************************** 3. ITERATE MESSAGES  ******************************************/
+
+
+    for(int i = 0; i < msg_cnt; i++) // iterate all full messages and split them into submessages
     {
-        err("exception raised", true);
+        if (messages[i].isEmpty()) // skip empty message
+            continue;
+
+        //qInfo() << "rx msg: " << messages[i];
+
+        m_mainBuffer = m_mainBuffer.right(m_mainBuffer.size() - (messages[i].size() + 2)); // remove message from buffer
+
+        /************************************* 4. HANDLE ASYNC MESSAGE  *************************************/
+
+        Ready ready = Ready::NOT_READY;
+
+        if (messages[i].contains(EMBO_READY_A)) ready = Ready::READY_AUTO;
+        if (messages[i].contains(EMBO_READY_N)) ready = Ready::READY_NORMAL;
+        if (messages[i].contains(EMBO_READY_D)) ready = Ready::READY_DISABLED;
+
+        if (ready != Ready::NOT_READY) // handle RDY async message, which is different
+        {
+            qInfo() << messages[i];
+            emit daqReady(ready);
+            continue;
+        }
+
+        /******************************** 5. SPLIT MESSAGE INTO SUBMESSAGES  *********************************/
+
+        QByteArrayList submessages;
+
+        if (i == bin_msg_it) // if message contains binary message, split to submessage is tricky
+        {
+            int bin_msg_start = messages[i].indexOf('#');
+            int bin_msg_end = bin_msg_start + bin_len_total;
+
+            // split for submessage skipping binary message
+            int j = 0;
+            int msg_len = messages[i].length();
+
+            for(int k = 0; k < bin_msg_start; k++) { // split left side of message to submessage
+                if (messages[i].at(k) == ';') {
+                    submessages.append(messages[i].mid(j, k - j));
+                    j = k + 1;
+                }
+            }
+            for(int k = bin_msg_end + 1; k < msg_len; k++) { // split right side of message to submessage
+                if (messages[i].at(k) == ';') {
+                    submessages.append(messages[i].mid(j, k - j));
+                    j = k + 1;
+                }
+            }
+            if (j < msg_len)
+                submessages.append(messages[i].mid(j, msg_len));
+
+            //qInfo() << "BIN MSG submsg cnt: " << submessages.size();
+        }
+        else // split text message into submsg
+        {
+            submessages = messages[i].split(';');
+
+            //qInfo() << "TXT MSG submsg cnt:" << submessages.size();
+        }
+
+        m_submsgIt = 0;
+        int activeMsg_size = m_activeMsgs.size();
+
+        /************************************* 6. ITERATE SUBMESSAGES ***************************************/
+
+        for(const QByteArray submessage : submessages) // now iterate all submessages and do virtual actions
+        {
+            if (submessage.isEmpty()) // skip empty submessage
+                continue;
+
+            if (m_state == DISCONNECTED) // if closing return
+                return;
+
+            if (m_submsgIt >= activeMsg_size) // safety guard - if submessage iterator dont match current state return error
+            {
+                err(COMM_FATAL_ERR + messages[i] + m_mainBuffer, true);
+                return;
+            }
+
+            /************************************* 7. EMIT CALLBACKS ****************************************/
+
+            if (submessage.at(0) == '#')
+                m_activeMsgs[m_submsgIt++]->fire(submessage.right(submessage.size() - bin_header_len)); // fire binary data action
+            else
+                m_activeMsgs[m_submsgIt++]->fire(QString(submessage)); // fire standard text message action
+        }
+
+        /************************************** 8. LAST MESSAGE - CLEANUP ***********************************/
+
+        if (m_submsgIt == activeMsg_size) // success - do post actions, clean up, reset timers
+        {
+            m_submsgIt = 0;
+            m_timer_rxTimeout->stop();
+            m_activeMsgs.clear();
+
+            m_commTimeoutMs = TIMER_COMM - m_latencyAvgMs;
+            if (m_commTimeoutMs < TIMER_COMM_MIN)
+                m_commTimeoutMs = TIMER_COMM_MIN;
+
+            if (m_state == CONNECTING2)
+                startComm();
+            else if (m_state == CONNECTED)
+                m_timer_comm->start(m_commTimeoutMs);
+        }
     }
+    if (m_open_comm)
+        openComm2();
 }
 
 void Core::on_timer_rxTimeout()
@@ -441,20 +446,20 @@ void Core::on_timer_rxTimeout()
 
 void Core::on_timer_comm()
 {
-    if (m_close_init)
+    if (m_close_init) // init close
     {
         m_close_init = false;
         closeComm();
         return;
     }
 
-    if (!m_activeMsgs.isEmpty())
+    if (!m_activeMsgs.isEmpty()) // CPU is not keeping up
     {
         qInfo() << "Communication is throttling!";
         return;
     }
 
-    if (m_mode != NO_MODE && m_mode != m_mode_last)
+    if (m_mode != NO_MODE && m_mode != m_mode_last) // mode change
     {
         m_msg_sys_mode->setIsQuery(false);
         m_msg_sys_mode->setParams(m_mode == LA ? "LA" : (m_mode == SCOPE ? "SCOPE" : "VM"));
@@ -462,23 +467,22 @@ void Core::on_timer_comm()
     }
     m_mode_last = m_mode;
 
-    int waitingSize = m_waitingMsgs.size();
+    int waitingSize = m_waitingMsgs.size(); // add messages from waiting queue
     if (waitingSize > 0)
     {
         m_activeMsgs.append(m_waitingMsgs.mid(0, waitingSize));
         m_waitingMsgs.remove(0, waitingSize);
     }
 
-    for (auto instr : emboInstruments)
+    for (auto instr : emboInstruments) // add active permanent messages
     {
-        auto activeMsg = instr->getActiveMsg();
-        if (activeMsg != Q_NULLPTR)
-            m_activeMsgs.append(activeMsg);
+        for (auto msg : instr->getActiveMsgs())
+            m_activeMsgs.append(msg);
     }
 
-    m_activeMsgs.append(m_msg_sys_uptime);
+    m_activeMsgs.append(m_msg_sys_uptime); // add uptime life check msg
 
-    send();
+    send(); // finally send all
 }
 
 void Core::on_timer_render()
