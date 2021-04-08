@@ -462,6 +462,283 @@ QSlider::handle:horizontal:hover {
              <property name="verticalSpacing">
               <number>0</number>
              </property>
+             <item row="1" column="1">
+              <widget class="QGroupBox" name="groupBox_ch4_3">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>170</width>
+                 <height>55</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>10000</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Roboto Medium</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  }; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+               </property>
+               <property name="title">
+                <string/>
+               </property>
+               <widget class="QPushButton" name="pushButton_cursorsVoff">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>10</y>
+                  <width>71</width>
+                  <height>36</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Roboto</family>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	text-align:left;
+	padding-left:13px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+                </property>
+                <property name="text">
+                 <string> V</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resources.qrc">
+                  <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
+                  <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>23</width>
+                  <height>22</height>
+                 </size>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="pushButton_cursorsVon">
+                <property name="geometry">
+                 <rect>
+                  <x>10</x>
+                  <y>10</y>
+                  <width>71</width>
+                  <height>36</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Roboto</family>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:13px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+                </property>
+                <property name="text">
+                 <string> V</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resources.qrc">
+                  <normaloff>:/main/resources/img/power-off-gray2.png</normaloff>:/main/resources/img/power-off-gray2.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>23</width>
+                  <height>22</height>
+                 </size>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="pushButton_cursorsHoff">
+                <property name="geometry">
+                 <rect>
+                  <x>90</x>
+                  <y>10</y>
+                  <width>71</width>
+                  <height>36</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Roboto</family>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	text-align:left;
+	padding-left:13px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+                </property>
+                <property name="text">
+                 <string> H</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resources.qrc">
+                  <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
+                  <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>23</width>
+                  <height>22</height>
+                 </size>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="pushButton_cursorsHon">
+                <property name="geometry">
+                 <rect>
+                  <x>90</x>
+                  <y>10</y>
+                  <width>71</width>
+                  <height>36</height>
+                 </rect>
+                </property>
+                <property name="font">
+                 <font>
+                  <family>Roboto</family>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:13px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+                </property>
+                <property name="text">
+                 <string> H</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="resources.qrc">
+                  <normaloff>:/main/resources/img/power-off-gray2.png</normaloff>:/main/resources/img/power-off-gray2.png</iconset>
+                </property>
+                <property name="iconSize">
+                 <size>
+                  <width>23</width>
+                  <height>22</height>
+                 </size>
+                </property>
+               </widget>
+              </widget>
+             </item>
              <item row="1" column="0">
               <widget class="QGroupBox" name="groupBox_ch4_2">
                <property name="sizePolicy">
@@ -797,19 +1074,6 @@ p, li { white-space: pre-wrap; }
                <zorder>label_10</zorder>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_meas">
-               <property name="font">
-                <font>
-                 <family>Roboto Medium</family>
-                 <pointsize>11</pointsize>
-                </font>
-               </property>
-               <property name="text">
-                <string>Measure (Channel 1)</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="1">
               <widget class="QLabel" name="label_meas_2">
                <property name="font">
@@ -823,277 +1087,17 @@ p, li { white-space: pre-wrap; }
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QGroupBox" name="groupBox_ch4_3">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>170</width>
-                 <height>55</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>10000</height>
-                </size>
-               </property>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_meas">
                <property name="font">
                 <font>
                  <family>Roboto Medium</family>
                  <pointsize>11</pointsize>
                 </font>
                </property>
-               <property name="styleSheet">
-                <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  }; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+               <property name="text">
+                <string>Measure (Channel 1)</string>
                </property>
-               <property name="title">
-                <string/>
-               </property>
-               <widget class="QPushButton" name="pushButton_cursorsVoff">
-                <property name="geometry">
-                 <rect>
-                  <x>10</x>
-                  <y>10</y>
-                  <width>71</width>
-                  <height>36</height>
-                 </rect>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Roboto</family>
-                  <pointsize>13</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
-	text-align:left;
-	padding-left:13px;
-}
-
-QPushButton:hover:!pressed
-{
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
-}
-
-QPushButton:pressed
-{
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
-}
-
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
-                </property>
-                <property name="text">
-                 <string> V</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="resources.qrc">
-                  <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-                  <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>23</width>
-                  <height>22</height>
-                 </size>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="pushButton_cursorsVon">
-                <property name="geometry">
-                 <rect>
-                  <x>10</x>
-                  <y>10</y>
-                  <width>71</width>
-                  <height>36</height>
-                 </rect>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Roboto</family>
-                  <pointsize>13</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
-	text-align:left;
-	padding-left:13px;
-}
-
-QPushButton:hover:!pressed
-{
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
-}
-
-QPushButton:pressed
-{
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
-}
-
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
-                </property>
-                <property name="text">
-                 <string> V</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="resources.qrc">
-                  <normaloff>:/main/resources/img/power-off-gray2.png</normaloff>:/main/resources/img/power-off-gray2.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>23</width>
-                  <height>22</height>
-                 </size>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="pushButton_cursorsHoff">
-                <property name="geometry">
-                 <rect>
-                  <x>90</x>
-                  <y>10</y>
-                  <width>71</width>
-                  <height>36</height>
-                 </rect>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Roboto</family>
-                  <pointsize>13</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
-	text-align:left;
-	padding-left:13px;
-}
-
-QPushButton:hover:!pressed
-{
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
-}
-
-QPushButton:pressed
-{
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
-}
-
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
-                </property>
-                <property name="text">
-                 <string> H</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="resources.qrc">
-                  <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-                  <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>23</width>
-                  <height>22</height>
-                 </size>
-                </property>
-               </widget>
-               <widget class="QPushButton" name="pushButton_cursorsHon">
-                <property name="geometry">
-                 <rect>
-                  <x>90</x>
-                  <y>10</y>
-                  <width>71</width>
-                  <height>36</height>
-                 </rect>
-                </property>
-                <property name="font">
-                 <font>
-                  <family>Roboto</family>
-                  <pointsize>13</pointsize>
-                 </font>
-                </property>
-                <property name="styleSheet">
-                 <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
-	text-align:left;
-	padding-left:13px;
-}
-
-QPushButton:hover:!pressed
-{
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
-}
-
-QPushButton:pressed
-{
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
-}
-
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
-                </property>
-                <property name="text">
-                 <string> H</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="resources.qrc">
-                  <normaloff>:/main/resources/img/power-off-gray2.png</normaloff>:/main/resources/img/power-off-gray2.png</iconset>
-                </property>
-                <property name="iconSize">
-                 <size>
-                  <width>23</width>
-                  <height>22</height>
-                 </size>
-                </property>
-               </widget>
               </widget>
              </item>
             </layout>
@@ -1339,34 +1343,35 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #69D769);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH1 ON  </string>
@@ -1399,34 +1404,35 @@ QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray;
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH1 OFF</string>
@@ -1719,35 +1725,35 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #69D769);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH2 ON  </string>
@@ -1780,34 +1786,35 @@ QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray;
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH2 OFF</string>
@@ -2103,34 +2110,35 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH3 ON  </string>
@@ -2163,34 +2171,35 @@ QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray;
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH3 OFF</string>
@@ -2480,34 +2489,35 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH4 OFF</string>
@@ -2539,34 +2549,35 @@ QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray;
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
 	text-align:left;
 	padding-left:13px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
 }
 
-QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; 
-                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }</string>
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
             </property>
             <property name="text">
              <string> CH4 ON  </string>
@@ -2726,10 +2737,10 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              </rect>
             </property>
             <property name="minimum">
-             <number>1</number>
+             <number>2</number>
             </property>
             <property name="maximum">
-             <number>3000</number>
+             <number>6000</number>
             </property>
             <property name="value">
              <number>100</number>
@@ -2816,10 +2827,10 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              <string/>
             </property>
             <property name="minimum">
-             <number>1</number>
+             <number>2</number>
             </property>
             <property name="maximum">
-             <number>3000</number>
+             <number>6000</number>
             </property>
             <property name="value">
              <number>300</number>
@@ -3018,30 +3029,34 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #69D769);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
 	text-align:left;
 	padding-left:22px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #ACFAAC);
-	color:#256552;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
             </property>
             <property name="text">
@@ -3075,30 +3090,34 @@ QPushButton:pressed
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
 	text-align:left;
 	padding-left:22px;
 }
 
-QPushButton:hover:!pressed
-{
+QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
 }
 
-QPushButton:pressed
-{
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
             </property>
             <property name="text">
@@ -3150,30 +3169,32 @@ QPushButton:pressed
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
-	text-align:left;
-	padding-left:28px;
-}
-
-QPushButton:hover:!pressed
-{
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
 }
 
-QPushButton:pressed
-{
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
             </property>
             <property name="text">
@@ -3202,30 +3223,32 @@ QPushButton:pressed
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {    
-    padding: 0.2em 0.2em 0.3em 0.2em;
-    border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-    background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B);
-    color: black;
-	text-align:left;
-	padding-left:4px;
-}
-
-QPushButton:hover:!pressed
-{
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #FFFFFF;
-	color:#2f836a;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
 }
 
-QPushButton:pressed
-{
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
 	border: 2px solid rgb(150, 150, 150);
 	border-radius: 5px;
- 	background: #AAAAAA;
-	color:white;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
             </property>
             <property name="text">
@@ -3241,9 +3264,9 @@ QPushButton:pressed
            <widget class="QLabel" name="label_nplc">
             <property name="geometry">
              <rect>
-              <x>170</x>
+              <x>160</x>
               <y>10</y>
-              <width>61</width>
+              <width>71</width>
               <height>21</height>
              </rect>
             </property>

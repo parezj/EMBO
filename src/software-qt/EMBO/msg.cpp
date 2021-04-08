@@ -16,8 +16,8 @@ Msg::Msg(const Msg& msg) : QObject(msg.parent())
 
 Msg::Msg(const QString cmd, bool isQuery, QObject* parent) : QObject(parent), m_cmd(cmd), m_isQuery(isQuery)
 {
-    connect(this, &Msg::rx, this, &Msg::on_dataRx);
-    connect(this, &Msg::rx_bin, this, &Msg::on_dataRx);
+    connect(this, &Msg::rx, this, &Msg::on_dataRx, Qt::DirectConnection);
+    connect(this, &Msg::rx_bin, this, &Msg::on_dataRx, Qt::DirectConnection);
 }
 
 void Msg::fire(const QString data)

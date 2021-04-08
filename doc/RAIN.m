@@ -21,11 +21,11 @@ f_adc_l4 = 80000000;
 
 %% fs - vzorkovaci frekvence
 
-fs_f1_12 = fConv(k_adc_f1, f_adc_f1, 12);
-fs_f3_12 = fConv(k_adc_f3, f_adc_f3, 12);
-fs_l4_12 = fConv(k_adc_l4, f_adc_l4, 12);
-fs_f3_8 = fConv(k_adc_f3, f_adc_f3, 8);
-fs_l4_8 = fConv(k_adc_l4, f_adc_l4, 8);
+fs_f1_12 = fConv(k_adc_f1, f_adc_f1, 12) / 1000000;
+fs_f3_12 = fConv(k_adc_f3, f_adc_f3, 12) / 1000000;
+fs_l4_12 = fConv(k_adc_l4, f_adc_l4, 12) / 1000000;
+fs_f3_8 = fConv(k_adc_f3, f_adc_f3, 8) / 1000000;
+fs_l4_8 = fConv(k_adc_l4, f_adc_l4, 8) / 1000000;
 
 %% Rin - max. vstupni impedance
 
@@ -62,16 +62,16 @@ Rin_f3_12_positive(1) = [];
 %% grafy 
 
 figure
-plot(fs_f1_12, Rin_f1_12, '-*', 'LineWidth', 3); hold on;
-plot(fs_f3_12, Rin_f3_12, '-*', 'LineWidth', 3); hold on;
-plot(fs_l4_12, Rin_l4_12, '-*', 'LineWidth', 3); hold on;
-plot(fs_f3_8, Rin_f3_8, '-*', 'LineWidth', 3); hold on;
-plot(fs_l4_8, Rin_l4_8, '-*', 'LineWidth', 3); hold on;
+plot(fs_f1_12, Rin_f1_12, '-*', 'LineWidth', 3, 'MarkerSize', 7); hold on;
+plot(fs_f3_12, Rin_f3_12, '-*', 'LineWidth', 3, 'MarkerSize', 7); hold on;
+plot(fs_l4_12, Rin_l4_12, '-*', 'LineWidth', 3, 'MarkerSize', 7); hold on;
+plot(fs_f3_8, Rin_f3_8, '-*', 'LineWidth', 3, 'MarkerSize', 7); hold on;
+plot(fs_l4_8, Rin_l4_8, '-*', 'LineWidth', 3, 'MarkerSize', 7); hold on;
 title("Závislost maximální vstupní impedance ADC STM32 na vzorkovací frekvenci");
 l=legend('F103 - 12 bit','F303 - 12 bit','L412 - 12 bit','F303 - 8 bit','L412 - 8 bit','Location','northeast');
 l.FontSize = 18;
 set(gca, 'YScale', 'log')
-xlabel("Vzorkovací frekvence [Hz]")
+xlabel("Vzorkovací frekvence [MHz]")
 ylabel("Maximální vstupní impedance [Ohm]")
 grid on;
 set(gca, 'FontSize', 20)

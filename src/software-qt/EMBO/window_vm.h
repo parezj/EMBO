@@ -20,9 +20,9 @@
 #include <QElapsedTimer>
 
 
-#define TIMER_VM_PLOT           16    // graph refresh rate = 16 ms = 60 FPS
-#define TIMER_VM_DIGITS         250   // values refresh rate = 250 ms = 4 FPS
-//#define MOVEMEAN_VM           1     // values moving average 20 * 10 ms = 200 ms
+#define TIMER_VM_PLOT           16.6    // graph refresh rate = 16.6 ms = 60 FPS
+#define TIMER_VM_DIGITS         250.0   // values refresh rate = 250 ms = 4 FPS
+//#define MOVEMEAN_VM           1       // values moving average 20 * 10 ms = 200 ms
 
 #define GRAPH_CH1               0
 #define GRAPH_CH2               1
@@ -34,7 +34,7 @@
 #define CURSOR_DEFAULT_V_MIN    400
 #define CURSOR_DEFAULT_V_MAX    600
 
-#define DISPLAY_VM_DEFAULT      150
+#define DISPLAY_VM_DEFAULT      1000.0
 
 
 QT_BEGIN_NAMESPACE
@@ -152,7 +152,7 @@ private:
     std::vector<VmSample> m_smplBuff;
 
     /* recorder */
-    Recorder rec;
+    Recorder m_rec;
 
     /* last raw data values */
     double m_data_ch1;
@@ -212,6 +212,7 @@ private:
     bool m_cursorsH_en = false;
     bool m_math_1minus2 = false;
     bool m_math_3minus4 = false;
+    bool m_plot = true;
 
     /* stm32 pins */
     QString m_pin1 = "?";
@@ -230,7 +231,7 @@ private:
     /* elapsed helpers */
     int m_elapsed_saved = 0;
     int m_elapsed_diff = 0;
-    double m_display = DISPLAY_VM_DEFAULT / TIMER_VM_PLOT;
+    double m_display = DISPLAY_VM_DEFAULT / (1000.0 / TIMER_VM_PLOT);
     double m_display_pts = DISPLAY_VM_DEFAULT;
     int m_average = 1;
 

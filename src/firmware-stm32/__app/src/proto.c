@@ -54,11 +54,11 @@ scpi_result_t EM_SYS_Mode(scpi_t* context)
     if (!SCPI_ParamCharacters(context, &p1, &p1l, TRUE))
         return SCPI_RES_ERR;
 
-    if (p1l == 5 && strncmp(p1, "SCOPE", 5) == 0)
+    if (((p1l == 5) && (strncmp(p1, "SCOPE", 5) == 0)) || ((p1l == 4) && (strncmp(p1, "SCOP", 4) == 0)))
         daq_mode_set(&daq, SCOPE);
-    else if (p1l == 2 && strncmp(p1, "VM", 2) == 0)
+    else if ((p1l == 2) && (strncmp(p1, "VM", 2) == 0))
         daq_mode_set(&daq, VM);
-    else if (p1l == 2 && strncmp(p1, "LA", 2) == 0)
+    else if ((p1l == 2) && (strncmp(p1, "LA", 2) == 0))
         daq_mode_set(&daq, LA);
     else
     {
@@ -84,7 +84,7 @@ scpi_result_t EM_SYS_ModeQ(scpi_t* context)
 
 scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
 {
-    char buff[100];
+    char buff[120];
     char dual[2] = {'\0'};
     char inter[2] = {'\0'};
     uint8_t dac = 0;
@@ -112,9 +112,10 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
     inter[0] = 'I';
 #endif
 
-    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d,%d%d%d%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
                       EM_LA_MAX_FS, EM_PWM_MAX_F, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MEAS_MS,
-                      EM_SGEN_MAX_F, EM_DAC_BUFF_LEN); // 78 chars
+                      EM_SGEN_MAX_F, EM_DAC_BUFF_LEN, EM_MEM_RESERVE,
+                      EM_GPIO_LA_CH1_NUM, EM_GPIO_LA_CH2_NUM, EM_GPIO_LA_CH3_NUM, EM_GPIO_LA_CH4_NUM); // 78 chars
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -269,7 +270,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
 
         if (context == NULL)
         {
-            if (daq.vcc_mv > 0)
+            if (daq.vcc_mv > 1500)
                 return SCPI_RES_OK;
             else
                 return SCPI_RES_ERR;
@@ -325,7 +326,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         uint16_t buff_total_len = 0;
 
 #if defined(EM_ADC_MODE_ADC1)
-        ///*
+        /*
         int added = 0;
         int idx = 0;
         int ch_it = 1; // 2 /w Vcc
@@ -344,7 +345,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         if (daq.set.ch4_en)
             added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
                                        daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-        //*/
+        */
 
         buff_start = (uint8_t*)daq.buff1.data;
         buff_total_len += daq.buff1.len;
@@ -462,8 +463,8 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         if (daq.set.bits == B12)
             buff_total_len *= 2;
 
-        //SCPI_ResultArbitraryBlock(context, buff_start, buff_total_len);
-        SCPI_ResultArbitraryBlock(context, daq.buff_out.data, daq.buff_out.len);
+        SCPI_ResultArbitraryBlock(context, buff_start, buff_total_len);
+        //SCPI_ResultArbitraryBlock(context, daq.buff_out.data, daq.buff_out.len);
 
         if (daq.trig.set.mode != SINGLE)
             daq_enable(&daq, EM_TRUE);
@@ -501,8 +502,8 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
         }
 
         if (p4l != 4 || p7l != 1 || p8l != 1 ||
-            (p4[0] != 'T' && p4[0] != 'F') || (p4[1] != 'T' && p4[1] != 'F') ||
-            (p4[2] != 'T' && p4[2] != 'F') || (p4[3] != 'T' && p4[3] != 'F') ||
+            (p4[0] != '1' && p4[0] != '0') || (p4[1] != '1' && p4[1] != '0') ||
+            (p4[2] != '1' && p4[2] != '0') || (p4[3] != '1' && p4[3] != '0') ||
             (p7[0] != 'R' && p7[0] != 'F') || (p8[0] != 'A' && p8[0] != 'N' && p8[0] != 'S' && p8[0] != 'D'))
         {
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
@@ -516,8 +517,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
 
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, (int)p1);
-        int ret4 = daq_ch_set(&daq, p4[0] == 'T' ? 1 : 0, p4[1] == 'T' ? 1 : 0,
-                                    p4[2] == 'T' ? 1 : 0, p4[3] == 'T' ? 1 : 0, (int)p3);
+        int ret4 = daq_ch_set(&daq, p4[0] - '0', p4[1] - '0', p4[2] - '0', p4[3] - '0', (int)p3);
         int ret3 = daq_fs_set(&daq, p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
         int ret5 = daq_trig_set(&daq, p5, p6, (p7[0] == 'R' ? RISING : FALLING),
@@ -568,10 +568,10 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
         char edge_s[2];
         char mode_s[2];
 
-        chans_en[0] = daq.set.ch1_en ? 'T' : 'F';
-        chans_en[1] = daq.set.ch2_en ? 'T' : 'F';
-        chans_en[2] = daq.set.ch3_en ? 'T' : 'F';
-        chans_en[3] = daq.set.ch4_en ? 'T' : 'F';
+        chans_en[0] = daq.set.ch1_en ? '1' : '0';
+        chans_en[1] = daq.set.ch2_en ? '1' : '0';
+        chans_en[2] = daq.set.ch3_en ? '1' : '0';
+        chans_en[3] = daq.set.ch4_en ? '1' : '0';
         edge_s[0] = daq.trig.set.edge == RISING ? 'R' : 'F';
         mode_s[0] = daq.trig.set.mode == AUTO ? 'A' : (daq.trig.set.mode == NORMAL ? 'N' :
             (daq.trig.set.mode == SINGLE ? 'S' : 'D'));
@@ -633,8 +633,8 @@ scpi_result_t EM_LA_ReadQ(scpi_t* context)
             return SCPI_RES_OK;
         }
 
-        ///*
-        for (int k = 0, i = daq.trig.pos_frst; k < daq.buff1.len; k++, i++) // TODO compress 4 + 4
+        /*
+        for (int k = 0, i = daq.trig.pos_frst; k < daq.set.mem; k++, i++) // TODO compress 4 + 4  BUG!!!!
         {
             if (i >= daq.buff1.len)
                 i = 0;
@@ -645,14 +645,14 @@ scpi_result_t EM_LA_ReadQ(scpi_t* context)
                                                (((val & (1 << EM_GPIO_LA_CH3_NUM)) ? 1 : 0) << 3) |
                                                (((val & (1 << EM_GPIO_LA_CH4_NUM)) ? 1 : 0) << 4);
         }
-        //*/
+        */
 
         daq.trig.pretrig_cntr = 0;
         daq.trig.ready = EM_FALSE;
         daq.trig.ready_last = 0;
 
-        //SCPI_ResultArbitraryBlock(context, daq.buff1.data, daq.buff1.len);
-        SCPI_ResultArbitraryBlock(context, daq.buff_out.data, daq.buff_out.len);
+        SCPI_ResultArbitraryBlock(context, daq.buff1.data, daq.buff1.len);
+        //SCPI_ResultArbitraryBlock(context, daq.buff_out.data, daq.buff_out.len);
 
         if (daq.trig.set.mode != SINGLE)
             daq_enable(&daq, EM_TRUE);

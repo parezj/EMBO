@@ -22,9 +22,9 @@ WindowSgen::WindowSgen(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     m_msg_set = new Msg_SGEN_Set(this);
 
-    connect(m_msg_set, &Msg_SGEN_Set::ok, this, &WindowSgen::on_msg_ok, Qt::DirectConnection);
-    connect(m_msg_set, &Msg_SGEN_Set::err, this, &WindowSgen::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_set, &Msg_SGEN_Set::result, this, &WindowSgen::on_msg_set, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_SGEN_Set::ok, this, &WindowSgen::on_msg_ok, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_SGEN_Set::err, this, &WindowSgen::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_SGEN_Set::result, this, &WindowSgen::on_msg_set, Qt::QueuedConnection);
 
     m_status_enabled = new QLabel(" Disabled", this);
     QWidget* widget = new QWidget(this);

@@ -65,6 +65,9 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     qRegisterMetaType<Msg>("Msg");
     qRegisterMetaType<MsgBoxType>("MsgBoxType");
     qRegisterMetaType<Ready>("Ready");
+    qRegisterMetaType<DaqBits>("DaqBits");
+    qRegisterMetaType<DaqTrigEdge>("DaqTrigEdge");
+    qRegisterMetaType<DaqTrigMode>("DaqTrigMode");
 
     //connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(on_close()));
 

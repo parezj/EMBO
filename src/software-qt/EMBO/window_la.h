@@ -51,20 +51,30 @@ private slots:
     void on_msg_ok_forceTrig(const QString, const QString);
 
      /* async ready msg */
-    void on_msg_daqReady(Ready ready);
+    void on_msg_daqReady(Ready ready, int firstPos);
 
     void on_actionAbout_triggered();
+    void on_qcpMouseWheel(QWheelEvent*);
+    void on_qcpMousePress(QMouseEvent*);
 
 private:
     void initQcp();
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
+    void rescaleXAxis();
+    void rescaleYAxis();
 
     Ui::WindowLa* m_ui;
+
+    int m_firstPos;
 
     QCPCursors* m_cursors;
     QCPCursor* m_cursorTrigVal;
     QCPCursor* m_cursorTrigPre;
+
+    QSharedPointer<QCPAxisTickerTime> m_timeTicker;
+
+    double m_t_last = 0;
 
     /* data */
     DaqSettings m_daqSet;

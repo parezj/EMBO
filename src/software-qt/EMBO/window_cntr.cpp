@@ -27,12 +27,12 @@ WindowCntr::WindowCntr(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_msg_enable = new Msg_CNTR_Enable(this);
     m_msg_read = new Msg_CNTR_Read(this);
 
-    connect(m_msg_enable, &Msg_CNTR_Enable::ok, this, &WindowCntr::on_msg_ok, Qt::DirectConnection);
-    connect(m_msg_enable, &Msg_CNTR_Enable::err, this, &WindowCntr::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_enable, &Msg_CNTR_Enable::result, this, &WindowCntr::on_msg_enable, Qt::DirectConnection);
+    connect(m_msg_enable, &Msg_CNTR_Enable::ok, this, &WindowCntr::on_msg_ok, Qt::QueuedConnection);
+    connect(m_msg_enable, &Msg_CNTR_Enable::err, this, &WindowCntr::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_enable, &Msg_CNTR_Enable::result, this, &WindowCntr::on_msg_enable, Qt::QueuedConnection);
 
-    connect(m_msg_read, &Msg_CNTR_Read::err, this, &WindowCntr::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read, &Msg_CNTR_Read::result, this, &WindowCntr::on_msg_read, Qt::DirectConnection);
+    connect(m_msg_read, &Msg_CNTR_Read::err, this, &WindowCntr::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_read, &Msg_CNTR_Read::result, this, &WindowCntr::on_msg_read, Qt::QueuedConnection);
 
     connect(m_timer_render, &QTimer::timeout, this, &WindowCntr::on_timer_render);
 

@@ -349,8 +349,18 @@ void Core::on_serial_readyRead()
         if (ready != Ready::NOT_READY) // handle RDY async message, which is different
         {
             qInfo() << messages[i];
-            emit daqReady(ready);
-            continue;
+            auto toks = messages[i].split(',');
+
+            if (toks.size() == 2)
+            {
+                emit daqReady(ready, toks[1].toInt());
+                continue;
+            }
+            else
+            {
+                err(COMM_FATAL_ERR + messages[i] + m_mainBuffer, true);
+                return;
+            }
         }
 
         /******************************** 5. SPLIT MESSAGE INTO SUBMESSAGES  *********************************/

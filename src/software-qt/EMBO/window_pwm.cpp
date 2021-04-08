@@ -22,9 +22,9 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
 
     m_msg_set = new Msg_PWM_Set(this);
 
-    connect(m_msg_set, &Msg_PWM_Set::ok, this, &WindowPwm::on_msg_ok, Qt::DirectConnection);
-    connect(m_msg_set, &Msg_PWM_Set::err, this, &WindowPwm::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_set, &Msg_PWM_Set::result, this, &WindowPwm::on_msg_set, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_PWM_Set::ok, this, &WindowPwm::on_msg_ok, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_PWM_Set::err, this, &WindowPwm::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_PWM_Set::result, this, &WindowPwm::on_msg_set, Qt::QueuedConnection);
 
     m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">? Hz&nbsp;&nbsp;&nbsp;</p>");
 

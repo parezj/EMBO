@@ -301,8 +301,8 @@ void SCPI_Init(scpi_t * context,
     sprintf(context->idn5, "%s-%s", idn2, "USB");
     sprintf(context->idn4, "%s-%s", idn2, "UART");
 
-    context->idn[2] = context->idn2;
-    context->idn[3] = idn4;
+    context->idn[3] = context->idn2;
+    context->idn[2] = idn4;
     context->idn[4] = context->idn4;
     context->idn[5] = context->idn5;
 

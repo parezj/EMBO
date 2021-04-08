@@ -105,7 +105,7 @@ public slots:
     void on_dispose();
 
 signals:
-    void daqReady(Ready ready);
+    void daqReady(Ready ready, int firstPos);
     void stateChanged(const State state);
     void msgDisplay(const QString name, MsgBoxType type);
     void latencyAndUptime(int latency_fix, int latency_mean, int latency_max, const QString uptime);

@@ -51,7 +51,14 @@
     </property>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuRec">
+    <property name="title">
+     <string>Rec</string>
+    </property>
+    <addaction name="actionRec1"/>
+   </widget>
    <addaction name="menuHelp"/>
+   <addaction name="menuRec"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="styleSheet">
@@ -71,6 +78,11 @@
      <family>Roboto</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionRec1">
+   <property name="text">
+    <string>Rec1</string>
    </property>
   </action>
  </widget>

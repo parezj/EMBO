@@ -4,6 +4,7 @@
  */
 
 #include "utils.h"
+#include "containers.h"
 
 #include <QString>
 #include <QDebug>
@@ -80,4 +81,61 @@ void msgBox(QMainWindow* window, QString text, MsgBoxType type)
 
    msgBox->setModal( false );
    msgBox->open(window, SLOT(msgBoxClosed(QAbstractButton*)));
+}
+
+int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, double vcc, uint8_t* buff,
+                       QVector<double>* ch1, QVector<double>* ch2, QVector<double>* ch3, QVector<double>* ch4)
+{
+    assert(total > 0 && bufflen >= total && buff != NULL);
+
+    int found = 0;
+    int ch_num = 0;
+
+    if (ch1 != NULL) ch_num++;
+    if (ch2 != NULL) ch_num++;
+    if (ch3 != NULL) ch_num++;
+    if (ch4 != NULL) ch_num++;
+
+    for (int k = 0, i = from; k < total; k++, i++)
+    {
+        if (i >= bufflen)
+            i = 0;
+
+        found++;
+        double val;
+
+        if (daq_bits == B12)
+        {
+            uint16_t raw = (*((uint16_t*)(((uint8_t*)buff)+(i*2))));
+            val = (raw / 4095.0) * vcc;
+        }
+        else if (daq_bits == B8)
+        {
+            uint16_t raw = (((uint8_t*)buff)[i]);
+            val = (raw / 255.0) * vcc;
+        }
+        else assert(0);
+
+        if (i % ch_num == 0)
+        {
+            if (ch1 != NULL)
+                ch1->push_back(val);
+        }
+        else if (ch_num > 1 && i % ch_num == 1)
+        {
+            if (ch2 != NULL)
+                ch2->push_back(val);
+        }
+        else if (ch_num > 2 && i % ch_num == 2)
+        {
+            if (ch3 != NULL)
+                ch3->push_back(val);
+        }
+        else if (ch_num > 3) // && i % ch_num == 3)
+        {
+            if (ch4 != NULL)
+                ch4->push_back(val);
+        }
+    }
+    return found;
 }

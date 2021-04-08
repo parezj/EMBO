@@ -173,7 +173,12 @@ void t4_comm_and_init(void* p)
 #endif
 #endif
 
-    while (EM_VM_ReadQ(NULL) == SCPI_RES_ERR) __asm("nop"); // read vcc
+    while (EM_VM_ReadQ(NULL) == SCPI_RES_ERR) // read vcc
+    {
+        for (int i = 0; i < 10000; i++) // wait data ready
+            __asm("nop");
+    }
+
     init_done = 1;
 
     while(1)

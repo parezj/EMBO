@@ -23,7 +23,7 @@ void Msg_Idn::on_dataRx()
     }
 
     core->getDevInfo()->name = tokens[1];
-    core->getDevInfo()->fw = tokens[2];
+    core->getDevInfo()->fw = tokens[3];
 }
 
 void Msg_Rst::on_dataRx()
@@ -61,7 +61,7 @@ void Msg_SYS_Lims::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
-    if (tokens.size() != 13)
+    if (tokens.size() != 15 && tokens[5].size() >= 1 && tokens[14].size() == 4)
     {
         core->err(INVALID_MSG + m_rxData, true);
         return;
@@ -82,6 +82,11 @@ void Msg_SYS_Lims::on_dataRx()
     core->getDevInfo()->cntr_timeout = tokens[10].toInt();
     core->getDevInfo()->sgen_maxf = tokens[11].toInt();
     core->getDevInfo()->sgen_maxmem = tokens[12].toInt();
+    core->getDevInfo()->daq_reserve = tokens[13].toInt();
+    core->getDevInfo()->la_ch1_pin = tokens[14][0].toLatin1() - '0';
+    core->getDevInfo()->la_ch2_pin = tokens[14][1].toLatin1() - '0';
+    core->getDevInfo()->la_ch3_pin = tokens[14][2].toLatin1() - '0';
+    core->getDevInfo()->la_ch4_pin = tokens[14][3].toLatin1() - '0';
 }
 
 
@@ -214,7 +219,7 @@ void Msg_SCOP_Set::on_dataRx()
         else if (tokens[7] == "S") mode = SINGLE;
 
         emit result(bits, tokens[1].toInt(), tokens[2].toInt(),
-                    tokens[3][0] == 'T', tokens[3][1] == 'T', tokens[3][2] == 'T', tokens[3][3] == 'T',
+                    tokens[3][0] == '1', tokens[3][1] == '1', tokens[3][2] == '1', tokens[3][3] == '1',
                     tokens[4].toInt(), tokens[5].toInt(), edge, mode, tokens[8].toInt(),
                     tokens[9].toDouble() ,tokens[10].toDouble());
     }

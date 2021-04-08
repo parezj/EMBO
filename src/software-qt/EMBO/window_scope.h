@@ -10,6 +10,7 @@
 #include "messages.h"
 #include "qcpcursors.h"
 #include "containers.h"
+#include "recorder.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -51,14 +52,19 @@ private slots:
     void on_msg_ok_forceTrig(const QString, const QString);
 
      /* async ready msg */
-    void on_msg_daqReady(Ready ready);
+    void on_msg_daqReady(Ready ready, int firstPos);
 
     void on_actionAbout_triggered();
+    void on_actionRec1_triggered(); // DEBUG
+    void on_qcpMouseWheel(QWheelEvent*);
+    void on_qcpMousePress(QMouseEvent*);
 
 private:
     void initQcp();
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
+    void rescaleXAxis();
+    void rescaleYAxis();
 
     Ui::WindowScope* m_ui;
 
@@ -69,6 +75,24 @@ private:
     QCPCursor* m_cursorTrigPre;
 
     bool m_spline = true;
+
+    bool m_export = false;
+
+    int m_firstPos;
+
+    double m_t_last = 0;
+
+    QSharedPointer<QCPAxisTickerTime> m_timeTicker;
+
+    /* gain */
+    double m_gain1 = 1;
+    double m_gain2 = 1;
+    double m_gain3 = 1;
+    double m_gain4 = 1;
+    double m_ref_v = 3.3;
+
+    /* recorder */
+    Recorder m_rec;
 
     /* data */
     DaqSettings m_daqSet;

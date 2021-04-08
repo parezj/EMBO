@@ -48,20 +48,20 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_msg_read4->setParams("1");
     m_msg_read5->setParams("1");
 
-    connect(m_msg_read1, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read1, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+    connect(m_msg_read1, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_read1, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::QueuedConnection);
 
-    connect(m_msg_read2, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read2, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+    connect(m_msg_read2, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_read2, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::QueuedConnection);
 
-    connect(m_msg_read3, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read3, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+    connect(m_msg_read3, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_read3, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::QueuedConnection);
 
-    connect(m_msg_read4, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read4, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+    connect(m_msg_read4, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_read4, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::QueuedConnection);
 
-    connect(m_msg_read5, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read5, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::DirectConnection);
+    connect(m_msg_read5, &Msg_VM_Read::err, this, &WindowVm::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_read5, &Msg_VM_Read::result, this, &WindowVm::on_msg_read, Qt::QueuedConnection);
 
     connect(m_timer_plot, &QTimer::timeout, this, &WindowVm::on_timer_plot);
     connect(m_timer_digits, &QTimer::timeout, this, &WindowVm::on_timer_digits);
@@ -159,8 +159,8 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     Settings::getValue(CFG_VM_CH3_EN, false).toBool() ? on_pushButton_enable3_clicked() : on_pushButton_disable3_clicked();
     Settings::getValue(CFG_VM_CH4_EN, false).toBool() ? on_pushButton_enable4_clicked() : on_pushButton_disable4_clicked();
 
-    m_ui->spinBox_average->setValue(Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
-    m_ui->spinBox_display->setValue(Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
+    m_ui->spinBox_average->setValue(DEFAULT_AVG); //Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
+    m_ui->spinBox_display->setValue(DEFAULT_PLT); //Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
     m_ui->actionShow_Plot->setChecked(Settings::getValue(CFG_VM_SHOW_PLOT, true).toBool());
 
     on_spinBox_average_valueChanged(m_ui->spinBox_average->value());
@@ -189,7 +189,7 @@ void WindowVm::initQcp()
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(m_spline);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(m_spline);
 
-    m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,15));
+    m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,30));
 
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
     timeTicker->setTimeFormat("%h:%m:%s");
@@ -274,6 +274,21 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
         if (m_math_3minus4)
             data_ch4 = _ch4 - _ch3;
 
+        if (m_recording)
+        {
+            m_rec << t_ms;
+            if (m_en1)
+                m_rec << data_ch1;
+            if (m_en2)
+                m_rec << data_ch2;
+            if (m_en3)
+                m_rec << data_ch3;
+            if (m_en4)
+                m_rec << data_ch4;
+            if (m_en1 + m_en2 + m_en3 + m_en4 > 0)
+                m_rec << ENDL;
+        }
+
         bool data_fresh = false;
 
         if (m_average > 1) // average enabled
@@ -331,21 +346,6 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
             */
 
             m_smplBuff.push_back(VmSample {t, m_data_ch1, m_data_ch2, m_data_ch3, m_data_ch4});
-
-            if (m_recording)
-            {
-                rec << t_ms;
-                if (m_en1)
-                    rec << m_data_ch1;
-                if (m_en2)
-                    rec << m_data_ch2;
-                if (m_en3)
-                    rec << m_data_ch3;
-                if (m_en4)
-                    rec << m_data_ch4;
-                if (m_en1 + m_en2 + m_en3 + m_en4 > 0)
-                    rec << ENDL;
-            }
         }
     }
 }
@@ -365,6 +365,19 @@ void WindowVm::on_timer_plot() // 60 FPS
             if (m_en4)
                 m_ui->progressBar_ch4->setValue((m_data_ch4 / (m_ref_v * m_gain4)) * 100.0);
         }
+    }
+
+    if (m_plot)
+    {
+        if (m_cursorsV_en || m_cursorsH_en)
+        {
+            auto rngV = m_ui->customPlot->yAxis->range();
+            auto rngH = m_ui->customPlot->xAxis->range();
+
+            m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+        }
+
+        m_ui->customPlot->replot();
     }
 }
 
@@ -466,20 +479,10 @@ bool WindowVm::updatePlotData()
     }
     */
 
-    if (m_cursorsV_en || m_cursorsH_en)
-    {
-        auto rngV = m_ui->customPlot->yAxis->range();
-        auto rngH = m_ui->customPlot->xAxis->range();
-
-        m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, true);
-    }
-
     m_ui->customPlot->graph(GRAPH_CH1)->data()->removeBefore(m_key_last - m_display);
     m_ui->customPlot->graph(GRAPH_CH2)->data()->removeBefore(m_key_last - m_display);
     m_ui->customPlot->graph(GRAPH_CH3)->data()->removeBefore(m_key_last - m_display);
     m_ui->customPlot->graph(GRAPH_CH4)->data()->removeBefore(m_key_last - m_display);
-
-    m_ui->customPlot->replot();
 
     return true;
 }
@@ -497,23 +500,23 @@ void WindowVm::on_actionStart_triggered()
         {"Common.Firmware", info->fw},
         {"Common.Vcc",      QString::number(info->ref_mv) + " mV"},
         {"Common.Mode",     "VM"},
-        {"VM.PlotPoints",   QString::number(m_display_pts)},
-        {"VM.Average",      QString::number(m_average)},
+        {"VM.SampleRate",   "100 Hz"},
+        {"VM.Resolution",   "12 bit"},
     };
-    bool ret = rec.createFile("VM", header);
+    bool ret = m_rec.createFile("VM", header);
 
     if (!ret)
     {
-        msgBox(this, "Write file at: " + rec.getDir() + " failed!", CRITICAL);
+        msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
     }
     else
     {
-        rec << "t(ms)";
-        if (m_en1) rec << "CH1(V)";
-        if (m_en2) rec << "CH2(V)";
-        if (m_en3) rec << "CH3(V)";
-        if (m_en4) rec << "CH4(V)";
-        rec << ENDL;
+        m_rec << "t(ms)";
+        if (m_en1) m_rec << "CH1(V)";
+        if (m_en2) m_rec << "CH2(V)";
+        if (m_en3) m_rec << "CH3(V)";
+        if (m_en4) m_rec << "CH4(V)";
+        m_rec << ENDL;
 
         m_recording = true;
 
@@ -523,7 +526,7 @@ void WindowVm::on_actionStart_triggered()
         m_ui->actionFormat->setEnabled(false);
         m_ui->actionFolder->setEnabled(false);
 
-        m_status_rec->setText("Recording to: " + rec.getFilePath());
+        m_status_rec->setText("Recording to: " + m_rec.getFilePath());
 
         m_status_rec->setVisible(true);
         m_status_line1->setVisible(true);
@@ -543,17 +546,17 @@ void WindowVm::on_actionStop_triggered()
     m_status_rec->setVisible(false);
     m_status_line1->setVisible(false);
 
-    QString ret = rec.closeFile();
+    QString ret = m_rec.closeFile();
 
     msgBox(this, "File saved at: " + ret, INFO);
 }
 
 void WindowVm::on_actionScreenshot_triggered()
 {
-     QString ret = rec.takeScreenshot("VM", m_ui->customPlot);
+     QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
 
      if (ret.isEmpty())
-         msgBox(this, "Write file at: " + rec.getDir() + " failed!", CRITICAL);
+         msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
      else
          msgBox(this, "File saved at: " + ret, INFO);
 }
@@ -561,12 +564,12 @@ void WindowVm::on_actionScreenshot_triggered()
 void WindowVm::on_actionFolder_triggered()
 {
     bool ok;
-    QString dir_saved = Settings::getValue(CFG_REC_DIR, rec.getDir()).toString();
+    QString dir_saved = Settings::getValue(CFG_REC_DIR, m_rec.getDir()).toString();
     QString dir = QInputDialog::getText(this, "EMBO - Recordings", "Directory path:", QLineEdit::Normal, dir_saved, &ok);
 
     if (ok && !dir.isEmpty())
     {
-        if (!rec.setDir(dir))
+        if (!m_rec.setDir(dir))
             msgBox(this, "Directory create failed!", CRITICAL);
         else
             Settings::setValue(CFG_REC_DIR, dir);
@@ -577,7 +580,7 @@ void WindowVm::on_actionCSV_triggered(bool checked)
 {
     if (checked)
     {
-        rec.setDelim(CSV);
+        m_rec.setDelim(CSV);
 
         m_ui->actionTXT_Tabs->setChecked(false);
         m_ui->actionTXT_Semicolon->setChecked(false);
@@ -589,7 +592,7 @@ void WindowVm::on_actionTXT_Tabs_triggered(bool checked)
 {
     if (checked)
     {
-        rec.setDelim(CSV);
+        m_rec.setDelim(CSV);
 
         m_ui->actionCSV->setChecked(false);
         m_ui->actionTXT_Semicolon->setChecked(false);
@@ -601,7 +604,7 @@ void WindowVm::on_actionTXT_Semicolon_triggered(bool checked)
 {
     if (checked)
     {
-        rec.setDelim(CSV);
+        m_rec.setDelim(CSV);
 
         m_ui->actionCSV->setChecked(false);
         m_ui->actionTXT_Tabs->setChecked(false);
@@ -635,8 +638,8 @@ void WindowVm::on_actionLines_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH3)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setLineStyle(style);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::on_actionPoints_triggered(bool checked)
@@ -653,8 +656,8 @@ void WindowVm::on_actionPoints_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH3)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setScatterStyle(style);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::on_actionSinc_triggered(bool checked) // exclusive with - actionLinear
@@ -668,8 +671,8 @@ void WindowVm::on_actionSinc_triggered(bool checked) // exclusive with - actionL
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::on_actionLinear_triggered(bool checked) // exclusive with - actionSinc
@@ -796,8 +799,6 @@ void WindowVm::on_pushButton_enable4_clicked()
     Settings::setValue(CFG_VM_CH4_EN, true);
 
     rescaleYAxis();
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
 }
 
 void WindowVm::on_doubleSpinBox_gain1_valueChanged(double arg1)
@@ -957,6 +958,8 @@ void WindowVm::on_spinBox_average_valueChanged(int arg1)
         m_ui->label_avg->setText("Average:");
     else
         m_ui->label_avg->setText("Average (OFF):");
+
+    on_spinBox_display_valueChanged(m_display_pts);
 }
 
 void WindowVm::on_dial_average_valueChanged(int value)
@@ -969,7 +972,7 @@ void WindowVm::on_spinBox_display_valueChanged(int arg1)
     m_ui->dial_display->setValue(arg1);
 
     m_display_pts = arg1;
-    m_display = ((double)arg1 + 1) / ((double)TIMER_VM_PLOT);
+    m_display = ((double)arg1 - 1) / (100.0 / m_average);
 
     Settings::setValue(CFG_VM_PLT, arg1);
 }
@@ -1225,8 +1228,8 @@ void WindowVm::on_pushButton_reset_clicked()
 
     if (m_recording)
         on_actionStop_triggered();
-    rec.reset();
-    Settings::setValue(CFG_REC_DIR, rec.getDir());
+    m_rec.reset();
+    Settings::setValue(CFG_REC_DIR, m_rec.getDir());
     on_actionCSV_triggered(true);
 
     m_ui->doubleSpinBox_gain1->setValue(1);
@@ -1248,8 +1251,8 @@ void WindowVm::on_pushButton_reset_clicked()
 
     if (en)
         on_pushButton_enable_clicked();
-    else
-        m_ui->customPlot->replot();
+    //else
+    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::on_pushButton_resetZoom_clicked()
@@ -1277,6 +1280,7 @@ void WindowVm::on_qcpMousePress(QMouseEvent*)
 void WindowVm::on_actionShow_Plot_triggered(bool checked)
 {
     Settings::setValue(CFG_VM_SHOW_PLOT, checked);
+    m_plot = checked;
 
     if (checked)
     {
@@ -1349,14 +1353,14 @@ void WindowVm::showEvent(QShowEvent*)
     m_meanAvg.reset();
     */
 
-    m_ui->customPlot->replot();
+    //m_ui->customPlot->replot();
 
     Core::getInstance()->setMode(VM);
 
     m_activeMsgs.push_back(m_msg_read1);
     m_activeMsgs.push_back(m_msg_read2);
     m_activeMsgs.push_back(m_msg_read3);
-    m_activeMsgs.push_back(m_msg_read4); // TODO is this needed?
+    m_activeMsgs.push_back(m_msg_read4);
     //m_activeMsgs.push_back(m_msg_read5);
 
     m_smplBuff.clear();
@@ -1383,14 +1387,14 @@ void WindowVm::rescaleYAxis()
 
     m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::rescaleXAxis()
 {
     m_ui->customPlot->xAxis->setRange(m_key_last, m_display, Qt::AlignRight);
 
-    if (!m_instrEnabled)
-        m_ui->customPlot->replot();
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
 }

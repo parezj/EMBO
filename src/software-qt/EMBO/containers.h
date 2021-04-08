@@ -107,6 +107,11 @@ public:
     int cntr_timeout;
     int sgen_maxf;
     int sgen_maxmem;
+    int daq_reserve;
+    int la_ch1_pin;
+    int la_ch2_pin;
+    int la_ch3_pin;
+    int la_ch4_pin;
 };
 
 class DaqSettings

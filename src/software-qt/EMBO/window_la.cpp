@@ -14,6 +14,7 @@
 #include <QLabel>
 #include <QMessageBox>
 
+#define Y_LIM           0.20
 
 WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa)
 {
@@ -23,15 +24,15 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     m_msg_read = new Msg_LA_Read(this);
     m_msg_forceTrig = new Msg_LA_ForceTrig(this);
 
-    connect(m_msg_set, &Msg_LA_Set::ok, this, &WindowLa::on_msg_ok_set, Qt::DirectConnection);
-    connect(m_msg_set, &Msg_LA_Set::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_set, &Msg_LA_Set::result, this, &WindowLa::on_msg_set, Qt::DirectConnection);
+    connect(m_msg_set, &Msg_LA_Set::ok, this, &WindowLa::on_msg_ok_set, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_LA_Set::err, this, &WindowLa::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_LA_Set::result, this, &WindowLa::on_msg_set, Qt::QueuedConnection);
 
-    connect(m_msg_read, &Msg_LA_Read::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
-    connect(m_msg_read, &Msg_LA_Read::result, this, &WindowLa::on_msg_read, Qt::DirectConnection);
+    connect(m_msg_read, &Msg_LA_Read::err, this, &WindowLa::on_msg_err, Qt::QueuedConnection);
+    connect(m_msg_read, &Msg_LA_Read::result, this, &WindowLa::on_msg_read, Qt::QueuedConnection);
 
-    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::ok, this, &WindowLa::on_msg_ok_forceTrig, Qt::DirectConnection);
-    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::DirectConnection);
+    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::ok, this, &WindowLa::on_msg_ok_forceTrig, Qt::QueuedConnection);
+    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::QueuedConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowLa::on_msg_daqReady, Qt::QueuedConnection);
 
@@ -61,6 +62,16 @@ void WindowLa::initQcp()
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(false);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(false);
 
+    m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,30));
+
+    m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
+    m_timeTicker->setTimeFormat("%s s");
+    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuSeconds, 1);
+    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMilliseconds, 1);
+    m_ui->customPlot->xAxis->setTicker(m_timeTicker);
+    //m_ui->customPlot->xAxis2->setTicker(timeTicker);
+    m_ui->customPlot->axisRect()->setupFullAxesBox();
+
     m_ui->customPlot->xAxis->setVisible(true);
     m_ui->customPlot->xAxis->setTickLabels(true);
     m_ui->customPlot->yAxis->setVisible(true);
@@ -72,11 +83,13 @@ void WindowLa::initQcp()
     m_ui->customPlot->xAxis->setLabelFont(font2);
     m_ui->customPlot->yAxis->setLabelFont(font2);
 
-    m_ui->customPlot->setInteractions(0);
-    //m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+    //m_ui->customPlot->setInteractions(0);
+    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
     connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
+    connect(m_ui->customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(on_qcpMouseWheel(QWheelEvent*)));
+    connect(m_ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(on_qcpMousePress(QMouseEvent*)));
 
     /* cursors */
 
@@ -148,9 +161,10 @@ void WindowLa::on_msg_read(const QByteArray data)
     bool ch3_en = true;
     bool ch4_en = true;
 
+    auto info = Core::getInstance()->getDevInfo();
     int data_sz = data.size();
 
-    if (data_sz != m_daqSet.mem) // wrong data size
+    if (data_sz != m_daqSet.mem + (info->daq_reserve * 1)) // wrong data size
     {
         on_msg_err(INVALID_MSG, CRITICAL, true);
         return;
@@ -158,36 +172,52 @@ void WindowLa::on_msg_read(const QByteArray data)
 
     std::vector<qreal> buff(data_sz);
 
-    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    QVector<double> y1(m_daqSet.mem);
+    QVector<double> y2(m_daqSet.mem);
+    QVector<double> y3(m_daqSet.mem);
+    QVector<double> y4(m_daqSet.mem);
 
-    for (int i = 0; i < data_sz; i++)
+    for (int k = 0, i = m_firstPos; k < m_daqSet.mem; k++, i++)
     {
-        bool ch1 = (data[i] & 2) != 0;
-        bool ch2 = (data[i] & 4) != 0;
-        bool ch3 = (data[i] & 8) != 0;
-        bool ch4 = (data[i] & 16) != 0;
+        if (i >= data_sz)
+            i = 0;
 
-        if (ch1_en)
-            m_ui->customPlot->graph(GRAPH_CH1)->addData(i, (qreal)ch1);
-        if (ch2_en)
-            m_ui->customPlot->graph(GRAPH_CH2)->addData(i, (qreal)ch2);
-        if (ch3_en)
-            m_ui->customPlot->graph(GRAPH_CH3)->addData(i, (qreal)ch3);
-        if (ch4_en)
-            m_ui->customPlot->graph(GRAPH_CH4)->addData(i, (qreal)ch4);
+        bool ch1 = (data[i] & (1 << info->la_ch1_pin)) != 0;
+        bool ch2 = (data[i] & (1 << info->la_ch2_pin)) != 0;
+        bool ch3 = (data[i] & (1 << info->la_ch3_pin)) != 0;
+        bool ch4 = (data[i] & (1 << info->la_ch4_pin)) != 0;
+
+        if (ch1_en) y1[k] = ch1 ? 1.0 : 0.0;
+        if (ch2_en) y2[k] = ch2 ? 1.0 : 0.0;
+        if (ch3_en) y3[k] = ch3 ? 1.0 : 0.0;
+        if (ch4_en) y4[k] = ch4 ? 1.0 : 0.0;
     }
 
-    //m_ui->customPlot->graph(GRAPH_CH1)->rescaleValueAxis(false);
-    //m_ui->customPlot->graph(GRAPH_CH2)->rescaleValueAxis(false);
-    //m_ui->customPlot->graph(GRAPH_CH3)->rescaleValueAxis(false);
-    //m_ui->customPlot->graph(GRAPH_CH4)->rescaleValueAxis(false);
+    double x = 0;
+    double dt = 1.0 / m_daqSet.fs_real;
+    QVector<double> t(m_daqSet.mem); // TODO move somewhere ELSE !
+    for (int i = 0; i < m_daqSet.mem; i++)
+    {
+        t[i] = x;
+        x += dt;
+    }
 
-    //m_ui->customPlot->yAxis->setRange(-LIM_OFFSET, (maxRng * 3.3) + LIM_OFFSET);
-    m_ui->customPlot->yAxis->setRange(-0.1, 1.1);
-    m_ui->customPlot->xAxis->setRange(0, data_sz);
+    m_t_last = t[t.size()-1];
+
+    if (m_t_last < 1)
+        m_timeTicker->setTimeFormat("%z ms");
+
+    if (m_daqSet.ch1_en)
+        m_ui->customPlot->graph(GRAPH_CH1)->setData(t, y1);
+    if (m_daqSet.ch2_en)
+        m_ui->customPlot->graph(GRAPH_CH2)->setData(t, y2);
+    if (m_daqSet.ch3_en)
+        m_ui->customPlot->graph(GRAPH_CH3)->setData(t, y3);
+    if (m_daqSet.ch4_en)
+        m_ui->customPlot->graph(GRAPH_CH4)->setData(t, y4);
+
+    rescaleXAxis();
+    rescaleYAxis();
 
     m_ui->customPlot->replot();
 }
@@ -197,10 +227,24 @@ void WindowLa::on_msg_ok_forceTrig(const QString, const QString)
 
 }
 
-void WindowLa::on_msg_daqReady(Ready ready)
+void WindowLa::on_msg_daqReady(Ready ready, int firstPos)
 {
+    m_firstPos = firstPos;
+
     if (m_instrEnabled)
         Core::getInstance()->msgAdd(m_msg_read, true);
+}
+
+void WindowLa::on_qcpMouseWheel(QWheelEvent*)
+{
+    //m_ui->pushButton_reset->hide();
+    //m_ui->pushButton_resetZoom->show();
+}
+
+void WindowLa::on_qcpMousePress(QMouseEvent*)
+{
+    //m_ui->pushButton_reset->hide();
+    //m_ui->pushButton_resetZoom->show();
 }
 
 /* private */
@@ -220,4 +264,14 @@ void WindowLa::showEvent(QShowEvent*)
     m_instrEnabled = true;
 
     Core::getInstance()->msgAdd(m_msg_set, true, "");
+}
+
+void WindowLa::rescaleYAxis()
+{
+    m_ui->customPlot->yAxis->setRange(0 - Y_LIM , 1 + Y_LIM);
+}
+
+void WindowLa::rescaleXAxis()
+{
+    m_ui->customPlot->xAxis->setRange(0, m_t_last);
 }
