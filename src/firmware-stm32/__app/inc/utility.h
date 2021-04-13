@@ -44,6 +44,7 @@ float fastlog(float x);
 float fastexp(float p);
 float fastpow2(float p);
 int itoa_fast(char* s, int num, int radix);
+long long lltoa_fast(char* s, long long num, int radix);
 
 /* Author: Jakub Parez
  * Descr:  ultra fast float sprintf

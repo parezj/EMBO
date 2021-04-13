@@ -65,6 +65,7 @@ typedef struct
     uint8_t ignore;         // AWD helper var
     uint8_t ready;          // if data is ready to read by user
     uint8_t ready_last;     // previous value of ready
+    uint8_t respond;        // initiating async ReadyX respond
 
     // counters
     int cntr;               // success trigger counter

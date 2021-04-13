@@ -246,6 +246,46 @@ int itoa_fast(char* s, int num, int radix)
     return str_loc;
 }
 
+long long lltoa_fast(char* s, long long num, int radix)
+{
+    char sign = 0;
+    char temp[65];
+    int temp_loc = 0;
+    int digit;
+    int str_loc = 0;
+
+    //save sign for radix 10 conversion
+    if (radix == 10 && num < 0) {
+        sign = 1;
+        num = -num;
+    }
+
+    //construct a backward string of the number.
+    do {
+        digit = (unsigned int)num % radix;
+        if (digit < 10)
+            temp[temp_loc++] = digit + '0';
+        else
+            temp[temp_loc++] = digit - 10 + 'A';
+        num = (((unsigned int)num) / radix);
+    } while ((unsigned int)num > 0);
+
+    //now add the sign for radix 10
+    if (radix == 10 && sign) {
+        temp[temp_loc] = '-';
+    } else {
+        temp_loc--;
+    }
+
+
+    //now reverse the string.
+    while ( temp_loc >=0 ) {// while there are still chars
+        s[str_loc++] = temp[temp_loc--];
+    }
+    s[str_loc] = 0; // add null termination.
+    return str_loc;
+}
+
 /* Author: Jakub Parez
  * Descr:  ultra fast float sprintf
  */
@@ -255,14 +295,24 @@ int sprint_fast(char* s, const char* format, double fVal, int prec)
     char result_rev[100] = { '\0' };
     int dVal, dec, i, j, k;
 
-    if (prec <= 0)
+    int trunc = fVal;
+
+    if (prec <= 0 || (double)trunc == fVal) // treat like ll integer
     {
-        sprintf(result, "%d", (int)fVal);
-        sprintf(s, format, result);
-        return;
+        int l1 = lltoa_fast(result, (uint64_t)fVal, 10);
+        if (prec > 0 && prec < 5)
+        {
+            result[l1++] = '.';
+            if (prec >= 1) result[l1++] = '0';
+            if (prec >= 2) result[l1++] = '0';
+            if (prec >= 3) result[l1++] = '0';
+            if (prec >= 4) result[l1++] = '0';
+            result[l1++] = '\0';
+        }
+        return sprintf(s, format, result);
     }
 
-    fVal += 0.5 * pow(0.1, prec);
+    //fVal += 0.5 * pow(0.1, prec);
     k = pow(10, prec);
 
     dVal = fVal;

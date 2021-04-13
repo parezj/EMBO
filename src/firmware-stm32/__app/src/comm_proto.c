@@ -5,7 +5,7 @@
 
 
 #include "cfg.h"
-#include "proto.h"
+#include "comm_proto.h"
 
 #include "app_data.h"
 #include "main.h"
@@ -526,6 +526,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
         {
             daq.dis_hold = EM_FALSE;
+            daq_settings_save(&daq.set, &daq.trig.set, &daq.save_s, &daq.trig.save_s); // added later
             daq_enable(&daq, EM_TRUE);
 
             char buff[40];
@@ -709,6 +710,7 @@ scpi_result_t EM_LA_Set(scpi_t* context)
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
         {
             daq.dis_hold = EM_FALSE;
+            daq_settings_save(&daq.set, &daq.trig.set, &daq.save_l, &daq.trig.save_l); // added later
             daq_enable(&daq, EM_TRUE);
 
             char buff[25];
@@ -792,7 +794,7 @@ scpi_result_t EM_LA_ForceTrig(scpi_t* context)
 
 /************************* [CNTR Actions] *************************/
 
-scpi_result_t EM_CNTR_EnableQ(scpi_t* context)
+scpi_result_t EM_CNTR_SetQ(scpi_t* context)
 {
     char buff[3];
     buff[0] = cntr.enabled ? '1' : '0';
@@ -803,7 +805,7 @@ scpi_result_t EM_CNTR_EnableQ(scpi_t* context)
     return SCPI_RES_OK;
 }
 
-scpi_result_t EM_CNTR_Enable(scpi_t* context)
+scpi_result_t EM_CNTR_Set(scpi_t* context)
 {
     uint32_t p1, p2;
 

@@ -69,25 +69,59 @@ signals:
     void closing(const char* className);
 
 private slots:
+    /* msg slots */
     void on_msg_err(const QString text, MsgBoxType type, bool needClose);
     void on_msg_read(const QString ch1, const QString ch2, const QString ch3, const QString ch4, const QString vcc);
 
+    /* timer slots */
     void on_timer_plot();
     void on_timer_digits();
 
+    /* GUI slots - Menu - Help */
     void on_actionAbout_triggered();
-    void on_actionPoints_triggered(bool checked);
-    void on_actionLinear_triggered(bool checked);
-    void on_actionLines_triggered(bool checked);
-    void on_actionSinc_triggered(bool checked);
-    void on_actionStart_triggered();
-    void on_actionStop_triggered();
-    void on_actionScreenshot_triggered();
-    void on_actionFolder_triggered();
-    void on_actionCSV_triggered(bool checked);
-    void on_actionTXT_Tabs_triggered(bool checked);
-    void on_actionTXT_Semicolon_triggered(bool checked);
-    void on_actionMAT_triggered(bool checked);
+
+    /* GUI slots - Menu - Plot */
+    void on_actionViewPoints_triggered(bool checked);
+    void on_actionViewLines_triggered(bool checked);
+    void on_actionInterpLinear_triggered(bool checked);
+    void on_actionInterpSinc_triggered(bool checked);
+    void on_actionShowPlot_triggered(bool checked);
+
+    /* GUI slots - Menu - Export */
+    void on_actionExportStart_triggered();
+    void on_actionExportStop_triggered();
+    void on_actionExportScreenshot_triggered();
+    void on_actionExportFolder_triggered();
+    void on_actionExportCSV_triggered(bool checked);
+    void on_actionExportTXT_Tabs_triggered(bool checked);
+    void on_actionExportTXT_Semicolon_triggered(bool checked);
+    void on_actionExportMAT_triggered(bool checked);
+
+    /* GUI slots - Menu - Measure */
+    void on_actionMeasEnabled_triggered(bool checked);
+    void on_actionMeasReset_triggered();
+    void on_actionMeasChannel_1_triggered(bool checked);
+    void on_actionMeasChannel_2_triggered(bool checked);
+    void on_actionMeasChannel_3_triggered(bool checked);
+    void on_actionMeasChannel_4_triggered(bool checked);
+
+    /* GUI slots - Menu - Math */
+    void on_actionMath_1_2_triggered(bool checked);
+    void on_actionMath_3_4_triggered(bool checked);
+
+    /* GUI slots - Cursors */
+    void on_cursorH_valuesChanged(int min, int max);
+    void on_cursorV_valuesChanged(int min, int max);
+    void on_pushButton_cursorsHoff_clicked();
+    void on_pushButton_cursorsHon_clicked();
+    void on_pushButton_cursorsVoff_clicked();
+    void on_pushButton_cursorsVon_clicked();
+
+    /* GUI slots - QCP */
+    void on_qcpMouseWheel(QWheelEvent*);
+    void on_qcpMousePress(QMouseEvent*);
+
+    /* GUI slots - right panel - on/off */
     void on_pushButton_disable1_clicked();
     void on_pushButton_enable1_clicked();
     void on_pushButton_disable2_clicked();
@@ -96,35 +130,24 @@ private slots:
     void on_pushButton_enable3_clicked();
     void on_pushButton_disable4_clicked();
     void on_pushButton_enable4_clicked();
+
+    /* GUI slots - right panel - gain */
     void on_doubleSpinBox_gain1_valueChanged(double arg1);
     void on_doubleSpinBox_gain2_valueChanged(double arg1);
     void on_doubleSpinBox_gain3_valueChanged(double arg1);
     void on_doubleSpinBox_gain4_valueChanged(double arg1);
+
+    /* GUI slots - right panel - main buttons */
     void on_pushButton_disable_clicked();
     void on_pushButton_enable_clicked();
+    void on_pushButton_reset_clicked();
+    void on_pushButton_resetZoom_clicked();
+
+    /* GUI slots - right panel - main settings */
     void on_spinBox_average_valueChanged(int arg1);
     void on_dial_average_valueChanged(int value);
     void on_spinBox_display_valueChanged(int arg1);
     void on_dial_display_valueChanged(int value);
-    void on_actionEnabled_triggered(bool checked);
-    void on_actionReset_triggered();
-    void on_actionChannel_1_triggered(bool checked);
-    void on_actionChannel_2_triggered(bool checked);
-    void on_actionChannel_3_triggered(bool checked);
-    void on_actionChannel_4_triggered(bool checked);
-    void on_cursorH_valuesChanged(int min, int max);
-    void on_cursorV_valuesChanged(int min, int max);
-    void on_pushButton_cursorsHoff_clicked();
-    void on_pushButton_cursorsHon_clicked();
-    void on_pushButton_cursorsVoff_clicked();
-    void on_pushButton_cursorsVon_clicked();
-    void on_actionMath_1_2_triggered(bool checked);
-    void on_actionMath_3_4_triggered(bool checked);
-    void on_pushButton_reset_clicked();
-    void on_pushButton_resetZoom_clicked();
-    void on_qcpMouseWheel(QWheelEvent*);
-    void on_qcpMousePress(QMouseEvent*);
-    void on_actionShow_Plot_triggered(bool checked);
 
 private:
     void initQcp();
@@ -225,8 +248,8 @@ private:
     /* measure helpers */
     bool m_meas_en = true;
     int m_meas_ch = GRAPH_CH1;
-    double m_meas_max = -1000;
-    double m_meas_min = 1000;
+    //double m_meas_max = -1000;
+    //double m_meas_min = 1000;
 
     /* elapsed helpers */
     int m_elapsed_saved = 0;

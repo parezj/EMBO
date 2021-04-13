@@ -15,24 +15,54 @@
 
 QString format_unit(double value, QString unit, int precision)
 {
-    if (value < 0.000000001)
-        return(QString::number(value * 1000000000000, 'd', precision) + " p" + unit);
-    else if (value < 0.000001)
-        return(QString::number(value * 1000000000, 'd', precision) + " n" + unit);
-    else if (value < 0.001)
-        return(QString::number(value * 1000000, 'd', precision) + " u" + unit);
-    else if (value < 1)
-        return(QString::number(value * 1000, 'd', precision) + " m" + unit);
-    else if (value < 1000)
-        return(QString::number(value * 1, 'd', precision) + " " + unit);
-    else if (value < 1000000)
-        return(QString::number(value * 0.001, 'd', precision) + " k" + unit);
-    else if (value < 1000000000)
-        return(QString::number(value * 0.000001, 'd', precision) + " M" + unit);
-    else if (value < 1000000000000)
-        return(QString::number(value * 0.000000001, 'd', precision) + " G" + unit);
+    const QString r = "\\.*0+$";
+
+    double scale;
+    QString prefix;
+
+    if (value < 0.000000001) {
+        scale = 1000000000000;
+        prefix = " p";
+    }
+    else if (value < 0.000001) {
+        scale = 1000000000;
+        prefix = " n";
+    }
+    else if (value < 0.001) {
+        scale = 1000000;
+        prefix = " u";
+    }
+    else if (value < 1) {
+        scale = 1000;
+        prefix = " m";
+    }
+    else if (value < 1000) {
+        scale = 1;
+        prefix = " ";
+    }
+    else if (value < 1000000) {
+        scale = 0.001;
+        prefix = " k";
+    }
+    else if (value < 1000000000) {
+        scale = 0.000001;
+        prefix = " M";
+    }
+    else if (value < 1000000000000) {
+        scale = 0.000000001;
+        prefix = " G";
+    }
+    else {
+        scale = 0.000000000001;
+        prefix = " T";
+    }
+
+    QString ret = QString::number(value * scale, 'd', precision);
+
+    if (ret.contains('.'))
+        return ret.remove(QRegExp(r)) + prefix + unit;
     else
-        return(QString::number(value * 0.000000000001, 'd', precision) + " T" + unit);
+        return ret + prefix + unit;
 }
 
 double lin_to_exp_1to36M(double x, bool inverse)
@@ -96,6 +126,7 @@ int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, doubl
     if (ch3 != NULL) ch_num++;
     if (ch4 != NULL) ch_num++;
 
+    int k1 = 0, k2 = 0, k3 = 0, k4 = 0;
     for (int k = 0, i = from; k < total; k++, i++)
     {
         if (i >= bufflen)
@@ -119,22 +150,22 @@ int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, doubl
         if (i % ch_num == 0)
         {
             if (ch1 != NULL)
-                ch1->push_back(val);
+                (*ch1)[k1++] = val;
         }
         else if (ch_num > 1 && i % ch_num == 1)
         {
             if (ch2 != NULL)
-                ch2->push_back(val);
+                (*ch2)[k2++] = val;
         }
         else if (ch_num > 2 && i % ch_num == 2)
         {
             if (ch3 != NULL)
-                ch3->push_back(val);
+                (*ch3)[k3++] = val;
         }
         else if (ch_num > 3) // && i % ch_num == 3)
         {
             if (ch4 != NULL)
-                ch4->push_back(val);
+                (*ch4)[k4++] = val;
         }
     }
     return found;

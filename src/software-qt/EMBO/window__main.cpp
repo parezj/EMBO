@@ -324,15 +324,15 @@ void WindowMain::setConnected()
         m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
 
     m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps", 3));
-    m_ui->label_scope_mem->setText(format_unit((info->mem / 2) / (1 * 2), "B", 0) +
-                                   (info->adc_bit8 ? " / " + format_unit(info->mem / (1 * 2), "B", 0) : ""));
+    m_ui->label_scope_mem->setText(format_unit((info->mem / 2), "S", 3) +
+                                   (info->adc_bit8 ? " / " + format_unit(info->mem, "S", 3) : ""));
     m_ui->label_scope_bits->setText(info->adc_bit8 ? "12 / 8 bit" : "12 bit");
     m_ui->label_scope_modes->setText("4ch " + QString::number(info->adc_num) + "ADC " + (info->adc_dualmode ? "D" : "") +
                                      (info->adc_dualmode && info->adc_interleaved ? "+" : "") + (info->adc_interleaved ? "I" : ""));
     m_ui->label_scope_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
     m_ui->label_la_fs->setText(format_unit(info->la_fs, "Sps", 3));
-    m_ui->label_la_mem->setText(format_unit(info->mem, "B", 0));
+    m_ui->label_la_mem->setText(format_unit(info->mem, "S", 3));
     m_ui->label_la_protocols->setText("Serial, I2C, SPI");
     m_ui->label_la_pins->setText(info->pins_la.replace("-", ", "));
 

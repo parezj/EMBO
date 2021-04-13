@@ -161,6 +161,11 @@ void WindowLa::on_msg_read(const QByteArray data)
     bool ch3_en = true;
     bool ch4_en = true;
 
+    m_ui->customPlot->graph(GRAPH_CH1)->setVisible(ch2_en);
+    m_ui->customPlot->graph(GRAPH_CH2)->setVisible(ch2_en);
+    m_ui->customPlot->graph(GRAPH_CH3)->setVisible(ch3_en);
+    m_ui->customPlot->graph(GRAPH_CH4)->setVisible(ch4_en);
+
     auto info = Core::getInstance()->getDevInfo();
     int data_sz = data.size();
 

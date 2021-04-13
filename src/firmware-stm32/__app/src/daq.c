@@ -95,8 +95,8 @@ void daq_settings_save(daq_settings_t* src1, trig_settings_t* src2, daq_settings
 void daq_settings_init(daq_data_t* self)
 {
     // SCOPE
-    self->save_s.fs = 100000; //TODO defaults from CFG macros
-    self->save_s.mem = 500;
+    self->save_s.fs = 100000;
+    self->save_s.mem = 1000;
     self->save_s.bits = B12;
 
     self->save_s.ch1_en = 1;
@@ -158,8 +158,8 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
 #if defined(EM_ADC_MODE_ADC1)
 
         int len1 = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + is_vcc;
-        //                            DMA ADC            UART / USB OUT
-        if (mem_per_ch < 1 || (mem_per_ch * len1) + (mem_per_ch * (len1 - is_vcc)) > max_len)
+
+        if (mem_per_ch < 1 || (mem_per_ch * len1) > max_len)
             return -2;
 
         daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
@@ -181,7 +181,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             total = 1;
         }
 #endif
-        if (mem_per_ch < 1 || (mem_per_ch * total) + (mem_per_ch * (total - is_vcc)) > max_len)
+        if (mem_per_ch < 1 || (mem_per_ch * total) > max_len)
             return -2;
 
         if (len1 > 0)
@@ -210,7 +210,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             total = 2; // TODO size??
         }
 #endif
-        if (mem_per_ch < 1 || (mem_per_ch * total) + (mem_per_ch * (total - is_vcc)) > max_len)
+        if (mem_per_ch < 1 || (mem_per_ch * total) > max_len)
             return -2;
 
         if (len1 > 0)
@@ -713,14 +713,12 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         }
     }
 
+    for (int i = 0; i < 10000; i++)  // let DMA and ADC finish their jobs
+        __asm("nop");
+
     if (enable == EM_TRUE) // start the timer
     {
         LL_TIM_EnableCounter(EM_TIM_DAQ);
-    }
-    else // let DMA and ADC finish their jobs
-    {
-        for (int i = 0; i < 10000; i++)
-            __asm("nop");
     }
 
     self->trig.uwtick_first = self->uwTick;

@@ -66,6 +66,10 @@
         <file>resources/img/range_down4.png</file>
         <file>resources/img/range_left3.png</file>
         <file>resources/img/range_left4.png</file>
+        <file>resources/img/range_right_sm.png</file>
+        <file>resources/img/range_right2_sm.png</file>
+        <file>resources/img/range_up_sm.png</file>
+        <file>resources/img/range_up2_sm.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>

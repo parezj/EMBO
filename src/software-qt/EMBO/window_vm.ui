@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>WindowVm</class>
- <widget class="QMainWindow" name="WindowVm">
+ <class>WindowLa</class>
+ <widget class="QMainWindow" name="WindowLa">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -95,87 +95,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <property name="spacing">
               <number>0</number>
              </property>
-             <item row="1" column="2">
-              <widget class="QSlider" name="horizontalSlider_trigVal">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>25</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-width: 25px;
-    max-width: 25px;
-	margin-bottom: 16px;
-	margin-top: 2px;
-}
-
-ctkRangeSlider::groove:vertical {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:vertical {
-     height: 25px;
-	 image: url(:/main/resources/img/range_right.png);
-}
-
-ctkRangeSlider::handle:vertical:hover {
-     height: 25px;
-	 image: url(:/main/resources/img/range_down2.png);
-}
-
-QSlider {
-    min-width: 25px;
-    max-width: 25px;
-	margin-bottom: 16px;
-	margin-top: 2px;
-}
-
-QSlider::groove:vertical {
-	background-color: transparent;
-}
-
-QSlider::handle:vertical {
-     height: 25px;
-	 image: url(:/main/resources/img/range_right.png);
-}
-
-QSlider::handle:vertical:hover {
-	 height: 25px;
-	 image: url(:/main/resources/img/range_right2.png);
-}</string>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="value">
-                <number>500</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100000</number>
-               </property>
-              </widget>
-             </item>
-             <item row="2" column="1">
+             <item row="1" column="1">
               <widget class="ctkRangeSlider" name="horizontalSlider_cursorH">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -261,7 +181,7 @@ QSlider::handle:horizontal:hover {
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
+             <item row="0" column="0">
               <widget class="ctkRangeSlider" name="horizontalSlider_cursorV">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -341,7 +261,7 @@ QSlider::handle:vertical:hover {
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
+             <item row="0" column="1">
               <widget class="QCustomPlot" name="customPlot" native="true">
                <property name="enabled">
                 <bool>true</bool>
@@ -360,92 +280,6 @@ QSlider::handle:vertical:hover {
                </property>
                <property name="styleSheet">
                 <string notr="true">background-color: white;border: 0px;</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSlider" name="horizontalSlider_trigPre">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-height: 25px;
-    max-height: 25px;
-	margin-left: 33px;
-	margin-right:2px;
-}
-
-ctkRangeSlider::groove:horizontal {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:horizontal {
-     width: 25px;
-	 image: url(:/main/resources/img/range_up.png);
-}
-
-ctkRangeSlider::handle:horizontal:hover {
-     width: 25px;
-	 image: url(:/main/resources/img/range_down2.png);
-}
-
-QSlider {
-    min-height: 25px;
-    max-height: 25px;
-	margin-left: 33px;
-	margin-right:2px;
-}
-
-QSlider::groove:horizontal {
-	background-color: transparent;
-}
-
-QSlider::handle:horizontal {
-     width: 25px;
-	 image: url(:/main/resources/img/range_up.png);
-}
-
-QSlider::handle:horizontal:hover {
-	 width: 25px;
-	 image: url(:/main/resources/img/range_up2.png);
-}</string>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="singleStep">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>500</number>
-               </property>
-               <property name="sliderPosition">
-                <number>500</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100000</number>
                </property>
               </widget>
              </item>
@@ -3404,7 +3238,7 @@ QPushButton:disabled {
     </property>
     <addaction name="actionAbout"/>
    </widget>
-   <widget class="QMenu" name="menuRecord">
+   <widget class="QMenu" name="menuExport">
     <property name="font">
      <font>
       <family>Roboto</family>
@@ -3414,7 +3248,7 @@ QPushButton:disabled {
     <property name="title">
      <string>Record</string>
     </property>
-    <widget class="QMenu" name="menuFormat">
+    <widget class="QMenu" name="menuExportFormat">
      <property name="font">
       <font>
        <family>Roboto</family>
@@ -3424,18 +3258,18 @@ QPushButton:disabled {
      <property name="title">
       <string>Format</string>
      </property>
-     <addaction name="actionCSV"/>
-     <addaction name="actionTXT_Tabs"/>
-     <addaction name="actionTXT_Semicolon"/>
-     <addaction name="actionMAT"/>
+     <addaction name="actionExportCSV"/>
+     <addaction name="actionExportTXT_Tabs"/>
+     <addaction name="actionExportTXT_Semicolon"/>
+     <addaction name="actionExportMAT"/>
     </widget>
-    <addaction name="actionStart"/>
-    <addaction name="actionStop"/>
+    <addaction name="actionExportStart"/>
+    <addaction name="actionExportStop"/>
     <addaction name="separator"/>
-    <addaction name="actionScreenshot"/>
+    <addaction name="actionExportScreenshot"/>
     <addaction name="separator"/>
-    <addaction name="actionFolder"/>
-    <addaction name="menuFormat"/>
+    <addaction name="actionExportFolder"/>
+    <addaction name="menuExportFormat"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="font">
@@ -3457,15 +3291,15 @@ QPushButton:disabled {
      <property name="title">
       <string>Interpolation</string>
      </property>
-     <addaction name="actionLinear"/>
-     <addaction name="actionSinc"/>
+     <addaction name="actionInterpLinear"/>
+     <addaction name="actionInterpSinc"/>
     </widget>
-    <addaction name="actionLines"/>
-    <addaction name="actionPoints"/>
+    <addaction name="actionViewLines"/>
+    <addaction name="actionViewPoints"/>
     <addaction name="separator"/>
     <addaction name="menuInterpolation"/>
     <addaction name="separator"/>
-    <addaction name="actionShow_Plot"/>
+    <addaction name="actionShowPlot"/>
    </widget>
    <widget class="QMenu" name="menuMeasure">
     <property name="font">
@@ -3477,7 +3311,7 @@ QPushButton:disabled {
     <property name="title">
      <string>Measure</string>
     </property>
-    <widget class="QMenu" name="menuChannel">
+    <widget class="QMenu" name="menuMeasChannel">
      <property name="font">
       <font>
        <family>Roboto</family>
@@ -3487,14 +3321,14 @@ QPushButton:disabled {
      <property name="title">
       <string>Channel</string>
      </property>
-     <addaction name="actionChannel_1"/>
-     <addaction name="actionChannel_2"/>
-     <addaction name="actionChannel_3"/>
-     <addaction name="actionChannel_4"/>
+     <addaction name="actionMeasChannel_1"/>
+     <addaction name="actionMeasChannel_2"/>
+     <addaction name="actionMeasChannel_3"/>
+     <addaction name="actionMeasChannel_4"/>
     </widget>
-    <addaction name="actionEnabled"/>
+    <addaction name="actionMeasEnabled"/>
     <addaction name="separator"/>
-    <addaction name="menuChannel"/>
+    <addaction name="menuMeasChannel"/>
     <addaction name="separator"/>
     <addaction name="actionReset"/>
    </widget>
@@ -3511,7 +3345,7 @@ QPushButton:disabled {
     <addaction name="actionMath_1_2"/>
     <addaction name="actionMath_3_4"/>
    </widget>
-   <addaction name="menuRecord"/>
+   <addaction name="menuExport"/>
    <addaction name="menuView"/>
    <addaction name="menuMeasure"/>
    <addaction name="menuMath"/>
@@ -3537,7 +3371,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionStart">
+  <action name="actionExportStart">
    <property name="text">
     <string>Start</string>
    </property>
@@ -3548,7 +3382,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionStop">
+  <action name="actionExportStop">
    <property name="enabled">
     <bool>false</bool>
    </property>
@@ -3562,7 +3396,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionFolder">
+  <action name="actionExportFolder">
    <property name="text">
     <string>Folder</string>
    </property>
@@ -3578,7 +3412,7 @@ QPushButton:disabled {
     <string>Format</string>
    </property>
   </action>
-  <action name="actionLines">
+  <action name="actionViewLines">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3595,7 +3429,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionPoints">
+  <action name="actionViewPoints">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3609,7 +3443,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionLinear">
+  <action name="actionInterpLinear">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3626,7 +3460,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionSinc">
+  <action name="actionInterpSinc">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3646,7 +3480,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionCSV">
+  <action name="actionExportCSV">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3663,7 +3497,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionTXT_Tabs">
+  <action name="actionExportTXT_Tabs">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3677,7 +3511,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionMAT">
+  <action name="actionExportMAT">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3722,7 +3556,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionEnabled">
+  <action name="actionMeasEnabled">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3750,7 +3584,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionChannel_1">
+  <action name="actionMeasChannel_1">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3767,7 +3601,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionChannel_2">
+  <action name="actionMeasChannel_2">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3781,7 +3615,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionChannel_3">
+  <action name="actionMeasChannel_3">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3795,7 +3629,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionChannel_4">
+  <action name="actionMeasChannel_4">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3837,7 +3671,7 @@ QPushButton:disabled {
     </font>
    </property>
   </action>
-  <action name="actionTXT_Semicolon">
+  <action name="actionExportTXT_Semicolon">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -3850,12 +3684,12 @@ QPushButton:disabled {
     <string>Name</string>
    </property>
   </action>
-  <action name="actionScreenshot">
+  <action name="actionExportScreenshot">
    <property name="text">
     <string>Screenshot</string>
    </property>
   </action>
-  <action name="actionShow_Plot">
+  <action name="actionShowPlot">
    <property name="checkable">
     <bool>true</bool>
    </property>

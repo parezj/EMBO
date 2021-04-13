@@ -3,8 +3,8 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
-#ifndef PROTO_H
-#define PROTO_H
+#ifndef COMM_PROTO_H
+#define COMM_PROTO_H
 
 #include "scpi/scpi.h"
 
@@ -28,8 +28,8 @@ scpi_result_t EM_LA_SetQ(scpi_t * context);
 scpi_result_t EM_LA_ReadQ(scpi_t * context);
 scpi_result_t EM_LA_ForceTrig(scpi_t * context);
 
-scpi_result_t EM_CNTR_EnableQ(scpi_t * context);
-scpi_result_t EM_CNTR_Enable(scpi_t * context);
+scpi_result_t EM_CNTR_SetQ(scpi_t * context);
+scpi_result_t EM_CNTR_Set(scpi_t * context);
 scpi_result_t EM_CNTR_ReadQ(scpi_t * context);
 
 scpi_result_t EM_SGEN_SetQ(scpi_t * context);
@@ -39,4 +39,4 @@ scpi_result_t EM_PWM_SetQ(scpi_t * context);
 scpi_result_t EM_PWM_Set(scpi_t * context);
 
 
-#endif /* PROTO_H */
+#endif /* COMM_PROTO_H */

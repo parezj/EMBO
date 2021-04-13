@@ -5,13 +5,14 @@
  
 #include "cfg.h"
 #include "comm.h"
+#include "comm_proto.h"
 #include "utility.h"
 #include "build_defs.h"
 
-#include "proto.h"
 #ifdef EM_USB
 #include "usbd_cdc_if.h"
 #endif
+
 #include "main.h"
 
 #include <stdio.h>
@@ -82,8 +83,8 @@ const scpi_command_t scpi_commands[] = {
     {.pattern = "LA:FORCetrig", .callback = EM_LA_ForceTrig,},
 
     /* EMBO - Counter */
-    {.pattern = "CNTR:ENAble?", .callback = EM_CNTR_EnableQ,},
-    {.pattern = "CNTR:ENAble", .callback = EM_CNTR_Enable,},
+    {.pattern = "CNTR:SET?", .callback = EM_CNTR_SetQ,},
+    {.pattern = "CNTR:SET", .callback = EM_CNTR_Set,},
     {.pattern = "CNTR:READ?", .callback = EM_CNTR_ReadQ,},
 
     /* EMBO - Signal Generator */

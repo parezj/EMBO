@@ -165,7 +165,7 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     on_spinBox_average_valueChanged(m_ui->spinBox_average->value());
     on_spinBox_display_valueChanged(m_ui->spinBox_display->value());
-    on_actionShow_Plot_triggered(m_ui->actionShow_Plot->isChecked());
+    on_actionShowPlot_triggered(m_ui->actionShow_Plot->isChecked());
 
     m_instrEnabled = true;
 }
@@ -487,7 +487,7 @@ bool WindowVm::updatePlotData()
     return true;
 }
 
-void WindowVm::on_actionStart_triggered()
+void WindowVm::on_actionExportStart_triggered()
 {
     auto info = Core::getInstance()->getDevInfo();
     auto sys = QSysInfo();
@@ -533,7 +533,7 @@ void WindowVm::on_actionStart_triggered()
     }
 }
 
-void WindowVm::on_actionStop_triggered()
+void WindowVm::on_actionExportStop_triggered()
 {
     m_recording = false;
 
@@ -551,7 +551,7 @@ void WindowVm::on_actionStop_triggered()
     msgBox(this, "File saved at: " + ret, INFO);
 }
 
-void WindowVm::on_actionScreenshot_triggered()
+void WindowVm::on_actionExportScreenshot_triggered()
 {
      QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
 
@@ -561,7 +561,7 @@ void WindowVm::on_actionScreenshot_triggered()
          msgBox(this, "File saved at: " + ret, INFO);
 }
 
-void WindowVm::on_actionFolder_triggered()
+void WindowVm::on_actionExportFolder_triggered()
 {
     bool ok;
     QString dir_saved = Settings::getValue(CFG_REC_DIR, m_rec.getDir()).toString();
@@ -576,7 +576,7 @@ void WindowVm::on_actionFolder_triggered()
     }
 }
 
-void WindowVm::on_actionCSV_triggered(bool checked)
+void WindowVm::on_actionExportCSV_triggered(bool checked)
 {
     if (checked)
     {
@@ -588,7 +588,7 @@ void WindowVm::on_actionCSV_triggered(bool checked)
     }
 }
 
-void WindowVm::on_actionTXT_Tabs_triggered(bool checked)
+void WindowVm::on_actionExportTXT_Tabs_triggered(bool checked)
 {
     if (checked)
     {
@@ -600,7 +600,7 @@ void WindowVm::on_actionTXT_Tabs_triggered(bool checked)
     }
 }
 
-void WindowVm::on_actionTXT_Semicolon_triggered(bool checked)
+void WindowVm::on_actionExportTXT_Semicolon_triggered(bool checked)
 {
     if (checked)
     {
@@ -612,7 +612,7 @@ void WindowVm::on_actionTXT_Semicolon_triggered(bool checked)
     }
 }
 
-void WindowVm::on_actionMAT_triggered(bool checked)
+void WindowVm::on_actionExportMAT_triggered(bool checked)
 {
     if (checked)
     {
@@ -624,7 +624,7 @@ void WindowVm::on_actionMAT_triggered(bool checked)
     }
 }
 
-void WindowVm::on_actionLines_triggered(bool checked)
+void WindowVm::on_actionViewLines_triggered(bool checked)
 {
     QCPGraph::LineStyle style = QCPGraph::lsNone;
 
@@ -642,7 +642,7 @@ void WindowVm::on_actionLines_triggered(bool checked)
     //    m_ui->customPlot->replot();
 }
 
-void WindowVm::on_actionPoints_triggered(bool checked)
+void WindowVm::on_actionViewPoints_triggered(bool checked)
 {
     QCPScatterStyle style = QCPScatterStyle(QCPScatterStyle::ssNone);
 
@@ -660,7 +660,7 @@ void WindowVm::on_actionPoints_triggered(bool checked)
     //    m_ui->customPlot->replot();
 }
 
-void WindowVm::on_actionSinc_triggered(bool checked) // exclusive with - actionLinear
+void WindowVm::on_actionInterpSinc_triggered(bool checked) // exclusive with - actionLinear
 {
     m_spline = checked;
 
@@ -675,10 +675,10 @@ void WindowVm::on_actionSinc_triggered(bool checked) // exclusive with - actionL
     //    m_ui->customPlot->replot();
 }
 
-void WindowVm::on_actionLinear_triggered(bool checked) // exclusive with - actionSinc
+void WindowVm::on_actionInterpLinear_triggered(bool checked) // exclusive with - actionSinc
 {
     m_ui->actionSinc->setChecked(!checked);
-    on_actionSinc_triggered(!checked);
+    on_actionInterpSinc_triggered(!checked);
 }
 
 void WindowVm::on_pushButton_disable1_clicked()
@@ -982,10 +982,10 @@ void WindowVm::on_dial_display_valueChanged(int value)
     m_ui->spinBox_display->setValue(value);
 }
 
-void WindowVm::on_actionEnabled_triggered(bool checked)
+void WindowVm::on_actionMeasEnabled_triggered(bool checked)
 {
     m_meas_en = checked;
-    on_actionReset_triggered();
+    on_actionMeasReset_triggered();
 
     m_ui->textBrowser_measVpp->setEnabled(checked);
     m_ui->textBrowser_measAvg->setEnabled(checked);
@@ -993,10 +993,10 @@ void WindowVm::on_actionEnabled_triggered(bool checked)
     m_ui->textBrowser_measMax->setEnabled(checked);
 }
 
-void WindowVm::on_actionReset_triggered()
+void WindowVm::on_actionMeasReset_triggered()
 {
-    m_meas_max = -1000;
-    m_meas_min = 1000;
+    //m_meas_max = -1000;
+    //m_meas_min = 1000;
 
     m_ui->textBrowser_measVpp->setText("");
     m_ui->textBrowser_measAvg->setText("");
@@ -1004,11 +1004,11 @@ void WindowVm::on_actionReset_triggered()
     m_ui->textBrowser_measMax->setText("");
 }
 
-void WindowVm::on_actionChannel_1_triggered(bool checked)
+void WindowVm::on_actionMeasChannel_1_triggered(bool checked)
 {
     if (checked)
     {
-        on_actionReset_triggered();
+        on_actionMeasReset_triggered();
         m_meas_ch = GRAPH_CH1;
 
         m_ui->actionChannel_2->setChecked(false);
@@ -1019,11 +1019,11 @@ void WindowVm::on_actionChannel_1_triggered(bool checked)
     }
 }
 
-void WindowVm::on_actionChannel_2_triggered(bool checked)
+void WindowVm::on_actionMeasChannel_2_triggered(bool checked)
 {
     if (checked)
     {
-        on_actionReset_triggered();
+        on_actionMeasReset_triggered();
         m_meas_ch = GRAPH_CH2;
 
         m_ui->actionChannel_1->setChecked(false);
@@ -1034,11 +1034,11 @@ void WindowVm::on_actionChannel_2_triggered(bool checked)
     }
 }
 
-void WindowVm::on_actionChannel_3_triggered(bool checked)
+void WindowVm::on_actionMeasChannel_3_triggered(bool checked)
 {
     if (checked)
     {
-        on_actionReset_triggered();
+        on_actionMeasReset_triggered();
         m_meas_ch = GRAPH_CH3;
 
         m_ui->actionChannel_1->setChecked(false);
@@ -1049,11 +1049,11 @@ void WindowVm::on_actionChannel_3_triggered(bool checked)
     }
 }
 
-void WindowVm::on_actionChannel_4_triggered(bool checked)
+void WindowVm::on_actionMeasChannel_4_triggered(bool checked)
 {
     if (checked)
     {
-        on_actionReset_triggered();
+        on_actionMeasReset_triggered();
         m_meas_ch = GRAPH_CH4;
 
         m_ui->actionChannel_1->setChecked(false);
@@ -1200,20 +1200,40 @@ void WindowVm::on_pushButton_reset_clicked()
 
     on_pushButton_disable_clicked();
 
-    on_actionChannel_1_triggered(true);
-    on_actionEnabled_triggered(true);
-    on_actionReset_triggered();
+    /* meas */
+    on_actionMeasChannel_1_triggered(true);
+    m_ui->actionChannel_1->setChecked(true);
 
+    on_actionMeasEnabled_triggered(true);
+    m_ui->actionEnabled->setChecked(true);
+
+    on_actionMeasReset_triggered();
+
+    /* math */
     on_actionMath_1_2_triggered(false);
-    on_actionMath_3_4_triggered(false);
+    m_ui->actionMath_1_2->setChecked(false);
 
+    on_actionMath_3_4_triggered(false);
+    m_ui->actionMath_3_4->setChecked(false);
+
+    /* cursors */
     on_pushButton_cursorsVoff_clicked();
     on_pushButton_cursorsHoff_clicked();
 
-    on_actionLines_triggered(true);
-    on_actionPoints_triggered(false);
-    on_actionSinc_triggered(true);
+    /* plot style */
+    on_actionViewLines_triggered(true);
+    m_ui->actionLines->setChecked(true);
 
+    on_actionViewPoints_triggered(false);
+    m_ui->actionPoints->setChecked(false);
+
+    on_actionInterpSinc_triggered(true);
+    m_ui->actionSinc->setChecked(true);
+
+    on_actionShowPlot_triggered(true);
+    m_ui->actionShow_Plot->setChecked(true);
+
+    /* channels */
     on_pushButton_disable1_clicked();
     on_pushButton_disable2_clicked();
     on_pushButton_disable3_clicked();
@@ -1221,27 +1241,32 @@ void WindowVm::on_pushButton_reset_clicked()
     on_pushButton_enable1_clicked();
     on_pushButton_enable2_clicked();
 
-    on_actionShow_Plot_triggered(true);
-
+    /* main menu */
     m_ui->spinBox_average->setValue(DEFAULT_AVG);
     m_ui->spinBox_display->setValue(DEFAULT_PLT);
 
+    /* recording */
     if (m_recording)
-        on_actionStop_triggered();
+        on_actionExportStop_triggered();
     m_rec.reset();
     Settings::setValue(CFG_REC_DIR, m_rec.getDir());
-    on_actionCSV_triggered(true);
 
+    on_actionExportCSV_triggered(true);
+    m_ui->actionCSV->setChecked(true);
+
+    /* gain */
     m_ui->doubleSpinBox_gain1->setValue(1);
     m_ui->doubleSpinBox_gain2->setValue(1);
     m_ui->doubleSpinBox_gain3->setValue(1);
     m_ui->doubleSpinBox_gain4->setValue(1);
 
+    /* graph data */
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
+    /* helper vars */
     m_smplBuff.clear();
     m_timer_elapsed = 0;
 
@@ -1277,7 +1302,7 @@ void WindowVm::on_qcpMousePress(QMouseEvent*)
     m_ui->pushButton_resetZoom->show();
 }
 
-void WindowVm::on_actionShow_Plot_triggered(bool checked)
+void WindowVm::on_actionShowPlot_triggered(bool checked)
 {
     Settings::setValue(CFG_VM_SHOW_PLOT, checked);
     m_plot = checked;
@@ -1365,7 +1390,7 @@ void WindowVm::showEvent(QShowEvent*)
 
     m_smplBuff.clear();
     m_data_fresh = false;
-    on_actionReset_triggered();
+    on_actionMeasReset_triggered();
 
     m_timer_elapsed = 0;
     m_timer_plot->start(TIMER_VM_PLOT);

@@ -51,10 +51,13 @@ void daq_trig_init(daq_data_t* self)
     self->trig.post_from = 0;
     self->trig.dma_pos_catched = 0;
     self->trig.forced = EM_FALSE;
+    self->trig.respond = EM_FALSE;
 }
 
 void daq_trig_check(daq_data_t* self)
 {
+    char t_resp = '0';
+
     if (self->enabled == EM_TRUE) // check pre trigger
     {
         self->trig.pretrig_cntr = self->uwTick - self->trig.uwtick_first;
@@ -75,7 +78,7 @@ void daq_trig_check(daq_data_t* self)
         self->trig.pretrig_cntr = 0;
     }
 
-    if (self->mode != VM) // auto trigger
+    if (self->mode != VM) // check auto trigger
     {
         if (self->enabled == EM_TRUE &&
             self->trig.set.mode == AUTO &&
@@ -89,7 +92,8 @@ void daq_trig_check(daq_data_t* self)
             self->trig.ready = EM_TRUE;
             self->trig.is_post = EM_FALSE;
 
-            comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst); // data ready - trig auto
+            t_resp = 'A';
+            self->trig.respond = EM_TRUE; // init async respond ReadyX
         }
         else if (self->trig.set.mode == DISABLED &&  // trigger is disabled
                  self->trig.pretrig_cntr > self->trig.fullmem_val)
@@ -100,11 +104,36 @@ void daq_trig_check(daq_data_t* self)
                 daq_enable(self, EM_FALSE);
                 self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
 
-                comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst); // data ready - trig disabled
+                t_resp = 'D';
+                self->trig.respond = EM_TRUE; // init async respond ReadyX
             }
         }
     }
     self->trig.ready_last = self->trig.ready;
+
+    if (self->trig.respond == EM_TRUE) // // check async respond ReadyX
+    {
+        const char* resp;
+
+        if (t_resp == 'A')
+            resp = EM_RESP_RDY_A;       // data ready - trig auto
+        else if (t_resp == 'D')
+            resp = EM_RESP_RDY_D;       // data ready - trig disabled
+        else
+        {
+            if (self->trig.forced == EM_TRUE)
+                resp = EM_RESP_RDY_F;   // data ready - trig forced
+            else if (self->trig.set.mode == SINGLE)
+                resp = EM_RESP_RDY_S;   // data ready - trig single
+            else
+                resp = EM_RESP_RDY_A;   // data ready - trig normal
+        }
+
+        comm_daq_ready(comm_ptr, resp, self->trig.pos_frst); // finally send the respond
+
+        self->trig.respond = EM_FALSE;
+        self->trig.forced = EM_FALSE;
+    }
 }
 
 void daq_trig_trigger_scope(daq_data_t* self)
@@ -285,11 +314,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             if (self->trig.pos_diff < 0)
                 self->trig.pos_diff += self->trig.buff_trig->len;
 
-            comm_daq_ready(comm_ptr, self->trig.forced == EM_TRUE  ? EM_RESP_RDY_F :                        // data ready - trig forced
-                                   ((self->trig.set.mode == SINGLE ? EM_RESP_RDY_S :                        // data ready - trig single
-                                                                     EM_RESP_RDY_N)), self->trig.pos_frst); // data ready - trig normal
-
-            self->trig.forced = EM_FALSE;
+            self->trig.respond = EM_TRUE; // init async respond ReadyX
             break;
         }
     }

@@ -31,7 +31,7 @@
 #define EMBO_LA_SET         ":LA:SET"
 #define EMBO_LA_FORCETRIG   ":LA:FORC"
 
-#define EMBO_CNTR_ENABLE    ":CNTR:ENA"
+#define EMBO_CNTR_SET       ":CNTR:SET"
 #define EMBO_CNTR_READ      ":CNTR:READ"
 
 #define EMBO_SGEN_SET       ":SGEN:SET"
@@ -196,7 +196,7 @@ class Msg_CNTR_Enable : public Msg
 {
     Q_OBJECT
 public:
-    explicit Msg_CNTR_Enable(QObject* parent=0) : Msg(EMBO_CNTR_ENABLE, true, parent) {};
+    explicit Msg_CNTR_Enable(QObject* parent=0) : Msg(EMBO_CNTR_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
     void result(bool enabled, bool fastMode);

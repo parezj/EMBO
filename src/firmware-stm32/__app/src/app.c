@@ -9,8 +9,8 @@
 #include "app_sync.h"
 
 #include "comm.h"
+#include "comm_proto.h"
 #include "periph.h"
-#include "proto.h"
 #include "main.h"
 
 #include "FreeRTOS.h"
@@ -86,7 +86,7 @@ void app_main(void)
 
     __enable_irq();
 
-    vTaskStartScheduler();
+    vTaskStartScheduler(); // start scheduler
 
     ASSERT(0);
 }
@@ -138,11 +138,8 @@ void t3_trig_post_count(void* p)
     while(1)
     {
         ASSERT(xSemaphoreTake(sem2_trig, portMAX_DELAY) == pdPASS);
-        ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
         daq_trig_postcount(&daq);
-
-        ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
 #ifdef EM_DEBUG
         watermark_t3 = uxTaskGetStackHighWaterMark(NULL);

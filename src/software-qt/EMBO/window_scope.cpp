@@ -159,6 +159,11 @@ void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, 
     m_daqSet.trig_pre = trig_pre;
     m_daqSet.maxZ_kohm = maxZ;
     m_daqSet.fs_real = fs_real;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setVisible(ch1);
+    m_ui->customPlot->graph(GRAPH_CH2)->setVisible(ch2);
+    m_ui->customPlot->graph(GRAPH_CH3)->setVisible(ch3);
+    m_ui->customPlot->graph(GRAPH_CH4)->setVisible(ch4);
 }
 
 void WindowScope::on_msg_read(const QByteArray data)
