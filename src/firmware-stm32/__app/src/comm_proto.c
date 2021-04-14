@@ -54,11 +54,11 @@ scpi_result_t EM_SYS_Mode(scpi_t* context)
     if (!SCPI_ParamCharacters(context, &p1, &p1l, TRUE))
         return SCPI_RES_ERR;
 
-    if (((p1l == 5) && (strncmp(p1, "SCOPE", 5) == 0)) || ((p1l == 4) && (strncmp(p1, "SCOP", 4) == 0)))
+    if (((p1l == 5) && (strncmp2(p1, "SCOPE", 5) == 0)) || ((p1l == 4) && (strncmp2(p1, "SCOP", 4) == 0)))
         daq_mode_set(&daq, SCOPE);
-    else if ((p1l == 2) && (strncmp(p1, "VM", 2) == 0))
+    else if ((p1l == 2) && (strncmp2(p1, "VM", 2) == 0))
         daq_mode_set(&daq, VM);
-    else if ((p1l == 2) && (strncmp(p1, "LA", 2) == 0))
+    else if ((p1l == 2) && (strncmp2(p1, "LA", 2) == 0))
         daq_mode_set(&daq, LA);
     else
     {

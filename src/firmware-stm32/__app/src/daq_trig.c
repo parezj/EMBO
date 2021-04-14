@@ -52,6 +52,7 @@ void daq_trig_init(daq_data_t* self)
     self->trig.dma_pos_catched = 0;
     self->trig.forced = EM_FALSE;
     self->trig.respond = EM_FALSE;
+    self->trig.irq_en = EM_FALSE;
 }
 
 void daq_trig_check(daq_data_t* self)
@@ -64,13 +65,26 @@ void daq_trig_check(daq_data_t* self)
         if (self->trig.pretrig_cntr < 0)
             self->trig.pretrig_cntr += EM_UWTICK_MAX;
 
-        if (self->trig.pretrig_cntr > self->trig.pretrig_val && self->trig.set.mode != DISABLED)
+        if (self->trig.irq_en == EM_FALSE && self->trig.pretrig_cntr > self->trig.pretrig_val && self->trig.set.mode != DISABLED) // enable IRQ
         {
             if (self->mode == SCOPE)
             {
                 ASSERT(self->trig.awd_trig != 0);
                 LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig);
             }
+            else if (self->mode == LA)
+            {
+                ASSERT(self->trig.exti_trig != 0);
+
+                NVIC_ClearPendingIRQ(self->trig.exti_trig);
+                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI1);
+                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI2);
+                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI3);
+                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI4);
+
+                NVIC_EnableIRQ(self->trig.exti_trig);
+            }
+            self->trig.irq_en = EM_TRUE;
         }
     }
     else
@@ -212,25 +226,38 @@ void daq_trig_trigger_la(daq_data_t* self)
 {
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_ch_trig != 0);
+    ASSERT(self->trig.exti_trig != 0);
+
+    self->trig.la_state = 2;
 
     if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE)
         goto invalid_trigger;
 
-    if (self->trig.pretrig_cntr > self->trig.pretrig_val)
-    {
+    //if (self->trig.pretrig_cntr > self->trig.pretrig_val)
+    //{
         daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
-        //return; here fails
-    }
+        return;
+    //}
     
-    return; // why need to be here?
-
     invalid_trigger: // if any code gets here, means that trigger is invalid
+
+    for (int i = 0; i < 10000; i++)
+        __asm("nop");
+
+    self->trig.la_state = 3;
+
     NVIC_ClearPendingIRQ(self->trig.exti_trig);
-    NVIC_EnableIRQ(self->trig.exti_trig); // reenable irq
+    NVIC_EnableIRQ(self->trig.exti_trig);
+
+    self->trig.la_state = 4;
 }
+
+volatile int a = 0;
 
 void daq_trig_poststart(daq_data_t* self, int pos)
 {
+    self->trig.la_state = 5;
+
     self->trig.post_start = EM_TRUE;
     self->trig.post_from = pos;
     self->trig.pretrig_cntr = 0;
@@ -239,10 +266,14 @@ void daq_trig_poststart(daq_data_t* self, int pos)
     ASSERT(xSemaphoreGiveFromISR(sem2_trig, &xHigherPriorityTaskWoken) == pdPASS);
     if (xHigherPriorityTaskWoken != pdFALSE)
         portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+
+    self->trig.la_state = 6;
 }
 
 void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (800 ksps)
 {
+    self->trig.la_state = 7;
+
     int last_idx = self->trig.post_from;
 
     ASSERT(self->trig.buff_trig != NULL);
@@ -286,6 +317,8 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
     int target_prev = self->trig.buff_trig->len - self->trig.post_from;
     int target_sum = 0;
 
+    self->trig.la_state = 8;
+
     while(1)
     {
         iwdg_feed(); // 1
@@ -302,6 +335,8 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
 
         target_prev = target;
 
+        self->trig.la_state = 9;
+
         if (target_sum >= self->trig.posttrig_size) // pos_last_len == target
         {
             LL_TIM_DisableCounter(EM_TIM_DAQ);
@@ -315,6 +350,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
                 self->trig.pos_diff += self->trig.buff_trig->len;
 
             self->trig.respond = EM_TRUE; // init async respond ReadyX
+            self->trig.la_state = 10;
             break;
         }
     }

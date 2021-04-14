@@ -46,7 +46,49 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
 
     /* statusbar */
 
+    m_status_vcc = new QLabel(" ", this);
+    m_status_rec = new QLabel(" ", this);
+    QWidget* widget = new QWidget(this);
+    QFont font1("Roboto", 11, QFont::Normal);
+    m_status_vcc->setFont(font1);
+    m_status_rec->setFont(font1);
+
+    QLabel* status_img = new QLabel(this);
+    QPixmap status_img_icon = QPixmap(":/main/resources/img/scope.svg");
+
+    status_img->setPixmap(status_img_icon);
+    status_img->setFixedWidth(17);
+    status_img->setFixedHeight(17);
+    status_img->setScaledContents(true);
+
+    m_status_line1 = new QFrame(this);
+    m_status_line1->setFrameShape(QFrame::VLine);
+    m_status_line1->setFrameShadow(QFrame::Plain);
+    m_status_line1->setStyleSheet("color:gray;");
+    m_status_line1->setFixedHeight(18);
+    m_status_line1->setVisible(false);
+
+    QLabel* status_spacer2 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer3 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+
+    QSpacerItem* status_spacer0 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
+
+    QGridLayout * layout = new QGridLayout(widget);
+    layout->addWidget(status_img,     0,0,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_vcc,   0,1,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer2, 0,2,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line1, 0,3,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer3, 0,4,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_rec,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addItem(status_spacer0,   0,6,1,1,Qt::AlignVCenter);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    m_ui->statusbar->addWidget(widget,1);
+    m_ui->statusbar->setSizeGripEnabled(false);
+
     /* styles */
+
+    m_instrEnabled = true;
 }
 void WindowScope::initQcp()
 {
@@ -98,16 +140,14 @@ void WindowScope::initQcp()
 
     /* cursors */
 
-    /*
     m_ui->horizontalSlider_cursorH->setValues(m_cursorH_min, m_cursorH_max);
     m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
 
     m_ui->horizontalSlider_cursorH->hide();
     m_ui->horizontalSlider_cursorV->hide();
 
-    connect(this, &WindowVm::on_cursorH_valuesChanged, m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged);
-    connect(this, &WindowVm::on_cursorV_valuesChanged, m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged);
-    */
+    connect(m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged, this, &WindowScope::on_cursorH_valuesChanged);
+    connect(m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged, this, &WindowScope::on_cursorV_valuesChanged);
 
     m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
     m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, true);
@@ -124,7 +164,7 @@ void WindowScope::on_actionAbout_triggered()
     QMessageBox::about(this, EMBO_TITLE, EMBO_ABOUT_TXT);
 }
 
-/* slots */
+/******************************** MSG slots ********************************/
 
 void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 {
@@ -168,73 +208,6 @@ void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, 
 
 void WindowScope::on_msg_read(const QByteArray data)
 {
-    /*
-    int ch_num = m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en;
-    const unsigned char *dataU8 = reinterpret_cast<const unsigned char*>(data.constData());
-
-    int data_sz = data.size();
-    int real_sz = data_sz;
-
-    std::vector<qreal> buff(data_sz);
-
-    if (m_daqSet.bits == B8)
-    {
-        for (int i = 0; i < data_sz; i++)
-            buff[i] = (((qreal)(dataU8[i]) / 100.0));
-    }
-    else
-    {
-        real_sz = data_sz / 2;
-        buff.resize(real_sz);
-        for (int i = 0, j = 0; i < data_sz; i += 2, j++)
-            buff[j] = (((qreal)(dataU8[i + 1] << 8 | dataU8[i]) / 10000.0));
-    }
-    int ch_sz = real_sz / ch_num;
-
-    if (ch_sz != m_daqSet.mem) // wrong data size
-    {
-        on_msg_err(INVALID_MSG, CRITICAL, true);
-        return;
-    }
-
-    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
-
-    for (int i = 0, k = 0; k < ch_num; k++)
-    {
-        for (int j = 1; j <= ch_sz; j++, i++) // plot from 1 to ch_sz
-        {
-            if (k == 0 && m_daqSet.ch1_en)
-                m_ui->customPlot->graph(GRAPH_CH1)->addData(j, buff[i]);
-            else if (k == 1 && m_daqSet.ch2_en)
-                m_ui->customPlot->graph(GRAPH_CH2)->addData(j, buff[i]);
-            else if (k == 2 && m_daqSet.ch3_en)
-                m_ui->customPlot->graph(GRAPH_CH3)->addData(j, buff[i]);
-            else if (k == 3 && m_daqSet.ch4_en)
-                m_ui->customPlot->graph(GRAPH_CH4)->addData(j, buff[i]);
-        }
-    }
-
-    m_old_range = m_ui->customPlot->yAxis->range();
-    m_ui->customPlot->xAxis->setRange(1, ch_sz);
-    m_ui->customPlot->yAxis->setRange(-0.1, 3.4);
-
-    m_ui->customPlot->yAxis->rescale();
-
-    if (m_old_range != m_ui->customPlot->yAxis->range())
-    {
-        auto low_range = m_ui->customPlot->yAxis->range().lower;
-        auto up_range = m_ui->customPlot->yAxis->range().upper;
-        auto hysteris = (up_range - low_range) * 0.05;
-
-        m_ui->customPlot->yAxis->setRange(low_range - hysteris,up_range + hysteris);
-    }
-
-    */
-
-
     auto info = Core::getInstance()->getDevInfo();
     int ch_num = m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en;
 
@@ -409,7 +382,6 @@ void WindowScope::on_msg_read(const QByteArray data)
     rescaleXAxis();
     rescaleYAxis();
 
-    /*
     if (m_cursorsV_en || m_cursorsH_en)
     {
         auto rngV = m_ui->customPlot->yAxis->range();
@@ -417,36 +389,8 @@ void WindowScope::on_msg_read(const QByteArray data)
 
         m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
     }
-    */
 
-    m_ui->customPlot->replot();
-
-    if (m_export) // TODO move else !
-    {
-        m_export = false;
-
-        QMap<QString, QString> header {
-            {"Common.Created",  {QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz")}},
-        };
-        bool ret = m_rec.createFile("SCOPE", header);
-
-        if (ret)
-        {
-            QCPGraphDataContainer::const_iterator it = m_ui->customPlot->graph(GRAPH_CH1)->data()->constBegin();
-            QCPGraphDataContainer::const_iterator itEnd = m_ui->customPlot->graph(GRAPH_CH1)->data()->constEnd();
-            while (it != itEnd)
-            {
-              m_rec << (*it).value << ENDL;
-              ++it;
-            }
-        }
-        m_rec.closeFile();
-    }
-}
-
-void WindowScope::on_msg_ok_forceTrig(const QString, const QString)
-{
-
+    m_ui->customPlot->replot();  // TODO in timer
 }
 
 void WindowScope::on_msg_daqReady(Ready ready, int firstPos)
@@ -456,6 +400,419 @@ void WindowScope::on_msg_daqReady(Ready ready, int firstPos)
     if (m_instrEnabled)
         Core::getInstance()->msgAdd(m_msg_read, true);
 }
+
+void WindowScope::on_msg_ok_forceTrig(const QString, const QString)
+{
+
+}
+
+/******************************** GUI slots ********************************/
+
+/********** Plot **********/
+
+void WindowScope::on_actionViewPoints_triggered(bool checked)
+{
+    QCPScatterStyle style = QCPScatterStyle(QCPScatterStyle::ssNone);
+
+    if (checked)
+        style = QCPScatterStyle(QCPScatterStyle::ssDisc, 5);
+
+    m_points = checked;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setScatterStyle(style);
+    m_ui->customPlot->graph(GRAPH_CH2)->setScatterStyle(style);
+    m_ui->customPlot->graph(GRAPH_CH3)->setScatterStyle(style);
+    m_ui->customPlot->graph(GRAPH_CH4)->setScatterStyle(style);
+
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
+}
+
+void WindowScope::on_actionViewLines_triggered(bool checked)
+{
+    QCPGraph::LineStyle style = QCPGraph::lsNone;
+
+    if (checked)
+        style = QCPGraph::lsLine;
+
+    m_lines = checked;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setLineStyle(style);
+    m_ui->customPlot->graph(GRAPH_CH2)->setLineStyle(style);
+    m_ui->customPlot->graph(GRAPH_CH3)->setLineStyle(style);
+    m_ui->customPlot->graph(GRAPH_CH4)->setLineStyle(style);
+
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
+}
+
+void WindowScope::on_actionInterpLinear_triggered(bool checked) // exclusive with - actionSinc
+{
+    m_ui->actionInterpSinc->setChecked(!checked);
+    on_actionInterpSinc_triggered(!checked);
+}
+
+
+void WindowScope::on_actionInterpSinc_triggered(bool checked) // exclusive with - actionLinear
+{
+    m_spline = checked;
+
+    m_ui->actionInterpLinear->setChecked(!checked);
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(checked);
+    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(checked);
+    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
+    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
+
+    //if (!m_instrEnabled)
+    //    m_ui->customPlot->replot();
+}
+
+/********** Export **********/
+
+void WindowScope::on_actionExportSave_triggered()
+{
+    auto info = Core::getInstance()->getDevInfo();
+    auto sys = QSysInfo();
+
+    QMap<QString, QString> header {
+        {"Common.Created",  {QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz")}},
+        {"Common.Version",  "EMBO " + QString(APP_VERSION)},
+        {"Common.System",   {sys.prettyProductName() + " [" + sys.currentCpuArchitecture() + "]"}},
+        {"Common.Device",   info->name},
+        {"Common.Firmware", info->fw},
+        {"Common.Vcc",      QString::number(info->ref_mv) + " mV"},
+        {"Common.Mode",     "SCOPE"},
+        {"SCOPE.SampleRate",   "TODO Hz"}, // TODO
+        {"SCOPE.Resolution",   "TODO bit"}, // TODO
+    };
+    bool ret = m_rec.createFile("SCOPE", header);
+
+    if (!ret)
+    {
+        msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
+    }
+    else
+    {
+        auto data_1 = m_ui->customPlot->graph(GRAPH_CH1)->data();
+        auto data_2 = m_ui->customPlot->graph(GRAPH_CH2)->data();
+        auto data_3 = m_ui->customPlot->graph(GRAPH_CH3)->data();
+        auto data_4 = m_ui->customPlot->graph(GRAPH_CH4)->data();
+
+        for (int i = 0; i < data_1->size(); i++)
+        {
+            if (m_daqSet.ch1_en)
+                m_rec << data_1->at(i)->value;
+            if (m_daqSet.ch2_en)
+                m_rec << data_2->at(i)->value;
+            if (m_daqSet.ch3_en)
+                m_rec << data_3->at(i)->value;
+            if (m_daqSet.ch4_en)
+                m_rec << data_4->at(i)->value;
+            m_rec << ENDL;
+        }
+
+        auto f = m_rec.closeFile();
+        msgBox(this, "File saved at: " + f, INFO);
+    }
+}
+
+void WindowScope::on_actionExportScreenshot_triggered()
+{
+     QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
+
+     if (ret.isEmpty())
+         msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
+     else
+         msgBox(this, "File saved at: " + ret, INFO);
+}
+
+void WindowScope::on_actionExportFolder_triggered()
+{
+    bool ok;
+    QString dir_saved = Settings::getValue(CFG_REC_DIR, m_rec.getDir()).toString();
+    QString dir = QInputDialog::getText(this, "EMBO - Recordings", "Directory path:", QLineEdit::Normal, dir_saved, &ok);
+
+    if (ok && !dir.isEmpty())
+    {
+        if (!m_rec.setDir(dir))
+            msgBox(this, "Directory create failed!", CRITICAL);
+        else
+            Settings::setValue(CFG_REC_DIR, dir);
+    }
+}
+
+void WindowScope::on_actionExportCSV_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_rec.setDelim(CSV);
+
+        m_ui->actionExportTXT_Tabs->setChecked(false);
+        m_ui->actionExportTXT_Semicolon->setChecked(false);
+        m_ui->actionExportMAT->setChecked(false);
+    }
+}
+
+void WindowScope::on_actionExportTXT_Tabs_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_rec.setDelim(CSV);
+
+        m_ui->actionExportCSV->setChecked(false);
+        m_ui->actionExportTXT_Semicolon->setChecked(false);
+        m_ui->actionExportMAT->setChecked(false);
+    }
+}
+
+void WindowScope::on_actionExportTXT_Semicolon_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_rec.setDelim(CSV);
+
+        m_ui->actionExportCSV->setChecked(false);
+        m_ui->actionExportTXT_Tabs->setChecked(false);
+        m_ui->actionExportMAT->setChecked(false);
+    }
+}
+
+void WindowScope::on_actionExportMAT_triggered(bool checked)
+{
+    if (checked)
+    {
+        //rec.setDelim(MAT); // not implemented yet
+
+        m_ui->actionExportCSV->setChecked(false);
+        m_ui->actionExportTXT_Tabs->setChecked(false);
+        m_ui->actionExportTXT_Semicolon->setChecked(false);
+    }
+}
+
+/********** Meas **********/
+
+void WindowScope::on_actionMeasEnabled_triggered(bool checked)
+{
+    m_meas_en = checked;
+    on_actionMeasReset_triggered();
+
+    m_ui->textBrowser_measVpp->setEnabled(checked);
+    m_ui->textBrowser_measAvg->setEnabled(checked);
+    m_ui->textBrowser_measMin->setEnabled(checked);
+    m_ui->textBrowser_measMax->setEnabled(checked);
+}
+
+void WindowScope::on_actionMeasReset_triggered()
+{
+    //m_meas_max = -1000;
+    //m_meas_min = 1000;
+
+    m_ui->textBrowser_measVpp->setText("");
+    m_ui->textBrowser_measAvg->setText("");
+    m_ui->textBrowser_measMin->setText("");
+    m_ui->textBrowser_measMax->setText("");
+}
+
+void WindowScope::on_actionMeasChannel_1_triggered(bool checked)
+{
+    if (checked)
+    {
+        on_actionMeasReset_triggered();
+        m_meas_ch = GRAPH_CH1;
+
+        m_ui->actionMeasChannel_2->setChecked(false);
+        m_ui->actionMeasChannel_3->setChecked(false);
+        m_ui->actionMeasChannel_4->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 1)");
+    }
+}
+
+void WindowScope::on_actionMeasChannel_2_triggered(bool checked)
+{
+    if (checked)
+    {
+        on_actionMeasReset_triggered();
+        m_meas_ch = GRAPH_CH2;
+
+        m_ui->actionMeasChannel_1->setChecked(false);
+        m_ui->actionMeasChannel_3->setChecked(false);
+        m_ui->actionMeasChannel_4->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 2)");
+    }
+}
+
+void WindowScope::on_actionMeasChannel_3_triggered(bool checked)
+{
+    if (checked)
+    {
+        on_actionMeasReset_triggered();
+        m_meas_ch = GRAPH_CH3;
+
+        m_ui->actionMeasChannel_1->setChecked(false);
+        m_ui->actionMeasChannel_2->setChecked(false);
+        m_ui->actionMeasChannel_4->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 3)");
+    }
+}
+
+void WindowScope::on_actionMeasChannel_4_triggered(bool checked)
+{
+    if (checked)
+    {
+        on_actionMeasReset_triggered();
+        m_meas_ch = GRAPH_CH4;
+
+        m_ui->actionMeasChannel_1->setChecked(false);
+        m_ui->actionMeasChannel_2->setChecked(false);
+        m_ui->actionMeasChannel_3->setChecked(false);
+
+        m_ui->label_meas->setText("Measure (Channel 4)");
+    }
+}
+
+/********** Math **********/
+
+void WindowScope::on_actionMath_1_2_triggered(bool checked)
+{
+    m_math_2minus1 = checked;
+
+    /*
+    if (checked)
+    {
+        m_ui->label_ch3->setText("Channel 2—1 (" + m_pin2 + "—" + m_pin1 + ")");
+        m_ui->label_ch3->setStyleSheet("color:red");
+
+        m_ui->pushButton_enable3->setText("2—1 ON  ");
+        m_ui->pushButton_disable3->setText("2—1 OFF");
+    }
+    else
+    {
+        m_ui->label_ch3->setText("Channel 3 (" + m_pin3 + ")");
+        m_ui->label_ch3->setStyleSheet("color:black");
+
+        m_ui->pushButton_enable3->setText("CH3 ON  ");
+        m_ui->pushButton_disable3->setText("CH3 OFF");
+    }
+    */
+}
+
+void WindowScope::on_actionMath_3_4_triggered(bool checked)
+{
+    m_math_4minus3 = checked;
+
+    /*
+    if (checked)
+    {
+        m_ui->label_ch4->setText("Channel 4—3 (" + m_pin4 + "—" + m_pin3 + ")");
+        m_ui->label_ch4->setStyleSheet("color:red");
+
+        m_ui->pushButton_enable4->setText("4—3 ON  ");
+        m_ui->pushButton_disable4->setText("4—3 OFF");
+    }
+    else
+    {
+        m_ui->label_ch4->setText("Channel 4 (" + m_pin4 + ")");
+        m_ui->label_ch4->setStyleSheet("color:black");
+
+        m_ui->pushButton_enable4->setText("CH4 ON  ");
+        m_ui->pushButton_disable4->setText("CH4 OFF");
+    }
+    */
+}
+
+/********** Cursors **********/
+
+void WindowScope::on_pushButton_cursorsHoff_clicked()
+{
+    m_ui->horizontalSlider_cursorH->hide();
+
+    m_ui->pushButton_cursorsHon->show();
+    m_ui->pushButton_cursorsHoff->hide();
+
+    m_cursors->showH(false);
+    m_cursorsH_en = false;
+}
+
+void WindowScope::on_pushButton_cursorsHon_clicked()
+{
+    m_ui->horizontalSlider_cursorH->setValues(m_cursorH_min, m_cursorH_max);
+    m_ui->horizontalSlider_cursorH->show();
+
+    m_ui->pushButton_cursorsHon->hide();
+    m_ui->pushButton_cursorsHoff->show();
+
+    auto rngH = m_ui->customPlot->xAxis->range();
+    auto rngV = m_ui->customPlot->yAxis->range();
+
+    m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+
+    m_cursors->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
+    m_cursors->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+
+    m_cursors->showH(true);
+    m_cursorsH_en = true;
+}
+
+void WindowScope::on_pushButton_cursorsVoff_clicked()
+{
+    m_ui->horizontalSlider_cursorV->hide();
+
+    m_ui->pushButton_cursorsVon->show();
+    m_ui->pushButton_cursorsVoff->hide();
+
+    m_cursors->showV(false);
+    m_cursorsV_en = false;
+}
+
+void WindowScope::on_pushButton_cursorsVon_clicked()
+{
+    m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
+    m_ui->horizontalSlider_cursorV->show();
+
+    m_ui->pushButton_cursorsVon->hide();
+    m_ui->pushButton_cursorsVoff->show();
+
+    auto rngH = m_ui->customPlot->xAxis->range();
+    auto rngV = m_ui->customPlot->yAxis->range();
+
+    m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+
+    m_cursors->setV_min(m_cursorV_min, rngV.lower, rngV.upper);
+    m_cursors->setV_max(m_cursorV_max, rngV.lower, rngV.upper);
+
+    m_cursors->showV(true);
+    m_cursorsV_en = true;
+}
+
+void WindowScope::on_cursorH_valuesChanged(int min, int max)
+{
+    m_cursorH_min = min;
+    m_cursorH_max = max;
+
+    auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    //auto rng = m_ui->customPlot->xAxis->range();
+
+    m_cursors->setH_min(m_cursorH_min, rng.lower, rng.upper);
+    m_cursors->setH_max(m_cursorH_max, rng.lower, rng.upper);
+}
+
+void WindowScope::on_cursorV_valuesChanged(int min, int max)
+{
+    m_cursorV_min = min;
+    m_cursorV_max = max;
+
+    auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
+    //auto rng = m_ui->customPlot->yAxis->range();
+
+    m_cursors->setV_min(m_cursorV_min, rng.lower, rng.upper);
+    m_cursors->setV_max(m_cursorV_max, rng.lower, rng.upper);
+}
+
+/********** QCP **********/
 
 void WindowScope::on_qcpMouseWheel(QWheelEvent*)
 {
@@ -469,7 +826,15 @@ void WindowScope::on_qcpMousePress(QMouseEvent*)
     //m_ui->pushButton_resetZoom->show();
 }
 
-/* private */
+/********** right pannel - on/off **********/
+
+/********** right pannel - on/off **********/
+
+/********** right pannel - on/off **********/
+
+/********** right pannel - on/off **********/
+
+/******************************** private ********************************/
 
 void WindowScope::closeEvent(QCloseEvent*)
 {
@@ -485,12 +850,12 @@ void WindowScope::showEvent(QShowEvent*)
     Core::getInstance()->setMode(SCOPE);
     m_instrEnabled = true;
 
-    Core::getInstance()->msgAdd(m_msg_set, true, "");
-}
+    auto info = Core::getInstance()->getDevInfo();
 
-void WindowScope::on_actionRec1_triggered()
-{
-    m_export = true;
+    m_ref_v = info->ref_mv / 1000.0;
+    m_status_vcc->setText(" Vcc: " + QString::number(info->ref_mv) + " mV");
+
+    Core::getInstance()->msgAdd(m_msg_set, true, "");
 }
 
 void WindowScope::rescaleYAxis()

@@ -21,7 +21,7 @@
 #include <math.h>
 
 
-#define SCPI_INPUT_BUFFER_LENGTH    256
+#define SCPI_INPUT_BUFFER_LENGTH    RX_BUFF_LEN
 #define SCPI_ERROR_QUEUE_SIZE       1
 
 

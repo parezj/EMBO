@@ -67,11 +67,9 @@ private slots:
     void on_actionViewLines_triggered(bool checked);
     void on_actionInterpLinear_triggered(bool checked);
     void on_actionInterpSinc_triggered(bool checked);
-    void on_actionShowPlot_triggered(bool checked);
 
     /* GUI slots - Menu - Export */
-    void on_actionExportStart_triggered();
-    void on_actionExportStop_triggered();
+    void on_actionExportSave_triggered();
     void on_actionExportScreenshot_triggered();
     void on_actionExportFolder_triggered();
     void on_actionExportCSV_triggered(bool checked);
@@ -103,7 +101,6 @@ private slots:
     void on_qcpMouseWheel(QWheelEvent*);
     void on_qcpMousePress(QMouseEvent*);
 
-
 private:
     void initQcp();
     void closeEvent(QCloseEvent *event) override;
@@ -120,6 +117,11 @@ private:
     double m_t_last = 0;
 
     QSharedPointer<QCPAxisTickerTime> m_timeTicker;
+
+    /* status bar */
+    QLabel* m_status_vcc;
+    QLabel* m_status_rec;
+    QFrame* m_status_line1;
 
     /* gain */
     double m_gain1 = 1;
@@ -150,10 +152,9 @@ private:
     bool m_recording = false;
     bool m_cursorsV_en = false;
     bool m_cursorsH_en = false;
-    bool m_math_1minus2 = false;
-    bool m_math_3minus4 = false;
+    bool m_math_2minus1 = false;
+    bool m_math_4minus3 = false;
     bool m_plot = true;
-    bool m_export = false;
 
     /* stm32 pins */
     QString m_pin1 = "?";

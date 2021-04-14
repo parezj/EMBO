@@ -19,10 +19,10 @@
 
 // units = uint32_t
 #define EM_STACK_T1     40
-#define EM_STACK_T2     50
-#define EM_STACK_T3     50
-#define EM_STACK_T4     300
-#define EM_STACK_T5     50
+#define EM_STACK_T2     65
+#define EM_STACK_T3     55
+#define EM_STACK_T4     320
+#define EM_STACK_T5     55
 
 #define EM_PRI_T1       3
 #define EM_PRI_T2       1

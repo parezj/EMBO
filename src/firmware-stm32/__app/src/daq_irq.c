@@ -61,12 +61,16 @@ void EM_LA_CH1_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
+    daq.trig.la_state = 0;
+
     if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI1) == 1)
     {
-        NVIC_DisableIRQ(daq.trig.exti_trig);
+        daq.trig.la_state = 1;
+
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI1);
         daq_trig_trigger_la(&daq);
-        LL_EXTI_ClearFlag_0_31(EM_LA_EXTI1);
     }
+    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI1);
 }
 
 void EM_LA_CH2_IRQh(void)
@@ -75,10 +79,10 @@ void EM_LA_CH2_IRQh(void)
 
     if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI2) == 1)
     {
-        NVIC_DisableIRQ(daq.trig.exti_trig);
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI2);
         daq_trig_trigger_la(&daq);
-        LL_EXTI_ClearFlag_0_31(EM_LA_EXTI2);
     }
+    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI2);
 }
 
 void EM_LA_CH3_IRQh(void)
@@ -87,10 +91,10 @@ void EM_LA_CH3_IRQh(void)
 
     if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI3) == 1)
     {
-        NVIC_DisableIRQ(daq.trig.exti_trig);
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI3);
         daq_trig_trigger_la(&daq);
-        LL_EXTI_ClearFlag_0_31(EM_LA_EXTI3);
     }
+    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI3);
 }
 
 void EM_LA_CH4_IRQh(void)
@@ -99,17 +103,17 @@ void EM_LA_CH4_IRQh(void)
 
     if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI4) == 1)
     {
-        NVIC_DisableIRQ(daq.trig.exti_trig);
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI4);
         daq_trig_trigger_la(&daq);
-        LL_EXTI_ClearFlag_0_31(EM_LA_EXTI4);
     }
+    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI4);
 }
 
 void EM_LA_UNUSED_IRQh(void)
 {
     if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI_UNUSED) == 1)
     {
-        LL_EXTI_ClearFlag_0_31(EM_LA_EXTI_UNUSED);
     }
+    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI_UNUSED);
 }
 

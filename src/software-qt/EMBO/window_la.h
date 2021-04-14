@@ -10,6 +10,7 @@
 #include "messages.h"
 #include "qcpcursors.h"
 #include "containers.h"
+#include "recorder.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -66,11 +67,9 @@ private slots:
     void on_actionViewLines_triggered(bool checked);
     void on_actionInterpLinear_triggered(bool checked);
     void on_actionInterpSinc_triggered(bool checked);
-    void on_actionShowPlot_triggered(bool checked);
 
     /* GUI slots - Menu - Export */
-    void on_actionExportStart_triggered();
-    void on_actionExportStop_triggered();
+    void on_actionExportSave_triggered();
     void on_actionExportScreenshot_triggered();
     void on_actionExportFolder_triggered();
     void on_actionExportCSV_triggered(bool checked);
@@ -118,6 +117,11 @@ private:
 
     double m_t_last = 0;
 
+    /* status bar */
+    QLabel* m_status_vcc;
+    QLabel* m_status_rec;
+    QFrame* m_status_line1;
+
     /* gain */
     double m_gain1 = 1;
     double m_gain2 = 1;
@@ -147,8 +151,8 @@ private:
     bool m_recording = false;
     bool m_cursorsV_en = false;
     bool m_cursorsH_en = false;
-    bool m_math_1minus2 = false;
-    bool m_math_3minus4 = false;
+    bool m_math_2minus1 = false;
+    bool m_math_4minus3 = false;
     bool m_plot = true;
     bool m_export = false;
 
@@ -163,6 +167,9 @@ private:
     int m_meas_ch = GRAPH_CH1;
     //double m_meas_max = -1000;
     //double m_meas_min = 1000;
+
+    /* recorder */
+    Recorder m_rec;
 
     /* data */
     DaqSettings m_daqSet;

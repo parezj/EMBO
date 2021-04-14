@@ -233,8 +233,8 @@ private:
     bool m_recording = false;
     bool m_cursorsV_en = false;
     bool m_cursorsH_en = false;
-    bool m_math_1minus2 = false;
-    bool m_math_3minus4 = false;
+    bool m_math_2minus1 = false;
+    bool m_math_4minus3 = false;
     bool m_plot = true;
 
     /* stm32 pins */

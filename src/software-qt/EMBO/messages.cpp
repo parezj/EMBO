@@ -32,7 +32,7 @@ void Msg_Rst::on_dataRx()
     auto core = Core::getInstance(this);
 
     if (!m_rxData.contains(EMBO_OK))
-        core->err("Reset failed!", false);
+        core->err("Reset failed! " + m_rxData, false);
 }
 
 
@@ -61,7 +61,7 @@ void Msg_SYS_Lims::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
 
-    if (tokens.size() != 15 && tokens[5].size() >= 1 && tokens[14].size() == 4)
+    if (tokens.size() != 15 || tokens[5].size() < 1 || tokens[14].size() != 4)
     {
         core->err(INVALID_MSG + m_rxData, true);
         return;
@@ -134,7 +134,7 @@ void Msg_SYS_Mode::on_dataRx()
     else
     {
         if (!m_rxData.contains(EMBO_OK))
-            core->err("Mode set failed!", true);
+            core->err("Mode set failed! " + m_rxData, true);
     }
 }
 

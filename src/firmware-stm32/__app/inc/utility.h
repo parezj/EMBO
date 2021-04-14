@@ -7,6 +7,7 @@
 #define UTILS_H
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define ASSERT(expr) \
   do {                                          \
@@ -50,5 +51,7 @@ long long lltoa_fast(char* s, long long num, int radix);
  * Descr:  ultra fast float sprintf
  */
 int sprint_fast(char* s, const char* format, double fVal, int prec);
+
+int strncmp2(const char * s1, const char * s2, size_t n);
 
 #endif /* UTILS_H */

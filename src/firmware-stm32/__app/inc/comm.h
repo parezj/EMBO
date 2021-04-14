@@ -10,7 +10,7 @@
 
 #include "scpi/scpi.h"
 
-#define RX_BUFF_LEN    100
+#define RX_BUFF_LEN    200
 #define RX_BUFF_LAST   RX_BUFF_LEN - 1
 
 #define APP_RX_DATA_SIZE  RX_BUFF_LEN

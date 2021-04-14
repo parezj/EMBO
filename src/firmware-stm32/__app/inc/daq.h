@@ -66,6 +66,7 @@ typedef struct
     uint8_t ready;          // if data is ready to read by user
     uint8_t ready_last;     // previous value of ready
     uint8_t respond;        // initiating async ReadyX respond
+    uint8_t irq_en;         // irq enabled after pre-trigger filled
 
     // counters
     int cntr;               // success trigger counter
@@ -99,6 +100,7 @@ typedef struct
     uint8_t post_start;     // flag when set posttrigger counting starts
     int post_from;          // position from where start counting posttrigger
     int dma_pos_catched;    // catched actual DMA circular buffer position
+    uint8_t la_state;       // for debuging LA
 }daq_trig_data_t;
 
 typedef struct

@@ -113,7 +113,7 @@ void daq_settings_init(daq_data_t* self)
 
     // LA
     self->save_l.fs = 100000;
-    self->save_l.mem = 1000;
+    self->save_l.mem = 2000;
     self->save_l.bits = B1;
 
     self->save_l.ch1_en = 1;
@@ -673,6 +673,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     self->trig.all_cntr = 0;
     self->trig.cntr = 0;
     self->trig.ignore = EM_FALSE;
+    self->trig.irq_en = EM_FALSE;
 
     if (self->mode == SCOPE || self->mode == VM)
     {
@@ -701,10 +702,10 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         if (enable == EM_TRUE)
         {
             LL_TIM_EnableDMAReq_CC1(EM_TIM_DAQ);
-            NVIC_ClearPendingIRQ(self->trig.exti_trig);
-            if (self->trig.set.mode != DISABLED)
-                NVIC_EnableIRQ(self->trig.exti_trig);
-            //LL_EXTI_EnableIT_0_31(EM_LA_EXTI1);
+
+            //NVIC_ClearPendingIRQ(self->trig.exti_trig);
+            //if (self->trig.set.mode != DISABLED)
+            //    NVIC_EnableIRQ(self->trig.exti_trig);
         }
         else
         {

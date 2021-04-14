@@ -697,9 +697,11 @@ void WindowMain::instrFirstRowEnable(bool enable)
 }
 
 void WindowMain::on_pushButton_scope_clicked()
-{
+{   
     m_w_scope->show();
-    m_w_scope->activateWindow();
+    m_w_scope->setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    m_w_scope->raise();  // MacOS
+    m_w_scope->activateWindow(); // Windows
 
     m_ui->pushButton_scope->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_SCOPE);
 
@@ -715,7 +717,9 @@ void WindowMain::on_pushButton_scope_clicked()
 void WindowMain::on_pushButton_la_clicked()
 {
     m_w_la->show();
-    m_w_la->activateWindow();
+    m_w_la->setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    m_w_la->raise();  // MacOS
+    m_w_la->activateWindow(); // Windows
 
     m_ui->pushButton_la->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_LA);
 
@@ -731,7 +735,9 @@ void WindowMain::on_pushButton_la_clicked()
 void WindowMain::on_pushButton_vm_clicked()
 {
     m_w_vm->show();
-    m_w_vm->activateWindow();
+    m_w_vm->setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    m_w_vm->raise();  // MacOS
+    m_w_vm->activateWindow(); // Windows
 
     m_ui->pushButton_vm->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM);
 
@@ -747,7 +753,9 @@ void WindowMain::on_pushButton_vm_clicked()
 void WindowMain::on_pushButton_cntr_clicked()
 {
     m_w_cntr->show();
-    m_w_cntr->activateWindow();
+    m_w_cntr->setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    m_w_cntr->raise();  // MacOS
+    m_w_cntr->activateWindow(); // Windows
 
     m_ui->pushButton_cntr->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_CNTR);
     m_ui->groupBox_cntr->setStyleSheet(CSS_INSTR_GROUP_OFF);
@@ -756,7 +764,9 @@ void WindowMain::on_pushButton_cntr_clicked()
 void WindowMain::on_pushButton_pwm_clicked()
 {
     m_w_pwm->show();
-    m_w_pwm->activateWindow();
+    m_w_pwm->setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    m_w_pwm->raise();  // MacOS
+    m_w_pwm->activateWindow(); // Windows
 
     m_ui->pushButton_pwm->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_PWM);
     m_ui->groupBox_pwm->setStyleSheet(CSS_INSTR_GROUP_OFF);
@@ -765,7 +775,9 @@ void WindowMain::on_pushButton_pwm_clicked()
 void WindowMain::on_pushButton_sgen_clicked()
 {
     m_w_sgen->show();
-    m_w_sgen->activateWindow();
+    m_w_sgen->setWindowState( (windowState() & ~Qt::WindowMinimized) | Qt::WindowActive);
+    m_w_sgen->raise();  // MacOS
+    m_w_sgen->activateWindow(); // Windows
 
     m_ui->pushButton_sgen->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_SGEN);
     m_ui->groupBox_sgen->setStyleSheet(CSS_INSTR_GROUP_OFF);

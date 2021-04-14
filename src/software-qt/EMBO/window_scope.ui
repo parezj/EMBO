@@ -87,6 +87,12 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <string/>
           </property>
           <layout class="QGridLayout" name="gridLayout_2">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>0</number>
+           </property>
            <property name="verticalSpacing">
             <number>3</number>
            </property>
@@ -108,7 +114,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                </property>
                <property name="minimumSize">
                 <size>
-                 <width>14</width>
+                 <width>10</width>
                  <height>0</height>
                 </size>
                </property>
@@ -120,8 +126,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                </property>
                <property name="styleSheet">
                 <string notr="true">ctkRangeSlider {
-    min-width: 14px;
-    max-width: 14px;
+    min-width: 10px;
+    max-width: 10px;
 	margin-bottom: 16px;
 	margin-top: 2px;
 }
@@ -131,18 +137,18 @@ ctkRangeSlider::groove:vertical {
 }
 
 ctkRangeSlider::handle:vertical {
-     height: 46px;
+     height: 36px;
 	 image: url(:/main/resources/img/range_right_sm.png);
 }
 
 ctkRangeSlider::handle:vertical:hover {
-     height: 46px;
+     height: 36px;
 	 image: url(:/main/resources/img/range_right2_sm.png);
 }
 
 QSlider {
-    min-width: 14px;
-    max-width: 14px;
+    min-width: 10px;
+    max-width: 10px;
 	margin-bottom: 16px;
 	margin-top: 2px;
 }
@@ -152,12 +158,12 @@ QSlider::groove:vertical {
 }
 
 QSlider::handle:vertical {
-     height: 46px;
+     height: 36px;
 	 image: url(:/main/resources/img/range_right_sm.png);
 }
 
 QSlider::handle:vertical:hover {
-	 height: 46px;
+	 height:36px;
 	 image: url(:/main/resources/img/range_right2_sm.png);
 }</string>
                </property>
@@ -380,7 +386,7 @@ QSlider::handle:vertical:hover {
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>14</height>
+                 <height>10</height>
                 </size>
                </property>
                <property name="font">
@@ -391,8 +397,8 @@ QSlider::handle:vertical:hover {
                </property>
                <property name="styleSheet">
                 <string notr="true">ctkRangeSlider {
-    min-height: 14px;
-    max-height: 14px;
+    min-height: 10px;
+    max-height: 10px;
 	margin-left: 33px;
 	margin-right:2px;
 }
@@ -402,18 +408,18 @@ ctkRangeSlider::groove:horizontal {
 }
 
 ctkRangeSlider::handle:horizontal {
-     width: 46px;
+     width: 36px;
 	 image: url(:/main/resources/img/range_up_sm.png);
 }
 
 ctkRangeSlider::handle:horizontal:hover {
-     width: 46px;
+     width: 36px;
 	 image: url(:/main/resources/img/range_up2_sm.png);
 }
 
 QSlider {
-    min-height: 14px;
-    max-height: 14px;
+    min-height: 10px;
+    max-height: 10px;
 	margin-left: 33px;
 	margin-right:2px;
 }
@@ -423,12 +429,12 @@ QSlider::groove:horizontal {
 }
 
 QSlider::handle:horizontal {
-     width: 46px;
+     width: 36px;
 	 image: url(:/main/resources/img/range_up_sm.png);
 }
 
 QSlider::handle:horizontal:hover {
-	 width: 46px;
+	 width: 36px;
 	 image: url(:/main/resources/img/range_up2_sm.png);
 }</string>
                </property>
@@ -1984,8 +1990,6 @@ QPushButton:disabled {
     <addaction name="actionViewPoints"/>
     <addaction name="separator"/>
     <addaction name="menuInterpolation"/>
-    <addaction name="separator"/>
-    <addaction name="actionShowPlot"/>
    </widget>
    <widget class="QMenu" name="menuMeasure">
     <property name="font">

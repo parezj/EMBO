@@ -44,8 +44,6 @@ Temporary Items
 .apdisk
 
 *.bin
-*.elf
-*.ld
 *.o
 
 .settings/
