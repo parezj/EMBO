@@ -70,6 +70,13 @@
         <file>resources/img/range_right2_sm.png</file>
         <file>resources/img/range_up_sm.png</file>
         <file>resources/img/range_up2_sm.png</file>
+        <file>resources/img/power-on_ch1.png</file>
+        <file>resources/img/power-on_ch2.png</file>
+        <file>resources/img/power-on_ch3.png</file>
+        <file>resources/img/power-on_ch4.png</file>
+        <file>resources/img/led_gray.png</file>
+        <file>resources/img/led_green.png</file>
+        <file>resources/img/led_red.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>

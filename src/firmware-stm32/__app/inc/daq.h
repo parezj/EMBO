@@ -123,7 +123,6 @@ typedef struct
     daq_buff_t buff2;       // DAQ buffer2
     daq_buff_t buff3;       // DAQ buffer3
     daq_buff_t buff4;       // DAQ buffer4
-    daq_buff_t buff_out;    // UART / USB output buffer
 
     uint8_t buff_raw[EM_DAQ_MAX_MEM + (EM_MEM_RESERVE * 2 * 5) + 20];  // static allocation of main buffer
     uint16_t buff_raw_ptr;  // top pointer of main raw buffer

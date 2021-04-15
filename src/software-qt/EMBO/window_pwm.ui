@@ -584,7 +584,7 @@ QRadioButton::indicator::checked {
      </property>
      <property name="font">
       <font>
-       <family>Roboto Mono Light</family>
+       <family>Roboto Mono Medium</family>
        <pointsize>14</pointsize>
        <weight>50</weight>
        <italic>false</italic>
@@ -597,13 +597,13 @@ QRadioButton::indicator::checked {
      <property name="styleSheet">
       <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;
+	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:14pt; font-weight:400;
 	color:black; 
 }
 
 QTextBrowser:disabled {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400;
+	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:14pt; font-weight:400;
 	color:black;
 }</string>
      </property>
@@ -611,7 +611,7 @@ QTextBrowser:disabled {
       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Light','Roboto'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium','Roboto'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Light','Roboto Mono Light'; font-weight:496;&quot;&gt;5000000.000 Hz  &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>

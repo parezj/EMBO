@@ -128,6 +128,7 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->pushButton_enable->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_MAIN);
     m_ui->pushButton_disable->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_MAIN);
 
+    /*
     m_ui->pushButton_enable1->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
     m_ui->pushButton_enable2->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
     m_ui->pushButton_enable3->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
@@ -137,6 +138,7 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->pushButton_disable2->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
     m_ui->pushButton_disable3->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
     m_ui->pushButton_disable4->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    */
 
     m_ui->pushButton_cursorsHon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
     m_ui->pushButton_cursorsVon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);

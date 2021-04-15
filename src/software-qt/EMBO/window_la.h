@@ -65,8 +65,6 @@ private slots:
     /* GUI slots - Menu - Plot */
     void on_actionViewPoints_triggered(bool checked);
     void on_actionViewLines_triggered(bool checked);
-    void on_actionInterpLinear_triggered(bool checked);
-    void on_actionInterpSinc_triggered(bool checked);
 
     /* GUI slots - Menu - Export */
     void on_actionExportSave_triggered();
@@ -91,11 +89,8 @@ private slots:
 
     /* GUI slots - Cursors */
     void on_cursorH_valuesChanged(int min, int max);
-    void on_cursorV_valuesChanged(int min, int max);
     void on_pushButton_cursorsHoff_clicked();
     void on_pushButton_cursorsHon_clicked();
-    void on_pushButton_cursorsVoff_clicked();
-    void on_pushButton_cursorsVon_clicked();
 
     /* GUI slots - QCP */
     void on_qcpMouseWheel(QWheelEvent*);
@@ -116,6 +111,11 @@ private:
     QSharedPointer<QCPAxisTickerTime> m_timeTicker;
 
     double m_t_last = 0;
+
+    QCPAxisRect* m_axis_ch1;
+    QCPAxisRect* m_axis_ch2;
+    QCPAxisRect* m_axis_ch3;
+    QCPAxisRect* m_axis_ch4;
 
     /* status bar */
     QLabel* m_status_vcc;

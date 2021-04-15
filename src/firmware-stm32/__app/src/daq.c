@@ -34,12 +34,10 @@ void daq_init(daq_data_t* self)
     daq_clear_buff(&self->buff2);
     daq_clear_buff(&self->buff3);
     daq_clear_buff(&self->buff4);
-    daq_clear_buff(&self->buff_out);
     memset(self->buff_raw, 0, EM_DAQ_MAX_MEM * sizeof(uint8_t));
     self->buff_raw_ptr = 0;
 
     self->trig.buff_trig = NULL;
-    self->buff_out.reserve = 0;
     self->enabled = EM_FALSE;
     self->dis_hold = EM_FALSE;
     self->vref = 0;
@@ -134,12 +132,10 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
     daq_enable(self, EM_FALSE);
     daq_reset(self);
 
-    self->buff_out.reserve = 0;
     daq_clear_buff(&self->buff1);
     daq_clear_buff(&self->buff2);
     daq_clear_buff(&self->buff3);
     daq_clear_buff(&self->buff4);
-    daq_clear_buff(&self->buff_out);
     self->buff_raw_ptr = 0;
     memset(self->buff_raw, 0, EM_DAQ_MAX_MEM * sizeof(uint8_t));
 
@@ -164,9 +160,6 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
 
         daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
 
-        self->buff_out.chans = len1 - is_vcc;
-        self->buff_out.len = out_per_ch * (len1 - is_vcc);
-
 #elif defined(EM_ADC_MODE_ADC12)
 
         int len1 = self->set.ch1_en + self->set.ch2_en + is_vcc;
@@ -188,9 +181,6 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
         if (len2 > 0)
             daq_malloc(self, &self->buff2, mem_per_ch * len2, EM_MEM_RESERVE, len2, EM_ADC_ADDR(ADC2), EM_DMA_CH_ADC2, EM_DMA_ADC2, self->set.bits);
-
-        self->buff_out.chans = total - is_vcc;
-        self->buff_out.len = out_per_ch * (total - is_vcc);
 
 #elif defined(EM_ADC_MODE_ADC1234)
 
@@ -222,13 +212,8 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
         if (len4 > 0)
             daq_malloc(self, &self->buff4, mem_per_ch * len4, EM_MEM_RESERVE, len4, EM_ADC_ADDR(ADC4), EM_DMA_CH_ADC4, EM_DMA_ADC4, self->set.bits);
 
-        self->buff_out.chans = total - is_vcc;
-        self->buff_out.len = out_per_ch * (total - is_vcc);
-
 #endif
 
-        self->buff_out.data = (uint8_t*)(((uint8_t*)self->buff_raw)+(self->buff_raw_ptr));
-        self->buff_raw_ptr += self->buff_out.len;
     }
     else // mode == LA
     {
@@ -236,11 +221,6 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             return -2;
 
         daq_malloc(self, &self->buff1, mem_per_ch, EM_MEM_RESERVE, 4, (uint32_t)&EM_GPIO_LA_PORT->IDR, EM_DMA_CH_LA, EM_DMA_LA, self->set.bits);
-
-        self->buff_out.chans = 4;
-        self->buff_out.len = mem_per_ch;
-        self->buff_out.data = (uint8_t*)(((uint8_t*)self->buff_raw)+(self->buff_raw_ptr));
-        self->buff_raw_ptr += self->buff_out.len;
     }
 
     self->set.mem = mem_per_ch;

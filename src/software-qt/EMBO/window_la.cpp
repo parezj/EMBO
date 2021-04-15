@@ -89,10 +89,82 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
 
 void WindowLa::initQcp()
 {
-    m_ui->customPlot->addGraph();  // ch1
-    m_ui->customPlot->addGraph();  // ch2
-    m_ui->customPlot->addGraph();  // ch3
-    m_ui->customPlot->addGraph();  // ch4
+    m_ui->customPlot->plotLayout()->clear();
+
+    m_axis_ch1 = new QCPAxisRect(m_ui->customPlot);
+    m_axis_ch2 = new QCPAxisRect(m_ui->customPlot);
+    m_axis_ch3 = new QCPAxisRect(m_ui->customPlot);
+    m_axis_ch4 = new QCPAxisRect(m_ui->customPlot);
+
+    m_axis_ch1->setupFullAxesBox();
+    m_axis_ch2->setupFullAxesBox();
+    m_axis_ch3->setupFullAxesBox();
+    m_axis_ch4->setupFullAxesBox();
+
+    m_axis_ch1->setMinimumMargins(QMargins(25,15,15,0)); // TODO need dynamic
+    m_axis_ch2->setMinimumMargins(QMargins(25,5,15,0));
+    m_axis_ch3->setMinimumMargins(QMargins(25,5,15,0));
+    m_axis_ch4->setMinimumMargins(QMargins(25,5,15,30));
+
+    m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
+    m_timeTicker->setTimeFormat("%s s");
+    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuSeconds, 1);
+    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMilliseconds, 1);
+
+    m_axis_ch1->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
+    m_axis_ch2->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
+    m_axis_ch3->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
+    m_axis_ch4->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
+
+    m_axis_ch1->axis(QCPAxis::atLeft)->ticker()->setTickCount(1);
+    m_axis_ch2->axis(QCPAxis::atLeft)->ticker()->setTickCount(1);
+    m_axis_ch3->axis(QCPAxis::atLeft)->ticker()->setTickCount(1);
+    m_axis_ch4->axis(QCPAxis::atLeft)->ticker()->setTickCount(1);
+
+    m_axis_ch1->axis(QCPAxis::atRight)->ticker()->setTickCount(1);
+    m_axis_ch2->axis(QCPAxis::atRight)->ticker()->setTickCount(1);
+    m_axis_ch3->axis(QCPAxis::atRight)->ticker()->setTickCount(1);
+    m_axis_ch4->axis(QCPAxis::atRight)->ticker()->setTickCount(1);
+
+    QFont font2("Roboto", 12, QFont::Normal);
+    m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabelFont(font2);
+    m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabelFont(font2);
+    m_axis_ch3->axis(QCPAxis::atBottom)->setTickLabelFont(font2);
+    m_axis_ch4->axis(QCPAxis::atBottom)->setTickLabelFont(font2);
+
+    m_axis_ch1->axis(QCPAxis::atLeft)->setTickLabelFont(font2);
+    m_axis_ch2->axis(QCPAxis::atLeft)->setTickLabelFont(font2);
+    m_axis_ch3->axis(QCPAxis::atLeft)->setTickLabelFont(font2);
+    m_axis_ch4->axis(QCPAxis::atLeft)->setTickLabelFont(font2);
+
+    m_axis_ch1->setRangeDrag(Qt::Horizontal);
+    m_axis_ch2->setRangeDrag(Qt::Horizontal);
+    m_axis_ch3->setRangeDrag(Qt::Horizontal);
+    m_axis_ch4->setRangeDrag(Qt::Horizontal);
+
+    m_axis_ch1->setRangeZoom(Qt::Horizontal);
+    m_axis_ch2->setRangeZoom(Qt::Horizontal);
+    m_axis_ch3->setRangeZoom(Qt::Horizontal);
+    m_axis_ch4->setRangeZoom(Qt::Horizontal);
+
+    m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_ch1);
+    m_ui->customPlot->plotLayout()->addElement(1, 0, m_axis_ch2);
+    m_ui->customPlot->plotLayout()->addElement(2, 0, m_axis_ch3);
+    m_ui->customPlot->plotLayout()->addElement(3, 0, m_axis_ch4);
+
+    foreach (QCPAxisRect *rect, m_ui->customPlot->axisRects())
+    {
+        foreach (QCPAxis *axis, rect->axes())
+        {
+            axis->setLayer("axes");
+            axis->grid()->setLayer("grid");
+        }
+    }
+
+    m_ui->customPlot->addGraph(m_axis_ch1->axis(QCPAxis::atBottom), m_axis_ch1->axis(QCPAxis::atLeft));  // ch1
+    m_ui->customPlot->addGraph(m_axis_ch2->axis(QCPAxis::atBottom), m_axis_ch2->axis(QCPAxis::atLeft));  // ch2
+    m_ui->customPlot->addGraph(m_axis_ch3->axis(QCPAxis::atBottom), m_axis_ch3->axis(QCPAxis::atLeft));  // ch3
+    m_ui->customPlot->addGraph(m_axis_ch4->axis(QCPAxis::atBottom), m_axis_ch4->axis(QCPAxis::atLeft));  // ch4
 
     m_ui->customPlot->graph(GRAPH_CH1)->setPen(QPen(QColor(COLOR1)));
     m_ui->customPlot->graph(GRAPH_CH2)->setPen(QPen(QColor(COLOR2)));
@@ -104,34 +176,37 @@ void WindowLa::initQcp()
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(false);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(false);
 
-    m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,30));
-
-    m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
-    m_timeTicker->setTimeFormat("%s s");
-    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuSeconds, 1);
-    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMilliseconds, 1);
-    m_ui->customPlot->xAxis->setTicker(m_timeTicker);
-    //m_ui->customPlot->xAxis2->setTicker(timeTicker);
-    m_ui->customPlot->axisRect()->setupFullAxesBox();
-
-    m_ui->customPlot->xAxis->setVisible(true);
-    m_ui->customPlot->xAxis->setTickLabels(true);
-    m_ui->customPlot->yAxis->setVisible(true);
-    m_ui->customPlot->yAxis->setTickLabels(true);
-
-    QFont font2("Roboto", 12, QFont::Normal);
-    m_ui->customPlot->xAxis->setTickLabelFont(font2);
-    m_ui->customPlot->yAxis->setTickLabelFont(font2);
-    m_ui->customPlot->xAxis->setLabelFont(font2);
-    m_ui->customPlot->yAxis->setLabelFont(font2);
-
     //m_ui->customPlot->setInteractions(0);
     m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
-    connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
-    connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(on_qcpMouseWheel(QWheelEvent*)));
     connect(m_ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(on_qcpMousePress(QMouseEvent*)));
+
+    connect(m_axis_ch1->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch2->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch1->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch3->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch1->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch4->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+
+    connect(m_axis_ch2->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch1->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch2->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch3->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch2->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch4->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+
+    connect(m_axis_ch3->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch1->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch3->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch2->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch3->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch4->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+
+    connect(m_axis_ch4->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch1->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch4->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch2->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch4->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch3->axis(QCPAxis::atBottom), SLOT(setRange(QCPRange)));
+
+    connect(m_axis_ch1->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch1->axis(QCPAxis::atTop), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch2->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch2->axis(QCPAxis::atTop), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch3->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch3->axis(QCPAxis::atTop), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch4->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_ch4->axis(QCPAxis::atTop), SLOT(setRange(QCPRange)));
+
+    connect(m_axis_ch1->axis(QCPAxis::atLeft), SIGNAL(rangeChanged(QCPRange)), m_axis_ch1->axis(QCPAxis::atRight), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch2->axis(QCPAxis::atLeft), SIGNAL(rangeChanged(QCPRange)), m_axis_ch2->axis(QCPAxis::atRight), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch3->axis(QCPAxis::atLeft), SIGNAL(rangeChanged(QCPRange)), m_axis_ch3->axis(QCPAxis::atRight), SLOT(setRange(QCPRange)));
+    connect(m_axis_ch4->axis(QCPAxis::atLeft), SIGNAL(rangeChanged(QCPRange)), m_axis_ch4->axis(QCPAxis::atRight), SLOT(setRange(QCPRange)));
 
     /* cursors */
 
@@ -142,7 +217,6 @@ void WindowLa::initQcp()
     m_ui->horizontalSlider_cursorV->hide();
 
     connect(m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged, this, &WindowLa::on_cursorH_valuesChanged);
-    connect(m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged, this, &WindowLa::on_cursorV_valuesChanged);
 
     m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
     m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, true);
@@ -196,15 +270,24 @@ void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, D
 
 void WindowLa::on_msg_read(const QByteArray data)
 {
-    bool ch1_en = true;
-    bool ch2_en = true;
-    bool ch3_en = true;
-    bool ch4_en = true;
+    m_axis_ch1->setVisible(m_daqSet.ch1_en);
+    m_axis_ch2->setVisible(m_daqSet.ch2_en);
+    m_axis_ch3->setVisible(m_daqSet.ch3_en);
+    m_axis_ch4->setVisible(m_daqSet.ch4_en);
 
-    m_ui->customPlot->graph(GRAPH_CH1)->setVisible(ch2_en);
-    m_ui->customPlot->graph(GRAPH_CH2)->setVisible(ch2_en);
-    m_ui->customPlot->graph(GRAPH_CH3)->setVisible(ch3_en);
-    m_ui->customPlot->graph(GRAPH_CH4)->setVisible(ch4_en);
+    m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabels(false);
+    m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabels(false);
+    m_axis_ch3->axis(QCPAxis::atBottom)->setTickLabels(false);
+    m_axis_ch4->axis(QCPAxis::atBottom)->setTickLabels(false);
+
+    if (m_daqSet.ch4_en)
+        m_axis_ch4->axis(QCPAxis::atBottom)->setTickLabels(true);
+    else if (m_daqSet.ch3_en)
+        m_axis_ch3->axis(QCPAxis::atBottom)->setTickLabels(true);
+    else if (m_daqSet.ch2_en)
+        m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabels(true);
+    else if (m_daqSet.ch1_en)
+        m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabels(true);
 
     auto info = Core::getInstance()->getDevInfo();
     int data_sz = data.size();
@@ -232,10 +315,10 @@ void WindowLa::on_msg_read(const QByteArray data)
         bool ch3 = (data[i] & (1 << info->la_ch3_pin)) != 0;
         bool ch4 = (data[i] & (1 << info->la_ch4_pin)) != 0;
 
-        if (ch1_en) y1[k] = ch1 ? 1.0 : 0.0;
-        if (ch2_en) y2[k] = ch2 ? 1.0 : 0.0;
-        if (ch3_en) y3[k] = ch3 ? 1.0 : 0.0;
-        if (ch4_en) y4[k] = ch4 ? 1.0 : 0.0;
+        y1[k] = ch1 ? 1.0 : 0.0;
+        y2[k] = ch2 ? 1.0 : 0.0;
+        y3[k] = ch3 ? 1.0 : 0.0;
+        y4[k] = ch4 ? 1.0 : 0.0;
     }
 
     double x = 0;
@@ -252,14 +335,10 @@ void WindowLa::on_msg_read(const QByteArray data)
     if (m_t_last < 1)
         m_timeTicker->setTimeFormat("%z ms");
 
-    if (m_daqSet.ch1_en)
-        m_ui->customPlot->graph(GRAPH_CH1)->setData(t, y1);
-    if (m_daqSet.ch2_en)
-        m_ui->customPlot->graph(GRAPH_CH2)->setData(t, y2);
-    if (m_daqSet.ch3_en)
-        m_ui->customPlot->graph(GRAPH_CH3)->setData(t, y3);
-    if (m_daqSet.ch4_en)
-        m_ui->customPlot->graph(GRAPH_CH4)->setData(t, y4);
+    m_ui->customPlot->graph(GRAPH_CH1)->setData(t, y1);
+    m_ui->customPlot->graph(GRAPH_CH2)->setData(t, y2);
+    m_ui->customPlot->graph(GRAPH_CH3)->setData(t, y3);
+    m_ui->customPlot->graph(GRAPH_CH4)->setData(t, y4);
 
     rescaleXAxis();
     rescaleYAxis();
@@ -323,28 +402,6 @@ void WindowLa::on_actionViewLines_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH2)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH3)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setLineStyle(style);
-
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
-}
-
-void WindowLa::on_actionInterpLinear_triggered(bool checked) // exclusive with - actionSinc
-{
-    m_ui->actionInterpSinc->setChecked(!checked);
-    on_actionInterpSinc_triggered(!checked);
-}
-
-
-void WindowLa::on_actionInterpSinc_triggered(bool checked) // exclusive with - actionLinear
-{
-    m_spline = checked;
-
-    m_ui->actionInterpLinear->setChecked(!checked);
-
-    m_ui->customPlot->graph(GRAPH_CH1)->setSpline(checked);
-    m_ui->customPlot->graph(GRAPH_CH2)->setSpline(checked);
-    m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
-    m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
 
     //if (!m_instrEnabled)
     //    m_ui->customPlot->replot();
@@ -643,37 +700,6 @@ void WindowLa::on_pushButton_cursorsHon_clicked()
     m_cursorsH_en = true;
 }
 
-void WindowLa::on_pushButton_cursorsVoff_clicked()
-{
-    m_ui->horizontalSlider_cursorV->hide();
-
-    m_ui->pushButton_cursorsVon->show();
-    m_ui->pushButton_cursorsVoff->hide();
-
-    m_cursors->showV(false);
-    m_cursorsV_en = false;
-}
-
-void WindowLa::on_pushButton_cursorsVon_clicked()
-{
-    m_ui->horizontalSlider_cursorV->setValues(m_cursorV_min, m_cursorV_max);
-    m_ui->horizontalSlider_cursorV->show();
-
-    m_ui->pushButton_cursorsVon->hide();
-    m_ui->pushButton_cursorsVoff->show();
-
-    auto rngH = m_ui->customPlot->xAxis->range();
-    auto rngV = m_ui->customPlot->yAxis->range();
-
-    m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
-
-    m_cursors->setV_min(m_cursorV_min, rngV.lower, rngV.upper);
-    m_cursors->setV_max(m_cursorV_max, rngV.lower, rngV.upper);
-
-    m_cursors->showV(true);
-    m_cursorsV_en = true;
-}
-
 void WindowLa::on_cursorH_valuesChanged(int min, int max)
 {
     m_cursorH_min = min;
@@ -684,18 +710,6 @@ void WindowLa::on_cursorH_valuesChanged(int min, int max)
 
     m_cursors->setH_min(m_cursorH_min, rng.lower, rng.upper);
     m_cursors->setH_max(m_cursorH_max, rng.lower, rng.upper);
-}
-
-void WindowLa::on_cursorV_valuesChanged(int min, int max)
-{
-    m_cursorV_min = min;
-    m_cursorV_max = max;
-
-    auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
-    //auto rng = m_ui->customPlot->yAxis->range();
-
-    m_cursors->setV_min(m_cursorV_min, rng.lower, rng.upper);
-    m_cursors->setV_max(m_cursorV_max, rng.lower, rng.upper);
 }
 
 /********** QCP **********/
@@ -747,10 +761,16 @@ void WindowLa::showEvent(QShowEvent*)
 
 void WindowLa::rescaleYAxis()
 {
-    m_ui->customPlot->yAxis->setRange(0 - Y_LIM , 1 + Y_LIM);
+    m_axis_ch1->axis(QCPAxis::atLeft)->setRange(0 - Y_LIM , 1 + Y_LIM);
+    m_axis_ch2->axis(QCPAxis::atLeft)->setRange(0 - Y_LIM , 1 + Y_LIM);
+    m_axis_ch3->axis(QCPAxis::atLeft)->setRange(0 - Y_LIM , 1 + Y_LIM);
+    m_axis_ch4->axis(QCPAxis::atLeft)->setRange(0 - Y_LIM , 1 + Y_LIM);
 }
 
 void WindowLa::rescaleXAxis()
 {
-    m_ui->customPlot->xAxis->setRange(0, m_t_last);
+    m_axis_ch1->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
+    //m_axis_ch2->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
+    //m_axis_ch3->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
+    //m_axis_ch4->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
 }

@@ -979,7 +979,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>150</height>
+             <height>100</height>
             </size>
            </property>
            <property name="font">
@@ -1033,7 +1033,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </property>
             <property name="styleSheet">
              <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: #0072BD;
 }
@@ -1182,7 +1182,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #0072BD);
 	text-align:left;
 	padding-left:13px;
 }
@@ -1191,7 +1191,7 @@ QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #63BFFC);
 }
 
 QPushButton:pressed {
@@ -1212,8 +1212,7 @@ QPushButton:disabled {
             </property>
             <property name="icon">
              <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-              <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+              <normaloff>:/main/resources/img/power-on_ch1.png</normaloff>:/main/resources/img/power-on_ch1.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -1364,7 +1363,7 @@ QProgressBar:disabled {
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>150</height>
+             <height>100</height>
             </size>
            </property>
            <property name="font">
@@ -1418,7 +1417,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </property>
             <property name="styleSheet">
              <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: #D95319;
 }
@@ -1564,7 +1563,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #D95319);
 	text-align:left;
 	padding-left:13px;
 }
@@ -1573,7 +1572,7 @@ QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #FDA47D);
 }
 
 QPushButton:pressed {
@@ -1594,8 +1593,7 @@ QPushButton:disabled {
             </property>
             <property name="icon">
              <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-              <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+              <normaloff>:/main/resources/img/power-on_ch2.png</normaloff>:/main/resources/img/power-on_ch2.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -1748,7 +1746,7 @@ QProgressBar:disabled {
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>150</height>
+             <height>100</height>
             </size>
            </property>
            <property name="font">
@@ -1802,7 +1800,7 @@ QProgressBar:disabled {
             </property>
             <property name="styleSheet">
              <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: #77AC30;
 }
@@ -1949,7 +1947,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #77AC30);
 	text-align:left;
 	padding-left:13px;
 }
@@ -1958,7 +1956,7 @@ QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #C3F384);
 }
 
 QPushButton:pressed {
@@ -1979,8 +1977,7 @@ QPushButton:disabled {
             </property>
             <property name="icon">
              <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-              <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+              <normaloff>:/main/resources/img/power-on_ch3.png</normaloff>:/main/resources/img/power-on_ch3.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2111,10 +2108,10 @@ QProgressBar:disabled {
            <zorder>textBrowser_ch3</zorder>
            <zorder>doubleSpinBox_gain3</zorder>
            <zorder>label_5</zorder>
-           <zorder>pushButton_disable3</zorder>
            <zorder>label_ch3</zorder>
            <zorder>progressBar_ch3</zorder>
            <zorder>pushButton_enable3</zorder>
+           <zorder>pushButton_disable3</zorder>
           </widget>
          </item>
          <item>
@@ -2128,7 +2125,7 @@ QProgressBar:disabled {
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>150</height>
+             <height>100</height>
             </size>
            </property>
            <property name="font">
@@ -2182,7 +2179,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </property>
             <property name="styleSheet">
              <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 2px solid; border-radius:10px;
+	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: #7E2F8E;
 }
@@ -2388,7 +2385,7 @@ QPushButton:disabled {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7E2F8E);
 	text-align:left;
 	padding-left:13px;
 }
@@ -2397,7 +2394,7 @@ QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #CC70DE);
 }
 
 QPushButton:pressed {
@@ -2418,8 +2415,7 @@ QPushButton:disabled {
             </property>
             <property name="icon">
              <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-              <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+              <normaloff>:/main/resources/img/power-on_ch4.png</normaloff>:/main/resources/img/power-on_ch4.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -2497,10 +2493,10 @@ QProgressBar:disabled {
            <zorder>textBrowser_ch4</zorder>
            <zorder>doubleSpinBox_gain4</zorder>
            <zorder>label_4</zorder>
-           <zorder>pushButton_disable4</zorder>
            <zorder>label_ch4</zorder>
            <zorder>progressBar_ch4</zorder>
            <zorder>pushButton_enable4</zorder>
+           <zorder>pushButton_disable4</zorder>
           </widget>
          </item>
          <item>

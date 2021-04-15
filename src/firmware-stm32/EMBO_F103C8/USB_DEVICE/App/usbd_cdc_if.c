@@ -260,7 +260,7 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
-  uint32_t len=*Len;
+  uint32_t len = *Len;
   if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED)
   {
      return USBD_FAIL;
@@ -271,7 +271,6 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
      return USBD_FAIL;
   }
 
-  /* Get data */
   uint8_t result = USBD_OK;
   do
   {
@@ -295,7 +294,7 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
      comm.uart.last = 0;
      comm.usb.last = 1;
 
-     if (*Buf == '\n')
+     if (*Buf == '\n' && comm.usb.rx_index > 1 && comm.usb.rx_buffer[comm.usb.rx_index - 2] == '\r')
      {
          portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
          if(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) != pdPASS)

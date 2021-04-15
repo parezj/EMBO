@@ -43,7 +43,7 @@
 
 // device -----------------------------------------------------------
 #define EM_DEV_NAME            "EMBO-STM32F303RE-Nucleo64"   // device specific name
-#define EM_DEV_COMM            "USB (ST) + UART (115200 bps)"    // device comm methods
+#define EM_DEV_COMM            "UART (115200 bps)"           // device comm methods
 
 // device name ------------------------------------------------------
 
@@ -127,7 +127,7 @@
 #define EM_TIM_SGEN_MAX        65535
 
 // Max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         50000     // DAQ max total memory
+#define EM_DAQ_MAX_MEM         56000     // DAQ max total memory
 #define EM_LA_MAX_FS           5000000   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      400000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       500000    // DAQ ADC max fs per 1 channel - 8 bit

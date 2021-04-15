@@ -326,60 +326,11 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         uint16_t buff_total_len = 0;
 
 #if defined(EM_ADC_MODE_ADC1)
-        /*
-        int added = 0;
-        int idx = 0;
-        int ch_it = 1; // 2 /w Vcc
-
-        int buff1_mem = daq.buff1.len - daq.buff1.reserve;
-
-        if (daq.set.ch1_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-        if (daq.set.ch2_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-        if (daq.set.ch3_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-        if (daq.set.ch4_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-        */
 
         buff_start = (uint8_t*)daq.buff1.data;
         buff_total_len += daq.buff1.len;
 
 #elif defined(EM_ADC_MODE_ADC12)
-
-        /*
-        int added = 0;
-        int idx = 0;
-        int ch_it = 1; // 2 /w Vcc
-
-        int buff1_mem = daq.buff1.len - daq.buff1.reserve;
-        int buff2_mem = daq.buff2.len - daq.buff2.reserve;
-
-        if (daq.trig.set.mode == DISABLED)
-            daq.trig.pos_frst = EM_DMA_LAST_IDX((daq.set.ch1_en || daq.set.ch2_en) ? daq.buff1.len : daq.buff2.len,
-                daq.trig.dma_ch_trig, daq.trig.dma_trig);
-
-        if (daq.set.ch1_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-        if (daq.set.ch2_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, ch_it++, daq.buff1.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-
-        ch_it = 1;
-        if (daq.set.ch3_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, ch_it++, daq.buff2.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff2.data, daq.buff_out.data, &idx);
-        if (daq.set.ch4_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, ch_it++, daq.buff2.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff2.data, daq.buff_out.data, &idx);
-
-        */
 
         if (daq.set.ch1_en || daq.set.ch2_en)
             buff_start = (uint8_t*)daq.buff1.data;
@@ -392,40 +343,6 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
             buff_total_len += daq.buff2.len;
 
 #elif defined(EM_ADC_MODE_ADC1234)
-
-        /*
-        int buff1_mem = daq.buff1.len - daq.buff1.reserve;
-        int buff2_mem = daq.buff2.len - daq.buff2.reserve;
-        int buff3_mem = daq.buff3.len - daq.buff3.reserve;
-        int buff4_mem = daq.buff4.len - daq.buff4.reserve;
-
-        int added = 0;
-        int idx = 0;
-
-        if (daq.trig.set.mode == DISABLED)
-        {
-            uint16_t buff_ln = daq.buff1.len;
-            if (daq.set.ch2_en) buff_ln = daq.buff2.len;
-            else if (daq.set.ch3_en) buff_ln = daq.buff3.len;
-            else if (daq.set.ch4_en) buff_ln = daq.buff4.len;
-
-            daq.trig.pos_frst = EM_DMA_LAST_IDX(buff_ln, daq.trig.dma_ch_trig, daq.trig.dma_trig);
-        }
-
-        if (daq.set.ch1_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff1_mem, daq.buff1.len, 1, daq.buff1.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff1.data, daq.buff_out.data, &idx);
-        if (daq.set.ch2_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff2_mem, daq.buff2.len, 1, daq.buff2.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff2.data, daq.buff_out.data, &idx);
-        if (daq.set.ch3_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff3_mem, daq.buff3.len, 1, daq.buff3.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff3.data, daq.buff_out.data, &idx);
-        if (daq.set.ch4_en)
-            added += get_1ch_from_circ(daq.trig.pos_frst, buff4_mem, daq.buff4.len, 1, daq.buff4.chans,
-                                       daq.set.bits, daq.vref, cal, daq.buff4.data, daq.buff_out.data, &idx);
-
-        */
 
         if (daq.set.ch1_en)
             buff_start = (uint8_t*)daq.buff1.data;
@@ -451,20 +368,10 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         daq.trig.ready = EM_FALSE;
         daq.trig.ready_last = 0;
 
-        /*
-        //ASSERT(added == daq.buff_out.len);
-        if (added != daq.buff_out.len)
-        {
-            SCPI_ResultText(context, "ERROR: invalid buffer size");
-            return SCPI_RES_OK;
-        }
-        */
-
         if (daq.set.bits == B12)
             buff_total_len *= 2;
 
         SCPI_ResultArbitraryBlock(context, buff_start, buff_total_len);
-        //SCPI_ResultArbitraryBlock(context, daq.buff_out.data, daq.buff_out.len);
 
         if (daq.trig.set.mode != SINGLE)
             daq_enable(&daq, EM_TRUE);
@@ -634,26 +541,11 @@ scpi_result_t EM_LA_ReadQ(scpi_t* context)
             return SCPI_RES_OK;
         }
 
-        /*
-        for (int k = 0, i = daq.trig.pos_frst; k < daq.set.mem; k++, i++) // TODO compress 4 + 4  BUG!!!!
-        {
-            if (i >= daq.buff1.len)
-                i = 0;
-
-            uint8_t val = (uint8_t)(((uint8_t*)daq.buff1.data)[i]);
-            ((uint8_t*)daq.buff_out.data)[k] = (((val & (1 << EM_GPIO_LA_CH1_NUM)) ? 1 : 0) << 1) |
-                                               (((val & (1 << EM_GPIO_LA_CH2_NUM)) ? 1 : 0) << 2) |
-                                               (((val & (1 << EM_GPIO_LA_CH3_NUM)) ? 1 : 0) << 3) |
-                                               (((val & (1 << EM_GPIO_LA_CH4_NUM)) ? 1 : 0) << 4);
-        }
-        */
-
         daq.trig.pretrig_cntr = 0;
         daq.trig.ready = EM_FALSE;
         daq.trig.ready_last = 0;
 
         SCPI_ResultArbitraryBlock(context, daq.buff1.data, daq.buff1.len);
-        //SCPI_ResultArbitraryBlock(context, daq.buff_out.data, daq.buff_out.len);
 
         if (daq.trig.set.mode != SINGLE)
             daq_enable(&daq, EM_TRUE);
@@ -913,17 +805,11 @@ scpi_result_t EM_PWM_SetQ(scpi_t* context)
 {
     char buff[60];
     char buff_freq_real[15];
-    //char buff_duty1[10];
-    //char buff_duty2[10];
 
-    //double duty1 = pwm.ch1.duty;
-    //double duty2 = pwm.ch2.duty;
     int offset2 = pwm.ch2.offset;
     uint8_t en1 = pwm.ch1.enabled;
     uint8_t en2 = pwm.ch2.enabled;
 
-    //sprint_fast(buff_duty1, "%s", duty1, 4);
-    //sprint_fast(buff_duty2, "%s", duty2, 4);
     sprint_fast(buff_freq_real, "%s", pwm.ch1.freq_real, 3);
 
     int len = sprintf(buff, "%d,%d,%d,%d,%d,%d,%s", pwm.ch1.freq, (int)pwm.ch1.duty, (int)pwm.ch2.duty, offset2, en1, en2, buff_freq_real);
