@@ -10,9 +10,9 @@
 
 
 void daq_trig_check(daq_data_t* self);
-void daq_trig_trigger_scope(daq_data_t* self);
-void daq_trig_trigger_la(daq_data_t* self);
-void daq_trig_poststart(daq_data_t* self, int pos);
+int8_t daq_trig_trigger_scope(daq_data_t* self);
+int8_t daq_trig_trigger_la(daq_data_t* self);
+int8_t daq_trig_poststart(daq_data_t* self, int pos);
 void daq_trig_postcount(daq_data_t* self);
 void daq_trig_init(daq_data_t* self);
 void daq_trig_update(daq_data_t* self);

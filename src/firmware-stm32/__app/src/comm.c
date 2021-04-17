@@ -250,13 +250,21 @@ void comm_init(comm_data_t* self)
     NVIC_EnableIRQ(EM_IRQN_UART);
 }
 
+volatile int comm_state = 0;
+
 uint8_t comm_main(comm_data_t* self)
 {
+    comm_state = 0;
+
     if (self->uart.available)
     {
+        comm_state = 1;
+
         SCPI_Input(&scpi_context, self->uart.rx_buffer, self->uart.rx_index);
 
-        //memset(self->uart.rx_buffer, 0, RX_BUFF_LEN * sizeof(char));
+        comm_state = 2;
+
+        memset(self->uart.rx_buffer, 'X', RX_BUFF_LEN * sizeof(char));
         self->uart.rx_index = 0;
         self->uart.available = 0;
         return 1;
@@ -266,7 +274,7 @@ uint8_t comm_main(comm_data_t* self)
     {
         SCPI_Input(&scpi_context, self->usb.rx_buffer, self->usb.rx_index);
 
-        //memset(self->usb.rx_buffer, 0, RX_BUFF_LEN * sizeof(char));
+        memset(self->usb.rx_buffer, 'X', RX_BUFF_LEN * sizeof(char));
         self->usb.rx_index = 0;
         self->usb.available = 0;
         return 1;

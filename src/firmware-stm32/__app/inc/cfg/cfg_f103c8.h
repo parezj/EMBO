@@ -120,11 +120,11 @@
 //#define EM_TIM_SGEN_MAX      65535
 
 // Max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         10000     // DAQ max total memory
+#define EM_DAQ_MAX_MEM         7000     // DAQ max total memory - 10000 !!
 #define EM_LA_MAX_FS           10000000   // Logic Analyzer max FS - TODO
 #define EM_DAQ_MAX_B12_FS      857142    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
-#define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq - TODO
+#define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq
 #define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve
 
@@ -207,6 +207,7 @@
 #define EM_GPIO_LA_CH2_NUM     2
 #define EM_GPIO_LA_CH3_NUM     3
 #define EM_GPIO_LA_CH4_NUM     4
+
 
 #endif
 #endif /* INC_CFG_CFG_F103C8_H_ */

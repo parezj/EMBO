@@ -260,15 +260,21 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length)
 static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 {
   /* USER CODE BEGIN 6 */
+  traceISR_ENTER();
+  int8_t ret = 0;
+  int8_t exit = 0;
+
   uint32_t len = *Len;
   if (hUsbDeviceFS.dev_state != USBD_STATE_CONFIGURED)
   {
-     return USBD_FAIL;
+     ret = USBD_FAIL;
+     goto quit;
   }
 
   if (((Buf == NULL) || (Len == NULL)) || (*Len <= 0))
   {
-     return USBD_FAIL;
+     ret = USBD_FAIL;
+     goto quit;
   }
 
   uint8_t result = USBD_OK;
@@ -296,22 +302,22 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
 
      if (*Buf == '\n' && comm.usb.rx_index > 1 && comm.usb.rx_buffer[comm.usb.rx_index - 2] == '\r')
      {
+         comm.usb.available = 1;
+         exit = -1;
+
          portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-         if(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) != pdPASS)
-         {
-             comm.usb.rx_index = 0;
-         }
-         else
-         {
-             comm.usb.available = 1;
-             if (xHigherPriorityTaskWoken != pdFALSE)
-                 portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
-         }
+         ASSERT(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) == pdPASS);
+         portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
      }
      Buf++;
   }
 
-  return USBD_OK;
+  ret = USBD_OK;
+  if (exit == 0)
+      traceISR_EXIT();
+
+  quit:
+  return ret;
   /* USER CODE END 6 */
 }
 

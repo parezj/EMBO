@@ -17,6 +17,10 @@
 #include "task.h"
 #include "semphr.h"
 
+#ifdef EM_SYSVIEW
+#include "SEGGER_SYSVIEW.h"
+#endif
+
 // units = uint32_t
 #define EM_STACK_T1     40
 #define EM_STACK_T2     65
@@ -78,11 +82,11 @@ void app_main(void)
     ASSERT(sem3_cntr != NULL);
     ASSERT(mtx1 != NULL);
 
-    ASSERT(xTaskCreateStatic(t1_wd, "T1", EM_STACK_T1, NULL, EM_PRI_T1, stack_t1, &buff_t1) != NULL);
-    ASSERT(xTaskCreateStatic(t2_trig_check, "T2", EM_STACK_T2, NULL, EM_PRI_T2, stack_t2, &buff_t2) != NULL);
-    ASSERT(xTaskCreateStatic(t3_trig_post_count, "T3", EM_STACK_T3, NULL, EM_PRI_T3, stack_t3, &buff_t3) != NULL);
-    ASSERT(xTaskCreateStatic(t4_comm_and_init, "T4", EM_STACK_T4, NULL, EM_PRI_T4, stack_t4, &buff_t4) != NULL);
-    ASSERT(xTaskCreateStatic(t5_cntr, "T5", EM_STACK_T5, NULL, EM_PRI_T5, stack_t5, &buff_t5) != NULL);
+    ASSERT(xTaskCreateStatic(t1_wd, "wd", EM_STACK_T1, NULL, EM_PRI_T1, stack_t1, &buff_t1) != NULL);
+    ASSERT(xTaskCreateStatic(t2_trig_check, "trig_check", EM_STACK_T2, NULL, EM_PRI_T2, stack_t2, &buff_t2) != NULL);
+    ASSERT(xTaskCreateStatic(t3_trig_post_count, "trig_post_count", EM_STACK_T3, NULL, EM_PRI_T3, stack_t3, &buff_t3) != NULL);
+    ASSERT(xTaskCreateStatic(t4_comm_and_init, "comm_and_init", EM_STACK_T4, NULL, EM_PRI_T4, stack_t4, &buff_t4) != NULL);
+    ASSERT(xTaskCreateStatic(t5_cntr, "cntr", EM_STACK_T5, NULL, EM_PRI_T5, stack_t5, &buff_t5) != NULL);
 
     __enable_irq();
 
@@ -138,8 +142,11 @@ void t3_trig_post_count(void* p)
     while(1)
     {
         ASSERT(xSemaphoreTake(sem2_trig, portMAX_DELAY) == pdPASS);
+        ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
         daq_trig_postcount(&daq);
+
+        ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
 #ifdef EM_DEBUG
         watermark_t3 = uxTaskGetStackHighWaterMark(NULL);
@@ -163,11 +170,13 @@ void t4_comm_and_init(void* p)
 
 #ifdef EM_DEBUG
     pwm_set(&pwm, 1000, 50, 25, 50, EM_TRUE, EM_TRUE);
-    //LL_IWDG_SetPrescaler(IWDG, LL_IWDG_PRESCALER_256);
-    //LL_IWDG_SetReloadCounter(IWDG, 0x0FFF);
 #ifdef EM_DAC
     sgen_enable(&sgen, SINE, 100, 1000, EM_DAC_BUFF_LEN);
 #endif
+#endif
+
+#ifdef EM_SYSVIEW
+    SEGGER_SYSVIEW_Conf();
 #endif
 
     while (EM_VM_ReadQ(NULL) == SCPI_RES_ERR) // read vcc

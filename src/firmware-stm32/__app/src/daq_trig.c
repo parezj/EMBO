@@ -127,30 +127,17 @@ void daq_trig_check(daq_data_t* self)
 
     if (self->trig.respond == EM_TRUE) // // check async respond ReadyX
     {
-        const char* resp;
-
         if (t_resp == 'A')
-            resp = EM_RESP_RDY_A;       // data ready - trig auto
+            comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);       // data ready - trig auto
         else if (t_resp == 'D')
-            resp = EM_RESP_RDY_D;       // data ready - trig disabled
-        else
-        {
-            if (self->trig.forced == EM_TRUE)
-                resp = EM_RESP_RDY_F;   // data ready - trig forced
-            else if (self->trig.set.mode == SINGLE)
-                resp = EM_RESP_RDY_S;   // data ready - trig single
-            else
-                resp = EM_RESP_RDY_A;   // data ready - trig normal
-        }
-
-        comm_daq_ready(comm_ptr, resp, self->trig.pos_frst); // finally send the respond
+            comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst);       // data ready - trig disabled
 
         self->trig.respond = EM_FALSE;
         self->trig.forced = EM_FALSE;
     }
 }
 
-void daq_trig_trigger_scope(daq_data_t* self)
+int8_t daq_trig_trigger_scope(daq_data_t* self)
 {
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_ch_trig != 0);
@@ -199,8 +186,7 @@ void daq_trig_trigger_scope(daq_data_t* self)
         if ((self->trig.set.edge == RISING && prev_last_val <= self->trig.set.val) || // last_val > self->trig.set.val &&
             (self->trig.set.edge == FALLING && prev_last_val >= self->trig.set.val))  // last_val < self->trig.set.val &&
         {
-            daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
-            return;
+            return daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
         }
         else // false trig, switch edges and wait for another window
         {
@@ -220,9 +206,11 @@ void daq_trig_trigger_scope(daq_data_t* self)
 
     invalid_trigger:  // if any code gets here, means that trigger is invalid
     LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig); // reenable irq
+
+    return 0;
 }
 
-void daq_trig_trigger_la(daq_data_t* self)
+int8_t daq_trig_trigger_la(daq_data_t* self)
 {
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_ch_trig != 0);
@@ -235,8 +223,7 @@ void daq_trig_trigger_la(daq_data_t* self)
 
     //if (self->trig.pretrig_cntr > self->trig.pretrig_val)
     //{
-        daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
-        return;
+        return daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
     //}
     
     invalid_trigger: // if any code gets here, means that trigger is invalid
@@ -250,11 +237,13 @@ void daq_trig_trigger_la(daq_data_t* self)
     NVIC_EnableIRQ(self->trig.exti_trig);
 
     self->trig.la_state = 4;
+
+    return 0;
 }
 
 volatile int a = 0;
 
-void daq_trig_poststart(daq_data_t* self, int pos)
+int8_t daq_trig_poststart(daq_data_t* self, int pos)
 {
     self->trig.la_state = 5;
 
@@ -264,10 +253,12 @@ void daq_trig_poststart(daq_data_t* self, int pos)
 
     portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
     ASSERT(xSemaphoreGiveFromISR(sem2_trig, &xHigherPriorityTaskWoken) == pdPASS);
-    if (xHigherPriorityTaskWoken != pdFALSE)
-        portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 
     self->trig.la_state = 6;
+
+    portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+
+    return -1;
 }
 
 void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (800 ksps)
@@ -349,7 +340,15 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             if (self->trig.pos_diff < 0)
                 self->trig.pos_diff += self->trig.buff_trig->len;
 
-            self->trig.respond = EM_TRUE; // init async respond ReadyX
+            //self->trig.respond = EM_TRUE; // init async respond ReadyX
+
+            if (self->trig.forced == EM_TRUE)
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_F, self->trig.pos_frst);   // data ready - trig forced
+            else if (self->trig.set.mode == SINGLE)
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_S, self->trig.pos_frst);   // data ready - trig single
+            else
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);   // data ready - trig normal
+
             self->trig.la_state = 10;
             break;
         }
