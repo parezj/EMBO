@@ -16,7 +16,7 @@ class QCPCursors : public QObject
     Q_OBJECT
 
 public:
-    QCPCursors(QObject* parent, QCustomPlot* plot,
+    QCPCursors(QObject* parent, QCustomPlot* plot, QCPAxisRect* rect = NULL, bool center = false,
                QColor colorH = Qt::black, QColor colorV = Qt::black,
                QColor colorDiff = Qt::black, QColor colorText = Qt::black);
 
@@ -30,6 +30,8 @@ public:
     void showH(bool val);
     void showV(bool val);
 
+    void showText(bool val);
+
     static int getUniqueNum() { return uniqueNum++; };
     static const QString formatUnitV(double value);
     static const QString formatUnitHz(double value);
@@ -40,6 +42,8 @@ private:
     void reCalcV();
 
     static int uniqueNum;
+
+    bool m_center;
 
     QCustomPlot* m_plot;
 
@@ -81,7 +85,7 @@ class QCPCursor : public QObject
     Q_OBJECT
 
 public:
-    QCPCursor(QObject* parent, QCustomPlot* plot, bool horizontal = true,
+    QCPCursor(QObject* parent, QCustomPlot* plot, QCPAxisRect* rect = NULL, bool horizontal = true, bool center = false,
               QColor colorLine = Qt::black, QColor colorText = Qt::black, Qt::PenStyle style = Qt::DashLine);
 
     void setValue(int percent, double rangeMin, double rangeMax);
@@ -90,6 +94,8 @@ public:
 
 private:
     void reCalc();
+
+    bool m_center;
 
     QCustomPlot* m_plot;
     QCPLayer* m_cursorLayer;

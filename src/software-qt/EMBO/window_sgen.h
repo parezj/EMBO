@@ -62,16 +62,18 @@ private:
     void enableAll(bool enable);
     void sendSet(bool enable);
 
-    bool m_ignoreValuesChanged = false;
-
-    QLabel* m_status_enabled;
-
-    QButtonGroup m_mode;
-
+    /* main window */
     Ui::WindowSgen* m_ui;
 
     /* messages */
     Msg_SGEN_Set* m_msg_set;
+
+    /* helpers */
+    bool m_ignoreValuesChanged = false;
+    QButtonGroup m_mode;
+
+    /* status bar */
+    QLabel* m_status_enabled;
 };
 
 #endif // WINDOW_SGEN_H

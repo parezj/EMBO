@@ -10,6 +10,11 @@
 #include "task.h"
 #include "semphr.h"
 
+StaticSemaphore_t buff_sem1_comm; // comm respond init
+StaticSemaphore_t buff_sem2_trig; // post trig count init
+StaticSemaphore_t buff_sem3_cntr; // counter enable
+StaticSemaphore_t buff_mtx1;      // mutex for comm and trig
+
 SemaphoreHandle_t sem1_comm;
 SemaphoreHandle_t sem2_trig;
 SemaphoreHandle_t sem3_cntr;

@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1257</width>
-    <height>975</height>
+    <width>1297</width>
+    <height>892</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>940</width>
-    <height>653</height>
+    <height>892</height>
    </size>
   </property>
   <property name="font">
@@ -33,7 +33,7 @@
    <property name="minimumSize">
     <size>
      <width>0</width>
-     <height>615</height>
+     <height>850</height>
     </size>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -1120,19 +1120,6 @@ p, li { white-space: pre-wrap; }
                <zorder>label_10</zorder>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_meas_2">
-               <property name="font">
-                <font>
-                 <family>Roboto Medium</family>
-                 <pointsize>11</pointsize>
-                </font>
-               </property>
-               <property name="text">
-                <string>Cursors</string>
-               </property>
-              </widget>
-             </item>
              <item row="0" column="0">
               <widget class="QLabel" name="label_meas">
                <property name="font">
@@ -1143,6 +1130,19 @@ p, li { white-space: pre-wrap; }
                </property>
                <property name="text">
                 <string>Measure (Channel 1)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_meas_2">
+               <property name="font">
+                <font>
+                 <family>Roboto Medium</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Cursors</string>
                </property>
               </widget>
              </item>
@@ -1186,18 +1186,27 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
          <bool>false</bool>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>2</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
          <item>
-          <widget class="QGroupBox" name="groupBox_main">
+          <widget class="QGroupBox" name="groupBox_horizontal_10">
            <property name="minimumSize">
             <size>
-             <width>400</width>
-             <height>55</height>
+             <width>410</width>
+             <height>85</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>55</height>
+             <height>85</height>
             </size>
            </property>
            <property name="font">
@@ -1207,36 +1216,145 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">QGroupBox { margin-top: 0.5em; border: 0px solid rgb(150,150,150); border-radius: 5px;  }; 
+            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
            </property>
            <property name="title">
             <string/>
            </property>
-           <widget class="QPushButton" name="pushButton_run">
+           <widget class="QLabel" name="label_25">
             <property name="geometry">
              <rect>
-              <x>280</x>
+              <x>10</x>
               <y>10</y>
-              <width>121</width>
-              <height>41</height>
+              <width>81</width>
+              <height>16</height>
              </rect>
             </property>
             <property name="font">
              <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_m_16">
+            <property name="geometry">
+             <rect>
+              <x>230</x>
+              <y>10</y>
+              <width>211</width>
+              <height>65</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QPushButton" name="pushButton_single_off">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>15</y>
+               <width>81</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:8px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+             </property>
+             <property name="text">
+              <string> SINGLE</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_single_on">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>15</y>
+               <width>81</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
 	text-align:left;
-	padding-left:22px;
+	padding-left:8px;
 }
 
 QPushButton:hover:!pressed {
@@ -1258,46 +1376,41 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> RUN  </string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-              <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_stop">
-            <property name="geometry">
-             <rect>
-              <x>280</x>
-              <y>10</y>
-              <width>121</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> SINGLE</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_stop">
+             <property name="geometry">
+              <rect>
+               <x>100</x>
+               <y>15</y>
+               <width>101</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #D76969);
 	text-align:left;
-	padding-left:22px;
+	padding-left:15px;
 }
 
 QPushButton:hover:!pressed {
@@ -1319,206 +1432,38 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> STOP</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-red.png</normaloff>:/main/resources/img/power-off-red.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>10</y>
-              <width>111</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>Reset</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_resetZoom">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>10</y>
-              <width>111</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>Reset Zoom</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_single_off">
-            <property name="geometry">
-             <rect>
-              <x>140</x>
-              <y>10</y>
-              <width>121</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-	text-align:left;
-	padding-left:15px;
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string> SINGLE</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-gray2.png</normaloff>:/main/resources/img/power-off-gray2.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_single_on">
-            <property name="geometry">
-             <rect>
-              <x>140</x>
-              <y>10</y>
-              <width>121</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> STOP</string>
+             </property>
+             <property name="icon">
+              <iconset resource="resources.qrc">
+               <normaloff>:/main/resources/img/power-off-red.png</normaloff>:/main/resources/img/power-off-red.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_run">
+             <property name="geometry">
+              <rect>
+               <x>100</x>
+               <y>15</y>
+               <width>101</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -1547,28 +1492,302 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
+             </property>
+             <property name="text">
+              <string> RUN  </string>
+             </property>
+             <property name="icon">
+              <iconset resource="resources.qrc">
+               <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
+               <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_m_17">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>10</y>
+              <width>211</width>
+              <height>65</height>
+             </rect>
             </property>
-            <property name="text">
-             <string> SINGLE</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-green3.png</normaloff>
-              <disabledoff>:/main/resources/img/power-off-green3.png</disabledoff>:/main/resources/img/power-off-green3.png</iconset>
-            </property>
-            <property name="iconSize">
+            <property name="minimumSize">
              <size>
-              <width>23</width>
-              <height>22</height>
+              <width>0</width>
+              <height>0</height>
              </size>
             </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QRadioButton" name="radioButton_zoomH">
+             <property name="geometry">
+              <rect>
+               <x>6</x>
+               <y>13</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>ZoomH</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_reset">
+             <property name="geometry">
+              <rect>
+               <x>94</x>
+               <y>15</y>
+               <width>107</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:33px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+             </property>
+             <property name="text">
+              <string>Reset</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_zoomV">
+             <property name="geometry">
+              <rect>
+               <x>6</x>
+               <y>38</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>ZoomV</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_resetZoom">
+             <property name="geometry">
+              <rect>
+               <x>94</x>
+               <y>15</y>
+               <width>107</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:7px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+             </property>
+             <property name="text">
+              <string>Reset Zoom</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
            </widget>
-           <zorder>pushButton_run</zorder>
-           <zorder>pushButton_stop</zorder>
-           <zorder>pushButton_resetZoom</zorder>
-           <zorder>pushButton_single_off</zorder>
-           <zorder>pushButton_single_on</zorder>
-           <zorder>pushButton_reset</zorder>
           </widget>
          </item>
          <item>
@@ -1638,173 +1857,11 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <string>Mode:</string>
             </property>
            </widget>
-           <widget class="QPushButton" name="pushButton_reset_2">
-            <property name="geometry">
-             <rect>
-              <x>100</x>
-              <y>30</y>
-              <width>91</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>Auto</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset_3">
-            <property name="geometry">
-             <rect>
-              <x>200</x>
-              <y>30</y>
-              <width>91</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>Normal</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset_4">
-            <property name="geometry">
-             <rect>
-              <x>300</x>
-              <y>30</y>
-              <width>91</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>Disabled</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
            <widget class="QLabel" name="label_21">
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>75</y>
+              <y>60</y>
               <width>51</width>
               <height>23</height>
              </rect>
@@ -1821,119 +1878,11 @@ QPushButton:disabled {
              <string>Slope:</string>
             </property>
            </widget>
-           <widget class="QPushButton" name="pushButton_reset_5">
-            <property name="geometry">
-             <rect>
-              <x>100</x>
-              <y>70</y>
-              <width>91</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>Rising</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset_6">
-            <property name="geometry">
-             <rect>
-              <x>200</x>
-              <y>70</y>
-              <width>91</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>Falling</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
            <widget class="QLabel" name="label_22">
             <property name="geometry">
              <rect>
               <x>20</x>
-              <y>115</y>
+              <y>90</y>
               <width>71</width>
               <height>23</height>
              </rect>
@@ -1948,222 +1897,6 @@ QPushButton:disabled {
             </property>
             <property name="text">
              <string>Channel:</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset_7">
-            <property name="geometry">
-             <rect>
-              <x>100</x>
-              <y>110</y>
-              <width>61</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>CH1</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset_8">
-            <property name="geometry">
-             <rect>
-              <x>170</x>
-              <y>110</y>
-              <width>61</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>CH2</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset_9">
-            <property name="geometry">
-             <rect>
-              <x>240</x>
-              <y>110</y>
-              <width>61</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>CH3</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset_10">
-            <property name="geometry">
-             <rect>
-              <x>310</x>
-              <y>110</y>
-              <width>61</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>CH4</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
             </property>
            </widget>
            <widget class="QLabel" name="label_6">
@@ -2358,13 +2091,13 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              <number>100</number>
             </property>
            </widget>
-           <widget class="QPushButton" name="pushButton_forc">
+           <widget class="QRadioButton" name="radioButton_trigSlope_Rising">
             <property name="geometry">
              <rect>
-              <x>240</x>
-              <y>200</y>
-              <width>121</width>
-              <height>41</height>
+              <x>100</x>
+              <y>60</y>
+              <width>81</width>
+              <height>21</height>
              </rect>
             </property>
             <property name="font">
@@ -2374,12 +2107,827 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QPushButton {
+             <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Rising</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QRadioButton" name="radioButton_trigSlope_Falling">
+            <property name="geometry">
+             <rect>
+              <x>190</x>
+              <y>60</y>
+              <width>81</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Falling</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QRadioButton" name="radioButton_trigCh_1">
+            <property name="geometry">
+             <rect>
+              <x>100</x>
+              <y>90</y>
+              <width>81</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>CH1</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QRadioButton" name="radioButton_trigCh_4">
+            <property name="geometry">
+             <rect>
+              <x>360</x>
+              <y>90</y>
+              <width>71</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>CH4</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QRadioButton" name="radioButton_trigMode_Auto">
+            <property name="geometry">
+             <rect>
+              <x>100</x>
+              <y>30</y>
+              <width>81</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Auto</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QDial" name="dial_trigVal">
+            <property name="geometry">
+             <rect>
+              <x>230</x>
+              <y>150</y>
+              <width>51</width>
+              <height>50</height>
+             </rect>
+            </property>
+            <property name="toolTip">
+             <string>CH1 vertical position</string>
+            </property>
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6000</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="invertedAppearance">
+             <bool>false</bool>
+            </property>
+            <property name="wrapping">
+             <bool>false</bool>
+            </property>
+            <property name="notchTarget">
+             <double>30.000000000000000</double>
+            </property>
+            <property name="notchesVisible">
+             <bool>true</bool>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_dial1_6">
+            <property name="geometry">
+             <rect>
+              <x>230</x>
+              <y>150</y>
+              <width>51</width>
+              <height>50</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_dial1_7">
+            <property name="geometry">
+             <rect>
+              <x>230</x>
+              <y>200</y>
+              <width>51</width>
+              <height>50</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QDial" name="dial_trigPre">
+            <property name="geometry">
+             <rect>
+              <x>230</x>
+              <y>200</y>
+              <width>51</width>
+              <height>50</height>
+             </rect>
+            </property>
+            <property name="toolTip">
+             <string>CH1 vertical position</string>
+            </property>
+            <property name="minimum">
+             <number>2</number>
+            </property>
+            <property name="maximum">
+             <number>6000</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="invertedAppearance">
+             <bool>false</bool>
+            </property>
+            <property name="wrapping">
+             <bool>false</bool>
+            </property>
+            <property name="notchTarget">
+             <double>30.000000000000000</double>
+            </property>
+            <property name="notchesVisible">
+             <bool>true</bool>
+            </property>
+           </widget>
+           <widget class="QRadioButton" name="radioButton_trigMode_Normal">
+            <property name="geometry">
+             <rect>
+              <x>190</x>
+              <y>30</y>
+              <width>91</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+            </property>
+            <property name="text">
+             <string>Normal</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
+            </property>
+            <property name="autoExclusive">
+             <bool>false</bool>
+            </property>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_t_16">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>431</width>
+              <height>101</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QRadioButton" name="radioButton_trigMode_Disabled">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>10</y>
+               <width>101</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>Disabled</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_trigCh_3">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>70</y>
+               <width>71</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>CH3</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_trigCh_2">
+             <property name="geometry">
+              <rect>
+               <x>180</x>
+               <y>70</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>CH2</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="Line" name="line_2">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>25</y>
+               <width>411</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: gray</string>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+            <widget class="Line" name="line_3">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>55</y>
+               <width>411</width>
+               <height>20</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: gray</string>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_t_18">
+            <property name="geometry">
+             <rect>
+              <x>300</x>
+              <y>140</y>
+              <width>141</width>
+              <height>101</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QPushButton" name="pushButton_trigForc">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>10</y>
+               <width>101</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:13px;
 }
 
 QPushButton:hover:!pressed {
@@ -2401,37 +2949,37 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string>Force Trig</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QRadioButton" name="radioButton_trigd">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>250</x>
-              <y>160</y>
-              <width>31</width>
-              <height>31</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QRadioButton::indicator {
+             </property>
+             <property name="text">
+              <string>Force Trig</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_trigLed">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>30</x>
+               <y>60</y>
+               <width>31</width>
+               <height>31</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>14</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton::indicator {
     width: 25px;
     height: 25px;
 }
@@ -2442,64 +2990,101 @@ QRadioButton::indicator::unchecked {
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/led_green.png);
 }</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
-            </property>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_24">
+             <property name="geometry">
+              <rect>
+               <x>60</x>
+               <y>60</y>
+               <width>41</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Trig´d</string>
+             </property>
+            </widget>
            </widget>
-           <widget class="QLabel" name="label_24">
+           <widget class="QGroupBox" name="groupBox_t_19">
             <property name="geometry">
              <rect>
-              <x>280</x>
-              <y>165</y>
-              <width>41</width>
-              <height>21</height>
+              <x>10</x>
+              <y>140</y>
+              <width>281</width>
+              <height>101</height>
              </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
             </property>
             <property name="font">
              <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="text">
-             <string>Trig´d</string>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
             </property>
            </widget>
-           <zorder>label_16</zorder>
-           <zorder>label_20</zorder>
-           <zorder>pushButton_reset_2</zorder>
-           <zorder>pushButton_reset_3</zorder>
-           <zorder>pushButton_reset_4</zorder>
+           <zorder>groupBox_t_16</zorder>
+           <zorder>groupBox_t_18</zorder>
+           <zorder>groupBox_t_19</zorder>
+           <zorder>radioButton_trigMode_Auto</zorder>
+           <zorder>radioButton_trigCh_1</zorder>
            <zorder>label_21</zorder>
-           <zorder>pushButton_reset_5</zorder>
-           <zorder>pushButton_reset_6</zorder>
-           <zorder>label_22</zorder>
-           <zorder>pushButton_reset_7</zorder>
-           <zorder>pushButton_reset_8</zorder>
-           <zorder>pushButton_reset_9</zorder>
-           <zorder>pushButton_reset_10</zorder>
-           <zorder>spinBox_trigVal</zorder>
-           <zorder>label_6</zorder>
            <zorder>spinBox_trigPre</zorder>
+           <zorder>label_22</zorder>
            <zorder>label_7</zorder>
-           <zorder>pushButton_forc</zorder>
-           <zorder>radioButton_trigd</zorder>
-           <zorder>label_24</zorder>
+           <zorder>radioButton_trigSlope_Falling</zorder>
+           <zorder>label_16</zorder>
+           <zorder>radioButton_trigSlope_Rising</zorder>
+           <zorder>label_dial1_7</zorder>
+           <zorder>spinBox_trigVal</zorder>
+           <zorder>radioButton_trigMode_Normal</zorder>
+           <zorder>label_20</zorder>
+           <zorder>label_6</zorder>
+           <zorder>label_dial1_6</zorder>
+           <zorder>radioButton_trigCh_4</zorder>
+           <zorder>dial_trigVal</zorder>
+           <zorder>dial_trigPre</zorder>
           </widget>
          </item>
          <item>
@@ -2507,13 +3092,13 @@ QRadioButton::indicator::checked {
            <property name="minimumSize">
             <size>
              <width>410</width>
-             <height>250</height>
+             <height>210</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>250</height>
+             <height>210</height>
             </size>
            </property>
            <property name="font">
@@ -2548,442 +3133,309 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <string>Horizontal</string>
             </property>
            </widget>
-           <widget class="QLabel" name="label_3">
+           <widget class="QGroupBox" name="groupBox_h_11">
             <property name="geometry">
              <rect>
-              <x>20</x>
-              <y>180</y>
-              <width>101</width>
-              <height>21</height>
+              <x>320</x>
+              <y>20</y>
+              <width>120</width>
+              <height>70</height>
              </rect>
             </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Fs:</string>
-            </property>
-           </widget>
-           <widget class="QSpinBox" name="spinBox_fs">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>170</y>
-              <width>231</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
-				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
-
-QSpinBox::up-button { 
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/resources/img/arrow_up4.png);
-}
-
-QSpinBox::down-button {
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/resources/img/arrow_down4.png);
- }
-
-QSpinBox::up-button:hover { 
-	image: url(:/main/resources/img/arrow_up4b.png);
-}
-
-QSpinBox::down-button:hover {
-	image: url(:/main/resources/img/arrow_down4b.png);
- }
-
-QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
-                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
-
-QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
-
-QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
-</string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::UpDownArrows</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="suffix">
-             <string> Sps</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>5000000</number>
-            </property>
-            <property name="value">
-             <number>5000000</number>
-            </property>
-           </widget>
-           <widget class="QRadioButton" name="radioButton_fast">
-            <property name="geometry">
-             <rect>
-              <x>260</x>
-              <y>30</y>
-              <width>81</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QRadioButton:checked {
-	background-color: rgba(245,245,245, 1.0);
-	border: 0px; 
-	border-radius:5px;
-}
-
-QRadioButton:hover {
-	background-color: rgba(230,230,230, 1.0);
-	border: 0px; 
-	border-radius:5px;
-}
-
-QRadioButton:checked:hover {
-	background-color: rgba(245,245,245, 1.0);
-	border: 0px; 
-	border-radius:5px;
-}
-
-QRadioButton::indicator {
-    width: 20px;
-    height: 20px;
-}
-QRadioButton::indicator::unchecked {
-    image: url(:/main/resources/img/radio_off1.png);
-}
-
-QRadioButton::indicator:unchecked:hover {
-    image: url(:/main/resources/img/radio_off1.png);
-}
-
-QRadioButton::indicator::checked {
-    image: url(:/main/resources/img/radio_on2.png);
-}</string>
-            </property>
-            <property name="text">
-             <string>S/div</string>
-            </property>
-            <property name="iconSize">
+            <property name="minimumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>0</width>
+              <height>0</height>
              </size>
             </property>
-            <property name="checked">
-             <bool>false</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
-            </property>
-           </widget>
-           <widget class="QRadioButton" name="radioButton_precise">
-            <property name="geometry">
-             <rect>
-              <x>130</x>
-              <y>30</y>
-              <width>111</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>14</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QRadioButton:checked {
-	background-color: rgba(245,245,245, 1.0);
-	border: 0px; 
-	border-radius:5px;
-}
-
-QRadioButton:hover {
-	background-color: rgba(230,230,230, 1.0);
-	border: 0px; 
-	border-radius:5px;
-}
-
-QRadioButton:checked:hover {
-	background-color: rgba(245,245,245, 1.0);
-	border: 0px; 
-	border-radius:5px;
-}
-
-QRadioButton::indicator {
-    width: 20px;
-    height: 20px;
-}
-QRadioButton::indicator::unchecked {
-    image: url(:/main/resources/img/radio_off1.png);
-}
-
-QRadioButton::indicator:unchecked:hover {
-    image: url(:/main/resources/img/radio_off1.png);
-}
-
-QRadioButton::indicator::checked {
-    image: url(:/main/resources/img/radio_on2.png);
-}</string>
-            </property>
-            <property name="text">
-             <string>Fs+Mem</string>
-            </property>
-            <property name="iconSize">
+            <property name="maximumSize">
              <size>
-              <width>20</width>
-              <height>20</height>
+              <width>16777215</width>
+              <height>10000</height>
              </size>
             </property>
-            <property name="checked">
-             <bool>true</bool>
-            </property>
-            <property name="autoExclusive">
-             <bool>false</bool>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_4">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>120</y>
-              <width>101</width>
-              <height>21</height>
-             </rect>
-            </property>
             <property name="font">
              <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="text">
-             <string>Mem:</string>
-            </property>
-           </widget>
-           <widget class="QSpinBox" name="spinBox_mem">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>110</y>
-              <width>231</width>
-              <height>41</height>
-             </rect>
-            </property>
             <property name="styleSheet">
-             <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
-				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
-
-QSpinBox::up-button { 
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/resources/img/arrow_up4.png);
-}
-
-QSpinBox::down-button {
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/resources/img/arrow_down4.png);
- }
-
-QSpinBox::up-button:hover { 
-	image: url(:/main/resources/img/arrow_up4b.png);
-}
-
-QSpinBox::down-button:hover {
-	image: url(:/main/resources/img/arrow_down4b.png);
- }
-
-QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
-                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
-
-QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
-
-QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
-</string>
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
             </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::UpDownArrows</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="suffix">
-             <string> S/ch</string>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>10000</number>
-            </property>
-            <property name="value">
-             <number>10000</number>
-            </property>
-           </widget>
-           <widget class="QDial" name="dial_Vpos_ch1_2">
-            <property name="geometry">
-             <rect>
-              <x>280</x>
-              <y>110</y>
-              <width>51</width>
-              <height>50</height>
-             </rect>
-            </property>
-            <property name="toolTip">
-             <string>CH1 vertical position</string>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>6000</number>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="invertedAppearance">
-             <bool>false</bool>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="notchTarget">
-             <double>30.000000000000000</double>
-            </property>
-            <property name="notchesVisible">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_dial1_2">
-            <property name="geometry">
-             <rect>
-              <x>280</x>
-              <y>110</y>
-              <width>51</width>
-              <height>50</height>
-             </rect>
-            </property>
-            <property name="text">
+            <property name="title">
              <string/>
             </property>
-            <property name="pixmap">
-             <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>false</bool>
-            </property>
+            <widget class="QRadioButton" name="radioButton_fsMem">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>15</y>
+               <width>101</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>Mem+Fs</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QRadioButton" name="radioButton_sDiv">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>40</y>
+               <width>101</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.7);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>Div</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
            </widget>
-           <widget class="QLabel" name="label_13">
+           <widget class="QGroupBox" name="groupBox_h_12">
             <property name="geometry">
              <rect>
-              <x>100</x>
-              <y>210</y>
-              <width>51</width>
-              <height>23</height>
+              <x>10</x>
+              <y>20</y>
+              <width>302</width>
+              <height>115</height>
              </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
             </property>
             <property name="font">
              <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
-            </property>
-            <property name="text">
-             <string>Max Z:</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_17">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>210</y>
-              <width>51</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Real F:</string>
-            </property>
-           </widget>
-           <widget class="QSpinBox" name="spinBox_fs_2">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>240</x>
-              <y>170</y>
-              <width>161</width>
-              <height>41</height>
-             </rect>
             </property>
             <property name="styleSheet">
-             <string notr="true">QSpinBox { background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QGroupBox" name="groupBox_h_13">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>100</y>
+               <width>291</width>
+               <height>111</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>10000</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+             </property>
+             <property name="title">
+              <string/>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_dial1_3">
+             <property name="geometry">
+              <rect>
+               <x>245</x>
+               <y>60</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QDial" name="dial_fs">
+             <property name="geometry">
+              <rect>
+               <x>245</x>
+               <y>60</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>CH1 vertical position</string>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>6000</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="notchTarget">
+              <double>30.000000000000000</double>
+             </property>
+             <property name="notchesVisible">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QSpinBox" name="spinBox_mem">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>15</y>
+               <width>231</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
 				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
 
 QSpinBox::up-button { 
@@ -3009,141 +3461,653 @@ QSpinBox::down-button:hover {
  }
 
 QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
+                                          border: 1px solid gray; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
 QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
 
 QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
 </string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="suffix">
-             <string> ms/div</string>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>1000</number>
-            </property>
-            <property name="value">
-             <number>1000</number>
-            </property>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::UpDownArrows</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string> S/ch</string>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>10000</number>
+             </property>
+             <property name="value">
+              <number>10000</number>
+             </property>
+            </widget>
+            <widget class="QSpinBox" name="spinBox_fs">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>65</y>
+               <width>231</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
+				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
+
+QSpinBox::up-button { 
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_up4.png);
+}
+
+QSpinBox::down-button {
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_down4.png);
+ }
+
+QSpinBox::up-button:hover { 
+	image: url(:/main/resources/img/arrow_up4b.png);
+}
+
+QSpinBox::down-button:hover {
+	image: url(:/main/resources/img/arrow_down4b.png);
+ }
+
+QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
+                                          border: 1px solid gray; border-radius:10px;
+                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
+
+QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
+
+QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
+</string>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::UpDownArrows</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string> Sps</string>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>5000000</number>
+             </property>
+             <property name="value">
+              <number>5000000</number>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_4">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>25</y>
+               <width>41</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Mem:</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_3">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>75</y>
+               <width>31</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Fs:</string>
+             </property>
+            </widget>
+            <widget class="QDial" name="dial_mem">
+             <property name="geometry">
+              <rect>
+               <x>245</x>
+               <y>10</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>CH1 vertical position</string>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>6000</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="notchTarget">
+              <double>30.000000000000000</double>
+             </property>
+             <property name="notchesVisible">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_dial1_4">
+             <property name="geometry">
+              <rect>
+               <x>245</x>
+               <y>10</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <zorder>groupBox_h_13</zorder>
+            <zorder>label_dial1_3</zorder>
+            <zorder>dial_fs</zorder>
+            <zorder>spinBox_mem</zorder>
+            <zorder>spinBox_fs</zorder>
+            <zorder>label_4</zorder>
+            <zorder>label_3</zorder>
+            <zorder>label_dial1_4</zorder>
+            <zorder>dial_mem</zorder>
            </widget>
-           <widget class="QLabel" name="label_5">
-            <property name="geometry">
-             <rect>
-              <x>20</x>
-              <y>70</y>
-              <width>91</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Real:</string>
-            </property>
-           </widget>
-           <widget class="QTextBrowser" name="textBrowser_realFreq">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
+           <widget class="QGroupBox" name="groupBox_h_14">
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>62</y>
-              <width>231</width>
-              <height>37</height>
+              <y>135</y>
+              <width>302</width>
+              <height>65</height>
              </rect>
             </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
             </property>
             <property name="font">
              <font>
-              <family>Roboto Mono Medium</family>
-              <pointsize>14</pointsize>
-              <weight>50</weight>
-              <italic>false</italic>
-              <bold>false</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="cursor" stdset="0">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
             <property name="styleSheet">
-             <string notr="true">QTextBrowser {
-	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:14pt; font-weight:400;
-	color:black; 
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QSpinBox" name="spinBox_div">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>15</y>
+               <width>231</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox { background-color: white;border: 1px solid gray; border-radius:10px;
+				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
+
+QSpinBox::up-button { 
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_up4.png);
 }
 
-QTextBrowser:disabled {
-	background-color: rgba(240,240,240, 1.0);border: 1px solid gray; border-radius:10px;
-	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:14pt; font-weight:400;
-	color:black;
-}</string>
+QSpinBox::down-button {
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/resources/img/arrow_down4.png);
+ }
+
+QSpinBox::up-button:hover { 
+	image: url(:/main/resources/img/arrow_up4b.png);
+}
+
+QSpinBox::down-button:hover {
+	image: url(:/main/resources/img/arrow_down4b.png);
+ }
+
+QSpinBox:disabled { background-color: rgba(220,220,220, 1.0); border: 1px transparent; border-radius:10px;
+                                          border: 1px solid gray; border-radius:10px;
+                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
+
+QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
+
+QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
+</string>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::UpDownArrows</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string> ms/div</string>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>1000</number>
+             </property>
+             <property name="value">
+              <number>1000</number>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_5">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>25</y>
+               <width>31</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Div:</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_dial1_5">
+             <property name="geometry">
+              <rect>
+               <x>245</x>
+               <y>10</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="resources.qrc">:/main/resources/img/dial1.png</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QDial" name="dial_div">
+             <property name="geometry">
+              <rect>
+               <x>245</x>
+               <y>10</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="toolTip">
+              <string>CH1 vertical position</string>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>6000</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="notchTarget">
+              <double>30.000000000000000</double>
+             </property>
+             <property name="notchesVisible">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_h_16">
+            <property name="geometry">
+             <rect>
+              <x>320</x>
+              <y>90</y>
+              <width>120</width>
+              <height>55</height>
+             </rect>
             </property>
-            <property name="html">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QLabel" name="label_27">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>5</y>
+               <width>121</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Real Fs</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QTextBrowser" name="textBrowser_realFs">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>25</y>
+               <width>121</width>
+               <height>31</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Mono Light</family>
+               <pointsize>12</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="cursor" stdset="0">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser {
+	background-color:transparent; border: 0px;
+	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:12pt;
+	color:black; 
+}
+</string>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium','Roboto'; font-size:14pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;right&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Light','Roboto Mono Light'; font-weight:496;&quot;&gt;5000000.000 Hz&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Light','Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Light','Roboto Mono Light';&quot;&gt;156.14 kSps&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
            </widget>
+           <widget class="QGroupBox" name="groupBox_h_17">
+            <property name="geometry">
+             <rect>
+              <x>320</x>
+              <y>145</y>
+              <width>120</width>
+              <height>55</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QLabel" name="label_28">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>5</y>
+               <width>121</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>10</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Max Impedance</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+            <widget class="QTextBrowser" name="textBrowser_maxZ">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>25</y>
+               <width>121</width>
+               <height>31</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Mono Light</family>
+               <pointsize>12</pointsize>
+               <weight>50</weight>
+               <italic>false</italic>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="cursor" stdset="0">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser {
+	background-color:transparent; border: 0px;
+	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:12pt;
+	color:black; 
+}
+</string>
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Light','Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Light','Roboto Mono Light';&quot;&gt;425.65 kΩ&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </widget>
+           <zorder>groupBox_h_11</zorder>
+           <zorder>groupBox_h_12</zorder>
+           <zorder>groupBox_h_14</zorder>
+           <zorder>groupBox_h_16</zorder>
            <zorder>label_15</zorder>
-           <zorder>spinBox_fs</zorder>
-           <zorder>label_3</zorder>
-           <zorder>radioButton_fast</zorder>
-           <zorder>radioButton_precise</zorder>
-           <zorder>spinBox_mem</zorder>
-           <zorder>label_4</zorder>
-           <zorder>dial_Vpos_ch1_2</zorder>
-           <zorder>label_dial1_2</zorder>
-           <zorder>label_13</zorder>
-           <zorder>label_17</zorder>
-           <zorder>spinBox_fs_2</zorder>
-           <zorder>textBrowser_realFreq</zorder>
-           <zorder>label_5</zorder>
+           <zorder>groupBox_h_17</zorder>
           </widget>
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox_vertical">
            <property name="minimumSize">
             <size>
-             <width>400</width>
+             <width>452</width>
              <height>170</height>
             </size>
            </property>
@@ -3166,12 +4130,12 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <property name="title">
             <string/>
            </property>
-           <widget class="QLabel" name="label_14">
+           <widget class="QLabel" name="label_pins">
             <property name="geometry">
              <rect>
               <x>10</x>
               <y>10</y>
-              <width>61</width>
+              <width>211</width>
               <height>16</height>
              </rect>
             </property>
@@ -3191,9 +4155,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </property>
             <property name="geometry">
              <rect>
-              <x>10</x>
+              <x>16</x>
               <y>70</y>
-              <width>91</width>
+              <width>90</width>
               <height>30</height>
              </rect>
             </property>
@@ -3275,8 +4239,8 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
            <widget class="QPushButton" name="pushButton_enable1">
             <property name="geometry">
              <rect>
-              <x>10</x>
-              <y>30</y>
+              <x>16</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3338,8 +4302,8 @@ QPushButton:disabled {
             </property>
             <property name="geometry">
              <rect>
-              <x>10</x>
-              <y>30</y>
+              <x>16</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3401,8 +4365,8 @@ QPushButton:disabled {
             </property>
             <property name="geometry">
              <rect>
-              <x>110</x>
-              <y>30</y>
+              <x>126</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3465,8 +4429,8 @@ QPushButton:disabled {
             </property>
             <property name="geometry">
              <rect>
-              <x>210</x>
-              <y>30</y>
+              <x>236</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3529,8 +4493,8 @@ QPushButton:disabled {
             </property>
             <property name="geometry">
              <rect>
-              <x>310</x>
-              <y>30</y>
+              <x>346</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3590,8 +4554,8 @@ QPushButton:disabled {
            <widget class="QPushButton" name="pushButton_enable2">
             <property name="geometry">
              <rect>
-              <x>110</x>
-              <y>30</y>
+              <x>126</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3650,8 +4614,8 @@ QPushButton:disabled {
            <widget class="QPushButton" name="pushButton_enable3">
             <property name="geometry">
              <rect>
-              <x>210</x>
-              <y>30</y>
+              <x>236</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3710,8 +4674,8 @@ QPushButton:disabled {
            <widget class="QPushButton" name="pushButton_enable4">
             <property name="geometry">
              <rect>
-              <x>310</x>
-              <y>30</y>
+              <x>346</x>
+              <y>34</y>
               <width>90</width>
               <height>30</height>
              </rect>
@@ -3770,7 +4734,7 @@ QPushButton:disabled {
            <widget class="QLabel" name="label_dial1">
             <property name="geometry">
              <rect>
-              <x>30</x>
+              <x>36</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -3789,7 +4753,7 @@ QPushButton:disabled {
            <widget class="QDial" name="dial_Vpos_ch1">
             <property name="geometry">
              <rect>
-              <x>30</x>
+              <x>36</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -3826,7 +4790,7 @@ QPushButton:disabled {
            <widget class="QLabel" name="label_dial2">
             <property name="geometry">
              <rect>
-              <x>130</x>
+              <x>146</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -3845,7 +4809,7 @@ QPushButton:disabled {
            <widget class="QDial" name="dial_Vpos_ch2">
             <property name="geometry">
              <rect>
-              <x>130</x>
+              <x>146</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -3882,7 +4846,7 @@ QPushButton:disabled {
            <widget class="QDial" name="dial_Vpos_ch3">
             <property name="geometry">
              <rect>
-              <x>230</x>
+              <x>256</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -3919,7 +4883,7 @@ QPushButton:disabled {
            <widget class="QDial" name="dial_Vpos_ch4">
             <property name="geometry">
              <rect>
-              <x>330</x>
+              <x>366</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -3959,9 +4923,9 @@ QPushButton:disabled {
             </property>
             <property name="geometry">
              <rect>
-              <x>110</x>
+              <x>126</x>
               <y>70</y>
-              <width>91</width>
+              <width>90</width>
               <height>30</height>
              </rect>
             </property>
@@ -4046,9 +5010,9 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
             </property>
             <property name="geometry">
              <rect>
-              <x>210</x>
+              <x>236</x>
               <y>70</y>
-              <width>91</width>
+              <width>90</width>
               <height>30</height>
              </rect>
             </property>
@@ -4133,9 +5097,9 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
             </property>
             <property name="geometry">
              <rect>
-              <x>310</x>
+              <x>346</x>
               <y>70</y>
-              <width>91</width>
+              <width>90</width>
               <height>30</height>
              </rect>
             </property>
@@ -4217,7 +5181,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
            <widget class="QLabel" name="label_dial3">
             <property name="geometry">
              <rect>
-              <x>230</x>
+              <x>256</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -4236,7 +5200,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
            <widget class="QLabel" name="label_dial4">
             <property name="geometry">
              <rect>
-              <x>330</x>
+              <x>366</x>
               <y>105</y>
               <width>51</width>
               <height>50</height>
@@ -4252,12 +5216,12 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
              <bool>false</bool>
             </property>
            </widget>
-           <widget class="QGroupBox" name="groupBox_horizontal_3">
+           <widget class="QGroupBox" name="groupBox_v_3">
             <property name="geometry">
              <rect>
-              <x>5</x>
+              <x>10</x>
               <y>20</y>
-              <width>100</width>
+              <width>102</width>
               <height>141</height>
              </rect>
             </property>
@@ -4280,19 +5244,19 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
             </property>
             <property name="title">
              <string/>
             </property>
            </widget>
-           <widget class="QGroupBox" name="groupBox_horizontal_4">
+           <widget class="QGroupBox" name="groupBox_v_4">
             <property name="geometry">
              <rect>
-              <x>105</x>
+              <x>120</x>
               <y>20</y>
-              <width>100</width>
+              <width>102</width>
               <height>141</height>
              </rect>
             </property>
@@ -4315,19 +5279,19 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
             </property>
             <property name="title">
              <string/>
             </property>
            </widget>
-           <widget class="QGroupBox" name="groupBox_horizontal_5">
+           <widget class="QGroupBox" name="groupBox_v_5">
             <property name="geometry">
              <rect>
-              <x>205</x>
+              <x>230</x>
               <y>20</y>
-              <width>100</width>
+              <width>102</width>
               <height>141</height>
              </rect>
             </property>
@@ -4350,19 +5314,19 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
             </property>
             <property name="title">
              <string/>
             </property>
            </widget>
-           <widget class="QGroupBox" name="groupBox_horizontal_6">
+           <widget class="QGroupBox" name="groupBox_v_6">
             <property name="geometry">
              <rect>
-              <x>305</x>
+              <x>340</x>
               <y>20</y>
-              <width>100</width>
+              <width>102</width>
               <height>141</height>
              </rect>
             </property>
@@ -4385,21 +5349,21 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              </font>
             </property>
             <property name="styleSheet">
-             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
             </property>
             <property name="title">
              <string/>
             </property>
            </widget>
-           <zorder>groupBox_horizontal_3</zorder>
-           <zorder>groupBox_horizontal_4</zorder>
-           <zorder>groupBox_horizontal_5</zorder>
-           <zorder>groupBox_horizontal_6</zorder>
+           <zorder>groupBox_v_3</zorder>
+           <zorder>groupBox_v_4</zorder>
+           <zorder>groupBox_v_5</zorder>
+           <zorder>groupBox_v_6</zorder>
            <zorder>pushButton_enable3</zorder>
            <zorder>label_dial2</zorder>
            <zorder>label_dial4</zorder>
-           <zorder>label_14</zorder>
+           <zorder>label_pins</zorder>
            <zorder>label_dial3</zorder>
            <zorder>pushButton_enable4</zorder>
            <zorder>label_dial1</zorder>
@@ -4424,13 +5388,13 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <property name="minimumSize">
             <size>
              <width>410</width>
-             <height>100</height>
+             <height>95</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>100</height>
+             <height>95</height>
             </size>
            </property>
            <property name="font">
@@ -4465,12 +5429,12 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <string>Utils:</string>
             </property>
            </widget>
-           <widget class="QPushButton" name="pushButton_average">
+           <widget class="QPushButton" name="pushButton_average_off">
             <property name="geometry">
              <rect>
-              <x>10</x>
-              <y>30</y>
-              <width>121</width>
+              <x>20</x>
+              <y>35</y>
+              <width>85</width>
               <height>41</height>
              </rect>
             </property>
@@ -4487,6 +5451,8 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
 	border-radius: 5px;
 	color: black;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:11px;
 }
 
 QPushButton:hover:!pressed {
@@ -4519,120 +5485,12 @@ QPushButton:disabled {
              </size>
             </property>
            </widget>
-           <widget class="QPushButton" name="pushButton_bit8">
-            <property name="geometry">
-             <rect>
-              <x>270</x>
-              <y>30</y>
-              <width>61</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>8 bit</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_bit12">
-            <property name="geometry">
-             <rect>
-              <x>340</x>
-              <y>30</y>
-              <width>61</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
-	padding: 0.2em 0.2em 0.3em 0.2em;
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
-}
-
-QPushButton:hover:!pressed {
-	border: 1px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
-}
-
-QPushButton:pressed {
-	border: 2px solid rgb(150, 150, 150);
-	border-radius: 5px;
-	background: #FFFFFF;
-	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
-            </property>
-            <property name="text">
-             <string>12 bit</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
            <widget class="QSpinBox" name="spinBox_average">
             <property name="geometry">
              <rect>
-              <x>150</x>
-              <y>30</y>
-              <width>111</width>
+              <x>115</x>
+              <y>35</y>
+              <width>85</width>
               <height>41</height>
              </rect>
             </property>
@@ -4698,16 +5556,530 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
             <property name="maximum">
              <number>100</number>
             </property>
+            <property name="singleStep">
+             <number>0</number>
+            </property>
             <property name="value">
-             <number>100</number>
+             <number>10</number>
             </property>
            </widget>
+           <widget class="QGroupBox" name="groupBox_u_8">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>20</y>
+              <width>201</width>
+              <height>65</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="pushButton_average_on">
+            <property name="geometry">
+             <rect>
+              <x>20</x>
+              <y>35</y>
+              <width>85</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	text-align:left;
+	padding-left:11px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+            </property>
+            <property name="text">
+             <string>Average</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>23</width>
+              <height>22</height>
+             </size>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="pushButton_bit12_on">
+            <property name="geometry">
+             <rect>
+              <x>290</x>
+              <y>35</y>
+              <width>61</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	text-align:left;
+	padding-left:8px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+            </property>
+            <property name="text">
+             <string>12 bit</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>23</width>
+              <height>22</height>
+             </size>
+            </property>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_u_9">
+            <property name="geometry">
+             <rect>
+              <x>370</x>
+              <y>20</y>
+              <width>71</width>
+              <height>65</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QPushButton" name="pushButton_fft_on">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>15</y>
+               <width>51</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	text-align:left;
+	padding-left:11px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+             </property>
+             <property name="text">
+              <string>FFT</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_fft_off">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>15</y>
+               <width>51</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:11px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+             </property>
+             <property name="text">
+              <string>FFT</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+           </widget>
+           <widget class="QPushButton" name="pushButton_bit12_off">
+            <property name="geometry">
+             <rect>
+              <x>290</x>
+              <y>35</y>
+              <width>61</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:8px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+            </property>
+            <property name="text">
+             <string>12 bit</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>23</width>
+              <height>22</height>
+             </size>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="pushButton_bit8_off">
+            <property name="geometry">
+             <rect>
+              <x>230</x>
+              <y>35</y>
+              <width>51</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	text-align:left;
+	padding-left:8px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+            </property>
+            <property name="text">
+             <string>8 bit</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>23</width>
+              <height>22</height>
+             </size>
+            </property>
+           </widget>
+           <widget class="QPushButton" name="pushButton_bit8_on">
+            <property name="geometry">
+             <rect>
+              <x>230</x>
+              <y>35</y>
+              <width>51</width>
+              <height>41</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto</family>
+              <pointsize>13</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+	padding: 0.2em 0.2em 0.3em 0.2em;
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: black;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #69D769);
+	text-align:left;
+	padding-left:8px;
+}
+
+QPushButton:hover:!pressed {
+	border: 1px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	color: #256552;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #ACFAAC);
+}
+
+QPushButton:pressed {
+	border: 2px solid rgb(150, 150, 150);
+	border-radius: 5px;
+	background: #FFFFFF;
+	color: #2f836a;
+}
+
+QPushButton:disabled {
+	border: 1px solid rgb(180, 180, 180);
+	color: gray;
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
+}</string>
+            </property>
+            <property name="text">
+             <string>8 bit</string>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>23</width>
+              <height>22</height>
+             </size>
+            </property>
+           </widget>
+           <widget class="QGroupBox" name="groupBox_u_7">
+            <property name="geometry">
+             <rect>
+              <x>220</x>
+              <y>20</y>
+              <width>141</width>
+              <height>65</height>
+             </rect>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>10000</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+           </widget>
+           <zorder>label_23</zorder>
+           <zorder>groupBox_u_8</zorder>
+           <zorder>spinBox_average</zorder>
+           <zorder>pushButton_average_on</zorder>
+           <zorder>groupBox_u_9</zorder>
+           <zorder>groupBox_u_7</zorder>
+           <zorder>pushButton_bit12_off</zorder>
+           <zorder>pushButton_bit8_on</zorder>
+           <zorder>pushButton_bit12_on</zorder>
+           <zorder>pushButton_bit8_off</zorder>
+           <zorder>pushButton_average_off</zorder>
           </widget>
          </item>
          <item>
           <spacer name="verticalSpacer_4">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
            </property>
            <property name="sizeHint" stdset="0">
             <size>
@@ -4729,7 +6101,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1257</width>
+     <width>1297</width>
      <height>22</height>
     </rect>
    </property>
@@ -4858,22 +6230,10 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
     <addaction name="actionMath_1_2"/>
     <addaction name="actionMath_3_4"/>
    </widget>
-   <widget class="QMenu" name="menuFFT">
-    <property name="font">
-     <font>
-      <family>Roboto</family>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="title">
-     <string>FFT</string>
-    </property>
-   </widget>
    <addaction name="menuExport"/>
    <addaction name="menuView"/>
    <addaction name="menuMeasure"/>
    <addaction name="menuMath"/>
-   <addaction name="menuFFT"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
@@ -5223,6 +6583,20 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
    </property>
    <property name="text">
     <string>Show Plot</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTEnabled">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enabled</string>
    </property>
    <property name="font">
     <font>

@@ -15,6 +15,9 @@
 #include <QMainWindow>
 #include <QLabel>
 
+
+#define TIMER_SCOPE_PLOT           16.6    // graph refresh rate = 16.6 ms = 60 FPS
+
 #define GRAPH_CH1       0
 #define GRAPH_CH2       1
 #define GRAPH_CH3       2
@@ -58,6 +61,9 @@ private slots:
 
      /* async ready msg */
     void on_msg_daqReady(Ready ready, int firstPos);
+
+    /* timer slots */
+    void on_timer_plot();
 
     /* GUI slots - Menu - Help */
     void on_actionAbout_triggered();
@@ -105,18 +111,27 @@ private:
     void initQcp();
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
+
     void rescaleXAxis();
     void rescaleYAxis();
+    void createX();
 
+    void updatePanel();
+    void enablePanel(bool en);
+
+    /* main window */
     Ui::WindowScope* m_ui;
 
-    QCPRange m_old_range;
+    /* timers */
+    QTimer* m_timer_plot;
 
+    /* async ready data */
     int m_firstPos;
+    Ready m_ready;
 
-    double m_t_last = 0;
-
+    /* X time axis */
     QSharedPointer<QCPAxisTickerTime> m_timeTicker;
+    QVector<double> m_t;
 
     /* status bar */
     QLabel* m_status_vcc;
@@ -171,7 +186,7 @@ private:
     /* recorder */
     Recorder m_rec;
 
-    /* data */
+    /* DAQ data */
     DaqSettings m_daqSet;
 
     /* messages */

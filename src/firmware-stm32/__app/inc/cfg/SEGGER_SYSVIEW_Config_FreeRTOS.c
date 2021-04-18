@@ -54,6 +54,7 @@ Revision: $Rev: 7745 $
 #include "FreeRTOS.h"
 #include "SEGGER_SYSVIEW.h"
 #include "cfg.h"
+#include "app_sync.h"
 
 extern const SEGGER_SYSVIEW_OS_API SYSVIEW_X_OS_TraceAPI;
 
@@ -76,7 +77,7 @@ extern const SEGGER_SYSVIEW_OS_API SYSVIEW_X_OS_TraceAPI;
 #define SYSVIEW_CPU_FREQ        configCPU_CLOCK_HZ
 
 // The lowest RAM address used for IDs (pointers)
-#define SYSVIEW_RAM_BASE        (0x10000000)
+#define SYSVIEW_RAM_BASE        (0x20000000)
 
 /********************************************************************* 
 *
@@ -89,10 +90,16 @@ static void _cbSendSystemDesc(void) {
   SEGGER_SYSVIEW_SendSysDesc("N="SYSVIEW_APP_NAME",D="SYSVIEW_DEVICE_NAME",O=FreeRTOS");
 
 #ifdef EM_F103C8
-  SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick,I#23=LA 1,I#24=LA 2,I#25=LA 3,I#26=LA 4,I#34=ADC,I#36=USB,I#53=UART,I#41=Cntr");
+  //SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick,I#23=LA 1,I#24=LA 2,I#25=LA 3,I#26=LA 4,I#34=ADC,I#36=USB,I#53=UART,I#41=Cntr");
+  SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick,I#23=LA CH1,I#34=ADC12,I#36=USB,I#53=UART1,I#41=Cntr");
 #else
   SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick");
 #endif
+
+  SEGGER_SYSVIEW_NameResource((U32)&buff_sem1_comm, "sem1 comm");
+  SEGGER_SYSVIEW_NameResource((U32)&buff_sem2_trig, "sem2 trig");
+  SEGGER_SYSVIEW_NameResource((U32)&buff_sem3_cntr, "sem3 cntr");
+  SEGGER_SYSVIEW_NameResource((U32)&buff_mtx1, "mtx1");
 }
 
 /*********************************************************************

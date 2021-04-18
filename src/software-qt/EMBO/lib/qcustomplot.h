@@ -1662,7 +1662,8 @@ public:
     
     \see setFieldWidth, setTimeFormat
   */
-  enum TimeUnit { tuMilliseconds ///< Milliseconds, one thousandth of a second (%%z in \ref setTimeFormat)
+  enum TimeUnit { tuMicroseconds ///< Microseconds, one thousandth of a milisecond
+                  ,tuMilliseconds ///< Milliseconds, one thousandth of a second (%%z in \ref setTimeFormat)
                   ,tuSeconds     ///< Seconds (%%s in \ref setTimeFormat)
                   ,tuMinutes     ///< Minutes (%%m in \ref setTimeFormat)
                   ,tuHours       ///< Hours (%%h in \ref setTimeFormat)

@@ -224,7 +224,7 @@ void WindowVm::initQcp()
     connect(m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged, this, &WindowVm::on_cursorH_valuesChanged);
     connect(m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged, this, &WindowVm::on_cursorV_valuesChanged);
 
-    m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursors = new QCPCursors(this, m_ui->customPlot, NULL, false, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
 }
 
 WindowVm::~WindowVm()

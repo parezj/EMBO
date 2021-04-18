@@ -120,7 +120,7 @@
 
 #define CSS_RADIOBUTTON        "QRadioButton:checked { background-color: rgba(245,245,245, 1.0); border: 0px; border-radius:5px; } \
                                 QRadioButton:hover { background-color: rgba(230,230,230, 1.0); border: 0px; border-radius:5px; } \
-                                QRadioButton:checked:hover { background-color: rgba(245,245,245, 1.0); border: 0px; border-radius:5px; } \
+                                QRadioButton:checked:hover { background-color: rgba(245,245,245, 0.7); border: 0px; border-radius:5px; } \
                                 QRadioButton::indicator { width: 20px; height: 20px; } \
                                 QRadioButton::indicator:unchecked { image: url(:/main/resources/img/radio_off1.png); } \
                                 QRadioButton::indicator:unchecked:hover { image: url(:/main/resources/img/radio_off1.png); } \

@@ -64,22 +64,24 @@ private:
     void sendSet(bool en1, bool en2);
     QString formatFreq(QString freq);
 
-    QLabel* m_status_enabled;
-
-    QButtonGroup m_mode;
-
-    bool m_ignoreValuesChanged = false;
-
-    bool m_ch1_enabled = false;
-    bool m_ch2_enabled = false;
-
-    bool m_ch1_wantSwitch = false;
-    bool m_ch2_wantSwitch = false;
-
+    /* main window */
     Ui::WindowPwm* m_ui;
 
     /* messages */
     Msg_PWM_Set* m_msg_set;
+
+    /* status bar */
+    QLabel* m_status_enabled;
+
+    /* helpers */
+    QButtonGroup m_mode;
+    bool m_ignoreValuesChanged = false;
+    bool m_ch1_wantSwitch = false;
+    bool m_ch2_wantSwitch = false;
+
+    /* data */
+    bool m_ch1_enabled = false;
+    bool m_ch2_enabled = false;
 };
 
 #endif // WINDOW_PWM_H

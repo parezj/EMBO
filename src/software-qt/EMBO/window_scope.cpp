@@ -24,6 +24,9 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
 {
     m_ui->setupUi(this);
 
+    m_timer_plot = new QTimer(this);
+    m_timer_plot->setTimerType(Qt::PreciseTimer);
+
     m_msg_set = new Msg_SCOP_Set(this);
     m_msg_read = new Msg_SCOP_Read(this);
     m_msg_forceTrig = new Msg_SCOP_ForceTrig(this);
@@ -39,6 +42,8 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     connect(m_msg_forceTrig, &Msg_SCOP_ForceTrig::err, this, &WindowScope::on_msg_err, Qt::QueuedConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowScope::on_msg_daqReady, Qt::QueuedConnection);
+
+    connect(m_timer_plot, &QTimer::timeout, this, &WindowScope::on_timer_plot);
 
     /* QCP */
 
@@ -112,9 +117,10 @@ void WindowScope::initQcp()
     m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,30));
 
     m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
-    m_timeTicker->setTimeFormat("%s s");
+    m_timeTicker->setTimeFormat("%z ms");
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuSeconds, 1);
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMilliseconds, 1);
+    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMicroseconds, 1);
     m_ui->customPlot->xAxis->setTicker(m_timeTicker);
     //m_ui->customPlot->xAxis2->setTicker(timeTicker);
     m_ui->customPlot->axisRect()->setupFullAxesBox();
@@ -149,9 +155,9 @@ void WindowScope::initQcp()
     connect(m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged, this, &WindowScope::on_cursorH_valuesChanged);
     connect(m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged, this, &WindowScope::on_cursorV_valuesChanged);
 
-    m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
-    m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, true);
-    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, false);
+    m_cursors = new QCPCursors(this, m_ui->customPlot, NULL, false, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, NULL, true, false);
+    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, NULL, false, false);
 }
 
 WindowScope::~WindowScope()
@@ -162,6 +168,21 @@ WindowScope::~WindowScope()
 void WindowScope::on_actionAbout_triggered()
 {
     QMessageBox::about(this, EMBO_TITLE, EMBO_ABOUT_TXT);
+}
+
+/********************************* timer slots *********************************/
+
+void WindowScope::on_timer_plot() // 60 FPS
+{
+    if (m_cursorsV_en || m_cursorsH_en)
+    {
+        auto rngV = m_ui->customPlot->yAxis->range();
+        auto rngH = m_ui->customPlot->xAxis->range();
+
+        m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    }
+
+    m_ui->customPlot->replot();
 }
 
 /******************************** MSG slots ********************************/
@@ -180,6 +201,8 @@ void WindowScope::on_msg_ok_set(const QString maxZ, const QString fs_real)
 {
     m_daqSet.maxZ_kohm = maxZ.toDouble();
     m_daqSet.fs_real = fs_real.toDouble();
+
+    updatePanel();
 }
 
 void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
@@ -200,10 +223,7 @@ void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, 
     m_daqSet.maxZ_kohm = maxZ;
     m_daqSet.fs_real = fs_real;
 
-    m_ui->customPlot->graph(GRAPH_CH1)->setVisible(ch1);
-    m_ui->customPlot->graph(GRAPH_CH2)->setVisible(ch2);
-    m_ui->customPlot->graph(GRAPH_CH3)->setVisible(ch3);
-    m_ui->customPlot->graph(GRAPH_CH4)->setVisible(ch4);
+    updatePanel();
 }
 
 void WindowScope::on_msg_read(const QByteArray data)
@@ -356,46 +376,22 @@ void WindowScope::on_msg_read(const QByteArray data)
         return;
     }
 
-    double x = 0;
-    double dt = 1.0 / m_daqSet.fs_real;
-    QVector<double> t(m_daqSet.mem); // TODO move somewhere ELSE !
-    for (int i = 0; i < m_daqSet.mem; i++)
-    {
-        t[i] = x;
-        x += dt;
-    }
-
-    m_t_last = t[t.size()-1];
-
-    if (m_t_last < 1)
-        m_timeTicker->setTimeFormat("%z ms");
+    assert(!m_t.isEmpty());
 
     if (m_daqSet.ch1_en)
-        m_ui->customPlot->graph(GRAPH_CH1)->setData(t, y1);
+        m_ui->customPlot->graph(GRAPH_CH1)->setData(m_t, y1);
     if (m_daqSet.ch2_en)
-        m_ui->customPlot->graph(GRAPH_CH2)->setData(t, y2);
+        m_ui->customPlot->graph(GRAPH_CH2)->setData(m_t, y2);
     if (m_daqSet.ch3_en)
-        m_ui->customPlot->graph(GRAPH_CH3)->setData(t, y3);
+        m_ui->customPlot->graph(GRAPH_CH3)->setData(m_t, y3);
     if (m_daqSet.ch4_en)
-        m_ui->customPlot->graph(GRAPH_CH4)->setData(t, y4);
-
-    rescaleXAxis();
-    rescaleYAxis();
-
-    if (m_cursorsV_en || m_cursorsH_en)
-    {
-        auto rngV = m_ui->customPlot->yAxis->range();
-        auto rngH = m_ui->customPlot->xAxis->range();
-
-        m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
-    }
-
-    m_ui->customPlot->replot();  // TODO in timer
+        m_ui->customPlot->graph(GRAPH_CH4)->setData(m_t, y4);
 }
 
 void WindowScope::on_msg_daqReady(Ready ready, int firstPos)
 {
     m_firstPos = firstPos;
+    m_ready = ready;
 
     if (m_instrEnabled)
         Core::getInstance()->msgAdd(m_msg_read, true);
@@ -843,6 +839,8 @@ void WindowScope::closeEvent(QCloseEvent*)
 
     Core::getInstance()->setMode(NO_MODE);
     emit closing(WindowScope::staticMetaObject.className());
+
+     m_timer_plot->stop();
 }
 
 void WindowScope::showEvent(QShowEvent*)
@@ -855,7 +853,28 @@ void WindowScope::showEvent(QShowEvent*)
     m_ref_v = info->ref_mv / 1000.0;
     m_status_vcc->setText(" Vcc: " + QString::number(info->ref_mv) + " mV");
 
+    QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+
+    if (pins.size() == 4)
+    {
+        m_pin1 = pins[0].trimmed();
+        m_pin2 = pins[1].trimmed();
+        m_pin3 = pins[2].trimmed();
+        m_pin4 = pins[3].trimmed();
+
+        //m_ui->label_pins->setText("Vertical (" + m_pin1 + ", " + m_pin2 + ", " + m_pin3 + ", " + m_pin4 + ")");
+    }
+
     Core::getInstance()->msgAdd(m_msg_set, true, "");
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    on_actionMeasReset_triggered();
+
+    m_timer_plot->start((int)TIMER_SCOPE_PLOT);
 }
 
 void WindowScope::rescaleYAxis()
@@ -876,5 +895,45 @@ void WindowScope::rescaleYAxis()
 
 void WindowScope::rescaleXAxis()
 {
-    m_ui->customPlot->xAxis->setRange(0, m_t_last);
+    assert(!m_t.isEmpty());
+    m_ui->customPlot->xAxis->setRange(0, m_t[m_t.size()-1]);
+}
+
+void WindowScope::createX()
+{
+    double x = 0;
+    double dt = 1.0 / m_daqSet.fs_real;
+    m_t.resize(m_daqSet.mem);
+
+    for (int i = 0; i < m_daqSet.mem; i++)
+    {
+        m_t[i] = x;
+        x += dt;
+    }
+
+    if (x >= 1)
+        m_timeTicker->setTimeFormat("%s s");
+    else if (x >= 0.001)
+        m_timeTicker->setTimeFormat("%z ms");
+    else
+        m_timeTicker->setTimeFormat("%u μs");
+}
+
+void WindowScope::updatePanel()
+{
+    createX();
+    rescaleXAxis();
+    rescaleYAxis();
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setVisible(m_daqSet.ch1_en);
+    m_ui->customPlot->graph(GRAPH_CH2)->setVisible(m_daqSet.ch2_en);
+    m_ui->customPlot->graph(GRAPH_CH3)->setVisible(m_daqSet.ch3_en);
+    m_ui->customPlot->graph(GRAPH_CH4)->setVisible(m_daqSet.ch4_en);
+
+    enablePanel(true);
+}
+
+void WindowScope::enablePanel(bool en)
+{
+
 }

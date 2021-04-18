@@ -52,11 +52,6 @@ StaticTask_t buff_t3;
 StaticTask_t buff_t4;
 StaticTask_t buff_t5;
 
-StaticSemaphore_t buff_sem1_comm; // comm respond init
-StaticSemaphore_t buff_sem2_trig; // post trig count init
-StaticSemaphore_t buff_sem3_cntr; // counter enable
-StaticSemaphore_t buff_mtx1;      // mutex for comm and trig
-
 volatile uint8_t init_done = 0;   // system initialized
 
 #ifdef EM_DEBUG

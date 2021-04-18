@@ -588,6 +588,19 @@ QPushButton:disabled {
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="label_pins">
+           <property name="font">
+            <font>
+             <family>Roboto Medium</family>
+             <pointsize>11</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Vertical (A1, A2, A3, A4)</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="verticalSpacer_4">
            <property name="orientation">
             <enum>Qt::Vertical</enum>

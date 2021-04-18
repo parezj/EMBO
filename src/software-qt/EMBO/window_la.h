@@ -16,6 +16,8 @@
 #include <QLabel>
 
 
+#define TIMER_LA_PLOT           16.6    // graph refresh rate = 16.6 ms = 60 FPS
+
 #define GRAPH_CH1       0
 #define GRAPH_CH2       1
 #define GRAPH_CH3       2
@@ -59,6 +61,9 @@ private slots:
      /* async ready msg */
     void on_msg_daqReady(Ready ready, int firstPos);
 
+    /* timer slots */
+    void on_timer_plot();
+
     /* GUI slots - Menu - Help */
     void on_actionAbout_triggered();
 
@@ -101,17 +106,29 @@ private:
     void initQcp();
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
+
     void rescaleXAxis();
     void rescaleYAxis();
+    void createX();
 
+    void updatePanel();
+    void enablePanel(bool en);
+
+    /* main window */
     Ui::WindowLa* m_ui;
 
+    /* timers */
+    QTimer* m_timer_plot;
+
+    /* async ready data */
     int m_firstPos;
+    Ready m_ready;
 
+    /* X time axis vars */
     QSharedPointer<QCPAxisTickerTime> m_timeTicker;
+    QVector<double> m_t;
 
-    double m_t_last = 0;
-
+    /* QCP axis */
     QCPAxisRect* m_axis_ch1;
     QCPAxisRect* m_axis_ch2;
     QCPAxisRect* m_axis_ch3;
@@ -136,8 +153,10 @@ private:
     bool m_en4 = true;
 
     /* cursors */
-    QCPCursors* m_cursors;
-    QCPCursor* m_cursorTrigVal;
+    QCPCursors* m_cursors1;
+    QCPCursors* m_cursors2;
+    QCPCursors* m_cursors3;
+    QCPCursors* m_cursors4;
     QCPCursor* m_cursorTrigPre;
     double m_cursorV_min = CURSOR_DEFAULT_V_MIN;
     double m_cursorV_max = CURSOR_DEFAULT_V_MAX;
@@ -171,7 +190,7 @@ private:
     /* recorder */
     Recorder m_rec;
 
-    /* data */
+    /* DAQ data */
     DaqSettings m_daqSet;
 
     /* messages */

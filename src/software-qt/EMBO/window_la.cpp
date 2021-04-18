@@ -20,6 +20,9 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
 {
     m_ui->setupUi(this);
 
+    m_timer_plot = new QTimer(this);
+    m_timer_plot->setTimerType(Qt::PreciseTimer);
+
     m_msg_set = new Msg_LA_Set(this);
     m_msg_read = new Msg_LA_Read(this);
     m_msg_forceTrig = new Msg_LA_ForceTrig(this);
@@ -35,6 +38,8 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::QueuedConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowLa::on_msg_daqReady, Qt::QueuedConnection);
+
+    connect(m_timer_plot, &QTimer::timeout, this, &WindowLa::on_timer_plot);
 
     /* QCP */
 
@@ -102,9 +107,9 @@ void WindowLa::initQcp()
     m_axis_ch4->setupFullAxesBox();
 
     m_axis_ch1->setMinimumMargins(QMargins(25,15,15,0)); // TODO need dynamic
-    m_axis_ch2->setMinimumMargins(QMargins(25,5,15,0));
-    m_axis_ch3->setMinimumMargins(QMargins(25,5,15,0));
-    m_axis_ch4->setMinimumMargins(QMargins(25,5,15,30));
+    m_axis_ch2->setMinimumMargins(QMargins(25,1,15,0));
+    m_axis_ch3->setMinimumMargins(QMargins(25,1,15,0));
+    m_axis_ch4->setMinimumMargins(QMargins(25,1,15,30));
 
     m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
     m_timeTicker->setTimeFormat("%s s");
@@ -218,9 +223,11 @@ void WindowLa::initQcp()
 
     connect(m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged, this, &WindowLa::on_cursorH_valuesChanged);
 
-    m_cursors = new QCPCursors(this, m_ui->customPlot, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
-    m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, true);
-    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, false);
+    m_cursors1 = new QCPCursors(this, m_ui->customPlot, m_axis_ch1, true, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursors2 = new QCPCursors(this, m_ui->customPlot, m_axis_ch2, true, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursors3 = new QCPCursors(this, m_ui->customPlot, m_axis_ch3, true, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursors4 = new QCPCursors(this, m_ui->customPlot, m_axis_ch4, true, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, m_axis_ch4, false, false);
 }
 
 WindowLa::~WindowLa()
@@ -231,6 +238,24 @@ WindowLa::~WindowLa()
 void WindowLa::on_actionAbout_triggered()
 {
     QMessageBox::about(this, EMBO_TITLE, EMBO_ABOUT_TXT);
+}
+
+/********************************* timer slots *********************************/
+
+void WindowLa::on_timer_plot() // 60 FPS
+{
+    if (m_cursorsV_en || m_cursorsH_en)
+    {
+        auto rngV = m_ui->customPlot->yAxis->range();
+        auto rngH = m_ui->customPlot->xAxis->range();
+
+        m_cursors1->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+        m_cursors2->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+        m_cursors3->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+        m_cursors4->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    }
+
+    m_ui->customPlot->replot();
 }
 
 /********************************* MSG slots *********************************/
@@ -248,6 +273,8 @@ void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
 void WindowLa::on_msg_ok_set(const QString fs_real, const QString)
 {
     m_daqSet.fs_real = fs_real.toDouble();
+
+    updatePanel();
 }
 
 void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real)
@@ -266,29 +293,12 @@ void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, D
     m_daqSet.trig_pre = trig_pre;
     m_daqSet.maxZ_kohm = 0;
     m_daqSet.fs_real = fs_real;
+
+    updatePanel();
 }
 
 void WindowLa::on_msg_read(const QByteArray data)
 {
-    m_axis_ch1->setVisible(m_daqSet.ch1_en);
-    m_axis_ch2->setVisible(m_daqSet.ch2_en);
-    m_axis_ch3->setVisible(m_daqSet.ch3_en);
-    m_axis_ch4->setVisible(m_daqSet.ch4_en);
-
-    m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabels(false);
-    m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabels(false);
-    m_axis_ch3->axis(QCPAxis::atBottom)->setTickLabels(false);
-    m_axis_ch4->axis(QCPAxis::atBottom)->setTickLabels(false);
-
-    if (m_daqSet.ch4_en)
-        m_axis_ch4->axis(QCPAxis::atBottom)->setTickLabels(true);
-    else if (m_daqSet.ch3_en)
-        m_axis_ch3->axis(QCPAxis::atBottom)->setTickLabels(true);
-    else if (m_daqSet.ch2_en)
-        m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabels(true);
-    else if (m_daqSet.ch1_en)
-        m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabels(true);
-
     auto info = Core::getInstance()->getDevInfo();
     int data_sz = data.size();
 
@@ -321,42 +331,18 @@ void WindowLa::on_msg_read(const QByteArray data)
         y4[k] = ch4 ? 1.0 : 0.0;
     }
 
-    double x = 0;
-    double dt = 1.0 / m_daqSet.fs_real;
-    QVector<double> t(m_daqSet.mem); // TODO move somewhere ELSE !
-    for (int i = 0; i < m_daqSet.mem; i++)
-    {
-        t[i] = x;
-        x += dt;
-    }
+    assert(!m_t.isEmpty());
 
-    m_t_last = t[t.size()-1];
-
-    if (m_t_last < 1)
-        m_timeTicker->setTimeFormat("%z ms");
-
-    m_ui->customPlot->graph(GRAPH_CH1)->setData(t, y1);
-    m_ui->customPlot->graph(GRAPH_CH2)->setData(t, y2);
-    m_ui->customPlot->graph(GRAPH_CH3)->setData(t, y3);
-    m_ui->customPlot->graph(GRAPH_CH4)->setData(t, y4);
-
-    rescaleXAxis();
-    rescaleYAxis();
-
-    if (m_cursorsV_en || m_cursorsH_en)
-    {
-        auto rngV = m_ui->customPlot->yAxis->range();
-        auto rngH = m_ui->customPlot->xAxis->range();
-
-        m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
-    }
-
-    m_ui->customPlot->replot();
+    m_ui->customPlot->graph(GRAPH_CH1)->setData(m_t, y1);
+    m_ui->customPlot->graph(GRAPH_CH2)->setData(m_t, y2);
+    m_ui->customPlot->graph(GRAPH_CH3)->setData(m_t, y3);
+    m_ui->customPlot->graph(GRAPH_CH4)->setData(m_t, y4);
 }
 
 void WindowLa::on_msg_daqReady(Ready ready, int firstPos)
 {
     m_firstPos = firstPos;
+    m_ready = ready;
 
     if (m_instrEnabled)
         Core::getInstance()->msgAdd(m_msg_read, true);
@@ -676,7 +662,11 @@ void WindowLa::on_pushButton_cursorsHoff_clicked()
     m_ui->pushButton_cursorsHon->show();
     m_ui->pushButton_cursorsHoff->hide();
 
-    m_cursors->showH(false);
+    m_cursors1->showH(false);
+    m_cursors2->showH(false);
+    m_cursors3->showH(false);
+    m_cursors4->showH(false);
+
     m_cursorsH_en = false;
 }
 
@@ -691,12 +681,25 @@ void WindowLa::on_pushButton_cursorsHon_clicked()
     auto rngH = m_ui->customPlot->xAxis->range();
     auto rngV = m_ui->customPlot->yAxis->range();
 
-    m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursors1->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursors2->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursors3->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursors4->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 
-    m_cursors->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
-    m_cursors->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+    m_cursors1->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
+    m_cursors1->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+    m_cursors2->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
+    m_cursors2->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+    m_cursors3->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
+    m_cursors3->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
+    m_cursors4->setH_min(m_cursorH_min, rngH.lower, rngH.upper);
+    m_cursors4->setH_max(m_cursorH_max, rngH.lower, rngH.upper);
 
-    m_cursors->showH(true);
+    m_cursors1->showH(true);
+    m_cursors2->showH(true);
+    m_cursors3->showH(true);
+    m_cursors4->showH(true);
+
     m_cursorsH_en = true;
 }
 
@@ -708,8 +711,14 @@ void WindowLa::on_cursorH_valuesChanged(int min, int max)
     auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
     //auto rng = m_ui->customPlot->xAxis->range();
 
-    m_cursors->setH_min(m_cursorH_min, rng.lower, rng.upper);
-    m_cursors->setH_max(m_cursorH_max, rng.lower, rng.upper);
+    m_cursors1->setH_min(m_cursorH_min, rng.lower, rng.upper);
+    m_cursors1->setH_max(m_cursorH_max, rng.lower, rng.upper);
+    m_cursors2->setH_min(m_cursorH_min, rng.lower, rng.upper);
+    m_cursors2->setH_max(m_cursorH_max, rng.lower, rng.upper);
+    m_cursors3->setH_min(m_cursorH_min, rng.lower, rng.upper);
+    m_cursors3->setH_max(m_cursorH_max, rng.lower, rng.upper);
+    m_cursors4->setH_min(m_cursorH_min, rng.lower, rng.upper);
+    m_cursors4->setH_max(m_cursorH_max, rng.lower, rng.upper);
 }
 
 /********** QCP **********/
@@ -744,6 +753,8 @@ void WindowLa::closeEvent(QCloseEvent*)
 
     Core::getInstance()->setMode(NO_MODE);
     emit closing(WindowLa::staticMetaObject.className());
+
+     m_timer_plot->stop();
 }
 
 void WindowLa::showEvent(QShowEvent*)
@@ -756,7 +767,28 @@ void WindowLa::showEvent(QShowEvent*)
     m_ref_v = info->ref_mv / 1000.0;
     m_status_vcc->setText(" Vcc: " + QString::number(info->ref_mv) + " mV");
 
+    QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+
+    if (pins.size() == 4)
+    {
+        m_pin1 = pins[0].trimmed();
+        m_pin2 = pins[1].trimmed();
+        m_pin3 = pins[2].trimmed();
+        m_pin4 = pins[3].trimmed();
+
+        //m_ui->label_pins->setText("Vertical (" + m_pin1 + ", " + m_pin2 + ", " + m_pin3 + ", " + m_pin4 + ")");
+    }
+
     Core::getInstance()->msgAdd(m_msg_set, true, "");
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    on_actionMeasReset_triggered();
+
+    m_timer_plot->start((int)TIMER_LA_PLOT);
 }
 
 void WindowLa::rescaleYAxis()
@@ -769,8 +801,106 @@ void WindowLa::rescaleYAxis()
 
 void WindowLa::rescaleXAxis()
 {
-    m_axis_ch1->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
+    assert(!m_t.isEmpty());
+    m_axis_ch1->axis(QCPAxis::atBottom)->setRange(0, m_t[m_t.size()-1]);
     //m_axis_ch2->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
     //m_axis_ch3->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
     //m_axis_ch4->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
+}
+
+void WindowLa::createX()
+{
+    double x = 0;
+    double dt = 1.0 / m_daqSet.fs_real;
+    m_t.resize(m_daqSet.mem);
+
+    for (int i = 0; i < m_daqSet.mem; i++)
+    {
+        m_t[i] = x;
+        x += dt;
+    }
+
+    if (x >= 1)
+        m_timeTicker->setTimeFormat("%s s");
+    else if (x >= 0.001)
+        m_timeTicker->setTimeFormat("%z ms");
+    else
+        m_timeTicker->setTimeFormat("%u μs");
+}
+
+void WindowLa::updatePanel()
+{
+    createX();
+    rescaleXAxis();
+    rescaleYAxis();
+
+    m_axis_ch1->setVisible(m_daqSet.ch1_en);
+    m_axis_ch2->setVisible(m_daqSet.ch2_en);
+    m_axis_ch3->setVisible(m_daqSet.ch3_en);
+    m_axis_ch4->setVisible(m_daqSet.ch4_en);
+
+    m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabels(false);
+    m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabels(false);
+    m_axis_ch3->axis(QCPAxis::atBottom)->setTickLabels(false);
+    m_axis_ch4->axis(QCPAxis::atBottom)->setTickLabels(false);
+
+    m_axis_ch1->setMinimumMargins(QMargins(25,15,15,0));
+    m_axis_ch2->setMinimumMargins(QMargins(25,1,15,0));
+    m_axis_ch3->setMinimumMargins(QMargins(25,1,15,0));
+    m_axis_ch4->setMinimumMargins(QMargins(25,1,15,30));
+
+    m_cursors1->showText(false);
+    m_cursors2->showText(false);
+    m_cursors3->showText(false);
+    m_cursors4->showText(false);
+
+    QCPAxisRect* top = m_axis_ch1;
+    QCPAxisRect* bot = m_axis_ch4;
+    QCPCursors* bot_cursors = m_cursors4;
+
+    if (m_daqSet.ch4_en)
+    {
+        bot_cursors = m_cursors4;
+        bot = m_axis_ch4;
+        m_axis_ch4->axis(QCPAxis::atBottom)->setTickLabels(true);
+    }
+    else if (m_daqSet.ch3_en)
+    {
+        bot_cursors = m_cursors3;
+        bot = m_axis_ch3;
+        m_axis_ch3->axis(QCPAxis::atBottom)->setTickLabels(true);
+    }
+    else if (m_daqSet.ch2_en)
+    {
+        bot_cursors = m_cursors3;
+        bot = m_axis_ch2;
+        m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabels(true);
+    }
+    else if (m_daqSet.ch1_en)
+    {
+        bot_cursors = m_cursors1;
+        bot = m_axis_ch1;
+        m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabels(true);
+    }
+
+    if (m_daqSet.ch1_en)
+        top = m_axis_ch1;
+    else if (m_daqSet.ch2_en)
+        top = m_axis_ch2;
+    else if (m_daqSet.ch3_en)
+        top = m_axis_ch3;
+    else if (m_daqSet.ch4_en)
+        top = m_axis_ch4;
+
+    top->setMinimumMargins(QMargins(25,15,15,0));
+    bot->setMinimumMargins(QMargins(25,1,15,30));
+
+    bot_cursors->showText(true);
+
+    enablePanel(true);
+}
+
+void WindowLa::enablePanel(bool en)
+{
+
 }

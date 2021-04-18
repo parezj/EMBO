@@ -500,13 +500,15 @@ void WindowMain::closeEvent(QCloseEvent* event)
 
     if (m_connected)
     {
+        /*
         this->activateWindow();
         if (QMessageBox::Yes == QMessageBox::question(this, EMBO_TITLE, "Device is connected! Do you want to disconnect and exit anyway?",
                                                       QMessageBox::Yes | QMessageBox::No))
         {
+        */
             m_close_init = true;
             on_pushButton_disconnect_clicked();
-        }
+        //}
         return;
     }
 

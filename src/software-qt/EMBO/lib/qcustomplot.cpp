@@ -6321,12 +6321,14 @@ QCPAxisTickerTime::QCPAxisTickerTime() :
   mBiggestUnit(tuHours)
 {
   setTickCount(4);
+  mFieldWidth[tuMicroseconds] = 3;
   mFieldWidth[tuMilliseconds] = 3;
   mFieldWidth[tuSeconds] = 2;
   mFieldWidth[tuMinutes] = 2;
   mFieldWidth[tuHours] = 2;
   mFieldWidth[tuDays] = 1;
   
+  mFormatPattern[tuMicroseconds] = QLatin1String("%u");
   mFormatPattern[tuMilliseconds] = QLatin1String("%z");
   mFormatPattern[tuSeconds] = QLatin1String("%s");
   mFormatPattern[tuMinutes] = QLatin1String("%m");
@@ -6403,7 +6405,9 @@ double QCPAxisTickerTime::getTickStep(const QCPRange &range)
   
   if (result < 1) // ideal tick step is below 1 second -> use normal clean mantissa algorithm in units of seconds
   {
-    if (mSmallestUnit == tuMilliseconds)
+    if (mSmallestUnit == tuMicroseconds)
+        result = qMax(cleanMantissa(result), 0.000001); // smallest tick step is 1 microsecond
+    else if (mSmallestUnit == tuMilliseconds)
       result = qMax(cleanMantissa(result), 0.001); // smallest tick step is 1 millisecond
     else // have no milliseconds available in format, so stick with 1 second tickstep
       result = 1.0;
@@ -6414,7 +6418,7 @@ double QCPAxisTickerTime::getTickStep(const QCPRange &range)
     // seconds range:
     if (mSmallestUnit <= tuSeconds)
       availableSteps << 1;
-    if (mSmallestUnit == tuMilliseconds)
+    if (mSmallestUnit == tuMilliseconds || mSmallestUnit == tuMicroseconds)
       availableSteps << 2.5; // only allow half second steps if milliseconds are there to display it
     else if (mSmallestUnit == tuSeconds)
       availableSteps << 2;
@@ -6481,10 +6485,12 @@ QString QCPAxisTickerTime::getTickLabel(double tick, const QLocale &locale, QCha
   Q_UNUSED(locale)
   bool negative = tick < 0;
   if (negative) tick *= -1;
-  double values[tuDays+1]; // contains the msec/sec/min/... value with its respective modulo (e.g. minute 0..59)
-  double restValues[tuDays+1]; // contains the msec/sec/min/... value as if it's the largest available unit and thus consumes the remaining time
+  double values[tuDays+2]; // contains the msec/sec/min/... value with its respective modulo (e.g. minute 0..59)
+  double restValues[tuDays+2]; // contains the msec/sec/min/... value as if it's the largest available unit and thus consumes the remaining time
   
-  restValues[tuMilliseconds] = tick*1000;
+  restValues[tuMicroseconds] = tick*1000000;
+  //restValues[tuMilliseconds] = tick*1000;
+  values[tuMicroseconds] = modf(restValues[tuMicroseconds]/1000, &restValues[tuMilliseconds])*1000;
   values[tuMilliseconds] = modf(restValues[tuMilliseconds]/1000, &restValues[tuSeconds])*1000;
   values[tuSeconds] = modf(restValues[tuSeconds]/60, &restValues[tuMinutes])*60;
   values[tuMinutes] = modf(restValues[tuMinutes]/60, &restValues[tuHours])*60;

@@ -62,23 +62,28 @@ private:
     void enableAll(bool enable);
     void sendEnable(bool enable);
 
-    QLabel* m_status_enabled;
-
-    QTimer* m_timer_render;
-
-    QButtonGroup m_mode;
-    bool m_fastMode = false;
-    bool m_enable_wantSwitch = false;
-
-    QString m_data_freq;
-    QString m_data_period;
-    bool m_data_fresh = false;
-
+    /* main window */
     Ui::WindowCntr* m_ui;
 
     /* messages */
     Msg_CNTR_Enable* m_msg_enable;
     Msg_CNTR_Read* m_msg_read;
+
+    /* status bar */
+    QLabel* m_status_enabled;
+
+    /* timer */
+    QTimer* m_timer_render;
+
+    /* mode */
+    QButtonGroup m_mode;
+    bool m_fastMode = false;
+    bool m_enable_wantSwitch = false;
+
+    /* data */
+    QString m_data_freq;
+    QString m_data_period;
+    bool m_data_fresh = false;
 };
 
 #endif // WINDOW_CNTR_H
