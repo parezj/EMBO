@@ -60,8 +60,9 @@ PWM and signal generator.<br>And of course, it's opensource! \
 
 #define EMBO_READY_A        "ReadyA"
 #define EMBO_READY_N        "ReadyN"
+#define EMBO_READY_F        "ReadyF"
+#define EMBO_READY_S        "ReadyS"
 #define EMBO_READY_D        "ReadyD"
-
 
 
 class Core : public QObject

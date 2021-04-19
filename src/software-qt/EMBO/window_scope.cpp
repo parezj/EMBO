@@ -17,7 +17,7 @@
 #include <QMessageBox>
 
 
-#define Y_LIM           0.20
+#define Y_LIM       0.20
 
 
 WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowScope)
@@ -39,7 +39,7 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     connect(m_msg_read, &Msg_SCOP_Read::result, this, &WindowScope::on_msg_read, Qt::QueuedConnection);
 
     connect(m_msg_forceTrig, &Msg_SCOP_ForceTrig::ok, this, &WindowScope::on_msg_ok_forceTrig, Qt::QueuedConnection);
-    connect(m_msg_forceTrig, &Msg_SCOP_ForceTrig::err, this, &WindowScope::on_msg_err, Qt::QueuedConnection);
+    //connect(m_msg_forceTrig, &Msg_SCOP_ForceTrig::err, this, &WindowScope::on_msg_err, Qt::QueuedConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowScope::on_msg_daqReady, Qt::QueuedConnection);
 
@@ -54,9 +54,12 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     m_status_vcc = new QLabel(" ", this);
     m_status_rec = new QLabel(" ", this);
     QWidget* widget = new QWidget(this);
+    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel&nbsp;&nbsp;<span>", this);
+
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_vcc->setFont(font1);
     m_status_rec->setFont(font1);
+    status_zoom->setFont(font1);
 
     QLabel* status_img = new QLabel(this);
     QPixmap status_img_icon = QPixmap(":/main/resources/img/scope.svg");
@@ -86,10 +89,41 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     layout->addWidget(status_spacer3, 0,4,1,1,Qt::AlignVCenter);
     layout->addWidget(m_status_rec,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
     layout->addItem(status_spacer0,   0,6,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_zoom,    0,7,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
+
+    /* button groups */
+
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Auto);
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Normal);
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Disabled);
+
+    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Rising);
+    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Falling);
+
+    m_trigCh.addButton(m_ui->radioButton_trigCh_1);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_2);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_3);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_4);
+
+    m_fsMem.addButton(m_ui->radioButton_fsMem);
+    m_fsMem.addButton(m_ui->radioButton_div);
+
+    m_trigMode.setExclusive(true);
+    m_trigSlope.setExclusive(true);
+    m_trigCh.setExclusive(true);
+    m_fsMem.setExclusive(true);
+
+    /* avg */
+
+    m_ui->spinBox_average->setRange(1, MAX_SCOPE_AVG);
+    m_average_buff_ch1 = QVector<QVector<double>>(MAX_SCOPE_AVG);
+    m_average_buff_ch2 = QVector<QVector<double>>(MAX_SCOPE_AVG);
+    m_average_buff_ch3 = QVector<QVector<double>>(MAX_SCOPE_AVG);
+    m_average_buff_ch4 = QVector<QVector<double>>(MAX_SCOPE_AVG);
 
     /* styles */
 
@@ -199,10 +233,11 @@ void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose
 
 void WindowScope::on_msg_ok_set(const QString maxZ, const QString fs_real)
 {
-    m_daqSet.maxZ_kohm = maxZ.toDouble();
+    m_daqSet.maxZ_ohm = maxZ.toDouble();
     m_daqSet.fs_real = fs_real.toDouble();
 
     updatePanel();
+    m_msgPending = false;
 }
 
 void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
@@ -220,14 +255,18 @@ void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, 
     m_daqSet.trig_edge = trig_edge;
     m_daqSet.trig_mode = trig_mode;
     m_daqSet.trig_pre = trig_pre;
-    m_daqSet.maxZ_kohm = maxZ;
+    m_daqSet.maxZ_ohm = maxZ;
     m_daqSet.fs_real = fs_real;
 
     updatePanel();
+    m_msgPending = false;
 }
 
 void WindowScope::on_msg_read(const QByteArray data)
 {
+    if (m_msgPending)
+        return;
+
     auto info = Core::getInstance()->getDevInfo();
     int ch_num = m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en;
 
@@ -256,7 +295,8 @@ void WindowScope::on_msg_read(const QByteArray data)
 
         int buff1_mem = buff1_len - (info->daq_reserve * ch_num);
 
-        found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, _y2, _y3, _y4);
+        found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, _y2, _y3, _y4,
+                                    m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
 
     }
     else if (info->adc_num == 2)
@@ -307,9 +347,11 @@ void WindowScope::on_msg_read(const QByteArray data)
         buff2_mem = buff2_len - (info->daq_reserve * (m_daqSet.ch3_en + m_daqSet.ch4_en));
 
         if (m_daqSet.ch1_en || m_daqSet.ch2_en)
-            found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, _y2, NULL, NULL);
+            found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, _y2, NULL, NULL,
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
         if (m_daqSet.ch3_en || m_daqSet.ch4_en)
-            found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y3, _y4, NULL, NULL); // todo trigger problem
+            found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y3, _y4, NULL, NULL, // todo trigger problem ?
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
 
     }
     else if (info->adc_num == 4)
@@ -359,13 +401,17 @@ void WindowScope::on_msg_read(const QByteArray data)
         }
 
         if (m_daqSet.ch1_en)
-            found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, NULL, NULL, NULL);
+            found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, NULL, NULL, NULL,
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
         if (m_daqSet.ch2_en)
-            found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y2, NULL, NULL, NULL);
+            found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y2, NULL, NULL, NULL,
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
         if (m_daqSet.ch3_en)
-            found += get_vals_from_circ(m_firstPos, buff3_mem, buff3_len, m_daqSet.bits, vcc, buff3, _y3, NULL, NULL, NULL);
+            found += get_vals_from_circ(m_firstPos, buff3_mem, buff3_len, m_daqSet.bits, vcc, buff3, _y3, NULL, NULL, NULL,
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
         if (m_daqSet.ch4_en)
-            found += get_vals_from_circ(m_firstPos, buff4_mem, buff4_len, m_daqSet.bits, vcc, buff4, _y4, NULL, NULL, NULL);
+            found += get_vals_from_circ(m_firstPos, buff4_mem, buff4_len, m_daqSet.bits, vcc, buff4, _y4, NULL, NULL, NULL,
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
 
     }
     else assert(0);
@@ -378,20 +424,92 @@ void WindowScope::on_msg_read(const QByteArray data)
 
     assert(!m_t.isEmpty());
 
-    if (m_daqSet.ch1_en)
-        m_ui->customPlot->graph(GRAPH_CH1)->setData(m_t, y1);
-    if (m_daqSet.ch2_en)
-        m_ui->customPlot->graph(GRAPH_CH2)->setData(m_t, y2);
-    if (m_daqSet.ch3_en)
-        m_ui->customPlot->graph(GRAPH_CH3)->setData(m_t, y3);
-    if (m_daqSet.ch4_en)
-        m_ui->customPlot->graph(GRAPH_CH4)->setData(m_t, y4);
+    if (m_average)
+    {
+        if (m_average_cnt < m_average_num)
+            m_average_cnt++;
+
+        for (int i = 0; i < m_daqSet.mem; i++)
+        {
+            double acc1 = 0;
+            double acc2 = 0;
+            double acc3 = 0;
+            double acc4 = 0;
+
+            if (m_daqSet.ch1_en) m_average_buff_ch1[m_average_it][i] = y1[i];
+            if (m_daqSet.ch2_en) m_average_buff_ch2[m_average_it][i] = y2[i];
+            if (m_daqSet.ch3_en) m_average_buff_ch3[m_average_it][i] = y3[i];
+            if (m_daqSet.ch4_en) m_average_buff_ch4[m_average_it][i] = y4[i];
+
+            for (int j = 0; j < m_average_cnt; j++)
+            {
+                if (m_daqSet.ch1_en) acc1 += m_average_buff_ch1[j][i];
+                if (m_daqSet.ch2_en) acc2 += m_average_buff_ch2[j][i];
+                if (m_daqSet.ch3_en) acc3 += m_average_buff_ch3[j][i];
+                if (m_daqSet.ch4_en) acc4 += m_average_buff_ch4[j][i];
+            }
+
+            if (m_daqSet.ch1_en) y1[i] = acc1 / m_average_cnt;
+            if (m_daqSet.ch2_en) y2[i] = acc2 / m_average_cnt;
+            if (m_daqSet.ch3_en) y3[i] = acc3 / m_average_cnt;
+            if (m_daqSet.ch4_en) y4[i] = acc4 / m_average_cnt;
+        }
+
+        m_average_it++;
+
+        if (m_average_it == m_average_num)
+            m_average_num = 0;
+    }
+
+    if (m_daqSet.ch1_en) m_ui->customPlot->graph(GRAPH_CH1)->setData(m_t, y1);
+    if (m_daqSet.ch2_en) m_ui->customPlot->graph(GRAPH_CH2)->setData(m_t, y2);
+    if (m_daqSet.ch3_en) m_ui->customPlot->graph(GRAPH_CH3)->setData(m_t, y3);
+    if (m_daqSet.ch4_en) m_ui->customPlot->graph(GRAPH_CH4)->setData(m_t, y4);
+
+
+    if (m_meas_en)
+    {
+        QString meas_vpp_s;
+        QString meas_rms_s;
+        QString meas_avg_s;
+        QString meas_min_s;
+        QString meas_max_s;
+
+        auto data_begin = m_ui->customPlot->graph(m_meas_ch)->data()->constBegin();
+        auto data_end = m_ui->customPlot->graph(m_meas_ch)->data()->constEnd();
+
+        double avg = std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + b.value;}) / std::distance(data_begin, data_end);
+        double rms = sqrt(std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + (b.value * b.value);}) / std::distance(data_begin, data_end));
+        double min = std::min_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_min;
+        double max = std::max_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_max;
+        double vpp = max - min;
+
+        meas_vpp_s = meas_vpp_s.asprintf(vpp >= 100 || vpp <= -10  ? "%.2f" : (vpp >= 10 || vpp < 0 ? "%.3f" : "%.4f"), vpp);
+        meas_rms_s = meas_rms_s.asprintf(rms >= 100 || rms <= -10  ? "%.2f" : (rms >= 10 || rms < 0 ? "%.3f" : "%.4f"), rms);
+        meas_avg_s = meas_avg_s.asprintf(avg >= 100 || avg <= -10  ? "%.2f" : (avg >= 10 || avg < 0 ? "%.3f" : "%.4f"), avg);
+        meas_min_s = meas_min_s.asprintf(min >= 100 || min <= -10  ? "%.2f" : (min >= 10 || min < 0 ? "%.3f" : "%.4f"), min);
+        meas_max_s = meas_max_s.asprintf(max >= 100 || max <= -10  ? "%.2f" : (max >= 10 || max < 0 ? "%.3f" : "%.4f"), max);
+
+        m_ui->textBrowser_measVpp->setHtml("<p align=\"right\">" + meas_vpp_s + " </p>");
+        m_ui->textBrowser_measRms->setHtml("<p align=\"right\">" + meas_rms_s + " </p>");
+        m_ui->textBrowser_measAvg->setHtml("<p align=\"right\">" + meas_avg_s + " </p>");
+        m_ui->textBrowser_measMin->setHtml("<p align=\"right\">" + meas_min_s + " </p>");
+        m_ui->textBrowser_measMax->setHtml("<p align=\"right\">" + meas_max_s + " </p>");
+    }
 }
 
 void WindowScope::on_msg_daqReady(Ready ready, int firstPos)
 {
+    if (m_msgPending)
+    {
+        m_msgPending = false;
+        return;
+    }
+
     m_firstPos = firstPos;
     m_ready = ready;
+
+    m_ui->radioButton_trigLed->setChecked(ready == Ready::READY_NORMAL || ready == Ready::READY_SINGLE);
 
     if (m_instrEnabled)
         Core::getInstance()->msgAdd(m_msg_read, true);
@@ -399,7 +517,7 @@ void WindowScope::on_msg_daqReady(Ready ready, int firstPos)
 
 void WindowScope::on_msg_ok_forceTrig(const QString, const QString)
 {
-
+    updatePanel();
 }
 
 /******************************** GUI slots ********************************/
@@ -594,6 +712,7 @@ void WindowScope::on_actionMeasEnabled_triggered(bool checked)
     on_actionMeasReset_triggered();
 
     m_ui->textBrowser_measVpp->setEnabled(checked);
+    m_ui->textBrowser_measRms->setEnabled(checked);
     m_ui->textBrowser_measAvg->setEnabled(checked);
     m_ui->textBrowser_measMin->setEnabled(checked);
     m_ui->textBrowser_measMax->setEnabled(checked);
@@ -605,6 +724,7 @@ void WindowScope::on_actionMeasReset_triggered()
     //m_meas_min = 1000;
 
     m_ui->textBrowser_measVpp->setText("");
+    m_ui->textBrowser_measRms->setText("");
     m_ui->textBrowser_measAvg->setText("");
     m_ui->textBrowser_measMin->setText("");
     m_ui->textBrowser_measMax->setText("");
@@ -812,23 +932,690 @@ void WindowScope::on_cursorV_valuesChanged(int min, int max)
 
 void WindowScope::on_qcpMouseWheel(QWheelEvent*)
 {
-    //m_ui->pushButton_reset->hide();
-    //m_ui->pushButton_resetZoom->show();
+    m_ui->pushButton_reset->hide();
+    m_ui->pushButton_resetZoom->show();
 }
 
 void WindowScope::on_qcpMousePress(QMouseEvent*)
 {
-    //m_ui->pushButton_reset->hide();
-    //m_ui->pushButton_resetZoom->show();
+    m_ui->pushButton_reset->hide();
+    m_ui->pushButton_resetZoom->show();
 }
 
-/********** right pannel - on/off **********/
+/********** right pannel - main **********/
 
-/********** right pannel - on/off **********/
+void WindowScope::on_radioButton_zoomH_clicked(bool checked)
+{
+    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
-/********** right pannel - on/off **********/
+    if (checked)
+    {
+        if (m_ui->radioButton_zoomV->isChecked())
+        {
+            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical | Qt::Horizontal);
+            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical | Qt::Horizontal);
+        }
+        else
+        {
+            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
+            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
+        }
+    }
+    else
+    {
+        if (m_ui->radioButton_zoomV->isChecked())
+        {
+            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical);
+            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical);
+        }
+        else
+        {
+            m_ui->customPlot->setInteractions(0);
+        }
+    }
+}
 
-/********** right pannel - on/off **********/
+void WindowScope::on_radioButton_zoomV_clicked(bool checked)
+{
+    m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+
+    if (checked)
+    {
+        if (m_ui->radioButton_zoomH->isChecked())
+        {
+            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical | Qt::Horizontal);
+            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical | Qt::Horizontal);
+        }
+        else
+        {
+            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical);
+            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical);
+        }
+    }
+    else
+    {
+        if (m_ui->radioButton_zoomH->isChecked())
+        {
+            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
+            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
+        }
+        else
+        {
+            m_ui->customPlot->setInteractions(0);
+        }
+    }
+}
+
+void WindowScope::on_pushButton_reset_clicked()
+{
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    // TODO
+}
+
+void WindowScope::on_pushButton_resetZoom_clicked()
+{
+    rescaleYAxis();
+    rescaleXAxis();
+
+    m_ui->pushButton_reset->show();
+    m_ui->pushButton_resetZoom->hide();
+}
+
+void WindowScope::on_pushButton_single_off_clicked()
+{
+    m_ui->radioButton_trigMode_Auto->setEnabled(false);
+    m_ui->radioButton_trigMode_Normal->setEnabled(false);
+    m_ui->radioButton_trigMode_Disabled->setEnabled(false);
+
+    m_ui->pushButton_single_on->show();
+    m_ui->pushButton_single_off->hide();
+
+    m_ui->pushButton_run->hide();
+    m_ui->pushButton_stop->hide();
+    m_ui->pushButton_run_off->show();
+
+    m_single = true;
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+void WindowScope::on_pushButton_single_on_clicked()
+{
+    m_single = true;
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+void WindowScope::on_pushButton_run_off_clicked()
+{
+    m_ui->radioButton_trigMode_Auto->setEnabled(true);
+    m_ui->radioButton_trigMode_Normal->setEnabled(true);
+    m_ui->radioButton_trigMode_Disabled->setEnabled(true);
+
+    m_ui->pushButton_single_off->show();
+    m_ui->pushButton_single_on->hide();
+
+    m_ui->pushButton_run->show();
+    m_ui->pushButton_stop->hide();
+    m_ui->pushButton_run_off->hide();
+
+    m_single = false;
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+void WindowScope::on_pushButton_run_clicked()
+{
+    m_ui->pushButton_run->hide();
+    m_ui->pushButton_stop->show();
+    m_ui->pushButton_run_off->hide();
+
+    m_instrEnabled = false;
+
+    m_ui->radioButton_trigLed->setChecked(false);
+
+    m_ui->groupBox_trigger->setEnabled(false);
+    m_ui->groupBox_horizontal->setEnabled(false);
+    m_ui->groupBox_vertical->setEnabled(false);
+}
+
+void WindowScope::on_pushButton_stop_clicked()
+{
+    m_ui->pushButton_run->show();
+    m_ui->pushButton_stop->hide();
+    m_ui->pushButton_run_off->hide();
+
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+/********** right pannel - trigger **********/
+
+void WindowScope::on_radioButton_trigMode_Auto_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->pushButton_single_off->show();
+        m_ui->pushButton_single_on->hide();
+        m_single = false;
+
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigMode_Normal_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->pushButton_single_off->show();
+        m_ui->pushButton_single_on->hide();
+        m_single = false;
+
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigMode_Disabled_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->pushButton_single_off->show();
+        m_ui->pushButton_single_on->hide();
+        m_single = false;
+
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigSlope_Rising_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigSlope_Falling_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigCh_1_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigCh_2_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigCh_3_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowScope::on_radioButton_trigCh_4_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowScope::on_spinBox_trigVal_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_trigVal->setValue(arg1);
+    m_ignoreValuesChanged = false;
+
+    auto rngV = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
+    m_cursorTrigVal->setValue(arg1 * 10, rngV.lower, rngV.upper);
+    m_ui->horizontalSlider_trigVal->setValue(arg1 * 10);
+
+    sendSet();
+}
+
+void WindowScope::on_dial_trigVal_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_trigVal->setValue(value);
+    m_ignoreValuesChanged = false;
+
+
+    auto rngV = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
+    m_cursorTrigVal->setValue(value * 10, rngV.lower, rngV.upper);
+    m_ui->horizontalSlider_trigVal->setValue(value * 10);
+
+    sendSet();
+}
+
+void WindowScope::on_spinBox_trigPre_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_trigPre->setValue(arg1);
+    m_ignoreValuesChanged = false;
+
+    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    m_cursorTrigPre->setValue(arg1 * 10, rngH.lower, rngH.upper);
+    m_ui->horizontalSlider_trigPre->setValue(arg1 * 10);
+
+    sendSet();
+}
+
+void WindowScope::on_dial_trigPre_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_trigPre->setValue(value);
+    m_ignoreValuesChanged = false;
+
+    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    m_cursorTrigPre->setValue(value * 10, rngH.lower, rngH.upper);
+    m_ui->horizontalSlider_trigPre->setValue(value * 10);
+
+    sendSet();
+}
+
+void WindowScope::on_pushButton_trigForc_clicked()
+{
+    enablePanel(false);
+    Core::getInstance()->msgAdd(m_msg_forceTrig, false, "");
+}
+
+/********** right pannel - horizontal **********/
+
+void WindowScope::on_radioButton_fsMem_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->groupBox_h_fsMem->setEnabled(true);
+        m_ui->groupBox_h_div->setEnabled(false);
+    }
+}
+
+void WindowScope::on_radioButton_div_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->groupBox_h_fsMem->setEnabled(false);
+        m_ui->groupBox_h_div->setEnabled(true);
+    }
+}
+
+void WindowScope::on_spinBox_mem_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_mem->setValue(arg1);
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowScope::on_dial_mem_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_mem->setValue(value);
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowScope::on_spinBox_fs_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_fs->setValue((int)lin_to_exp_1to36M((int)m_ui->spinBox_fs->value(), true));
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowScope::on_dial_fs_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_fs->setValue((int)lin_to_exp_1to36M((int)value));
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowScope::on_spinBox_div_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+
+    m_ignoreValuesChanged = false;
+
+    // TODO
+}
+
+void WindowScope::on_dial_div_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+
+    m_ignoreValuesChanged = false;
+
+    // TODO
+}
+
+/********** right pannel - vertical **********/
+
+void WindowScope::on_pushButton_disable1_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable1->show();
+    m_ui->pushButton_disable1->hide();
+
+    m_ui->customPlot->graph(GRAPH_CH1)->setVisible(false);
+    sendSet();
+}
+
+void WindowScope::on_pushButton_disable2_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable2->show();
+    m_ui->pushButton_disable2->hide();
+
+    m_ui->customPlot->graph(GRAPH_CH2)->setVisible(false);
+    sendSet();
+}
+
+void WindowScope::on_pushButton_disable3_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable3->show();
+    m_ui->pushButton_disable3->hide();
+
+    m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
+    sendSet();
+}
+
+void WindowScope::on_pushButton_disable4_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable4->show();
+    m_ui->pushButton_disable4->hide();
+
+    m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
+    sendSet();
+}
+
+void WindowScope::on_pushButton_enable1_clicked()
+{
+    m_ui->pushButton_enable1->hide();
+    m_ui->pushButton_disable1->show();
+
+    sendSet();
+}
+
+void WindowScope::on_pushButton_enable2_clicked()
+{
+    m_ui->pushButton_enable2->hide();
+    m_ui->pushButton_disable2->show();
+
+    sendSet();
+}
+
+void WindowScope::on_pushButton_enable3_clicked()
+{
+    m_ui->pushButton_enable3->hide();
+    m_ui->pushButton_disable3->show();
+
+    sendSet();
+}
+
+void WindowScope::on_pushButton_enable4_clicked()
+{
+    m_ui->pushButton_enable4->hide();
+    m_ui->pushButton_disable4->show();
+
+    sendSet();
+}
+
+void WindowScope::on_doubleSpinBox_gain_ch1_valueChanged(double arg1)
+{
+    m_gain1 = arg1;
+    m_ui->dial_Vpos_ch1->setRange(-m_ref_v * m_gain1 * 1000.0, m_ref_v * m_gain1 * 1000.0);
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+void WindowScope::on_doubleSpinBox_gain_ch2_valueChanged(double arg1)
+{
+    m_gain2 = arg1;
+    m_ui->dial_Vpos_ch2->setRange(-m_ref_v * m_gain2 * 1000.0, m_ref_v * m_gain2 * 1000.0);
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+void WindowScope::on_doubleSpinBox_gain_ch3_valueChanged(double arg1)
+{
+    m_gain3 = arg1;
+    m_ui->dial_Vpos_ch3->setRange(-m_ref_v * m_gain3 * 1000.0, m_ref_v * m_gain3 * 1000.0);
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+void WindowScope::on_doubleSpinBox_gain_ch4_valueChanged(double arg1)
+{
+    m_gain4 = arg1;
+    m_ui->dial_Vpos_ch4->setRange(-m_ref_v * m_gain4 * 1000.0, m_ref_v * m_gain4 * 1000.0);
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+void WindowScope::on_dial_Vpos_ch1_valueChanged(int value)
+{
+    m_offset1 = value / 1000.0;
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+void WindowScope::on_dial_Vpos_ch2_valueChanged(int value)
+{
+    m_offset2 = value / 1000.0;
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+void WindowScope::on_dial_Vpos_ch3_valueChanged(int value)
+{
+    m_offset3 = value / 1000.0;
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+void WindowScope::on_dial_Vpos_ch4_valueChanged(int value)
+{
+    m_offset4 = value / 1000.0;
+
+    rescaleYAxis();
+    on_pushButton_resetZoom_clicked();
+}
+
+/********** right pannel - utils **********/
+
+void WindowScope::on_pushButton_average_off_clicked()
+{
+    m_ui->pushButton_average_on->show();
+    m_ui->pushButton_average_off->hide();
+
+    for (int i = 0 ; i < MAX_SCOPE_AVG ; i++)
+    {
+        if (m_daqSet.ch1_en)
+        {
+            m_average_buff_ch1[i].resize(m_daqSet.mem);
+            m_average_buff_ch1[i].clear();
+        }
+        if (m_daqSet.ch2_en)
+        {
+            m_average_buff_ch2[i].resize(m_daqSet.mem);
+            m_average_buff_ch2[i].clear();
+        }
+        if (m_daqSet.ch3_en)
+        {
+            m_average_buff_ch3[i].resize(m_daqSet.mem);
+            m_average_buff_ch3[i].clear();
+        }
+        if (m_daqSet.ch4_en)
+        {
+            m_average_buff_ch4[i].resize(m_daqSet.mem);
+            m_average_buff_ch4[i].clear();
+        }
+    }
+
+    m_average_cnt = 0;
+    m_average_it = 0;
+
+    m_ui->spinBox_average->setEnabled(false);
+
+    m_average = true;
+}
+
+void WindowScope::on_pushButton_average_on_clicked()
+{
+    m_ui->pushButton_average_off->show();
+    m_ui->pushButton_average_on->hide();
+
+    for (int i = 0 ; i < MAX_SCOPE_AVG ; i++)
+    {
+        m_average_buff_ch1[i].resize(1);
+        m_average_buff_ch2[i].resize(1);
+        m_average_buff_ch3[i].resize(1);
+        m_average_buff_ch4[i].resize(1);
+    }
+
+    m_ui->spinBox_average->setEnabled(true);
+
+    m_average = false;
+}
+
+void WindowScope::on_spinBox_average_valueChanged(int arg1)
+{
+    m_average_num = arg1;
+}
+
+void WindowScope::on_pushButton_bit8_off_clicked()
+{
+    m_ui->pushButton_bit12_on->hide();
+    m_ui->pushButton_bit12_off->show();
+    m_ui->pushButton_bit8_off->hide();
+    m_ui->pushButton_bit8_on->show();
+}
+
+void WindowScope::on_pushButton_bit8_on_clicked()
+{
+}
+
+void WindowScope::on_pushButton_bit12_off_clicked()
+{
+    if (m_ui->pushButton_bit8_on->isEnabled())
+    {
+        m_ui->pushButton_bit12_off->hide();
+        m_ui->pushButton_bit12_on->show();
+        m_ui->pushButton_bit8_on->hide();
+        m_ui->pushButton_bit8_off->show();
+    }
+}
+
+void WindowScope::on_pushButton_bit12_on_clicked()
+{
+}
+
+void WindowScope::on_pushButton_fft_off_clicked()
+{
+    m_ui->pushButton_fft_on->show();
+    m_ui->pushButton_fft_off->hide();
+}
+
+void WindowScope::on_pushButton_fft_on_clicked()
+{
+    m_ui->pushButton_fft_off->show();
+    m_ui->pushButton_fft_on->hide();
+}
 
 /******************************** private ********************************/
 
@@ -845,8 +1632,13 @@ void WindowScope::closeEvent(QCloseEvent*)
 
 void WindowScope::showEvent(QShowEvent*)
 {
+    m_ignoreValuesChanged = true;
+
+    enablePanel(false);
+
     Core::getInstance()->setMode(SCOPE);
-    m_instrEnabled = true;
+    if (m_ui->pushButton_run->isVisible())
+        m_instrEnabled = true;
 
     auto info = Core::getInstance()->getDevInfo();
 
@@ -874,7 +1666,27 @@ void WindowScope::showEvent(QShowEvent*)
 
     on_actionMeasReset_triggered();
 
+    m_ui->radioButton_trigLed->setChecked(false);
+
+    m_ui->pushButton_bit8_on->setEnabled(info->adc_bit8);
+    m_ui->pushButton_bit8_off->setEnabled(info->adc_bit8);
+    m_ui->pushButton_bit12_off->hide();
+    m_ui->pushButton_bit12_on->show();
+
+    m_ui->dial_mem->setRange(1, info->mem);
+    m_ui->spinBox_mem->setRange(1, info->mem);
+
+    m_ui->dial_fs->setRange(1, info->adc_fs_12b); // TODO
+    m_ui->spinBox_fs->setRange(1, info->adc_fs_12b); // TODO
+
     m_timer_plot->start((int)TIMER_SCOPE_PLOT);
+
+    m_ui->dial_Vpos_ch1->setRange(-m_ref_v * m_gain1 * 1000.0, m_ref_v * m_gain1 * 1000.0);
+    m_ui->dial_Vpos_ch2->setRange(-m_ref_v * m_gain2 * 1000.0, m_ref_v * m_gain2 * 1000.0);
+    m_ui->dial_Vpos_ch3->setRange(-m_ref_v * m_gain3 * 1000.0, m_ref_v * m_gain3 * 1000.0);
+    m_ui->dial_Vpos_ch4->setRange(-m_ref_v * m_gain4 * 1000.0, m_ref_v * m_gain4 * 1000.0);
+
+    m_ignoreValuesChanged = false;
 }
 
 void WindowScope::rescaleYAxis()
@@ -921,19 +1733,243 @@ void WindowScope::createX()
 
 void WindowScope::updatePanel()
 {
+    m_ignoreValuesChanged = true;
+
+    on_pushButton_average_on_clicked();
+
     createX();
     rescaleXAxis();
     rescaleYAxis();
+    enablePanel(true);
 
     m_ui->customPlot->graph(GRAPH_CH1)->setVisible(m_daqSet.ch1_en);
     m_ui->customPlot->graph(GRAPH_CH2)->setVisible(m_daqSet.ch2_en);
     m_ui->customPlot->graph(GRAPH_CH3)->setVisible(m_daqSet.ch3_en);
     m_ui->customPlot->graph(GRAPH_CH4)->setVisible(m_daqSet.ch4_en);
 
-    enablePanel(true);
+    m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + format_unit(m_daqSet.fs_real, "Sps", 2) + " </p>");
+    m_ui->textBrowser_maxZ->setHtml("<p align=\"center\">" + format_unit(m_daqSet.maxZ_ohm, "Ω", 2) + " </p>");
+
+    m_ui->pushButton_enable1->setVisible(!m_daqSet.ch1_en);
+    m_ui->pushButton_enable2->setVisible(!m_daqSet.ch2_en);
+    m_ui->pushButton_enable3->setVisible(!m_daqSet.ch3_en);
+    m_ui->pushButton_enable4->setVisible(!m_daqSet.ch4_en);
+
+    m_ui->pushButton_disable1->setVisible(m_daqSet.ch1_en);
+    m_ui->pushButton_disable2->setVisible(m_daqSet.ch2_en);
+    m_ui->pushButton_disable3->setVisible(m_daqSet.ch3_en);
+    m_ui->pushButton_disable4->setVisible(m_daqSet.ch4_en);
+
+    m_ui->pushButton_bit12_on->setVisible(m_daqSet.bits == B12);
+    m_ui->pushButton_bit12_off->setVisible(!(m_daqSet.bits == B12));
+    m_ui->pushButton_bit8_off->setVisible(m_daqSet.bits == B12);
+    m_ui->pushButton_bit8_on->setVisible(!(m_daqSet.bits == B12));
+
+    m_ui->spinBox_mem->setValue(m_daqSet.mem);
+    m_ui->dial_mem->setValue(m_daqSet.mem);
+
+    m_ui->spinBox_fs->setValue(m_daqSet.fs);
+    m_ui->dial_fs->setValue(m_daqSet.fs);
+
+    m_ui->dial_trigPre->setValue(m_daqSet.trig_pre);
+    m_ui->dial_trigVal->setValue(m_daqSet.trig_val);
+
+    m_ui->spinBox_trigPre->setValue(m_daqSet.trig_pre);
+    m_ui->spinBox_trigVal->setValue(m_daqSet.trig_val);
+
+    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    auto rngV = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
+
+    m_cursorTrigPre->setValue(m_daqSet.trig_pre * 10, rngH.lower, rngH.upper);
+    m_cursorTrigVal->setValue(m_daqSet.trig_val * 10, rngV.lower, rngV.upper);
+
+    m_ui->horizontalSlider_trigPre->setValue(m_daqSet.trig_pre * 10);
+    m_ui->horizontalSlider_trigVal->setValue(m_daqSet.trig_val * 10);
+
+    m_ui->pushButton_single_off->show();
+    m_ui->pushButton_single_on->hide();
+    m_single = false;
+
+    if (m_daqSet.trig_mode == DaqTrigMode::AUTO)
+        m_ui->radioButton_trigMode_Auto->setChecked(true);
+    else if (m_daqSet.trig_mode == DaqTrigMode::NORMAL)
+        m_ui->radioButton_trigMode_Normal->setChecked(true);
+    else if (m_daqSet.trig_mode == DaqTrigMode::DISABLED)
+        m_ui->radioButton_trigMode_Disabled->setChecked(true);
+    else // SINGLE
+    {
+        m_ui->radioButton_trigMode_Auto->setEnabled(false);
+        m_ui->radioButton_trigMode_Normal->setEnabled(false);
+        m_ui->radioButton_trigMode_Disabled->setEnabled(false);
+
+        m_ui->pushButton_single_on->show();
+        m_ui->pushButton_single_off->hide();
+
+        m_ui->pushButton_run->hide();
+        m_ui->pushButton_stop->hide();
+        m_ui->pushButton_run_off->show();
+
+        m_single = true;
+    }
+
+    if (m_daqSet.trig_edge == DaqTrigEdge::RISING)
+        m_ui->radioButton_trigSlope_Rising->setChecked(true);
+    else // FALLING
+        m_ui->radioButton_trigSlope_Falling->setChecked(true);
+
+    if (m_daqSet.trig_ch == 1)
+        m_ui->radioButton_trigCh_1->setChecked(true);
+    else if (m_daqSet.trig_ch == 2)
+        m_ui->radioButton_trigCh_2->setChecked(true);
+    else if (m_daqSet.trig_ch == 3)
+        m_ui->radioButton_trigCh_3->setChecked(true);
+    else // 4
+        m_ui->radioButton_trigCh_4->setChecked(true);
+
+    m_ui->pushButton_trigForc->setEnabled(m_daqSet.trig_mode != DaqTrigMode::DISABLED && m_daqSet.trig_mode != DaqTrigMode::AUTO);
+    m_ui->spinBox_average->setEnabled(!m_average);
+
+    on_radioButton_fsMem_clicked(m_ui->radioButton_fsMem->isChecked());
+
+    /* MAX FS AND MEM */
+
+    auto info = Core::getInstance()->getDevInfo();
+    int max_mem = info->mem;
+    if (m_daqSet.bits == B12)
+        max_mem /= 2;
+    max_mem /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
+
+    m_ui->spinBox_mem->setRange(1,max_mem);
+    m_ui->dial_mem->setRange(1,max_mem);
+
+    int max_fs = info->adc_fs_12b; // TODO
+
+    if (info->adc_num == 1)
+        max_fs /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
+    else if (info->adc_num == 2)
+    {
+        int cnt1 = m_daqSet.ch1_en + m_daqSet.ch2_en;
+        int cnt2 = m_daqSet.ch3_en + m_daqSet.ch4_en;
+        max_fs /= (cnt1 > cnt2) ? cnt1 : cnt2;
+    }
+
+    m_ui->spinBox_fs->setRange(1,max_fs);
+    m_ui->dial_fs->setRange(1,max_fs);
+
+    /************ */
+
+    m_ignoreValuesChanged = false;
 }
 
 void WindowScope::enablePanel(bool en)
 {
+    m_ui->groupBox_main->setEnabled(en);
+    m_ui->groupBox_trigger->setEnabled(en);
+    m_ui->groupBox_horizontal->setEnabled(en);
+    m_ui->groupBox_vertical->setEnabled(en);
+    m_ui->groupBox_utils->setEnabled(en);
+}
 
+void WindowScope::sendSet()
+{
+    m_msgPending = true;
+    enablePanel(false);
+
+    /* MAX FS AND MEM */
+
+    auto info = Core::getInstance()->getDevInfo();
+    int max_mem = info->mem;
+    if (m_daqSet.bits == B12)
+        max_mem /= 2;
+    max_mem /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
+
+    m_ui->spinBox_mem->setRange(1,max_mem);
+    m_ui->dial_mem->setRange(1,max_mem);
+
+    int max_fs = info->adc_fs_12b; // TODO
+
+    if (info->adc_num == 1)
+        max_fs /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
+    else if (info->adc_num == 2)
+    {
+        int cnt1 = m_daqSet.ch1_en + m_daqSet.ch2_en;
+        int cnt2 = m_daqSet.ch3_en + m_daqSet.ch4_en;
+        max_fs /= (cnt1 > cnt2) ? cnt1 : cnt2;
+    }
+
+    m_ui->spinBox_fs->setRange(1,max_fs);
+    m_ui->dial_fs->setRange(1,max_fs);
+
+    /************ */
+
+    m_ui->radioButton_trigLed->setChecked(false);
+
+    m_daqSet.bits = m_ui->pushButton_bit12_on->isVisible() ? B12 : B8;
+    m_daqSet.mem = m_ui->spinBox_mem->value();
+    m_daqSet.fs = m_ui->spinBox_fs->value();
+    m_daqSet.ch1_en = m_ui->pushButton_disable1->isVisible();
+    m_daqSet.ch2_en = m_ui->pushButton_disable2->isVisible();
+    m_daqSet.ch3_en = m_ui->pushButton_disable3->isVisible();
+    m_daqSet.ch4_en = m_ui->pushButton_disable4->isVisible();
+
+    QString channs = "0000";
+    channs[0] = m_daqSet.ch1_en ? '1' : '0';
+    channs[1] = m_daqSet.ch2_en ? '1' : '0';
+    channs[2] = m_daqSet.ch3_en ? '1' : '0';
+    channs[3] = m_daqSet.ch4_en ? '1' : '0';
+
+    if (m_ui->radioButton_trigCh_1->isChecked()) m_daqSet.trig_ch = 1;
+    else if (m_ui->radioButton_trigCh_2->isChecked()) m_daqSet.trig_ch = 2;
+    else if (m_ui->radioButton_trigCh_3->isChecked()) m_daqSet.trig_ch = 3;
+    else m_daqSet.trig_ch = 4;
+
+    m_daqSet.trig_val = m_ui->spinBox_trigVal->value();
+    m_daqSet.trig_pre = m_ui->spinBox_trigPre->value();
+
+    QString trigMode = "0";
+
+    if (m_single)
+    {
+        m_daqSet.trig_mode = SINGLE;
+        trigMode = "S";
+    }
+    else if (m_ui->radioButton_trigMode_Auto->isChecked())
+    {
+        m_daqSet.trig_mode = AUTO;
+        trigMode = "A";
+    }
+    else if (m_ui->radioButton_trigMode_Normal->isChecked())
+    {
+        m_daqSet.trig_mode = NORMAL;
+        trigMode = "N";
+    }
+    else if (m_ui->radioButton_trigMode_Disabled->isChecked())
+    {
+        m_daqSet.trig_mode = DISABLED;
+        trigMode = "D";
+    }
+    else assert(0);
+
+    QString trigEdge = "0";
+
+    if (m_ui->radioButton_trigSlope_Rising->isChecked())
+    {
+        m_daqSet.trig_edge = RISING;
+        trigEdge = "R";
+    }
+    else
+    {
+        m_daqSet.trig_edge = FALLING;
+        trigEdge = "F";
+    }
+
+    Core::getInstance()->msgAdd(m_msg_set, false, (m_daqSet.bits == B12 ? "12," : "8," ) +     // bits
+                                                   QString::number(m_daqSet.mem) + "," +       // mem
+                                                   QString::number(m_daqSet.fs) + "," +        // fs
+                                                   channs + "," +                              // channs
+                                                   QString::number(m_daqSet.trig_ch) + "," +   // trig ch
+                                                   QString::number(m_daqSet.trig_val) + "," +  // trig val
+                                                   trigEdge + "," +                            // trig edge
+                                                   trigMode + "," +                            // trig mode
+                                                   QString::number(m_daqSet.trig_pre));        // trig pre
 }

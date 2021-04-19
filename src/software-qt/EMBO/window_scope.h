@@ -29,6 +29,10 @@
 #define CURSOR_DEFAULT_V_MAX    600
 
 
+#define MAX_SCOPE_AVG     10
+
+
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class WindowScope; }
 QT_END_NAMESPACE
@@ -107,6 +111,72 @@ private slots:
     void on_qcpMouseWheel(QWheelEvent*);
     void on_qcpMousePress(QMouseEvent*);
 
+    /* GUI slots - right pannel - main */
+    void on_radioButton_zoomH_clicked(bool checked);
+    void on_radioButton_zoomV_clicked(bool checked);
+    void on_pushButton_reset_clicked();
+    void on_pushButton_resetZoom_clicked();
+    void on_pushButton_single_off_clicked();
+    void on_pushButton_single_on_clicked();
+    void on_pushButton_run_off_clicked();
+    void on_pushButton_run_clicked();
+    void on_pushButton_stop_clicked();
+
+    /* GUI slots - right pannel - trigger */
+    void on_radioButton_trigMode_Auto_clicked(bool checked);
+    void on_radioButton_trigMode_Normal_clicked(bool checked);
+    void on_radioButton_trigMode_Disabled_clicked(bool checked);
+    void on_radioButton_trigSlope_Rising_clicked(bool checked);
+    void on_radioButton_trigSlope_Falling_clicked(bool checked);
+    void on_radioButton_trigCh_1_clicked(bool checked);
+    void on_radioButton_trigCh_2_clicked(bool checked);
+    void on_radioButton_trigCh_3_clicked(bool checked);
+    void on_radioButton_trigCh_4_clicked(bool checked);
+    void on_spinBox_trigVal_valueChanged(int arg1);
+    void on_dial_trigVal_valueChanged(int value);
+    void on_spinBox_trigPre_valueChanged(int arg1);
+    void on_dial_trigPre_valueChanged(int value);
+    void on_pushButton_trigForc_clicked();
+
+    /* GUI slots - right pannel - horizontal */
+    void on_radioButton_fsMem_clicked(bool checked);
+    void on_radioButton_div_clicked(bool checked);
+    void on_spinBox_mem_valueChanged(int arg1);
+    void on_dial_mem_valueChanged(int value);
+    void on_spinBox_fs_valueChanged(int arg1);
+    void on_dial_fs_valueChanged(int value);
+    void on_spinBox_div_valueChanged(int arg1);
+    void on_dial_div_valueChanged(int value);
+
+    /* GUI slots - right pannel - vertical */
+    void on_pushButton_disable1_clicked();
+    void on_pushButton_disable2_clicked();
+    void on_pushButton_disable3_clicked();
+    void on_pushButton_disable4_clicked();
+    void on_pushButton_enable1_clicked();
+    void on_pushButton_enable2_clicked();
+    void on_pushButton_enable3_clicked();
+    void on_pushButton_enable4_clicked();
+    void on_doubleSpinBox_gain_ch1_valueChanged(double arg1);
+    void on_doubleSpinBox_gain_ch2_valueChanged(double arg1);
+    void on_doubleSpinBox_gain_ch3_valueChanged(double arg1);
+    void on_doubleSpinBox_gain_ch4_valueChanged(double arg1);
+    void on_dial_Vpos_ch1_valueChanged(int value);
+    void on_dial_Vpos_ch2_valueChanged(int value);
+    void on_dial_Vpos_ch3_valueChanged(int value);
+    void on_dial_Vpos_ch4_valueChanged(int value);
+
+    /* GUI slots - right pannel - utils */
+    void on_pushButton_average_off_clicked();
+    void on_pushButton_average_on_clicked();
+    void on_spinBox_average_valueChanged(int arg1);
+    void on_pushButton_bit8_off_clicked();
+    void on_pushButton_bit8_on_clicked();
+    void on_pushButton_bit12_off_clicked();
+    void on_pushButton_bit12_on_clicked();
+    void on_pushButton_fft_off_clicked();
+    void on_pushButton_fft_on_clicked();
+
 private:
     void initQcp();
     void closeEvent(QCloseEvent *event) override;
@@ -118,6 +188,8 @@ private:
 
     void updatePanel();
     void enablePanel(bool en);
+
+    void sendSet();
 
     /* main window */
     Ui::WindowScope* m_ui;
@@ -145,11 +217,11 @@ private:
     double m_gain4 = 1;
     double m_ref_v = 3.3;
 
-    /* enabled channels */
-    bool m_en1 = true;
-    bool m_en2 = true;
-    bool m_en3 = true;
-    bool m_en4 = true;
+    /* pos */
+    double m_offset1 = 0;
+    double m_offset2 = 0;
+    double m_offset3 = 0;
+    double m_offset4 = 0;
 
     /* cursors */
     QCPCursors* m_cursors;
@@ -169,7 +241,18 @@ private:
     bool m_cursorsH_en = false;
     bool m_math_2minus1 = false;
     bool m_math_4minus3 = false;
-    bool m_plot = true;
+    bool m_fft = false;
+    bool m_single = false;
+
+    /* average */
+    bool m_average = false;
+    int m_average_num = 1;
+    int m_average_cnt = 0;
+    int m_average_it = 0;
+    QVector<QVector<double>> m_average_buff_ch1;
+    QVector<QVector<double>> m_average_buff_ch2;
+    QVector<QVector<double>> m_average_buff_ch3;
+    QVector<QVector<double>> m_average_buff_ch4;
 
     /* stm32 pins */
     QString m_pin1 = "?";
@@ -188,6 +271,14 @@ private:
 
     /* DAQ data */
     DaqSettings m_daqSet;
+
+    /* helpers */
+    bool m_msgPending = false;
+    bool m_ignoreValuesChanged = false;
+    QButtonGroup m_trigMode;
+    QButtonGroup m_trigSlope;
+    QButtonGroup m_trigCh;
+    QButtonGroup m_fsMem;
 
     /* messages */
     Msg_SCOP_Set* m_msg_set;

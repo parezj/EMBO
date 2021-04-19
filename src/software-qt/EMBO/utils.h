@@ -18,6 +18,8 @@ double lin_to_exp_1to36M(double x, bool inverse = false);
 void msgBox(QMainWindow* window, QString text, MsgBoxType type);
 
 int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, double vcc, uint8_t* buff,
-                       QVector<double>* ch1, QVector<double>* ch2, QVector<double>* ch3, QVector<double>* ch4);
+                       QVector<double>* ch1, QVector<double>* ch2, QVector<double>* ch3, QVector<double>* ch4,
+                       double gain1, double gain2, double gain3, double gain4,
+                       double offset1, double offset2, double offset3, double offset4);
 
 #endif // UTILS_H

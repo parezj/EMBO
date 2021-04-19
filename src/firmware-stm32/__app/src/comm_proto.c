@@ -515,15 +515,29 @@ scpi_result_t EM_SCOPE_ForceTrig(scpi_t* context)
         return SCPI_RES_ERR;
     }
 
-    if (daq.trig.ready == EM_TRUE || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
+    if (daq.trig.post_start == EM_TRUE || daq.trig.ready == EM_TRUE || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
     {
         SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE);
         return SCPI_RES_ERR;
     }
 
-    daq.trig.forced = EM_TRUE;
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
-    daq_trig_trigger_scope(&daq);
+    uint8_t en = daq.enabled;
+
+    if (daq.enabled == EM_FALSE)
+        daq_enable(&daq, EM_TRUE);
+
+    if (daq.trig.pretrig_cntr < daq.trig.pretrig_val || en == EM_FALSE)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE2);
+        return SCPI_RES_ERR;
+    }
+
+    daq.trig.ready = EM_TRUE;
+
+    daq_enable(&daq, EM_FALSE);
+    daq.trig.pos_frst = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+
+    comm_daq_ready(comm_ptr, EM_RESP_RDY_F, daq.trig.pos_frst);
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;
@@ -670,15 +684,29 @@ scpi_result_t EM_LA_ForceTrig(scpi_t* context)
         return SCPI_RES_ERR;
     }
 
-    if (daq.trig.ready == EM_TRUE || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
+    if (daq.trig.post_start == EM_TRUE || daq.trig.ready == EM_TRUE || daq.trig.set.mode == DISABLED || daq.trig.set.mode == AUTO)
     {
         SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE);
         return SCPI_RES_ERR;
     }
 
-    daq.trig.forced = EM_TRUE;
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, EM_DMA_CH_LA, EM_DMA_LA);
-    daq_trig_trigger_la(&daq);
+    uint8_t en = daq.enabled;
+
+    if (daq.enabled == EM_FALSE)
+        daq_enable(&daq, EM_TRUE);
+
+    if (daq.trig.pretrig_cntr < daq.trig.pretrig_val || en == EM_FALSE)
+    {
+        SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE2);
+        return SCPI_RES_ERR;
+    }
+
+    daq.trig.ready = EM_TRUE;
+    daq_enable(&daq, EM_FALSE);
+
+    daq.trig.pos_frst = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig);
+
+    comm_daq_ready(comm_ptr, EM_RESP_RDY_F, daq.trig.pos_frst);
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;

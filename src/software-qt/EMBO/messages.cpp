@@ -140,7 +140,7 @@ void Msg_SYS_Mode::on_dataRx()
 
 void Msg_SYS_Uptime::on_dataRx()
 {
-    qInfo() << "SYS:UPT: " <<  m_rxData;
+    //qInfo() << "SYS:UPT: " <<  m_rxData;
     auto core = Core::getInstance(this);
 
     if (m_rxData.size() < 10)
@@ -240,8 +240,7 @@ void Msg_SCOP_ForceTrig::on_dataRx()
     qInfo() << "SCOP:FORC: " <<  m_rxData;
     //auto core = Core::getInstance(this);
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
+    emit ok();
 }
 
 /***************************** Messages - LA ****************************/
@@ -286,7 +285,7 @@ void Msg_LA_Set::on_dataRx()
     {
         if (tokens.size() != 2 && !m_rxData.contains(EMBO_OK))
         {
-            emit err("SCOPE set failed! " + m_rxData, CRITICAL, true);
+            emit err("LA set failed! " + m_rxData, CRITICAL, true);
             return;
         }
 
@@ -299,8 +298,7 @@ void Msg_LA_ForceTrig::on_dataRx()
     qInfo() << "LA:FORC: " <<  m_rxData;
     //auto core = Core::getInstance(this);
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
-    // TODO parse
+    emit ok();
 }
 
 /***************************** Messages - CNTR **************************/

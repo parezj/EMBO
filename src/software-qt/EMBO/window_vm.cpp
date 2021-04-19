@@ -85,10 +85,13 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     m_status_vcc = new QLabel(" ", this);
     m_status_rec = new QLabel(" ", this);
+    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel&nbsp;&nbsp;<span>", this);
     QWidget* widget = new QWidget(this);
+
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_vcc->setFont(font1);
     m_status_rec->setFont(font1);
+    status_zoom->setFont(font1);
 
     QLabel* status_img = new QLabel(this);
     QPixmap status_img_icon = QPixmap(":/main/resources/img/vm.png");
@@ -118,6 +121,7 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     layout->addWidget(status_spacer3, 0,4,1,1,Qt::AlignVCenter);
     layout->addWidget(m_status_rec,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
     layout->addItem(status_spacer0,   0,6,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_zoom,    0,7,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
@@ -558,7 +562,7 @@ void WindowVm::on_actionShowPlot_triggered(bool checked)
     if (checked)
     {
         this->setMinimumWidth(1244);
-        this->setMinimumHeight(653);
+        this->setMinimumHeight(606);
 
         this->setMaximumWidth(QWIDGETSIZE_MAX);
         this->setMaximumHeight(QWIDGETSIZE_MAX);
@@ -570,7 +574,7 @@ void WindowVm::on_actionShowPlot_triggered(bool checked)
     else
     {
         this->setFixedWidth(426);
-        this->setFixedHeight(653);
+        this->setFixedHeight(606);
 
         m_ui->groupBox_screen->hide();
     }

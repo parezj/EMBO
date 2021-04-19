@@ -114,7 +114,9 @@ void msgBox(QMainWindow* window, QString text, MsgBoxType type)
 }
 
 int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, double vcc, uint8_t* buff,
-                       QVector<double>* ch1, QVector<double>* ch2, QVector<double>* ch3, QVector<double>* ch4)
+                       QVector<double>* ch1, QVector<double>* ch2, QVector<double>* ch3, QVector<double>* ch4,
+                       double gain1, double gain2, double gain3, double gain4,
+                       double offset1, double offset2, double offset3, double offset4)
 {
     assert(total > 0 && bufflen >= total && buff != NULL);
 
@@ -150,22 +152,22 @@ int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, doubl
         if (i % ch_num == 0)
         {
             if (ch1 != NULL)
-                (*ch1)[k1++] = val;
+                (*ch1)[k1++] = (gain1 * val) + offset1;
         }
         else if (ch_num > 1 && i % ch_num == 1)
         {
             if (ch2 != NULL)
-                (*ch2)[k2++] = val;
+                (*ch2)[k2++] = (gain2 * val) + offset2;
         }
         else if (ch_num > 2 && i % ch_num == 2)
         {
             if (ch3 != NULL)
-                (*ch3)[k3++] = val;
+                (*ch3)[k3++] = (gain3 * val) + offset3;
         }
         else if (ch_num > 3) // && i % ch_num == 3)
         {
             if (ch4 != NULL)
-                (*ch4)[k4++] = val;
+                (*ch4)[k4++] = (gain4 * val) + offset4;
         }
     }
     return found;

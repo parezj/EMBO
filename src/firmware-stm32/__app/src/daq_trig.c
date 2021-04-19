@@ -347,7 +347,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             else if (self->trig.set.mode == SINGLE)
                 comm_daq_ready(comm_ptr, EM_RESP_RDY_S, self->trig.pos_frst);   // data ready - trig single
             else
-                comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);   // data ready - trig normal
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_N, self->trig.pos_frst);   // data ready - trig normal
 
             self->trig.la_state = 10;
             break;

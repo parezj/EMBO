@@ -344,6 +344,8 @@ void Core::on_serial_readyRead()
 
         if (messages[i].contains(EMBO_READY_A)) ready = Ready::READY_AUTO;
         if (messages[i].contains(EMBO_READY_N)) ready = Ready::READY_NORMAL;
+        if (messages[i].contains(EMBO_READY_S)) ready = Ready::READY_SINGLE;
+        if (messages[i].contains(EMBO_READY_F)) ready = Ready::READY_FORCED;
         if (messages[i].contains(EMBO_READY_D)) ready = Ready::READY_DISABLED;
 
         if (ready != Ready::NOT_READY) // handle RDY async message, which is different

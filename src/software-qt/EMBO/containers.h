@@ -38,7 +38,9 @@ enum Ready
     NOT_READY = 0,
     READY_AUTO = 1,
     READY_NORMAL = 2,
-    READY_DISABLED = 3
+    READY_FORCED = 3,
+    READY_SINGLE = 4,
+    READY_DISABLED = 5
 };
 
 enum SgenMode
@@ -134,7 +136,7 @@ public:
     int trig_pre;
 
     /* read-only */
-    double maxZ_kohm;
+    double maxZ_ohm;
     double fs_real;
 };
 

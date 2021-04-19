@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1244</width>
-    <height>653</height>
+    <width>1234</width>
+    <height>606</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>940</width>
-    <height>653</height>
+    <height>606</height>
    </size>
   </property>
   <property name="font">
@@ -33,7 +33,7 @@
    <property name="minimumSize">
     <size>
      <width>0</width>
-     <height>606</height>
+     <height>562</height>
     </size>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -961,25 +961,40 @@ p, li { white-space: pre-wrap; }
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.0em;}; 
+         <string notr="true">QGroupBox {background-color: rgba(220,220,220,0); border:0px}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
         </property>
         <property name="title">
          <string/>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>5</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>1</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QGroupBox" name="groupBox_ch1">
            <property name="minimumSize">
             <size>
              <width>390</width>
-             <height>100</height>
+             <height>95</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
              <width>16777215</width>
-             <height>100</height>
+             <height>95</height>
             </size>
            </property>
            <property name="font">
@@ -989,7 +1004,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px; }; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
            </property>
            <property name="title">
@@ -1002,7 +1017,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="geometry">
              <rect>
               <x>9</x>
-              <y>26</y>
+              <y>20</y>
               <width>225</width>
               <height>65</height>
              </rect>
@@ -1035,7 +1050,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
-	border-color: #0072BD;
+	border-color: gray;
 }
 
 QTextBrowser:disabled {
@@ -1060,7 +1075,7 @@ p, li { white-space: pre-wrap; }
             <property name="geometry">
              <rect>
               <x>259</x>
-              <y>61</y>
+              <y>55</y>
               <width>121</width>
               <height>30</height>
              </rect>
@@ -1141,7 +1156,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
             <property name="geometry">
              <rect>
               <x>264</x>
-              <y>65</y>
+              <y>59</y>
               <width>45</width>
               <height>23</height>
              </rect>
@@ -1165,7 +1180,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
             <property name="geometry">
              <rect>
               <x>259</x>
-              <y>26</y>
+              <y>20</y>
               <width>121</width>
               <height>30</height>
              </rect>
@@ -1225,7 +1240,7 @@ QPushButton:disabled {
             <property name="geometry">
              <rect>
               <x>259</x>
-              <y>26</y>
+              <y>20</y>
               <width>121</width>
               <height>30</height>
              </rect>
@@ -1285,7 +1300,7 @@ QPushButton:disabled {
             <property name="geometry">
              <rect>
               <x>10</x>
-              <y>8</y>
+              <y>1</y>
               <width>221</width>
               <height>16</height>
              </rect>
@@ -1307,7 +1322,7 @@ QPushButton:disabled {
             <property name="geometry">
              <rect>
               <x>239</x>
-              <y>26</y>
+              <y>20</y>
               <width>15</width>
               <height>65</height>
              </rect>
@@ -1419,7 +1434,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
-	border-color: #D95319;
+	border-color: gray;
 }
 
 QTextBrowser:disabled {
@@ -1802,7 +1817,7 @@ QProgressBar:disabled {
              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
-	border-color: #77AC30;
+	border-color: gray;
 }
 
 QTextBrowser:disabled {
@@ -2181,7 +2196,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
-	border-color: #7E2F8E;
+	border-color: gray;
 }
 
 QTextBrowser:disabled {
@@ -3209,7 +3224,7 @@ QPushButton:disabled {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1244</width>
+     <width>1234</width>
      <height>22</height>
     </rect>
    </property>

@@ -35,7 +35,7 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     connect(m_msg_read, &Msg_LA_Read::result, this, &WindowLa::on_msg_read, Qt::QueuedConnection);
 
     connect(m_msg_forceTrig, &Msg_LA_ForceTrig::ok, this, &WindowLa::on_msg_ok_forceTrig, Qt::QueuedConnection);
-    connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::QueuedConnection);
+    //connect(m_msg_forceTrig, &Msg_LA_ForceTrig::err, this, &WindowLa::on_msg_err, Qt::QueuedConnection);
 
     connect(Core::getInstance(), &Core::daqReady, this, &WindowLa::on_msg_daqReady, Qt::QueuedConnection);
 
@@ -50,9 +50,12 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     m_status_vcc = new QLabel(" ", this);
     m_status_rec = new QLabel(" ", this);
     QWidget* widget = new QWidget(this);
+    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel&nbsp;&nbsp;<span>", this);
+
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_vcc->setFont(font1);
     m_status_rec->setFont(font1);
+    status_zoom->setFont(font1);
 
     QLabel* status_img = new QLabel(this);
     QPixmap status_img_icon = QPixmap(":/main/resources/img/la.png");
@@ -82,10 +85,33 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     layout->addWidget(status_spacer3, 0,4,1,1,Qt::AlignVCenter);
     layout->addWidget(m_status_rec,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
     layout->addItem(status_spacer0,   0,6,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_zoom,    0,7,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
+
+    /* button groups */
+
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Auto);
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Normal);
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Disabled);
+
+    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Rising);
+    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Falling);
+
+    m_trigCh.addButton(m_ui->radioButton_trigCh_1);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_2);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_3);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_4);
+
+    m_fsMem.addButton(m_ui->radioButton_fsMem);
+    m_fsMem.addButton(m_ui->radioButton_div);
+
+    m_trigMode.setExclusive(true);
+    m_trigSlope.setExclusive(true);
+    m_trigCh.setExclusive(true);
+    m_fsMem.setExclusive(true);
 
     /* styles */
 
@@ -112,9 +138,10 @@ void WindowLa::initQcp()
     m_axis_ch4->setMinimumMargins(QMargins(25,1,15,30));
 
     m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
-    m_timeTicker->setTimeFormat("%s s");
+    m_timeTicker->setTimeFormat("%z ms");
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuSeconds, 1);
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMilliseconds, 1);
+    m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMicroseconds, 1);
 
     m_axis_ch1->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
     m_axis_ch2->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
@@ -275,6 +302,7 @@ void WindowLa::on_msg_ok_set(const QString fs_real, const QString)
     m_daqSet.fs_real = fs_real.toDouble();
 
     updatePanel();
+    m_msgPending = false;
 }
 
 void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real)
@@ -291,10 +319,11 @@ void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, D
     m_daqSet.trig_edge = trig_edge;
     m_daqSet.trig_mode = trig_mode;
     m_daqSet.trig_pre = trig_pre;
-    m_daqSet.maxZ_kohm = 0;
+    m_daqSet.maxZ_ohm = 0;
     m_daqSet.fs_real = fs_real;
 
     updatePanel();
+    m_msgPending = false;
 }
 
 void WindowLa::on_msg_read(const QByteArray data)
@@ -341,8 +370,16 @@ void WindowLa::on_msg_read(const QByteArray data)
 
 void WindowLa::on_msg_daqReady(Ready ready, int firstPos)
 {
+    if (m_msgPending)
+    {
+        m_msgPending = false;
+        return;
+    }
+
     m_firstPos = firstPos;
     m_ready = ready;
+
+    m_ui->radioButton_trigLed->setChecked(ready == Ready::READY_NORMAL || ready == Ready::READY_SINGLE);
 
     if (m_instrEnabled)
         Core::getInstance()->msgAdd(m_msg_read, true);
@@ -350,7 +387,7 @@ void WindowLa::on_msg_daqReady(Ready ready, int firstPos)
 
 void WindowLa::on_msg_ok_forceTrig(const QString, const QString)
 {
-
+    updatePanel();
 }
 
 /******************************** GUI slots ********************************/
@@ -725,23 +762,434 @@ void WindowLa::on_cursorH_valuesChanged(int min, int max)
 
 void WindowLa::on_qcpMouseWheel(QWheelEvent*)
 {
-    //m_ui->pushButton_reset->hide();
-    //m_ui->pushButton_resetZoom->show();
+    m_ui->pushButton_reset->hide();
+    m_ui->pushButton_resetZoom->show();
 }
 
 void WindowLa::on_qcpMousePress(QMouseEvent*)
 {
-    //m_ui->pushButton_reset->hide();
-    //m_ui->pushButton_resetZoom->show();
+    m_ui->pushButton_reset->hide();
+    m_ui->pushButton_resetZoom->show();
 }
 
-/********** right pannel - on/off **********/
+/********** right pannel - main **********/
 
-/********** right pannel - on/off **********/
 
-/********** right pannel - on/off **********/
+void WindowLa::on_pushButton_reset_clicked()
+{
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
-/********** right pannel - on/off **********/
+    // TODO
+}
+
+void WindowLa::on_pushButton_resetZoom_clicked()
+{
+    rescaleYAxis();
+    rescaleXAxis();
+
+    m_ui->pushButton_reset->show();
+    m_ui->pushButton_resetZoom->hide();
+}
+
+void WindowLa::on_pushButton_single_off_clicked()
+{
+    m_ui->radioButton_trigMode_Auto->setEnabled(false);
+    m_ui->radioButton_trigMode_Normal->setEnabled(false);
+    m_ui->radioButton_trigMode_Disabled->setEnabled(false);
+
+    m_ui->pushButton_single_on->show();
+    m_ui->pushButton_single_off->hide();
+
+    m_ui->pushButton_run->hide();
+    m_ui->pushButton_stop->hide();
+    m_ui->pushButton_run_off->show();
+
+    m_single = true;
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+void WindowLa::on_pushButton_single_on_clicked()
+{
+    m_single = true;
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+void WindowLa::on_pushButton_run_off_clicked()
+{
+    m_ui->radioButton_trigMode_Auto->setEnabled(true);
+    m_ui->radioButton_trigMode_Normal->setEnabled(true);
+    m_ui->radioButton_trigMode_Disabled->setEnabled(true);
+
+    m_ui->pushButton_single_off->show();
+    m_ui->pushButton_single_on->hide();
+
+    m_ui->pushButton_run->show();
+    m_ui->pushButton_stop->hide();
+    m_ui->pushButton_run_off->hide();
+
+    m_single = false;
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+void WindowLa::on_pushButton_run_clicked()
+{
+    m_ui->pushButton_run->hide();
+    m_ui->pushButton_stop->show();
+    m_ui->pushButton_run_off->hide();
+
+    m_instrEnabled = false;
+
+    m_ui->radioButton_trigLed->setChecked(false);
+
+    m_ui->groupBox_trigger->setEnabled(false);
+    m_ui->groupBox_horizontal->setEnabled(false);
+    m_ui->groupBox_vertical->setEnabled(false);
+}
+
+void WindowLa::on_pushButton_stop_clicked()
+{
+    m_ui->pushButton_run->show();
+    m_ui->pushButton_stop->hide();
+    m_ui->pushButton_run_off->hide();
+
+    m_instrEnabled = true;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    sendSet();
+}
+
+/********** right pannel - trigger **********/
+
+void WindowLa::on_radioButton_trigMode_Auto_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->pushButton_single_off->show();
+        m_ui->pushButton_single_on->hide();
+        m_single = false;
+
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigMode_Normal_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->pushButton_single_off->show();
+        m_ui->pushButton_single_on->hide();
+        m_single = false;
+
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigMode_Disabled_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->pushButton_single_off->show();
+        m_ui->pushButton_single_on->hide();
+        m_single = false;
+
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigSlope_Rising_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigSlope_Falling_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigCh_1_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigCh_2_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigCh_3_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowLa::on_radioButton_trigCh_4_clicked(bool checked)
+{
+    if (checked)
+    {
+        sendSet();
+    }
+}
+
+void WindowLa::on_spinBox_trigPre_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_trigPre->setValue(arg1);
+    m_ignoreValuesChanged = false;
+
+    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    m_cursorTrigPre->setValue(arg1 * 10, rngH.lower, rngH.upper);
+    m_ui->horizontalSlider_trigPre->setValue(arg1 * 10);
+
+    sendSet();
+}
+
+void WindowLa::on_dial_trigPre_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_trigPre->setValue(value);
+    m_ignoreValuesChanged = false;
+
+    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    m_cursorTrigPre->setValue(value * 10, rngH.lower, rngH.upper);
+    m_ui->horizontalSlider_trigPre->setValue(value * 10);
+
+    sendSet();
+}
+
+void WindowLa::on_pushButton_trigForc_clicked()
+{
+    enablePanel(false);
+    Core::getInstance()->msgAdd(m_msg_forceTrig, false, "");
+}
+
+/********** right pannel - horizontal **********/
+
+void WindowLa::on_radioButton_fsMem_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->groupBox_h_fsMem->setEnabled(true);
+        m_ui->groupBox_h_div->setEnabled(false);
+    }
+}
+
+void WindowLa::on_radioButton_div_clicked(bool checked)
+{
+    if (checked)
+    {
+        m_ui->groupBox_h_fsMem->setEnabled(false);
+        m_ui->groupBox_h_div->setEnabled(true);
+    }
+}
+
+void WindowLa::on_spinBox_mem_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_mem->setValue(arg1);
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowLa::on_dial_mem_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_mem->setValue(value);
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowLa::on_spinBox_fs_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->dial_fs->setValue((int)lin_to_exp_1to36M((int)m_ui->spinBox_fs->value(), true));
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowLa::on_dial_fs_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_fs->setValue((int)lin_to_exp_1to36M((int)value));
+    m_ignoreValuesChanged = false;
+
+    sendSet();
+}
+
+void WindowLa::on_spinBox_div_valueChanged(int arg1)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+
+    m_ignoreValuesChanged = false;
+
+    // TODO
+}
+
+void WindowLa::on_dial_div_valueChanged(int value)
+{
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ignoreValuesChanged = true;
+
+    m_ignoreValuesChanged = false;
+
+    // TODO
+}
+
+/********** right pannel - vertical **********/
+
+void WindowLa::on_pushButton_disable1_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable1->show();
+    m_ui->pushButton_disable1->hide();
+
+    m_daqSet.ch1_en = false;
+    updatePanel();
+}
+
+void WindowLa::on_pushButton_disable2_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable2->show();
+    m_ui->pushButton_disable2->hide();
+
+    m_daqSet.ch2_en = false;
+    updatePanel();
+}
+
+void WindowLa::on_pushButton_disable3_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable3->show();
+    m_ui->pushButton_disable3->hide();
+
+    m_daqSet.ch3_en = false;
+    updatePanel();
+}
+
+void WindowLa::on_pushButton_disable4_clicked()
+{
+    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+        return;
+
+    m_ui->pushButton_enable4->show();
+    m_ui->pushButton_disable4->hide();
+
+    m_daqSet.ch4_en = false;
+    updatePanel();
+}
+
+void WindowLa::on_pushButton_enable1_clicked()
+{
+    m_ui->pushButton_enable1->hide();
+    m_ui->pushButton_disable1->show();
+
+    m_daqSet.ch1_en = true;
+    updatePanel();
+}
+
+void WindowLa::on_pushButton_enable2_clicked()
+{
+    m_ui->pushButton_enable2->hide();
+    m_ui->pushButton_disable2->show();
+
+    m_daqSet.ch2_en = true;
+    updatePanel();
+}
+
+void WindowLa::on_pushButton_enable3_clicked()
+{
+    m_ui->pushButton_enable3->hide();
+    m_ui->pushButton_disable3->show();
+
+    m_daqSet.ch3_en = true;
+    updatePanel();
+}
+
+void WindowLa::on_pushButton_enable4_clicked()
+{
+    m_ui->pushButton_enable4->hide();
+    m_ui->pushButton_disable4->show();
+
+    m_daqSet.ch4_en = true;
+    updatePanel();
+}
+
+/********** right pannel - utils **********/
+
 
 /******************************** private ********************************/
 
@@ -759,8 +1207,13 @@ void WindowLa::closeEvent(QCloseEvent*)
 
 void WindowLa::showEvent(QShowEvent*)
 {
+    m_ignoreValuesChanged = true;
+
+    enablePanel(false);
+
     Core::getInstance()->setMode(LA);
-    m_instrEnabled = true;
+    if (m_ui->pushButton_run->isVisible())
+        m_instrEnabled = true;
 
     auto info = Core::getInstance()->getDevInfo();
 
@@ -788,7 +1241,17 @@ void WindowLa::showEvent(QShowEvent*)
 
     on_actionMeasReset_triggered();
 
+    m_ui->radioButton_trigLed->setChecked(false);
+
+    m_ui->dial_mem->setRange(1, info->mem);
+    m_ui->spinBox_mem->setRange(1, info->mem);
+
+    m_ui->dial_fs->setRange(1, info->la_fs);
+    m_ui->spinBox_fs->setRange(1, info->la_fs);
+
     m_timer_plot->start((int)TIMER_LA_PLOT);
+
+    m_ignoreValuesChanged = false;
 }
 
 void WindowLa::rescaleYAxis()
@@ -830,14 +1293,52 @@ void WindowLa::createX()
 
 void WindowLa::updatePanel()
 {
+    m_ignoreValuesChanged = true;
+
     createX();
     rescaleXAxis();
     rescaleYAxis();
+    enablePanel(true);
 
-    m_axis_ch1->setVisible(m_daqSet.ch1_en);
-    m_axis_ch2->setVisible(m_daqSet.ch2_en);
-    m_axis_ch3->setVisible(m_daqSet.ch3_en);
-    m_axis_ch4->setVisible(m_daqSet.ch4_en);
+    if (m_axis_ch1->visible()) {
+        m_axis_ch1->setVisible(false);
+        m_axis_ch1->layout()->take(m_axis_ch1);
+    }
+    if (m_axis_ch2->visible()) {
+        m_axis_ch2->setVisible(false);
+        m_axis_ch2->layout()->take(m_axis_ch2);
+    }
+    if (m_axis_ch3->visible()) {
+        m_axis_ch3->setVisible(false);
+        m_axis_ch3->layout()->take(m_axis_ch3);
+    }
+    if (m_axis_ch4->visible()) {
+        m_axis_ch4->setVisible(false);
+        m_axis_ch4->layout()->take(m_axis_ch4);
+    }
+
+    m_ui->customPlot->plotLayout()->simplify();
+
+    if (m_daqSet.ch4_en) {
+        m_ui->customPlot->plotLayout()->insertRow(0);
+        m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_ch4);
+        m_axis_ch4->setVisible(true);
+    }
+    if (m_daqSet.ch3_en) {
+        m_ui->customPlot->plotLayout()->insertRow(0);
+        m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_ch3);
+        m_axis_ch3->setVisible(true);
+    }
+    if (m_daqSet.ch2_en) {
+        m_ui->customPlot->plotLayout()->insertRow(0);
+        m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_ch2);
+        m_axis_ch2->setVisible(true);
+    }
+    if (m_daqSet.ch1_en) {
+        m_ui->customPlot->plotLayout()->insertRow(0);
+        m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_ch1);
+        m_axis_ch1->setVisible(true);
+    }
 
     m_axis_ch1->axis(QCPAxis::atBottom)->setTickLabels(false);
     m_axis_ch2->axis(QCPAxis::atBottom)->setTickLabels(false);
@@ -897,10 +1398,141 @@ void WindowLa::updatePanel()
 
     bot_cursors->showText(true);
 
-    enablePanel(true);
+    m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + format_unit(m_daqSet.fs_real, "Sps", 2) + " </p>");
+
+    m_ui->spinBox_mem->setValue(m_daqSet.mem);
+    m_ui->dial_mem->setValue(m_daqSet.mem);
+
+    m_ui->spinBox_fs->setValue(m_daqSet.fs);
+    m_ui->dial_fs->setValue(m_daqSet.fs);
+
+    m_ui->dial_trigPre->setValue(m_daqSet.trig_pre);
+    m_ui->spinBox_trigPre->setValue(m_daqSet.trig_pre);
+
+    auto rngH = m_axis_ch1->rangeZoomAxis(Qt::Horizontal)->range();
+
+    m_cursorTrigPre->setValue(m_daqSet.trig_pre * 10, rngH.lower, rngH.upper);
+    m_ui->horizontalSlider_trigPre->setValue(m_daqSet.trig_pre * 10);
+
+    m_ui->pushButton_single_off->show();
+    m_ui->pushButton_single_on->hide();
+    m_single = false;
+
+    if (m_daqSet.trig_mode == DaqTrigMode::AUTO)
+        m_ui->radioButton_trigMode_Auto->setChecked(true);
+    else if (m_daqSet.trig_mode == DaqTrigMode::NORMAL)
+        m_ui->radioButton_trigMode_Normal->setChecked(true);
+    else if (m_daqSet.trig_mode == DaqTrigMode::DISABLED)
+        m_ui->radioButton_trigMode_Disabled->setChecked(true);
+    else // SINGLE
+    {
+        m_ui->radioButton_trigMode_Auto->setEnabled(false);
+        m_ui->radioButton_trigMode_Normal->setEnabled(false);
+        m_ui->radioButton_trigMode_Disabled->setEnabled(false);
+
+        m_ui->pushButton_single_on->show();
+        m_ui->pushButton_single_off->hide();
+
+        m_ui->pushButton_run->hide();
+        m_ui->pushButton_stop->hide();
+        m_ui->pushButton_run_off->show();
+
+        m_single = true;
+    }
+
+    if (m_daqSet.trig_edge == DaqTrigEdge::RISING)
+        m_ui->radioButton_trigSlope_Rising->setChecked(true);
+    else // FALLING
+        m_ui->radioButton_trigSlope_Falling->setChecked(true);
+
+    if (m_daqSet.trig_ch == 1)
+        m_ui->radioButton_trigCh_1->setChecked(true);
+    else if (m_daqSet.trig_ch == 2)
+        m_ui->radioButton_trigCh_2->setChecked(true);
+    else if (m_daqSet.trig_ch == 3)
+        m_ui->radioButton_trigCh_3->setChecked(true);
+    else // 4
+        m_ui->radioButton_trigCh_4->setChecked(true);
+
+    m_ui->pushButton_trigForc->setEnabled(m_daqSet.trig_mode != DaqTrigMode::DISABLED && m_daqSet.trig_mode != DaqTrigMode::AUTO);
+
+    on_radioButton_fsMem_clicked(m_ui->radioButton_fsMem->isChecked());
+
+    m_ignoreValuesChanged = false;
 }
 
 void WindowLa::enablePanel(bool en)
 {
+    m_ui->groupBox_main->setEnabled(en);
+    m_ui->groupBox_trigger->setEnabled(en);
+    m_ui->groupBox_horizontal->setEnabled(en);
+    m_ui->groupBox_vertical->setEnabled(en);
+}
 
+void WindowLa::sendSet()
+{
+    m_msgPending = true;
+    enablePanel(false);
+
+    m_ui->radioButton_trigLed->setChecked(false);
+
+    m_daqSet.bits = B1;
+    m_daqSet.mem = m_ui->spinBox_mem->value();
+    m_daqSet.fs = m_ui->spinBox_fs->value();
+    m_daqSet.ch1_en = m_ui->pushButton_disable1->isVisible();
+    m_daqSet.ch2_en = m_ui->pushButton_disable2->isVisible();
+    m_daqSet.ch3_en = m_ui->pushButton_disable3->isVisible();
+    m_daqSet.ch4_en = m_ui->pushButton_disable4->isVisible();
+
+    if (m_ui->radioButton_trigCh_1->isChecked()) m_daqSet.trig_ch = 1;
+    else if (m_ui->radioButton_trigCh_2->isChecked()) m_daqSet.trig_ch = 2;
+    else if (m_ui->radioButton_trigCh_3->isChecked()) m_daqSet.trig_ch = 3;
+    else m_daqSet.trig_ch = 4;
+
+    m_daqSet.trig_val = 0;
+    m_daqSet.trig_pre = m_ui->spinBox_trigPre->value();
+
+    QString trigMode = "0";
+
+    if (m_single)
+    {
+        m_daqSet.trig_mode = SINGLE;
+        trigMode = "S";
+    }
+    else if (m_ui->radioButton_trigMode_Auto->isChecked())
+    {
+        m_daqSet.trig_mode = AUTO;
+        trigMode = "A";
+    }
+    else if (m_ui->radioButton_trigMode_Normal->isChecked())
+    {
+        m_daqSet.trig_mode = NORMAL;
+        trigMode = "N";
+    }
+    else if (m_ui->radioButton_trigMode_Disabled->isChecked())
+    {
+        m_daqSet.trig_mode = DISABLED;
+        trigMode = "D";
+    }
+    else assert(0);
+
+    QString trigEdge = "0";
+
+    if (m_ui->radioButton_trigSlope_Rising->isChecked())
+    {
+        m_daqSet.trig_edge = RISING;
+        trigEdge = "R";
+    }
+    else
+    {
+        m_daqSet.trig_edge = FALLING;
+        trigEdge = "F";
+    }
+
+    Core::getInstance()->msgAdd(m_msg_set, false, QString::number(m_daqSet.mem) + "," +       // mem
+                                                  QString::number(m_daqSet.fs) + "," +        // fs
+                                                  QString::number(m_daqSet.trig_ch) + "," +   // trig ch
+                                                  trigEdge + "," +                            // trig edge
+                                                  trigMode + "," +                            // trig mode
+                                                  QString::number(m_daqSet.trig_pre));        // trig pre
 }

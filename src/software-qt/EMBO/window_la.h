@@ -16,7 +16,7 @@
 #include <QLabel>
 
 
-#define TIMER_LA_PLOT           16.6    // graph refresh rate = 16.6 ms = 60 FPS
+#define TIMER_LA_PLOT           30.6    // graph refresh rate = 16.6 ms = 60 FPS
 
 #define GRAPH_CH1       0
 #define GRAPH_CH2       1
@@ -101,6 +101,52 @@ private slots:
     void on_qcpMouseWheel(QWheelEvent*);
     void on_qcpMousePress(QMouseEvent*);
 
+    /* GUI slots - right pannel - main */
+    //void on_radioButton_zoomH_clicked(bool checked);
+    //void on_radioButton_zoomV_clicked(bool checked);
+    void on_pushButton_reset_clicked();
+    void on_pushButton_resetZoom_clicked();
+    void on_pushButton_single_off_clicked();
+    void on_pushButton_single_on_clicked();
+    void on_pushButton_run_off_clicked();
+    void on_pushButton_run_clicked();
+    void on_pushButton_stop_clicked();
+
+    /* GUI slots - right pannel - trigger */
+    void on_radioButton_trigMode_Auto_clicked(bool checked);
+    void on_radioButton_trigMode_Normal_clicked(bool checked);
+    void on_radioButton_trigMode_Disabled_clicked(bool checked);
+    void on_radioButton_trigSlope_Rising_clicked(bool checked);
+    void on_radioButton_trigSlope_Falling_clicked(bool checked);
+    void on_radioButton_trigCh_1_clicked(bool checked);
+    void on_radioButton_trigCh_2_clicked(bool checked);
+    void on_radioButton_trigCh_3_clicked(bool checked);
+    void on_radioButton_trigCh_4_clicked(bool checked);
+    void on_spinBox_trigPre_valueChanged(int arg1);
+    void on_dial_trigPre_valueChanged(int value);
+    void on_pushButton_trigForc_clicked();
+
+    /* GUI slots - right pannel - horizontal */
+    void on_radioButton_fsMem_clicked(bool checked);
+    void on_radioButton_div_clicked(bool checked);
+    void on_spinBox_mem_valueChanged(int arg1);
+    void on_dial_mem_valueChanged(int value);
+    void on_spinBox_fs_valueChanged(int arg1);
+    void on_dial_fs_valueChanged(int value);
+    void on_spinBox_div_valueChanged(int arg1);
+    void on_dial_div_valueChanged(int value);
+
+    /* GUI slots - right pannel - vertical */
+    void on_pushButton_disable1_clicked();
+    void on_pushButton_disable2_clicked();
+    void on_pushButton_disable3_clicked();
+    void on_pushButton_disable4_clicked();
+    void on_pushButton_enable1_clicked();
+    void on_pushButton_enable2_clicked();
+    void on_pushButton_enable3_clicked();
+    void on_pushButton_enable4_clicked();
+
+    /* GUI slots - right pannel - utils */
 
 private:
     void initQcp();
@@ -113,6 +159,8 @@ private:
 
     void updatePanel();
     void enablePanel(bool en);
+
+    void sendSet();
 
     /* main window */
     Ui::WindowLa* m_ui;
@@ -172,8 +220,8 @@ private:
     bool m_cursorsH_en = false;
     bool m_math_2minus1 = false;
     bool m_math_4minus3 = false;
-    bool m_plot = true;
     bool m_export = false;
+    bool m_single = false;
 
     /* stm32 pins */
     QString m_pin1 = "?";
@@ -189,6 +237,14 @@ private:
 
     /* recorder */
     Recorder m_rec;
+
+    /* helpers */
+    bool m_msgPending = false;
+    bool m_ignoreValuesChanged = false;
+    QButtonGroup m_trigMode;
+    QButtonGroup m_trigSlope;
+    QButtonGroup m_trigCh;
+    QButtonGroup m_fsMem;
 
     /* DAQ data */
     DaqSettings m_daqSet;
