@@ -50,12 +50,12 @@ signals:
 
 private slots:
     /* data msg */
-    void on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real);
+    void on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real_n, const QString fs_real);
     void on_msg_read(const QByteArray data);
 
     /* ok-err msg */
     void on_msg_err(const QString text, MsgBoxType type, bool needClose);
-    void on_msg_ok_set(const QString fs_real, const QString);
+    void on_msg_ok_set(double fs_real_n, const QString fs_real);
     void on_msg_ok_forceTrig(const QString, const QString);
 
      /* async ready msg */
@@ -102,8 +102,8 @@ private slots:
     void on_qcpMousePress(QMouseEvent*);
 
     /* GUI slots - right pannel - main */
-    //void on_radioButton_zoomH_clicked(bool checked);
-    //void on_radioButton_zoomV_clicked(bool checked);
+    void on_radioButton_zoomH_clicked(bool checked);
+    void on_radioButton_zoomV_clicked(bool checked);
     void on_pushButton_reset_clicked();
     void on_pushButton_resetZoom_clicked();
     void on_pushButton_single_off_clicked();
@@ -125,6 +125,8 @@ private slots:
     void on_spinBox_trigPre_valueChanged(int arg1);
     void on_dial_trigPre_valueChanged(int value);
     void on_pushButton_trigForc_clicked();
+    void on_hideTrigSliders();
+    void on_dial_trigPre_sliderPressed();
 
     /* GUI slots - right pannel - horizontal */
     void on_radioButton_fsMem_clicked(bool checked);
@@ -167,6 +169,7 @@ private:
 
     /* timers */
     QTimer* m_timer_plot;
+    QTimer* m_timer_trigSliders;
 
     /* async ready data */
     int m_firstPos;
@@ -205,7 +208,12 @@ private:
     QCPCursors* m_cursors2;
     QCPCursors* m_cursors3;
     QCPCursors* m_cursors4;
-    QCPCursor* m_cursorTrigPre;
+
+    QCPCursor* m_cursorTrigPre1;
+    QCPCursor* m_cursorTrigPre2;
+    QCPCursor* m_cursorTrigPre3;
+    QCPCursor* m_cursorTrigPre4;
+
     double m_cursorV_min = CURSOR_DEFAULT_V_MIN;
     double m_cursorV_max = CURSOR_DEFAULT_V_MAX;
     double m_cursorH_min = CURSOR_DEFAULT_H_MIN;
@@ -239,6 +247,7 @@ private:
     Recorder m_rec;
 
     /* helpers */
+    bool m_rescale_needed = true;
     bool m_msgPending = false;
     bool m_ignoreValuesChanged = false;
     QButtonGroup m_trigMode;

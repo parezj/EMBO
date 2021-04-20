@@ -88,9 +88,11 @@ public:
     QCPCursor(QObject* parent, QCustomPlot* plot, QCPAxisRect* rect = NULL, bool horizontal = true, bool center = false,
               QColor colorLine = Qt::black, QColor colorText = Qt::black, Qt::PenStyle style = Qt::DashLine);
 
-    void setValue(int percent, double rangeMin, double rangeMax);
-    void refresh(double rangeMin, double rangeMax, bool replot = true);
+    void setValue(int percent, double vRangeMin, double vRangeMax, double hRangeMin, double hRangeMax);
+    void refresh(double vRangeMin, double vRangeMax, double hRangeMin, double hRangeMax, bool replot = true);
+
     void show(bool val);
+    void showText(bool val);
 
 private:
     void reCalc();
@@ -103,9 +105,12 @@ private:
     QCPItemLine* m_cursor;
     QCPItemText* m_text;
 
+    double m_hRangeMin = 0;
+    double m_hRangeMax = 10;
+    double m_vRangeMin = 0;
+    double m_vRangeMax = 10;
+
     int m_value = 5;
-    double m_rangeMin = 0;
-    double m_rangeMax = 10;
     bool m_horizontal = true;
 };
 

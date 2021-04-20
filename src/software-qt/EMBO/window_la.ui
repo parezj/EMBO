@@ -23,7 +23,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>EMBO - Voltmeter</string>
+   <string>EMBO - Logic Analyzer</string>
   </property>
   <property name="windowIcon">
    <iconset resource="resources.qrc">
@@ -52,6 +52,34 @@
     <property name="spacing">
      <number>0</number>
     </property>
+    <item row="3" column="1">
+     <widget class="Line" name="line">
+      <property name="windowModality">
+       <enum>Qt::NonModal</enum>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>2</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>2</height>
+       </size>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="1">
      <layout class="QGridLayout" name="layout_main">
       <property name="leftMargin">
@@ -69,322 +97,6 @@
       <property name="spacing">
        <number>6</number>
       </property>
-      <item row="0" column="0">
-       <layout class="QVBoxLayout" name="layout_screen">
-        <item>
-         <widget class="QGroupBox" name="groupBox_screen">
-          <property name="minimumSize">
-           <size>
-            <width>0</width>
-            <height>100</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.0em;}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
-          </property>
-          <property name="title">
-           <string/>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <property name="topMargin">
-            <number>0</number>
-           </property>
-           <property name="rightMargin">
-            <number>9</number>
-           </property>
-           <property name="verticalSpacing">
-            <number>3</number>
-           </property>
-           <item row="1" column="0">
-            <layout class="QGridLayout" name="gridLayout_plot">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <item row="2" column="1">
-              <widget class="ctkRangeSlider" name="horizontalSlider_cursorH">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-height: 25px;
-    max-height: 25px;
-	margin-left: 13px;
-	margin-right:2px;
-}
-
-ctkRangeSlider::groove:horizontal {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:horizontal {
-     width: 25px;
-	 image: url(:/main/resources/img/range_down.png);
-}
-
-ctkRangeSlider::handle:horizontal:hover {
-     width: 25px;
-	 image: url(:/main/resources/img/range_down2.png);
-}
-
-QSlider {
-    min-height: 25px;
-    max-height: 25px;
-	margin-left:13px;
-	margin-right:2px;
-}
-
-QSlider::groove:horizontal {
-	background-color: transparent;
-}
-
-QSlider::handle:horizontal {
-     width: 25px;
-	 image: url(:/main/resources/img/range_down.png);
-}
-
-QSlider::handle:horizontal:hover {
-	 width: 25px;
-	 image: url(:/main/resources/img/range_down2.png);
-}</string>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="singleStep">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>500</number>
-               </property>
-               <property name="sliderPosition">
-                <number>500</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100000</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QCustomPlot" name="customPlot" native="true">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-color: white;border: 0px;</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QSlider" name="horizontalSlider_trigPre">
-               <property name="enabled">
-                <bool>false</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>10</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-height: 10px;
-    max-height: 10px;
-	margin-left: 13px;
-	margin-right:2px;
-}
-
-ctkRangeSlider::groove:horizontal {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:horizontal {
-     width: 36px;
-	 image: url(:/main/resources/img/range_up_sm.png);
-}
-
-ctkRangeSlider::handle:horizontal:hover {
-     width: 36px;
-	 image: url(:/main/resources/img/range_up2_sm.png);
-}
-
-QSlider {
-    min-height: 10px;
-    max-height: 10px;
-	margin-left: 13px;
-	margin-right:2px;
-}
-
-QSlider::groove:horizontal {
-	background-color: transparent;
-}
-
-QSlider::handle:horizontal {
-     width: 36px;
-	 image: url(:/main/resources/img/range_up_sm.png);
-}
-
-QSlider::handle:horizontal:hover {
-	 width: 36px;
-	 image: url(:/main/resources/img/range_up2_sm.png);
-}</string>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="singleStep">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>500</number>
-               </property>
-               <property name="sliderPosition">
-                <number>500</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100000</number>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="ctkRangeSlider" name="horizontalSlider_cursorV">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>25</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-width: 25px;
-    max-width: 25px;
-	margin-bottom: 16px;
-	margin-top: 2px;
-}
-
-ctkRangeSlider::groove:vertical {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:vertical {
-     height: 25px;
-	 image: url(:/main/resources/img/range_left.png);
-}
-
-ctkRangeSlider::handle:vertical:hover {
-     height: 25px;
-	 image: url(:/main/resources/img/range_left2.png);
-}
-
-QSlider {
-    min-width: 25px;
-    max-width: 25px;
-	margin-bottom: 16px;
-	margin-top: 2px;
-}
-
-QSlider::groove:vertical {
-	background-color: transparent;
-}
-
-QSlider::handle:vertical {
-     height: 25px;
-	 image: url(:/main/resources/img/range_left.png);
-}
-
-QSlider::handle:vertical:hover {
-	 height: 25px;
-	 image: url(:/main/resources/img/range_left2.png);
-}</string>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="value">
-                <number>500</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100000</number>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </item>
       <item row="0" column="1">
        <widget class="QGroupBox" name="layout_controls">
         <property name="sizePolicy">
@@ -417,9 +129,12 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
         <property name="title">
          <string/>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <property name="spacing">
-          <number>2</number>
+          <number>0</number>
          </property>
          <property name="leftMargin">
           <number>5</number>
@@ -433,6 +148,19 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item>
           <widget class="QGroupBox" name="groupBox_main">
            <property name="minimumSize">
@@ -848,7 +576,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </property>
             <widget class="QRadioButton" name="radioButton_zoomH">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="geometry">
               <rect>
@@ -897,6 +625,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1022,6 +754,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1231,6 +967,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1297,6 +1037,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1363,6 +1107,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1467,6 +1215,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1575,6 +1327,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1641,6 +1397,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1728,6 +1488,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1794,6 +1558,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -1860,6 +1628,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -2093,6 +1865,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <property name="value">
               <number>99</number>
              </property>
+             <property name="tracking">
+              <bool>true</bool>
+             </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -2163,13 +1938,13 @@ QSpinBox::down-button:hover {
 	image: url(:/main/resources/img/arrow_down4b.png);
  }
 
-QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
+QSpinBox:disabled { background-color: rgba(220,220,220, 1.0); border: 1px transparent; border-radius:10px;
+                                          border: 1px solid gray; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
-QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up2.png); }
+QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up3.png); }
 
-QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down2.png); }
+QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down3.png); }
 </string>
              </property>
              <property name="wrapping">
@@ -2363,6 +2138,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -2429,6 +2208,10 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
 }</string>
              </property>
              <property name="text">
@@ -2466,7 +2249,7 @@ QRadioButton::indicator::checked {
               </font>
              </property>
              <property name="text">
-              <string>          Real Fs         </string>
+              <string>Real Fs (Sps)</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -2481,7 +2264,7 @@ QRadioButton::indicator::checked {
                <x>0</x>
                <y>90</y>
                <width>121</width>
-               <height>31</height>
+               <height>61</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -2492,7 +2275,7 @@ QRadioButton::indicator::checked {
              </property>
              <property name="font">
               <font>
-               <family>Roboto Mono Light</family>
+               <family>Roboto Mono Medium</family>
                <pointsize>12</pointsize>
                <weight>50</weight>
                <italic>false</italic>
@@ -2505,17 +2288,23 @@ QRadioButton::indicator::checked {
              <property name="styleSheet">
               <string notr="true">QTextBrowser {
 	background-color:transparent; border: 0px;
-	text-align:right;font-family:'Roboto Mono Light','Roboto'; font-size:12pt;
+	text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:12pt;
 	color:black; 
 }
 </string>
+             </property>
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
+             </property>
+             <property name="horizontalScrollBarPolicy">
+              <enum>Qt::ScrollBarAlwaysOff</enum>
              </property>
              <property name="html">
               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Light','Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Light','Roboto Mono Light';&quot;&gt;156.14 kSps&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium','Roboto'; font-size:12pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Roboto Mono Medium','Roboto Mono Medium';&quot;&gt;1002.123456&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
              </property>
             </widget>
             <widget class="Line" name="line_6">
@@ -2666,7 +2455,7 @@ QSpinBox::down-button:hover {
 	image: url(:/main/resources/img/arrow_down4b.png);
  }
 
-QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
+QSpinBox:disabled { background-color: rgba(220,220,220, 1.0); border: 1px transparent; border-radius:10px;
                                           border: 1px solid gray; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
@@ -2697,7 +2486,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
               <string/>
              </property>
              <property name="minimum">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="maximum">
               <number>10000</number>
@@ -2744,7 +2533,7 @@ QSpinBox::down-button:hover {
 	image: url(:/main/resources/img/arrow_down4b.png);
  }
 
-QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
+QSpinBox:disabled { background-color: rgba(220,220,220, 1.0); border: 1px transparent; border-radius:10px;
                                           border: 1px solid gray; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
@@ -2842,7 +2631,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
               <string>CH1 vertical position</string>
              </property>
              <property name="minimum">
-              <number>1</number>
+              <number>2</number>
              </property>
              <property name="maximum">
               <number>10000</number>
@@ -2896,7 +2685,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
            </widget>
            <widget class="QGroupBox" name="groupBox_h_div">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="geometry">
              <rect>
@@ -2933,7 +2722,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             </property>
             <widget class="QSpinBox" name="spinBox_div">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="geometry">
               <rect>
@@ -3014,7 +2803,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
             </widget>
             <widget class="QLabel" name="label_div">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="geometry">
               <rect>
@@ -3057,7 +2846,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
             </widget>
             <widget class="QDial" name="dial_div">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="geometry">
               <rect>
@@ -4332,7 +4121,7 @@ QPushButton:disabled {
           </widget>
          </item>
          <item>
-          <spacer name="verticalSpacer_4">
+          <spacer name="verticalSpacer_2">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
            </property>
@@ -4347,35 +4136,332 @@ QPushButton:disabled {
         </layout>
        </widget>
       </item>
+      <item row="0" column="0">
+       <layout class="QVBoxLayout" name="layout_screen">
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>5</number>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="groupBox_screen">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>100</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.0em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+          </property>
+          <property name="title">
+           <string/>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_2">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>9</number>
+           </property>
+           <property name="verticalSpacing">
+            <number>3</number>
+           </property>
+           <item row="1" column="0">
+            <layout class="QGridLayout" name="gridLayout_plot">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item row="2" column="1">
+              <widget class="ctkRangeSlider" name="horizontalSlider_cursorH">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">ctkRangeSlider {
+    min-height: 25px;
+    max-height: 25px;
+	margin-left: 13px;
+	margin-right:2px;
+}
+
+ctkRangeSlider::groove:horizontal {
+    background-color: transparent;
+}
+
+ctkRangeSlider::handle:horizontal {
+     width: 25px;
+	 image: url(:/main/resources/img/range_down.png);
+}
+
+ctkRangeSlider::handle:horizontal:hover {
+     width: 25px;
+	 image: url(:/main/resources/img/range_down2.png);
+}
+
+QSlider {
+    min-height: 25px;
+    max-height: 25px;
+	margin-left:13px;
+	margin-right:2px;
+}
+
+QSlider::groove:horizontal {
+	background-color: transparent;
+}
+
+QSlider::handle:horizontal {
+     width: 25px;
+	 image: url(:/main/resources/img/range_down.png);
+}
+
+QSlider::handle:horizontal:hover {
+	 width: 25px;
+	 image: url(:/main/resources/img/range_down2.png);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>500</number>
+               </property>
+               <property name="sliderPosition">
+                <number>500</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>100000</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QCustomPlot" name="customPlot" native="true">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: white;border: 0px;</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QSlider" name="horizontalSlider_trigPre">
+               <property name="enabled">
+                <bool>false</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>10</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">ctkRangeSlider {
+    min-height: 10px;
+    max-height: 10px;
+	margin-left: 8px;
+	margin-right:0px;
+}
+
+ctkRangeSlider::groove:horizontal {
+    background-color: transparent;
+}
+
+ctkRangeSlider::handle:horizontal {
+     width: 36px;
+	 image: url(:/main/resources/img/range_up_sm.png);
+}
+
+ctkRangeSlider::handle:horizontal:hover {
+     width: 36px;
+	 image: url(:/main/resources/img/range_up2_sm.png);
+}
+
+QSlider {
+    min-height: 10px;
+    max-height: 10px;
+	margin-left: 8px;
+	margin-right:0px;
+}
+
+QSlider::groove:horizontal {
+	background-color: transparent;
+}
+
+QSlider::handle:horizontal {
+     width: 36px;
+	 image: url(:/main/resources/img/range_up_sm.png);
+}
+
+QSlider::handle:horizontal:hover {
+	 width: 36px;
+	 image: url(:/main/resources/img/range_up2_sm.png);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>50</number>
+               </property>
+               <property name="sliderPosition">
+                <number>50</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>100000</number>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="ctkRangeSlider" name="horizontalSlider_cursorV">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>25</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <weight>50</weight>
+                 <bold>false</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">ctkRangeSlider {
+    min-width: 25px;
+    max-width: 25px;
+	margin-bottom: 16px;
+	margin-top: 2px;
+}
+
+ctkRangeSlider::groove:vertical {
+    background-color: transparent;
+}
+
+ctkRangeSlider::handle:vertical {
+     height: 25px;
+	 image: url(:/main/resources/img/range_left.png);
+}
+
+ctkRangeSlider::handle:vertical:hover {
+     height: 25px;
+	 image: url(:/main/resources/img/range_left2.png);
+}
+
+QSlider {
+    min-width: 25px;
+    max-width: 25px;
+	margin-bottom: 16px;
+	margin-top: 2px;
+}
+
+QSlider::groove:vertical {
+	background-color: transparent;
+}
+
+QSlider::handle:vertical {
+     height: 25px;
+	 image: url(:/main/resources/img/range_left.png);
+}
+
+QSlider::handle:vertical:hover {
+	 height: 25px;
+	 image: url(:/main/resources/img/range_left2.png);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="value">
+                <number>500</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>100000</number>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
-    </item>
-    <item row="3" column="1">
-     <widget class="Line" name="line">
-      <property name="windowModality">
-       <enum>Qt::NonModal</enum>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>2</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>2</height>
-       </size>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>

@@ -217,7 +217,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
     }
     else // mode == LA
     {
-        if (mem_per_ch < 1 || (mem_per_ch * 2) > EM_DAQ_MAX_MEM)
+        if (mem_per_ch < 1 || mem_per_ch > EM_DAQ_MAX_MEM)
             return -2;
 
         daq_malloc(self, &self->buff1, mem_per_ch, EM_MEM_RESERVE, 4, (uint32_t)&EM_GPIO_LA_PORT->IDR, EM_DMA_CH_LA, EM_DMA_LA, self->set.bits);

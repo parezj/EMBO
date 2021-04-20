@@ -7,23 +7,24 @@
 #include "css.h"
 
 
-#define PERCENT_MAX         1000.0
-
 /* classic mode */
+
+#define PERCENT_MAX         1000.0
 
 #define HCUROSR_DIFF_POS    850.0
 #define VCUROSR_DIFF_POS    170.0
 #define HCUROSR_DIFF_POS2   850.0
 #define VCUROSR_DIFF_POS2   200.0
 
-/* center mode */
-
 #define CURSOR_DIFF_CNTR    500.0
 
 /* single cursor mode */
 
-#define HCUROSR_DIFF_POS3   150.0
-#define VCUROSR_DIFF_POS3   850.0
+#define PERCENT_MAX3        100.0
+
+#define CURSOR_DIFF_CNTR3   50.0
+#define HCUROSR_DIFF_POS3   90.0
+#define VCUROSR_DIFF_POS3   10.0
 
 int QCPCursors::uniqueNum = 0;
 
@@ -453,21 +454,26 @@ QCPCursor::QCPCursor(QObject* parent, QCustomPlot* plot, QCPAxisRect* rect, bool
     m_cursorLayer->setVisible(false);
 }
 
-void QCPCursor::setValue(int percent, double rangeMin, double rangeMax)
+void QCPCursor::setValue(int percent, double vRangeMin, double vRangeMax, double hRangeMin, double hRangeMax)
 {
     m_value = percent;
-    m_rangeMin = rangeMin;
-    m_rangeMax = rangeMax;
+
+    m_vRangeMin = vRangeMin;
+    m_vRangeMax = vRangeMax;
+    m_hRangeMin = hRangeMin;
+    m_hRangeMax = hRangeMax;
 
     reCalc();
 
     m_cursorLayer->replot();
 }
 
-void QCPCursor::refresh(double rangeMin, double rangeMax, bool replot)
+void QCPCursor::refresh(double vRangeMin, double vRangeMax, double hRangeMin, double hRangeMax, bool replot)
 {
-    m_rangeMin = rangeMin;
-    m_rangeMax = rangeMax;
+    m_vRangeMin = vRangeMin;
+    m_vRangeMax = vRangeMax;
+    m_hRangeMin = hRangeMin;
+    m_hRangeMax = hRangeMax;
 
     reCalc();
 
@@ -483,13 +489,17 @@ void QCPCursor::show(bool val)
 
 void QCPCursor::reCalc()
 {
-    double d = m_rangeMax - m_rangeMin;
-    double val = ((double)(m_value / PERCENT_MAX) * d) + m_rangeMin;
+    double dH = m_hRangeMax - m_hRangeMin;
+    double dV = m_vRangeMax - m_vRangeMin;
 
-    double textPos = ((double)((m_center ? CURSOR_DIFF_CNTR : (m_horizontal ? HCUROSR_DIFF_POS3 : VCUROSR_DIFF_POS3)) / PERCENT_MAX) * d) + m_rangeMin;
+    double val = ((double)(m_value / PERCENT_MAX3) * (m_horizontal ? dV : dH)) + (m_horizontal ? m_vRangeMin : m_hRangeMin);
+
+    double textPos = ((double)((m_center ? CURSOR_DIFF_CNTR3 : (m_horizontal ? HCUROSR_DIFF_POS3 : VCUROSR_DIFF_POS3)) / PERCENT_MAX3) *
+                      (m_horizontal ? dH : dV)) + (m_horizontal ? m_hRangeMin : m_vRangeMin);
+
     double m_text_sz = m_text->bottomRight->pixelPosition().x() - m_text->bottomLeft->pixelPosition().x();
 
-    if (m_horizontal)
+    if (!m_horizontal)
     {
         m_text->setText(' ' + QCPCursors::formatUnitS(val) + ' ');
 
@@ -509,4 +519,9 @@ void QCPCursor::reCalc()
         m_cursor->start->setCoords(-QCPRange::maxRange, val);
         m_cursor->end->setCoords(QCPRange::maxRange, val);
     }
+}
+
+void QCPCursor::showText(bool val)
+{
+    m_text->setVisible(val);
 }

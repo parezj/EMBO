@@ -167,4 +167,6 @@
 #define COLOR6      "#4DBEEE"
 #define COLOR7      "#A2142F"
 
+#define COLOR9      "#256552"
+
 #endif // CSS_H

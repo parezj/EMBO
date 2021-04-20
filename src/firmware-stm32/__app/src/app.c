@@ -65,7 +65,7 @@ volatile UBaseType_t watermark_t5 = -1;
 
 void app_main(void)
 {
-    __disable_irq();
+    __disable_irq(); // should be as first command also in main.c to prevent xSemaphoreGiveFromISR in assert fail
 
     sem1_comm = xSemaphoreCreateBinaryStatic(&buff_sem1_comm);
     sem2_trig = xSemaphoreCreateBinaryStatic(&buff_sem2_trig);

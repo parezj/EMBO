@@ -137,7 +137,8 @@ public:
 
     /* read-only */
     double maxZ_ohm;
-    double fs_real;
+    double fs_real_n;
+    QString fs_real;
 };
 
 #endif // CONTAINERS_H

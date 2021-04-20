@@ -54,11 +54,11 @@ scpi_result_t EM_SYS_Mode(scpi_t* context)
     if (!SCPI_ParamCharacters(context, &p1, &p1l, TRUE))
         return SCPI_RES_ERR;
 
-    if (((p1l == 5) && (strncmp2(p1, "SCOPE", 5) == 0)) || ((p1l == 4) && (strncmp2(p1, "SCOP", 4) == 0)))
+    if (((p1l == 5) && (strncmp(p1, "SCOPE", 5) == 0)) || ((p1l == 4) && (strncmp(p1, "SCOP", 4) == 0)))
         daq_mode_set(&daq, SCOPE);
-    else if ((p1l == 2) && (strncmp2(p1, "VM", 2) == 0))
+    else if ((p1l == 2) && (strncmp(p1, "VM", 2) == 0))
         daq_mode_set(&daq, VM);
-    else if ((p1l == 2) && (strncmp2(p1, "LA", 2) == 0))
+    else if ((p1l == 2) && (strncmp(p1, "LA", 2) == 0))
         daq_mode_set(&daq, LA);
     else
     {
@@ -436,13 +436,13 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             daq_settings_save(&daq.set, &daq.trig.set, &daq.save_s, &daq.trig.save_s); // added later
             daq_enable(&daq, EM_TRUE);
 
-            char buff[40];
+            char buff[45];
             char maxZ_s[15];
             double max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
             sprint_fast(maxZ_s, "%s", max_Z, 1);
 
-            char freq_real_s[15];
-            sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+            char freq_real_s[20];
+            sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
             int len = sprintf(buff, "\"OK\",%s,%s", maxZ_s, freq_real_s);
 
@@ -471,7 +471,7 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
 {
     if (daq.mode == SCOPE)
     {
-        char buff[100];
+        char buff[105];
         char chans_en[5];
         char edge_s[2];
         char mode_s[2];
@@ -491,8 +491,8 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
         double max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
         sprint_fast(maxZ_s, "%s", max_Z, 3);
 
-        char freq_real_s[15];
-        sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+        char freq_real_s[20];
+        sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
         int len = sprintf(buff, "%d,%d,%d,%s,%d,%d,%s,%s,%d,%s,%s", daq.set.bits, daq.set.mem, daq.set.fs, chans_en,
                           daq.trig.set.ch, daq.trig.set.val_percent, edge_s, mode_s, daq.trig.set.pretrigger, maxZ_s, freq_real_s);
@@ -619,9 +619,9 @@ scpi_result_t EM_LA_Set(scpi_t* context)
             daq_settings_save(&daq.set, &daq.trig.set, &daq.save_l, &daq.trig.save_l); // added later
             daq_enable(&daq, EM_TRUE);
 
-            char buff[25];
-            char freq_real_s[15];
-            sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+            char buff[30];
+            char freq_real_s[20];
+            sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
             int len = sprintf(buff, "\"OK\",%s", freq_real_s);
 
@@ -650,7 +650,7 @@ scpi_result_t EM_LA_SetQ(scpi_t* context)
 {
     if (daq.mode == LA)
     {
-        char buff[100];
+        char buff[105];
         char edge_s[2];
         char mode_s[2];
 
@@ -660,8 +660,8 @@ scpi_result_t EM_LA_SetQ(scpi_t* context)
         edge_s[1] = '\0';
         mode_s[1] = '\0';
 
-        char freq_real_s[15];
-        sprint_fast(freq_real_s, "%s", daq.set.fs_real, 3);
+        char freq_real_s[20];
+        sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
         int len = sprintf(buff, "%d,%d,%d,%s,%s,%d,%s", daq.set.mem, daq.set.fs,
                           daq.trig.set.ch, edge_s, mode_s, daq.trig.set.pretrigger, freq_real_s);

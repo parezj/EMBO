@@ -19,6 +19,8 @@
 
 #define Y_LIM       0.20
 
+#define TRIG_VAL_PRE_TIMEOUT    3000
+
 
 WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowScope)
 {
@@ -27,11 +29,14 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     m_timer_plot = new QTimer(this);
     m_timer_plot->setTimerType(Qt::PreciseTimer);
 
+    m_timer_trigSliders = new QTimer(this);
+    m_timer_trigSliders->setSingleShot(true);
+
     m_msg_set = new Msg_SCOP_Set(this);
     m_msg_read = new Msg_SCOP_Read(this);
     m_msg_forceTrig = new Msg_SCOP_ForceTrig(this);
 
-    connect(m_msg_set, &Msg_SCOP_Set::ok, this, &WindowScope::on_msg_ok_set, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_SCOP_Set::ok2, this, &WindowScope::on_msg_ok_set, Qt::QueuedConnection);
     connect(m_msg_set, &Msg_SCOP_Set::err, this, &WindowScope::on_msg_err, Qt::QueuedConnection);
     connect(m_msg_set, &Msg_SCOP_Set::result, this, &WindowScope::on_msg_set, Qt::QueuedConnection);
 
@@ -44,6 +49,7 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     connect(Core::getInstance(), &Core::daqReady, this, &WindowScope::on_msg_daqReady, Qt::QueuedConnection);
 
     connect(m_timer_plot, &QTimer::timeout, this, &WindowScope::on_timer_plot);
+    connect(m_timer_trigSliders, &QTimer::timeout, this, &WindowScope::on_hideTrigSliders);
 
     /* QCP */
 
@@ -120,6 +126,8 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     /* avg */
 
     m_ui->spinBox_average->setRange(1, MAX_SCOPE_AVG);
+    m_ui->spinBox_average->setValue(AVERAGE_DEFAULT);
+
     m_average_buff_ch1 = QVector<QVector<double>>(MAX_SCOPE_AVG);
     m_average_buff_ch2 = QVector<QVector<double>>(MAX_SCOPE_AVG);
     m_average_buff_ch3 = QVector<QVector<double>>(MAX_SCOPE_AVG);
@@ -190,8 +198,8 @@ void WindowScope::initQcp()
     connect(m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged, this, &WindowScope::on_cursorV_valuesChanged);
 
     m_cursors = new QCPCursors(this, m_ui->customPlot, NULL, false, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
-    m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, NULL, true, false);
-    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, NULL, false, false);
+    m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, NULL, true, false, QColor(COLOR9));
+    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, NULL, false, false, QColor(COLOR9));
 }
 
 WindowScope::~WindowScope()
@@ -231,17 +239,18 @@ void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose
     msgBox(this, text, type);
 }
 
-void WindowScope::on_msg_ok_set(const QString maxZ, const QString fs_real)
+void WindowScope::on_msg_ok_set(double maxZ, double fs_real_n, const QString fs_real)
 {
-    m_daqSet.maxZ_ohm = maxZ.toDouble();
-    m_daqSet.fs_real = fs_real.toDouble();
+    m_daqSet.maxZ_ohm = maxZ;
+    m_daqSet.fs_real = fs_real;
+    m_daqSet.fs_real_n = fs_real_n;
 
     updatePanel();
     m_msgPending = false;
 }
 
 void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
-                             DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real)
+                             DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real_n, const QString fs_real)
 {
     m_daqSet.bits = bits;
     m_daqSet.mem = mem;
@@ -257,6 +266,7 @@ void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, 
     m_daqSet.trig_pre = trig_pre;
     m_daqSet.maxZ_ohm = maxZ;
     m_daqSet.fs_real = fs_real;
+    m_daqSet.fs_real_n = fs_real_n;
 
     updatePanel();
     m_msgPending = false;
@@ -418,7 +428,8 @@ void WindowScope::on_msg_read(const QByteArray data)
 
     if (found / ch_num != m_daqSet.mem) // wrong data size
     {
-        on_msg_err(INVALID_MSG, CRITICAL, true);
+        on_msg_err(QString(INVALID_MSG) + " (data size wrong -> " + QString::number(found) + "!=" +
+                   QString::number((m_daqSet.mem * ch_num)) + ")", CRITICAL, true);
         return;
     }
 
@@ -458,7 +469,7 @@ void WindowScope::on_msg_read(const QByteArray data)
         m_average_it++;
 
         if (m_average_it == m_average_num)
-            m_average_num = 0;
+            m_average_it = 0;
     }
 
     if (m_daqSet.ch1_en) m_ui->customPlot->graph(GRAPH_CH1)->setData(m_t, y1);
@@ -479,7 +490,7 @@ void WindowScope::on_msg_read(const QByteArray data)
         auto data_end = m_ui->customPlot->graph(m_meas_ch)->data()->constEnd();
 
         double avg = std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + b.value;}) / std::distance(data_begin, data_end);
-        double rms = sqrt(std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + (b.value * b.value);}) / std::distance(data_begin, data_end));
+        double rms = sqrt((std::accumulate(data_begin, data_end, .0, [](double a, QCPGraphData b) { return a + (b.value * b.value);}) / std::distance(data_begin, data_end)));
         double min = std::min_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_min;
         double max = std::max_element(data_begin, data_end, [](QCPGraphData a, QCPGraphData b) { return a.value < b.value; })->value; // m_meas_max;
         double vpp = max - min;
@@ -1013,6 +1024,8 @@ void WindowScope::on_pushButton_reset_clicked()
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
+    m_rescale_needed = true;
+
     // TODO
 }
 
@@ -1210,11 +1223,18 @@ void WindowScope::on_spinBox_trigVal_valueChanged(int arg1)
 
     m_ignoreValuesChanged = true;
     m_ui->dial_trigVal->setValue(arg1);
-    m_ignoreValuesChanged = false;
 
-    auto rngV = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
-    m_cursorTrigVal->setValue(arg1 * 10, rngV.lower, rngV.upper);
-    m_ui->horizontalSlider_trigVal->setValue(arg1 * 10);
+    if (!m_t.isEmpty())
+        m_cursorTrigVal->setValue(m_daqSet.trig_val, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+
+    m_cursorTrigVal->show(true);
+    m_cursorTrigPre->show(true);
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+
+    double p = Y_LIM / (m_ref_v + (2.0 * Y_LIM));
+    m_ui->horizontalSlider_trigVal->setValue(((arg1 * (1.0 - (2.0 * p))) + (p * 100.0)) * 10.0);
+
+     m_ignoreValuesChanged = false;
 
     sendSet();
 }
@@ -1226,12 +1246,18 @@ void WindowScope::on_dial_trigVal_valueChanged(int value)
 
     m_ignoreValuesChanged = true;
     m_ui->spinBox_trigVal->setValue(value);
+
+    if (!m_t.isEmpty())
+        m_cursorTrigVal->setValue(m_daqSet.trig_val, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+
+    m_cursorTrigVal->show(true);
+    m_cursorTrigPre->show(true);
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+
+    double p = Y_LIM / (m_ref_v + (2.0 * Y_LIM));
+    m_ui->horizontalSlider_trigVal->setValue(((value * (1.0 - (2.0 * p))) + (p * 100.0)) * 10.0);
+
     m_ignoreValuesChanged = false;
-
-
-    auto rngV = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
-    m_cursorTrigVal->setValue(value * 10, rngV.lower, rngV.upper);
-    m_ui->horizontalSlider_trigVal->setValue(value * 10);
 
     sendSet();
 }
@@ -1243,11 +1269,17 @@ void WindowScope::on_spinBox_trigPre_valueChanged(int arg1)
 
     m_ignoreValuesChanged = true;
     m_ui->dial_trigPre->setValue(arg1);
-    m_ignoreValuesChanged = false;
 
-    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
-    m_cursorTrigPre->setValue(arg1 * 10, rngH.lower, rngH.upper);
-    m_ui->horizontalSlider_trigPre->setValue(arg1 * 10);
+    if (!m_t.isEmpty())
+        m_cursorTrigPre->setValue(m_daqSet.trig_pre, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+
+    m_cursorTrigVal->show(true);
+    m_cursorTrigPre->show(true);
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+
+    m_ui->horizontalSlider_trigPre->setValue(arg1 * 10.0);
+
+    m_ignoreValuesChanged = false;
 
     sendSet();
 }
@@ -1259,19 +1291,52 @@ void WindowScope::on_dial_trigPre_valueChanged(int value)
 
     m_ignoreValuesChanged = true;
     m_ui->spinBox_trigPre->setValue(value);
-    m_ignoreValuesChanged = false;
 
-    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
-    m_cursorTrigPre->setValue(value * 10, rngH.lower, rngH.upper);
-    m_ui->horizontalSlider_trigPre->setValue(value * 10);
+    if (!m_t.isEmpty())
+        m_cursorTrigPre->setValue(m_daqSet.trig_pre, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+
+    m_cursorTrigVal->show(true);
+    m_cursorTrigPre->show(true);
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+
+    m_ui->horizontalSlider_trigPre->setValue(value * 10.0);
+
+    m_ignoreValuesChanged = false;
 
     sendSet();
 }
 
 void WindowScope::on_pushButton_trigForc_clicked()
 {
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    m_ui->radioButton_trigLed->setChecked(false);
     enablePanel(false);
+
     Core::getInstance()->msgAdd(m_msg_forceTrig, false, "");
+}
+
+void WindowScope::on_hideTrigSliders()
+{
+    m_cursorTrigVal->show(false);
+    m_cursorTrigPre->show(false);
+}
+
+void WindowScope::on_dial_trigVal_sliderPressed()
+{
+    m_cursorTrigVal->show(true);
+    m_cursorTrigPre->show(true);
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+}
+
+void WindowScope::on_dial_trigPre_sliderPressed()
+{
+    m_cursorTrigVal->show(true);
+    m_cursorTrigPre->show(true);
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
 }
 
 /********** right pannel - horizontal **********/
@@ -1299,9 +1364,17 @@ void WindowScope::on_spinBox_mem_valueChanged(int arg1)
     if (m_ignoreValuesChanged)
         return;
 
+    if (arg1 > m_daqSet.fs)
+    {
+        m_ui->spinBox_mem->setValue(m_daqSet.fs);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
     m_ui->dial_mem->setValue(arg1);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1311,9 +1384,17 @@ void WindowScope::on_dial_mem_valueChanged(int value)
     if (m_ignoreValuesChanged)
         return;
 
+    if (value > m_daqSet.fs)
+    {
+        m_ui->dial_mem->setValue(m_daqSet.fs);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
     m_ui->spinBox_mem->setValue(value);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1323,9 +1404,17 @@ void WindowScope::on_spinBox_fs_valueChanged(int arg1)
     if (m_ignoreValuesChanged)
         return;
 
+    if (arg1 < m_daqSet.mem)
+    {
+        m_ui->spinBox_fs->setValue(m_daqSet.mem);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
-    m_ui->dial_fs->setValue((int)lin_to_exp_1to36M((int)m_ui->spinBox_fs->value(), true));
+    m_ui->dial_fs->setValue(arg1);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1335,9 +1424,17 @@ void WindowScope::on_dial_fs_valueChanged(int value)
     if (m_ignoreValuesChanged)
         return;
 
+    if (value < m_daqSet.mem)
+    {
+        m_ui->dial_fs->setValue(m_daqSet.mem);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
-    m_ui->spinBox_fs->setValue((int)lin_to_exp_1to36M((int)value));
+    m_ui->spinBox_fs->setValue(value);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1376,6 +1473,8 @@ void WindowScope::on_pushButton_disable1_clicked()
     m_ui->pushButton_enable1->show();
     m_ui->pushButton_disable1->hide();
 
+    m_rescale_needed = true;
+
     m_ui->customPlot->graph(GRAPH_CH1)->setVisible(false);
     sendSet();
 }
@@ -1387,6 +1486,8 @@ void WindowScope::on_pushButton_disable2_clicked()
 
     m_ui->pushButton_enable2->show();
     m_ui->pushButton_disable2->hide();
+
+    m_rescale_needed = true;
 
     m_ui->customPlot->graph(GRAPH_CH2)->setVisible(false);
     sendSet();
@@ -1400,6 +1501,8 @@ void WindowScope::on_pushButton_disable3_clicked()
     m_ui->pushButton_enable3->show();
     m_ui->pushButton_disable3->hide();
 
+    m_rescale_needed = true;
+
     m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
     sendSet();
 }
@@ -1412,6 +1515,8 @@ void WindowScope::on_pushButton_disable4_clicked()
     m_ui->pushButton_enable4->show();
     m_ui->pushButton_disable4->hide();
 
+    m_rescale_needed = true;
+
     m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
     sendSet();
 }
@@ -1421,6 +1526,8 @@ void WindowScope::on_pushButton_enable1_clicked()
     m_ui->pushButton_enable1->hide();
     m_ui->pushButton_disable1->show();
 
+    m_rescale_needed = true;
+
     sendSet();
 }
 
@@ -1428,6 +1535,8 @@ void WindowScope::on_pushButton_enable2_clicked()
 {
     m_ui->pushButton_enable2->hide();
     m_ui->pushButton_disable2->show();
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1437,6 +1546,8 @@ void WindowScope::on_pushButton_enable3_clicked()
     m_ui->pushButton_enable3->hide();
     m_ui->pushButton_disable3->show();
 
+    m_rescale_needed = true;
+
     sendSet();
 }
 
@@ -1444,6 +1555,8 @@ void WindowScope::on_pushButton_enable4_clicked()
 {
     m_ui->pushButton_enable4->hide();
     m_ui->pushButton_disable4->show();
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1525,30 +1638,15 @@ void WindowScope::on_pushButton_average_off_clicked()
 
     for (int i = 0 ; i < MAX_SCOPE_AVG ; i++)
     {
-        if (m_daqSet.ch1_en)
-        {
-            m_average_buff_ch1[i].resize(m_daqSet.mem);
-            m_average_buff_ch1[i].clear();
-        }
-        if (m_daqSet.ch2_en)
-        {
-            m_average_buff_ch2[i].resize(m_daqSet.mem);
-            m_average_buff_ch2[i].clear();
-        }
-        if (m_daqSet.ch3_en)
-        {
-            m_average_buff_ch3[i].resize(m_daqSet.mem);
-            m_average_buff_ch3[i].clear();
-        }
-        if (m_daqSet.ch4_en)
-        {
-            m_average_buff_ch4[i].resize(m_daqSet.mem);
-            m_average_buff_ch4[i].clear();
-        }
+        if (m_daqSet.ch1_en) m_average_buff_ch1[i].resize(m_daqSet.mem);
+        if (m_daqSet.ch2_en) m_average_buff_ch2[i].resize(m_daqSet.mem);
+        if (m_daqSet.ch3_en) m_average_buff_ch3[i].resize(m_daqSet.mem);
+        if (m_daqSet.ch4_en) m_average_buff_ch4[i].resize(m_daqSet.mem);
     }
 
     m_average_cnt = 0;
     m_average_it = 0;
+    m_average_num = m_ui->spinBox_average->value();
 
     m_ui->spinBox_average->setEnabled(false);
 
@@ -1557,25 +1655,24 @@ void WindowScope::on_pushButton_average_off_clicked()
 
 void WindowScope::on_pushButton_average_on_clicked()
 {
+    m_average = false;
+
     m_ui->pushButton_average_off->show();
     m_ui->pushButton_average_on->hide();
 
     for (int i = 0 ; i < MAX_SCOPE_AVG ; i++)
     {
-        m_average_buff_ch1[i].resize(1);
-        m_average_buff_ch2[i].resize(1);
-        m_average_buff_ch3[i].resize(1);
-        m_average_buff_ch4[i].resize(1);
+        m_average_buff_ch1[i].clear();
+        m_average_buff_ch2[i].clear();
+        m_average_buff_ch3[i].clear();
+        m_average_buff_ch4[i].clear();
     }
 
     m_ui->spinBox_average->setEnabled(true);
-
-    m_average = false;
 }
 
 void WindowScope::on_spinBox_average_valueChanged(int arg1)
 {
-    m_average_num = arg1;
 }
 
 void WindowScope::on_pushButton_bit8_off_clicked()
@@ -1584,6 +1681,8 @@ void WindowScope::on_pushButton_bit8_off_clicked()
     m_ui->pushButton_bit12_off->show();
     m_ui->pushButton_bit8_off->hide();
     m_ui->pushButton_bit8_on->show();
+
+    m_rescale_needed = true;
 }
 
 void WindowScope::on_pushButton_bit8_on_clicked()
@@ -1598,6 +1697,8 @@ void WindowScope::on_pushButton_bit12_off_clicked()
         m_ui->pushButton_bit12_on->show();
         m_ui->pushButton_bit8_on->hide();
         m_ui->pushButton_bit8_off->show();
+
+        m_rescale_needed = true;
     }
 }
 
@@ -1623,6 +1724,8 @@ void WindowScope::closeEvent(QCloseEvent*)
 {
     m_activeMsgs.clear();
     m_instrEnabled = false;
+
+    on_pushButton_average_on_clicked();
 
     Core::getInstance()->setMode(NO_MODE);
     emit closing(WindowScope::staticMetaObject.className());
@@ -1673,8 +1776,8 @@ void WindowScope::showEvent(QShowEvent*)
     m_ui->pushButton_bit12_off->hide();
     m_ui->pushButton_bit12_on->show();
 
-    m_ui->dial_mem->setRange(1, info->mem);
-    m_ui->spinBox_mem->setRange(1, info->mem);
+    m_ui->dial_mem->setRange(2, info->mem);
+    m_ui->spinBox_mem->setRange(2, info->mem);
 
     m_ui->dial_fs->setRange(1, info->adc_fs_12b); // TODO
     m_ui->spinBox_fs->setRange(1, info->adc_fs_12b); // TODO
@@ -1707,14 +1810,16 @@ void WindowScope::rescaleYAxis()
 
 void WindowScope::rescaleXAxis()
 {
-    assert(!m_t.isEmpty());
+    if (m_t.isEmpty())
+        return;
+
     m_ui->customPlot->xAxis->setRange(0, m_t[m_t.size()-1]);
 }
 
 void WindowScope::createX()
 {
     double x = 0;
-    double dt = 1.0 / m_daqSet.fs_real;
+    double dt = 1.0 / m_daqSet.fs_real_n;
     m_t.resize(m_daqSet.mem);
 
     for (int i = 0; i < m_daqSet.mem; i++)
@@ -1738,17 +1843,29 @@ void WindowScope::updatePanel()
     on_pushButton_average_on_clicked();
 
     createX();
-    rescaleXAxis();
-    rescaleYAxis();
     enablePanel(true);
+
+    if (m_rescale_needed)
+    {
+        rescaleXAxis();
+        rescaleYAxis();
+
+        m_rescale_needed = false;
+    }
 
     m_ui->customPlot->graph(GRAPH_CH1)->setVisible(m_daqSet.ch1_en);
     m_ui->customPlot->graph(GRAPH_CH2)->setVisible(m_daqSet.ch2_en);
     m_ui->customPlot->graph(GRAPH_CH3)->setVisible(m_daqSet.ch3_en);
     m_ui->customPlot->graph(GRAPH_CH4)->setVisible(m_daqSet.ch4_en);
 
-    m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + format_unit(m_daqSet.fs_real, "Sps", 2) + " </p>");
-    m_ui->textBrowser_maxZ->setHtml("<p align=\"center\">" + format_unit(m_daqSet.maxZ_ohm, "Ω", 2) + " </p>");
+    QStringList tokens = m_daqSet.fs_real.split('.', Qt::SkipEmptyParts);
+
+    if (tokens.size() > 1 && tokens[0].length() > 4)
+        m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + tokens[0] + ". " + tokens[1] + "</p>");
+    else
+        m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + m_daqSet.fs_real + "</p>");
+
+    m_ui->textBrowser_maxZ->setHtml("<p align=\"center\">" + format_unit(m_daqSet.maxZ_ohm, "Ω", 2) + "</p>");
 
     m_ui->pushButton_enable1->setVisible(!m_daqSet.ch1_en);
     m_ui->pushButton_enable2->setVisible(!m_daqSet.ch2_en);
@@ -1777,14 +1894,15 @@ void WindowScope::updatePanel()
     m_ui->spinBox_trigPre->setValue(m_daqSet.trig_pre);
     m_ui->spinBox_trigVal->setValue(m_daqSet.trig_val);
 
-    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
-    auto rngV = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
+    if (!m_t.isEmpty())
+    {
+        m_cursorTrigPre->setValue(m_daqSet.trig_pre, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigVal->setValue(m_daqSet.trig_val, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+    }
 
-    m_cursorTrigPre->setValue(m_daqSet.trig_pre * 10, rngH.lower, rngH.upper);
-    m_cursorTrigVal->setValue(m_daqSet.trig_val * 10, rngV.lower, rngV.upper);
-
-    m_ui->horizontalSlider_trigPre->setValue(m_daqSet.trig_pre * 10);
-    m_ui->horizontalSlider_trigVal->setValue(m_daqSet.trig_val * 10);
+    double p = Y_LIM / (m_ref_v + (2.0 * Y_LIM));
+    m_ui->horizontalSlider_trigPre->setValue(m_daqSet.trig_pre * 10.0);
+    m_ui->horizontalSlider_trigVal->setValue(((m_daqSet.trig_val * (1.0 - (2.0 * p))) + (p * 100.0)) * 10.0);
 
     m_ui->pushButton_single_off->show();
     m_ui->pushButton_single_on->hide();
@@ -1839,8 +1957,8 @@ void WindowScope::updatePanel()
         max_mem /= 2;
     max_mem /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
 
-    m_ui->spinBox_mem->setRange(1,max_mem);
-    m_ui->dial_mem->setRange(1,max_mem);
+    m_ui->spinBox_mem->setRange(2,max_mem);
+    m_ui->dial_mem->setRange(2,max_mem);
 
     int max_fs = info->adc_fs_12b; // TODO
 
@@ -1858,6 +1976,11 @@ void WindowScope::updatePanel()
 
     /************ */
 
+    m_ui->radioButton_trigCh_1->setEnabled(m_daqSet.ch1_en);
+    m_ui->radioButton_trigCh_2->setEnabled(m_daqSet.ch2_en);
+    m_ui->radioButton_trigCh_3->setEnabled(m_daqSet.ch3_en);
+    m_ui->radioButton_trigCh_4->setEnabled(m_daqSet.ch4_en);
+
     m_ignoreValuesChanged = false;
 }
 
@@ -1874,31 +1997,6 @@ void WindowScope::sendSet()
 {
     m_msgPending = true;
     enablePanel(false);
-
-    /* MAX FS AND MEM */
-
-    auto info = Core::getInstance()->getDevInfo();
-    int max_mem = info->mem;
-    if (m_daqSet.bits == B12)
-        max_mem /= 2;
-    max_mem /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
-
-    m_ui->spinBox_mem->setRange(1,max_mem);
-    m_ui->dial_mem->setRange(1,max_mem);
-
-    int max_fs = info->adc_fs_12b; // TODO
-
-    if (info->adc_num == 1)
-        max_fs /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
-    else if (info->adc_num == 2)
-    {
-        int cnt1 = m_daqSet.ch1_en + m_daqSet.ch2_en;
-        int cnt2 = m_daqSet.ch3_en + m_daqSet.ch4_en;
-        max_fs /= (cnt1 > cnt2) ? cnt1 : cnt2;
-    }
-
-    m_ui->spinBox_fs->setRange(1,max_fs);
-    m_ui->dial_fs->setRange(1,max_fs);
 
     /************ */
 
@@ -1963,6 +2061,47 @@ void WindowScope::sendSet()
         trigEdge = "F";
     }
 
+    /* fs, mem, trig ch -> trimm */
+
+    auto info = Core::getInstance()->getDevInfo();
+    int max_mem = info->mem;
+    if (m_daqSet.bits == B12)
+        max_mem /= 2;
+    max_mem /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
+
+    m_ui->spinBox_mem->setRange(2,max_mem);
+    m_ui->dial_mem->setRange(2,max_mem);
+
+    int max_fs = info->adc_fs_12b; // TODO
+
+    if (info->adc_num == 1)
+        max_fs /= (m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en);
+    else if (info->adc_num == 2)
+    {
+        int cnt1 = m_daqSet.ch1_en + m_daqSet.ch2_en;
+        int cnt2 = m_daqSet.ch3_en + m_daqSet.ch4_en;
+        max_fs /= (cnt1 > cnt2) ? cnt1 : cnt2;
+    }
+
+    m_ui->spinBox_fs->setRange(1,max_fs);
+    m_ui->dial_fs->setRange(1,max_fs);
+
+    for (int i = 0, j = m_daqSet.trig_ch; i < 4; i++)
+    {
+        if ((m_daqSet.trig_ch == 1 && m_ui->pushButton_enable1->isVisible()) ||
+            (m_daqSet.trig_ch == 2 && m_ui->pushButton_enable2->isVisible()) ||
+            (m_daqSet.trig_ch == 3 && m_ui->pushButton_enable3->isVisible()) ||
+            (m_daqSet.trig_ch == 4 && m_ui->pushButton_enable4->isVisible()))
+        {
+            j++;
+            if (j == 5)
+                j = 1;
+
+            m_daqSet.trig_ch = j;
+        }
+        else break;
+    }
+
     Core::getInstance()->msgAdd(m_msg_set, false, (m_daqSet.bits == B12 ? "12," : "8," ) +     // bits
                                                    QString::number(m_daqSet.mem) + "," +       // mem
                                                    QString::number(m_daqSet.fs) + "," +        // fs
@@ -1973,3 +2112,4 @@ void WindowScope::sendSet()
                                                    trigMode + "," +                            // trig mode
                                                    QString::number(m_daqSet.trig_pre));        // trig pre
 }
+

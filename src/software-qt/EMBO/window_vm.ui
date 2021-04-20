@@ -71,6 +71,15 @@
       </property>
       <item row="0" column="0">
        <layout class="QVBoxLayout" name="layout_screen">
+        <property name="leftMargin">
+         <number>3</number>
+        </property>
+        <property name="topMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>4</number>
+        </property>
         <item>
          <widget class="QGroupBox" name="groupBox_screen">
           <property name="minimumSize">
@@ -983,6 +992,19 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
          <property name="bottomMargin">
           <number>0</number>
          </property>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item>
           <widget class="QGroupBox" name="groupBox_ch1">
            <property name="minimumSize">

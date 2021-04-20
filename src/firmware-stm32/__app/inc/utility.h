@@ -51,7 +51,6 @@ long long lltoa_fast(char* s, long long num, int radix);
  * Descr:  ultra fast float sprintf
  */
 int sprint_fast(char* s, const char* format, double fVal, int prec);
-
-int strncmp2(const char * s1, const char * s2, size_t n);
+char* ftoa2(double f, char * buf, int precision);
 
 #endif /* UTILS_H */

@@ -128,6 +128,30 @@ int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, doubl
     if (ch3 != NULL) ch_num++;
     if (ch4 != NULL) ch_num++;
 
+    QVector<double>* _ch1 = NULL;
+    QVector<double>* _ch2 = NULL;
+    QVector<double>* _ch3 = NULL;
+    QVector<double>* _ch4 = NULL;
+
+    QVector<double>* ch1_copy = ch1;
+    QVector<double>* ch2_copy = ch2;
+    QVector<double>* ch3_copy = ch3;
+
+    QVector<double>** it;
+
+    for (int i = 0; i < ch_num; i++) // sort algorithm
+    {
+        if      (i == 0) it = &_ch1;
+        else if (i == 1) it = &_ch2;
+        else if (i == 2) it = &_ch3;
+        else             it = &_ch4;
+
+        if      (i < 1 && ch1_copy != NULL) { *it = ch1_copy; ch1_copy = NULL; continue; }
+        else if (i < 2 && ch2_copy != NULL) { *it = ch2_copy; ch2_copy = NULL; continue; }
+        else if (i < 3 && ch3_copy != NULL) { *it = ch3_copy; ch3_copy = NULL; continue; }
+        else                                { *it = ch4; continue; }
+    }
+
     int k1 = 0, k2 = 0, k3 = 0, k4 = 0;
     for (int k = 0, i = from; k < total; k++, i++)
     {
@@ -151,23 +175,23 @@ int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, doubl
 
         if (i % ch_num == 0)
         {
-            if (ch1 != NULL)
-                (*ch1)[k1++] = (gain1 * val) + offset1;
+            if (_ch1 != NULL)
+                (*_ch1)[k1++] = (gain1 * val) + offset1;
         }
         else if (ch_num > 1 && i % ch_num == 1)
         {
-            if (ch2 != NULL)
-                (*ch2)[k2++] = (gain2 * val) + offset2;
+            if (_ch2 != NULL)
+                (*_ch2)[k2++] = (gain2 * val) + offset2;
         }
         else if (ch_num > 2 && i % ch_num == 2)
         {
-            if (ch3 != NULL)
-                (*ch3)[k3++] = (gain3 * val) + offset3;
+            if (_ch3 != NULL)
+                (*_ch3)[k3++] = (gain3 * val) + offset3;
         }
         else if (ch_num > 3) // && i % ch_num == 3)
         {
-            if (ch4 != NULL)
-                (*ch4)[k4++] = (gain4 * val) + offset4;
+            if (_ch4 != NULL)
+                (*_ch4)[k4++] = (gain4 * val) + offset4;
         }
     }
     return found;

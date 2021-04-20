@@ -29,7 +29,8 @@
 #define CURSOR_DEFAULT_V_MAX    600
 
 
-#define MAX_SCOPE_AVG     10
+#define MAX_SCOPE_AVG     100
+#define AVERAGE_DEFAULT   10
 
 
 
@@ -55,12 +56,12 @@ signals:
 private slots:
     /* data msg */
     void on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
-                    DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real);
+                    DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real_n, const QString fs_real);
     void on_msg_read(const QByteArray data);
 
     /* ok-err msg */
     void on_msg_err(const QString text, MsgBoxType type, bool needClose);
-    void on_msg_ok_set(const QString maxZ, const QString fs_real);
+    void on_msg_ok_set(double maxZ, double fs_real_n, const QString fs_real);
     void on_msg_ok_forceTrig(const QString, const QString);
 
      /* async ready msg */
@@ -137,6 +138,9 @@ private slots:
     void on_spinBox_trigPre_valueChanged(int arg1);
     void on_dial_trigPre_valueChanged(int value);
     void on_pushButton_trigForc_clicked();
+    void on_hideTrigSliders();
+    void on_dial_trigVal_sliderPressed();
+    void on_dial_trigPre_sliderPressed();
 
     /* GUI slots - right pannel - horizontal */
     void on_radioButton_fsMem_clicked(bool checked);
@@ -196,6 +200,7 @@ private:
 
     /* timers */
     QTimer* m_timer_plot;
+    QTimer* m_timer_trigSliders;
 
     /* async ready data */
     int m_firstPos;
@@ -246,7 +251,7 @@ private:
 
     /* average */
     bool m_average = false;
-    int m_average_num = 1;
+    int m_average_num = AVERAGE_DEFAULT;
     int m_average_cnt = 0;
     int m_average_it = 0;
     QVector<QVector<double>> m_average_buff_ch1;
@@ -273,6 +278,7 @@ private:
     DaqSettings m_daqSet;
 
     /* helpers */
+    bool m_rescale_needed = true;
     bool m_msgPending = false;
     bool m_ignoreValuesChanged = false;
     QButtonGroup m_trigMode;

@@ -192,6 +192,59 @@ Notes:
 #define apiID_XSTREAMBUFFERRECEIVE                (110u)
 #define apiID_XSTREAMBUFFERRECEIVEFROMISR         (111u)
 
+#undef traceTASK_NOTIFY_TAKE
+#undef traceTASK_DELAY
+#undef traceTASK_DELAY_UNTIL
+#undef traceTASK_NOTIFY_GIVE_FROM_ISR
+#undef traceTASK_PRIORITY_INHERIT
+#undef traceTASK_RESUME
+#undef traceINCREASE_TICK_COUNT
+#undef traceTASK_SUSPEND
+#undef traceTASK_PRIORITY_DISINHERIT
+#undef traceTASK_RESUME_FROM_ISR
+#undef traceTASK_NOTIFY
+#undef traceTASK_NOTIFY_WAIT
+#undef traceTASK_NOTIFY_FROM_ISR
+#undef traceQUEUE_CREATE
+#undef traceQUEUE_DELETE
+#undef traceQUEUE_PEEK
+#undef traceQUEUE_PEEK_FROM_ISR
+#undef traceQUEUE_PEEK_FROM_ISR_FAILED
+#undef traceQUEUE_RECEIVE
+#undef traceQUEUE_RECEIVE_FAILED
+#undef traceQUEUE_RECEIVE_FAILED
+#undef traceQUEUE_SEMAPHORE_RECEIVE
+#undef traceQUEUE_RECEIVE_FROM_ISR
+#undef traceQUEUE_RECEIVE_FROM_ISR_FAILED
+#undef traceQUEUE_REGISTRY_ADD
+#undef traceQUEUE_SEND
+#undef traceQUEUE_SEND_FAILED
+#undef traceQUEUE_SEND_FROM_ISR
+#undef traceQUEUE_SEND_FROM_ISR_FAILED
+#undef traceSTREAM_BUFFER_CREATE
+#undef traceSTREAM_BUFFER_CREATE_FAILED
+#undef traceSTREAM_BUFFER_DELETE
+#undef traceSTREAM_BUFFER_RESET
+#undef traceSTREAM_BUFFER_SEND
+#undef traceSTREAM_BUFFER_SEND_FAILED
+#undef traceSTREAM_BUFFER_SEND_FROM_ISR
+#undef traceSTREAM_BUFFER_RECEIVE
+#undef traceSTREAM_BUFFER_RECEIVE_FAILED
+#undef traceSTREAM_BUFFER_RECEIVE_FROM_ISR
+#undef traceTASK_DELETE
+#undef traceTASK_CREATE
+#undef traceTASK_PRIORITY_SET
+#undef traceTASK_SWITCHED_IN
+#undef traceMOVED_TASK_TO_READY_STATE
+#undef traceREADDED_TASK_TO_READY_STATE
+#undef traceMOVED_TASK_TO_DELAYED_LIST
+#undef traceMOVED_TASK_TO_OVERFLOW_DELAYED_LIST
+#undef traceMOVED_TASK_TO_SUSPENDED_LIST
+#undef traceISR_EXIT_TO_SCHEDULER
+#undef traceISR_EXIT
+#undef traceISR_ENTER
+
+
 #define traceTASK_NOTIFY_TAKE(x)                                                SEGGER_SYSVIEW_RecordU32x2(apiID_OFFSET + apiID_ULTASKNOTIFYTAKE, xClearCountOnExit, xTicksToWait)
 #define traceTASK_DELAY()                                                       SEGGER_SYSVIEW_RecordU32  (apiID_OFFSET + apiID_VTASKDELAY, xTicksToDelay)
 #define traceTASK_DELAY_UNTIL(xTimeToWake)                                      SEGGER_SYSVIEW_RecordVoid (apiID_OFFSET + apiID_VTASKDELAYUNTIL)

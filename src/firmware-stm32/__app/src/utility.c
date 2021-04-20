@@ -291,9 +291,7 @@ long long lltoa_fast(char* s, long long num, int radix)
  */
 int sprint_fast(char* s, const char* format, double fVal, int prec)
 {
-    char result[100] = { '\0' };
-    char result_rev[100] = { '\0' };
-    int dVal, dec, i, j, k;
+    char result[65]; // = { '\0' };
 
     int trunc = fVal;
 
@@ -311,6 +309,11 @@ int sprint_fast(char* s, const char* format, double fVal, int prec)
         }
         return sprintf(s, format, result);
     }
+
+    /*
+    char result[100] = { '\0' };
+    char result_rev[100] = { '\0' };
+    int dVal, dec, i, j, k;
 
     //fVal += 0.5 * pow(0.1, prec);
     k = pow(10, prec);
@@ -346,23 +349,115 @@ int sprint_fast(char* s, const char* format, double fVal, int prec)
     sprintf(s, format, result_rev);
 
     return j;
+    */
+
+    ftoa2(fVal, result, prec);
+    return sprintf(s, format, result);
 }
 
-// https://stackoverflow.com/questions/32560167/strncmp-implementation
-int strncmp2(const char * s1, const char * s2, size_t n)
+
+// https://github.com/antongus/stm32tpl/blob/master/ftoa.c
+#define MAX_PRECISION   (10)
+static const double rounders[MAX_PRECISION + 1] =
 {
-    while ( n && *s1 && ( *s1 == *s2 ) )
+    0.5,                // 0
+    0.05,               // 1
+    0.005,              // 2
+    0.0005,             // 3
+    0.00005,            // 4
+    0.000005,           // 5
+    0.0000005,          // 6
+    0.00000005,         // 7
+    0.000000005,        // 8
+    0.0000000005,       // 9
+    0.00000000005       // 10
+};
+char* ftoa2(double f, char * buf, int precision)
+{
+    char * ptr = buf;
+    char * p = ptr;
+    char * p1;
+    char c;
+    long intPart;
+
+    // check precision bounds
+    if (precision > MAX_PRECISION)
+        precision = MAX_PRECISION;
+
+    // sign stuff
+    if (f < 0)
     {
-        ++s1;
-        ++s2;
-        --n;
+        f = -f;
+        *ptr++ = '-';
     }
-    if ( n == 0 )
+
+    if (precision < 0)  // negative precision == automatic precision guess
     {
-        return 0;
+        if (f < 1.0) precision = 6;
+        else if (f < 10.0) precision = 5;
+        else if (f < 100.0) precision = 4;
+        else if (f < 1000.0) precision = 3;
+        else if (f < 10000.0) precision = 2;
+        else if (f < 100000.0) precision = 1;
+        else precision = 0;
     }
+
+    // round value according the precision
+    if (precision)
+        f += rounders[precision];
+
+    // integer part...
+    intPart = f;
+    f -= intPart;
+
+    if (!intPart)
+        *ptr++ = '0';
     else
     {
-        return ( *(unsigned char *)s1 - *(unsigned char *)s2 );
+        // save start pointer
+        p = ptr;
+
+        // convert (reverse order)
+        while (intPart)
+        {
+            *p++ = '0' + intPart % 10;
+            intPart /= 10;
+        }
+
+        // save end pos
+        p1 = p;
+
+        // reverse result
+        while (p > ptr)
+        {
+            c = *--p;
+            *p = *ptr;
+            *ptr++ = c;
+        }
+
+        // restore end pos
+        ptr = p1;
     }
+
+    // decimal part
+    if (precision)
+    {
+        // place decimal point
+        *ptr++ = '.';
+
+        // convert
+        while (precision--)
+        {
+            f *= 10.0;
+            c = f;
+            *ptr++ = '0' + c;
+            f -= c;
+        }
+    }
+
+    // terminating zero
+    *ptr = 0;
+
+    return buf;
 }
+

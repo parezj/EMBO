@@ -16,6 +16,9 @@
 
 #define Y_LIM           0.20
 
+#define TRIG_VAL_PRE_TIMEOUT    3000
+
+
 WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa)
 {
     m_ui->setupUi(this);
@@ -23,11 +26,14 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     m_timer_plot = new QTimer(this);
     m_timer_plot->setTimerType(Qt::PreciseTimer);
 
+    m_timer_trigSliders = new QTimer(this);
+    m_timer_trigSliders->setSingleShot(true);
+
     m_msg_set = new Msg_LA_Set(this);
     m_msg_read = new Msg_LA_Read(this);
     m_msg_forceTrig = new Msg_LA_ForceTrig(this);
 
-    connect(m_msg_set, &Msg_LA_Set::ok, this, &WindowLa::on_msg_ok_set, Qt::QueuedConnection);
+    connect(m_msg_set, &Msg_LA_Set::ok2, this, &WindowLa::on_msg_ok_set, Qt::QueuedConnection);
     connect(m_msg_set, &Msg_LA_Set::err, this, &WindowLa::on_msg_err, Qt::QueuedConnection);
     connect(m_msg_set, &Msg_LA_Set::result, this, &WindowLa::on_msg_set, Qt::QueuedConnection);
 
@@ -40,6 +46,7 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     connect(Core::getInstance(), &Core::daqReady, this, &WindowLa::on_msg_daqReady, Qt::QueuedConnection);
 
     connect(m_timer_plot, &QTimer::timeout, this, &WindowLa::on_timer_plot);
+    connect(m_timer_trigSliders, &QTimer::timeout, this, &WindowLa::on_hideTrigSliders);
 
     /* QCP */
 
@@ -254,7 +261,16 @@ void WindowLa::initQcp()
     m_cursors2 = new QCPCursors(this, m_ui->customPlot, m_axis_ch2, true, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
     m_cursors3 = new QCPCursors(this, m_ui->customPlot, m_axis_ch3, true, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
     m_cursors4 = new QCPCursors(this, m_ui->customPlot, m_axis_ch4, true, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
-    m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, m_axis_ch4, false, false);
+
+    m_cursorTrigPre1 = new QCPCursor(this, m_ui->customPlot, m_axis_ch1, false, false, QColor(COLOR9));
+    m_cursorTrigPre2 = new QCPCursor(this, m_ui->customPlot, m_axis_ch2, false, false, QColor(COLOR9));
+    m_cursorTrigPre3 = new QCPCursor(this, m_ui->customPlot, m_axis_ch3, false, false, QColor(COLOR9));
+    m_cursorTrigPre4 = new QCPCursor(this, m_ui->customPlot, m_axis_ch4, false, false, QColor(COLOR9));
+
+    m_cursorTrigPre1->showText(false);
+    m_cursorTrigPre2->showText(false);
+    m_cursorTrigPre3->showText(false);
+    m_cursorTrigPre4->showText(false);
 }
 
 WindowLa::~WindowLa()
@@ -297,15 +313,16 @@ void WindowLa::on_msg_err(const QString text, MsgBoxType type, bool needClose)
     msgBox(this, text, type);
 }
 
-void WindowLa::on_msg_ok_set(const QString fs_real, const QString)
+void WindowLa::on_msg_ok_set(double fs_real_n, const QString fs_real)
 {
-    m_daqSet.fs_real = fs_real.toDouble();
+    m_daqSet.fs_real = fs_real;
+    m_daqSet.fs_real_n = fs_real_n;
 
     updatePanel();
     m_msgPending = false;
 }
 
-void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real)
+void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double fs_real_n, const QString fs_real)
 {
     m_daqSet.bits = B1;
     m_daqSet.mem = mem;
@@ -321,6 +338,7 @@ void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, D
     m_daqSet.trig_pre = trig_pre;
     m_daqSet.maxZ_ohm = 0;
     m_daqSet.fs_real = fs_real;
+    m_daqSet.fs_real_n = fs_real_n;
 
     updatePanel();
     m_msgPending = false;
@@ -328,12 +346,17 @@ void WindowLa::on_msg_set(int mem, int fs, int trig_ch, DaqTrigEdge trig_edge, D
 
 void WindowLa::on_msg_read(const QByteArray data)
 {
+    if (m_msgPending)
+        return;
+
     auto info = Core::getInstance()->getDevInfo();
     int data_sz = data.size();
 
-    if (data_sz != m_daqSet.mem + (info->daq_reserve * 1)) // wrong data size
+    int data_sz_wanted = m_daqSet.mem + (info->daq_reserve * 1);
+    if (data_sz != data_sz_wanted) // wrong data size
     {
-        on_msg_err(INVALID_MSG, CRITICAL, true);
+        on_msg_err(QString(INVALID_MSG) + " (data size wrong -> " + QString::number(data_sz) + "!=" +
+                   QString::number(data_sz_wanted) + ")", CRITICAL, true);
         return;
     }
 
@@ -774,6 +797,14 @@ void WindowLa::on_qcpMousePress(QMouseEvent*)
 
 /********** right pannel - main **********/
 
+void WindowLa::on_radioButton_zoomH_clicked(bool)
+{
+    m_ui->radioButton_zoomH->setChecked(true);
+}
+
+void WindowLa::on_radioButton_zoomV_clicked(bool)
+{
+}
 
 void WindowLa::on_pushButton_reset_clicked()
 {
@@ -781,6 +812,8 @@ void WindowLa::on_pushButton_reset_clicked()
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    m_rescale_needed = true;
 
     // TODO
 }
@@ -979,11 +1012,25 @@ void WindowLa::on_spinBox_trigPre_valueChanged(int arg1)
 
     m_ignoreValuesChanged = true;
     m_ui->dial_trigPre->setValue(arg1);
-    m_ignoreValuesChanged = false;
 
-    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
-    m_cursorTrigPre->setValue(arg1 * 10, rngH.lower, rngH.upper);
-    m_ui->horizontalSlider_trigPre->setValue(arg1 * 10);
+    if (!m_t.isEmpty())
+    {
+        m_cursorTrigPre1->setValue(arg1, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre2->setValue(arg1, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre3->setValue(arg1, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre4->setValue(arg1, 0, 1, 0, m_t[m_t.size()-1]);
+    }
+
+    m_cursorTrigPre1->show(true);
+    m_cursorTrigPre2->show(true);
+    m_cursorTrigPre3->show(true);
+    m_cursorTrigPre4->show(true);
+
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+
+    m_ui->horizontalSlider_trigPre->setValue(arg1 * 10.0);
+
+    m_ignoreValuesChanged = false;
 
     sendSet();
 }
@@ -995,19 +1042,58 @@ void WindowLa::on_dial_trigPre_valueChanged(int value)
 
     m_ignoreValuesChanged = true;
     m_ui->spinBox_trigPre->setValue(value);
-    m_ignoreValuesChanged = false;
 
-    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
-    m_cursorTrigPre->setValue(value * 10, rngH.lower, rngH.upper);
-    m_ui->horizontalSlider_trigPre->setValue(value * 10);
+    if (!m_t.isEmpty())
+    {
+        m_cursorTrigPre1->setValue(value, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre2->setValue(value, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre3->setValue(value, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre4->setValue(value, 0, 1, 0, m_t[m_t.size()-1]);
+    }
+
+    m_cursorTrigPre1->show(true);
+    m_cursorTrigPre2->show(true);
+    m_cursorTrigPre3->show(true);
+    m_cursorTrigPre4->show(true);
+
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+
+    m_ui->horizontalSlider_trigPre->setValue(value * 10.0);
+
+    m_ignoreValuesChanged = false;
 
     sendSet();
 }
 
 void WindowLa::on_pushButton_trigForc_clicked()
 {
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+
+    m_ui->radioButton_trigLed->setChecked(false);
     enablePanel(false);
+
     Core::getInstance()->msgAdd(m_msg_forceTrig, false, "");
+}
+
+void WindowLa::on_dial_trigPre_sliderPressed()
+{
+    m_cursorTrigPre1->show(true);
+    m_cursorTrigPre2->show(true);
+    m_cursorTrigPre3->show(true);
+    m_cursorTrigPre4->show(true);
+
+    m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+}
+
+void WindowLa::on_hideTrigSliders()
+{
+    m_cursorTrigPre1->show(false);
+    m_cursorTrigPre2->show(false);
+    m_cursorTrigPre3->show(false);
+    m_cursorTrigPre4->show(false);
 }
 
 /********** right pannel - horizontal **********/
@@ -1035,9 +1121,17 @@ void WindowLa::on_spinBox_mem_valueChanged(int arg1)
     if (m_ignoreValuesChanged)
         return;
 
+    if (arg1 > m_daqSet.fs)
+    {
+        m_ui->spinBox_mem->setValue(m_daqSet.fs);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
     m_ui->dial_mem->setValue(arg1);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1047,9 +1141,17 @@ void WindowLa::on_dial_mem_valueChanged(int value)
     if (m_ignoreValuesChanged)
         return;
 
+    if (value > m_daqSet.fs)
+    {
+        m_ui->dial_mem->setValue(m_daqSet.fs);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
     m_ui->spinBox_mem->setValue(value);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1059,9 +1161,17 @@ void WindowLa::on_spinBox_fs_valueChanged(int arg1)
     if (m_ignoreValuesChanged)
         return;
 
+    if (arg1 < m_daqSet.mem)
+    {
+        m_ui->spinBox_fs->setValue(m_daqSet.mem);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
-    m_ui->dial_fs->setValue((int)lin_to_exp_1to36M((int)m_ui->spinBox_fs->value(), true));
+    m_ui->dial_fs->setValue(arg1);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1071,9 +1181,17 @@ void WindowLa::on_dial_fs_valueChanged(int value)
     if (m_ignoreValuesChanged)
         return;
 
+    if (value < m_daqSet.mem)
+    {
+        m_ui->dial_fs->setValue(m_daqSet.mem);
+        return;
+    }
+
     m_ignoreValuesChanged = true;
-    m_ui->spinBox_fs->setValue((int)lin_to_exp_1to36M((int)value));
+    m_ui->spinBox_fs->setValue(value);
     m_ignoreValuesChanged = false;
+
+    m_rescale_needed = true;
 
     sendSet();
 }
@@ -1113,6 +1231,8 @@ void WindowLa::on_pushButton_disable1_clicked()
     m_ui->pushButton_disable1->hide();
 
     m_daqSet.ch1_en = false;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1125,6 +1245,8 @@ void WindowLa::on_pushButton_disable2_clicked()
     m_ui->pushButton_disable2->hide();
 
     m_daqSet.ch2_en = false;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1137,6 +1259,8 @@ void WindowLa::on_pushButton_disable3_clicked()
     m_ui->pushButton_disable3->hide();
 
     m_daqSet.ch3_en = false;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1149,6 +1273,8 @@ void WindowLa::on_pushButton_disable4_clicked()
     m_ui->pushButton_disable4->hide();
 
     m_daqSet.ch4_en = false;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1158,6 +1284,8 @@ void WindowLa::on_pushButton_enable1_clicked()
     m_ui->pushButton_disable1->show();
 
     m_daqSet.ch1_en = true;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1167,6 +1295,8 @@ void WindowLa::on_pushButton_enable2_clicked()
     m_ui->pushButton_disable2->show();
 
     m_daqSet.ch2_en = true;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1176,6 +1306,8 @@ void WindowLa::on_pushButton_enable3_clicked()
     m_ui->pushButton_disable3->show();
 
     m_daqSet.ch3_en = true;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1185,6 +1317,8 @@ void WindowLa::on_pushButton_enable4_clicked()
     m_ui->pushButton_disable4->show();
 
     m_daqSet.ch4_en = true;
+    m_rescale_needed = true;
+
     updatePanel();
 }
 
@@ -1243,8 +1377,8 @@ void WindowLa::showEvent(QShowEvent*)
 
     m_ui->radioButton_trigLed->setChecked(false);
 
-    m_ui->dial_mem->setRange(1, info->mem);
-    m_ui->spinBox_mem->setRange(1, info->mem);
+    m_ui->dial_mem->setRange(2, info->mem);
+    m_ui->spinBox_mem->setRange(2, info->mem);
 
     m_ui->dial_fs->setRange(1, info->la_fs);
     m_ui->spinBox_fs->setRange(1, info->la_fs);
@@ -1264,7 +1398,9 @@ void WindowLa::rescaleYAxis()
 
 void WindowLa::rescaleXAxis()
 {
-    assert(!m_t.isEmpty());
+    if (m_t.isEmpty())
+        return;
+
     m_axis_ch1->axis(QCPAxis::atBottom)->setRange(0, m_t[m_t.size()-1]);
     //m_axis_ch2->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
     //m_axis_ch3->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
@@ -1274,7 +1410,7 @@ void WindowLa::rescaleXAxis()
 void WindowLa::createX()
 {
     double x = 0;
-    double dt = 1.0 / m_daqSet.fs_real;
+    double dt = 1.0 / m_daqSet.fs_real_n;
     m_t.resize(m_daqSet.mem);
 
     for (int i = 0; i < m_daqSet.mem; i++)
@@ -1296,9 +1432,15 @@ void WindowLa::updatePanel()
     m_ignoreValuesChanged = true;
 
     createX();
-    rescaleXAxis();
-    rescaleYAxis();
     enablePanel(true);
+
+    if (m_rescale_needed)
+    {
+        rescaleXAxis();
+        rescaleYAxis();
+
+        m_rescale_needed = false;
+    }
 
     if (m_axis_ch1->visible()) {
         m_axis_ch1->setVisible(false);
@@ -1398,7 +1540,12 @@ void WindowLa::updatePanel()
 
     bot_cursors->showText(true);
 
-    m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + format_unit(m_daqSet.fs_real, "Sps", 2) + " </p>");
+    QStringList tokens = m_daqSet.fs_real.split('.', Qt::SkipEmptyParts);
+
+    if (tokens.size() > 1 && tokens[0].length() > 4)
+        m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + tokens[0] + ". " + tokens[1] + "</p>");
+    else
+        m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + m_daqSet.fs_real + "</p>");
 
     m_ui->spinBox_mem->setValue(m_daqSet.mem);
     m_ui->dial_mem->setValue(m_daqSet.mem);
@@ -1409,10 +1556,15 @@ void WindowLa::updatePanel()
     m_ui->dial_trigPre->setValue(m_daqSet.trig_pre);
     m_ui->spinBox_trigPre->setValue(m_daqSet.trig_pre);
 
-    auto rngH = m_axis_ch1->rangeZoomAxis(Qt::Horizontal)->range();
+    if (!m_t.isEmpty())
+    {
+        m_cursorTrigPre1->setValue(m_daqSet.trig_pre, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre2->setValue(m_daqSet.trig_pre, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre3->setValue(m_daqSet.trig_pre, 0, 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre4->setValue(m_daqSet.trig_pre, 0, 1, 0, m_t[m_t.size()-1]);
+    }
 
-    m_cursorTrigPre->setValue(m_daqSet.trig_pre * 10, rngH.lower, rngH.upper);
-    m_ui->horizontalSlider_trigPre->setValue(m_daqSet.trig_pre * 10);
+    m_ui->horizontalSlider_trigPre->setValue(m_daqSet.trig_pre * 10.0);
 
     m_ui->pushButton_single_off->show();
     m_ui->pushButton_single_on->hide();
@@ -1457,6 +1609,11 @@ void WindowLa::updatePanel()
     m_ui->pushButton_trigForc->setEnabled(m_daqSet.trig_mode != DaqTrigMode::DISABLED && m_daqSet.trig_mode != DaqTrigMode::AUTO);
 
     on_radioButton_fsMem_clicked(m_ui->radioButton_fsMem->isChecked());
+
+    m_ui->radioButton_trigCh_1->setEnabled(m_daqSet.ch1_en);
+    m_ui->radioButton_trigCh_2->setEnabled(m_daqSet.ch2_en);
+    m_ui->radioButton_trigCh_3->setEnabled(m_daqSet.ch3_en);
+    m_ui->radioButton_trigCh_4->setEnabled(m_daqSet.ch4_en);
 
     m_ignoreValuesChanged = false;
 }
@@ -1536,3 +1693,4 @@ void WindowLa::sendSet()
                                                   trigMode + "," +                            // trig mode
                                                   QString::number(m_daqSet.trig_pre));        // trig pre
 }
+

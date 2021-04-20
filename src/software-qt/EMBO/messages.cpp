@@ -221,7 +221,7 @@ void Msg_SCOP_Set::on_dataRx()
         emit result(bits, tokens[1].toInt(), tokens[2].toInt(),
                     tokens[3][0] == '1', tokens[3][1] == '1', tokens[3][2] == '1', tokens[3][3] == '1',
                     tokens[4].toInt(), tokens[5].toInt(), edge, mode, tokens[8].toInt(),
-                    tokens[9].toDouble() ,tokens[10].toDouble());
+                    tokens[9].toDouble(), tokens[10].toDouble(), tokens[10]);
     }
     else
     {
@@ -231,7 +231,7 @@ void Msg_SCOP_Set::on_dataRx()
             return;
         }
 
-        emit ok(tokens[1], tokens[2]);
+        emit ok2(tokens[1].toDouble(), tokens[2].toDouble(), tokens[2]);
     }
 }
 
@@ -279,7 +279,7 @@ void Msg_LA_Set::on_dataRx()
         else if (tokens[4] == "S") mode = SINGLE;
 
         emit result(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt(),
-                    edge, mode, tokens[5].toInt(), tokens[6].toDouble());
+                    edge, mode, tokens[5].toInt(), tokens[6].toDouble(), tokens[6]);
     }
     else
     {
@@ -289,7 +289,7 @@ void Msg_LA_Set::on_dataRx()
             return;
         }
 
-        emit ok(tokens[1]);
+        emit ok2(tokens[1].toDouble(), tokens[1]);
     }
 }
 

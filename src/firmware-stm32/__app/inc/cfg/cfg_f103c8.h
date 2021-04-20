@@ -125,7 +125,7 @@
 #else
 #define EM_DAQ_MAX_MEM         10000 // DAQ max total memory in release mode
 #endif
-#define EM_LA_MAX_FS           5142857   // Logic Analyzer max FS - TODO
+#define EM_LA_MAX_FS           10000000//5142857   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      857142    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq
