@@ -9,7 +9,7 @@ OpenDocument="main.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C
 OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_trig.c", Line=307
 OpenDocument="stm32f1xx_ll_dma.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h", Line=889
 OpenDocument="app.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/app.c", Line=85
-OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=596
+OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=0
 OpenDocument="cntr.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr.c", Line=78
 OpenDocument="comm.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm.c", Line=232
 OpenDocument="utility.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/utility.c", Line=0
@@ -25,13 +25,13 @@ OpenDocument="list.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/list.
 OpenDocument="periph.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/inc/periph.h", Line=0
 OpenToolbar="Debug", Floating=0, x=0, y=0
 OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=502, h=375, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=502, h=385, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=502, h=365, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=502, h=385, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=502, h=367, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
 OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=624, h=105, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x8004D20
-OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=502, h=385, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=502, h=385, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=502, h=385, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
 OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=340, h=1143, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1070, h=105, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]

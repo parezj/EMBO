@@ -6363,7 +6363,7 @@ void QCPAxisTickerTime::setTimeFormat(const QString &format)
   mSmallestUnit = tuMilliseconds;
   mBiggestUnit = tuMilliseconds;
   bool hasSmallest = false;
-  for (int i = tuMilliseconds; i <= tuDays; ++i)
+  for (int i = tuMicroseconds; i <= tuDays; ++i)
   {
     TimeUnit unit = static_cast<TimeUnit>(i);
     if (mTimeFormat.contains(mFormatPattern.value(unit)))

@@ -79,6 +79,7 @@ public:
     void startComm();
     void err(QString name, bool needClose);
     void msgAdd(Msg* msg, bool isQuery, QString params = "");
+    void sendRst(Mode mode);
 
     QVector<IEmboInstrument*> emboInstruments;
 

@@ -165,6 +165,12 @@ void Core::getLatencyMs(double& mean, double& max)
     max = m_meanLatency.getMax();
 }
 
+void Core::sendRst(Mode mode)
+{
+    msgAdd(m_msg_rst, false, "");
+    msgAdd(m_msg_sys_mode, false, (mode == SCOPE ? "SCOPE" : (mode == LA ? "LA" : "VM")));
+}
+
 /* private */
 
 void Core::send()

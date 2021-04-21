@@ -85,7 +85,7 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     m_status_vcc = new QLabel(" ", this);
     m_status_rec = new QLabel(" ", this);
-    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel&nbsp;&nbsp;<span>", this);
+    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
     QWidget* widget = new QWidget(this);
 
     QFont font1("Roboto", 11, QFont::Normal);
@@ -1290,6 +1290,8 @@ void WindowVm::on_pushButton_reset_clicked()
     m_elapsed_diff = 0;
     m_elapsed_saved = 0;
     m_data_fresh = false;
+
+    on_pushButton_resetZoom_clicked();
 
     if (en)
         on_pushButton_enable_clicked();

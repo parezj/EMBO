@@ -18,57 +18,68 @@ QString format_unit(double value, QString unit, int precision)
     const QString r = "\\.*0+$";
 
     double scale;
-    QString prefix;
+    QString suffix;
 
     if (value < 0.000000001) {
         scale = 1000000000000;
-        prefix = " p";
+        suffix = " p";
     }
     else if (value < 0.000001) {
         scale = 1000000000;
-        prefix = " n";
+        suffix = " n";
     }
     else if (value < 0.001) {
         scale = 1000000;
-        prefix = " u";
+        suffix = " u";
     }
     else if (value < 1) {
         scale = 1000;
-        prefix = " m";
+        suffix = " m";
     }
     else if (value < 1000) {
         scale = 1;
-        prefix = " ";
+        suffix = " ";
     }
     else if (value < 1000000) {
         scale = 0.001;
-        prefix = " k";
+        suffix = " k";
     }
     else if (value < 1000000000) {
         scale = 0.000001;
-        prefix = " M";
+        suffix = " M";
     }
     else if (value < 1000000000000) {
         scale = 0.000000001;
-        prefix = " G";
+        suffix = " G";
     }
     else {
         scale = 0.000000000001;
-        prefix = " T";
+        suffix = " T";
     }
 
     QString ret = QString::number(value * scale, 'd', precision);
 
     if (ret.contains('.'))
-        return ret.remove(QRegExp(r)) + prefix + unit;
+        return ret.remove(QRegExp(r)) + suffix + unit;
     else
-        return ret + prefix + unit;
+        return ret + suffix + unit;
 }
 
 double lin_to_exp_1to36M(double x, bool inverse)
 {
     const double a = 0.999999516693728;
     const double b = 0.0000004833063883257437;
+
+    double ret = inverse ? ((a * log(x)) / b) : (a * exp(b * x));
+    //qInfo() << ret;
+
+    return ret;
+}
+
+double lin_to_exp_1to1M(double x, bool inverse)
+{
+    const double a = 0.999986184571060;
+    const double b = 0.00001381552437348865;
 
     double ret = inverse ? ((a * log(x)) / b) : (a * exp(b * x));
     //qInfo() << ret;
@@ -196,3 +207,39 @@ int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, doubl
     }
     return found;
 }
+
+
+const QString h_manual_to_auto(double fs, int mem, double& div_format, double& div_sec)
+{
+    double sec = (1.0 / fs) * (double)mem;
+    QString suffix;
+    double scale;
+
+    if (sec < 0.000001) {
+        scale = 1000000000;
+        suffix = " ns";
+    }
+    else if (sec < 0.001) {
+        scale = 1000000;
+        suffix = " us";
+    }
+    else if (sec < 1) {
+        scale = 1000;
+        suffix = " ms";
+    }
+    else { //if (value < 1000) {
+        scale = 1;
+        suffix = " s";
+    }
+
+    div_sec = sec;
+    div_format = sec * scale;
+
+    return suffix;
+}
+
+
+
+
+
+

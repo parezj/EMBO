@@ -278,6 +278,7 @@ private:
     DaqSettings m_daqSet;
 
     /* helpers */
+    bool m_zoomed = false;
     bool m_rescale_needed = true;
     bool m_msgPending = false;
     bool m_ignoreValuesChanged = false;

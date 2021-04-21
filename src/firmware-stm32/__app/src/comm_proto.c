@@ -24,9 +24,9 @@
 scpi_result_t EM_Reset(scpi_t* context)
 {
     daq_enable(&daq, EM_FALSE);
-    daq_settings_init(&daq);
     daq_mode_set(&daq, VM);
     daq_enable(&daq, EM_TRUE);
+    daq_settings_init(&daq);
     cntr_enable(&cntr, EM_FALSE, EM_FALSE);
     pwm_disable(&pwm);
 #ifdef EM_DAC

@@ -60,7 +60,7 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     m_status_vcc = new QLabel(" ", this);
     m_status_rec = new QLabel(" ", this);
     QWidget* widget = new QWidget(this);
-    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel&nbsp;&nbsp;<span>", this);
+    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
 
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_vcc->setFont(font1);
@@ -180,6 +180,8 @@ void WindowScope::initQcp()
 
     //m_ui->customPlot->setInteractions(0);
     m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
+    m_ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
+    m_ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
 
     connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
@@ -945,6 +947,16 @@ void WindowScope::on_qcpMouseWheel(QWheelEvent*)
 {
     m_ui->pushButton_reset->hide();
     m_ui->pushButton_resetZoom->show();
+
+    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    double d = rngH.upper - rngH.lower;
+
+    if (d >= 1)
+        m_timeTicker->setTimeFormat("%s s");
+    else if (d >= 0.001)
+        m_timeTicker->setTimeFormat("%z ms");
+    else
+        m_timeTicker->setTimeFormat("%u μs");
 }
 
 void WindowScope::on_qcpMousePress(QMouseEvent*)
@@ -1019,14 +1031,65 @@ void WindowScope::on_radioButton_zoomV_clicked(bool checked)
 
 void WindowScope::on_pushButton_reset_clicked()
 {
+    m_msgPending = true;
+    m_rescale_needed = true;
+
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
-    m_rescale_needed = true;
+    m_ui->doubleSpinBox_gain_ch1->setValue(1.0);
+    m_ui->doubleSpinBox_gain_ch2->setValue(1.0);
+    m_ui->doubleSpinBox_gain_ch3->setValue(1.0);
+    m_ui->doubleSpinBox_gain_ch4->setValue(1.0);
 
-    // TODO
+    m_ui->dial_Vpos_ch1->setValue(0);
+    m_ui->dial_Vpos_ch2->setValue(0);
+    m_ui->dial_Vpos_ch3->setValue(0);
+    m_ui->dial_Vpos_ch4->setValue(0);
+
+    /* meas */
+    on_actionMeasChannel_1_triggered(true);
+    m_ui->actionMeasChannel_1->setChecked(true);
+
+    on_actionMeasEnabled_triggered(true);
+    m_ui->actionMeasEnabled->setChecked(true);
+
+    on_actionMeasReset_triggered();
+
+    /* math */
+    on_actionMath_1_2_triggered(false);
+    m_ui->actionMath_1_2->setChecked(false);
+
+    on_actionMath_3_4_triggered(false);
+    m_ui->actionMath_3_4->setChecked(false);
+
+    /* cursors */
+    on_pushButton_cursorsVoff_clicked();
+    on_pushButton_cursorsHoff_clicked();
+
+    /* plot style */
+    on_actionViewLines_triggered(true);
+    m_ui->actionViewLines->setChecked(true);
+
+    on_actionViewPoints_triggered(false);
+    m_ui->actionViewPoints->setChecked(false);
+
+    on_actionInterpSinc_triggered(true);
+    m_ui->actionInterpSinc->setChecked(true);
+
+    Settings::setValue(CFG_REC_DIR, m_rec.getDir());
+
+    on_actionExportCSV_triggered(true);
+    m_ui->actionExportCSV->setChecked(true);
+
+    on_pushButton_resetZoom_clicked();
+    on_pushButton_average_on_clicked();
+
+    Core::getInstance()->sendRst(SCOPE);
+
+    showEvent(NULL);
 }
 
 void WindowScope::on_pushButton_resetZoom_clicked()
@@ -1036,6 +1099,18 @@ void WindowScope::on_pushButton_resetZoom_clicked()
 
     m_ui->pushButton_reset->show();
     m_ui->pushButton_resetZoom->hide();
+
+    if (m_t.isEmpty())
+        return;
+
+    double x = m_t[m_t.size()-1];
+
+    if (x >= 2)
+        m_timeTicker->setTimeFormat("%s s");
+    else if (x >= 0.002)
+        m_timeTicker->setTimeFormat("%z ms");
+    else
+        m_timeTicker->setTimeFormat("%u μs");
 }
 
 void WindowScope::on_pushButton_single_off_clicked()
@@ -1782,6 +1857,8 @@ void WindowScope::showEvent(QShowEvent*)
     m_ui->dial_fs->setRange(1, info->adc_fs_12b); // TODO
     m_ui->spinBox_fs->setRange(1, info->adc_fs_12b); // TODO
 
+    m_ui->dial_div->setRange(((1.0 / info->adc_fs_12b) * 2.0 * 1000000.0), 1000000);
+
     m_timer_plot->start((int)TIMER_SCOPE_PLOT);
 
     m_ui->dial_Vpos_ch1->setRange(-m_ref_v * m_gain1 * 1000.0, m_ref_v * m_gain1 * 1000.0);
@@ -1828,12 +1905,15 @@ void WindowScope::createX()
         x += dt;
     }
 
-    if (x >= 1)
-        m_timeTicker->setTimeFormat("%s s");
-    else if (x >= 0.001)
-        m_timeTicker->setTimeFormat("%z ms");
-    else
-        m_timeTicker->setTimeFormat("%u μs");
+    if (m_zoomed)
+    {
+        if (x >= 2)
+            m_timeTicker->setTimeFormat("%s s");
+        else if (x >= 0.002)
+            m_timeTicker->setTimeFormat("%z ms");
+        else
+            m_timeTicker->setTimeFormat("%u μs");
+    }
 }
 
 void WindowScope::updatePanel()
@@ -1980,6 +2060,16 @@ void WindowScope::updatePanel()
     m_ui->radioButton_trigCh_2->setEnabled(m_daqSet.ch2_en);
     m_ui->radioButton_trigCh_3->setEnabled(m_daqSet.ch3_en);
     m_ui->radioButton_trigCh_4->setEnabled(m_daqSet.ch4_en);
+
+    double div_format;
+    double div_sec;
+    const QString suffix = h_manual_to_auto(m_daqSet.fs_real_n, m_daqSet.mem, div_format, div_sec);
+
+    m_ui->spinBox_div->setValue(div_format);
+    m_ui->spinBox_div->setSuffix(suffix);
+    //m_ui->dial_div->setRange(((1.0 / info->adc_fs_12b) * 2.0 * 1000000.0), 1000000);
+    m_ui->dial_div->setValue(lin_to_exp_1to1M(div_sec * 1000000.0, true));
+    m_ui->radioButton_div->setEnabled(false);
 
     m_ignoreValuesChanged = false;
 }

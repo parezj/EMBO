@@ -2145,7 +2145,7 @@ QRadioButton::indicator::disabled {
 }</string>
              </property>
              <property name="text">
-              <string>Mem+Fs</string>
+              <string>Manual</string>
              </property>
              <property name="iconSize">
               <size>
@@ -2161,6 +2161,9 @@ QRadioButton::indicator::disabled {
              </property>
             </widget>
             <widget class="QRadioButton" name="radioButton_div">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -2215,7 +2218,7 @@ QRadioButton::indicator::disabled {
 }</string>
              </property>
              <property name="text">
-              <string>Div</string>
+              <string>Auto</string>
              </property>
              <property name="iconSize">
               <size>
@@ -2726,9 +2729,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              </property>
              <property name="geometry">
               <rect>
-               <x>120</x>
+               <x>80</x>
                <y>15</y>
-               <width>111</width>
+               <width>151</width>
                <height>41</height>
               </rect>
              </property>
@@ -2789,10 +2792,10 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
               <bool>false</bool>
              </property>
              <property name="suffix">
-              <string/>
+              <string> ms</string>
              </property>
              <property name="minimum">
-              <number>2</number>
+              <number>1</number>
              </property>
              <property name="maximum">
               <number>1000</number>
@@ -2822,7 +2825,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
               </font>
              </property>
              <property name="text">
-              <string>Div (ms/div):</string>
+              <string>Width:</string>
              </property>
             </widget>
             <widget class="QLabel" name="label_dial1_9">
@@ -2860,10 +2863,10 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
               <string>CH1 vertical position</string>
              </property>
              <property name="minimum">
-              <number>2</number>
+              <number>1</number>
              </property>
              <property name="maximum">
-              <number>6000</number>
+              <number>1000000</number>
              </property>
              <property name="value">
               <number>100</number>
@@ -2872,6 +2875,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
               <enum>Qt::Horizontal</enum>
              </property>
              <property name="invertedAppearance">
+              <bool>true</bool>
+             </property>
+             <property name="invertedControls">
               <bool>false</bool>
              </property>
              <property name="wrapping">
@@ -4358,10 +4364,10 @@ QSlider::handle:horizontal:hover {
                 <number>1</number>
                </property>
                <property name="value">
-                <number>50</number>
+                <number>500</number>
                </property>
                <property name="sliderPosition">
-                <number>50</number>
+                <number>500</number>
                </property>
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
