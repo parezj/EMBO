@@ -156,6 +156,29 @@
                                 QSpinBox::down-button:hover { image: url(:/main/resources/img/arrow_down4b.png); } \
                                 QSpinBox:disabled { color: black; }"
 
+/* trigger sliders */
+
+#define CSS_SCOPE_TRIG_PRE      "QSlider { min-height: 10px; max-height: 10px; margin-left: 28px; margin-right:0px; } \
+                                 QSlider::groove:horizontal { background-color: transparent; } \
+                                 QSlider::handle:horizontal { width: 36px; image: url(:/main/resources/img/range_up_sm.png); } \
+                                 QSlider::handle:horizontal:hover { width: 36px; image: url(:/main/resources/img/range_up2_sm.png); }"
+
+#define CSS_SCOPE_TRIG_VAL      "QSlider { min-width: 10px; max-width: 10px; margin-bottom: 14px; margin-top: 0px; } \
+                                 QSlider::groove:vertical { background-color: transparent; } \
+                                 QSlider::handle:vertical { height: 36px; image: url(:/main/resources/img/range_right_sm.png); } \
+                                 QSlider::handle:vertical:hover { height:36px; image: url(:/main/resources/img/range_right2_sm.png); }"
+
+#define CSS_LA_TRIG_PRE         "QSlider { min-height: 10px; max-height: 10px; margin-left: 8px; margin-right:0px; } \
+                                 QSlider::groove:horizontal { background-color: transparent; } \
+                                 QSlider::handle:horizontal { width: 36px; image: url(:/main/resources/img/range_up_sm.png); } \
+                                 QSlider::handle:horizontal:hover { width: 36px; image: url(:/main/resources/img/range_up2_sm.png); }"
+
+#define CSS_SCOPE_TRIG_PRE_OFF  "QSlider { min-height: 10px; max-height: 10px; margin-left: 8px; margin-right:0px; } \
+                                 QSlider::groove:horizontal { background-color: transparent; } QSlider::handle:horizontal { width: 36px; }"
+#define CSS_SCOPE_TRIG_VAL_OFF  "QSlider { min-width: 10px; max-width: 10px; margin-bottom: 14px; margin-top: 0px; } \
+                                 QSlider::groove:vertical { background-color: transparent; } QSlider::handle:vertical { height: 36px; }"
+#define CSS_LA_TRIG_PRE_OFF     "QSlider { min-height: 10px; max-height: 10px; margin-left: 8px; margin-right:0px; } \
+                                 QSlider::groove:horizontal { background-color: transparent; } QSlider::handle:horizontal { width: 36px; }"
 
 /* plot colors  */
 

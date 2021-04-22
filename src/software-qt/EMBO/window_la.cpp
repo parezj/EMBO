@@ -297,6 +297,7 @@ void WindowLa::on_timer_plot() // 60 FPS
         m_cursors3->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
         m_cursors4->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
     }
+
     //m_ui->customPlot->replot();
 }
 
@@ -669,12 +670,16 @@ void WindowLa::on_qcpMouseWheel(QWheelEvent*)
         m_timeTicker->setTimeFormat("%z ms");
     else
         m_timeTicker->setTimeFormat("%u μs");
+
+    m_ui->horizontalSlider_trigPre->setStyleSheet(CSS_LA_TRIG_PRE_OFF);
 }
 
 void WindowLa::on_qcpMousePress(QMouseEvent*)
 {
     m_ui->pushButton_reset->hide();
     m_ui->pushButton_resetZoom->show();
+
+    m_ui->horizontalSlider_trigPre->setStyleSheet(CSS_LA_TRIG_PRE_OFF);
 }
 
 /********** right pannel - main **********/
@@ -739,6 +744,8 @@ void WindowLa::on_pushButton_resetZoom_clicked()
         m_timeTicker->setTimeFormat("%z ms");
     else
         m_timeTicker->setTimeFormat("%u μs");
+
+    m_ui->horizontalSlider_trigPre->setStyleSheet(CSS_LA_TRIG_PRE);
 }
 
 void WindowLa::on_pushButton_single_off_clicked()
@@ -1170,6 +1177,8 @@ void WindowLa::on_pushButton_disable1_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_pushButton_disable2_clicked()
@@ -1184,6 +1193,8 @@ void WindowLa::on_pushButton_disable2_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_pushButton_disable3_clicked()
@@ -1198,6 +1209,8 @@ void WindowLa::on_pushButton_disable3_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_pushButton_disable4_clicked()
@@ -1212,6 +1225,8 @@ void WindowLa::on_pushButton_disable4_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_pushButton_enable1_clicked()
@@ -1223,6 +1238,8 @@ void WindowLa::on_pushButton_enable1_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_pushButton_enable2_clicked()
@@ -1234,6 +1251,8 @@ void WindowLa::on_pushButton_enable2_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_pushButton_enable3_clicked()
@@ -1245,6 +1264,8 @@ void WindowLa::on_pushButton_enable3_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 void WindowLa::on_pushButton_enable4_clicked()
@@ -1256,6 +1277,8 @@ void WindowLa::on_pushButton_enable4_clicked()
     m_rescale_needed = true;
 
     updatePanel();
+
+    m_ui->customPlot->replot();
 }
 
 /********** right pannel - utils **********/
@@ -1332,6 +1355,14 @@ void WindowLa::rescaleYAxis()
     m_axis_ch2->axis(QCPAxis::atLeft)->setRange(0 - Y_LIM , 1 + Y_LIM);
     m_axis_ch3->axis(QCPAxis::atLeft)->setRange(0 - Y_LIM , 1 + Y_LIM);
     m_axis_ch4->axis(QCPAxis::atLeft)->setRange(0 - Y_LIM , 1 + Y_LIM);
+
+    auto rngV = m_ui->customPlot->yAxis->range();
+    auto rngH = m_ui->customPlot->xAxis->range();
+
+    m_cursorTrigPre1->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre2->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre3->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre4->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 }
 
 void WindowLa::rescaleXAxis()
@@ -1343,6 +1374,14 @@ void WindowLa::rescaleXAxis()
     //m_axis_ch2->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
     //m_axis_ch3->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
     //m_axis_ch4->axis(QCPAxis::atBottom)->setRange(0, m_t_last);
+
+    auto rngV = m_ui->customPlot->yAxis->range();
+    auto rngH = m_ui->customPlot->xAxis->range();
+
+    m_cursorTrigPre1->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre2->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre3->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre4->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 }
 
 void WindowLa::createX()

@@ -1109,8 +1109,8 @@ void WindowScope::on_cursorH_valuesChanged(int min, int max)
     m_cursorH_min = min;
     m_cursorH_max = max;
 
-    auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
-    //auto rng = m_ui->customPlot->xAxis->range();
+    //auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    auto rng = m_ui->customPlot->xAxis->range();
 
     m_cursors->setH_min(m_cursorH_min, rng.lower, rng.upper);
     m_cursors->setH_max(m_cursorH_max, rng.lower, rng.upper);
@@ -1144,12 +1144,18 @@ void WindowScope::on_qcpMouseWheel(QWheelEvent*)
         m_timeTicker->setTimeFormat("%z ms");
     else
         m_timeTicker->setTimeFormat("%u μs");
+
+    m_ui->horizontalSlider_trigPre->setStyleSheet(CSS_SCOPE_TRIG_PRE_OFF);
+    m_ui->horizontalSlider_trigVal->setStyleSheet(CSS_SCOPE_TRIG_VAL_OFF);
 }
 
 void WindowScope::on_qcpMousePress(QMouseEvent*)
 {
     m_ui->pushButton_reset->hide();
     m_ui->pushButton_resetZoom->show();
+
+    m_ui->horizontalSlider_trigPre->setStyleSheet(CSS_SCOPE_TRIG_PRE_OFF);
+    m_ui->horizontalSlider_trigVal->setStyleSheet(CSS_SCOPE_TRIG_VAL_OFF);
 }
 
 /********** right pannel - main **********/
@@ -1298,6 +1304,9 @@ void WindowScope::on_pushButton_resetZoom_clicked()
         m_timeTicker->setTimeFormat("%z ms");
     else
         m_timeTicker->setTimeFormat("%u μs");
+
+    m_ui->horizontalSlider_trigPre->setStyleSheet(CSS_SCOPE_TRIG_PRE);
+    m_ui->horizontalSlider_trigVal->setStyleSheet(CSS_SCOPE_TRIG_VAL);
 }
 
 void WindowScope::on_pushButton_single_off_clicked()
@@ -2094,6 +2103,12 @@ void WindowScope::rescaleYAxis()
     else if (m_daqSet.ch4_en && m_gain4 < min_scale) min_scale = m_gain4;
 
     m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
+
+    auto rngV = m_ui->customPlot->yAxis->range();
+    auto rngH = m_ui->customPlot->xAxis->range();
+
+    m_cursorTrigVal->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 }
 
 void WindowScope::rescaleXAxis()
@@ -2105,6 +2120,12 @@ void WindowScope::rescaleXAxis()
         m_ui->customPlot->xAxis->setRange(0, m_ui->customPlot->yAxis->range().upper);
     else
         m_ui->customPlot->xAxis->setRange(0, m_t[m_t.size()-1]);
+
+    auto rngV = m_ui->customPlot->yAxis->range();
+    auto rngH = m_ui->customPlot->xAxis->range();
+
+    m_cursorTrigVal->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+    m_cursorTrigPre->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 }
 
 void WindowScope::createX()

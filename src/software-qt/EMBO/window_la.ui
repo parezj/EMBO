@@ -4315,28 +4315,7 @@ QSlider::handle:horizontal:hover {
                 </font>
                </property>
                <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-height: 10px;
-    max-height: 10px;
-	margin-left: 8px;
-	margin-right:0px;
-}
-
-ctkRangeSlider::groove:horizontal {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:horizontal {
-     width: 36px;
-	 image: url(:/main/resources/img/range_up_sm.png);
-}
-
-ctkRangeSlider::handle:horizontal:hover {
-     width: 36px;
-	 image: url(:/main/resources/img/range_up2_sm.png);
-}
-
-QSlider {
+                <string notr="true">QSlider {
     min-height: 10px;
     max-height: 10px;
 	margin-left: 8px;
