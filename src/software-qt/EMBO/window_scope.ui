@@ -4133,7 +4133,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QSpinBox" name="spinBox_div">
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_div">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -4146,38 +4146,38 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
               </rect>
              </property>
              <property name="styleSheet">
-              <string notr="true">QSpinBox { background-color: white;border: 1px solid gray; border-radius:10px;
+              <string notr="true">QDoubleSpinBox { background-color: white;border: 1px solid gray; border-radius:10px;
 				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
 
-QSpinBox::up-button { 
+QDoubleSpinBox::up-button { 
 	height:22px; 
 	width: 30px;
 	border: 0px;
 	image: url(:/main/resources/img/arrow_up4.png);
 }
 
-QSpinBox::down-button {
+QDoubleSpinBox::down-button {
 	height:22px; 
 	width: 30px;
 	border: 0px;
 	image: url(:/main/resources/img/arrow_down4.png);
  }
 
-QSpinBox::up-button:hover { 
+QDoubleSpinBox::up-button:hover { 
 	image: url(:/main/resources/img/arrow_up4b.png);
 }
 
-QSpinBox::down-button:hover {
+QDoubleSpinBox::down-button:hover {
 	image: url(:/main/resources/img/arrow_down4b.png);
  }
 
-QSpinBox:disabled { background-color: rgba(220,220,220, 1.0); border: 1px transparent; border-radius:10px;
+QDoubleSpinBox:disabled { background-color: rgba(220,220,220, 1.0); border: 1px transparent; border-radius:10px;
                                           border: 1px solid gray; border-radius:10px;
                                           text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
 
-QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up3.png); }
+QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_up3.png); }
 
-QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down3.png); }
+QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/resources/img/arrow_down3.png); }
 </string>
              </property>
              <property name="wrapping">
@@ -4190,7 +4190,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
               <bool>true</bool>
              </property>
              <property name="buttonSymbols">
-              <enum>QAbstractSpinBox::UpDownArrows</enum>
+              <enum>QAbstractSpinBox::NoButtons</enum>
              </property>
              <property name="accelerated">
               <bool>false</bool>
@@ -4204,14 +4204,14 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
              <property name="suffix">
               <string> ms</string>
              </property>
-             <property name="minimum">
-              <number>1</number>
+             <property name="decimals">
+              <number>2</number>
              </property>
              <property name="maximum">
-              <number>1000</number>
+              <double>9999.000000000000000</double>
              </property>
              <property name="value">
-              <number>1000</number>
+              <double>999.000000000000000</double>
              </property>
             </widget>
             <widget class="QLabel" name="label_div">
@@ -6445,6 +6445,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     </property>
     <addaction name="actionMath_1_2"/>
     <addaction name="actionMath_3_4"/>
+    <addaction name="separator"/>
+    <addaction name="actionMath_XY_X_1_Y_2"/>
+    <addaction name="actionMath_XY_X_3_Y_4"/>
    </widget>
    <addaction name="menuExport"/>
    <addaction name="menuView"/>
@@ -6813,6 +6816,34 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
    </property>
    <property name="text">
     <string>Enabled</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionMath_XY_X_1_Y_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>XY Mode (X:1, Y:2)</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionMath_XY_X_3_Y_4">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>XY Mode (X:3, Y:4)</string>
    </property>
    <property name="font">
     <font>

@@ -17,8 +17,7 @@
 #include <QMessageBox>
 
 
-#define Y_LIM       0.20
-
+#define Y_LIM                   0.20
 #define TRIG_VAL_PRE_TIMEOUT    3000
 
 
@@ -58,13 +57,13 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     /* statusbar */
 
     m_status_vcc = new QLabel(" ", this);
-    m_status_rec = new QLabel(" ", this);
+    m_status_seq = new QLabel("Sequence Number: 0", this);
     QWidget* widget = new QWidget(this);
     QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
 
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_vcc->setFont(font1);
-    m_status_rec->setFont(font1);
+    m_status_seq->setFont(font1);
     status_zoom->setFont(font1);
 
     QLabel* status_img = new QLabel(this);
@@ -80,7 +79,6 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     m_status_line1->setFrameShadow(QFrame::Plain);
     m_status_line1->setStyleSheet("color:gray;");
     m_status_line1->setFixedHeight(18);
-    m_status_line1->setVisible(false);
 
     QLabel* status_spacer2 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
     QLabel* status_spacer3 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
@@ -93,7 +91,7 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     layout->addWidget(status_spacer2, 0,2,1,1,Qt::AlignVCenter);
     layout->addWidget(m_status_line1, 0,3,1,1,Qt::AlignVCenter);
     layout->addWidget(status_spacer3, 0,4,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_rec,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addWidget(m_status_seq,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
     layout->addItem(status_spacer0,   0,6,1,1,Qt::AlignVCenter);
     layout->addWidget(status_zoom,    0,7,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
@@ -159,6 +157,7 @@ void WindowScope::initQcp()
     m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,30));
 
     m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
+    m_timeTicker2 = QSharedPointer<QCPAxisTickerFixed>(new QCPAxisTickerFixed);
     m_timeTicker->setTimeFormat("%z ms");
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuSeconds, 1);
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMilliseconds, 1);
@@ -182,6 +181,8 @@ void WindowScope::initQcp()
     m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
     m_ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
     m_ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
+
+    //m_ui->customPlot->setOpenGl(true);
 
     connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
     connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
@@ -226,7 +227,7 @@ void WindowScope::on_timer_plot() // 60 FPS
         m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
     }
 
-    m_ui->customPlot->replot();
+    //m_ui->customPlot->replot();
 }
 
 /******************************** MSG slots ********************************/
@@ -278,6 +279,8 @@ void WindowScope::on_msg_read(const QByteArray data)
 {
     if (m_msgPending)
         return;
+
+    /************* parse circular buffer(s) *************/
 
     auto info = Core::getInstance()->getDevInfo();
     int ch_num = m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en;
@@ -435,7 +438,21 @@ void WindowScope::on_msg_read(const QByteArray data)
         return;
     }
 
-    assert(!m_t.isEmpty());
+    /************* math *************/
+
+    if (m_math_2minus1 || m_math_4minus3)
+    {
+        for (int i = 0; i < m_daqSet.mem; i++)
+        {
+            if (m_math_2minus1 && m_daqSet.ch1_en && m_daqSet.ch2_en)
+                y1[i] = y2[i] - y1[i];
+
+            if (m_math_4minus3 && m_daqSet.ch3_en && m_daqSet.ch4_en)
+                y3[i] = y4[i] - y3[i];
+        }
+    }
+
+    /************* average *************/
 
     if (m_average)
     {
@@ -474,11 +491,40 @@ void WindowScope::on_msg_read(const QByteArray data)
             m_average_it = 0;
     }
 
-    if (m_daqSet.ch1_en) m_ui->customPlot->graph(GRAPH_CH1)->setData(m_t, y1);
-    if (m_daqSet.ch2_en) m_ui->customPlot->graph(GRAPH_CH2)->setData(m_t, y2);
-    if (m_daqSet.ch3_en) m_ui->customPlot->graph(GRAPH_CH3)->setData(m_t, y3);
-    if (m_daqSet.ch4_en) m_ui->customPlot->graph(GRAPH_CH4)->setData(m_t, y4);
+    /************* plot data *************/
 
+    assert(!m_t.isEmpty());
+
+    if (m_math_xy_12 || m_math_xy_34)
+    {
+        if (m_math_xy_12)
+        {
+            if (m_daqSet.ch1_en && m_daqSet.ch2_en)
+                m_ui->customPlot->graph(GRAPH_CH1)->setData(y1, y2);
+        }
+
+        if (m_math_xy_34)
+        {
+            if (m_daqSet.ch3_en && m_daqSet.ch4_en)
+                m_ui->customPlot->graph(GRAPH_CH3)->setData(y3, y4);
+        }
+    }
+    else
+    {
+        if (m_daqSet.ch1_en)
+            m_ui->customPlot->graph(GRAPH_CH1)->setData(m_t, y1);
+
+        if (!m_math_2minus1 && m_daqSet.ch2_en)
+            m_ui->customPlot->graph(GRAPH_CH2)->setData(m_t, y2);
+
+        if (m_daqSet.ch3_en)
+            m_ui->customPlot->graph(GRAPH_CH3)->setData(m_t, y3);
+
+        if (!m_math_4minus3 && m_daqSet.ch4_en)
+            m_ui->customPlot->graph(GRAPH_CH4)->setData(m_t, y4);
+    }
+
+    /************* meas *************/
 
     if (m_meas_en)
     {
@@ -509,6 +555,15 @@ void WindowScope::on_msg_read(const QByteArray data)
         m_ui->textBrowser_measMin->setHtml("<p align=\"right\">" + meas_min_s + " </p>");
         m_ui->textBrowser_measMax->setHtml("<p align=\"right\">" + meas_max_s + " </p>");
     }
+
+    /************* seq num *************/
+
+    m_seq_num++;
+    m_status_seq->setText("Sequence Number: " + QString::number(m_seq_num));
+
+    /************* finally replot *************/
+
+    m_ui->customPlot->replot();
 }
 
 void WindowScope::on_msg_daqReady(Ready ready, int firstPos)
@@ -551,8 +606,7 @@ void WindowScope::on_actionViewPoints_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH3)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setScatterStyle(style);
 
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
+    m_ui->customPlot->replot();
 }
 
 void WindowScope::on_actionViewLines_triggered(bool checked)
@@ -569,8 +623,7 @@ void WindowScope::on_actionViewLines_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH3)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setLineStyle(style);
 
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
+    m_ui->customPlot->replot();
 }
 
 void WindowScope::on_actionInterpLinear_triggered(bool checked) // exclusive with - actionSinc
@@ -591,8 +644,7 @@ void WindowScope::on_actionInterpSinc_triggered(bool checked) // exclusive with 
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
 
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
+    m_ui->customPlot->replot();
 }
 
 /********** Export **********/
@@ -603,15 +655,26 @@ void WindowScope::on_actionExportSave_triggered()
     auto sys = QSysInfo();
 
     QMap<QString, QString> header {
-        {"Common.Created",  {QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz")}},
-        {"Common.Version",  "EMBO " + QString(APP_VERSION)},
-        {"Common.System",   {sys.prettyProductName() + " [" + sys.currentCpuArchitecture() + "]"}},
-        {"Common.Device",   info->name},
-        {"Common.Firmware", info->fw},
-        {"Common.Vcc",      QString::number(info->ref_mv) + " mV"},
-        {"Common.Mode",     "SCOPE"},
-        {"SCOPE.SampleRate",   "TODO Hz"}, // TODO
-        {"SCOPE.Resolution",   "TODO bit"}, // TODO
+        {"Common.Created",    {QDateTime::currentDateTime().toString("yyyy.MM.dd HH:mm:ss.zzz")}},
+        {"Common.Version",    "EMBO " + QString(APP_VERSION)},
+        {"Common.System",     {sys.prettyProductName() + " [" + sys.currentCpuArchitecture() + "]"}},
+        {"Common.Device",     info->name},
+        {"Common.Firmware",   info->fw},
+        {"Common.Vcc",        QString::number(info->ref_mv) + " mV"},
+        {"Common.Mode",       "SCOPE"},
+        {"SCOPE.SampleRate",  m_daqSet.fs_real},
+        {"SCOPE.Resolution",  QString::number(m_daqSet.bits)},
+        {"SCOPE.Memory",      QString::number(m_daqSet.mem)},
+        {"SCOPE.Ch1",         m_daqSet.ch1_en ? "True" : "False"},
+        {"SCOPE.Ch2",         m_daqSet.ch2_en ? "True" : "False"},
+        {"SCOPE.Ch3",         m_daqSet.ch3_en ? "True" : "False"},
+        {"SCOPE.Ch4",         m_daqSet.ch4_en ? "True" : "False"},
+        {"SCOPE.Trig.Ch",     QString::number(m_daqSet.trig_ch)},
+        {"SCOPE.Trig.Level",  QString::number(m_daqSet.trig_val)},
+        {"SCOPE.Trig.Mode",   m_daqSet.trig_mode == AUTO ? "AUTO" : (m_daqSet.trig_mode == NORMAL ? "NORMAL" : (m_daqSet.trig_mode == SINGLE ? "SINGLE" : "DISABLED"))},
+        {"SCOPE.Trig.Slope",  m_daqSet.trig_edge == RISING ? "RISING" : "FALLING"},
+        {"SCOPE.Trig.Pre",    QString::number(m_daqSet.trig_pre)},
+        {"SCOPE.MaxZ_ohm",    QString::number(m_daqSet.maxZ_ohm)},
     };
     bool ret = m_rec.createFile("SCOPE", header);
 
@@ -807,50 +870,174 @@ void WindowScope::on_actionMeasChannel_4_triggered(bool checked)
 
 void WindowScope::on_actionMath_1_2_triggered(bool checked)
 {
-    m_math_2minus1 = checked;
-
-    /*
     if (checked)
     {
-        m_ui->label_ch3->setText("Channel 2—1 (" + m_pin2 + "—" + m_pin1 + ")");
-        m_ui->label_ch3->setStyleSheet("color:red");
+        on_actionMath_3_4_triggered(false);
+        on_actionMath_XY_X_1_Y_2_triggered(false);
+        on_actionMath_XY_X_3_Y_4_triggered(false);
 
-        m_ui->pushButton_enable3->setText("2—1 ON  ");
-        m_ui->pushButton_disable3->setText("2—1 OFF");
+        m_ui->pushButton_enable1->setText(" 2—1  ");
+        m_ui->pushButton_disable1->setText(" 2—1  ");
+
+        m_ui->pushButton_enable2->setText(" 2—1  ");
+        m_ui->pushButton_disable2->setText(" 2—1  ");
+
+        m_ui->actionMath_3_4->setChecked(false);
+        m_ui->actionMath_XY_X_1_Y_2->setChecked(false);
+        m_ui->actionMath_XY_X_3_Y_4->setChecked(false);
     }
     else
     {
-        m_ui->label_ch3->setText("Channel 3 (" + m_pin3 + ")");
-        m_ui->label_ch3->setStyleSheet("color:black");
+        m_ui->pushButton_enable1->setText(" CH1  ");
+        m_ui->pushButton_disable1->setText(" CH1  ");
 
-        m_ui->pushButton_enable3->setText("CH3 ON  ");
-        m_ui->pushButton_disable3->setText("CH3 OFF");
+        m_ui->pushButton_enable2->setText(" CH2  ");
+        m_ui->pushButton_disable2->setText(" CH2  ");
     }
-    */
+
+    m_math_2minus1 = checked;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 }
 
 void WindowScope::on_actionMath_3_4_triggered(bool checked)
 {
-    m_math_4minus3 = checked;
-
-    /*
     if (checked)
     {
-        m_ui->label_ch4->setText("Channel 4—3 (" + m_pin4 + "—" + m_pin3 + ")");
-        m_ui->label_ch4->setStyleSheet("color:red");
+        on_actionMath_1_2_triggered(false);
+        on_actionMath_XY_X_1_Y_2_triggered(false);
+        on_actionMath_XY_X_3_Y_4_triggered(false);
 
-        m_ui->pushButton_enable4->setText("4—3 ON  ");
-        m_ui->pushButton_disable4->setText("4—3 OFF");
+        m_ui->pushButton_enable3->setText(" 4—3  ");
+        m_ui->pushButton_disable3->setText(" 4—3  ");
+
+        m_ui->pushButton_enable4->setText(" 4—3  ");
+        m_ui->pushButton_disable4->setText(" 4—3  ");
+
+        m_ui->actionMath_1_2->setChecked(false);
+        m_ui->actionMath_XY_X_1_Y_2->setChecked(false);
+        m_ui->actionMath_XY_X_3_Y_4->setChecked(false);
     }
     else
     {
-        m_ui->label_ch4->setText("Channel 4 (" + m_pin4 + ")");
-        m_ui->label_ch4->setStyleSheet("color:black");
+        m_ui->pushButton_enable3->setText(" CH3  ");
+        m_ui->pushButton_disable3->setText(" CH3  ");
 
-        m_ui->pushButton_enable4->setText("CH4 ON  ");
-        m_ui->pushButton_disable4->setText("CH4 OFF");
+        m_ui->pushButton_enable4->setText(" CH4  ");
+        m_ui->pushButton_disable4->setText(" CH4  ");
     }
-    */
+
+    m_math_4minus3 = checked;
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+}
+
+void WindowScope::on_actionMath_XY_X_1_Y_2_triggered(bool checked)
+{
+    m_math_xy_12 = checked;
+
+    if (checked)
+    {
+        on_actionMath_1_2_triggered(false);
+        on_actionMath_3_4_triggered(false);
+        on_actionMath_XY_X_3_Y_4_triggered(false);
+
+        m_ui->pushButton_enable1->setText(" XY12");
+        m_ui->pushButton_disable1->setText(" XY12");
+
+        m_ui->pushButton_enable2->setText(" XY12");
+        m_ui->pushButton_disable2->setText(" XY12");
+
+        m_ui->actionMath_1_2->setChecked(false);
+        m_ui->actionMath_3_4->setChecked(false);
+        m_ui->actionMath_XY_X_3_Y_4->setChecked(false);
+
+        m_ui->actionViewLines->setChecked(false);
+        m_ui->actionViewPoints->setChecked(true);
+
+        on_actionViewLines_triggered(false);
+        on_actionViewPoints_triggered(true);
+
+        m_ui->customPlot->xAxis->setTicker(m_timeTicker2);
+        rescaleXAxis();
+    }
+    else
+    {
+        m_ui->pushButton_enable1->setText(" CH1  ");
+        m_ui->pushButton_disable1->setText( "CH1  ");
+
+        m_ui->pushButton_enable2->setText(" CH2  ");
+        m_ui->pushButton_disable2->setText(" CH2  ");
+
+        m_ui->actionViewLines->setChecked(true);
+        m_ui->actionViewPoints->setChecked(false);
+
+        on_actionViewLines_triggered(true);
+        on_actionViewPoints_triggered(false);
+
+        m_ui->customPlot->xAxis->setTicker(m_timeTicker);
+        rescaleXAxis();
+    }
+
+    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+}
+
+void WindowScope::on_actionMath_XY_X_3_Y_4_triggered(bool checked)
+{
+    m_math_xy_34 = checked;
+
+    if (checked)
+    {
+        on_actionMath_1_2_triggered(false);
+        on_actionMath_3_4_triggered(false);
+        on_actionMath_XY_X_1_Y_2_triggered(false);
+
+        m_ui->pushButton_enable1->setText(" XY34");
+        m_ui->pushButton_disable1->setText( "XY34");
+
+        m_ui->pushButton_enable2->setText(" XY34");
+        m_ui->pushButton_disable2->setText(" XY34");
+
+        m_ui->actionMath_1_2->setChecked(false);
+        m_ui->actionMath_3_4->setChecked(false);
+        m_ui->actionMath_XY_X_1_Y_2->setChecked(false);
+
+        m_ui->actionViewLines->setChecked(false);
+        m_ui->actionViewPoints->setChecked(true);
+
+        on_actionViewLines_triggered(false);
+        on_actionViewPoints_triggered(true);
+
+        m_ui->customPlot->xAxis->setTicker(m_timeTicker2);
+        rescaleXAxis();
+    }
+    else
+    {
+        m_ui->pushButton_enable1->setText(" CH3  ");
+        m_ui->pushButton_disable1->setText(" CH3  ");
+
+        m_ui->pushButton_enable2->setText(" CH4  ");
+        m_ui->pushButton_disable2->setText(" CH4  ");
+
+        m_ui->actionViewLines->setChecked(true);
+        m_ui->actionViewPoints->setChecked(false);
+
+        on_actionViewLines_triggered(true);
+        on_actionViewPoints_triggered(false);
+
+        m_ui->customPlot->xAxis->setTicker(m_timeTicker);
+        rescaleXAxis();
+    }
+
+    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 }
 
 /********** Cursors **********/
@@ -1436,14 +1623,14 @@ void WindowScope::on_radioButton_div_clicked(bool checked)
 
 void WindowScope::on_spinBox_mem_valueChanged(int arg1)
 {
-    if (m_ignoreValuesChanged)
-        return;
-
     if (arg1 > m_daqSet.fs)
     {
         m_ui->spinBox_mem->setValue(m_daqSet.fs);
         return;
     }
+
+    if (m_ignoreValuesChanged)
+        return;
 
     m_ignoreValuesChanged = true;
     m_ui->dial_mem->setValue(arg1);
@@ -1456,14 +1643,14 @@ void WindowScope::on_spinBox_mem_valueChanged(int arg1)
 
 void WindowScope::on_dial_mem_valueChanged(int value)
 {
-    if (m_ignoreValuesChanged)
-        return;
-
     if (value > m_daqSet.fs)
     {
         m_ui->dial_mem->setValue(m_daqSet.fs);
         return;
     }
+
+    if (m_ignoreValuesChanged)
+        return;
 
     m_ignoreValuesChanged = true;
     m_ui->spinBox_mem->setValue(value);
@@ -1476,14 +1663,14 @@ void WindowScope::on_dial_mem_valueChanged(int value)
 
 void WindowScope::on_spinBox_fs_valueChanged(int arg1)
 {
-    if (m_ignoreValuesChanged)
-        return;
-
     if (arg1 < m_daqSet.mem)
     {
         m_ui->spinBox_fs->setValue(m_daqSet.mem);
         return;
     }
+
+    if (m_ignoreValuesChanged)
+        return;
 
     m_ignoreValuesChanged = true;
     m_ui->dial_fs->setValue(arg1);
@@ -1496,14 +1683,14 @@ void WindowScope::on_spinBox_fs_valueChanged(int arg1)
 
 void WindowScope::on_dial_fs_valueChanged(int value)
 {
-    if (m_ignoreValuesChanged)
-        return;
-
     if (value < m_daqSet.mem)
     {
         m_ui->dial_fs->setValue(m_daqSet.mem);
         return;
     }
+
+    if (m_ignoreValuesChanged)
+        return;
 
     m_ignoreValuesChanged = true;
     m_ui->spinBox_fs->setValue(value);
@@ -1514,16 +1701,10 @@ void WindowScope::on_dial_fs_valueChanged(int value)
     sendSet();
 }
 
-void WindowScope::on_spinBox_div_valueChanged(int arg1)
+void WindowScope::on_spinBox_div_valueChanged(int)
 {
     if (m_ignoreValuesChanged)
         return;
-
-    m_ignoreValuesChanged = true;
-
-    m_ignoreValuesChanged = false;
-
-    // TODO
 }
 
 void WindowScope::on_dial_div_valueChanged(int value)
@@ -1531,11 +1712,39 @@ void WindowScope::on_dial_div_valueChanged(int value)
     if (m_ignoreValuesChanged)
         return;
 
-    m_ignoreValuesChanged = true;
+    int fs_last = m_ui->spinBox_fs->value();
+    int mem_last = m_ui->spinBox_mem->value();
 
+    double sec = lin_to_exp_1to1M(value, false) / 1000000.0;
+    double fs_max = m_ui->spinBox_fs->maximum();
+    double fs_min = m_ui->spinBox_fs->minimum();
+    double mem_max = m_ui->spinBox_mem->maximum();
+
+    int fs = mem_max / sec;
+    int mem = mem_max;
+
+    if (fs >= fs_max)
+    {
+        double ratio = 1.0 - ((fs - fs_max) / fs);
+
+        fs = fs_max;
+        mem = mem_max * ratio;
+    }
+    else if (fs < fs_min)
+        fs = fs_min;
+
+    m_ignoreValuesChanged = true;
+    m_ui->spinBox_fs->setValue(fs);
+    m_ui->dial_fs->setValue(fs);
+    m_ui->spinBox_mem->setValue(mem);
+    m_ui->dial_mem->setValue(mem);
     m_ignoreValuesChanged = false;
 
-    // TODO
+    if (fs_last != fs || mem_last != mem)
+    {
+        m_rescale_needed = true;
+        sendSet();
+    }
 }
 
 /********** right pannel - vertical **********/
@@ -1746,7 +1955,7 @@ void WindowScope::on_pushButton_average_on_clicked()
     m_ui->spinBox_average->setEnabled(true);
 }
 
-void WindowScope::on_spinBox_average_valueChanged(int arg1)
+void WindowScope::on_spinBox_average_valueChanged(int)
 {
 }
 
@@ -1837,10 +2046,12 @@ void WindowScope::showEvent(QShowEvent*)
 
     Core::getInstance()->msgAdd(m_msg_set, true, "");
 
+    /*
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    */
 
     on_actionMeasReset_triggered();
 
@@ -1890,7 +2101,10 @@ void WindowScope::rescaleXAxis()
     if (m_t.isEmpty())
         return;
 
-    m_ui->customPlot->xAxis->setRange(0, m_t[m_t.size()-1]);
+    if (m_math_xy_12 || m_math_xy_34)
+        m_ui->customPlot->xAxis->setRange(0, m_ui->customPlot->yAxis->range().upper);
+    else
+        m_ui->customPlot->xAxis->setRange(0, m_t[m_t.size()-1]);
 }
 
 void WindowScope::createX()
@@ -2065,11 +2279,11 @@ void WindowScope::updatePanel()
     double div_sec;
     const QString suffix = h_manual_to_auto(m_daqSet.fs_real_n, m_daqSet.mem, div_format, div_sec);
 
-    m_ui->spinBox_div->setValue(div_format);
-    m_ui->spinBox_div->setSuffix(suffix);
+    m_ui->doubleSpinBox_div->setValue(div_format);
+    m_ui->doubleSpinBox_div->setSuffix(suffix);
     //m_ui->dial_div->setRange(((1.0 / info->adc_fs_12b) * 2.0 * 1000000.0), 1000000);
     m_ui->dial_div->setValue(lin_to_exp_1to1M(div_sec * 1000000.0, true));
-    m_ui->radioButton_div->setEnabled(false);
+    m_ui->radioButton_div->setEnabled(true);
 
     m_ignoreValuesChanged = false;
 }

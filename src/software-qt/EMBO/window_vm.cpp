@@ -212,6 +212,8 @@ void WindowVm::initQcp()
     m_ui->customPlot->xAxis->setLabelFont(font2);
     m_ui->customPlot->yAxis->setLabelFont(font2);
 
+    //m_ui->customPlot->setOpenGl(true);
+
     //m_ui->customPlot->setInteractions(0);
     m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
 
@@ -341,14 +343,6 @@ void WindowVm::on_msg_read(const QString ch1, const QString ch2, const QString c
         {
             data_fresh = false;
 
-            /*
-            m_meanCh1.addVal(m_data_ch1);
-            m_meanCh2.addVal(m_data_ch2);
-            m_meanCh3.addVal(m_data_ch3);
-            m_meanCh4.addVal(m_data_ch4);
-            m_meanVcc.addVal(m_data_vcc);
-            */
-
             m_smplBuff.push_back(VmSample {t, m_data_ch1, m_data_ch2, m_data_ch3, m_data_ch4});
         }
     }
@@ -472,19 +466,6 @@ bool WindowVm::updatePlotData()
 
     rescaleXAxis();
 
-    /*
-    m_old_range = m_ui->customPlot->yAxis->range();
-
-    if (m_old_range != m_ui->customPlot->yAxis->range())
-    {
-        auto low_range = m_ui->customPlot->yAxis->range().lower;
-        auto up_range = m_ui->customPlot->yAxis->range().upper;
-        auto hysteris = (up_range - low_range) * 0.05;
-
-        m_ui->customPlot->yAxis->setRange(low_range - hysteris,up_range + hysteris);
-    }
-    */
-
     m_ui->customPlot->graph(GRAPH_CH1)->data()->removeBefore(m_key_last - m_display);
     m_ui->customPlot->graph(GRAPH_CH2)->data()->removeBefore(m_key_last - m_display);
     m_ui->customPlot->graph(GRAPH_CH3)->data()->removeBefore(m_key_last - m_display);
@@ -510,9 +491,6 @@ void WindowVm::on_actionViewPoints_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH2)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH3)->setScatterStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setScatterStyle(style);
-
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::on_actionViewLines_triggered(bool checked)
@@ -528,9 +506,6 @@ void WindowVm::on_actionViewLines_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH2)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH3)->setLineStyle(style);
     m_ui->customPlot->graph(GRAPH_CH4)->setLineStyle(style);
-
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::on_actionInterpLinear_triggered(bool checked) // exclusive with - actionSinc
@@ -549,9 +524,6 @@ void WindowVm::on_actionInterpSinc_triggered(bool checked) // exclusive with - a
     m_ui->customPlot->graph(GRAPH_CH2)->setSpline(checked);
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
-
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::on_actionShowPlot_triggered(bool checked)
@@ -807,8 +779,6 @@ void WindowVm::on_actionMeasChannel_4_triggered(bool checked)
 
 void WindowVm::on_actionMath_1_2_triggered(bool checked)
 {
-    m_math_2minus1 = checked;
-
     if (checked)
     {
         m_ui->label_ch3->setText("Channel 2—1 (" + m_pin2 + "—" + m_pin1 + ")");
@@ -816,6 +786,9 @@ void WindowVm::on_actionMath_1_2_triggered(bool checked)
 
         m_ui->pushButton_enable3->setText("2—1 ON  ");
         m_ui->pushButton_disable3->setText("2—1 OFF");
+
+        m_ui->actionMath_3_4->setChecked(false);
+        on_actionMath_3_4_triggered(false);
     }
     else
     {
@@ -825,12 +798,12 @@ void WindowVm::on_actionMath_1_2_triggered(bool checked)
         m_ui->pushButton_enable3->setText("CH3 ON  ");
         m_ui->pushButton_disable3->setText("CH3 OFF");
     }
+
+    m_math_2minus1 = checked;
 }
 
 void WindowVm::on_actionMath_3_4_triggered(bool checked)
 {
-    m_math_4minus3 = checked;
-
     if (checked)
     {
         m_ui->label_ch4->setText("Channel 4—3 (" + m_pin4 + "—" + m_pin3 + ")");
@@ -838,6 +811,9 @@ void WindowVm::on_actionMath_3_4_triggered(bool checked)
 
         m_ui->pushButton_enable4->setText("4—3 ON  ");
         m_ui->pushButton_disable4->setText("4—3 OFF");
+
+        m_ui->actionMath_1_2->setChecked(false);
+        on_actionMath_1_2_triggered(false);
     }
     else
     {
@@ -847,6 +823,8 @@ void WindowVm::on_actionMath_3_4_triggered(bool checked)
         m_ui->pushButton_enable4->setText("CH4 ON  ");
         m_ui->pushButton_disable4->setText("CH4 OFF");
     }
+
+    m_math_4minus3 = checked;
 }
 
 /********** Cursors **********/
@@ -1400,15 +1378,6 @@ void WindowVm::showEvent(QShowEvent*)
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
 
-    /*
-    m_meanCh1.reset();
-    m_meanCh2.reset();
-    m_meanCh3.reset();
-    m_meanCh4.reset();
-    m_meanVcc.reset();
-    m_meanAvg.reset();
-    */
-
     //m_ui->customPlot->replot();
 
     Core::getInstance()->setMode(VM);
@@ -1442,15 +1411,9 @@ void WindowVm::rescaleYAxis()
     else if (m_en4 && m_gain4 < min_scale) min_scale = m_gain4;
 
     m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
-
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
 }
 
 void WindowVm::rescaleXAxis()
 {
     m_ui->customPlot->xAxis->setRange(m_key_last, m_display, Qt::AlignRight);
-
-    //if (!m_instrEnabled)
-    //    m_ui->customPlot->replot();
 }

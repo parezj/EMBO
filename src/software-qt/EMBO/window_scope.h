@@ -16,7 +16,7 @@
 #include <QLabel>
 
 
-#define TIMER_SCOPE_PLOT           16.6    // graph refresh rate = 16.6 ms = 60 FPS
+#define TIMER_SCOPE_PLOT           33.3    // cursors refresh rate = 30 FPS
 
 #define GRAPH_CH1       0
 #define GRAPH_CH2       1
@@ -181,6 +181,10 @@ private slots:
     void on_pushButton_fft_off_clicked();
     void on_pushButton_fft_on_clicked();
 
+    void on_actionMath_XY_X_1_Y_2_triggered(bool checked);
+
+    void on_actionMath_XY_X_3_Y_4_triggered(bool checked);
+
 private:
     void initQcp();
     void closeEvent(QCloseEvent *event) override;
@@ -208,11 +212,12 @@ private:
 
     /* X time axis */
     QSharedPointer<QCPAxisTickerTime> m_timeTicker;
+    QSharedPointer<QCPAxisTickerFixed> m_timeTicker2;
     QVector<double> m_t;
 
     /* status bar */
     QLabel* m_status_vcc;
-    QLabel* m_status_rec;
+    QLabel* m_status_seq;
     QFrame* m_status_line1;
 
     /* gain */
@@ -246,6 +251,8 @@ private:
     bool m_cursorsH_en = false;
     bool m_math_2minus1 = false;
     bool m_math_4minus3 = false;
+    bool m_math_xy_12 = false;
+    bool m_math_xy_34 = false;
     bool m_fft = false;
     bool m_single = false;
 
@@ -278,10 +285,13 @@ private:
     DaqSettings m_daqSet;
 
     /* helpers */
+    int m_seq_num = 0;
     bool m_zoomed = false;
     bool m_rescale_needed = true;
     bool m_msgPending = false;
     bool m_ignoreValuesChanged = false;
+
+    /* button groups */
     QButtonGroup m_trigMode;
     QButtonGroup m_trigSlope;
     QButtonGroup m_trigCh;

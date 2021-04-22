@@ -16,7 +16,7 @@
 #include <QLabel>
 
 
-#define TIMER_LA_PLOT           30.6    // graph refresh rate = 16.6 ms = 60 FPS
+#define TIMER_LA_PLOT           33.3    // cursors refresh rate = 30 FPS
 
 #define GRAPH_CH1       0
 #define GRAPH_CH2       1
@@ -79,18 +79,6 @@ private slots:
     void on_actionExportTXT_Tabs_triggered(bool checked);
     void on_actionExportTXT_Semicolon_triggered(bool checked);
     void on_actionExportMAT_triggered(bool checked);
-
-    /* GUI slots - Menu - Measure */
-    void on_actionMeasEnabled_triggered(bool checked);
-    void on_actionMeasReset_triggered();
-    void on_actionMeasChannel_1_triggered(bool checked);
-    void on_actionMeasChannel_2_triggered(bool checked);
-    void on_actionMeasChannel_3_triggered(bool checked);
-    void on_actionMeasChannel_4_triggered(bool checked);
-
-    /* GUI slots - Menu - Math */
-    void on_actionMath_1_2_triggered(bool checked);
-    void on_actionMath_3_4_triggered(bool checked);
 
     /* GUI slots - Cursors */
     void on_cursorH_valuesChanged(int min, int max);
@@ -187,7 +175,7 @@ private:
 
     /* status bar */
     QLabel* m_status_vcc;
-    QLabel* m_status_rec;
+    QLabel* m_status_seq;
     QFrame* m_status_line1;
 
     /* gain */
@@ -247,10 +235,13 @@ private:
     Recorder m_rec;
 
     /* helpers */
+    int m_seq_num = 0;
     bool m_zoomed = false;
     bool m_rescale_needed = true;
     bool m_msgPending = false;
     bool m_ignoreValuesChanged = false;
+
+    /* button groups */
     QButtonGroup m_trigMode;
     QButtonGroup m_trigSlope;
     QButtonGroup m_trigCh;

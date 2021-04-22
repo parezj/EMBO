@@ -188,16 +188,6 @@ private:
     bool m_data_fresh = false;
     double m_key_last = 0;
 
-    /* mean buffers */
-    /*
-    MoveMean<double> m_meanCh1;
-    MoveMean<double> m_meanCh2;
-    MoveMean<double> m_meanCh3;
-    MoveMean<double> m_meanCh4;
-    MoveMean<double> m_meanVcc;
-    MoveMean<double> m_meanAvg;
-    */
-
     /* average vars */
     double m_avg1_val = 0;
     double m_avg2_val = 0;
