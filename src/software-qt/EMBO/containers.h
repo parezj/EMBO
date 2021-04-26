@@ -63,7 +63,8 @@ enum DaqBits
 enum DaqTrigEdge
 {
     RISING,
-    FALLING
+    FALLING,
+    BOTH
 };
 
 enum DaqTrigMode

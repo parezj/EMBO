@@ -9,7 +9,6 @@ CONFIG += c++11
 # depend on your compiler). Please consult the documentation of the
 # deprecated API in order to know how to port your code away from it.
 DEFINES += QT_DEPRECATED_WARNINGS
-DEFINES += QCUSTOMPLOT_USE_OPENGL
 
 win32:RC_ICONS = icon.ico
 macx: ICON = icon.icns
@@ -21,19 +20,58 @@ greaterThan(QT_MAJOR_VERSION, 4){
     TARGET_ARCH=$${QMAKE_HOST.arch}
 }
 
+CONFIG(release, debug|release): DESTDIR = $$OUT_PWD/release
+CONFIG(debug, debug|release): DESTDIR = $$OUT_PWD/debug
+
+
 include(__crashhandler/qBreakpad.pri)
 include(__updater/QSimpleUpdater.pri)
 
-contains(TARGET_ARCH, x86_64){
-    ARCHITECTURE = x64
-    QMAKE_LIBDIR += $$PWD/lib/x64
-}else{
-    QMAKE_LIBDIR += $$PWD/lib/x86
-    ARCHITECTURE = x86
+win32 {
+    contains(TARGET_ARCH, x86_64) {
+
+        ARCHITECTURE = win64
+        QMAKE_LIBDIR += $$PWD/lib/win_64
+        LIBS += $$PWD/lib/win_64/libfftw3-3.dll
+        LIBS += -lqBreakpad
+
+        inst.files += $$PWD/lib/win_64/libfftw3-3.dll
+        inst.path += $${DESTDIR}
+        INSTALLS += inst
+
+    } else {
+
+        ARCHITECTURE = win32
+        QMAKE_LIBDIR += $$PWD/lib/win_32
+        LIBS += $$PWD/lib/win_32/libfftw3-3.dll
+        LIBS += -lqBreakpad
+
+        inst.files += $$PWD/lib/win_32/libfftw3-3.dll
+        inst.path += $${DESTDIR}
+        INSTALLS += inst
+    }
 }
 
-macx: LIBS += -framework AppKit
-LIBS += -lqBreakpad
+
+linux {
+    ARCHITECTURE = linux64
+    QMAKE_LIBDIR += $$PWD/lib/linux_64
+    LIBS += -lfftw3-3
+    LIBS += -lqBreakpad
+}
+
+macx {
+    ARCHITECTURE = mac64
+    QMAKE_LIBDIR += $$PWD/lib/mac_64
+    INCLUDEPATH += /usr/local/include
+    LIBS += -framework AppKit
+    LIBS += -lfftw3-3 -lm
+    LIBS += -lqBreakpad
+}
+
+fw.files += $${PWD}/firmware/EMBO_F103C8.hex
+fw.path += $${DESTDIR}/firmware
+INSTALLS += fw
 
 
 VERSION = 0.0.4
@@ -75,6 +113,7 @@ HEADERS += \
     css.h \
     interfaces.h \
     lib/ctkrangeslider.h \
+    lib/fftw3.h \
     lib/qcustomplot.h \
     messages.h \
     movemean.h \

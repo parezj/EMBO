@@ -6959,9 +6959,33 @@ int QCPAxisTickerPi::getSubTickCount(double tickStep)
 QString QCPAxisTickerPi::getTickLabel(double tick, const QLocale &locale, QChar formatChar, int precision)
 {
   double tickInPis = tick/mPiValue;
+
+  QString suffix;
+  double scale;
+
+  if (tickInPis < 1000) {
+      scale = 1;
+      suffix = " ";
+  }
+  else if (tickInPis < 1000000) {
+      scale = 0.001;
+      suffix = " k";
+  }
+  else if (tickInPis < 1000000000) {
+      scale = 0.000001;
+      suffix = " M";
+  }
+  else { //if (tickInPis < 1000000000000) {
+      scale = 0.000000001;
+      suffix = " G";
+  }
+
+  tickInPis *= scale;
+
   if (mPeriodicity > 0)
     tickInPis = fmod(tickInPis, mPeriodicity);
   
+  /*
   if (mFractionStyle != fsFloatingPoint && mPiTickStep > 0.09 && mPiTickStep < 50)
   {
     // simply construct fraction from decimal like 1.234 -> 1234/1000 and then simplify fraction, smaller digits are irrelevant due to mPiTickStep conditional above
@@ -6969,20 +6993,21 @@ QString QCPAxisTickerPi::getTickLabel(double tick, const QLocale &locale, QChar 
     int numerator = qRound(tickInPis*denominator);
     simplifyFraction(numerator, denominator);
     if (qAbs(numerator) == 1 && denominator == 1)
-      return (numerator < 0 ? QLatin1String("-") : QLatin1String("")) + mPiSymbol.trimmed();
+      return (numerator < 0 ? QLatin1String("-") : QLatin1String("")) + suffix + mPiSymbol.trimmed();
     else if (numerator == 0)
       return QLatin1String("0");
     else
-      return fractionToString(numerator, denominator) + mPiSymbol;
+      return fractionToString(numerator, denominator) + suffix + mPiSymbol;
   } else
   {
+  */
     if (qFuzzyIsNull(tickInPis))
-      return QLatin1String("0");
-    else if (qFuzzyCompare(qAbs(tickInPis), 1.0))
-      return (tickInPis < 0 ? QLatin1String("-") : QLatin1String("")) + mPiSymbol.trimmed();
+      return "0";
+    //else if (qFuzzyCompare(qAbs(tickInPis), 1.0))
+    //  return (tickInPis < 0 ? QLatin1String("-") : QLatin1String("")) + suffix + mPiSymbol.trimmed();
     else
-      return QCPAxisTicker::getTickLabel(tickInPis, locale, formatChar, precision) + mPiSymbol;
-  }
+      return QCPAxisTicker::getTickLabel(tickInPis, locale, formatChar, precision) + suffix + mPiSymbol;
+  //}
 }
 
 /*! \internal

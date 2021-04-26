@@ -1,14 +1,15 @@
 
 Breakpoint=daq_trig.c:247, State=BP_STATE_DISABLED
 Breakpoint=utility.c:293, State=BP_STATE_DISABLED
+OpenDocument="startup_stm32f103c8tx.s", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Core/Startup/startup_stm32f103c8tx.s", Line=45
 OpenDocument="daq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq.c", Line=152
 OpenDocument="utils.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__lib/scpi/src/utils.c", Line=585
 OpenDocument="irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/irq.c", Line=0
 OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/tasks.c", Line=3504
-OpenDocument="main.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Core/Src/main.c", Line=55
+OpenDocument="main.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Core/Src/main.c", Line=31
 OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_trig.c", Line=307
-OpenDocument="stm32f1xx_ll_dma.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h", Line=889
-OpenDocument="app.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/app.c", Line=85
+OpenDocument="stm32f1xx_ll_dma.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h", Line=826
+OpenDocument="app.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/app.c", Line=28
 OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=0
 OpenDocument="cntr.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr.c", Line=78
 OpenDocument="comm.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm.c", Line=232
@@ -24,14 +25,14 @@ OpenDocument="EMBO_F103C8.jdebug", FilePath="F:/STM32Cube/EMBO/src/firmware-stm3
 OpenDocument="list.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/list.c", Line=134
 OpenDocument="periph.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/inc/periph.h", Line=0
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=502, h=375, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=502, h=367, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
+OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=502, h=376, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=502, h=378, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=502, h=371, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=502, h=378, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
 OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=624, h=105, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x8004D20
-OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=502, h=383, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=502, h=378, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=502, h=378, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=502, h=378, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
 OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=340, h=1143, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1070, h=105, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
@@ -39,7 +40,7 @@ TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", Visibl
 TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
 TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[144;147;224]
 TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;103;100;120]
-TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[196;121;84;44;185;100]
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[196;121;84;44;185;242]
 TableHeader="Functions", SortCol="Size", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[130;64;44;57;176]
 TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;366]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]

@@ -90,7 +90,8 @@ private slots:
     /* GUI slots - Menu - Export */
     void on_actionExportStart_triggered();
     void on_actionExportStop_triggered();
-    void on_actionExportScreenshot_triggered();
+    void on_actionExportPNG_triggered();
+    void on_actionExportPDF_triggered();
     void on_actionExportFolder_triggered();
     void on_actionExportCSV_triggered(bool checked);
     void on_actionExportTXT_Tabs_triggered(bool checked);
@@ -150,13 +151,15 @@ private slots:
     void on_dial_display_valueChanged(int value);
 
 private:
+    void statusBarLoad();
     void initQcp();
-    bool updatePlotData();
-    void rescaleYAxis();
-    void rescaleXAxis();
 
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
+
+    bool updatePlotData();
+    void rescaleYAxis();
+    void rescaleXAxis();
 
     /* main window */
     Ui::WindowVm* m_ui;

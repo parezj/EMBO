@@ -411,7 +411,8 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
         if (p4l != 4 || p7l != 1 || p8l != 1 ||
             (p4[0] != '1' && p4[0] != '0') || (p4[1] != '1' && p4[1] != '0') ||
             (p4[2] != '1' && p4[2] != '0') || (p4[3] != '1' && p4[3] != '0') ||
-            (p7[0] != 'R' && p7[0] != 'F') || (p8[0] != 'A' && p8[0] != 'N' && p8[0] != 'S' && p8[0] != 'D'))
+            (p7[0] != 'R' && p7[0] != 'F') || //&& p7[0] != 'B') ||
+            (p8[0] != 'A' && p8[0] != 'N' && p8[0] != 'S' && p8[0] != 'D'))
         {
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
@@ -427,7 +428,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
         int ret4 = daq_ch_set(&daq, p4[0] - '0', p4[1] - '0', p4[2] - '0', p4[3] - '0', (int)p3);
         int ret3 = daq_fs_set(&daq, p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
-        int ret5 = daq_trig_set(&daq, p5, p6, (p7[0] == 'R' ? RISING : FALLING),
+        int ret5 = daq_trig_set(&daq, p5, p6, (p7[0] == 'R' ? RISING : (p7[0] == 'F' ? FALLING : BOTH)),
             (p8[0] == 'A' ? AUTO : (p8[0] == 'N' ? NORMAL : (p8[0] == 'S' ? SINGLE : DISABLED))), (int)p9);
 
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
@@ -480,7 +481,7 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
         chans_en[1] = daq.set.ch2_en ? '1' : '0';
         chans_en[2] = daq.set.ch3_en ? '1' : '0';
         chans_en[3] = daq.set.ch4_en ? '1' : '0';
-        edge_s[0] = daq.trig.set.edge == RISING ? 'R' : 'F';
+        edge_s[0] = daq.trig.set.edge == RISING ? 'R' : (daq.trig.set.edge == FALLING ? 'F' : 'B');
         mode_s[0] = daq.trig.set.mode == AUTO ? 'A' : (daq.trig.set.mode == NORMAL ? 'N' :
             (daq.trig.set.mode == SINGLE ? 'S' : 'D'));
         chans_en[4] = '\0';
@@ -593,7 +594,7 @@ scpi_result_t EM_LA_Set(scpi_t* context)
         }
 
         if (p7l != 1 || p8l != 1 ||
-            (p7[0] != 'R' && p7[0] != 'F') ||
+            (p7[0] != 'R' && p7[0] != 'F' && p7[0] != 'B') ||
             (p8[0] != 'A' && p8[0] != 'N' && p8[0] != 'S' && p8[0] != 'D'))
         {
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
@@ -610,7 +611,7 @@ scpi_result_t EM_LA_Set(scpi_t* context)
         int ret4 = daq_ch_set(&daq, 1, 1, 1, 1, (int)p3);
         int ret3 = daq_fs_set(&daq, p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
-        int ret5 = daq_trig_set(&daq, p5, 0, (p7[0] == 'R' ? RISING : FALLING),
+        int ret5 = daq_trig_set(&daq, p5, 0, (p7[0] == 'R' ? RISING : (p7[0] == 'F' ? FALLING : BOTH)),
             (p8[0] == 'A' ? AUTO : (p8[0] == 'N' ? NORMAL : (p8[0] == 'S' ? SINGLE : DISABLED))), (int)p9);
 
         if (ret1 + ret2 + ret3 + ret4 + ret5 == 0)
@@ -654,7 +655,7 @@ scpi_result_t EM_LA_SetQ(scpi_t* context)
         char edge_s[2];
         char mode_s[2];
 
-        edge_s[0] = daq.trig.set.edge == RISING ? 'R' : 'F';
+        edge_s[0] = daq.trig.set.edge == RISING ? 'R' : (daq.trig.set.edge == FALLING ? 'F' : 'B');
         mode_s[0] = daq.trig.set.mode == AUTO ? 'A' : (daq.trig.set.mode == NORMAL ? 'N' :
             (daq.trig.set.mode == SINGLE ? 'S' : 'D'));
         edge_s[1] = '\0';

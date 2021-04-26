@@ -1650,6 +1650,76 @@ QRadioButton::indicator::disabled {
               <bool>false</bool>
              </property>
             </widget>
+            <widget class="QRadioButton" name="radioButton_trigSlope_Both">
+             <property name="geometry">
+              <rect>
+               <x>270</x>
+               <y>45</y>
+               <width>81</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QRadioButton:checked {
+	background-color: rgba(245,245,245, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:hover {
+	background-color: rgba(230,230,230, 1.0);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton:checked:hover {
+	background-color: rgba(245,245,245, 0.8);
+	border: 0px; 
+	border-radius:5px;
+}
+
+QRadioButton::indicator {
+    width: 20px;
+    height: 20px;
+}
+QRadioButton::indicator::unchecked {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator:unchecked:hover {
+    image: url(:/main/resources/img/radio_off1.png);
+}
+
+QRadioButton::indicator::checked {
+    image: url(:/main/resources/img/radio_on2.png);
+}
+
+QRadioButton::indicator::disabled {
+    image: url(:/main/resources/img/radio_off_dis.png);
+}</string>
+             </property>
+             <property name="text">
+              <string>Both</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>20</width>
+               <height>20</height>
+              </size>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
            </widget>
            <widget class="QGroupBox" name="groupBox_t_18">
             <property name="geometry">
@@ -4498,7 +4568,7 @@ QSlider::handle:vertical:hover {
       </font>
      </property>
      <property name="title">
-      <string>Format</string>
+      <string>Data Format</string>
      </property>
      <addaction name="actionExportCSV"/>
      <addaction name="actionExportTXT_Tabs"/>
@@ -4506,11 +4576,12 @@ QSlider::handle:vertical:hover {
      <addaction name="actionExportMAT"/>
     </widget>
     <addaction name="actionExportSave"/>
+    <addaction name="menuExportFormat"/>
     <addaction name="separator"/>
-    <addaction name="actionExportScreenshot"/>
+    <addaction name="actionExportPNG"/>
+    <addaction name="actionExportPDF"/>
     <addaction name="separator"/>
     <addaction name="actionExportFolder"/>
-    <addaction name="menuExportFormat"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="font">
@@ -4551,7 +4622,7 @@ QSlider::handle:vertical:hover {
   </action>
   <action name="actionExportSave">
    <property name="text">
-    <string>Save File</string>
+    <string>Save Data</string>
    </property>
    <property name="font">
     <font>
@@ -4862,9 +4933,9 @@ QSlider::handle:vertical:hover {
     <string>Name</string>
    </property>
   </action>
-  <action name="actionExportScreenshot">
+  <action name="actionExportPNG">
    <property name="text">
-    <string>Screenshot</string>
+    <string>Plot PNG</string>
    </property>
   </action>
   <action name="actionShowPlot">
@@ -4876,6 +4947,17 @@ QSlider::handle:vertical:hover {
    </property>
    <property name="text">
     <string>Show Plot</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionExportPDF">
+   <property name="text">
+    <string>Plot PDF</string>
    </property>
    <property name="font">
     <font>

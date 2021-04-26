@@ -42,6 +42,7 @@ public:
     QString getFilePath() const { return m_file_path; }
     QString getFileName() const { return m_file_name; }
     Delim getDelim() const { return m_delim; }
+    QString generateFilePath(QString prefix, QString ext);
 
     bool createFile(QString prefix, QMap<QString,QString> header);
     QString closeFile();

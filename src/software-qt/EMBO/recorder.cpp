@@ -49,14 +49,18 @@ bool Recorder::setDelim(Delim delim)
     return true;
 }
 
+QString Recorder::generateFilePath(QString prefix, QString ext)
+{
+    m_file_name = "EMBO_" + prefix + "_" + QDateTime::currentDateTime().toString(FILENAME_FORMAT) + ext;
+    m_file_path = pathCombine(m_dir, m_file_name);
+    return m_file_path;
+}
+
 bool Recorder::createFile(QString prefix, QMap<QString,QString> header)
 {
-    QString timestamp = QDateTime::currentDateTime().toString(FILENAME_FORMAT);
+    generateFilePath(prefix, m_ext);
 
-    m_file_name = "EMBO_" + prefix + "_" + timestamp + m_ext;
-    m_file_path = pathCombine(m_dir, m_file_name);
     m_file.setFileName(m_file_path);
-
     m_file.open(QIODevice::Append);
     if(m_file.isOpen())
     {
@@ -84,16 +88,15 @@ QString Recorder::closeFile()
 
 QString Recorder::takeScreenshot(QString prefix, QWidget* widget)
 {
-    QString timestamp = QDateTime::currentDateTime().toString(FILENAME_FORMAT);
-    QString screen_path = m_file_path = pathCombine(m_dir, "EMBO_" + prefix + "_" + timestamp + ".png");
+    generateFilePath(prefix, ".png");
 
     QPixmap pixmap(widget->size());
     widget->render(&pixmap);
 
-    QFile file(screen_path);
+    QFile file(m_file_path);
     if (file.open(QIODevice::WriteOnly))
         if (pixmap.save(&file, "PNG"))
-            return screen_path;
+            return m_file_path;
 
     return "";
 }

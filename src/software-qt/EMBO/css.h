@@ -180,6 +180,16 @@
 #define CSS_LA_TRIG_PRE_OFF     "QSlider { min-height: 10px; max-height: 10px; margin-left: 8px; margin-right:0px; } \
                                  QSlider::groove:horizontal { background-color: transparent; } QSlider::handle:horizontal { width: 36px; }"
 
+ /* trigger led */
+
+#define CSS_TRIG_LED1           "QRadioButton::indicator { width: 25px; height: 25px; } \
+                                 QRadioButton::indicator::unchecked { image: url(:/main/resources/img/led_gray.png); } \
+                                 QRadioButton::indicator::checked   { image: url(:/main/resources/img/led_green.png); }"
+
+#define CSS_TRIG_LED2           "QRadioButton::indicator { width: 25px; height: 25px; } \
+                                 QRadioButton::indicator::unchecked { image: url(:/main/resources/img/led_gray.png); } \
+                                 QRadioButton::indicator::checked   { image: url(:/main/resources/img/led_green4.png); }"
+
 /* plot colors  */
 
 #define COLOR1      "#0072BD"

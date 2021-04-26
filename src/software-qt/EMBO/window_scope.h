@@ -12,6 +12,8 @@
 #include "containers.h"
 #include "recorder.h"
 
+#include "lib/fftw3.h"
+
 #include <QMainWindow>
 #include <QLabel>
 
@@ -22,6 +24,7 @@
 #define GRAPH_CH2       1
 #define GRAPH_CH3       2
 #define GRAPH_CH4       3
+#define GRAPH_FFT       4
 
 #define CURSOR_DEFAULT_H_MIN    400
 #define CURSOR_DEFAULT_H_MAX    600
@@ -81,7 +84,8 @@ private slots:
 
     /* GUI slots - Menu - Export */
     void on_actionExportSave_triggered();
-    void on_actionExportScreenshot_triggered();
+    void on_actionExportPNG_triggered();
+    void on_actionExportPDF_triggered();
     void on_actionExportFolder_triggered();
     void on_actionExportCSV_triggered(bool checked);
     void on_actionExportTXT_Tabs_triggered(bool checked);
@@ -99,6 +103,15 @@ private slots:
     /* GUI slots - Menu - Math */
     void on_actionMath_1_2_triggered(bool checked);
     void on_actionMath_3_4_triggered(bool checked);
+    void on_actionMath_XY_X_1_Y_2_triggered(bool checked);
+    void on_actionMath_XY_X_3_Y_4_triggered(bool checked);
+
+    /* GUI slots - Menu - FFT */
+    void on_actionFFTChannel_1_triggered(bool checked);
+    void on_actionFFTChannel_2_triggered(bool checked);
+    void on_actionFFTChannel_3_triggered(bool checked);
+    void on_actionFFTChannel_4_triggered(bool checked);
+    void on_actionFFTSplit_Screen_triggered(bool checked);
 
     /* GUI slots - Cursors */
     void on_cursorH_valuesChanged(int min, int max);
@@ -141,6 +154,8 @@ private slots:
     void on_hideTrigSliders();
     void on_dial_trigVal_sliderPressed();
     void on_dial_trigPre_sliderPressed();
+    void on_dial_trigVal_sliderReleased();
+    void on_dial_trigPre_sliderReleased();
 
     /* GUI slots - right pannel - horizontal */
     void on_radioButton_fsMem_clicked(bool checked);
@@ -181,12 +196,10 @@ private slots:
     void on_pushButton_fft_off_clicked();
     void on_pushButton_fft_on_clicked();
 
-    void on_actionMath_XY_X_1_Y_2_triggered(bool checked);
-
-    void on_actionMath_XY_X_3_Y_4_triggered(bool checked);
-
 private:
+    void statusBarLoad();
     void initQcp();
+
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
 
@@ -210,15 +223,29 @@ private:
     int m_firstPos;
     Ready m_ready;
 
-    /* X time axis */
+    /* X axis */
     QSharedPointer<QCPAxisTickerTime> m_timeTicker;
     QSharedPointer<QCPAxisTickerFixed> m_timeTicker2;
     QVector<double> m_t;
+
+    /* QCP axis */
+    QCPAxisRect* m_axis_scope;
+    QCPAxisRect* m_axis_fft;
 
     /* status bar */
     QLabel* m_status_vcc;
     QLabel* m_status_seq;
     QFrame* m_status_line1;
+
+    /* FFT */
+    int m_fft_size = 0;
+    int m_fft_ch = 1;
+    fftw_plan m_fft_plan = NULL;
+    QVector<double> m_fft_x;
+    double* m_fft_in = NULL;
+    double* m_fft_out = NULL;
+    bool m_fft_split = true;
+    bool m_rescale_fft_needed = false;
 
     /* gain */
     double m_gain1 = 1;
@@ -256,6 +283,17 @@ private:
     bool m_fft = false;
     bool m_single = false;
 
+    /* helpers */
+    int m_seq_num = 0;
+    bool m_zoomed = false;
+    bool m_rescale_needed = true;
+    bool m_msgPending = false;
+    bool m_ignoreValuesChanged = false;
+    bool m_trigDialPressed = false;
+    bool m_trig_led = false;
+    int m_last_fs = 0;
+    int m_last_mem = 0;
+
     /* average */
     bool m_average = false;
     int m_average_num = AVERAGE_DEFAULT;
@@ -283,13 +321,6 @@ private:
 
     /* DAQ data */
     DaqSettings m_daqSet;
-
-    /* helpers */
-    int m_seq_num = 0;
-    bool m_zoomed = false;
-    bool m_rescale_needed = true;
-    bool m_msgPending = false;
-    bool m_ignoreValuesChanged = false;
 
     /* button groups */
     QButtonGroup m_trigMode;

@@ -68,21 +68,63 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
 
     m_ui->dial_display->setValue(DISPLAY_VM_DEFAULT);
 
-    /*
-    m_meanCh1.setSize(MOVEMEAN_VM);
-    m_meanCh2.setSize(MOVEMEAN_VM);
-    m_meanCh3.setSize(MOVEMEAN_VM);
-    m_meanCh4.setSize(MOVEMEAN_VM);
-    m_meanVcc.setSize(MOVEMEAN_VM);
-    m_meanAvg.setSize(MOVEMEAN_VM);
-    */
-
     /* QCP */
 
     initQcp();
 
     /* statusbar */
 
+    statusBarLoad();
+
+    /* styles */
+
+    //m_ui->pushButton_enable->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_MAIN);
+    m_ui->pushButton_disable->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_MAIN);
+
+    /*
+    m_ui->pushButton_enable1->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_enable2->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_enable3->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_enable4->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+
+    m_ui->pushButton_disable1->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_disable2->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_disable3->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_disable4->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    */
+
+    m_ui->pushButton_cursorsHon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+    m_ui->pushButton_cursorsVon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
+
+    m_ui->pushButton_cursorsHoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+    m_ui->pushButton_cursorsVoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
+
+    m_ui->pushButton_reset->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESET);
+    m_ui->pushButton_resetZoom->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESETZ);
+
+    m_ui->spinBox_average->setStyleSheet(CSS_SPINBOX);
+    m_ui->spinBox_display->setStyleSheet(CSS_SPINBOX);
+
+    /* settings */
+
+    Settings::getValue(CFG_VM_CH1_EN, true).toBool() ? on_pushButton_enable1_clicked() : on_pushButton_disable1_clicked();
+    Settings::getValue(CFG_VM_CH2_EN, true).toBool() ? on_pushButton_enable2_clicked() : on_pushButton_disable2_clicked();
+    Settings::getValue(CFG_VM_CH3_EN, false).toBool() ? on_pushButton_enable3_clicked() : on_pushButton_disable3_clicked();
+    Settings::getValue(CFG_VM_CH4_EN, false).toBool() ? on_pushButton_enable4_clicked() : on_pushButton_disable4_clicked();
+
+    m_ui->spinBox_average->setValue(DEFAULT_AVG); //Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
+    m_ui->spinBox_display->setValue(DEFAULT_PLT); //Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
+    m_ui->actionShowPlot->setChecked(Settings::getValue(CFG_VM_SHOW_PLOT, true).toBool());
+
+    on_spinBox_average_valueChanged(m_ui->spinBox_average->value());
+    on_spinBox_display_valueChanged(m_ui->spinBox_display->value());
+    on_actionShowPlot_triggered(m_ui->actionShowPlot->isChecked());
+
+    m_instrEnabled = true;
+}
+
+void WindowVm::statusBarLoad()
+{
     m_status_vcc = new QLabel(" ", this);
     m_status_rec = new QLabel(" ", this);
     QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
@@ -126,52 +168,6 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
-
-    /* styles */
-
-    m_ui->pushButton_enable->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_MAIN);
-    m_ui->pushButton_disable->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_MAIN);
-
-    /*
-    m_ui->pushButton_enable1->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
-    m_ui->pushButton_enable2->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
-    m_ui->pushButton_enable3->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
-    m_ui->pushButton_enable4->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
-
-    m_ui->pushButton_disable1->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
-    m_ui->pushButton_disable2->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
-    m_ui->pushButton_disable3->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
-    m_ui->pushButton_disable4->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
-    */
-
-    m_ui->pushButton_cursorsHon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
-    m_ui->pushButton_cursorsVon->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_ON);
-
-    m_ui->pushButton_cursorsHoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
-    m_ui->pushButton_cursorsVoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
-
-    m_ui->pushButton_reset->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESET);
-    m_ui->pushButton_resetZoom->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESETZ);
-
-    m_ui->spinBox_average->setStyleSheet(CSS_SPINBOX);
-    m_ui->spinBox_display->setStyleSheet(CSS_SPINBOX);
-
-    /* settings */
-
-    Settings::getValue(CFG_VM_CH1_EN, true).toBool() ? on_pushButton_enable1_clicked() : on_pushButton_disable1_clicked();
-    Settings::getValue(CFG_VM_CH2_EN, true).toBool() ? on_pushButton_enable2_clicked() : on_pushButton_disable2_clicked();
-    Settings::getValue(CFG_VM_CH3_EN, false).toBool() ? on_pushButton_enable3_clicked() : on_pushButton_disable3_clicked();
-    Settings::getValue(CFG_VM_CH4_EN, false).toBool() ? on_pushButton_enable4_clicked() : on_pushButton_disable4_clicked();
-
-    m_ui->spinBox_average->setValue(DEFAULT_AVG); //Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
-    m_ui->spinBox_display->setValue(DEFAULT_PLT); //Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
-    m_ui->actionShowPlot->setChecked(Settings::getValue(CFG_VM_SHOW_PLOT, true).toBool());
-
-    on_spinBox_average_valueChanged(m_ui->spinBox_average->value());
-    on_spinBox_display_valueChanged(m_ui->spinBox_display->value());
-    on_actionShowPlot_triggered(m_ui->actionShowPlot->isChecked());
-
-    m_instrEnabled = true;
 }
 
 void WindowVm::initQcp()
@@ -618,14 +614,28 @@ void WindowVm::on_actionExportStop_triggered()
     msgBox(this, "File saved at: " + ret, INFO);
 }
 
-void WindowVm::on_actionExportScreenshot_triggered()
+void WindowVm::on_actionExportPNG_triggered()
 {
-     QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
+     //QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
 
-     if (ret.isEmpty())
-         msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
+     QString path = m_rec.generateFilePath("VM", ".png");
+     bool ret = m_ui->customPlot->savePng(path);
+
+     if (ret)
+         msgBox(this, "File saved at: " + path, INFO);
      else
-         msgBox(this, "File saved at: " + ret, INFO);
+         msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
+}
+
+void WindowVm::on_actionExportPDF_triggered()
+{
+    QString path = m_rec.generateFilePath("VM", ".pdf");
+    bool ret = m_ui->customPlot->savePdf(path);
+
+    if (ret)
+        msgBox(this, "File saved at: " + path, INFO);
+    else
+        msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
 }
 
 void WindowVm::on_actionExportFolder_triggered()
@@ -1417,3 +1427,4 @@ void WindowVm::rescaleXAxis()
 {
     m_ui->customPlot->xAxis->setRange(m_key_last, m_display, Qt::AlignRight);
 }
+

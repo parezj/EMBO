@@ -2962,7 +2962,7 @@ QPushButton:disabled {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: black;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #D76969);
 	text-align:left;
 	padding-left:22px;
 }
@@ -2971,7 +2971,7 @@ QPushButton:hover:!pressed {
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
 	color: #256552;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #AAAAAA);
+	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #FAACAC);
 }
 
 QPushButton:pressed {
@@ -2992,7 +2992,7 @@ QPushButton:disabled {
             </property>
             <property name="icon">
              <iconset resource="resources.qrc">
-              <normaloff>:/main/resources/img/power-off-gray2.png</normaloff>:/main/resources/img/power-off-gray2.png</iconset>
+              <normaloff>:/main/resources/img/power-off-red.png</normaloff>:/main/resources/img/power-off-red.png</iconset>
             </property>
             <property name="iconSize">
              <size>
@@ -3279,7 +3279,7 @@ QPushButton:disabled {
      </font>
     </property>
     <property name="title">
-     <string>Record</string>
+     <string>Export</string>
     </property>
     <widget class="QMenu" name="menuExportFormat">
      <property name="font">
@@ -3289,7 +3289,7 @@ QPushButton:disabled {
       </font>
      </property>
      <property name="title">
-      <string>Format</string>
+      <string>Data Format</string>
      </property>
      <addaction name="actionExportCSV"/>
      <addaction name="actionExportTXT_Tabs"/>
@@ -3298,11 +3298,12 @@ QPushButton:disabled {
     </widget>
     <addaction name="actionExportStart"/>
     <addaction name="actionExportStop"/>
+    <addaction name="menuExportFormat"/>
     <addaction name="separator"/>
-    <addaction name="actionExportScreenshot"/>
+    <addaction name="actionExportPNG"/>
+    <addaction name="actionExportPDF"/>
     <addaction name="separator"/>
     <addaction name="actionExportFolder"/>
-    <addaction name="menuExportFormat"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="font">
@@ -3406,7 +3407,7 @@ QPushButton:disabled {
   </action>
   <action name="actionExportStart">
    <property name="text">
-    <string>Start</string>
+    <string>Start Record</string>
    </property>
    <property name="font">
     <font>
@@ -3420,7 +3421,7 @@ QPushButton:disabled {
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Stop</string>
+    <string>Stop Record</string>
    </property>
    <property name="font">
     <font>
@@ -3717,9 +3718,9 @@ QPushButton:disabled {
     <string>Name</string>
    </property>
   </action>
-  <action name="actionExportScreenshot">
+  <action name="actionExportPNG">
    <property name="text">
-    <string>Screenshot</string>
+    <string>Plot PNG</string>
    </property>
   </action>
   <action name="actionShowPlot">
@@ -3731,6 +3732,17 @@ QPushButton:disabled {
    </property>
    <property name="text">
     <string>Show Plot</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionExportPDF">
+   <property name="text">
+    <string>Plot PDF</string>
    </property>
    <property name="font">
     <font>

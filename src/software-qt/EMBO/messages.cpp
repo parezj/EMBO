@@ -213,6 +213,7 @@ void Msg_SCOP_Set::on_dataRx()
         else if (tokens[0] == "12") bits = B12;
 
         if (tokens[6] == "F") edge = FALLING;
+        else if (tokens[6] == "B") edge = BOTH;
 
         if (tokens[7] == "A") mode = AUTO;
         else if (tokens[7] == "N") mode = NORMAL;
@@ -273,6 +274,7 @@ void Msg_LA_Set::on_dataRx()
         DaqTrigMode mode = DISABLED;
 
         if (tokens[3] == "F") edge = FALLING;
+        else if (tokens[6] == "B") edge = BOTH;
 
         if (tokens[4] == "A") mode = AUTO;
         else if (tokens[4] == "N") mode = NORMAL;

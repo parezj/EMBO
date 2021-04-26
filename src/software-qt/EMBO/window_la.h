@@ -73,7 +73,8 @@ private slots:
 
     /* GUI slots - Menu - Export */
     void on_actionExportSave_triggered();
-    void on_actionExportScreenshot_triggered();
+    void on_actionExportPNG_triggered();
+    void on_actionExportPDF_triggered();
     void on_actionExportFolder_triggered();
     void on_actionExportCSV_triggered(bool checked);
     void on_actionExportTXT_Tabs_triggered(bool checked);
@@ -106,6 +107,7 @@ private slots:
     void on_radioButton_trigMode_Disabled_clicked(bool checked);
     void on_radioButton_trigSlope_Rising_clicked(bool checked);
     void on_radioButton_trigSlope_Falling_clicked(bool checked);
+    void on_radioButton_trigSlope_Both_toggled(bool checked);
     void on_radioButton_trigCh_1_clicked(bool checked);
     void on_radioButton_trigCh_2_clicked(bool checked);
     void on_radioButton_trigCh_3_clicked(bool checked);
@@ -115,6 +117,7 @@ private slots:
     void on_pushButton_trigForc_clicked();
     void on_hideTrigSliders();
     void on_dial_trigPre_sliderPressed();
+    void on_dial_trigPre_sliderReleased();
 
     /* GUI slots - right pannel - horizontal */
     void on_radioButton_fsMem_clicked(bool checked);
@@ -139,7 +142,9 @@ private slots:
     /* GUI slots - right pannel - utils */
 
 private:
+    void statusBarLoad();
     void initQcp();
+
     void closeEvent(QCloseEvent *event) override;
     void showEvent(QShowEvent* event) override;
 
@@ -219,6 +224,17 @@ private:
     bool m_export = false;
     bool m_single = false;
 
+    /* helpers */
+    int m_seq_num = 0;
+    bool m_zoomed = false;
+    bool m_rescale_needed = true;
+    bool m_msgPending = false;
+    bool m_ignoreValuesChanged = false;
+    bool m_trigDialPressed = false;
+    bool m_trig_led = false;
+    int m_last_fs = 0;
+    int m_last_mem = 0;
+
     /* stm32 pins */
     QString m_pin1 = "?";
     QString m_pin2 = "?";
@@ -233,13 +249,6 @@ private:
 
     /* recorder */
     Recorder m_rec;
-
-    /* helpers */
-    int m_seq_num = 0;
-    bool m_zoomed = false;
-    bool m_rescale_needed = true;
-    bool m_msgPending = false;
-    bool m_ignoreValuesChanged = false;
 
     /* button groups */
     QButtonGroup m_trigMode;

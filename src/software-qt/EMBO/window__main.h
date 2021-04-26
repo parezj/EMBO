@@ -86,6 +86,7 @@ private:
     /* images */
     QPixmap m_icon_plugOn;
     QPixmap m_icon_plugOff;
+    QPixmap m_img_chip;
     QPixmap m_img_bluepill;
     QPixmap m_img_nucleoF303;
     QPixmap m_img_unknown;

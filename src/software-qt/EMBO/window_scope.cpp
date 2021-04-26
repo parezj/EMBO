@@ -18,7 +18,11 @@
 
 
 #define Y_LIM                   0.20
-#define TRIG_VAL_PRE_TIMEOUT    3000
+#define TRIG_VAL_PRE_TIMEOUT    3000    // trig cursors visible time
+
+#define FFT_MAX_SIZE            1048576 //65536
+#define FFT_DB_MIN              -100
+#define FFT_DB_MAX              0
 
 
 WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowScope)
@@ -56,6 +60,47 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
 
     /* statusbar */
 
+    statusBarLoad();
+
+    /* button groups */
+
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Auto);
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Normal);
+    m_trigMode.addButton(m_ui->radioButton_trigMode_Disabled);
+
+    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Rising);
+    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Falling);
+
+    m_trigCh.addButton(m_ui->radioButton_trigCh_1);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_2);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_3);
+    m_trigCh.addButton(m_ui->radioButton_trigCh_4);
+
+    m_fsMem.addButton(m_ui->radioButton_fsMem);
+    m_fsMem.addButton(m_ui->radioButton_div);
+
+    m_trigMode.setExclusive(true);
+    m_trigSlope.setExclusive(true);
+    m_trigCh.setExclusive(true);
+    m_fsMem.setExclusive(true);
+
+    /* avg */
+
+    m_ui->spinBox_average->setRange(1, MAX_SCOPE_AVG);
+    m_ui->spinBox_average->setValue(AVERAGE_DEFAULT);
+
+    m_average_buff_ch1 = QVector<QVector<double>>(MAX_SCOPE_AVG);
+    m_average_buff_ch2 = QVector<QVector<double>>(MAX_SCOPE_AVG);
+    m_average_buff_ch3 = QVector<QVector<double>>(MAX_SCOPE_AVG);
+    m_average_buff_ch4 = QVector<QVector<double>>(MAX_SCOPE_AVG);
+
+    /* styles */
+
+    m_instrEnabled = true;
+}
+
+void WindowScope::statusBarLoad()
+{
     m_status_vcc = new QLabel(" ", this);
     m_status_seq = new QLabel("Sequence Number: 0", this);
     QWidget* widget = new QWidget(this);
@@ -98,54 +143,50 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     layout->setSpacing(0);
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
-
-    /* button groups */
-
-    m_trigMode.addButton(m_ui->radioButton_trigMode_Auto);
-    m_trigMode.addButton(m_ui->radioButton_trigMode_Normal);
-    m_trigMode.addButton(m_ui->radioButton_trigMode_Disabled);
-
-    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Rising);
-    m_trigSlope.addButton(m_ui->radioButton_trigSlope_Falling);
-
-    m_trigCh.addButton(m_ui->radioButton_trigCh_1);
-    m_trigCh.addButton(m_ui->radioButton_trigCh_2);
-    m_trigCh.addButton(m_ui->radioButton_trigCh_3);
-    m_trigCh.addButton(m_ui->radioButton_trigCh_4);
-
-    m_fsMem.addButton(m_ui->radioButton_fsMem);
-    m_fsMem.addButton(m_ui->radioButton_div);
-
-    m_trigMode.setExclusive(true);
-    m_trigSlope.setExclusive(true);
-    m_trigCh.setExclusive(true);
-    m_fsMem.setExclusive(true);
-
-    /* avg */
-
-    m_ui->spinBox_average->setRange(1, MAX_SCOPE_AVG);
-    m_ui->spinBox_average->setValue(AVERAGE_DEFAULT);
-
-    m_average_buff_ch1 = QVector<QVector<double>>(MAX_SCOPE_AVG);
-    m_average_buff_ch2 = QVector<QVector<double>>(MAX_SCOPE_AVG);
-    m_average_buff_ch3 = QVector<QVector<double>>(MAX_SCOPE_AVG);
-    m_average_buff_ch4 = QVector<QVector<double>>(MAX_SCOPE_AVG);
-
-    /* styles */
-
-    m_instrEnabled = true;
 }
+
 void WindowScope::initQcp()
 {
-    m_ui->customPlot->addGraph();  // ch1
-    m_ui->customPlot->addGraph();  // ch2
-    m_ui->customPlot->addGraph();  // ch3
-    m_ui->customPlot->addGraph();  // ch4
+    m_ui->customPlot->plotLayout()->clear();
+
+    m_axis_scope = new QCPAxisRect(m_ui->customPlot);
+    m_axis_fft = new QCPAxisRect(m_ui->customPlot);
+
+    m_axis_scope->setupFullAxesBox();
+    m_axis_fft->setupFullAxesBox();
+
+    QFont font2("Roboto", 12, QFont::Normal);
+    m_axis_scope->axis(QCPAxis::atBottom)->setTickLabelFont(font2);
+    m_axis_fft->axis(QCPAxis::atBottom)->setTickLabelFont(font2);
+    m_axis_scope->axis(QCPAxis::atLeft)->setTickLabelFont(font2);
+    m_axis_fft->axis(QCPAxis::atLeft)->setTickLabelFont(font2);
+
+    //m_axis_fft->axis(QCPAxis::atBottom)->setScaleType(QCPAxis::stLogarithmic);
+    //m_axis_fft->axis(QCPAxis::atTop)->setScaleType(QCPAxis::stLogarithmic);
+
+    m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_scope);
+    m_ui->customPlot->plotLayout()->addElement(1, 0, m_axis_fft);
+
+    foreach (QCPAxisRect *rect, m_ui->customPlot->axisRects())
+    {
+        foreach (QCPAxis *axis, rect->axes())
+        {
+            axis->setLayer("axes");
+            axis->grid()->setLayer("grid");
+        }
+    }
+
+    m_ui->customPlot->addGraph(m_axis_scope->axis(QCPAxis::atBottom), m_axis_scope->axis(QCPAxis::atLeft));
+    m_ui->customPlot->addGraph(m_axis_scope->axis(QCPAxis::atBottom), m_axis_scope->axis(QCPAxis::atLeft));
+    m_ui->customPlot->addGraph(m_axis_scope->axis(QCPAxis::atBottom), m_axis_scope->axis(QCPAxis::atLeft));
+    m_ui->customPlot->addGraph(m_axis_scope->axis(QCPAxis::atBottom), m_axis_scope->axis(QCPAxis::atLeft));
+    m_ui->customPlot->addGraph(m_axis_fft->axis(QCPAxis::atBottom), m_axis_fft->axis(QCPAxis::atLeft));
 
     m_ui->customPlot->graph(GRAPH_CH1)->setPen(QPen(QColor(COLOR1)));
     m_ui->customPlot->graph(GRAPH_CH2)->setPen(QPen(QColor(COLOR2)));
     m_ui->customPlot->graph(GRAPH_CH3)->setPen(QPen(QColor(COLOR5)));
     m_ui->customPlot->graph(GRAPH_CH4)->setPen(QPen(QColor(COLOR4)));
+    m_ui->customPlot->graph(GRAPH_FFT)->setPen(QPen(QColor(COLOR1)));
 
     m_spline = true;
 
@@ -153,8 +194,7 @@ void WindowScope::initQcp()
     m_ui->customPlot->graph(GRAPH_CH2)->setSpline(m_spline);
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(m_spline);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(m_spline);
-
-    m_ui->customPlot->axisRect()->setMinimumMargins(QMargins(45,15,15,30));
+    m_ui->customPlot->graph(GRAPH_FFT)->setSpline(false);
 
     m_timeTicker = QSharedPointer<QCPAxisTickerTime>(new QCPAxisTickerTime);
     m_timeTicker2 = QSharedPointer<QCPAxisTickerFixed>(new QCPAxisTickerFixed);
@@ -162,32 +202,54 @@ void WindowScope::initQcp()
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuSeconds, 1);
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMilliseconds, 1);
     m_timeTicker->setFieldWidth(QCPAxisTickerTime::tuMicroseconds, 1);
-    m_ui->customPlot->xAxis->setTicker(m_timeTicker);
-    //m_ui->customPlot->xAxis2->setTicker(timeTicker);
-    m_ui->customPlot->axisRect()->setupFullAxesBox();
 
+    auto ticker_fft = QSharedPointer<QCPAxisTickerPi>(new QCPAxisTickerPi);
+    ticker_fft->setPiValue(1);
+    ticker_fft->setPiSymbol("Hz");
+
+    m_axis_scope->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
+    m_axis_fft->axis(QCPAxis::atBottom)->setTicker(ticker_fft);
+
+    /*
     m_ui->customPlot->xAxis->setVisible(true);
     m_ui->customPlot->xAxis->setTickLabels(true);
     m_ui->customPlot->yAxis->setVisible(true);
     m_ui->customPlot->yAxis->setTickLabels(true);
-
-    QFont font2("Roboto", 12, QFont::Normal);
-    m_ui->customPlot->xAxis->setTickLabelFont(font2);
-    m_ui->customPlot->yAxis->setTickLabelFont(font2);
-    m_ui->customPlot->xAxis->setLabelFont(font2);
-    m_ui->customPlot->yAxis->setLabelFont(font2);
+    */
 
     //m_ui->customPlot->setInteractions(0);
     m_ui->customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom);
-    m_ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
-    m_ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
+    m_axis_scope->setRangeDrag(Qt::Horizontal);
+    m_axis_scope->setRangeZoom(Qt::Horizontal);
+    m_axis_fft->setRangeDrag(Qt::Horizontal);
+    m_axis_fft->setRangeZoom(Qt::Horizontal);
 
     //m_ui->customPlot->setOpenGl(true);
 
-    connect(m_ui->customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->xAxis2, SLOT(setRange(QCPRange)));
-    connect(m_ui->customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), m_ui->customPlot->yAxis2, SLOT(setRange(QCPRange)));
+    connect(m_axis_scope->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_scope->axis(QCPAxis::atTop), SLOT(setRange(QCPRange)));
+    connect(m_axis_fft->axis(QCPAxis::atBottom), SIGNAL(rangeChanged(QCPRange)), m_axis_fft->axis(QCPAxis::atTop), SLOT(setRange(QCPRange)));
+    connect(m_axis_scope->axis(QCPAxis::atLeft), SIGNAL(rangeChanged(QCPRange)), m_axis_scope->axis(QCPAxis::atRight), SLOT(setRange(QCPRange)));
+    connect(m_axis_fft->axis(QCPAxis::atLeft), SIGNAL(rangeChanged(QCPRange)), m_axis_fft->axis(QCPAxis::atRight), SLOT(setRange(QCPRange)));
+
     connect(m_ui->customPlot, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(on_qcpMouseWheel(QWheelEvent*)));
     connect(m_ui->customPlot, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(on_qcpMousePress(QMouseEvent*)));
+
+    if (m_axis_scope->visible())
+    {
+        m_axis_scope->setVisible(false);
+        m_axis_scope->layout()->take(m_axis_scope);
+    }
+    if (m_axis_fft->visible())
+    {
+        m_axis_fft->setVisible(false);
+        m_axis_fft->layout()->take(m_axis_fft);
+    }
+
+    m_ui->customPlot->plotLayout()->simplify();
+
+    m_ui->customPlot->plotLayout()->insertRow(0);
+    m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_scope);
+    m_axis_scope->setVisible(true);
 
     /* cursors */
 
@@ -200,7 +262,7 @@ void WindowScope::initQcp()
     connect(m_ui->horizontalSlider_cursorH, &ctkRangeSlider::valuesChanged, this, &WindowScope::on_cursorH_valuesChanged);
     connect(m_ui->horizontalSlider_cursorV, &ctkRangeSlider::valuesChanged, this, &WindowScope::on_cursorV_valuesChanged);
 
-    m_cursors = new QCPCursors(this, m_ui->customPlot, NULL, false, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
+    m_cursors = new QCPCursors(this, m_ui->customPlot, m_axis_scope, false, QColor(COLOR3), QColor(COLOR3), QColor(COLOR7), QColor(Qt::black));
     m_cursorTrigVal = new QCPCursor(this, m_ui->customPlot, NULL, true, false, QColor(COLOR9));
     m_cursorTrigPre = new QCPCursor(this, m_ui->customPlot, NULL, false, false, QColor(COLOR9));
 }
@@ -208,6 +270,13 @@ void WindowScope::initQcp()
 WindowScope::~WindowScope()
 {
     delete m_ui;
+
+    if (m_fft_in != NULL)
+        fftw_free(m_fft_in);
+    if (m_fft_out != NULL)
+        fftw_free(m_fft_out);
+    if (m_fft_plan != NULL)
+        fftw_destroy_plan(m_fft_plan);
 }
 
 void WindowScope::on_actionAbout_triggered()
@@ -221,10 +290,10 @@ void WindowScope::on_timer_plot() // 60 FPS
 {
     if (m_cursorsV_en || m_cursorsH_en)
     {
-        auto rngV = m_ui->customPlot->yAxis->range();
-        auto rngH = m_ui->customPlot->xAxis->range();
+        auto rngV = m_axis_scope->axis(QCPAxis::atLeft)->range();
+        auto rngH = m_axis_scope->axis(QCPAxis::atBottom)->range();
 
-        m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
+        m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, true);
     }
 
     //m_ui->customPlot->replot();
@@ -556,6 +625,58 @@ void WindowScope::on_msg_read(const QByteArray data)
         m_ui->textBrowser_measMax->setHtml("<p align=\"right\">" + meas_max_s + " </p>");
     }
 
+    /************* FFT *************/
+
+    if (m_fft)
+    {
+        QVector<double>* y = NULL;
+
+        if (m_fft_ch == 1 && m_daqSet.ch1_en)
+            y = &y1;
+        else if (m_fft_ch == 2 && m_daqSet.ch2_en)
+            y = &y2;
+        else if (m_fft_ch == 3 && m_daqSet.ch3_en)
+            y = &y3;
+        else if (m_fft_ch == 4 && m_daqSet.ch4_en)
+            y = &y4;
+
+        if (y != NULL && m_fft_in != NULL)
+        {
+            memset(m_fft_in, 0, m_fft_size); // zero pad
+            memcpy(m_fft_in, (*y).data(), m_daqSet.mem * sizeof(double));
+
+            for (int i = 0; i < m_daqSet.mem; i++)
+            {
+                double multiplier = 0.5 * (1 - cos(2*M_PI*i/(m_daqSet.mem - 1))); // hanning window
+                m_fft_in[i] = multiplier * m_fft_in[i];
+            }
+
+            fftw_execute(m_fft_plan);
+
+            double scale = 1.0 / (double)m_daqSet.mem;
+            QVector<double> fft_db;
+
+            for (int re = 0, im = m_fft_size - 1; re < m_fft_size / 2; re++, im--)
+            {
+                m_fft_out[re] *= scale; // normalize
+                m_fft_out[im] *= scale;
+
+                double db = 20 * log10(sqrt((m_fft_out[re] * m_fft_out[re]) + (m_fft_out[im] * m_fft_out[im]))); // complex to dB
+                fft_db.append(db);
+            }
+
+            m_ui->customPlot->graph(GRAPH_FFT)->setData(m_fft_x, fft_db);
+
+            if (m_rescale_fft_needed)
+            {
+                m_axis_fft->axis(QCPAxis::atLeft)->setRange(FFT_DB_MIN, FFT_DB_MAX);
+                //m_axis_fft->axis(QCPAxis::atLeft)->rescale();
+                m_axis_fft->axis(QCPAxis::atBottom)->setRange(0, m_daqSet.fs_real_n / 2);
+                m_rescale_fft_needed = false;
+            }
+        }
+    }
+
     /************* seq num *************/
 
     m_seq_num++;
@@ -577,7 +698,18 @@ void WindowScope::on_msg_daqReady(Ready ready, int firstPos)
     m_firstPos = firstPos;
     m_ready = ready;
 
-    m_ui->radioButton_trigLed->setChecked(ready == Ready::READY_NORMAL || ready == Ready::READY_SINGLE);
+    if (ready == Ready::READY_NORMAL || ready == Ready::READY_SINGLE)
+    {
+        if (m_trig_led)
+            m_ui->radioButton_trigLed->setStyleSheet(CSS_TRIG_LED1);
+        else
+            m_ui->radioButton_trigLed->setStyleSheet(CSS_TRIG_LED2);
+
+        m_trig_led = !m_trig_led;
+        m_ui->radioButton_trigLed->setChecked(true);
+    }
+    else
+        m_ui->radioButton_trigLed->setChecked(false);
 
     if (m_instrEnabled)
         Core::getInstance()->msgAdd(m_msg_read, true);
@@ -707,14 +839,28 @@ void WindowScope::on_actionExportSave_triggered()
     }
 }
 
-void WindowScope::on_actionExportScreenshot_triggered()
+void WindowScope::on_actionExportPNG_triggered()
 {
-     QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
+     //QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
 
-     if (ret.isEmpty())
-         msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
+     QString path = m_rec.generateFilePath("VM", ".png");
+     bool ret = m_ui->customPlot->savePng(path);
+
+     if (ret)
+         msgBox(this, "File saved at: " + path, INFO);
      else
-         msgBox(this, "File saved at: " + ret, INFO);
+         msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
+}
+
+void WindowScope::on_actionExportPDF_triggered()
+{
+    QString path = m_rec.generateFilePath("VM", ".pdf");
+    bool ret = m_ui->customPlot->savePdf(path);
+
+    if (ret)
+        msgBox(this, "File saved at: " + path, INFO);
+    else
+        msgBox(this, "Write file at: " + m_rec.getDir() + " failed!", CRITICAL);
 }
 
 void WindowScope::on_actionExportFolder_triggered()
@@ -901,6 +1047,7 @@ void WindowScope::on_actionMath_1_2_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 }
 
 void WindowScope::on_actionMath_3_4_triggered(bool checked)
@@ -936,6 +1083,7 @@ void WindowScope::on_actionMath_3_4_triggered(bool checked)
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 }
 
 void WindowScope::on_actionMath_XY_X_1_Y_2_triggered(bool checked)
@@ -964,7 +1112,7 @@ void WindowScope::on_actionMath_XY_X_1_Y_2_triggered(bool checked)
         on_actionViewLines_triggered(false);
         on_actionViewPoints_triggered(true);
 
-        m_ui->customPlot->xAxis->setTicker(m_timeTicker2);
+        m_axis_scope->axis(QCPAxis::atBottom)->setTicker(m_timeTicker2);
         rescaleXAxis();
     }
     else
@@ -981,12 +1129,13 @@ void WindowScope::on_actionMath_XY_X_1_Y_2_triggered(bool checked)
         on_actionViewLines_triggered(true);
         on_actionViewPoints_triggered(false);
 
-        m_ui->customPlot->xAxis->setTicker(m_timeTicker);
+        m_axis_scope->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
         rescaleXAxis();
     }
 
     m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 }
 
 void WindowScope::on_actionMath_XY_X_3_Y_4_triggered(bool checked)
@@ -1015,7 +1164,7 @@ void WindowScope::on_actionMath_XY_X_3_Y_4_triggered(bool checked)
         on_actionViewLines_triggered(false);
         on_actionViewPoints_triggered(true);
 
-        m_ui->customPlot->xAxis->setTicker(m_timeTicker2);
+        m_axis_scope->axis(QCPAxis::atBottom)->setTicker(m_timeTicker2);
         rescaleXAxis();
     }
     else
@@ -1032,12 +1181,138 @@ void WindowScope::on_actionMath_XY_X_3_Y_4_triggered(bool checked)
         on_actionViewLines_triggered(true);
         on_actionViewPoints_triggered(false);
 
-        m_ui->customPlot->xAxis->setTicker(m_timeTicker);
+        m_axis_scope->axis(QCPAxis::atBottom)->setTicker(m_timeTicker);
         rescaleXAxis();
     }
 
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
+}
+
+/********** FFT **********/
+
+void WindowScope::on_actionFFTChannel_1_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_fft_ch = 1;
+        m_ui->label_FFT->setText("CH1");
+
+        m_ui->actionFFTChannel_2->setChecked(false);
+        m_ui->actionFFTChannel_3->setChecked(false);
+        m_ui->actionFFTChannel_4->setChecked(false);
+
+        m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
+        m_ui->customPlot->replot();
+    }
+}
+
+void WindowScope::on_actionFFTChannel_2_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_fft_ch = 2;
+        m_ui->label_FFT->setText("CH2");
+
+        m_ui->actionFFTChannel_1->setChecked(false);
+        m_ui->actionFFTChannel_3->setChecked(false);
+        m_ui->actionFFTChannel_4->setChecked(false);
+
+        m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
+        m_ui->customPlot->replot();
+    }
+}
+
+void WindowScope::on_actionFFTChannel_3_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_fft_ch = 3;
+        m_ui->label_FFT->setText("CH3");
+
+        m_ui->actionFFTChannel_1->setChecked(false);
+        m_ui->actionFFTChannel_2->setChecked(false);
+        m_ui->actionFFTChannel_4->setChecked(false);
+
+        m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
+        m_ui->customPlot->replot();
+    }
+}
+
+void WindowScope::on_actionFFTChannel_4_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_fft_ch = 4;
+        m_ui->label_FFT->setText("CH4");
+
+        m_ui->actionFFTChannel_1->setChecked(false);
+        m_ui->actionFFTChannel_2->setChecked(false);
+        m_ui->actionFFTChannel_3->setChecked(false);
+
+        m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
+        m_ui->customPlot->replot();
+    }
+}
+
+void WindowScope::on_actionFFTSplit_Screen_triggered(bool checked)
+{
+    m_fft_split = checked;
+
+    m_axis_scope->setMinimumMargins(QMargins(45,15,15,0));
+
+    if (m_fft_split)
+        m_axis_fft->setMinimumMargins(QMargins(45,0,15,30));
+    else
+        m_axis_fft->setMinimumMargins(QMargins(45,15,15,30));
+
+    if (m_fft)
+    {
+        if (checked)
+        {
+            if (m_axis_scope->visible())
+            {
+                m_axis_scope->setVisible(false);
+                m_axis_scope->layout()->take(m_axis_scope);
+            }
+            if (m_axis_fft->visible())
+            {
+                m_axis_fft->setVisible(false);
+                m_axis_fft->layout()->take(m_axis_fft);
+            }
+
+            m_ui->customPlot->plotLayout()->simplify();
+
+            m_ui->customPlot->plotLayout()->insertRow(0);
+            m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_fft);
+            m_axis_fft->setVisible(true);
+
+            m_ui->customPlot->plotLayout()->insertRow(0);
+            m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_scope);
+            m_axis_scope->setVisible(true);
+        }
+        else
+        {
+            if (m_axis_scope->visible())
+            {
+                m_axis_scope->setVisible(false);
+                m_axis_scope->layout()->take(m_axis_scope);
+            }
+            if (m_axis_fft->visible())
+            {
+                m_axis_fft->setVisible(false);
+                m_axis_fft->layout()->take(m_axis_fft);
+            }
+
+            m_ui->customPlot->plotLayout()->simplify();
+
+            m_ui->customPlot->plotLayout()->insertRow(0);
+            m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_fft);
+            m_axis_fft->setVisible(true);
+        }
+    }
+    m_ui->customPlot->replot();
 }
 
 /********** Cursors **********/
@@ -1061,8 +1336,8 @@ void WindowScope::on_pushButton_cursorsHon_clicked()
     m_ui->pushButton_cursorsHon->hide();
     m_ui->pushButton_cursorsHoff->show();
 
-    auto rngH = m_ui->customPlot->xAxis->range();
-    auto rngV = m_ui->customPlot->yAxis->range();
+    auto rngH = m_axis_scope->axis(QCPAxis::atBottom)->range();
+    auto rngV = m_axis_scope->axis(QCPAxis::atLeft)->range();
 
     m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 
@@ -1092,8 +1367,8 @@ void WindowScope::on_pushButton_cursorsVon_clicked()
     m_ui->pushButton_cursorsVon->hide();
     m_ui->pushButton_cursorsVoff->show();
 
-    auto rngH = m_ui->customPlot->xAxis->range();
-    auto rngV = m_ui->customPlot->yAxis->range();
+    auto rngH = m_axis_scope->axis(QCPAxis::atBottom)->range();
+    auto rngV = m_axis_scope->axis(QCPAxis::atLeft)->range();
 
     m_cursors->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
 
@@ -1109,8 +1384,7 @@ void WindowScope::on_cursorH_valuesChanged(int min, int max)
     m_cursorH_min = min;
     m_cursorH_max = max;
 
-    //auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
-    auto rng = m_ui->customPlot->xAxis->range();
+    auto rng = m_axis_scope->axis(QCPAxis::atBottom)->range();
 
     m_cursors->setH_min(m_cursorH_min, rng.lower, rng.upper);
     m_cursors->setH_max(m_cursorH_max, rng.lower, rng.upper);
@@ -1121,8 +1395,7 @@ void WindowScope::on_cursorV_valuesChanged(int min, int max)
     m_cursorV_min = min;
     m_cursorV_max = max;
 
-    auto rng = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Vertical)->range();
-    //auto rng = m_ui->customPlot->yAxis->range();
+    auto rng = m_axis_scope->rangeZoomAxis(Qt::Vertical)->range();
 
     m_cursors->setV_min(m_cursorV_min, rng.lower, rng.upper);
     m_cursors->setV_max(m_cursorV_max, rng.lower, rng.upper);
@@ -1135,7 +1408,7 @@ void WindowScope::on_qcpMouseWheel(QWheelEvent*)
     m_ui->pushButton_reset->hide();
     m_ui->pushButton_resetZoom->show();
 
-    auto rngH = m_ui->customPlot->axisRect()->rangeZoomAxis(Qt::Horizontal)->range();
+    auto rngH = m_axis_scope->rangeZoomAxis(Qt::Horizontal)->range();
     double d = rngH.upper - rngH.lower;
 
     if (d >= 1)
@@ -1168,21 +1441,27 @@ void WindowScope::on_radioButton_zoomH_clicked(bool checked)
     {
         if (m_ui->radioButton_zoomV->isChecked())
         {
-            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical | Qt::Horizontal);
-            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical | Qt::Horizontal);
+            m_axis_scope->setRangeDrag(Qt::Vertical | Qt::Horizontal);
+            m_axis_scope->setRangeZoom(Qt::Vertical | Qt::Horizontal);
+            m_axis_fft->setRangeDrag(Qt::Vertical | Qt::Horizontal);
+            m_axis_fft->setRangeZoom(Qt::Vertical | Qt::Horizontal);
         }
         else
         {
-            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
-            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
+            m_axis_scope->setRangeDrag(Qt::Horizontal);
+            m_axis_scope->setRangeZoom(Qt::Horizontal);
+            m_axis_fft->setRangeDrag(Qt::Horizontal);
+            m_axis_fft->setRangeZoom(Qt::Horizontal);
         }
     }
     else
     {
         if (m_ui->radioButton_zoomV->isChecked())
         {
-            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical);
-            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical);
+            m_axis_scope->setRangeDrag(Qt::Vertical);
+            m_axis_scope->setRangeZoom(Qt::Vertical);
+            m_axis_fft->setRangeDrag(Qt::Vertical);
+            m_axis_fft->setRangeZoom(Qt::Vertical);
         }
         else
         {
@@ -1199,21 +1478,27 @@ void WindowScope::on_radioButton_zoomV_clicked(bool checked)
     {
         if (m_ui->radioButton_zoomH->isChecked())
         {
-            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical | Qt::Horizontal);
-            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical | Qt::Horizontal);
+            m_axis_scope->setRangeDrag(Qt::Vertical | Qt::Horizontal);
+            m_axis_scope->setRangeZoom(Qt::Vertical | Qt::Horizontal);
+            m_axis_fft->setRangeDrag(Qt::Vertical | Qt::Horizontal);
+            m_axis_fft->setRangeZoom(Qt::Vertical | Qt::Horizontal);
         }
         else
         {
-            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Vertical);
-            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Vertical);
+            m_axis_scope->setRangeDrag(Qt::Vertical);
+            m_axis_scope->setRangeZoom(Qt::Vertical);
+            m_axis_fft->setRangeDrag(Qt::Vertical);
+            m_axis_fft->setRangeZoom(Qt::Vertical);
         }
     }
     else
     {
         if (m_ui->radioButton_zoomH->isChecked())
         {
-            m_ui->customPlot->axisRect()->setRangeDrag(Qt::Horizontal);
-            m_ui->customPlot->axisRect()->setRangeZoom(Qt::Horizontal);
+            m_axis_scope->setRangeDrag(Qt::Horizontal);
+            m_axis_scope->setRangeZoom(Qt::Horizontal);
+            m_axis_fft->setRangeDrag(Qt::Horizontal);
+            m_axis_fft->setRangeZoom(Qt::Horizontal);
         }
         else
         {
@@ -1231,6 +1516,7 @@ void WindowScope::on_pushButton_reset_clicked()
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 
     m_ui->doubleSpinBox_gain_ch1->setValue(1.0);
     m_ui->doubleSpinBox_gain_ch2->setValue(1.0);
@@ -1306,7 +1592,11 @@ void WindowScope::on_pushButton_resetZoom_clicked()
         m_timeTicker->setTimeFormat("%u μs");
 
     m_ui->horizontalSlider_trigPre->setStyleSheet(CSS_SCOPE_TRIG_PRE);
-    m_ui->horizontalSlider_trigVal->setStyleSheet(CSS_SCOPE_TRIG_VAL);
+
+    if (!m_fft)
+        m_ui->horizontalSlider_trigVal->setStyleSheet(CSS_SCOPE_TRIG_VAL);
+
+    m_ui->customPlot->replot();
 }
 
 void WindowScope::on_pushButton_single_off_clicked()
@@ -1329,6 +1619,7 @@ void WindowScope::on_pushButton_single_off_clicked()
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 
     sendSet();
 }
@@ -1342,6 +1633,7 @@ void WindowScope::on_pushButton_single_on_clicked()
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 
     sendSet();
 }
@@ -1366,6 +1658,7 @@ void WindowScope::on_pushButton_run_off_clicked()
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 
     sendSet();
 }
@@ -1397,6 +1690,7 @@ void WindowScope::on_pushButton_stop_clicked()
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 
     sendSet();
 }
@@ -1434,6 +1728,14 @@ void WindowScope::on_radioButton_trigMode_Disabled_clicked(bool checked)
         m_ui->pushButton_single_off->show();
         m_ui->pushButton_single_on->hide();
         m_single = false;
+
+        m_ui->radioButton_trigCh_1->setEnabled(false);
+        m_ui->radioButton_trigCh_2->setEnabled(false);
+        m_ui->radioButton_trigCh_3->setEnabled(false);
+        m_ui->radioButton_trigCh_4->setEnabled(false);
+
+        m_ui->radioButton_trigSlope_Rising->setEnabled(false);
+        m_ui->radioButton_trigSlope_Falling->setEnabled(false);
 
         sendSet();
     }
@@ -1496,7 +1798,7 @@ void WindowScope::on_spinBox_trigVal_valueChanged(int arg1)
     m_ui->dial_trigVal->setValue(arg1);
 
     if (!m_t.isEmpty())
-        m_cursorTrigVal->setValue(m_daqSet.trig_val, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigVal->setValue(arg1, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
 
     m_cursorTrigVal->show(true);
     m_cursorTrigPre->show(true);
@@ -1519,7 +1821,7 @@ void WindowScope::on_dial_trigVal_valueChanged(int value)
     m_ui->spinBox_trigVal->setValue(value);
 
     if (!m_t.isEmpty())
-        m_cursorTrigVal->setValue(m_daqSet.trig_val, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigVal->setValue(value, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
 
     m_cursorTrigVal->show(true);
     m_cursorTrigPre->show(true);
@@ -1530,7 +1832,8 @@ void WindowScope::on_dial_trigVal_valueChanged(int value)
 
     m_ignoreValuesChanged = false;
 
-    sendSet();
+    //if (!m_trigDialPressed)
+    //    sendSet();
 }
 
 void WindowScope::on_spinBox_trigPre_valueChanged(int arg1)
@@ -1542,7 +1845,7 @@ void WindowScope::on_spinBox_trigPre_valueChanged(int arg1)
     m_ui->dial_trigPre->setValue(arg1);
 
     if (!m_t.isEmpty())
-        m_cursorTrigPre->setValue(m_daqSet.trig_pre, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre->setValue(arg1, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
 
     m_cursorTrigVal->show(true);
     m_cursorTrigPre->show(true);
@@ -1564,7 +1867,7 @@ void WindowScope::on_dial_trigPre_valueChanged(int value)
     m_ui->spinBox_trigPre->setValue(value);
 
     if (!m_t.isEmpty())
-        m_cursorTrigPre->setValue(m_daqSet.trig_pre, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
+        m_cursorTrigPre->setValue(value, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
 
     m_cursorTrigVal->show(true);
     m_cursorTrigPre->show(true);
@@ -1574,7 +1877,8 @@ void WindowScope::on_dial_trigPre_valueChanged(int value)
 
     m_ignoreValuesChanged = false;
 
-    sendSet();
+    //if (!m_trigDialPressed)
+    //    sendSet();
 }
 
 void WindowScope::on_pushButton_trigForc_clicked()
@@ -1583,6 +1887,7 @@ void WindowScope::on_pushButton_trigForc_clicked()
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
 
     m_ui->radioButton_trigLed->setChecked(false);
     enablePanel(false);
@@ -1600,14 +1905,34 @@ void WindowScope::on_dial_trigVal_sliderPressed()
 {
     m_cursorTrigVal->show(true);
     m_cursorTrigPre->show(true);
+
     m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+    m_trigDialPressed = true;
 }
 
 void WindowScope::on_dial_trigPre_sliderPressed()
 {
     m_cursorTrigVal->show(true);
     m_cursorTrigPre->show(true);
+
     m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
+    m_trigDialPressed = true;
+}
+
+void WindowScope::on_dial_trigVal_sliderReleased()
+{
+    m_trigDialPressed = false;
+
+    if (m_daqSet.trig_val != m_ui->dial_trigVal->value())
+        sendSet();
+}
+
+void WindowScope::on_dial_trigPre_sliderReleased()
+{
+    m_trigDialPressed = false;
+
+    if (m_daqSet.trig_pre != m_ui->dial_trigPre->value())
+        sendSet();
 }
 
 /********** right pannel - horizontal **********/
@@ -2003,12 +2328,112 @@ void WindowScope::on_pushButton_fft_off_clicked()
 {
     m_ui->pushButton_fft_on->show();
     m_ui->pushButton_fft_off->hide();
+
+    m_axis_scope->setMinimumMargins(QMargins(45,15,15,0));
+
+    if (m_fft_split)
+        m_axis_fft->setMinimumMargins(QMargins(45,0,15,30));
+    else
+        m_axis_fft->setMinimumMargins(QMargins(45,15,15,30));
+
+    m_ui->horizontalSlider_trigVal->setStyleSheet(CSS_SCOPE_TRIG_VAL_OFF);
+
+    m_ui->pushButton_cursorsVon->setEnabled(false);
+    on_pushButton_cursorsVoff_clicked();
+
+    if (m_axis_scope->visible())
+    {
+        m_axis_scope->setVisible(false);
+        m_axis_scope->layout()->take(m_axis_scope);
+    }
+    if (m_axis_fft->visible())
+    {
+        m_axis_fft->setVisible(false);
+        m_axis_fft->layout()->take(m_axis_fft);
+    }
+
+    m_ui->customPlot->plotLayout()->simplify();
+
+    m_ui->customPlot->plotLayout()->insertRow(0);
+    m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_fft);
+    m_axis_fft->setVisible(true);
+
+    if (m_fft_split)
+    {
+        m_ui->customPlot->plotLayout()->insertRow(0);
+        m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_scope);
+        m_axis_scope->setVisible(true);
+    }
+
+    /*
+    m_ui->radioButton_zoomH->setChecked(true);
+    m_ui->radioButton_zoomV->setChecked(true);
+    on_radioButton_zoomH_clicked(true);
+    on_radioButton_zoomV_clicked(true);
+    */
+
+    m_ui->customPlot->replot();
+
+    m_axis_fft->axis(QCPAxis::atLeft)->setRange(FFT_DB_MIN, FFT_DB_MAX);
+    //m_axis_fft->axis(QCPAxis::atLeft)->rescale();
+    m_axis_fft->axis(QCPAxis::atBottom)->setRange(0, m_daqSet.fs_real_n / 2);
+
+    m_rescale_fft_needed = true;
+    m_fft = true;
+    m_last_fs = 0;
+
+    createX();
 }
 
 void WindowScope::on_pushButton_fft_on_clicked()
 {
+    m_fft = false;
+
     m_ui->pushButton_fft_off->show();
     m_ui->pushButton_fft_on->hide();
+
+    m_axis_scope->setMinimumMargins(QMargins(45,15,15,30));
+
+    m_ui->horizontalSlider_trigVal->setStyleSheet(CSS_SCOPE_TRIG_VAL);
+
+    m_ui->pushButton_cursorsVon->setEnabled(true);
+
+    if (m_axis_scope->visible())
+    {
+        m_axis_scope->setVisible(false);
+        m_axis_scope->layout()->take(m_axis_scope);
+    }
+    if (m_axis_fft->visible())
+    {
+        m_axis_fft->setVisible(false);
+        m_axis_fft->layout()->take(m_axis_fft);
+    }
+
+    m_ui->customPlot->plotLayout()->simplify();
+
+    m_ui->customPlot->plotLayout()->insertRow(0);
+    m_ui->customPlot->plotLayout()->addElement(0, 0, m_axis_scope);
+    m_axis_scope->setVisible(true);
+
+    /*
+    m_ui->radioButton_zoomH->setChecked(true);
+    m_ui->radioButton_zoomV->setChecked(false);
+    on_radioButton_zoomH_clicked(true);
+    on_radioButton_zoomV_clicked(false);
+    */
+
+    m_ui->customPlot->replot();
+
+    if (m_fft_in != NULL)
+        fftw_free(m_fft_in);
+    if (m_fft_out != NULL)
+        fftw_free(m_fft_out);
+    if (m_fft_plan != NULL)
+        fftw_destroy_plan(m_fft_plan);
+
+    m_fft_in = NULL;
+    m_fft_out = NULL;
+    m_fft_plan = NULL;
 }
 
 /******************************** private ********************************/
@@ -2060,6 +2485,7 @@ void WindowScope::showEvent(QShowEvent*)
     m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
     m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    m_ui->customPlot->graph(GRAPH_FFT)->data()->clear();
     */
 
     on_actionMeasReset_triggered();
@@ -2102,10 +2528,15 @@ void WindowScope::rescaleYAxis()
     if (m_daqSet.ch4_en && m_gain4 > max_scale) max_scale = m_gain4;
     else if (m_daqSet.ch4_en && m_gain4 < min_scale) min_scale = m_gain4;
 
-    m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
+    m_axis_scope->axis(QCPAxis::atLeft)->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
 
-    auto rngV = m_ui->customPlot->yAxis->range();
-    auto rngH = m_ui->customPlot->xAxis->range();
+    //if (m_fft)
+    //    m_axis_fft->axis(QCPAxis::atLeft)->rescale();
+    if (m_fft)
+        m_axis_fft->axis(QCPAxis::atLeft)->setRange(FFT_DB_MIN, FFT_DB_MAX);
+
+    auto rngV = m_axis_scope->axis(QCPAxis::atLeft)->range();
+    auto rngH = m_axis_scope->axis(QCPAxis::atBottom)->range();
 
     m_cursorTrigVal->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
     m_cursorTrigPre->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
@@ -2117,12 +2548,15 @@ void WindowScope::rescaleXAxis()
         return;
 
     if (m_math_xy_12 || m_math_xy_34)
-        m_ui->customPlot->xAxis->setRange(0, m_ui->customPlot->yAxis->range().upper);
+        m_axis_scope->axis(QCPAxis::atBottom)->setRange(0, m_axis_scope->axis(QCPAxis::atLeft)->range().upper);
     else
-        m_ui->customPlot->xAxis->setRange(0, m_t[m_t.size()-1]);
+        m_axis_scope->axis(QCPAxis::atBottom)->setRange(0, m_t[m_t.size()-1]);
 
-    auto rngV = m_ui->customPlot->yAxis->range();
-    auto rngH = m_ui->customPlot->xAxis->range();
+    if (m_fft)
+        m_axis_fft->axis(QCPAxis::atBottom)->setRange(0, m_daqSet.fs_real_n / 2);
+
+    auto rngV = m_axis_scope->axis(QCPAxis::atLeft)->range();
+    auto rngH = m_axis_scope->axis(QCPAxis::atBottom)->range();
 
     m_cursorTrigVal->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
     m_cursorTrigPre->refresh(rngV.lower, rngV.upper, rngH.lower, rngH.upper, false);
@@ -2130,18 +2564,83 @@ void WindowScope::rescaleXAxis()
 
 void WindowScope::createX()
 {
-    double x = 0;
-    double dt = 1.0 / m_daqSet.fs_real_n;
-    m_t.resize(m_daqSet.mem);
-
-    for (int i = 0; i < m_daqSet.mem; i++)
+    if (m_last_fs != m_daqSet.fs || m_last_mem != m_daqSet.mem)
     {
-        m_t[i] = x;
-        x += dt;
+        double x = 0;
+        double dt = 1.0 / m_daqSet.fs_real_n;
+        m_t.resize(m_daqSet.mem);
+
+        for (int i = 0; i < m_daqSet.mem; i++)
+        {
+            m_t[i] = x;
+            x += dt;
+        }
+
+        /* FFT */
+
+        if (m_fft)
+        {
+            m_fft_size = 2;
+            while (m_fft_size < m_daqSet.fs_real_n)
+            {
+                m_fft_size *= 2;
+
+                if (m_fft_size >= FFT_MAX_SIZE)
+                {
+                    m_fft_size = FFT_MAX_SIZE;
+                    break;
+                }
+            }
+
+            double fft_x = 0;
+            double fft_dt = m_daqSet.fs_real_n / (double)m_fft_size;
+            double fft_dt_real = m_daqSet.fs_real_n / (double)m_daqSet.mem;
+
+            m_fft_x.resize(m_fft_size / 2);
+
+            for (int i = 0; i < m_fft_size / 2; i++)
+            {
+                m_fft_x[i] = fft_x;
+                fft_x += fft_dt;
+            }
+
+            m_ui->actionFFTwindow->setText("wind:   Hanning");
+            m_ui->actionFFTsamples->setText("size:    " + QString::number(m_fft_size));
+            m_ui->actionFFTresolution->setText("res:      " + QString::number(fft_dt_real, 10, 2) + " Hz");
+
+            if (m_fft_in != NULL)
+                fftw_free(m_fft_in);
+            if (m_fft_out != NULL)
+                fftw_free(m_fft_out);
+            if (m_fft_plan != NULL)
+                fftw_destroy_plan(m_fft_plan);
+
+            m_fft_in = NULL;
+            m_fft_out = NULL;
+            m_fft_plan = NULL;
+
+            m_fft_in  = fftw_alloc_real(m_fft_size);
+            m_fft_out = fftw_alloc_real(m_fft_size);
+            m_fft_plan = fftw_plan_r2r_1d(m_fft_size, m_fft_in, m_fft_out, FFTW_R2HC, FFTW_ESTIMATE);
+
+            if (m_fft_in == NULL || m_fft_out == NULL || m_fft_plan == NULL)
+            {
+                msgBox(this, "FFTW alloc memory failed!", CRITICAL);
+                on_pushButton_fft_on_clicked();
+            }
+        }
     }
+
+    m_last_fs = m_daqSet.fs;
+    m_last_mem = m_daqSet.mem;
 
     if (m_zoomed)
     {
+        if (m_t.isEmpty())
+            return;
+
+        double x = m_t[m_t.size()-1];
+
         if (x >= 2)
             m_timeTicker->setTimeFormat("%s s");
         else if (x >= 0.002)
@@ -2158,6 +2657,7 @@ void WindowScope::updatePanel()
     on_pushButton_average_on_clicked();
 
     createX();
+
     enablePanel(true);
 
     if (m_rescale_needed)
@@ -2222,6 +2722,16 @@ void WindowScope::updatePanel()
     m_ui->pushButton_single_off->show();
     m_ui->pushButton_single_on->hide();
     m_single = false;
+
+    bool trigEnabled = !(m_daqSet.trig_mode == DaqTrigMode::DISABLED);
+
+    m_ui->radioButton_trigCh_1->setEnabled(trigEnabled);
+    m_ui->radioButton_trigCh_2->setEnabled(trigEnabled);
+    m_ui->radioButton_trigCh_3->setEnabled(trigEnabled);
+    m_ui->radioButton_trigCh_4->setEnabled(trigEnabled);
+
+    m_ui->radioButton_trigSlope_Rising->setEnabled(trigEnabled);
+    m_ui->radioButton_trigSlope_Falling->setEnabled(trigEnabled);
 
     if (m_daqSet.trig_mode == DaqTrigMode::AUTO)
         m_ui->radioButton_trigMode_Auto->setChecked(true);
@@ -2291,10 +2801,13 @@ void WindowScope::updatePanel()
 
     /************ */
 
-    m_ui->radioButton_trigCh_1->setEnabled(m_daqSet.ch1_en);
-    m_ui->radioButton_trigCh_2->setEnabled(m_daqSet.ch2_en);
-    m_ui->radioButton_trigCh_3->setEnabled(m_daqSet.ch3_en);
-    m_ui->radioButton_trigCh_4->setEnabled(m_daqSet.ch4_en);
+    if (trigEnabled)
+    {
+        m_ui->radioButton_trigCh_1->setEnabled(m_daqSet.ch1_en);
+        m_ui->radioButton_trigCh_2->setEnabled(m_daqSet.ch2_en);
+        m_ui->radioButton_trigCh_3->setEnabled(m_daqSet.ch3_en);
+        m_ui->radioButton_trigCh_4->setEnabled(m_daqSet.ch4_en);
+    }
 
     double div_format;
     double div_sec;
@@ -2437,4 +2950,5 @@ void WindowScope::sendSet()
                                                    trigMode + "," +                            // trig mode
                                                    QString::number(m_daqSet.trig_pre));        // trig pre
 }
+
 

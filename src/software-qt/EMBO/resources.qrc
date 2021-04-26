@@ -78,6 +78,8 @@
         <file>resources/img/led_green.png</file>
         <file>resources/img/led_red.png</file>
         <file>resources/img/radio_off_dis.png</file>
+        <file>resources/img/chip.png</file>
+        <file>resources/img/led_green4.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>resources/fonts/Roboto-Black.otf</file>

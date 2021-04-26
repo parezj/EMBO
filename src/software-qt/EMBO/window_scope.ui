@@ -5974,7 +5974,7 @@ QPushButton:disabled {
             </widget>
             <widget class="QPushButton" name="pushButton_fft_off">
              <property name="enabled">
-              <bool>false</bool>
+              <bool>true</bool>
              </property>
              <property name="geometry">
               <rect>
@@ -6235,6 +6235,31 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <string/>
             </property>
            </widget>
+           <widget class="QLabel" name="label_FFT">
+            <property name="geometry">
+             <rect>
+              <x>370</x>
+              <y>10</y>
+              <width>71</width>
+              <height>21</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Light</family>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+              <underline>false</underline>
+             </font>
+            </property>
+            <property name="text">
+             <string>CH1</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
            <zorder>label_23</zorder>
            <zorder>groupBox_u_8</zorder>
            <zorder>spinBox_average</zorder>
@@ -6246,6 +6271,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <zorder>pushButton_bit12_on</zorder>
            <zorder>pushButton_bit8_off</zorder>
            <zorder>pushButton_average_off</zorder>
+           <zorder>label_FFT</zorder>
           </widget>
          </item>
          <item>
@@ -6319,7 +6345,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       </font>
      </property>
      <property name="title">
-      <string>Format</string>
+      <string>Data Format</string>
      </property>
      <addaction name="actionExportCSV"/>
      <addaction name="actionExportTXT_Tabs"/>
@@ -6327,11 +6353,12 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <addaction name="actionExportMAT"/>
     </widget>
     <addaction name="actionExportSave"/>
+    <addaction name="menuExportFormat"/>
     <addaction name="separator"/>
-    <addaction name="actionExportScreenshot"/>
+    <addaction name="actionExportPNG"/>
+    <addaction name="actionExportPDF"/>
     <addaction name="separator"/>
     <addaction name="actionExportFolder"/>
-    <addaction name="menuExportFormat"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="font">
@@ -6408,9 +6435,42 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     <addaction name="actionMath_XY_X_1_Y_2"/>
     <addaction name="actionMath_XY_X_3_Y_4"/>
    </widget>
+   <widget class="QMenu" name="menuFFT">
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="title">
+     <string>FFT</string>
+    </property>
+    <widget class="QMenu" name="menuFFTChannel">
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>Channel</string>
+     </property>
+     <addaction name="actionFFTChannel_1"/>
+     <addaction name="actionFFTChannel_2"/>
+     <addaction name="actionFFTChannel_3"/>
+     <addaction name="actionFFTChannel_4"/>
+    </widget>
+    <addaction name="menuFFTChannel"/>
+    <addaction name="actionFFTSplit_Screen"/>
+    <addaction name="separator"/>
+    <addaction name="actionFFTwindow"/>
+    <addaction name="actionFFTsamples"/>
+    <addaction name="actionFFTresolution"/>
+   </widget>
    <addaction name="menuExport"/>
    <addaction name="menuView"/>
    <addaction name="menuMeasure"/>
+   <addaction name="menuFFT"/>
    <addaction name="menuMath"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -6436,7 +6496,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
   </action>
   <action name="actionExportSave">
    <property name="text">
-    <string>Save File</string>
+    <string>Save Data</string>
    </property>
    <property name="font">
     <font>
@@ -6747,9 +6807,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     <string>Name</string>
    </property>
   </action>
-  <action name="actionExportScreenshot">
+  <action name="actionExportPNG">
    <property name="text">
-    <string>Screenshot</string>
+    <string>Plot PNG</string>
    </property>
   </action>
   <action name="actionShowPlot">
@@ -6803,6 +6863,135 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
    </property>
    <property name="text">
     <string>XY Mode (X:3, Y:4)</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionExportPDF">
+   <property name="text">
+    <string>Plot PDF</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTChannel_1">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 1</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTChannel_2">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 2</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTChannel_3">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 3</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTChannel_4">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Channel 4</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTSplit_Screen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Split Screen</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTwindow">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>wind:   ?</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTsamples">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>size:    ?</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFFTresolution">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>res:      ?</string>
    </property>
    <property name="font">
     <font>

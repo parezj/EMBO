@@ -101,6 +101,13 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->groupBox_sgen->hide();
     m_ui->groupBox_cntr->hide();
 
+    m_icon_plugOn = QPixmap(":/main/resources/img/plug_on.png");
+    m_icon_plugOff = QPixmap(":/main/resources/img/plug_off.png");
+    m_img_chip = QPixmap(":/main/resources/img/chip.png");
+    m_img_bluepill = QPixmap(":/main/resources/img/bluepill2.png");
+    m_img_nucleoF303 = QPixmap(":/main/resources/img/nucleo-f303.png");
+    m_img_unknown = QPixmap(":/main/resources/img/unknown2.png");
+
     statusBarLoad();
 
     m_ui->groupBox_scope->setStyleSheet(CSS_INSTR_GROUP_SCOPE);
@@ -201,11 +208,6 @@ void WindowMain::statusBarLoad()
     status_ctu->setFont(font1);
     status_author->setFont(font1);
 
-    m_icon_plugOn = QPixmap(":/main/resources/img/plug_on.png");
-    m_icon_plugOff = QPixmap(":/main/resources/img/plug_off.png");
-    m_img_bluepill = QPixmap(":/main/resources/img/bluepill2.png");
-    m_img_nucleoF303 = QPixmap(":/main/resources/img/nucleo-f303.png");
-    m_img_unknown = QPixmap(":/main/resources/img/unknown2.png");
     QPixmap icon_jp = QPixmap(":/main/resources/img/jp.png");
 
     m_status_icon_comm->setPixmap(m_icon_plugOff);
@@ -318,10 +320,13 @@ void WindowMain::setConnected()
     m_ui->label_dev_rtos->setText(info->rtos);
     m_ui->label_dev_comm->setText(info->comm);
     m_ui->label_dev_vref->setText(QString::number(info->ref_mv) + " mV");
+
     if (info->name.toLower().contains("bluepill"))
         m_ui->label_boardImg->setPixmap(m_img_bluepill);
     else if (info->name.toLower().contains("nucleo"))
         m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
+    else
+        m_ui->label_boardImg->setPixmap(m_img_chip);
 
     m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps", 3));
     m_ui->label_scope_mem->setText(format_unit((info->mem / 2), "S", 3) +

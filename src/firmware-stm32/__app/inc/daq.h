@@ -33,6 +33,7 @@ enum trig_edge
 {
     RISING = 0,
     FALLING = 1,
+    BOTH = 2
 };
 
 typedef struct

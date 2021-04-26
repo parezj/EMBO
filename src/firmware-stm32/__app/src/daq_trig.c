@@ -554,7 +554,9 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         EXTI_InitStruct.Line_0_31 = exti;
         EXTI_InitStruct.LineCommand = ENABLE;
         EXTI_InitStruct.Mode = LL_EXTI_MODE_IT;
-        EXTI_InitStruct.Trigger = (edge == RISING ? LL_EXTI_TRIGGER_RISING : LL_EXTI_TRIGGER_FALLING);
+        EXTI_InitStruct.Trigger = (edge == RISING ?  LL_EXTI_TRIGGER_RISING :
+                                  (edge == FALLING ? LL_EXTI_TRIGGER_FALLING :
+                                                     LL_EXTI_TRIGGER_RISING_FALLING));
         LL_EXTI_Init(&EXTI_InitStruct);
         LL_EXTI_EnableIT_0_31(exti);
 
