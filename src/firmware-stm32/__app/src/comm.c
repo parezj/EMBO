@@ -250,56 +250,50 @@ void comm_init(comm_data_t* self)
     NVIC_EnableIRQ(EM_IRQN_UART);
 }
 
-volatile int comm_state = 0;
-
 uint8_t comm_main(comm_data_t* self)
 {
-    comm_state = 0;
-
-    if (self->uart.available)
+    if (self->uart.available == EM_TRUE)
     {
-        comm_state = 1;
-
         SCPI_Input(&scpi_context, self->uart.rx_buffer, self->uart.rx_index);
 
-        comm_state = 2;
-
-        memset(self->uart.rx_buffer, 'X', RX_BUFF_LEN * sizeof(char));
+        memset(self->uart.rx_buffer, '\0', RX_BUFF_LEN * sizeof(char));
         self->uart.rx_index = 0;
-        self->uart.available = 0;
-        return 1;
+        return EM_TRUE;
     }
 #ifdef EM_USB
-    else if (self->usb.available)
+    else if (self->usb.available == EM_TRUE)
     {
         SCPI_Input(&scpi_context, self->usb.rx_buffer, self->usb.rx_index);
 
-        memset(self->usb.rx_buffer, 'X', RX_BUFF_LEN * sizeof(char));
+        memset(self->usb.rx_buffer, '\0', RX_BUFF_LEN * sizeof(char));
         self->usb.rx_index = 0;
-        self->usb.available = 0;
-        return 1;
+        return EM_TRUE;
     }
 #endif
-    return 0;
+    return EM_FALSE;
 }
 
 int comm_respond(comm_data_t* self, const char* data, int len)
 {
-    if (self->uart.last)
+    if (self->uart.last == EM_TRUE)
     {
         uart_put_str(data, len);
         return len;
     }
 #ifdef EM_USB
-    else if (self->usb.last)
+    else if (self->usb.last == EM_TRUE)
     {
         int cntr = 1000000;
         uint8_t ret = USBD_BUSY;
+
         while (ret == USBD_BUSY && cntr > 0)
         {
             ret = CDC_Transmit_FS((uint8_t *)data, len);
             cntr--;
         }
+
+        while (CDC_Busy()) // busy wait for packet sent
+            __asm("nop");
 
         return len;
     }

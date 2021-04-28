@@ -69,9 +69,18 @@ macx {
     LIBS += -lqBreakpad
 }
 
-fw.files += $${PWD}/firmware/EMBO_F103C8.hex
-fw.path += $${DESTDIR}/firmware
+#LIBS += -lOpenGL32
+#DEFINES += QCUSTOMPLOT_USE_OPENGL
+
+fw.files += "$${PWD}/firmware/EMBO_F103C8.hex"
+fw.path += $${DESTDIR}/__firmware
 INSTALLS += fw
+
+win32 {
+    drivers.files += "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x86_32bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x86_32bits.exe"
+    drivers.path += $${DESTDIR}/__drivers
+    INSTALLS += drivers
+}
 
 
 VERSION = 0.0.4
@@ -88,64 +97,66 @@ QMAKE_TARGET_COPYRIGHT = CTU Jakub Parez
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += src/
+INCLUDEPATH += src/windows/
+
 SOURCES += \
-    core.cpp \
+    src/core.cpp \
     lib/ctkrangeslider.cpp \
     lib/qcustomplot.cpp \
-    main.cpp \
-    messages.cpp \
-    msg.cpp \
-    qcpcursors.cpp \
-    recorder.cpp \
-    settings.cpp \
-    utils.cpp \
-    window__main.cpp \
-    window_cntr.cpp \
-    window_la.cpp \
-    window_pwm.cpp \
-    window_scope.cpp \
-    window_sgen.cpp \
-    window_vm.cpp
+    src/main.cpp \
+    src/messages.cpp \
+    src/msg.cpp \
+    src/qcpcursors.cpp \
+    src/recorder.cpp \
+    src/settings.cpp \
+    src/utils.cpp \
+    src/windows/window__main.cpp \
+    src/windows/window_cntr.cpp \
+    src/windows/window_la.cpp \
+    src/windows/window_pwm.cpp \
+    src/windows/window_scope.cpp \
+    src/windows/window_sgen.cpp \
+    src/windows/window_vm.cpp
 
 HEADERS += \
-    containers.h \
-    core.h \
-    css.h \
-    interfaces.h \
+    src/containers.h \
+    src/core.h \
+    src/css.h \
+    src/interfaces.h \
     lib/ctkrangeslider.h \
     lib/fftw3.h \
     lib/qcustomplot.h \
-    messages.h \
-    movemean.h \
-    msg.h \
-    qcpcursors.h \
-    recorder.h \
-    settings.h \
-    utils.h \
-    window__main.h \
-    window_cntr.h \
-    window_la.h \
-    window_pwm.h \
-    window_scope.h \
-    window_sgen.h \
-    window_vm.h
+    src/messages.h \
+    src/movemean.h \
+    src/msg.h \
+    src/qcpcursors.h \
+    src/recorder.h \
+    src/settings.h \
+    src/utils.h \
+    src/windows/window__main.h \
+    src/windows/window_cntr.h \
+    src/windows/window_la.h \
+    src/windows/window_pwm.h \
+    src/windows/window_scope.h \
+    src/windows/window_sgen.h \
+    src/windows/window_vm.h
 
 FORMS += \
-    window__main.ui \
-    window_cntr.ui \
-    window_la.ui \
-    window_pwm.ui \
-    window_scope.ui \
-    window_sgen.ui \
-    window_vm.ui
+    src/windows/window__main.ui \
+    src/windows/window_cntr.ui \
+    src/windows/window_la.ui \
+    src/windows/window_pwm.ui \
+    src/windows/window_scope.ui \
+    src/windows/window_sgen.ui \
+    src/windows/window_vm.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-RESOURCES += \
-    resources.qrc
+RESOURCES += resources/resources.qrc
 
 DISTFILES += \
     icon.icns \

@@ -65,7 +65,7 @@ volatile UBaseType_t watermark_t5 = -1;
 
 void app_main(void)
 {
-    __disable_irq(); // should be as first command also in main.c to prevent xSemaphoreGiveFromISR in assert fail
+    __disable_irq();
 
     sem1_comm = xSemaphoreCreateBinaryStatic(&buff_sem1_comm);
     sem2_trig = xSemaphoreCreateBinaryStatic(&buff_sem2_trig);
@@ -180,6 +180,7 @@ void t4_comm_and_init(void* p)
             __asm("nop");
     }
 
+    //iwdg_feed();
     init_done = 1;
 
     while(1)
@@ -187,9 +188,11 @@ void t4_comm_and_init(void* p)
         ASSERT(xSemaphoreTake(sem1_comm, portMAX_DELAY) == pdPASS);
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
-        //iwdg_feed();
-        if (comm_main(&comm))
+        if (comm_main(&comm) == EM_TRUE)
             led_blink_set(&led, 1, EM_BLINK_SHORT_MS, daq.uwTick);
+
+        comm.uart.available = EM_FALSE;
+        comm.usb.available = EM_FALSE;
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 

@@ -101,7 +101,6 @@ typedef struct
     uint8_t post_start;     // flag when set posttrigger counting starts
     int post_from;          // position from where start counting posttrigger
     int dma_pos_catched;    // catched actual DMA circular buffer position
-    uint8_t la_state;       // for debuging LA
 }daq_trig_data_t;
 
 typedef struct

@@ -216,8 +216,6 @@ int8_t daq_trig_trigger_la(daq_data_t* self)
     ASSERT(self->trig.dma_ch_trig != 0);
     ASSERT(self->trig.exti_trig != 0);
 
-    self->trig.la_state = 2;
-
     if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE)
         goto invalid_trigger;
 
@@ -231,12 +229,8 @@ int8_t daq_trig_trigger_la(daq_data_t* self)
     for (int i = 0; i < 10000; i++)
         __asm("nop");
 
-    self->trig.la_state = 3;
-
     NVIC_ClearPendingIRQ(self->trig.exti_trig);
     NVIC_EnableIRQ(self->trig.exti_trig);
-
-    self->trig.la_state = 4;
 
     return 0;
 }
@@ -245,17 +239,12 @@ volatile int a = 0;
 
 int8_t daq_trig_poststart(daq_data_t* self, int pos)
 {
-    self->trig.la_state = 5;
-
     self->trig.post_start = EM_TRUE;
     self->trig.post_from = pos;
     self->trig.pretrig_cntr = 0;
 
     portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
     ASSERT(xSemaphoreGiveFromISR(sem2_trig, &xHigherPriorityTaskWoken) == pdPASS);
-
-    self->trig.la_state = 6;
-
     portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
 
     return -1;
@@ -263,7 +252,6 @@ int8_t daq_trig_poststart(daq_data_t* self, int pos)
 
 void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (800 ksps)
 {
-    self->trig.la_state = 7;
 
     int last_idx = self->trig.post_from;
 
@@ -308,8 +296,6 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
     int target_prev = self->trig.buff_trig->len - self->trig.post_from;
     int target_sum = 0;
 
-    self->trig.la_state = 8;
-
     while(1)
     {
         iwdg_feed(); // 1
@@ -325,8 +311,6 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             target_sum += target_diff + self->trig.buff_trig->len;
 
         target_prev = target;
-
-        self->trig.la_state = 9;
 
         if (target_sum >= self->trig.posttrig_size) // pos_last_len == target
         {
@@ -349,7 +333,6 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             else
                 comm_daq_ready(comm_ptr, EM_RESP_RDY_N, self->trig.pos_frst);   // data ready - trig normal
 
-            self->trig.la_state = 10;
             break;
         }
     }

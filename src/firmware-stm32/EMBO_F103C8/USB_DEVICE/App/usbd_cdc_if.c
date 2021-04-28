@@ -128,7 +128,11 @@ static int8_t CDC_Control_FS(uint8_t cmd, uint8_t* pbuf, uint16_t length);
 static int8_t CDC_Receive_FS(uint8_t* pbuf, uint32_t *Len);
 
 /* USER CODE BEGIN PRIVATE_FUNCTIONS_DECLARATION */
-
+uint8_t CDC_Busy()
+{
+    USBD_CDC_HandleTypeDef *hcdc = (USBD_CDC_HandleTypeDef*)hUsbDeviceFS.pClassData;
+    return hcdc->TxState != 0 ? 1 : 0;
+}
 /* USER CODE END PRIVATE_FUNCTIONS_DECLARATION */
 
 /**
@@ -290,26 +294,29 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   }
   while(result != USBD_OK);
 
-  while (len--)
+  if (comm.uart.available == EM_FALSE && comm.usb.available == EM_FALSE)
   {
-     comm.usb.rx_buffer[comm.usb.rx_index++] = *Buf;
+      while (len--)
+      {
+         comm.usb.rx_buffer[comm.usb.rx_index++] = *Buf;
 
-     if (comm.usb.rx_index >= RX_BUFF_LAST)
-         comm.usb.rx_index = 0;
+         if (comm.usb.rx_index >= RX_BUFF_LAST)
+             comm.usb.rx_index = 0;
 
-     comm.uart.last = 0;
-     comm.usb.last = 1;
+         comm.uart.last = EM_FALSE;
+         comm.usb.last = EM_TRUE;
 
-     if (*Buf == '\n' && comm.usb.rx_index > 1 && comm.usb.rx_buffer[comm.usb.rx_index - 2] == '\r')
-     {
-         comm.usb.available = 1;
-         exit = -1;
+         if (*Buf == '\n' && comm.usb.rx_index > 1 && comm.usb.rx_buffer[comm.usb.rx_index - 2] == '\r')
+         {
+             comm.usb.available = EM_TRUE;
+             exit = -1;
 
-         portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
-         ASSERT(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) == pdPASS);
-         portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
-     }
-     Buf++;
+             portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
+             ASSERT(xSemaphoreGiveFromISR(sem1_comm, &xHigherPriorityTaskWoken) == pdPASS);
+             portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
+         }
+         Buf++;
+      }
   }
 
   ret = USBD_OK;

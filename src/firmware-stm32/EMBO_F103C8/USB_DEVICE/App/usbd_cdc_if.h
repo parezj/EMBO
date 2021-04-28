@@ -69,6 +69,8 @@
 #include "app_sync.h"
 #include "FreeRTOS.h"
 #include "semphr.h"
+
+uint8_t CDC_Busy();
 /* USER CODE END EXPORTED_TYPES */
 
 /**

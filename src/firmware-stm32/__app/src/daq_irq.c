@@ -83,15 +83,11 @@ void EM_LA_CH1_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
-    daq.trig.la_state = 0;
-
     traceISR_ENTER();
     uint8_t ret = -1;
 
     if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI1) == 1)
     {
-        daq.trig.la_state = 1;
-
         NVIC_DisableIRQ(EM_LA_IRQ_EXTI1);
         ret = daq_trig_trigger_la(&daq);
     }

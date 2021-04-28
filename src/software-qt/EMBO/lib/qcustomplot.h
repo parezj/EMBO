@@ -4408,8 +4408,8 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
       !painter->modes().testFlag(QCPPainter::pmVectorized) &&
       !painter->modes().testFlag(QCPPainter::pmNoCaching))
   {
-      if (painter->spline())
-        qWarning() << "NOT SUPPROTED !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
+    if (painter->spline())
+      qWarning() << "NOT SUPPROTED !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
 
     int i = 0;
     bool lastIsNan = false;
@@ -4436,14 +4436,10 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
     int i = 0;
     const int lineDataSize = lineData.size();
 
-    //qInfo() << "====start draw====";
     while (i < lineDataSize)
     {
       if (qIsNaN(lineData.at(i).y()) || qIsNaN(lineData.at(i).x()) || qIsInf(lineData.at(i).y())) // NaNs create a gap in the line. Also filter Infs which make drawPolyline block
       {
-        if (painter->spline())
-            qWarning() << "NOT SUPPROTED2 !! (QCPAbstractPlottable1D<DataType>::drawPolyline)";
-
         painter->drawPolyline(lineData.constData()+segmentStart, i-segmentStart); // i, because we don't want to include the current NaN point
         segmentStart = i+1;
       }
@@ -4451,33 +4447,18 @@ void QCPAbstractPlottable1D<DataType>::drawPolyline(QCPPainter *painter, const Q
     }
     // draw last segment:
 
-    auto poly_start = lineData.constData()+segmentStart;
-    int poly_count = lineDataSize-segmentStart;
-    assert(segmentStart == 0);
-    //qInfo() << " start: " << poly_start->x() << " y: " << poly_start->y() << " count: " << poly_count;
-
-    if (poly_count > 1 && painter->spline())
+    if (painter->spline())
     {
-        /*
-        QPainterPath bezierPath;
-        bezierPath.moveTo(poly_start[0]);
-
-        for (int p = 1; p < poly_count; p++)
-        {
-            QPointF c1 = QPointF((poly_start[p].x() + poly_start[p - 1].x()) / 2, poly_start[p - 1].y());
-            QPointF c2 = QPointF((poly_start[p].x() + poly_start[p - 1].x()) / 2, poly_start[p].y());
-
-            bezierPath.cubicTo(c1, c2, poly_start[p]);
-        }
-
-        painter->drawPath(bezierPath);
-        */
-
-        painter->drawPath(SplineUtils::splineFromPoints(lineData));
-
+        if (lineData.count() >= 2)
+            painter->drawPath(SplineUtils::splineFromPoints(lineData));
+        else
+            qWarning() << "points to construct splines from are less then 2 !";
     }
     else
     {
+        auto poly_start = lineData.constData()+segmentStart;
+        int poly_count = lineDataSize-segmentStart;
+
         painter->drawPolyline(poly_start, poly_count);
     }
   }
