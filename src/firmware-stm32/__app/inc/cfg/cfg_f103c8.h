@@ -24,6 +24,14 @@
  *  =======================
 */
 
+// stack size
+#define EM_STACK_MIN           64
+#define EM_STACK_T1            40
+#define EM_STACK_T2            65
+#define EM_STACK_T3            55
+#define EM_STACK_T4            320
+#define EM_STACK_T5            55
+
 // pins strings
 #define EM_PINS_SCOPE_VM       "A1-A2-A3-A4"
 #define EM_PINS_LA             "A1-A2-A3-A4"
@@ -51,6 +59,7 @@
 //#define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RTO(x);  // RTO flags needs clearing
 #define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RXNE(x);  // RXNE flags needs clearing
 #define EM_USB                                      // if emulated USB enabled
+//#define EM_UART_POLLINIT                          // if defined poll for init
 
 // LED -------------------------------------------------------------
 #define EM_LED_PORT            GPIOC                // main LED port

@@ -157,6 +157,6 @@ void daq_reset(daq_data_t* self);
 void daq_enable(daq_data_t* self, uint8_t enable);
 void daq_mode_set(daq_data_t* self, enum daq_mode mode);
 void daq_settings_save(daq_settings_t* src1, trig_settings_t* src2, daq_settings_t* dst1, trig_settings_t* dst2);
-void daq_settings_init(daq_data_t* self);
+void daq_settings_init(daq_data_t* self, uint8_t scope, uint8_t la);
 
 #endif /* INC_DAQ_H_ */

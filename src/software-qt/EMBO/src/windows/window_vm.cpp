@@ -99,8 +99,8 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->pushButton_cursorsHoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
     m_ui->pushButton_cursorsVoff->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_VM_ON);
 
-    m_ui->pushButton_reset->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESET);
-    m_ui->pushButton_resetZoom->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESETZ);
+    //m_ui->pushButton_reset->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESET);
+    //m_ui->pushButton_resetZoom->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_VM_RESETZ);
 
     m_ui->spinBox_average->setStyleSheet(CSS_SPINBOX);
     m_ui->spinBox_display->setStyleSheet(CSS_SPINBOX);
@@ -115,10 +115,12 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     m_ui->spinBox_average->setValue(DEFAULT_AVG); //Settings::getValue(CFG_VM_AVG, DEFAULT_AVG).toInt());
     m_ui->spinBox_display->setValue(DEFAULT_PLT); //Settings::getValue(CFG_VM_PLT, DEFAULT_PLT).toInt());
     m_ui->actionShowPlot->setChecked(Settings::getValue(CFG_VM_SHOW_PLOT, true).toBool());
+    m_ui->actionInterpSinc->setChecked(Settings::getValue(CFG_VM_SPLINE, true).toBool());
 
     on_spinBox_average_valueChanged(m_ui->spinBox_average->value());
     on_spinBox_display_valueChanged(m_ui->spinBox_display->value());
     on_actionShowPlot_triggered(m_ui->actionShowPlot->isChecked());
+    on_actionInterpSinc_triggered(m_ui->actionInterpSinc->isChecked());
 
     m_instrEnabled = true;
 }
@@ -513,6 +515,8 @@ void WindowVm::on_actionInterpLinear_triggered(bool checked) // exclusive with -
 void WindowVm::on_actionInterpSinc_triggered(bool checked) // exclusive with - actionLinear
 {
     m_spline = checked;
+
+    Settings::setValue(CFG_VM_SPLINE, m_spline);
 
     m_ui->actionInterpLinear->setChecked(!checked);
 
@@ -1226,6 +1230,7 @@ void WindowVm::on_pushButton_reset_clicked()
     on_pushButton_cursorsHoff_clicked();
 
     /* plot style */
+    /*
     on_actionViewLines_triggered(true);
     m_ui->actionViewLines->setChecked(true);
 
@@ -1237,6 +1242,7 @@ void WindowVm::on_pushButton_reset_clicked()
 
     on_actionShowPlot_triggered(true);
     m_ui->actionShowPlot->setChecked(true);
+    */
 
     /* channels */
     on_pushButton_disable1_clicked();

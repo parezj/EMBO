@@ -167,8 +167,8 @@ void Core::getLatencyMs(double& mean, double& max)
 
 void Core::sendRst(Mode mode)
 {
-    msgAdd(m_msg_rst, false, "");
-    msgAdd(m_msg_sys_mode, false, (mode == SCOPE ? "SCOPE" : (mode == LA ? "LA" : "VM")));
+    msgAdd(m_msg_rst, false, (mode == SCOPE ? "S" : (mode == LA ? "L" : "")));
+    //msgAdd(m_msg_sys_mode, false, (mode == SCOPE ? "SCOPE" : (mode == LA ? "LA" : "VM"))); // TODO CHECK
 }
 
 /* private */

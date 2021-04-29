@@ -21,12 +21,6 @@
 #include "SEGGER_SYSVIEW.h"
 #endif
 
-// units = uint32_t
-#define EM_STACK_T1     40
-#define EM_STACK_T2     65
-#define EM_STACK_T3     55
-#define EM_STACK_T4     320
-#define EM_STACK_T5     55
 
 #define EM_PRI_T1       3
 #define EM_PRI_T2       1
@@ -62,11 +56,25 @@ volatile UBaseType_t watermark_t4 = -1;
 volatile UBaseType_t watermark_t5 = -1;
 #endif
 
+/* NOTE: without optimizations -Os (for size) vTaskDelay or context switch
+ * cause probably stack overflow somewhere, because hard fault. its weird
+ */
 
 void app_main(void)
 {
     __disable_irq();
 
+    /* crucial for FreeRTOS */
+    NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+
+    /* SysTick  (added: need to check with BluePill ! */
+    SysTick->VAL   = 0UL;
+    LL_Init1msTick(SystemCoreClock);
+    NVIC_SetPriority(SysTick_IRQn, EM_IT_PRI_SYST);
+    NVIC_EnableIRQ(SysTick_IRQn);
+    LL_SYSTICK_EnableIT();
+
+    /* Semaphores */
     sem1_comm = xSemaphoreCreateBinaryStatic(&buff_sem1_comm);
     sem2_trig = xSemaphoreCreateBinaryStatic(&buff_sem2_trig);
     sem3_cntr = xSemaphoreCreateBinaryStatic(&buff_sem3_cntr);
@@ -77,6 +85,7 @@ void app_main(void)
     ASSERT(sem3_cntr != NULL);
     ASSERT(mtx1 != NULL);
 
+    /* Tasks */
     ASSERT(xTaskCreateStatic(t1_wd, "wd", EM_STACK_T1, NULL, EM_PRI_T1, stack_t1, &buff_t1) != NULL);
     ASSERT(xTaskCreateStatic(t2_trig_check, "trig_check", EM_STACK_T2, NULL, EM_PRI_T2, stack_t2, &buff_t2) != NULL);
     ASSERT(xTaskCreateStatic(t3_trig_post_count, "trig_post_count", EM_STACK_T3, NULL, EM_PRI_T3, stack_t3, &buff_t3) != NULL);
@@ -85,9 +94,11 @@ void app_main(void)
 
     __enable_irq();
 
+    init_done = true;
+
     vTaskStartScheduler(); // start scheduler
 
-    ASSERT(0);
+    ASSERT(0); // never get here
 }
 
 void t1_wd(void* p)
@@ -164,7 +175,7 @@ void t4_comm_and_init(void* p)
 #endif
 
 #ifdef EM_DEBUG
-    pwm_set(&pwm, 1000, 50, 25, 50, EM_TRUE, EM_TRUE);
+    pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
 #ifdef EM_DAC
     sgen_enable(&sgen, SINE, 100, 1000, EM_DAC_BUFF_LEN);
 #endif

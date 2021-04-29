@@ -83,7 +83,7 @@ win32 {
 }
 
 
-VERSION = 0.0.4
+VERSION = 0.1.2
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 QMAKE_TARGET_COMPANY = CTU Jakub Parez

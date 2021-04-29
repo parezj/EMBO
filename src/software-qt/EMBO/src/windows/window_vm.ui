@@ -3042,6 +3042,7 @@ QPushButton:disabled {
 	border-radius: 5px;
 	color: black;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7B7B7B);
+	padding-left:5px;
 }
 
 QPushButton:hover:!pressed {
@@ -3065,7 +3066,7 @@ QPushButton:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>Reset</string>
+             <string>Reset All</string>
             </property>
             <property name="iconSize">
              <size>

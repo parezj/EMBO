@@ -23,22 +23,43 @@
 
 scpi_result_t EM_Reset(scpi_t* context)
 {
+    const char* p1;
+    size_t p1l;
+
+    SCPI_ParamCharacters(context, &p1, &p1l, FALSE);
+
     daq_enable(&daq, EM_FALSE);
     daq_mode_set(&daq, VM);
     daq_enable(&daq, EM_TRUE);
-    daq_settings_init(&daq);
-    cntr_enable(&cntr, EM_FALSE, EM_FALSE);
-    pwm_disable(&pwm);
+
+    if (p1l == 1 && p1[0] == 'S')
+    {
+        daq_settings_init(&daq, EM_TRUE, EM_FALSE);
+        daq_mode_set(&daq, SCOPE);
+    }
+
+    else if (p1l == 1 && p1[0] == 'L')
+    {
+        daq_settings_init(&daq, EM_FALSE, EM_TRUE);
+        daq_mode_set(&daq, LA);
+    }
+    else
+    {
+        daq_settings_init(&daq, EM_TRUE, EM_TRUE);
+
+        cntr_enable(&cntr, EM_FALSE, EM_FALSE);
+        pwm_disable(&pwm);
 #ifdef EM_DAC
-    sgen_disable(&sgen);
+        sgen_disable(&sgen);
 #endif
 
 #ifdef EM_DEBUG
-    pwm_set(&pwm, 1000, 25, 25, 50, EM_TRUE, EM_TRUE); // TODO to fn
+        pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
 #ifdef EM_DAC
-    sgen_enable(&sgen, SINE, 100, 1000, EM_DAC_BUFF_LEN);
+        sgen_enable(&sgen, SINE, 100, 1000, EM_DAC_BUFF_LEN);
 #endif
 #endif
+    }
 
     SCPI_ResultText(context, SCPI_OK);
     return SCPI_RES_OK;
@@ -322,7 +343,7 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
             cal *= 10.0;
         //*/
 
-        uint8_t* buff_start;
+        uint8_t* buff_start = (uint8_t*)daq.buff1.data;
         uint16_t buff_total_len = 0;
 
 #if defined(EM_ADC_MODE_ADC1)

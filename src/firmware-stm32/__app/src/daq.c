@@ -26,7 +26,7 @@ static void daq_clear_buff(daq_buff_t* buff);
 void daq_init(daq_data_t* self)
 {
     daq_trig_init(self);
-    daq_settings_init(self);
+    daq_settings_init(self, EM_TRUE, EM_TRUE);
     daq_settings_save(&self->save_s, &self->trig.save_s, &self->set, &self->trig.set);
     self->mode = SCOPE;
 
@@ -90,41 +90,45 @@ void daq_settings_save(daq_settings_t* src1, trig_settings_t* src2, daq_settings
     dst2->pretrigger = src2->pretrigger;
 }
 
-void daq_settings_init(daq_data_t* self)
+void daq_settings_init(daq_data_t* self, uint8_t scope, uint8_t la)
 {
-    // SCOPE
-    self->save_s.fs = 100000;
-    self->save_s.mem = 1000;
-    self->save_s.bits = B12;
+    if (scope == EM_TRUE)
+    {
+        self->save_s.fs = 100000;
+        self->save_s.mem = 1000;
+        self->save_s.bits = B12;
 
-    self->save_s.ch1_en = 1;
-    self->save_s.ch2_en = 1;
-    self->save_s.ch3_en = 0;
-    self->save_s.ch4_en = 0;
+        self->save_s.ch1_en = 1;
+        self->save_s.ch2_en = 1;
+        self->save_s.ch3_en = 0;
+        self->save_s.ch4_en = 0;
 
-    self->trig.save_s.val_percent = 50;
-    self->trig.save_s.val = 2047;
-    self->trig.save_s.ch = 1;
-    self->trig.save_s.edge = RISING;
-    self->trig.save_s.mode = AUTO;
-    self->trig.save_s.pretrigger = 50;
+        self->trig.save_s.val_percent = 50;
+        self->trig.save_s.val = 2047;
+        self->trig.save_s.ch = 1;
+        self->trig.save_s.edge = RISING;
+        self->trig.save_s.mode = AUTO;
+        self->trig.save_s.pretrigger = 50;
+    }
 
-    // LA
-    self->save_l.fs = 100000;
-    self->save_l.mem = 2000;
-    self->save_l.bits = B1;
+    if (la == EM_TRUE)
+    {
+        self->save_l.fs = 100000;
+        self->save_l.mem = 2000;
+        self->save_l.bits = B1;
 
-    self->save_l.ch1_en = 1;
-    self->save_l.ch2_en = 1;
-    self->save_l.ch3_en = 1;
-    self->save_l.ch4_en = 1;
+        self->save_l.ch1_en = 1;
+        self->save_l.ch2_en = 1;
+        self->save_l.ch3_en = 1;
+        self->save_l.ch4_en = 1;
 
-    self->trig.save_l.val_percent = 0;
-    self->trig.save_l.val = 0;
-    self->trig.save_l.ch = 1;
-    self->trig.save_l.edge = RISING;
-    self->trig.save_l.mode = AUTO;
-    self->trig.save_l.pretrigger = 50;
+        self->trig.save_l.val_percent = 0;
+        self->trig.save_l.val = 0;
+        self->trig.save_l.ch = 1;
+        self->trig.save_l.edge = RISING;
+        self->trig.save_l.mode = AUTO;
+        self->trig.save_l.pretrigger = 50;
+    }
 }
 
 int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)

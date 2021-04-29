@@ -97,6 +97,15 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     /* styles */
 
     m_ui->label_FFT->setVisible(false);
+    m_ui->label_Vpos1->setVisible(false);
+    m_ui->label_Vpos2->setVisible(false);
+    m_ui->label_Vpos3->setVisible(false);
+    m_ui->label_Vpos4->setVisible(false);
+
+    /* settings */
+
+    m_ui->actionInterpSinc->setChecked(Settings::getValue(CFG_SCOPE_SPLINE, true).toBool());
+    on_actionInterpSinc_triggered(m_ui->actionInterpSinc->isChecked());
 
     m_instrEnabled = true;
 }
@@ -770,6 +779,8 @@ void WindowScope::on_actionInterpLinear_triggered(bool checked) // exclusive wit
 void WindowScope::on_actionInterpSinc_triggered(bool checked) // exclusive with - actionLinear
 {
     m_spline = checked;
+
+    Settings::setValue(CFG_SCOPE_SPLINE, m_spline);
 
     m_ui->actionInterpLinear->setChecked(!checked);
 
@@ -1559,6 +1570,8 @@ void WindowScope::on_pushButton_reset_clicked()
     on_pushButton_cursorsHoff_clicked();
 
     /* plot style */
+
+    /*
     on_actionViewLines_triggered(true);
     m_ui->actionViewLines->setChecked(true);
 
@@ -1567,6 +1580,7 @@ void WindowScope::on_pushButton_reset_clicked()
 
     on_actionInterpSinc_triggered(true);
     m_ui->actionInterpSinc->setChecked(true);
+    */
 
     Settings::setValue(CFG_REC_DIR, m_rec.getDir());
 
@@ -2231,6 +2245,9 @@ void WindowScope::on_dial_Vpos_ch1_valueChanged(int value)
 
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
+
+    m_ui->label_Vpos1->setText(QString::number(m_offset1, 10, 1));
+    m_ui->label_Vpos1->setVisible(true);
 }
 
 void WindowScope::on_dial_Vpos_ch2_valueChanged(int value)
@@ -2239,6 +2256,9 @@ void WindowScope::on_dial_Vpos_ch2_valueChanged(int value)
 
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
+
+    m_ui->label_Vpos2->setText(QString::number(m_offset2, 10, 1));
+    m_ui->label_Vpos2->setVisible(true);
 }
 
 void WindowScope::on_dial_Vpos_ch3_valueChanged(int value)
@@ -2247,6 +2267,9 @@ void WindowScope::on_dial_Vpos_ch3_valueChanged(int value)
 
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
+
+    m_ui->label_Vpos3->setText(QString::number(m_offset3, 10, 1));
+    m_ui->label_Vpos3->setVisible(true);
 }
 
 void WindowScope::on_dial_Vpos_ch4_valueChanged(int value)
@@ -2255,6 +2278,9 @@ void WindowScope::on_dial_Vpos_ch4_valueChanged(int value)
 
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
+
+    m_ui->label_Vpos4->setText(QString::number(m_offset4, 10, 1));
+    m_ui->label_Vpos4->setVisible(true);
 }
 
 /********** right pannel - utils **********/

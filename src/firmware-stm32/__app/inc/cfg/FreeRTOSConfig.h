@@ -35,7 +35,7 @@
 #define configCPU_CLOCK_HZ                       EM_FREQ_HCLK
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 7 )
-#define configMINIMAL_STACK_SIZE                 ((uint16_t)64)
+#define configMINIMAL_STACK_SIZE                 ((uint16_t)EM_STACK_MIN)
 #define configTOTAL_HEAP_SIZE                    ((size_t)0)
 #define configMAX_TASK_NAME_LEN                  ( 20 )
 #define configUSE_16_BIT_TICKS                   0

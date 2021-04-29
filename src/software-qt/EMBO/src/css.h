@@ -79,7 +79,7 @@
 #define CSS_BUTTON_SGEN_ON    " QPushButton { text-align:left; padding-left:15px }"
 #define CSS_BUTTON_VM_ON      " QPushButton { text-align:left; padding-left:13px }"
 #define CSS_BUTTON_VM_MAIN    " QPushButton { text-align:left; padding-left:22px }"
-#define CSS_BUTTON_VM_RESET   " QPushButton { text-align:left; padding-left:28px }"
+#define CSS_BUTTON_VM_RESET   " QPushButton { text-align:left; padding-left:5px }"
 #define CSS_BUTTON_VM_RESETZ  " QPushButton { text-align:left; padding-left:4px  }"
 
 

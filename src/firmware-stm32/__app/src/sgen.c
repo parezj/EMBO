@@ -99,7 +99,7 @@ static void sgen_const(sgen_data_t* self, float A)
 // https://controllerstech.com/dac-in-stm32/
 static void sgen_sine(sgen_data_t* self, float A, float f, int N)
 {
-    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N < EM_DAC_BUFF_LEN);
+    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
     self->mode = SINE;
     self->freq = f;
@@ -116,7 +116,7 @@ static void sgen_sine(sgen_data_t* self, float A, float f, int N)
 
 static void sgen_square(sgen_data_t* self, float A, float f, int N)
 {
-    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N < EM_DAC_BUFF_LEN);
+    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
     self->mode = SINE;
     self->freq = f;
@@ -134,7 +134,7 @@ static void sgen_square(sgen_data_t* self, float A, float f, int N)
 
 static void sgen_triangle(sgen_data_t* self, float A, float f, int N)
 {
-    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N < EM_DAC_BUFF_LEN);
+    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
     self->mode = SINE;
     self->freq = f;
@@ -151,7 +151,7 @@ static void sgen_triangle(sgen_data_t* self, float A, float f, int N)
 
 static void sgen_saw(sgen_data_t* self, float A, float f, int N)
 {
-    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N < EM_DAC_BUFF_LEN);
+    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
     self->mode = SINE;
     self->freq = f;
@@ -171,7 +171,7 @@ static void sgen_saw(sgen_data_t* self, float A, float f, int N)
 
 static void sgen_rand(sgen_data_t* self, float A, float f, int N)
 {
-    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N < EM_DAC_BUFF_LEN);
+    ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
     self->mode = SINE;
     self->freq = f;

@@ -76,9 +76,15 @@ void adc_init_calib(ADC_TypeDef* adc)
 #if defined(EM_ADC_CAL_EN)
     LL_ADC_Enable(adc);
 #endif
+
 #if defined(ADC_CR2_TSVREFE)
     adc->CR2 |= ADC_CR2_TSVREFE;
 #endif
+#if defined(EM_ADC_LINREG)
+    LL_ADC_EnableInternalRegulator(adc);
+    for (int i = 0; i <  10000; ++i) asm("nop"); // ?
+#endif
+
     uint32_t  wait_loop_index = ((EM_ADC_EN_TICKS * 32) >> 1);
     while(wait_loop_index != 0)
     {
@@ -103,6 +109,7 @@ void adc_init_calib(ADC_TypeDef* adc)
     for (int i = 0; i <  10000; ++i) asm("nop");
 
     LL_ADC_REG_SetDMATransfer(adc, dma_tx_mode);
+
 #if !defined(EM_ADC_CAL_EN)
     LL_ADC_Enable(adc);
 #endif

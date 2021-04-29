@@ -26,7 +26,7 @@
 
 #define EMBO_TITLE      "EMBO"
 #define EMBO_TITLE2     "EMBO - EMBedded Oscilloscope"
-#define EMBO_ABOUT_TXT  "<b><big>EMBedded Oscilloscope</big></b><br><br>CTU FEE © 2020-2021 Jakub Pařez<br><br>\
+#define EMBO_ABOUT_TXT  "<b><big>EMBedded Oscilloscope " APP_VERSION "</big></b><br><br>CTU FEE © 2020-2021 Jakub Pařez<br><br>\
 EMBO is useful tool for every electronics enthusiast.<br>\
 For just few dollar hardware can become powerfull scope, logic analyzer, voltmeter, counter, \
 PWM and signal generator.<br>And of course, it's opensource! \
@@ -52,6 +52,9 @@ PWM and signal generator.<br>And of course, it's opensource! \
 #define CFG_VM_AVG          "vm/avg"
 #define CFG_VM_PLT          "vm/plt"
 #define CFG_VM_SHOW_PLOT    "vm/show_plot"
+#define CFG_VM_SPLINE       "vm/spline"
+
+#define CFG_SCOPE_SPLINE    "scope/spline"
 
 #define EMBO_NEWLINE        "\r\n"
 #define EMBO_DELIM1         ";"

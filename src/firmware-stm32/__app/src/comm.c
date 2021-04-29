@@ -243,7 +243,14 @@ void comm_init(comm_data_t* self)
               scpi_error_queue_data, SCPI_ERROR_QUEUE_SIZE,
               self);
 
+
+#ifdef EM_UART_POLLINIT
+    while((!(LL_USART_IsActiveFlag_TEACK(EM_UART))) || (!(LL_USART_IsActiveFlag_REACK(EM_UART))))
+        __asm("nop");
+#endif
+
     LL_USART_EnableIT_RXNE(EM_UART);
+
     uart_put_text(WELCOME_STR);
 
     NVIC_SetPriority(EM_IRQN_UART, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_UART, 0));

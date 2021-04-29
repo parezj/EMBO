@@ -27,6 +27,15 @@
  *  =======================
 */
 
+// stack size
+#define EM_STACK_MIN           128
+#define EM_STACK_T1            128
+#define EM_STACK_T2            128
+#define EM_STACK_T3            128
+#define EM_STACK_T4            512
+#define EM_STACK_T5            128
+
+// pins
 #define EM_PINS_SCOPE_VM       "C0-C1-B0-B14"
 #define EM_PINS_LA             "C0-C1-C2-C3"
 #define EM_PINS_CNTR           "C9"
@@ -51,11 +60,12 @@
 
 
 // UART -------------------------------------------------------------
-#define EM_UART                USART2               // UART periph
-#define EM_UART_RX_IRQHandler  USART2_IRQHandler    // UART IRQ handler
+#define EM_UART                USART1 //USART2               // UART periph
+#define EM_UART_RX_IRQHandler  USART1_IRQHandler //USART2_IRQHandler    // UART IRQ handler
 #define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RTO(x);  // RTO flags needs clearing
 //#define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RXNE(x);  // RXNE flags needs clearing
 //#define EM_USB                                    // if emulated USB enabled
+#define EM_UART_POLLINIT                            // if defined poll for init
 
 // LED -------------------------------------------------------------
 #define EM_LED_PORT            GPIOA                // main LED port
@@ -89,7 +99,8 @@
 #define EM_ADC_C_F             0.000000000008 // 8pF           // ADC internal capacitance in F
 #define EM_ADC_R_OHM           6000.0                          // ADC internal impedance in Ohm
 #define EM_ADC_SMPLT_CNT       8                               // count of available smpl times
-#define EM_ADC_CAL_EN                                          // calibration while enabled
+#define EM_ADC_LINREG                                          // before calibration enable regulator
+//#define EM_ADC_CAL_EN                                        // calibration while enabled
 //#define LL_ADC_SPEC_START                                    // special start stop methods needed
 #define EM_ADC_AWD             LL_ADC_AWD1,                    // Analog Watchdog
 #define EM_ADC_TRIG_12         LL_ADC_REG_TRIG_EXT_TIM3_TRGO_ADC12     // ADC TIM trig TRGO 12
@@ -129,7 +140,7 @@
 #define EM_TIM_SGEN_MAX        65535
 
 // Max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         56000     // DAQ max total memory
+#define EM_DAQ_MAX_MEM         50000     // DAQ max total memory
 #define EM_LA_MAX_FS           5000000   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      400000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       500000    // DAQ ADC max fs per 1 channel - 8 bit
@@ -162,7 +173,7 @@
 #define EM_IRQN_ADC12          ADC1_2_IRQn
 #define EM_IRQN_ADC3           ADC3_IRQn
 #define EM_IRQN_ADC4           ADC4_IRQn
-#define EM_IRQN_UART           USART2_IRQn
+#define EM_IRQN_UART           USART1_IRQn //USART2_IRQn
 #define EM_LA_IRQ_EXTI1        EXTI0_IRQn
 #define EM_LA_IRQ_EXTI2        EXTI1_IRQn
 #define EM_LA_IRQ_EXTI3        EXTI2_TSC_IRQn
