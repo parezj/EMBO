@@ -161,7 +161,7 @@ static void sgen_saw(sgen_data_t* self, float A, float f, int N)
 
     float a = (A/100.0*EM_DAC_MAX_VAL);
     float inc = a / (float)N;
-    float _a;
+    float _a = 0;
     for (int i = 0; i < N; i++)
     {
         self->data[i] = (uint16_t)(_a);

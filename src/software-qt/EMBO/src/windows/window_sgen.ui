@@ -664,7 +664,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
       <string>Offset:</string>
      </property>
     </widget>
-    <widget class="QDial" name="dial_offset">
+    <widget class="QDial2" name="dial_offset">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -761,7 +761,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <number>50</number>
      </property>
     </widget>
-    <widget class="QDial" name="dial_freq">
+    <widget class="QDial2" name="dial_freq">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1123,6 +1123,13 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QDial2</class>
+   <extends>QDial</extends>
+   <header>lib/qdial2.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../../resources/resources.qrc"/>
  </resources>

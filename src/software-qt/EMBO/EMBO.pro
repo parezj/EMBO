@@ -101,6 +101,7 @@ INCLUDEPATH += src/
 INCLUDEPATH += src/windows/
 
 SOURCES += \
+    lib/qdial2.cpp \
     src/core.cpp \
     lib/ctkrangeslider.cpp \
     lib/qcustomplot.cpp \
@@ -120,6 +121,7 @@ SOURCES += \
     src/windows/window_vm.cpp
 
 HEADERS += \
+    lib/qdial2.h \
     src/containers.h \
     src/core.h \
     src/css.h \

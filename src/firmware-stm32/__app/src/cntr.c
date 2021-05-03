@@ -24,6 +24,8 @@ void cntr_init(cntr_data_t* self)
     self->enabled = EM_FALSE;
     self->fast_mode = EM_FALSE;
     self->fast_mode_now = 0;
+
+    NVIC_SetPriority(EM_CNTR_IRQ, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_CNTR, 0));
     cntr_reset(self);
 }
 
@@ -43,13 +45,12 @@ static void cntr_reset(cntr_data_t* self)
             self->fast_mode_now ? EM_CNTR_BUFF_SZ : EM_CNTR_BUFF_SZ2,
             LL_DMA_PDATAALIGN_HALFWORD, LL_DMA_MDATAALIGN_HALFWORD, LL_DMA_DIRECTION_PERIPH_TO_MEMORY);
 
-    NVIC_SetPriority(TIM1_UP_TIM16_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),1, 0));
     LL_TIM_EnableIT_UPDATE(EM_TIM_CNTR);
     EM_TIM_CNTR_OVF(LL_TIM_OC_SetCompare)(EM_TIM_CNTR, 0);
     LL_TIM_SetCounter(EM_TIM_CNTR, 0);
 
-    LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, LL_TIM_CHANNEL_CH1, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
-    LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, LL_TIM_CHANNEL_CH2, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
+    LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, EM_TIM_CNTR_CH, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
+    LL_TIM_IC_SetPrescaler(EM_TIM_CNTR, EM_TIM_CNTR_CH2, self->fast_mode_now ? LL_TIM_ICPSC_DIV8 : LL_TIM_ICPSC_DIV1);
 }
 
 void cntr_enable(cntr_data_t* self, uint8_t enable, uint8_t fast_mode)
@@ -75,7 +76,7 @@ void cntr_start(cntr_data_t* self, uint8_t start)
 
         EM_TIM_CNTR_CC(LL_TIM_EnableDMAReq_)(EM_TIM_CNTR);
         EM_TIM_CNTR_CC2(LL_TIM_EnableDMAReq_)(EM_TIM_CNTR);
-        NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
+        NVIC_EnableIRQ(EM_CNTR_IRQ);
         LL_TIM_CC_EnableChannel(EM_TIM_CNTR, EM_TIM_CNTR_CH);
         LL_TIM_CC_EnableChannel(EM_TIM_CNTR, EM_TIM_CNTR_CH2);
         LL_TIM_EnableCounter(EM_TIM_CNTR);
@@ -85,7 +86,7 @@ void cntr_start(cntr_data_t* self, uint8_t start)
         LL_TIM_DisableCounter(EM_TIM_CNTR);
         LL_TIM_CC_DisableChannel(EM_TIM_CNTR, EM_TIM_CNTR_CH);
         LL_TIM_CC_DisableChannel(EM_TIM_CNTR, EM_TIM_CNTR_CH2);
-        NVIC_DisableIRQ(TIM1_UP_TIM16_IRQn);
+        NVIC_DisableIRQ(EM_CNTR_IRQ);
         EM_TIM_CNTR_CC(LL_TIM_DisableDMAReq_)(EM_TIM_CNTR);
         EM_TIM_CNTR_CC2(LL_TIM_DisableDMAReq_)(EM_TIM_CNTR);
     }
@@ -142,10 +143,6 @@ void cntr_meas(cntr_data_t* self)
         double total = (ovf * EM_TIM_CNTR_MAX) + ccr_sum;
         total /= (double)(sz - 1);
         self->freq = ((double)EM_TIM_CNTR_FREQ / total) * (double)(self->fast_mode_now ? 8 : 1);
-
-        //float diff = f - 1.6;
-        //if (diff < 1 && diff > -1)
-        //    ASSERT(0);
     }
     else
     {

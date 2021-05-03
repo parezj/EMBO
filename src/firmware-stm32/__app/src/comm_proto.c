@@ -343,56 +343,38 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
             cal *= 10.0;
         //*/
 
-        uint8_t* buff_start = (uint8_t*)daq.buff1.data;
-        uint16_t buff_total_len = 0;
+        size_t buff_len = daq.set.mem + EM_MEM_RESERVE;
+        if (daq.set.bits == B12)
+            buff_len *= 2;
 
 #if defined(EM_ADC_MODE_ADC1)
 
-        buff_start = (uint8_t*)daq.buff1.data;
-        buff_total_len += daq.buff1.len;
+        buff_len *= daq.set.ch1_en + daq.set.ch2_en + daq.set.ch3_en + daq.set.ch4_en;
+
+        SCPI_ResultArbitraryBlocks(context, buff_len, 0, 0, 0, (uint8_t*)daq.buff1.data, NULL, NULL, NULL);
 
 #elif defined(EM_ADC_MODE_ADC12)
 
-        if (daq.set.ch1_en || daq.set.ch2_en)
-            buff_start = (uint8_t*)daq.buff1.data;
-        else // (daq.set.ch3_en || daq.set.ch4_en)
-            buff_start = (uint8_t*)daq.buff2.data;
+        size_t buff_len1 *= daq.set.ch1_en + daq.set.ch2_en;
+        size_t buff_len2 *= daq.set.ch3_en + daq.set.ch4_en;
 
-        if (daq.set.ch1_en || daq.set.ch2_en)
-            buff_total_len += daq.buff1.len;
-        if (daq.set.ch3_en || daq.set.ch4_en)
-            buff_total_len += daq.buff2.len;
+        SCPI_ResultArbitraryBlocks(context, buff_len1, buff_len2, 0, 0,
+                                            (daq.set.ch1_en == EM_TRUE || daq.set.ch2_en == EM_TRUE ? (uint8_t*)daq.buff1.data : NULL),
+                                            (daq.set.ch3_en == EM_TRUE || daq.set.ch4_en == EM_TRUE ? (uint8_t*)daq.buff2.data : NULL),
+                                            NULL, NULL);
 
 #elif defined(EM_ADC_MODE_ADC1234)
 
-        if (daq.set.ch1_en)
-            buff_start = (uint8_t*)daq.buff1.data;
-        else if (daq.set.ch2_en)
-            buff_start = (uint8_t*)daq.buff2.data;
-        else if (daq.set.ch3_en)
-            buff_start = (uint8_t*)daq.buff3.data;
-        else if (daq.set.ch4_en)
-            buff_start = (uint8_t*)daq.buff4.data;
-
-        if (daq.set.ch1_en)
-            buff_total_len += daq.buff1.len;
-        if (daq.set.ch2_en)
-            buff_total_len += daq.buff2.len;
-        if (daq.set.ch3_en)
-            buff_total_len += daq.buff3.len;
-        if (daq.set.ch4_en)
-            buff_total_len += daq.buff4.len;
-
+        SCPI_ResultArbitraryBlocks(context, buff_len, buff_len, buff_len, buff_len,
+                                            (daq.set.ch1_en == EM_TRUE ? (uint8_t*)daq.buff1.data : NULL),
+                                            (daq.set.ch2_en == EM_TRUE ? (uint8_t*)daq.buff2.data : NULL),
+                                            (daq.set.ch3_en == EM_TRUE ? (uint8_t*)daq.buff3.data : NULL),
+                                            (daq.set.ch4_en == EM_TRUE ? (uint8_t*)daq.buff4.data : NULL));
 #endif
 
         daq.trig.pretrig_cntr = 0;
         daq.trig.ready = EM_FALSE;
         daq.trig.ready_last = 0;
-
-        if (daq.set.bits == B12)
-            buff_total_len *= 2;
-
-        SCPI_ResultArbitraryBlock(context, buff_start, buff_total_len);
 
         if (daq.trig.set.mode != SINGLE)
             daq_enable(&daq, EM_TRUE);

@@ -234,6 +234,7 @@ private:
     bool m_trig_led = false;
     int m_last_fs = 0;
     int m_last_mem = 0;
+    int m_err_cntr = 0;
 
     /* stm32 pins */
     QString m_pin1 = "?";

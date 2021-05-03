@@ -14,7 +14,7 @@
 #define FILENAME_FORMAT    "yyyyMMdd_HHmmsszzz"
 
 
-Recorder::Recorder()
+Recorder::Recorder(int precision) : m_precision(precision)
 {
     reset();
 }
@@ -101,9 +101,15 @@ QString Recorder::takeScreenshot(QString prefix, QWidget* widget)
     return "";
 }
 
-Recorder& Recorder::operator<<(double val)
+Recorder& Recorder::operator<<(int val)
 {
     (*this) << QString::number(val);
+    return (*this);
+}
+
+Recorder& Recorder::operator<<(double val)
+{
+    (*this) << QString::number(val, 10, m_precision);
     return (*this);
 }
 

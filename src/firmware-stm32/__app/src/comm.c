@@ -251,7 +251,7 @@ void comm_init(comm_data_t* self)
 
     LL_USART_EnableIT_RXNE(EM_UART);
 
-    uart_put_text(WELCOME_STR);
+    //uart_put_text(WELCOME_STR);
 
     NVIC_SetPriority(EM_IRQN_UART, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_UART, 0));
     NVIC_EnableIRQ(EM_IRQN_UART);

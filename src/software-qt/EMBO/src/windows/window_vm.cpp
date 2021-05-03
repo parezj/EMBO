@@ -21,12 +21,13 @@
 #include <algorithm>
 
 
-#define Y_LIM           0.20
+#define Y_LIM1          0.50 // spline on
+#define Y_LIM2          0.15 // spline off
 #define DEFAULT_PLT     DISPLAY_VM_DEFAULT
 #define DEFAULT_AVG     1
 
 
-WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm) // TODO nasekat na funkce
+WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm), m_rec(4)
 {
     m_ui->setupUi(this);
 
@@ -524,6 +525,8 @@ void WindowVm::on_actionInterpSinc_triggered(bool checked) // exclusive with - a
     m_ui->customPlot->graph(GRAPH_CH2)->setSpline(checked);
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
+
+    rescaleYAxis();
 }
 
 void WindowVm::on_actionShowPlot_triggered(bool checked)
@@ -1426,7 +1429,8 @@ void WindowVm::rescaleYAxis()
     if (m_en4 && m_gain4 > max_scale) max_scale = m_gain4;
     else if (m_en4 && m_gain4 < min_scale) min_scale = m_gain4;
 
-    m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
+    double yLim = (m_spline ? Y_LIM1 : Y_LIM2);
+    m_ui->customPlot->yAxis->setRange((min_scale * m_ref_v) - yLim, (max_scale * m_ref_v) + yLim);
 }
 
 void WindowVm::rescaleXAxis()

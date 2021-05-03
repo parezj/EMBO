@@ -31,7 +31,7 @@ enum Specials
 class Recorder
 {
 public:
-    Recorder();
+    Recorder(int precision = 4);
 
     void reset();
 
@@ -49,6 +49,7 @@ public:
 
     QString takeScreenshot(QString prefix, QWidget* widget);
 
+    Recorder& operator<<(int val);
     Recorder& operator<<(double val);
     Recorder& operator<<(QString val);
     Recorder& operator<<(Specials special);
@@ -57,6 +58,7 @@ public:
 private:
     QString pathCombine(const QString& path1, const QString& path2);
 
+    int m_precision = 4;
     bool m_recording = false;
     bool m_data_prev = false;
     QFile m_file;

@@ -2239,7 +2239,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              <property name="title">
               <string/>
              </property>
-             <widget class="QDial" name="dial_trigPre">
+             <widget class="QDial2" name="dial_trigPre">
               <property name="geometry">
                <rect>
                 <x>240</x>
@@ -2778,7 +2778,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                <bool>false</bool>
               </property>
              </widget>
-             <widget class="QDial" name="dial_fs">
+             <widget class="QDial2" name="dial_fs">
               <property name="geometry">
                <rect>
                 <x>240</x>
@@ -3016,7 +3016,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
                <string>Fs (Sps):</string>
               </property>
              </widget>
-             <widget class="QDial" name="dial_mem">
+             <widget class="QDial2" name="dial_mem">
               <property name="geometry">
                <rect>
                 <x>240</x>
@@ -3242,7 +3242,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
                <bool>false</bool>
               </property>
              </widget>
-             <widget class="QDial" name="dial_div">
+             <widget class="QDial2" name="dial_div">
               <property name="enabled">
                <bool>true</bool>
               </property>
@@ -4990,6 +4990,11 @@ QPushButton:disabled {
   </action>
  </widget>
  <customwidgets>
+  <customwidget>
+   <class>QDial2</class>
+   <extends>QDial</extends>
+   <header>lib/qdial2.h</header>
+  </customwidget>
   <customwidget>
    <class>QCustomPlot</class>
    <extends>QWidget</extends>

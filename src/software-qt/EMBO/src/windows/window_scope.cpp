@@ -17,15 +17,16 @@
 #include <QMessageBox>
 
 
-#define Y_LIM                   0.20
+#define Y_LIM1                  0.50    // spline on
+#define Y_LIM2                  0.15    // spline off
 #define TRIG_VAL_PRE_TIMEOUT    3000    // trig cursors visible time
 
-#define FFT_MAX_SIZE            131072 // 1048576 //65536
+#define FFT_MAX_SIZE            131072  // 1048576 //65536
 #define FFT_DB_MIN              -100
 #define FFT_DB_MAX              0
 
 
-WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowScope)
+WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowScope), m_rec(4)
 {
     m_ui->setupUi(this);
 
@@ -513,8 +514,14 @@ void WindowScope::on_msg_read(const QByteArray data)
 
     if (found / ch_num != m_daqSet.mem) // wrong data size
     {
-        on_msg_err(QString(INVALID_MSG) + " (data size wrong -> " + QString::number(found) + "!=" +
-                   QString::number((m_daqSet.mem * ch_num)) + ")", CRITICAL, true);
+        m_err_cntr++;
+        if (m_err_cntr > READ_ERROR_CNT)
+        {
+            on_msg_err(QString(INVALID_MSG) + " (data size wrong -> " + QString::number(found) + "!=" +
+                       QString::number((m_daqSet.mem * ch_num)) + ")", CRITICAL, true);
+            m_err_cntr = 0;
+        }
+
         return;
     }
 
@@ -789,6 +796,7 @@ void WindowScope::on_actionInterpSinc_triggered(bool checked) // exclusive with 
     m_ui->customPlot->graph(GRAPH_CH3)->setSpline(checked);
     m_ui->customPlot->graph(GRAPH_CH4)->setSpline(checked);
 
+    rescaleYAxis();
     m_ui->customPlot->replot();
 }
 
@@ -1828,7 +1836,8 @@ void WindowScope::on_spinBox_trigVal_valueChanged(int arg1)
     m_cursorTrigPre->show(true);
     m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
 
-    double p = Y_LIM / (m_ref_v + (2.0 * Y_LIM));
+    double yLim = (m_spline ? Y_LIM1 : Y_LIM2);
+    double p = yLim / (m_ref_v + (2.0 * yLim));
     m_ui->horizontalSlider_trigVal->setValue(((arg1 * (1.0 - (2.0 * p))) + (p * 100.0)) * 10.0);
 
      m_ignoreValuesChanged = false;
@@ -1851,7 +1860,8 @@ void WindowScope::on_dial_trigVal_valueChanged(int value)
     m_cursorTrigPre->show(true);
     m_timer_trigSliders->start(TRIG_VAL_PRE_TIMEOUT);
 
-    double p = Y_LIM / (m_ref_v + (2.0 * Y_LIM));
+    double yLim = (m_spline ? Y_LIM1 : Y_LIM2);
+    double p = yLim / (m_ref_v + (2.0 * yLim));
     m_ui->horizontalSlider_trigVal->setValue(((value * (1.0 - (2.0 * p))) + (p * 100.0)) * 10.0);
 
     m_ignoreValuesChanged = false;
@@ -2505,6 +2515,7 @@ void WindowScope::showEvent(QShowEvent*)
 
     auto info = Core::getInstance()->getDevInfo();
 
+    m_err_cntr = 0;
     m_ref_v = info->ref_mv / 1000.0;
     m_status_vcc->setText(" Vcc: " + QString::number(info->ref_mv) + " mV");
 
@@ -2570,7 +2581,8 @@ void WindowScope::rescaleYAxis()
     if (m_daqSet.ch4_en && m_gain4 > max_scale) max_scale = m_gain4;
     else if (m_daqSet.ch4_en && m_gain4 < min_scale) min_scale = m_gain4;
 
-    m_axis_scope->axis(QCPAxis::atLeft)->setRange((min_scale * m_ref_v) - Y_LIM , (max_scale * m_ref_v) + Y_LIM);
+    double yLim = (m_spline ? Y_LIM1 : Y_LIM2);
+    m_axis_scope->axis(QCPAxis::atLeft)->setRange((min_scale * m_ref_v) - yLim , (max_scale * m_ref_v) + yLim);
 
     //if (m_fft)
     //    m_axis_fft->axis(QCPAxis::atLeft)->rescale();
@@ -2762,7 +2774,8 @@ void WindowScope::updatePanel()
         m_cursorTrigVal->setValue(m_daqSet.trig_val, 0, m_ref_v * 1, 0, m_t[m_t.size()-1]);
     }
 
-    double p = Y_LIM / (m_ref_v + (2.0 * Y_LIM));
+    double yLim = (m_spline ? Y_LIM1 : Y_LIM2);
+    double p = yLim / (m_ref_v + (2.0 * yLim));
     m_ui->horizontalSlider_trigPre->setValue(m_daqSet.trig_pre * 10.0);
     m_ui->horizontalSlider_trigVal->setValue(((m_daqSet.trig_val * (1.0 - (2.0 * p))) + (p * 100.0)) * 10.0);
 

@@ -18,7 +18,7 @@
 #define TRIG_VAL_PRE_TIMEOUT    3000
 
 
-WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa)
+WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa), m_rec(0)
 {
     m_ui->setupUi(this);
 
@@ -361,8 +361,14 @@ void WindowLa::on_msg_read(const QByteArray data)
     int data_sz_wanted = m_daqSet.mem + (info->daq_reserve * 1);
     if (data_sz != data_sz_wanted) // wrong data size
     {
-        on_msg_err(QString(INVALID_MSG) + " (data size wrong -> " + QString::number(data_sz) + "!=" +
-                   QString::number(data_sz_wanted) + ")", CRITICAL, true);
+        m_err_cntr++;
+        if (m_err_cntr > READ_ERROR_CNT)
+        {
+            on_msg_err(QString(INVALID_MSG) + " (data size wrong -> " + QString::number(data_sz) + "!=" +
+                       QString::number(data_sz_wanted) + ")", CRITICAL, true);
+            m_err_cntr = 0;
+        }
+
         return;
     }
 
@@ -515,13 +521,13 @@ void WindowLa::on_actionExportSave_triggered()
         for (int i = 0; i < data_1->size(); i++)
         {
             if (m_daqSet.ch1_en)
-                m_rec << data_1->at(i)->value;
+                m_rec << (int)(data_1->at(i)->value);
             if (m_daqSet.ch2_en)
-                m_rec << data_2->at(i)->value;
+                m_rec << (int)(data_2->at(i)->value);
             if (m_daqSet.ch3_en)
-                m_rec << data_3->at(i)->value;
+                m_rec << (int)(data_3->at(i)->value);
             if (m_daqSet.ch4_en)
-                m_rec << data_4->at(i)->value;
+                m_rec << (int)(data_4->at(i)->value);
             m_rec << ENDL;
         }
 
@@ -1383,6 +1389,7 @@ void WindowLa::showEvent(QShowEvent*)
 
     auto info = Core::getInstance()->getDevInfo();
 
+    m_err_cntr = 0;
     m_ref_v = info->ref_mv / 1000.0;
     m_status_vcc->setText(" Vcc: " + QString::number(info->ref_mv) + " mV");
 

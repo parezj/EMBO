@@ -688,6 +688,26 @@ size_t SCPI_ResultArbitraryBlock(scpi_t * context, const void * data, size_t len
     return result;
 }
 
+size_t SCPI_ResultArbitraryBlocks(scpi_t * context, size_t len1, size_t len2, size_t len3, size_t len4,
+                                  const void * data1, const void * data2, const void * data3, const void * data4) {
+    size_t result = 0;
+    size_t total = 0;
+
+    if (data1 != NULL) total += len1;
+    if (data2 != NULL) total += len2;
+    if (data3 != NULL) total += len3;
+    if (data4 != NULL) total += len4;
+
+    result += SCPI_ResultArbitraryBlockHeader(context, total);
+
+    if (data1 != NULL) result += SCPI_ResultArbitraryBlockData(context, data1, len1);
+    if (data2 != NULL) result += SCPI_ResultArbitraryBlockData(context, data2, len2);
+    if (data3 != NULL) result += SCPI_ResultArbitraryBlockData(context, data3, len3);
+    if (data4 != NULL) result += SCPI_ResultArbitraryBlockData(context, data4, len4);
+
+    return result;
+}
+
 /**
  * Write boolean value to the result
  * @param context

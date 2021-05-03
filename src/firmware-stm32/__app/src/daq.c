@@ -189,9 +189,9 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
 #elif defined(EM_ADC_MODE_ADC1234)
 
         int len1 = self->set.ch1_en + is_vcc;
-        int len2 = self->set.ch3_en;
+        int len2 = self->set.ch2_en;
         int len3 = self->set.ch3_en;
-        int len4 = self->set.ch3_en;
+        int len4 = self->set.ch4_en;
         int total = len1 + len2 + len3 + len4;
 
 #if defined(EM_ADC_INTERLEAVED)

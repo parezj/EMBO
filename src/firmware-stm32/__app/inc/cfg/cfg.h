@@ -76,6 +76,7 @@
 #define EM_UWTICK_MAX          4294967295 // (2^32) - 1
 
 // IRQ priorities --------------------------------------------------
+#define EM_IT_PRI_CNTR         4   // counter - overflow bit
 #define EM_IT_PRI_ADC          5   // analog watchdog ADC
 #define EM_IT_PRI_EXTI         5   // logic analyzer GPIO
 #define EM_IT_PRI_UART         6   // UART RX

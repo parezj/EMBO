@@ -75,8 +75,8 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     self->ch1.duty = duty1;
     self->ch2.duty = duty2;
 
-    LL_TIM_OC_SetCompareCH1(EM_TIM_PWM1, compare1);
-    LL_TIM_OC_SetCompareCH1(EM_TIM_PWM2, compare2);
+    EM_TIM_PWM1_CHN(LL_TIM_OC_SetCompare)(EM_TIM_PWM1, compare1);
+    EM_TIM_PWM2_CHN(LL_TIM_OC_SetCompare)(EM_TIM_PWM2, compare2);
     
     LL_TIM_SetCounter(EM_TIM_PWM1, 0);
     LL_TIM_SetCounter(EM_TIM_PWM2, 0);

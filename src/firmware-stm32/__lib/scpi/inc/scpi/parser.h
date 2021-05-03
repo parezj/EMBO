@@ -77,6 +77,8 @@ extern "C" {
     size_t SCPI_ResultText(scpi_t * context, const char * data);
     size_t SCPI_ResultError(scpi_t * context, scpi_error_t * error);
     size_t SCPI_ResultArbitraryBlock(scpi_t * context, const void * data, size_t len);
+    size_t SCPI_ResultArbitraryBlocks(scpi_t * context, size_t len1, size_t len2, size_t len3, size_t len4,
+                                      const void * data1, const void * data2, const void * data3, const void * data4);
     size_t SCPI_ResultArbitraryBlockHeader(scpi_t * context, size_t len);
     size_t SCPI_ResultArbitraryBlockData(scpi_t * context, const void * data, size_t len);
     size_t SCPI_ResultBool(scpi_t * context, scpi_bool_t val);

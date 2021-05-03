@@ -75,21 +75,19 @@ void adc_init_calib(ADC_TypeDef* adc)
 {
 #if defined(EM_ADC_CAL_EN)
     LL_ADC_Enable(adc);
+
+    uint32_t  wait_loop_index = ((EM_ADC_EN_TICKS * 32) >> 1);
+    while(wait_loop_index != 0) wait_loop_index--;
 #endif
 
 #if defined(ADC_CR2_TSVREFE)
     adc->CR2 |= ADC_CR2_TSVREFE;
 #endif
+
 #if defined(EM_ADC_LINREG)
     LL_ADC_EnableInternalRegulator(adc);
     for (int i = 0; i <  10000; ++i) asm("nop"); // ?
 #endif
-
-    uint32_t  wait_loop_index = ((EM_ADC_EN_TICKS * 32) >> 1);
-    while(wait_loop_index != 0)
-    {
-      wait_loop_index--;
-    }
 
     //LL_ADC_EnableInternalRegulator(adc);
     //LL_ADC_DisableDeepPowerDown(adc);
@@ -112,6 +110,9 @@ void adc_init_calib(ADC_TypeDef* adc)
 
 #if !defined(EM_ADC_CAL_EN)
     LL_ADC_Enable(adc);
+
+    uint32_t  wait_loop_index = ((EM_ADC_EN_TICKS * 32) >> 1);
+    while(wait_loop_index != 0) wait_loop_index--;
 #endif
 }
 
@@ -128,7 +129,6 @@ void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t
     LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(adc), LL_ADC_MULTI_INDEPENDENT);
     LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
 
-    //LL_ADC_Disable(adc);
     int len = ch1 + ch2 + ch3 + ch4 + vrefint;
 
     uint32_t len_raw = LL_ADC_REG_SEQ_SCAN_DISABLE;
@@ -171,8 +171,6 @@ void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t
         LL_ADC_SetChannelSamplingTime(adc, EM_ADC_CH4, smpl_time);
         next_rank = adc_get_next_rank(next_rank);
     }
-
-    //LL_ADC_Enable(adc);
 }
 
 uint32_t adc_get_next_rank(uint32_t rank)

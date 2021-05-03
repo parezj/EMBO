@@ -18,8 +18,8 @@
  *  ADC CH4 ........... PB14 (Morpho CN10-28)
  *  LA  CH3 ........... PC2  (Morpho CN7-35)
  *  LA  CH4 ........... PC3  (Morpho CN7-37)
- *  PWM CH1 ........... PB8  (Arduino D15)
- *  PWM CH2 ........... PB10 (Arduino D6)
+ *  PWM CH1 ........... PB10 (Arduino D6)
+ *  PWM CH2 ........... PB8  (Arduino D15)
  *  CNTR .............. PC9  (Morpho CN10-1)
  *  DAC ............... PA4  (Arduino A2)
  *  UART RX ........... 
@@ -49,7 +49,7 @@
 #define EM_FREQ_HCLK           72000000  // HCLK clock - main
 #define EM_FREQ_ADCCLK         72000000  // ADC clock
 #define EM_FREQ_PCLK1          72000000  // APB1 clock - TIM2,3,4
-#define EM_FREQ_PCLK2          72000000  // APB2 clock - TIM1
+#define EM_FREQ_PCLK2          72000000  // APB2 clock - TIM1,8
 #define EM_SYSTICK_FREQ        1000      // Systick clock
 
 // device -----------------------------------------------------------
@@ -70,6 +70,7 @@
 // LED -------------------------------------------------------------
 #define EM_LED_PORT            GPIOA                // main LED port
 #define EM_LED_PIN             5                    // main LED pin
+#define EM_LED_INVERTED                             // inverted behavior
 
 // DAC -------------------------------------------------------------
 #define EM_DAC                 DAC1                 // sgen available
@@ -96,10 +97,10 @@
 #define EM_ADC_SMPLT_MAX_N     1.5                             // max smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit
 #define EM_ADC_TCONV12         12.5                            // ADC Tconversion ticks for 12-bit
-#define EM_ADC_C_F             0.000000000008 // 8pF           // ADC internal capacitance in F
+#define EM_ADC_C_F             0.000000000005 // 5pF           // ADC internal capacitance in F
 #define EM_ADC_R_OHM           6000.0                          // ADC internal impedance in Ohm
 #define EM_ADC_SMPLT_CNT       8                               // count of available smpl times
-#define EM_ADC_LINREG                                          // before calibration enable regulator
+//#define EM_ADC_LINREG                                          // before calibration enable regulator
 //#define EM_ADC_CAL_EN                                        // calibration while enabled
 //#define LL_ADC_SPEC_START                                    // special start stop methods needed
 #define EM_ADC_AWD             LL_ADC_AWD1,                    // Analog Watchdog
@@ -114,26 +115,27 @@
 #define EM_TIM_DAQ_MAX         65535
 #define EM_TIM_DAQ_FREQ        EM_FREQ_PCLK1
 #define EM_TIM_DAQ_IRQh        TIM3_IRQHandler
-#define EM_TIM_PWM1            TIM4
+#define EM_TIM_PWM1            TIM2
 #define EM_TIM_PWM1_MAX        65535
 #define EM_TIM_PWM1_FREQ       EM_FREQ_PCLK1
 #define EM_TIM_PWM1_CH         LL_TIM_CHANNEL_CH3
-#define EM_TIM_PWM2            TIM2
+#define EM_TIM_PWM1_CHN(a)     a##CH3
+#define EM_TIM_PWM2            TIM4
 #define EM_TIM_PWM2_MAX        65535
 #define EM_TIM_PWM2_FREQ       EM_FREQ_PCLK1
 #define EM_TIM_PWM2_CH         LL_TIM_CHANNEL_CH3
+#define EM_TIM_PWM2_CHN(a)     a##CH3
 #define EM_TIM_CNTR            TIM8
-#define EM_TIM_CNTR_FREQ       EM_FREQ_PCLK2
+#define EM_TIM_CNTR_FREQ       (EM_FREQ_PCLK2*2)
 #define EM_TIM_CNTR_UP_IRQh    TIM8_UP_IRQHandler
-#define EM_TIM_CNTR_CCR_IRQh   TIM8_CC_IRQHandler
 #define EM_TIM_CNTR_MAX        65535
 #define EM_TIM_CNTR_CH         LL_TIM_CHANNEL_CH4 // direct input capture - channel
 #define EM_TIM_CNTR_CH2        LL_TIM_CHANNEL_CH3 // indirect input capture - channel
 #define EM_TIM_CNTR_CCR        CCR4   // direct input capture - ccr register
-#define EM_TIM_CNTR_CCR2       CCR1   // ovf store - ccr register
+#define EM_TIM_CNTR_CCR2       CCR2   // ovf store - ccr register
 #define EM_TIM_CNTR_CC(a)      a##CC4 // direct input capture - cc name
 #define EM_TIM_CNTR_CC2(a)     a##CC3 // indirect input capture - cc name
-#define EM_TIM_CNTR_OVF(a)     a##CH1 // ovf store
+#define EM_TIM_CNTR_OVF(a)     a##CH2 // ovf store
 #define EM_TIM_CNTR_PSC_FAST   8      // prescaler for fast mode
 #define EM_TIM_SGEN            TIM6
 #define EM_TIM_SGEN_FREQ       EM_FREQ_PCLK1
@@ -141,10 +143,10 @@
 
 // Max values ------------------------------------------------------
 #define EM_DAQ_MAX_MEM         50000     // DAQ max total memory
-#define EM_LA_MAX_FS           5000000   // Logic Analyzer max FS
-#define EM_DAQ_MAX_B12_FS      400000    // DAQ ADC max fs per 1 channel - 12 bit
-#define EM_DAQ_MAX_B8_FS       500000    // DAQ ADC max fs per 1 channel - 8 bit
-#define EM_PWM_MAX_F           1000000   // PWM max freq - TODO
+#define EM_LA_MAX_FS           10000000   // Logic Analyzer max FS
+#define EM_DAQ_MAX_B12_FS      5000000    // DAQ ADC max fs per 1 channel - 12 bit
+#define EM_DAQ_MAX_B8_FS       5000000    // DAQ ADC max fs per 1 channel - 8 bit
+#define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)   // PWM max freq - TODO
 #define EM_CNTR_MAX_F          5000000   // Counter max input frequency
 #define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve (min 2)
@@ -161,12 +163,12 @@
 
 // DMA channels ----------------------------------------------------
 #define EM_DMA_CH_ADC1         LL_DMA_CHANNEL_1
-#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_1
+#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_3
 #define EM_DMA_CH_ADC3         LL_DMA_CHANNEL_5
-#define EM_DMA_CH_ADC4         LL_DMA_CHANNEL_2
+#define EM_DMA_CH_ADC4         LL_DMA_CHANNEL_4
 #define EM_DMA_CH_LA           LL_DMA_CHANNEL_6
 #define EM_DMA_CH_CNTR         LL_DMA_CHANNEL_2
-#define EM_DMA_CH_CNTR2        LL_DMA_CHANNEL_3
+#define EM_DMA_CH_CNTR2        LL_DMA_CHANNEL_1
 #define EM_DMA_CH_SGEN         LL_DMA_CHANNEL_3
 
 // IRQ map ---------------------------------------------------------
@@ -178,6 +180,7 @@
 #define EM_LA_IRQ_EXTI2        EXTI1_IRQn
 #define EM_LA_IRQ_EXTI3        EXTI2_TSC_IRQn
 #define EM_LA_IRQ_EXTI4        EXTI3_IRQn
+#define EM_CNTR_IRQ            TIM8_UP_IRQn
 
 // LA pins and IRQs ------------------------------------------------
 #define EM_LA_EXTI_PORT        LL_SYSCFG_EXTI_PORTC

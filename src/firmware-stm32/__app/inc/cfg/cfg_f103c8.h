@@ -64,6 +64,7 @@
 // LED -------------------------------------------------------------
 #define EM_LED_PORT            GPIOC                // main LED port
 #define EM_LED_PIN             13                   // main LED pin
+//#define EM_LED_INVERTED                           // inverted behavior
 
 // DAC -------------------------------------------------------------
 //#define EM_DAC               DAC1                 // sgen available
@@ -110,10 +111,12 @@
 #define EM_TIM_PWM1_MAX        65535
 #define EM_TIM_PWM1_FREQ       EM_FREQ_PCLK1
 #define EM_TIM_PWM1_CH         LL_TIM_CHANNEL_CH1
+#define EM_TIM_PWM1_CHN(a)     a##CH1
 #define EM_TIM_PWM2            TIM4
 #define EM_TIM_PWM2_MAX        65535
 #define EM_TIM_PWM2_FREQ       EM_FREQ_PCLK1
 #define EM_TIM_PWM2_CH         LL_TIM_CHANNEL_CH1
+#define EM_TIM_PWM2_CHN(a)     a##CH1
 #define EM_TIM_CNTR            TIM1
 #define EM_TIM_CNTR_FREQ       EM_FREQ_PCLK2
 #define EM_TIM_CNTR_UP_IRQh    TIM1_UP_IRQHandler
@@ -137,7 +140,7 @@
 #define EM_DAQ_MAX_MEM         10000 // DAQ max total memory in release mode
 #endif
 #define EM_LA_MAX_FS           5142857   // Logic Analyzer max FS
-#define EM_DAQ_MAX_B12_FS      857142    // DAQ ADC max fs per 1 channel - 12 bit
+#define EM_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq
 #define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
@@ -172,6 +175,7 @@
 #define EM_LA_IRQ_EXTI2        EXTI2_IRQn
 #define EM_LA_IRQ_EXTI3        EXTI3_IRQn
 #define EM_LA_IRQ_EXTI4        EXTI4_IRQn
+#define EM_CNTR_IRQ            TIM1_UP_TIM16_IRQn
 
 // LA pins and IRQs ------------------------------------------------
 #define EM_LA_EXTI_PORT        LL_GPIO_AF_EXTI_PORTA
