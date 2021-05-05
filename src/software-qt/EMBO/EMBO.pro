@@ -24,16 +24,18 @@ CONFIG(release, debug|release): DESTDIR = $$OUT_PWD/release
 CONFIG(debug, debug|release): DESTDIR = $$OUT_PWD/debug
 
 
-include(__crashhandler/qBreakpad.pri)
 include(__updater/QSimpleUpdater.pri)
 
 win32 {
+
+    include(__crashhandler/qBreakpad.pri)
+
     contains(TARGET_ARCH, x86_64) {
 
         ARCHITECTURE = win64
         QMAKE_LIBDIR += $$PWD/lib/win_64
         LIBS += $$PWD/lib/win_64/libfftw3-3.dll
-        LIBS += -lqBreakpad
+        LIBS += $$PWD/lib/win_64/libqBreakpad.a
 
         inst.files += $$PWD/lib/win_64/libfftw3-3.dll
         inst.path += $${DESTDIR}
@@ -44,7 +46,7 @@ win32 {
         ARCHITECTURE = win32
         QMAKE_LIBDIR += $$PWD/lib/win_32
         LIBS += $$PWD/lib/win_32/libfftw3-3.dll
-        LIBS += -lqBreakpad
+        LIBS += $$PWD/lib/win_32/libqBreakpad.a
 
         inst.files += $$PWD/lib/win_32/libfftw3-3.dll
         inst.path += $${DESTDIR}
@@ -52,12 +54,11 @@ win32 {
     }
 }
 
-
 linux {
     ARCHITECTURE = linux64
     QMAKE_LIBDIR += $$PWD/lib/linux_64
-    LIBS += -lfftw3-3
-    LIBS += -lqBreakpad
+    LIBS += $$PWD/lib/linux_64/libfftw3.so.3.5.7
+    #LIBS += $$PWD/lib/linux_64/libqBreakpad.a
 }
 
 macx {
@@ -66,21 +67,21 @@ macx {
     INCLUDEPATH += /usr/local/include
     LIBS += -framework AppKit
     LIBS += -lfftw3-3 -lm
-    LIBS += -lqBreakpad
+    #LIBS += -lqBreakpad
 }
 
 #LIBS += -lOpenGL32
 #DEFINES += QCUSTOMPLOT_USE_OPENGL
 
-fw.files += "$${PWD}/firmware/EMBO_F103C8.hex"
-fw.path += $${DESTDIR}/__firmware
-INSTALLS += fw
+#fw.files += "$${PWD}/firmware/EMBO_F103C8.hex"
+#fw.path += $${DESTDIR}/__firmware
+#INSTALLS += fw
 
-win32 {
-    drivers.files += "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x86_32bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x86_32bits.exe"
-    drivers.path += $${DESTDIR}/__drivers
-    INSTALLS += drivers
-}
+#win32 {
+#    drivers.files += "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x86_32bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x86_32bits.exe"
+#    drivers.path += $${DESTDIR}/__drivers
+#    INSTALLS += drivers
+#}
 
 
 VERSION = 0.1.2

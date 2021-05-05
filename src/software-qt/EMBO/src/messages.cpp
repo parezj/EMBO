@@ -14,7 +14,7 @@ void Msg_Idn::on_dataRx()
     qInfo() << "IDN: " << m_rxData;
     auto core = Core::getInstance(this);
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (tokens.size() != 4)
     {
@@ -59,7 +59,7 @@ void Msg_SYS_Lims::on_dataRx()
     qInfo() << "SYS:LIM: " <<  m_rxData;
     auto core = Core::getInstance(this);
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (tokens.size() != 15 || tokens[5].size() < 1 || tokens[14].size() != 4)
     {
@@ -95,7 +95,7 @@ void Msg_SYS_Info::on_dataRx()
     qInfo() << "SYS:INFO: " <<  m_rxData;
     auto core = Core::getInstance(this);
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (tokens.size() != 10)
     {
@@ -168,7 +168,7 @@ void Msg_VM_Read::on_dataRx()
     if (m_rxData.contains("Empty"))
         return;
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (tokens.size() != 5)
     {
@@ -193,11 +193,11 @@ void Msg_SCOP_Set::on_dataRx()
 {
     qInfo() << "SCOP:SET: " <<  m_rxData;
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (getIsQuery())
     {
-        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
         if (tokens.size() != 11)
         {
@@ -258,11 +258,11 @@ void Msg_LA_Set::on_dataRx()
 {
     qInfo() << "LA:SET: " <<  m_rxData;
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (getIsQuery())
     {
-        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
         if (tokens.size() != 7)
         {
@@ -311,7 +311,7 @@ void Msg_CNTR_Enable::on_dataRx()
 
     if (getIsQuery())
     {
-        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
         if (tokens.size() != 2)
         {
@@ -334,7 +334,7 @@ void Msg_CNTR_Read::on_dataRx()
 {
     qInfo() << "CNTR:READ: " <<  m_rxData;
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (tokens.size() == 0)
     {
@@ -351,11 +351,11 @@ void Msg_SGEN_Set::on_dataRx()
 {
     qInfo() << "SGEN:SET: " <<  m_rxData;
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (getIsQuery())
     {
-        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
         if (tokens.size() != 5)
         {
@@ -382,11 +382,11 @@ void Msg_PWM_Set::on_dataRx()
 {
     qInfo() << "PWM:SET: " <<  m_rxData;
 
-    QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (getIsQuery())
     {
-        QStringList tokens = m_rxData.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+        QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
         if (tokens.size() != 7)
         {

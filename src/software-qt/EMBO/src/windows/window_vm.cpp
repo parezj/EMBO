@@ -1372,7 +1372,7 @@ void WindowVm::closeEvent(QCloseEvent*)
 void WindowVm::showEvent(QShowEvent*)
 {
     auto info = Core::getInstance()->getDevInfo();
-    QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (pins.size() == 4)
     {

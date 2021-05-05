@@ -54,7 +54,7 @@
 
 // device -----------------------------------------------------------
 #define EM_DEV_NAME            "EMBO-STM32F303RE-Nucleo64"   // device specific name
-#define EM_DEV_COMM            "UART (115200 bps)"           // device comm methods
+#define EM_DEV_COMM            "USART2 (115200 bps)"         // device comm methods
 
 // device name ------------------------------------------------------
 
@@ -91,8 +91,7 @@
 //#define EM_ADC_DUALMODE                                      // dual mode available         - N/A
 
 #define EM_VREF                3300                            // main voltage reference in mV
-//#define EM_ADC_VREF_CAL      1200                            // vref cal value
-#define EM_ADC_VREF_CAL        *((uint16_t*)VREFINT_CAL_ADDR)  // Vref cal value TODO
+#define EM_ADC_VREF_CAL        *((uint16_t*)VREFINT_CAL_ADDR)  // Vref cal value
 #define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // max sampling time in ticks
 #define EM_ADC_SMPLT_MAX_N     1.5                             // max smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit

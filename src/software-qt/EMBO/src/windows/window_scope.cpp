@@ -2519,7 +2519,7 @@ void WindowScope::showEvent(QShowEvent*)
     m_ref_v = info->ref_mv / 1000.0;
     m_status_vcc->setText(" Vcc: " + QString::number(info->ref_mv) + " mV");
 
-    QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, Qt::SkipEmptyParts);
+    QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
     if (pins.size() == 4)
     {
@@ -2732,7 +2732,7 @@ void WindowScope::updatePanel()
     m_ui->customPlot->graph(GRAPH_CH3)->setVisible(m_daqSet.ch3_en);
     m_ui->customPlot->graph(GRAPH_CH4)->setVisible(m_daqSet.ch4_en);
 
-    QStringList tokens = m_daqSet.fs_real.split('.', Qt::SkipEmptyParts);
+    QStringList tokens = m_daqSet.fs_real.split('.', QString::SkipEmptyParts);
 
     if (tokens.size() > 1 && tokens[0].length() > 4)
         m_ui->textBrowser_realFs->setHtml("<p align=\"center\">" + tokens[0] + ". " + tokens[1] + "</p>");

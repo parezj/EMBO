@@ -92,9 +92,9 @@ void daq_trig_check(daq_data_t* self)
         self->trig.pretrig_cntr = 0;
     }
 
-    if (self->mode != VM) // check auto trigger
+    if (self->mode != VM) // check auto trigger & disabled trigger
     {
-        if (self->enabled == EM_TRUE &&
+        if (self->enabled == EM_TRUE && // auto trigger
             self->trig.set.mode == AUTO &&
             self->trig.is_post == EM_FALSE &&
             self->trig.ready == EM_FALSE &&
@@ -109,7 +109,7 @@ void daq_trig_check(daq_data_t* self)
             t_resp = 'A';
             self->trig.respond = EM_TRUE; // init async respond ReadyX
         }
-        else if (self->trig.set.mode == DISABLED &&  // trigger is disabled
+        else if (self->trig.set.mode == DISABLED &&  // disabled trigger
                  self->trig.pretrig_cntr > self->trig.fullmem_val)
         {
             self->trig.ready = EM_TRUE;

@@ -10,7 +10,9 @@
 #include "settings.h"
 #include "css.h"
 
+#ifdef Q_OS_WIN
 #include "QBreakpadHandler.h"
+#endif
 #include "QSimpleUpdater.h"
 
 #include <QDebug>
@@ -42,7 +44,9 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     m_ui->setupUi(this);
 
+#ifdef Q_OS_WIN
     QBreakpadInstance.setDumpPath(QLatin1String("crashes"));
+#endif
 
     QThread* t1 = new QThread(this);
     auto core = Core::getInstance();

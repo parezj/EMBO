@@ -19,6 +19,8 @@
 #include <QSerialPort>
 #include <QVector>
 
+#include <assert.h>
+
 #define UPDATE_URL      "http://embo.jakubparez.com/updates.json"
 
 #define INVALID_MSG     "Invalid message! "

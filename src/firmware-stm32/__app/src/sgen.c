@@ -30,15 +30,22 @@ static int get_rnd(int* m_w, int* m_z);
 void sgen_init(sgen_data_t* self)
 {
     self->enabled = EM_FALSE;
+    self->freq = 0;
+    self->ampl = 0;
+    self->offset = 0;
+    self->samples = 0;
+    self->tim_f = 0;
     self->tim_f_real = 0;
     memset(self->data, 0x00, EM_DAC_BUFF_LEN * sizeof(uint16_t));
     sgen_const(self, 50);
 }
 
-void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int N)
+void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int offset, int N)
 {
     if (self->enabled == EM_TRUE)
         return;
+
+    self->offset = offset;
 
     if (mode == SINE)
         sgen_sine(self, A, f, N);
@@ -46,9 +53,9 @@ void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int N
         sgen_square(self, A, f, N);
     else if (mode == TRIANGLE)
         sgen_triangle(self, A, f, N);
-    else if (mode == SAW)
+    else if (mode == SAWTOOTH)
         sgen_saw(self, A, f, N);
-    else if (mode == RAND)
+    else if (mode == NOISE)
         sgen_rand(self, A, f, N);
     else // mode == CONST
         sgen_const(self, A);

@@ -9,7 +9,7 @@ unix {
     SOURCES += \
         $$BREAKPAD_PATH/client/minidump_file_writer.cc \
         $$BREAKPAD_PATH/common/string_conversion.cc \
-        $$BREAKPAD_PATH/common/convert_UTF.c \
+        $$BREAKPAD_PATH/common/convert_UTF.cc \
         $$BREAKPAD_PATH/common/md5.cc
 }
 

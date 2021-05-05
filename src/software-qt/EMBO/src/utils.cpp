@@ -11,6 +11,7 @@
 #include <QMessageBox>
 
 #include <math.h>
+#include <assert.h>
 
 
 QString format_unit(double value, QString unit, int precision)
