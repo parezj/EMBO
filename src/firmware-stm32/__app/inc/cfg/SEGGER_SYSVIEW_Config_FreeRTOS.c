@@ -92,6 +92,9 @@ static void _cbSendSystemDesc(void) {
 #ifdef EM_F103C8
   //SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick,I#23=LA 1,I#24=LA 2,I#25=LA 3,I#26=LA 4,I#34=ADC,I#36=USB,I#53=UART,I#41=Cntr");
   SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick,I#23=LA CH1,I#34=ADC12,I#36=USB,I#53=UART1,I#41=Cntr");
+#elif defined(EM_F303RE)
+  //SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick,I#22=LA1,I#23=LA2,I#24=LA3,I#25=LA4,I#34=ADC12,I#63=ADC3,I#77=ADC4,I#53=UART1,I#54=UART2,I#60=Cntr");
+  SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick,I#22=LA1,I#34=ADC12,I#63=ADC3,I#77=ADC4,I#53=UART1,I#54=UART2,I#60=Cntr");
 #else
   SEGGER_SYSVIEW_SendSysDesc("I#15=SysTick");
 #endif

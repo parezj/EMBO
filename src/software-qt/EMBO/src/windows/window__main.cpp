@@ -10,7 +10,7 @@
 #include "settings.h"
 #include "css.h"
 
-#ifdef Q_OS_WIN
+#ifndef Q_OS_UNIX
 #include "QBreakpadHandler.h"
 #endif
 #include "QSimpleUpdater.h"
@@ -44,7 +44,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     m_ui->setupUi(this);
 
-#ifdef Q_OS_WIN
+#ifndef Q_OS_UNIX
     QBreakpadInstance.setDumpPath(QLatin1String("crashes"));
 #endif
 
@@ -72,6 +72,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     qRegisterMetaType<DaqBits>("DaqBits");
     qRegisterMetaType<DaqTrigEdge>("DaqTrigEdge");
     qRegisterMetaType<DaqTrigMode>("DaqTrigMode");
+    qRegisterMetaType<SgenMode>("SgenMode");
 
     //connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(on_close()));
 
@@ -155,6 +156,16 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     setDisconnected();
     on_pushButton_scan_clicked();
+
+#if defined(Q_OS_WIN)
+    m_ui->label_titlePrimary->move(TITLE_LEFT, TITLE_TOP_WIN);
+    m_ui->label_titleSecondary->move(TITLE_LEFT, TITLE_TOP_WIN);
+    m_ui->label_titlePorts->move(TITLE_LEFT, TITLE_TOP_WIN);
+#else
+    m_ui->label_titlePrimary->move(TITLE_LEFT, TITLE_TOP_UNIX);
+    m_ui->label_titleSecondary->move(TITLE_LEFT, TITLE_TOP_UNIX);
+    m_ui->label_titlePorts->move(TITLE_LEFT, TITLE_TOP_UNIX);
+#endif
 }
 
 WindowMain::~WindowMain()
@@ -554,7 +565,7 @@ void WindowMain::on_pushButton_scan_clicked()
     auto ports = QSerialPortInfo::availablePorts();
     int ports_sz = ports.size();
 
-    m_ui->groupBox_ports->setTitle("Ports (" + QString::number(ports_sz) + ")");
+    m_ui->label_titlePorts->setText("Ports (" + QString::number(ports_sz) + ")");
 
     if (ports_sz > 0)
     {
@@ -833,4 +844,18 @@ void WindowMain::displayAppcast (const QString& url, const QByteArray& reply)
                    "It allows your application to interpret the appcast "
                    "using your code and not QSU's code.</p>";
     qInfo() << text;
+}
+
+void WindowMain::on_actionDocumentation_triggered()
+{
+#if defined(Q_OS_WIN)
+    QString help_path = QDir(QDir::currentPath() + QDir::separator() + "doc").filePath("EMBO.chm");
+#elif defined(Q_OS_UNIX)
+    QString help_path = QDir(QDir::currentPath() + QDir::separator() + "doc").filePath("EMBO.pdf");
+#elif defined(Q_OS_MAC)
+    QString help_path = QDir(QDir::currentPath() + QDir::separator() + "doc").filePath("EMBO.pdf");
+#endif
+
+    qInfo() << help_path;
+    QDesktopServices::openUrl(QUrl::fromUserInput(help_path));
 }

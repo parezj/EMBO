@@ -34,14 +34,14 @@ signals:
     void closing(const char* className);
 
 private slots:
-    void on_msg_ok(const QString val1, const QString val2);
+    void on_msg_ok(const QString real_freq, const QString N);
     void on_msg_err(const QString text, MsgBoxType type, bool needClose);
-    void on_msg_set(SgenMode mode, double freq, int ampl, int offset, bool enable);
+    void on_msg_set(double freq, int ampl, int offset, SgenMode mode, bool enable, const QString real_freq, const QString N);
 
     void on_actionAbout_triggered();
     void on_spinBox_freq_valueChanged(int arg1);
     void on_dial_freq_valueChanged(int value);
-    void on_spinBox_ampl_valueChanged(int arg1);
+    void on_doubleSpinBox_ampl_valueChanged(double arg1);
     void on_dial_ampl_valueChanged(int value);
     void on_spinBox_offset_valueChanged(int arg1);
     void on_dial_offset_valueChanged(int value);
@@ -70,7 +70,12 @@ private:
 
     /* helpers */
     bool m_ignoreValuesChanged = false;
+    bool m_ch_wantSwitch = false;
     QButtonGroup m_mode;
+
+    /* data */
+    QString m_real_freq;
+    QString m_N;
 
     /* status bar */
     QLabel* m_status_enabled;

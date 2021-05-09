@@ -107,7 +107,7 @@
 
 // Voltmeter common ------------------------------------------------
 #define EM_VM_FS               100  // voltmeter fs (Hz)
-#define EM_VM_MEM              300  // voltmeter mem
+#define EM_VM_MEM              10 // 300  // voltmeter mem
 
 // LED timing ------------------------------------------------------
 #define EM_BLINK_LONG_MS       500  // long blink - startup

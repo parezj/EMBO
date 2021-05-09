@@ -15,12 +15,16 @@
 #include <string.h>
 #include <math.h>
 
+void TIM3_IRQHandler();
+void DMA1_Channel1_IRQHandler();
+void DMA2_Channel3_IRQHandler();
+void DMA2_Channel4_IRQHandler();
+void DMA2_Channel5_IRQHandler();
+
 
 void dma_set(uint32_t src, DMA_TypeDef* dma, uint32_t dma_ch, uint32_t dst, uint32_t buff_size, uint32_t p_sz, uint32_t m_sz, uint32_t dir)
 {
     LL_DMA_DisableChannel(dma, dma_ch);
-    // Select ADC as DMA transfer request.
-    //LL_DMAMUX_SetRequestID(DMAMUX1, LL_DMAMUX_CHANNEL_0, LL_DMAMUX_REQ_ADC1);
 
     // DMA transfer addresses and size.
     LL_DMA_ConfigAddresses(dma, dma_ch, src, dst, dir);
@@ -118,6 +122,7 @@ void adc_init_calib(ADC_TypeDef* adc)
 
 void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, uint32_t smpl_time, uint8_t vrefint)
 {
+/*
 #ifdef EM_ADC_TRIG_34
     if (ch1 == 1 || ch2 == 2)
         LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_12);
@@ -126,8 +131,9 @@ void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t
 #else
     LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_12);
 #endif
-    LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(adc), LL_ADC_MULTI_INDEPENDENT);
-    LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_UNLIMITED);
+*/
+    //LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(adc), LL_ADC_MULTI_INDEPENDENT); // CHANGED 6.5.21
+    //LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_UNLIMITED); // CHANGED 6.5.21
 
     int len = ch1 + ch2 + ch3 + ch4 + vrefint;
 

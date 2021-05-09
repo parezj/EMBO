@@ -1986,7 +1986,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_16">
+            <widget class="QLabel" name="label_titleTrigger">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -3292,7 +3292,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
             <zorder>groupBox_t_16</zorder>
             <zorder>groupBox_t_18</zorder>
             <zorder>groupBox_t_19</zorder>
-            <zorder>label_16</zorder>
+            <zorder>label_titleTrigger</zorder>
            </widget>
           </item>
           <item>
@@ -3322,7 +3322,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_15">
+            <widget class="QLabel" name="label_titleHorizontal">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -4281,7 +4281,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
             <zorder>groupBox_h_11</zorder>
             <zorder>groupBox_h_fsMem</zorder>
             <zorder>groupBox_h_div</zorder>
-            <zorder>label_15</zorder>
+            <zorder>label_titleHorizontal</zorder>
            </widget>
           </item>
           <item>
@@ -4311,7 +4311,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_pins">
+            <widget class="QLabel" name="label_titleVertical">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -5644,7 +5644,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <zorder>pushButton_enable3</zorder>
             <zorder>label_dial2</zorder>
             <zorder>label_dial4</zorder>
-            <zorder>label_pins</zorder>
+            <zorder>label_titleVertical</zorder>
             <zorder>label_dial3</zorder>
             <zorder>pushButton_enable4</zorder>
             <zorder>label_dial1</zorder>
@@ -5692,7 +5692,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_23">
+            <widget class="QLabel" name="label_titleUtils">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -6379,7 +6379,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
-            <zorder>label_23</zorder>
+            <zorder>label_titleUtils</zorder>
             <zorder>groupBox_u_8</zorder>
             <zorder>spinBox_average</zorder>
             <zorder>pushButton_average_on</zorder>

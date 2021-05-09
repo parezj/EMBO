@@ -175,9 +175,9 @@ void t4_comm_and_init(void* p)
 #endif
 
 #ifdef EM_DEBUG
-    pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
+    //pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
 #ifdef EM_DAC
-    sgen_enable(&sgen, SINE, 100, 1000, 0, EM_DAC_BUFF_LEN);
+    //sgen_enable(&sgen, SINE, 100, 1000, 0, EM_DAC_BUFF_LEN);
 #endif
 #endif
 

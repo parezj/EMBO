@@ -74,6 +74,10 @@ PWM and signal generator.<br>And of course, it's opensource! \
 
 #define READ_ERROR_CNT      5  // when more than 5 read erros happen, instrument is closed
 
+#define TITLE_LEFT          10
+#define TITLE_TOP_WIN       6
+#define TITLE_TOP_UNIX      10
+
 
 class Core : public QObject
 {

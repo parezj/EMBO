@@ -45,8 +45,8 @@ void EM_UART_RX_IRQHandler(void)
                 portEND_SWITCHING_ISR(xHigherPriorityTaskWoken);
             }
         }
-        else
-            ASSERT(0);
+        //else
+        //    ASSERT(0);
     }
 
     if (exit == 0)

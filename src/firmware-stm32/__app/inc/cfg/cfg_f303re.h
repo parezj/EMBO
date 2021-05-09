@@ -97,12 +97,13 @@
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit
 #define EM_ADC_TCONV12         12.5                            // ADC Tconversion ticks for 12-bit
 #define EM_ADC_C_F             0.000000000005 // 5pF           // ADC internal capacitance in F
-#define EM_ADC_R_OHM           6000.0                          // ADC internal impedance in Ohm
+#define EM_ADC_R_OHM           1000.0                          // ADC internal impedance in Ohm
 #define EM_ADC_SMPLT_CNT       8                               // count of available smpl times
 //#define EM_ADC_LINREG                                          // before calibration enable regulator
 //#define EM_ADC_CAL_EN                                        // calibration while enabled
 //#define LL_ADC_SPEC_START                                    // special start stop methods needed
 #define EM_ADC_AWD             LL_ADC_AWD1,                    // Analog Watchdog
+
 #define EM_ADC_TRIG_12         LL_ADC_REG_TRIG_EXT_TIM3_TRGO_ADC12     // ADC TIM trig TRGO 12
 #define EM_ADC_TRIG_34         LL_ADC_REG_TRIG_EXT_TIM3_TRGO__ADC34    // ADC TIM trig TRGO 34
 #define EM_ADC_EN_TICKS        LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES
@@ -141,12 +142,11 @@
 #define EM_TIM_SGEN_MAX        65535
 
 // Max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         50000     // DAQ max total memory
-#define EM_LA_MAX_FS           10000000   // Logic Analyzer max FS
+#define EM_DAQ_MAX_MEM         50000      // DAQ max total memory
+#define EM_LA_MAX_FS           10285714   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      5000000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       5000000    // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)   // PWM max freq - TODO
-#define EM_CNTR_MAX_F          5000000   // Counter max input frequency
 #define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve (min 2)
 

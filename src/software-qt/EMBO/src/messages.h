@@ -223,7 +223,7 @@ public:
     explicit Msg_SGEN_Set(QObject* parent=0) : Msg(EMBO_SGEN_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void result(SgenMode mode, double freq, int ampl, int offset, bool enabled);
+    void result(double freq, int ampl, int offset, SgenMode mode, bool enable, const QString N, const QString real_freq);
 };
 
 /***************************** Messages - PWM ***************************/

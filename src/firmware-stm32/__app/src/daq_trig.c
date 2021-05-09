@@ -53,6 +53,11 @@ void daq_trig_init(daq_data_t* self)
     self->trig.forced = EM_FALSE;
     self->trig.respond = EM_FALSE;
     self->trig.irq_en = EM_FALSE;
+    self->trig.awd_hi = 0;
+    self->trig.awd_mid = 0;
+    self->trig.awd_lo = 0;
+    self->trig.awd_rising = 0;
+    self->trig.awd_rising2 = 0;
 }
 
 void daq_trig_check(daq_data_t* self)
@@ -70,6 +75,8 @@ void daq_trig_check(daq_data_t* self)
             if (self->mode == SCOPE)
             {
                 ASSERT(self->trig.awd_trig != 0);
+
+                self->trig.awd_rising2 = self->trig.awd_rising;
                 LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig);
             }
             else if (self->mode == LA)
@@ -142,70 +149,83 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_ch_trig != 0);
 
-    if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE)
-        goto invalid_trigger;
-
-    int ch_cnt = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en;
-    int ch_pos_trig = self->trig.dma_pos_catched % ch_cnt;
-    int ch_pos_want = ch_cnt - self->trig.order - 1;
-
-    if (ch_pos_want < ch_pos_trig)
-        self->trig.dma_pos_catched -= ch_pos_trig - ch_pos_want;
-    else if (ch_pos_want > ch_pos_trig)
-        self->trig.dma_pos_catched -= ch_cnt - (ch_pos_want - ch_pos_trig);
-
-    if (self->trig.dma_pos_catched < 0)
-        self->trig.dma_pos_catched += self->trig.buff_trig->len;
-
-    int prev_last_idx = self->trig.dma_pos_catched - self->trig.buff_trig->chans;
-    if (prev_last_idx < 0)
-        prev_last_idx += self->trig.buff_trig->len;
-
-    //uint16_t last_val = 0;
-    uint16_t prev_last_val = 0;
-
-    if (self->set.bits == B8)
+    if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE || self->trig.irq_en == EM_FALSE) // invalid trig
     {
-        prev_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev_last_idx]);
+        LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
     }
-    else //(self->set.bits == B12)
+    else // VALID TRIG
     {
-        prev_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev_last_idx * 2))));
-    }
+        int ch_cnt = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en;
+        int ch_pos_trig = self->trig.dma_pos_catched % ch_cnt;
+        int ch_pos_want = ch_cnt - self->trig.order - 1;
 
-    self->trig.all_cntr++;
-    uint8_t switch_awd = 0;
-    if (self->trig.ignore == EM_TRUE)
-    {
-        self->trig.ignore = EM_FALSE;
-        switch_awd = 1;
-    }
-    else
-    {
-        // trigger condition
-        if ((self->trig.set.edge == RISING && prev_last_val <= self->trig.set.val) || // last_val > self->trig.set.val &&
-            (self->trig.set.edge == FALLING && prev_last_val >= self->trig.set.val))  // last_val < self->trig.set.val &&
+        if (ch_pos_want < ch_pos_trig)
+            self->trig.dma_pos_catched -= ch_pos_trig - ch_pos_want;
+        else if (ch_pos_want > ch_pos_trig)
+            self->trig.dma_pos_catched -= ch_cnt - (ch_pos_want - ch_pos_trig);
+
+        if (self->trig.dma_pos_catched < 0)
+            self->trig.dma_pos_catched += self->trig.buff_trig->len;
+
+        int prev_last_idx = self->trig.dma_pos_catched - self->trig.buff_trig->chans;
+        if (prev_last_idx < 0)
+            prev_last_idx += self->trig.buff_trig->len;
+
+        //uint16_t last_val = 0;
+        uint16_t prev_last_val = 0;
+
+        if (self->set.bits == B8)
         {
-            return daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
+            prev_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev_last_idx]);
         }
-        else // false trig, switch edges and wait for another window
+        else //(self->set.bits == B12)
         {
-            self->trig.ignore = EM_TRUE;
+            prev_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev_last_idx * 2))));
+        }
+
+        self->trig.all_cntr++;
+        uint8_t switch_awd = 0;
+        if (self->trig.ignore == EM_TRUE)
+        {
+            self->trig.ignore = EM_FALSE;
             switch_awd = 1;
         }
+        else
+        {
+            // trigger condition
+            if ((self->trig.set.edge == RISING && prev_last_val <= self->trig.set.val) || // last_val > self->trig.set.val &&
+                (self->trig.set.edge == FALLING && prev_last_val >= self->trig.set.val))  // last_val < self->trig.set.val &&
+            {
+                return daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
+            }
+            else // false trig, switch edges and wait for another window
+            {
+                self->trig.ignore = EM_TRUE;
+                switch_awd = 1;
+            }
+        }
+
+        if (switch_awd) // flip awd limits
+        {
+            if (self->trig.awd_rising2 == 1)
+            {
+                LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, self->trig.awd_hi);
+                LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, self->trig.awd_mid);
+
+                self->trig.awd_rising2 = 0;
+            }
+            else // (self->trig.awd_rising2 == 0)
+            {
+                LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, self->trig.awd_mid);
+                LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, self->trig.awd_lo);
+
+                self->trig.awd_rising2 = 1;
+            }
+        }
+
+        LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig); // reenable irq
+
     }
-
-    if (switch_awd)
-    {
-        uint32_t awd_h = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH);
-        uint32_t awd_l = LL_ADC_GetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW);
-
-        LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, awd_l);
-        LL_ADC_SetAnalogWDThresholds(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, awd_h);
-    }
-
-    invalid_trigger:  // if any code gets here, means that trigger is invalid
-    LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig); // reenable irq
 
     return 0;
 }
@@ -216,21 +236,17 @@ int8_t daq_trig_trigger_la(daq_data_t* self)
     ASSERT(self->trig.dma_ch_trig != 0);
     ASSERT(self->trig.exti_trig != 0);
 
-    if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE)
-        goto invalid_trigger;
+    if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE) // invalid trig
+    {
+        NVIC_ClearPendingIRQ(self->trig.exti_trig);
 
-    //if (self->trig.pretrig_cntr > self->trig.pretrig_val)
-    //{
+        for (int i = 0; i < 10000; i++)
+            __asm("nop");
+    }
+    else
+    {
         return daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
-    //}
-    
-    invalid_trigger: // if any code gets here, means that trigger is invalid
-
-    for (int i = 0; i < 10000; i++)
-        __asm("nop");
-
-    NVIC_ClearPendingIRQ(self->trig.exti_trig);
-    NVIC_EnableIRQ(self->trig.exti_trig);
+    }
 
     return 0;
 }
@@ -452,7 +468,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
             self->trig.dma_trig = EM_DMA_ADC1;
         }
-        if (ch2 == 2)
+        else if (ch2 == 2)
         {
             adc = ADC2;
             self->trig.buff_trig = &self->buff2;
@@ -569,22 +585,33 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
                 self->trig.awd_trig = EM_ADC_AWD4;
 
             uint32_t level_raw = (int)(self->adc_max_val / 100.0 * (double)level);
+            uint32_t res = (self->set.bits == B12 ? LL_ADC_RESOLUTION_12B : LL_ADC_RESOLUTION_8B);
+
+            self->trig.awd_hi = __LL_ADC_ANALOGWD_SET_THRESHOLD_RESOLUTION(res, (int)self->adc_max_val);
+            self->trig.awd_mid = __LL_ADC_ANALOGWD_SET_THRESHOLD_RESOLUTION(res, level_raw);
+            self->trig.awd_lo = __LL_ADC_ANALOGWD_SET_THRESHOLD_RESOLUTION(res, 0);
 
             if (edge == RISING)
             {
                 memset(self->trig.buff_trig->data, (int)self->adc_max_val,
                        self->trig.buff_trig->len * (self->set.bits == B12 ? sizeof(uint16_t) : sizeof(uint8_t)));
 
-                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, level_raw);
-                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, 0);
+                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, self->trig.awd_mid);
+                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, self->trig.awd_lo);
+
+                self->trig.awd_rising = 1;
+                self->trig.awd_rising2 = 1;
             }
             else // (edge == FALLING)
             {
                 memset(self->trig.buff_trig->data, 0,
                        self->trig.buff_trig->len * (self->set.bits == B12 ? sizeof(uint16_t) : sizeof(uint8_t)));
 
-                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, (int)self->adc_max_val);
-                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, level_raw);
+                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_HIGH, self->trig.awd_hi);
+                LL_ADC_SetAnalogWDThresholds(adc, EM_ADC_AWD LL_ADC_AWD_THRESHOLD_LOW, self->trig.awd_mid);
+
+                self->trig.awd_rising = 0;
+                self->trig.awd_rising2 = 0;
             }
 
             self->trig.set.val = level_raw;

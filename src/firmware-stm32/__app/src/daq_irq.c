@@ -37,6 +37,11 @@ void ADC1_2_IRQHandler(void)
         LL_ADC_ClearFlag_AWD1(ADC2);
     }
 
+    if (LL_ADC_IsActiveFlag_EOS(ADC1) == 1)
+        LL_ADC_ClearFlag_EOS(ADC1);
+    if (LL_ADC_IsActiveFlag_EOS(ADC2) == 1)
+        LL_ADC_ClearFlag_EOS(ADC2);
+
     if (ret == 0)
         traceISR_EXIT();
 }
@@ -56,6 +61,9 @@ void ADC3_IRQHandler(void)
         LL_ADC_ClearFlag_AWD1(ADC3);
     }
 
+    if (LL_ADC_IsActiveFlag_EOS(ADC3) == 1)
+        LL_ADC_ClearFlag_EOS(ADC3);
+
     if (ret == 0)
         traceISR_EXIT();
 }
@@ -73,6 +81,9 @@ void ADC4_IRQHandler(void)
         ret = daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC4);
     }
+
+    if (LL_ADC_IsActiveFlag_EOS(ADC4) == 1)
+        LL_ADC_ClearFlag_EOS(ADC4);
 
     if (ret == 0)
         traceISR_EXIT();

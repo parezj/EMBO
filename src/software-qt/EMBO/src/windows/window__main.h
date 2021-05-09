@@ -64,6 +64,8 @@ private slots:
     void on_pushButton_sgen_clicked();
     void on_actionCheck_Updates_triggered();
 
+    void on_actionDocumentation_triggered();
+
 private:
     void instrFirstRowEnable(bool enable);
     QStringList addFontsFromResources(const QStringList& filters={QStringLiteral("*.ttf"),QStringLiteral("*.otf")});
@@ -110,5 +112,6 @@ private:
     WindowCntr* m_w_cntr = Q_NULLPTR;
     WindowPwm* m_w_pwm = Q_NULLPTR;
     WindowSgen* m_w_sgen = Q_NULLPTR;
+
 };
 #endif // MAINWINDOW_H

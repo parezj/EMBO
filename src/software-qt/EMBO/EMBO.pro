@@ -33,56 +33,57 @@ win32 {
     contains(TARGET_ARCH, x86_64) {
 
         ARCHITECTURE = win64
-        QMAKE_LIBDIR += $$PWD/lib/win_64
-        LIBS += $$PWD/lib/win_64/libfftw3-3.dll
-        LIBS += $$PWD/lib/win_64/libqBreakpad.a
+        QMAKE_LIBDIR += $$PWD/lib/win64
+        LIBS += $$PWD/lib/win64/libfftw3-3.dll
+        LIBS += $$PWD/lib/win64/libqBreakpad.a
 
-        inst.files += $$PWD/lib/win_64/libfftw3-3.dll
+        inst.files += $$PWD/lib/win64/libfftw3-3.dll
         inst.path += $${DESTDIR}
         INSTALLS += inst
 
     } else {
 
         ARCHITECTURE = win32
-        QMAKE_LIBDIR += $$PWD/lib/win_32
-        LIBS += $$PWD/lib/win_32/libfftw3-3.dll
-        LIBS += $$PWD/lib/win_32/libqBreakpad.a
+        QMAKE_LIBDIR += $$PWD/lib/win32
+        LIBS += $$PWD/lib/win32/libfftw3-3.dll
+        LIBS += $$PWD/lib/win32/libqBreakpad.a
 
-        inst.files += $$PWD/lib/win_32/libfftw3-3.dll
+        inst.files += $$PWD/lib/win32/libfftw3-3.dll
         inst.path += $${DESTDIR}
         INSTALLS += inst
     }
 }
 
 linux {
-    ARCHITECTURE = linux64
-    QMAKE_LIBDIR += $$PWD/lib/linux_64
-    LIBS += $$PWD/lib/linux_64/libfftw3.so.3.5.7
-    #LIBS += $$PWD/lib/linux_64/libqBreakpad.a
+
+    #include(__crashhandler/qBreakpad.pri)
+
+    ARCHITECTURE = linux
+    QMAKE_LIBDIR += $$PWD/lib/linux
+    LIBS += $$PWD/lib/linux/libfftw3.a
+    #LIBS += $$PWD/lib/linux/libqBreakpad.a
 }
 
 macx {
-    ARCHITECTURE = mac64
-    QMAKE_LIBDIR += $$PWD/lib/mac_64
-    INCLUDEPATH += /usr/local/include
+
+    include(__crashhandler/qBreakpad.pri)
+
+    ARCHITECTURE = mac
+    QMAKE_LIBDIR += $$PWD/lib/mac
     LIBS += -framework AppKit
-    LIBS += -lfftw3-3 -lm
-    #LIBS += -lqBreakpad
+    LIBS += $$PWD/lib/mac/libfftw3.a
+    LIBS += $$PWD/lib/mac/libqBreakpad.a
 }
 
 #LIBS += -lOpenGL32
 #DEFINES += QCUSTOMPLOT_USE_OPENGL
 
-#fw.files += "$${PWD}/firmware/EMBO_F103C8.hex"
-#fw.path += $${DESTDIR}/__firmware
-#INSTALLS += fw
-
-#win32 {
-#    drivers.files += "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W7_x86_32bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x64_64bits.exe" "$${PWD}/drivers/VCP_V1.5.0_Setup_W8_x86_32bits.exe"
-#    drivers.path += $${DESTDIR}/__drivers
-#    INSTALLS += drivers
-#}
-
+help.files += "$${PWD}/doc/EMBO.chm" \
+              "$${PWD}/doc/EMBO.pdf" \
+              "$${PWD}/doc/EMBO.qhc" \
+              "$${PWD}/doc/EMBO.qch"
+help.path += $${DESTDIR}/doc
+INSTALLS += help
 
 VERSION = 0.1.2
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -92,6 +93,7 @@ QMAKE_TARGET_PRODUCT = EMBO
 QMAKE_TARGET_DESCRIPTION = EMBedded Oscilloscope
 QMAKE_TARGET_COPYRIGHT = CTU Jakub Parez
 
+QMAKE_CXXFLAGS += -Wno-deprecated -Wno-deprecated-declarations
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.

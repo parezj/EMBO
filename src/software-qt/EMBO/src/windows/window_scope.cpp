@@ -398,9 +398,12 @@ void WindowScope::on_msg_read(const QByteArray data)
     else if (info->adc_num == 2)
     {
         int buff_part = data.size();
+        int buff_part_raw = buff_part;
+
         if (m_daqSet.bits == B12)
             buff_part /= 2;
         buff_part /= ch_num;
+        buff_part_raw /= ch_num;
 
         uint8_t* buff_it = (uint8_t*)dataU8;
 
@@ -415,27 +418,27 @@ void WindowScope::on_msg_read(const QByteArray data)
         if (m_daqSet.ch1_en)
         {
             buff1 = buff_it;
-            buff_it += buff_part;
+            buff_it += buff_part_raw;
             buff1_len += buff_part;
         }
         if (m_daqSet.ch2_en)
         {
             if (!m_daqSet.ch1_en)
                 buff1 = buff_it;
-            buff_it += buff_part;
+            buff_it += buff_part_raw;
             buff1_len += buff_part;
         }
         if (m_daqSet.ch3_en)
         {
             buff2 = buff_it;
-            buff_it += buff_part;
+            buff_it += buff_part_raw;
             buff2_len += buff_part;
         }
         if (m_daqSet.ch4_en)
         {
             if (!m_daqSet.ch3_en)
                 buff2 = buff_it;
-            //buff_it += buff_part;
+            //buff_it += buff_part_raw;
             buff2_len += buff_part;
         }
 
@@ -453,9 +456,12 @@ void WindowScope::on_msg_read(const QByteArray data)
     else if (info->adc_num == 4)
     {
         int buff_part = data.size();
+        int buff_part_raw = buff_part;
+
         if (m_daqSet.bits == B12)
             buff_part /= 2;
         buff_part /= ch_num;
+        buff_part_raw /= ch_num;
 
         uint8_t* buff_it = (uint8_t*)dataU8;
 
@@ -465,49 +471,49 @@ void WindowScope::on_msg_read(const QByteArray data)
 
         uint8_t* buff2 = NULL;
         int buff2_len = buff_part;
-        int buff2_mem = buff1_len - (info->daq_reserve);
+        int buff2_mem = buff2_len - (info->daq_reserve);
 
         uint8_t* buff3 = NULL;
         int buff3_len = buff_part;
-        int buff3_mem = buff1_len - (info->daq_reserve);
+        int buff3_mem = buff3_len - (info->daq_reserve);
 
         uint8_t* buff4 = NULL;
         int buff4_len = buff_part;
-        int buff4_mem = buff1_len - (info->daq_reserve);
+        int buff4_mem = buff4_len - (info->daq_reserve);
 
         if (m_daqSet.ch1_en)
         {
             buff1 = buff_it;
-            buff_it += buff_part;
+            buff_it += buff_part_raw;
         }
         if (m_daqSet.ch2_en)
         {
             buff2 = buff_it;
-            buff_it += buff_part;
+            buff_it += buff_part_raw;
         }
         if (m_daqSet.ch3_en)
         {
             buff3 = buff_it;
-            buff_it += buff_part;
+            buff_it += buff_part_raw;
         }
         if (m_daqSet.ch4_en)
         {
             buff4 = buff_it;
-            buff_it += buff_part;
+            buff_it += buff_part_raw;
         }
 
         if (m_daqSet.ch1_en)
             found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
         if (m_daqSet.ch2_en)
             found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y2, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
         if (m_daqSet.ch3_en)
             found += get_vals_from_circ(m_firstPos, buff3_mem, buff3_len, m_daqSet.bits, vcc, buff3, _y3, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
         if (m_daqSet.ch4_en)
             found += get_vals_from_circ(m_firstPos, buff4_mem, buff4_len, m_daqSet.bits, vcc, buff4, _y4, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3 / 1000.0, m_offset4);
+                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
 
     }
     else assert(0);
@@ -915,7 +921,7 @@ void WindowScope::on_actionExportTXT_Tabs_triggered(bool checked)
 {
     if (checked)
     {
-        m_rec.setDelim(CSV);
+        m_rec.setDelim(TAB);
 
         m_ui->actionExportCSV->setChecked(false);
         m_ui->actionExportTXT_Semicolon->setChecked(false);
@@ -927,7 +933,7 @@ void WindowScope::on_actionExportTXT_Semicolon_triggered(bool checked)
 {
     if (checked)
     {
-        m_rec.setDelim(CSV);
+        m_rec.setDelim(SEMICOLON);
 
         m_ui->actionExportCSV->setChecked(false);
         m_ui->actionExportTXT_Tabs->setChecked(false);
@@ -2256,6 +2262,9 @@ void WindowScope::on_dial_Vpos_ch1_valueChanged(int value)
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
 
+    if (m_ignoreValuesChanged)
+        return;
+
     m_ui->label_Vpos1->setText(QString::number(m_offset1, 10, 1));
     m_ui->label_Vpos1->setVisible(true);
 }
@@ -2266,6 +2275,9 @@ void WindowScope::on_dial_Vpos_ch2_valueChanged(int value)
 
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
+
+    if (m_ignoreValuesChanged)
+        return;
 
     m_ui->label_Vpos2->setText(QString::number(m_offset2, 10, 1));
     m_ui->label_Vpos2->setVisible(true);
@@ -2278,6 +2290,9 @@ void WindowScope::on_dial_Vpos_ch3_valueChanged(int value)
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
 
+    if (m_ignoreValuesChanged)
+        return;
+
     m_ui->label_Vpos3->setText(QString::number(m_offset3, 10, 1));
     m_ui->label_Vpos3->setVisible(true);
 }
@@ -2288,6 +2303,9 @@ void WindowScope::on_dial_Vpos_ch4_valueChanged(int value)
 
     rescaleYAxis();
     on_pushButton_resetZoom_clicked();
+
+    if (m_ignoreValuesChanged)
+        return;
 
     m_ui->label_Vpos4->setText(QString::number(m_offset4, 10, 1));
     m_ui->label_Vpos4->setVisible(true);
@@ -2347,6 +2365,8 @@ void WindowScope::on_pushButton_bit8_off_clicked()
     m_ui->pushButton_bit8_on->show();
 
     m_rescale_needed = true;
+
+    sendSet();
 }
 
 void WindowScope::on_pushButton_bit8_on_clicked()
@@ -2363,6 +2383,8 @@ void WindowScope::on_pushButton_bit12_off_clicked()
         m_ui->pushButton_bit8_off->show();
 
         m_rescale_needed = true;
+
+        sendSet();
     }
 }
 

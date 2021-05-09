@@ -591,7 +591,7 @@ void WindowLa::on_actionExportTXT_Tabs_triggered(bool checked)
 {
     if (checked)
     {
-        m_rec.setDelim(CSV);
+        m_rec.setDelim(TAB);
 
         m_ui->actionExportCSV->setChecked(false);
         m_ui->actionExportTXT_Semicolon->setChecked(false);
@@ -603,7 +603,7 @@ void WindowLa::on_actionExportTXT_Semicolon_triggered(bool checked)
 {
     if (checked)
     {
-        m_rec.setDelim(CSV);
+        m_rec.setDelim(SEMICOLON);
 
         m_ui->actionExportCSV->setChecked(false);
         m_ui->actionExportTXT_Tabs->setChecked(false);

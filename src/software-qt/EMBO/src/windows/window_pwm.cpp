@@ -66,6 +66,16 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
     m_ui->spinBox_duty1->setStyleSheet(CSS_SPINBOX_NODIS);
     m_ui->spinBox_duty2->setStyleSheet(CSS_SPINBOX_NODIS);
     m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
+
+#if defined(Q_OS_WIN)
+    m_ui->label_titleCh1->move(TITLE_LEFT, TITLE_TOP_WIN);
+    m_ui->label_titleCh2->move(TITLE_LEFT, TITLE_TOP_WIN);
+    m_ui->label_titleFreq->move(TITLE_LEFT, TITLE_TOP_WIN);
+#else
+    m_ui->label_titleCh1->move(TITLE_LEFT, TITLE_TOP_UNIX);
+    m_ui->label_titleCh2->move(TITLE_LEFT, TITLE_TOP_UNIX);
+    m_ui->label_titleFreq->move(TITLE_LEFT, TITLE_TOP_UNIX);
+#endif
 }
 
 WindowPwm::~WindowPwm()
@@ -292,6 +302,8 @@ void WindowPwm::closeEvent(QCloseEvent*)
 
 void WindowPwm::showEvent(QShowEvent*)
 {
+    m_ignoreValuesChanged = true;
+
     m_ui->pushButton_ch1enable->show();
     m_ui->pushButton_ch1disable->hide();
 
@@ -300,6 +312,8 @@ void WindowPwm::showEvent(QShowEvent*)
 
     enableAll(false);
     m_instrEnabled = true;
+
+    m_ignoreValuesChanged = false;
 
     Core::getInstance()->msgAdd(m_msg_set, true, "");
 }

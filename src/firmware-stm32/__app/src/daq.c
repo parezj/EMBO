@@ -144,12 +144,8 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
     memset(self->buff_raw, 0, EM_DAQ_MAX_MEM * sizeof(uint8_t));
 
     int max_len = EM_DAQ_MAX_MEM;
-    int out_per_ch = mem_per_ch;
     if (self->set.bits == B12)
-    {
         max_len /= 2;
-        out_per_ch *= 2;
-    }
 
     if (self->mode != LA)
     {
@@ -581,8 +577,8 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
 #elif defined(EM_ADC_MODE_ADC1234) /* --------------------------------------------------------------------------*/
         adc_set_ch(ADC1, ch1, 0, 0, 0, smpl_time, is_vcc);
         adc_set_ch(ADC2, 0, ch2, 0, 0, smpl_time, 0);
-        adc_set_ch(ADC1, 0, 0, ch3, 0, smpl_time, 0);
-        adc_set_ch(ADC2, 0, 0, 0, ch4, smpl_time, 0);
+        adc_set_ch(ADC3, 0, 0, ch3, 0, smpl_time, 0);
+        adc_set_ch(ADC4, 0, 0, 0, ch4, smpl_time, 0);
 
 #if defined(EM_ADC_INTERLEAVED)
         if (channs == 1)
@@ -662,21 +658,18 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     if (self->mode == SCOPE || self->mode == VM)
     {
 
-#if defined(EM_ADC_MODE_ADC1) || defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
+#if defined(EM_ADC_MODE_ADC1)
         daq_enable_adc(self, ADC1, enable, EM_DMA_CH_ADC1);
+#elif defined(EM_ADC_MODE_ADC12)
+        daq_enable_adc(self, ADC1, (enable && (self->set.ch1_en == EM_TRUE || self->set.ch2_en == EM_TRUE)), EM_DMA_CH_ADC1);
+        daq_enable_adc(self, ADC2, (enable && (self->set.ch3_en == EM_TRUE || self->set.ch4_en == EM_TRUE) &&
+                (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC2);
+#elif defined(EM_ADC_MODE_ADC1234)
+        daq_enable_adc(self, ADC1, (enable && (self->set.ch1_en == EM_TRUE)), EM_DMA_CH_ADC1);
+        daq_enable_adc(self, ADC2, (enable && (self->set.ch2_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC2);
+        daq_enable_adc(self, ADC3, (enable && (self->set.ch3_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC3);
+        daq_enable_adc(self, ADC4, (enable && (self->set.ch4_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC4);
 #endif
-
-        if (self->interleaved == EM_FALSE)
-        {
-#if defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
-        daq_enable_adc(self, ADC2, enable, EM_DMA_CH_ADC2);
-#endif
-
-#if defined(EM_ADC_MODE_ADC1234)
-        daq_enable_adc(self, ADC3, enable, EM_DMA_CH_ADC3);
-        daq_enable_adc(self, ADC4, enable, EM_DMA_CH_ADC4);
-#endif
-        }
 
     }
     else //if(self->mode == LA)

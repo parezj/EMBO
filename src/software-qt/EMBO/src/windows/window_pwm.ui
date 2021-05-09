@@ -328,7 +328,7 @@ QPushButton:pressed
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string>Frequency</string>
+     <string/>
     </property>
     <widget class="QDial2" name="dial_freq">
      <property name="enabled">
@@ -636,6 +636,25 @@ p, li { white-space: pre-wrap; }
       <string>Real:</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_titleFreq">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>6</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto Medium</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Frequency</string>
+     </property>
+    </widget>
     <zorder>spinBox_freq</zorder>
     <zorder>label_4</zorder>
     <zorder>label_dial1</zorder>
@@ -643,6 +662,7 @@ p, li { white-space: pre-wrap; }
     <zorder>radioButton_coarse</zorder>
     <zorder>textBrowser_realFreq</zorder>
     <zorder>label_5</zorder>
+    <zorder>label_titleFreq</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_2">
     <property name="geometry">
@@ -674,7 +694,7 @@ p, li { white-space: pre-wrap; }
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string>Channel 1</string>
+     <string/>
     </property>
     <widget class="QLabel" name="label">
      <property name="geometry">
@@ -811,10 +831,30 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <bool>false</bool>
      </property>
     </widget>
+    <widget class="QLabel" name="label_titleCh1">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>6</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto Medium</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Channel 2</string>
+     </property>
+    </widget>
     <zorder>spinBox_duty1</zorder>
     <zorder>label</zorder>
     <zorder>label_dial2</zorder>
     <zorder>dial_duty1</zorder>
+    <zorder>label_titleCh1</zorder>
    </widget>
    <widget class="QGroupBox" name="groupBox_3">
     <property name="geometry">
@@ -846,7 +886,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string>Channel 2</string>
+     <string/>
     </property>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
@@ -1131,6 +1171,25 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <bool>false</bool>
      </property>
     </widget>
+    <widget class="QLabel" name="label_titleCh2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>6</y>
+       <width>91</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto Medium</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Channel 2</string>
+     </property>
+    </widget>
     <zorder>spinBox_offset</zorder>
     <zorder>label_3</zorder>
     <zorder>label_dial4</zorder>
@@ -1139,6 +1198,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
     <zorder>label_2</zorder>
     <zorder>label_dial3</zorder>
     <zorder>dial_duty2</zorder>
+    <zorder>label_titleCh2</zorder>
    </widget>
    <widget class="QRadioButton" name="radioButton_fine">
     <property name="geometry">

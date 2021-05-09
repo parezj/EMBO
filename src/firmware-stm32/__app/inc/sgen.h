@@ -25,7 +25,7 @@ typedef struct
     uint8_t enabled;
     enum sgen_mode mode;
     int freq;
-    int ampl;
+    float ampl;
     int tim_f;
     double tim_f_real;
     int samples;

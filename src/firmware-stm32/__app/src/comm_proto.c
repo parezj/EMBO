@@ -287,7 +287,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
 
         if (context == NULL)
         {
-            if (daq.vcc_mv > 1500)
+            if (vref_raw > 0 && daq.vcc_mv > 1500)
                 return SCPI_RES_OK;
             else
                 return SCPI_RES_ERR;
@@ -802,9 +802,9 @@ scpi_result_t EM_SGEN_SetQ(scpi_t* context)
     char buff[60];
     char freq_real_s[20];
 
-    sprint_fast(freq_real_s, "%s", 1000, 6);
+    sprint_fast(freq_real_s, "%s", sgen.tim_f_real / (double)sgen.samples, 6);
 
-    int len = sprintf(buff, "%d,%d,%d,%d,%d,%s,%d", sgen.freq, sgen.ampl, sgen.offset,
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%s,%d", sgen.freq, (int)(sgen.ampl * 10.0), sgen.offset,
                       sgen.mode, sgen.enabled, freq_real_s, sgen.samples);
 
     SCPI_ResultCharacters(context, buff, len);
@@ -831,24 +831,24 @@ scpi_result_t EM_SGEN_Set(scpi_t* context)
     }
 
     if (param1 < 0 || param1 > EM_SGEN_MAX_F || // freq
-        param2 < 0 || param2 > 100 ||           // ampl
+        param2 < 0 || param2 > 1000 ||          // ampl
         param3 < 0 || param3 > 100 ||           // offset
-        param4 < 0 || param4 > 2 ||             // mode
+        param4 < 0 || param4 > 5 ||             // mode
         param5 < 0 || param5 > 1)               // enable
     {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
 
+    sgen_disable(&sgen);
+
     if (param5 == EM_TRUE)
-        sgen_enable(&sgen, param4, param2, param1, param3, EM_DAC_BUFF_LEN); // TODO
-    else
-        sgen_disable(&sgen);
+        sgen_enable(&sgen, param4, (float)param2 / 10.0, param1, param3, EM_DAC_BUFF_LEN);
 
     char buff[45];
     char freq_real_s[20];
 
-    sprint_fast(freq_real_s, "%s", sgen.tim_f_real / (double)sgen.samples, 6);
+    sprint_fast(freq_real_s, "%s", sgen.tim_f_real / (double)sgen.samples, 3);
 
     int len = sprintf(buff, "\"OK\",%s,%d", freq_real_s, sgen.samples);
 

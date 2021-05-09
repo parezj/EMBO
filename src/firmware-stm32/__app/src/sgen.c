@@ -37,7 +37,13 @@ void sgen_init(sgen_data_t* self)
     self->tim_f = 0;
     self->tim_f_real = 0;
     memset(self->data, 0x00, EM_DAC_BUFF_LEN * sizeof(uint16_t));
-    sgen_const(self, 50);
+    sgen_sine(self, 50, 1000, EM_DAC_BUFF_LEN);
+
+    LL_DAC_Enable(EM_DAC, EM_DAC_CH);
+
+    uint32_t wait_loop_index = ((LL_DAC_DELAY_STARTUP_VOLTAGE_SETTLING_US * (SystemCoreClock / (100000 * 2))) / 10);
+    while(wait_loop_index != 0)
+        wait_loop_index--;
 }
 
 void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int offset, int N)
@@ -69,7 +75,17 @@ void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int o
             LL_DAC_DMA_GetRegAddr(EM_DAC, EM_DAC_CH, LL_DAC_DMA_REG_DATA_12BITS_RIGHT_ALIGNED), self->samples,
             LL_DMA_PDATAALIGN_HALFWORD, LL_DMA_MDATAALIGN_HALFWORD, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
 
-    LL_DAC_EnableDMAReq(EM_DAC, EM_DAC_CH);
+    if (mode == NOISE)
+    {
+        LL_DAC_DisableDMAReq(EM_DAC, EM_DAC_CH);
+        LL_DAC_SetWaveAutoGeneration(EM_DAC, EM_DAC_CH, LL_DAC_WAVE_AUTO_GENERATION_NOISE);
+    }
+    else
+    {
+        LL_DAC_EnableDMAReq(EM_DAC, EM_DAC_CH);
+        LL_DAC_SetWaveAutoGeneration(EM_DAC, EM_DAC_CH, LL_DAC_WAVE_AUTO_GENERATION_NONE);
+    }
+
     LL_DAC_EnableTrigger(EM_DAC, EM_DAC_CH);
     LL_TIM_SetAutoReload(EM_TIM_SGEN, reload);
     LL_TIM_SetPrescaler(EM_TIM_SGEN, prescaler);
@@ -80,6 +96,12 @@ void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int o
 
 void sgen_disable(sgen_data_t* self)
 {
+    memset(self->data, 0x00, EM_DAC_BUFF_LEN * sizeof(uint16_t));
+
+    uint32_t wait_loop_index = ((LL_DAC_DELAY_STARTUP_VOLTAGE_SETTLING_US * (SystemCoreClock / (100000 * 2))) / 10);
+    while(wait_loop_index != 0)
+        wait_loop_index--;
+
     LL_TIM_DisableCounter(EM_TIM_SGEN);
     LL_DAC_DisableDMAReq(EM_DAC, EM_DAC_CH);
     LL_DAC_DisableTrigger(EM_DAC, EM_DAC_CH);
@@ -92,14 +114,14 @@ static void sgen_const(sgen_data_t* self, float A)
     ASSERT(A >= 0 && A <= 100);
 
     self->mode = CONST;
-    self->freq = 0;
     self->ampl = A;
     self->samples = EM_DAC_BUFF_LEN;
     self->tim_f = EM_DAC_BUFF_LEN;
 
+    float a = (A/100.0*EM_DAC_MAX_VAL);
     for (int i = 0; i < EM_DAC_BUFF_LEN; i++)
     {
-        self->data[i] = (uint16_t)(EM_DAC_MAX_VAL * A);
+        self->data[i] = (uint16_t)(a);
     }
 }
 
@@ -125,7 +147,7 @@ static void sgen_square(sgen_data_t* self, float A, float f, int N)
 {
     ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
-    self->mode = SINE;
+    self->mode = SQUARE;
     self->freq = f;
     self->ampl = A;
     self->samples = N;
@@ -143,7 +165,7 @@ static void sgen_triangle(sgen_data_t* self, float A, float f, int N)
 {
     ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
-    self->mode = SINE;
+    self->mode = TRIANGLE;
     self->freq = f;
     self->ampl = A;
     self->samples = N;
@@ -160,7 +182,7 @@ static void sgen_saw(sgen_data_t* self, float A, float f, int N)
 {
     ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
-    self->mode = SINE;
+    self->mode = SAWTOOTH;
     self->freq = f;
     self->ampl = A;
     self->samples = N;
@@ -180,7 +202,7 @@ static void sgen_rand(sgen_data_t* self, float A, float f, int N)
 {
     ASSERT(A >= 0 && A <= 100 && f > 0 && N > 0 && N <= EM_DAC_BUFF_LEN);
 
-    self->mode = SINE;
+    self->mode = NOISE;
     self->freq = f;
     self->ampl = A;
     self->samples = N;
@@ -188,10 +210,11 @@ static void sgen_rand(sgen_data_t* self, float A, float f, int N)
 
     int m_w = 1;
     int m_z = 2; 
+    float a = (A/100.0*EM_DAC_MAX_VAL);
 
     for (int i = 0; i < N; i++)
     {
-        self->data[i] = (uint16_t)(((float)get_rnd(&m_w, &m_z) / 2147483647.0) * EM_DAC_MAX_VAL);
+        self->data[i] = (uint16_t)(((float)get_rnd(&m_w, &m_z) / 2147483647.0) * a);
     }
 }
 

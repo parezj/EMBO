@@ -79,6 +79,13 @@ typedef struct
     int pos_last;           // pointer to last data pos
     int pos_diff;           // helper var to compare last trig pos
 
+    // awd limits
+    uint32_t awd_hi;        // ADC AWD high limit raw value
+    uint32_t awd_mid;       // ADC AWD trigger limit raw value
+    uint32_t awd_lo;        // ADC AWD low limit raw value
+    uint8_t awd_rising;     // AWD limits state, either rising or falling - defined by user
+    uint8_t awd_rising2;    // AWD limits state, either rising or falling - current value
+
     // misc
     uint32_t uwtick_first;  // systick timestamp when sampling start
     int pretrig_cntr;       // pre trig counter - ms

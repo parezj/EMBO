@@ -1191,7 +1191,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_16">
+            <widget class="QLabel" name="label_titleTrigger">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -2402,7 +2402,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
             <zorder>groupBox_t_16</zorder>
             <zorder>groupBox_t_18</zorder>
             <zorder>groupBox_t_19</zorder>
-            <zorder>label_16</zorder>
+            <zorder>label_titleTrigger</zorder>
            </widget>
           </item>
           <item>
@@ -2432,7 +2432,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_17">
+            <widget class="QLabel" name="label_titleHorizontal">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -3315,7 +3315,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_pins">
+            <widget class="QLabel" name="label_titleVertical">
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -4030,7 +4030,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <zorder>groupBox_v_4</zorder>
             <zorder>groupBox_v_5</zorder>
             <zorder>groupBox_v_6</zorder>
-            <zorder>label_pins</zorder>
+            <zorder>label_titleVertical</zorder>
             <zorder>line_4</zorder>
             <zorder>line_5</zorder>
             <zorder>line_7</zorder>
@@ -4071,7 +4071,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
             <property name="title">
              <string/>
             </property>
-            <widget class="QLabel" name="label_23">
+            <widget class="QLabel" name="label_titleUtils">
              <property name="geometry">
               <rect>
                <x>10</x>

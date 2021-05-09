@@ -219,10 +219,14 @@ void Msg_SCOP_Set::on_dataRx()
         else if (tokens[7] == "N") mode = NORMAL;
         else if (tokens[7] == "S") mode = SINGLE;
 
+        double maxZ = tokens[9].toDouble();
+        if (maxZ < 0)
+            maxZ = 10;
+
         emit result(bits, tokens[1].toInt(), tokens[2].toInt(),
                     tokens[3][0] == '1', tokens[3][1] == '1', tokens[3][2] == '1', tokens[3][3] == '1',
                     tokens[4].toInt(), tokens[5].toInt(), edge, mode, tokens[8].toInt(),
-                    tokens[9].toDouble(), tokens[10].toDouble(), tokens[10]);
+                    maxZ, tokens[10].toDouble(), tokens[10]);
     }
     else
     {
@@ -232,7 +236,11 @@ void Msg_SCOP_Set::on_dataRx()
             return;
         }
 
-        emit ok2(tokens[1].toDouble(), tokens[2].toDouble(), tokens[2]);
+        double maxZ = tokens[1].toDouble();
+        if (maxZ < 0)
+            maxZ = 10;
+
+        emit ok2(maxZ, tokens[2].toDouble(), tokens[2]);
     }
 }
 
@@ -357,22 +365,24 @@ void Msg_SGEN_Set::on_dataRx()
     {
         QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
-        if (tokens.size() != 5)
+        if (tokens.size() != 7)
         {
             emit err(INVALID_MSG + m_rxData, CRITICAL, true);
             return;
         }
 
-        // TODO
-        emit result(SgenMode::CONSTANT, tokens[1].toDouble(), tokens[2].toInt(), tokens[3].toInt(),
-                    tokens[4] == "1");
+        emit result(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt(),
+                    (SgenMode)tokens[3].toInt(), tokens[4] == "1", tokens[5], tokens[6]);
     }
     else
     {
-        if (m_rxData.contains(EMBO_OK))
-            emit ok();
-        else
-            emit err("Signal generator set failed! " + m_rxData, CRITICAL, false);
+        if (tokens.size() != 3 && !m_rxData.contains(EMBO_OK))
+        {
+            emit err("Signal Generator set failed! " + m_rxData, CRITICAL, true);
+            return;
+        }
+
+        emit ok(tokens[1], tokens[2]);
     }
 }
 

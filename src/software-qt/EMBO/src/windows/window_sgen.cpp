@@ -69,8 +69,8 @@ WindowSgen::WindowSgen(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_ui->radioButton_noise->setStyleSheet(CSS_RADIOBUTTON);
 
     m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX_NODIS);
-    m_ui->spinBox_ampl->setStyleSheet(CSS_SPINBOX_NODIS);
-    m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
+    //m_ui->spinBox_ampl->setStyleSheet(CSS_SPINBOX_NODIS);
+    //m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
 }
 
 WindowSgen::~WindowSgen()
@@ -80,9 +80,16 @@ WindowSgen::~WindowSgen()
 
 /* slots */
 
-void WindowSgen::on_msg_ok(const QString, const QString)
+void WindowSgen::on_msg_ok(const QString real_freq, const QString N)
 {
-    m_instrEnabled = !m_instrEnabled;
+    if (m_ch_wantSwitch)
+    {
+        m_ch_wantSwitch = false;
+        m_instrEnabled = !m_instrEnabled;
+    }
+
+    m_real_freq = real_freq;
+    m_N = N;
 
     enableAll(true);
 }
@@ -99,12 +106,12 @@ void WindowSgen::on_msg_err(const QString text, MsgBoxType type, bool needClose)
     msgBox(this, text, type);
 }
 
-void WindowSgen::on_msg_set(SgenMode mode, double freq, int ampl, int offset, bool enable)
+void WindowSgen::on_msg_set(double freq, int ampl, int offset, SgenMode mode, bool enable, const QString real_freq, const QString N)
 {
     m_ignoreValuesChanged = true;
 
     m_ui->spinBox_freq->setValue(freq);
-    m_ui->spinBox_ampl->setValue(ampl);
+    m_ui->doubleSpinBox_ampl->setValue(ampl / 10.0);
     m_ui->spinBox_offset->setValue(offset);
 
     switch (mode)
@@ -118,17 +125,18 @@ void WindowSgen::on_msg_set(SgenMode mode, double freq, int ampl, int offset, bo
         case SgenMode::NOISE: m_ui->radioButton_noise->setChecked(true); break;
     }
 
-    m_ui->dial_freq->setValue((int)lin_to_exp_1to36M((int)freq, true)); // TODO upper range
-    m_ui->dial_ampl->setValue(ampl);
+    m_ui->dial_freq->setValue(freq);
+    m_ui->dial_ampl->setValue(ampl / 10.0);
     m_ui->dial_offset->setValue(offset);
 
     auto info = Core::getInstance()->getDevInfo();
 
     m_ui->spinBox_freq->setRange(1, info->sgen_maxf);
     m_ui->dial_freq->setRange(1, info->sgen_maxf);
-    m_ui->dial_freq->setNotchTarget(info->pwm_fs / 100000);
+    m_ui->dial_freq->setNotchTarget(info->sgen_maxf / 100000);
 
-    //m_ui->label_realFreq->setText(format_unit(freq_real, "Hz"));
+    m_real_freq = real_freq;
+    m_N = N;
 
     m_ignoreValuesChanged = false;
 
@@ -148,7 +156,7 @@ void WindowSgen::on_spinBox_freq_valueChanged(int)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->dial_freq->setValue((int)lin_to_exp_1to36M((int)m_ui->spinBox_freq->value(), true)); // TODO upper range
+    m_ui->dial_freq->setValue(m_ui->spinBox_freq->value());
     m_ignoreValuesChanged = false;
 
     sendSet(m_instrEnabled);
@@ -160,19 +168,19 @@ void WindowSgen::on_dial_freq_valueChanged(int value)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->spinBox_freq->setValue((int)lin_to_exp_1to36M((int)value));  // TODO upper range
+    m_ui->spinBox_freq->setValue(value);
     m_ignoreValuesChanged = false;
 
     sendSet(m_instrEnabled);
 }
 
-void WindowSgen::on_spinBox_ampl_valueChanged(int)
+void WindowSgen::on_doubleSpinBox_ampl_valueChanged(double)
 {
     if (m_ignoreValuesChanged)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->dial_ampl->setValue(m_ui->spinBox_ampl->value());
+    m_ui->dial_ampl->setValue(m_ui->doubleSpinBox_ampl->value());
     m_ignoreValuesChanged = false;
 
     sendSet(m_instrEnabled);
@@ -184,7 +192,7 @@ void WindowSgen::on_dial_ampl_valueChanged(int value)
         return;
 
     m_ignoreValuesChanged = true;
-    m_ui->spinBox_ampl->setValue(value);
+    m_ui->doubleSpinBox_ampl->setValue(value);
     m_ignoreValuesChanged = false;
 
     sendSet(m_instrEnabled);
@@ -197,7 +205,7 @@ void WindowSgen::on_spinBox_offset_valueChanged(int)
 
     m_ignoreValuesChanged = true;
     m_ui->dial_offset->setValue(m_ui->spinBox_offset->value());
-    m_ignoreValuesChanged = false;
+    m_ignoreValuesChanged = false;;
 
     sendSet(m_instrEnabled);
 }
@@ -216,96 +224,68 @@ void WindowSgen::on_dial_offset_valueChanged(int value)
 
 void WindowSgen::on_pushButton_enable_clicked()
 {
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ch_wantSwitch = true;
     sendSet(true);
 }
 
 void WindowSgen::on_pushButton_disable_clicked()
 {
+    if (m_ignoreValuesChanged)
+        return;
+
+    m_ch_wantSwitch = true;
     sendSet(false);
 }
 
 void WindowSgen::on_radioButton_const_clicked()
 {
-    m_ui->dial_freq->setEnabled(false);
-    m_ui->spinBox_freq->setEnabled(false);
+    if (m_ignoreValuesChanged)
+        return;
 
-    m_ui->dial_offset->setEnabled(false);
-    m_ui->spinBox_offset->setEnabled(false);
-
-    QString style3(CSS_SPINBOX);
-
-    m_ui->spinBox_freq->setStyleSheet(style3);
-    m_ui->spinBox_offset->setStyleSheet(style3);
+    sendSet(m_instrEnabled);
 }
 
 void WindowSgen::on_radioButton_sine_clicked()
 {
-    m_ui->dial_freq->setEnabled(true);
-    m_ui->spinBox_freq->setEnabled(true);
+    if (m_ignoreValuesChanged)
+        return;
 
-    m_ui->dial_offset->setEnabled(true);
-    m_ui->spinBox_offset->setEnabled(true);
-
-    QString style3(CSS_SPINBOX_NODIS);
-
-    m_ui->spinBox_freq->setStyleSheet(style3);
-    m_ui->spinBox_offset->setStyleSheet(style3);
+    sendSet(m_instrEnabled);
 }
 
 void WindowSgen::on_radioButton_triangle_clicked()
 {
-    m_ui->dial_freq->setEnabled(true);
-    m_ui->spinBox_freq->setEnabled(true);
+    if (m_ignoreValuesChanged)
+        return;
 
-    m_ui->dial_offset->setEnabled(true);
-    m_ui->spinBox_offset->setEnabled(true);
-
-    QString style3(CSS_SPINBOX_NODIS);
-
-    m_ui->spinBox_freq->setStyleSheet(style3);
-    m_ui->spinBox_offset->setStyleSheet(style3);
+    sendSet(m_instrEnabled);
 }
 
 void WindowSgen::on_radioButton_saw_clicked()
 {
-    m_ui->dial_freq->setEnabled(true);
-    m_ui->spinBox_freq->setEnabled(true);
+    if (m_ignoreValuesChanged)
+        return;
 
-    m_ui->dial_offset->setEnabled(true);
-    m_ui->spinBox_offset->setEnabled(true);
-
-    QString style3(CSS_SPINBOX_NODIS);
-
-    m_ui->spinBox_freq->setStyleSheet(style3);
-    m_ui->spinBox_offset->setStyleSheet(style3);
+    sendSet(m_instrEnabled);
 }
 
 void WindowSgen::on_radioButton_square_clicked()
 {
-    m_ui->dial_freq->setEnabled(true);
-    m_ui->spinBox_freq->setEnabled(true);
+    if (m_ignoreValuesChanged)
+        return;
 
-    m_ui->dial_offset->setEnabled(true);
-    m_ui->spinBox_offset->setEnabled(true);
-
-    QString style3(CSS_SPINBOX_NODIS);
-
-    m_ui->spinBox_freq->setStyleSheet(style3);
-    m_ui->spinBox_offset->setStyleSheet(style3);
+    sendSet(m_instrEnabled);
 }
 
 void WindowSgen::on_radioButton_noise_clicked()
 {
-    m_ui->dial_freq->setEnabled(false);
-    m_ui->spinBox_freq->setEnabled(false);
+    if (m_ignoreValuesChanged)
+        return;
 
-    m_ui->dial_offset->setEnabled(false);
-    m_ui->spinBox_offset->setEnabled(false);
-
-    QString style3(CSS_SPINBOX);
-
-    m_ui->spinBox_freq->setStyleSheet(style3);
-    m_ui->spinBox_offset->setStyleSheet(style3);
+    sendSet(m_instrEnabled);
 }
 
 /* private */
@@ -318,22 +298,16 @@ void WindowSgen::closeEvent(QCloseEvent*)
 
 void WindowSgen::showEvent(QShowEvent*)
 {
+    m_ignoreValuesChanged = true;
+
     m_ui->pushButton_enable->show();
     m_ui->pushButton_disable->hide();
 
-    /*
     enableAll(false);
 
-    m_ui->spinBox_freq->setValue(0);
-    m_ui->spinBox_ampl->setValue(0);
-    m_ui->spinBox_offset->setValue(0);
+    m_ignoreValuesChanged = false;
 
-    m_ui->dial_freq->setValue(0);
-    m_ui->dial_ampl->setValue(0);
-    m_ui->dial_offset->setValue(0);
-    */
-
-    //Core::getInstance()->msgAdd(m_msg_set, true, "");
+    Core::getInstance()->msgAdd(m_msg_set, true, "");
 }
 
 void WindowSgen::enableAll(bool enable)
@@ -342,12 +316,12 @@ void WindowSgen::enableAll(bool enable)
     m_ui->pushButton_disable->setEnabled(enable);
 
     m_ui->spinBox_freq->setEnabled(enable);
-    m_ui->spinBox_ampl->setEnabled(enable);
-    m_ui->spinBox_offset->setEnabled(enable);
+    m_ui->doubleSpinBox_ampl->setEnabled(enable);
+    //m_ui->spinBox_offset->setEnabled(enable);
 
     m_ui->dial_freq->setEnabled(enable);
     m_ui->dial_ampl->setEnabled(enable);
-    m_ui->dial_offset->setEnabled(enable);
+    //m_ui->dial_offset->setEnabled(enable);
 
     m_ui->radioButton_const->setEnabled(enable);
     m_ui->radioButton_sine->setEnabled(enable);
@@ -355,6 +329,29 @@ void WindowSgen::enableAll(bool enable)
     m_ui->radioButton_saw->setEnabled(enable);
     m_ui->radioButton_square->setEnabled(enable);
     m_ui->radioButton_noise->setEnabled(enable);
+
+    if (m_ui->radioButton_noise->isChecked() || m_ui->radioButton_const->isChecked())
+    {
+        m_ui->dial_freq->setEnabled(false);
+        m_ui->spinBox_freq->setEnabled(false);
+
+        //m_ui->dial_offset->setEnabled(false);
+        //m_ui->spinBox_offset->setEnabled(false);
+
+        m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX);
+        //m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX);
+    }
+    else
+    {
+        m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX_NODIS);
+        //m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
+    }
+
+    auto info = Core::getInstance()->getDevInfo();
+
+    m_ui->textBrowser_realFs->setText(m_real_freq + " Hz");
+    m_ui->textBrowser_N->setText(m_N);
+    m_ui->textBrowser_Ampl->setText(QString::number(m_ui->doubleSpinBox_ampl->value() / 100.0 * info->ref_mv, 10, 1) + " mV");
 
     if (enable)
     {
@@ -383,13 +380,18 @@ void WindowSgen::sendSet(bool enable)
 {
     enableAll(false);
 
-    /*
-    Core::getInstance()->msgAdd(m_msg_set, false, QString::number(m_ui->spinBox_freq->value()) + EMBO_DELIM2 +
-                                                  QString::number(m_ui->spinBox_freq->value()) + EMBO_DELIM2 +
-                                                  QString::number(m_ui->spinBox_freq->value()) + EMBO_DELIM2 +
-                                                  QString::number(m_ui->spinBox_freq->value()) + EMBO_DELIM2 +
-                                                  (en1 ? EMBO_SET_TRUE : EMBO_SET_FALSE) + EMBO_DELIM2 +
-                                                  (en2 ? EMBO_SET_TRUE : EMBO_SET_FALSE));
-                                                  */
+    int mode;
 
+    if      (m_ui->radioButton_const->isChecked())    mode = 0;
+    else if (m_ui->radioButton_sine->isChecked())     mode = 1;
+    else if (m_ui->radioButton_triangle->isChecked()) mode = 2;
+    else if (m_ui->radioButton_saw->isChecked())      mode = 3;
+    else if (m_ui->radioButton_square->isChecked())   mode = 4;
+    else                                              mode = 5;
+
+    Core::getInstance()->msgAdd(m_msg_set, false, QString::number(m_ui->spinBox_freq->value()) + EMBO_DELIM2 +
+                                                  QString::number(m_ui->doubleSpinBox_ampl->value() * 10.0) + EMBO_DELIM2 +
+                                                  QString::number(m_ui->spinBox_offset->value()) + EMBO_DELIM2 +
+                                                  QString::number(mode) + EMBO_DELIM2 +
+                                                  (enable ? "1" : "0"));
 }

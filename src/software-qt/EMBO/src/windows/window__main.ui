@@ -73,7 +73,7 @@
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string>Ports</string>
+     <string/>
     </property>
     <widget class="QListWidget" name="listWidget_ports">
      <property name="geometry">
@@ -325,6 +325,25 @@ QPushButton:pressed
      <property name="icon">
       <iconset resource="../../resources/resources.qrc">
        <normaloff>:/main/img/power-off-green3.png</normaloff>:/main/img/power-off-green3.png</iconset>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_titlePorts">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>6</y>
+       <width>191</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto Medium</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Ports</string>
      </property>
     </widget>
    </widget>
@@ -769,7 +788,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string>Primary Instruments</string>
+     <string/>
     </property>
     <widget class="QGroupBox" name="groupBox_scope">
      <property name="geometry">
@@ -1666,6 +1685,25 @@ QPushButton:pressed
       </property>
      </widget>
     </widget>
+    <widget class="QLabel" name="label_titlePrimary">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>6</y>
+       <width>161</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto Medium</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Primary Instruments</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QGroupBox" name="groupBox_instr2">
     <property name="geometry">
@@ -1697,7 +1735,7 @@ QPushButton:pressed
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
-     <string>Secondary Instruments</string>
+     <string/>
     </property>
     <widget class="QGroupBox" name="groupBox_pwm">
      <property name="geometry">
@@ -2439,6 +2477,25 @@ QPushButton:pressed
        <enum>Qt::AutoText</enum>
       </property>
      </widget>
+    </widget>
+    <widget class="QLabel" name="label_titleSecondary">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>6</y>
+       <width>171</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Roboto Medium</family>
+       <pointsize>11</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Secondary Instruments</string>
+     </property>
     </widget>
    </widget>
    <widget class="Line" name="line">

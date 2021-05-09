@@ -3001,7 +3001,7 @@ QPushButton:disabled {
              </size>
             </property>
            </widget>
-           <widget class="QLabel" name="label_13">
+           <widget class="QLabel" name="label_titleSettings">
             <property name="geometry">
              <rect>
               <x>10</x>
@@ -3187,7 +3187,7 @@ QPushButton:disabled {
            <zorder>dial_average</zorder>
            <zorder>pushButton_enable</zorder>
            <zorder>pushButton_disable</zorder>
-           <zorder>label_13</zorder>
+           <zorder>label_titleSettings</zorder>
            <zorder>pushButton_resetZoom</zorder>
            <zorder>pushButton_reset</zorder>
            <zorder>label_nplc</zorder>
