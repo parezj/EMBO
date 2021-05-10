@@ -30,12 +30,12 @@ typedef struct
     double tim_f_real;
     int samples;
     int offset;
-    uint16_t data[EM_DAC_BUFF_LEN];
+    uint32_t data[EM_DAC_BUFF_LEN];
 }sgen_data_t;
 
 
 void sgen_init(sgen_data_t* self);
-void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int offset, int N);
+void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int offset);
 void sgen_disable(sgen_data_t* self);
 
 #endif

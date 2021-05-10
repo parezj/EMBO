@@ -54,10 +54,7 @@ scpi_result_t EM_Reset(scpi_t* context)
 #endif
 
 #ifdef EM_DEBUG
-        pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
-#ifdef EM_DAC
-        sgen_enable(&sgen, SINE, 100, 1000, 0, EM_DAC_BUFF_LEN);
-#endif
+        //pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
 #endif
     }
 
@@ -802,7 +799,7 @@ scpi_result_t EM_SGEN_SetQ(scpi_t* context)
     char buff[60];
     char freq_real_s[20];
 
-    sprint_fast(freq_real_s, "%s", sgen.tim_f_real / (double)sgen.samples, 6);
+    sprint_fast(freq_real_s, "%s", sgen.tim_f_real / (double)sgen.samples, 3);
 
     int len = sprintf(buff, "%d,%d,%d,%d,%d,%s,%d", sgen.freq, (int)(sgen.ampl * 10.0), sgen.offset,
                       sgen.mode, sgen.enabled, freq_real_s, sgen.samples);
@@ -843,7 +840,7 @@ scpi_result_t EM_SGEN_Set(scpi_t* context)
     sgen_disable(&sgen);
 
     if (param5 == EM_TRUE)
-        sgen_enable(&sgen, param4, (float)param2 / 10.0, param1, param3, EM_DAC_BUFF_LEN);
+        sgen_enable(&sgen, param4, (float)param2 / 10.0, param1, param3);
 
     char buff[45];
     char freq_real_s[20];

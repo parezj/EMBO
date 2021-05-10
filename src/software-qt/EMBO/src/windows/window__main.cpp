@@ -371,7 +371,7 @@ void WindowMain::setConnected()
 
     if (info->dac)
     {
-        m_ui->label_sgen_freq->setText(format_unit(info->sgen_maxf, "Hz", 0));
+        m_ui->label_sgen_freq->setText(format_unit(info->sgen_maxf, "Hz", 3));
         m_ui->label_sgen_mem->setText(format_unit(info->sgen_maxmem, "S", 0));
         m_ui->label_sgen_pins->setText(info->pins_sgen);
         m_ui->groupBox_sgen->show();

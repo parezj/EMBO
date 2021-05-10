@@ -24,7 +24,12 @@
  *  =======================
 */
 
-// stack size
+// device -----------------------------------------------------------
+#define EM_DEV_NAME            "EMBO-STM32F103C8-BluePill"   // device specific name
+#define EM_DEV_COMM            "USB + USART1 (115200 bps)"   // device comm methods
+#define EM_LL_VER              "1.8.3"                       // STM32 CubeMX LL drivers
+
+// stack size -------------------------------------------------------
 #define EM_STACK_MIN           64
 #define EM_STACK_T1            40
 #define EM_STACK_T2            65
@@ -32,14 +37,12 @@
 #define EM_STACK_T4            320
 #define EM_STACK_T5            55
 
-// pins strings
+// pins strings -----------------------------------------------------
 #define EM_PINS_SCOPE_VM       "A1-A2-A3-A4"
 #define EM_PINS_LA             "A1-A2-A3-A4"
 #define EM_PINS_CNTR           "A8"
 #define EM_PINS_PWM            "A15-B6"
 #define EM_PINS_SGEN           "-"
-
-#define EM_LL_VER              "1.8.3" // TODO automate
 
 // freqs  -----------------------------------------------------------
 #define EM_FREQ_LSI            40000     // LSI clock - wdg
@@ -48,10 +51,6 @@
 #define EM_FREQ_PCLK1          72000000  // APB1 clock - TIM2,3,4
 #define EM_FREQ_PCLK2          72000000  // APB2 clock - TIM1
 #define EM_SYSTICK_FREQ        1000      // Systick clock
-
-// device -----------------------------------------------------------
-#define EM_DEV_NAME            "EMBO-STM32F103C8-BluePill"   // device specific name
-#define EM_DEV_COMM            "USB + USART1 (115200 bps)"     // device comm methods
 
 // UART -------------------------------------------------------------
 #define EM_UART                USART1               // UART periph
@@ -132,7 +131,7 @@
 //#define EM_TIM_SGEN_FREQ     EM_FREQ_PCLK1
 //#define EM_TIM_SGEN_MAX      65535
 
-// Max values ------------------------------------------------------
+// max values ------------------------------------------------------
 #ifdef EM_SYSVIEW
 #define EM_DAQ_MAX_MEM         7000  // DAQ memory is lees because SysView
 #else
@@ -142,7 +141,7 @@
 #define EM_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)  // PWM max freq
-#define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
+#define EM_SGEN_MAX_F          0         // SGEN max output freq.
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve
 
 // DMA -------------------------------------------------------------

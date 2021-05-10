@@ -1407,12 +1407,13 @@ void WindowLa::showEvent(QShowEvent*)
 
     Core::getInstance()->msgAdd(m_msg_set, true, "");
 
-    /*
-    m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
-    m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
-    */
+    if (m_instrEnabled)
+    {
+        m_ui->customPlot->graph(GRAPH_CH1)->data()->clear();
+        m_ui->customPlot->graph(GRAPH_CH2)->data()->clear();
+        m_ui->customPlot->graph(GRAPH_CH3)->data()->clear();
+        m_ui->customPlot->graph(GRAPH_CH4)->data()->clear();
+    }
 
     m_ui->radioButton_trigLed->setChecked(false);
 

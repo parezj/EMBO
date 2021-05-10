@@ -317,11 +317,11 @@ void WindowSgen::enableAll(bool enable)
 
     m_ui->spinBox_freq->setEnabled(enable);
     m_ui->doubleSpinBox_ampl->setEnabled(enable);
-    //m_ui->spinBox_offset->setEnabled(enable);
+    m_ui->spinBox_offset->setEnabled(enable);
 
     m_ui->dial_freq->setEnabled(enable);
     m_ui->dial_ampl->setEnabled(enable);
-    //m_ui->dial_offset->setEnabled(enable);
+    m_ui->dial_offset->setEnabled(enable);
 
     m_ui->radioButton_const->setEnabled(enable);
     m_ui->radioButton_sine->setEnabled(enable);
@@ -330,28 +330,32 @@ void WindowSgen::enableAll(bool enable)
     m_ui->radioButton_square->setEnabled(enable);
     m_ui->radioButton_noise->setEnabled(enable);
 
-    if (m_ui->radioButton_noise->isChecked() || m_ui->radioButton_const->isChecked())
-    {
-        m_ui->dial_freq->setEnabled(false);
-        m_ui->spinBox_freq->setEnabled(false);
-
-        //m_ui->dial_offset->setEnabled(false);
-        //m_ui->spinBox_offset->setEnabled(false);
-
-        m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX);
-        //m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX);
-    }
-    else
-    {
-        m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX_NODIS);
-        //m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
-    }
-
     auto info = Core::getInstance()->getDevInfo();
 
     m_ui->textBrowser_realFs->setText(m_real_freq + " Hz");
     m_ui->textBrowser_N->setText(m_N);
     m_ui->textBrowser_Ampl->setText(QString::number(m_ui->doubleSpinBox_ampl->value() / 100.0 * info->ref_mv, 10, 1) + " mV");
+
+    if (m_ui->radioButton_const->isChecked())
+    {
+        m_ui->textBrowser_realFs->setText("");
+
+        m_ui->dial_freq->setEnabled(false);
+        m_ui->spinBox_freq->setEnabled(false);
+
+        m_ui->dial_offset->setEnabled(false);
+        m_ui->spinBox_offset->setEnabled(false);
+
+        m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX);
+        m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX);
+    }
+    else
+    {
+        m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX_NODIS);
+        m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
+    }
+
+
 
     if (enable)
     {

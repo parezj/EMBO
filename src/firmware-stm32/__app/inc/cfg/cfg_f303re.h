@@ -27,7 +27,12 @@
  *  =======================
 */
 
-// stack size
+// device -----------------------------------------------------------
+#define EM_DEV_NAME            "EMBO-STM32F303RE-Nucleo64"   // device specific name
+#define EM_DEV_COMM            "USART2 (115200 bps)"         // device comm methods
+#define EM_LL_VER              "1.11.2"                      // STM32 CubeMX LL drivers
+
+// stack size ------------------------------------------------------
 #define EM_STACK_MIN           128
 #define EM_STACK_T1            128
 #define EM_STACK_T2            128
@@ -35,14 +40,12 @@
 #define EM_STACK_T4            512
 #define EM_STACK_T5            128
 
-// pins
+// pins ------------------------------------------------------------
 #define EM_PINS_SCOPE_VM       "C0-C1-B0-B14"
 #define EM_PINS_LA             "C0-C1-C2-C3"
 #define EM_PINS_CNTR           "C9"
 #define EM_PINS_PWM            "B8-B10"
 #define EM_PINS_SGEN           "A4"
-
-#define EM_LL_VER              "1.11.2" // TODO automate
 
 // freqs  -----------------------------------------------------------
 #define EM_FREQ_LSI            40000     // LSI clock - wdg
@@ -51,13 +54,6 @@
 #define EM_FREQ_PCLK1          72000000  // APB1 clock - TIM2,3,4
 #define EM_FREQ_PCLK2          72000000  // APB2 clock - TIM1,8
 #define EM_SYSTICK_FREQ        1000      // Systick clock
-
-// device -----------------------------------------------------------
-#define EM_DEV_NAME            "EMBO-STM32F303RE-Nucleo64"   // device specific name
-#define EM_DEV_COMM            "USART2 (115200 bps)"         // device comm methods
-
-// device name ------------------------------------------------------
-
 
 // UART -------------------------------------------------------------
 #define EM_UART                USART1 //USART2               // UART periph
@@ -77,6 +73,7 @@
 #define EM_DAC_CH              LL_DAC_CHANNEL_1     // DAC channel
 #define EM_DAC_BUFF_LEN        1000                 // sgen buffer max len
 #define EM_DAC_MAX_VAL         4095.0               // DAC max value
+#define EM_DAC_TIM_MAX_F       4500000              // DAC max sampling time
 
 // GPIO ------------------------------------------------------------
 #define EM_GPIO_EXTI_SRC       LL_SYSCFG_SetEXTISource         // GPIO EXTI source
@@ -141,14 +138,14 @@
 #define EM_TIM_SGEN_FREQ       EM_FREQ_PCLK1
 #define EM_TIM_SGEN_MAX        65535
 
-// Max values ------------------------------------------------------
+// max values ------------------------------------------------------
 #define EM_DAQ_MAX_MEM         50000      // DAQ max total memory
 #define EM_LA_MAX_FS           10285714   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      5000000    // DAQ ADC max fs per 1 channel - 12 bit
-#define EM_DAQ_MAX_B8_FS       5000000    // DAQ ADC max fs per 1 channel - 8 bit
-#define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)   // PWM max freq - TODO
-#define EM_SGEN_MAX_F          5000000   // SGEB max output freq. TODO
-#define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve (min 2)
+#define EM_DAQ_MAX_B8_FS       5000000    // DAQ ADC max fs per 1 channel - 8 bit TODO
+#define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)   // PWM max freq
+#define EM_SGEN_MAX_F          EM_DAC_TIM_MAX_F    // SGEN max output freq.
+#define EM_MEM_RESERVE         10         // DAQ circ buff memory reserve (min 2)
 
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
