@@ -43,6 +43,25 @@
 
 #include "cfg_f103c8.h"
 
+#elif defined(STM32F103xE)
+
+#define EM_F103RE
+
+/*
+ * =========layout=========
+ *  DAQ CH1 ........... PA0
+ *  DAQ CH2 ........... PA1
+ *  DAQ CH3 ........... PA2
+ *  DAQ CH4 ........... PA3
+ *  PWM CH1 ........... PA15
+ *  PWM CH2 ........... PB6
+ *  CNTR .............. PA8
+ *  DAC ............... PA4
+ *  =======================
+*/
+
+#include "cfg_f103re.h"
+
 #elif defined(STM32F303xE)
 
 #define EM_F303RE

@@ -1,1 +1,0 @@
-Intel Mac 10.15.3 64 bit

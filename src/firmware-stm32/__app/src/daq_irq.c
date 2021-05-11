@@ -15,7 +15,7 @@
 #include "SEGGER_SYSVIEW.h"
 #endif
 
-
+#if defined(EM_ADC1_USED) || defined(EM_ADC2_USED)
 void ADC1_2_IRQHandler(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
@@ -37,16 +37,17 @@ void ADC1_2_IRQHandler(void)
         LL_ADC_ClearFlag_AWD1(ADC2);
     }
 
-    if (LL_ADC_IsActiveFlag_EOS(ADC1) == 1)
-        LL_ADC_ClearFlag_EOS(ADC1);
-    if (LL_ADC_IsActiveFlag_EOS(ADC2) == 1)
-        LL_ADC_ClearFlag_EOS(ADC2);
+    //if (LL_ADC_IsActiveFlag_EOS(ADC1) == 1)
+    //    LL_ADC_ClearFlag_EOS(ADC1);
+    //if (LL_ADC_IsActiveFlag_EOS(ADC2) == 1)
+    //    LL_ADC_ClearFlag_EOS(ADC2);
 
     if (ret == 0)
         traceISR_EXIT();
 }
+#endif
 
-#if defined(EM_ADC_MODE_ADC1234)
+#if defined(EM_ADC3_USED)
 void ADC3_IRQHandler(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
@@ -61,13 +62,15 @@ void ADC3_IRQHandler(void)
         LL_ADC_ClearFlag_AWD1(ADC3);
     }
 
-    if (LL_ADC_IsActiveFlag_EOS(ADC3) == 1)
-        LL_ADC_ClearFlag_EOS(ADC3);
+    //if (LL_ADC_IsActiveFlag_EOS(ADC3) == 1)
+    //    LL_ADC_ClearFlag_EOS(ADC3);
 
     if (ret == 0)
         traceISR_EXIT();
 }
+#endif
 
+#if defined(EM_ADC4_USED)
 void ADC4_IRQHandler(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
@@ -82,8 +85,8 @@ void ADC4_IRQHandler(void)
         LL_ADC_ClearFlag_AWD1(ADC4);
     }
 
-    if (LL_ADC_IsActiveFlag_EOS(ADC4) == 1)
-        LL_ADC_ClearFlag_EOS(ADC4);
+    //if (LL_ADC_IsActiveFlag_EOS(ADC4) == 1)
+    //    LL_ADC_ClearFlag_EOS(ADC4);
 
     if (ret == 0)
         traceISR_EXIT();

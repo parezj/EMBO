@@ -210,6 +210,8 @@ private:
     void updatePanel();
     void enablePanel(bool en);
 
+    void fix2ADCproblem(bool add);
+
     void sendSet();
 
     /* main window */

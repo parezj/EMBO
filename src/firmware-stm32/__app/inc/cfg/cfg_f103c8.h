@@ -77,9 +77,9 @@
 // ADC -------------------------------------------------------------
 #define EM_ADC_MODE_ADC1                                       // 1 ADC (1 DMA)              - verified
 //#define EM_ADC_MODE_ADC12                                    // 2 full ADCs (2 DMA)        - N/A
-//#define EM_ADC_MODE_ADC1234                                  // 4 full ADCs (4 DMA)        - N/A
+//#define EM_ADC_MODE_ADC1234                                  // 4 full ADCs (4 DMA)        - verified
 #define EM_ADC_BIT12                                           // 12-bit mode available      - verified
-//#define EM_ADC_BIT8                                          // 8-bit mode available       - N/A
+//#define EM_ADC_BIT8                                          // 8-bit mode available       - verified
 //#define EM_ADC_INTERLEAVED                                   // interleaved mode available - TODO
 //#define EM_ADC_DUALMODE                                      // dual mode available        - TODO
 
@@ -144,6 +144,17 @@
 #define EM_SGEN_MAX_F          0         // SGEN max output freq.
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve
 
+// ADC -------------------------------------------------------------
+#define EM_ADC1                ADC1
+//#define EM_ADC2              ADC2
+//#define EM_ADC3              ADC3
+//#define EM_ADC4              ADC4
+
+#define EM_ADC1_USED
+//#define EM_ADC2_USED
+//#define EM_ADC3_USED
+//#define EM_ADC4_USED
+
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
 //#define EM_DMA_ADC2          DMA1
@@ -165,7 +176,8 @@
 //#define EM_DMA_CH_SGEN       LL_DMA_CHANNEL_2
 
 // IRQ map ---------------------------------------------------------
-#define EM_IRQN_ADC12          ADC1_2_IRQn
+#define EM_IRQN_ADC1           ADC1_2_IRQn
+#define EM_IRQN_ADC2           ADC1_2_IRQn
 //#define EM_IRQN_ADC3         ADC3_IRQn
 //#define EM_IRQN_ADC4         ADC4_IRQn
 #define EM_IRQN_UART           USART1_IRQn

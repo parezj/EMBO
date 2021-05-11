@@ -50,23 +50,30 @@ void daq_init(daq_data_t* self)
     self->uwTick_start = 0;
     self->vm_seq = -1;
 
-#if defined(EM_ADC_MODE_ADC1) || defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
-    NVIC_SetPriority(EM_IRQN_ADC12, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(EM_IRQN_ADC12);
-#endif
-
-#if defined(EM_ADC_MODE_ADC1234)
-    NVIC_SetPriority(EM_IRQN_ADC3, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(EM_IRQN_ADC3);
-
-    NVIC_SetPriority(EM_IRQN_ADC4, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(EM_IRQN_ADC4);
-#endif
-
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI1);
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI2);
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI3);
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI4);
+
+#if defined(EM_ADC1_USED)
+    NVIC_SetPriority(EM_IRQN_ADC1, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
+    NVIC_EnableIRQ(EM_IRQN_ADC1);
+#endif
+
+#if defined(EM_ADC2_USED)
+    NVIC_SetPriority(EM_IRQN_ADC2, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
+    NVIC_EnableIRQ(EM_IRQN_ADC2);
+#endif
+
+#if defined(EM_ADC3_USED)
+    NVIC_SetPriority(EM_IRQN_ADC3, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
+    NVIC_EnableIRQ(EM_IRQN_ADC3);
+#endif
+
+#if defined(EM_ADC4_USED)
+    NVIC_SetPriority(EM_IRQN_ADC4, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
+    NVIC_EnableIRQ(EM_IRQN_ADC4);
+#endif
 
     adc_init();
 }
@@ -158,7 +165,7 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
         if (mem_per_ch < 1 || (mem_per_ch * len1) > max_len)
             return -2;
 
-        daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
+        daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(EM_ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
 
 #elif defined(EM_ADC_MODE_ADC12)
 
@@ -178,9 +185,9 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             return -2;
 
         if (len1 > 0)
-            daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
+            daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(EM_ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
         if (len2 > 0)
-            daq_malloc(self, &self->buff2, mem_per_ch * len2, EM_MEM_RESERVE, len2, EM_ADC_ADDR(ADC2), EM_DMA_CH_ADC2, EM_DMA_ADC2, self->set.bits);
+            daq_malloc(self, &self->buff2, mem_per_ch * len2, EM_MEM_RESERVE, len2, EM_ADC_ADDR(EM_ADC2), EM_DMA_CH_ADC2, EM_DMA_ADC2, self->set.bits);
 
 #elif defined(EM_ADC_MODE_ADC1234)
 
@@ -204,13 +211,13 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
             return -2;
 
         if (len1 > 0)
-            daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
+            daq_malloc(self, &self->buff1, mem_per_ch * len1, EM_MEM_RESERVE, len1, EM_ADC_ADDR(EM_ADC1), EM_DMA_CH_ADC1, EM_DMA_ADC1, self->set.bits);
         if (len2 > 0)
-            daq_malloc(self, &self->buff2, mem_per_ch * len2, EM_MEM_RESERVE, len2, EM_ADC_ADDR(ADC2), EM_DMA_CH_ADC2, EM_DMA_ADC2, self->set.bits);
+            daq_malloc(self, &self->buff2, mem_per_ch * len2, EM_MEM_RESERVE, len2, EM_ADC_ADDR(EM_ADC2), EM_DMA_CH_ADC2, EM_DMA_ADC2, self->set.bits);
         if (len3 > 0)
-            daq_malloc(self, &self->buff3, mem_per_ch * len3, EM_MEM_RESERVE, len3, EM_ADC_ADDR(ADC3), EM_DMA_CH_ADC3, EM_DMA_ADC3, self->set.bits);
+            daq_malloc(self, &self->buff3, mem_per_ch * len3, EM_MEM_RESERVE, len3, EM_ADC_ADDR(EM_ADC3), EM_DMA_CH_ADC3, EM_DMA_ADC3, self->set.bits);
         if (len4 > 0)
-            daq_malloc(self, &self->buff4, mem_per_ch * len4, EM_MEM_RESERVE, len4, EM_ADC_ADDR(ADC4), EM_DMA_CH_ADC4, EM_DMA_ADC4, self->set.bits);
+            daq_malloc(self, &self->buff4, mem_per_ch * len4, EM_MEM_RESERVE, len4, EM_ADC_ADDR(EM_ADC4), EM_DMA_CH_ADC4, EM_DMA_ADC4, self->set.bits);
 
 #endif
 
@@ -349,16 +356,16 @@ int daq_bit_set(daq_data_t* self, enum daq_bits bits)
 #endif
 
 #if defined(EM_ADC_MODE_ADC1) || defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
-        adc_set_res(ADC1, bits_raw);
+        adc_set_res(EM_ADC1, bits_raw);
 #endif
 
 #if defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234)
-        adc_set_res(ADC2, bits_raw);
+        adc_set_res(EM_ADC2, bits_raw);
 #endif
 
 #if defined(EM_ADC_MODE_ADC1234)
-        adc_set_res(ADC3, bits_raw);
-        adc_set_res(ADC4, bits_raw);
+        adc_set_res(EM_ADC3, bits_raw);
+        adc_set_res(EM_ADC4, bits_raw);
 #endif
         int ret = daq_mem_set(self, self->set.mem);
 
@@ -392,7 +399,6 @@ int daq_fs_set(daq_data_t* self, int fs)
 #elif defined(EM_ADC_MODE_ADC12)
     int adc1 = self->set.ch1_en + self->set.ch2_en + is_vcc;
     int adc2 = self->set.ch3_en + self->set.ch4_en;
-    int channs = adc1 + adc2;
     double scope_max_fs = (self->set.bits == B12 ? EM_DAQ_MAX_B12_FS : EM_DAQ_MAX_B8_FS) / (double)(adc1 > adc2 ? adc1 : adc2);
 #if defined(EM_ADC_INTERLEAVED)
     if (channs == 1)
@@ -488,48 +494,48 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
         self->smpl_time = smpl_time_n;
 
 #if defined(EM_ADC_MODE_ADC1) /* --------------------------------------------------------------------------*/
-        adc_set_ch(ADC1, ch1, ch2, ch3, ch4, smpl_time, is_vcc);
+        adc_set_ch(EM_ADC1, ch1, ch2, ch3, ch4, smpl_time, is_vcc);
 
 #if defined(EM_ADC_DUALMODE)
         if (channs == 2)
         {
             if (ch1 && ch2) {
-                adc_set_ch(ADC1, ch1, 0, 0, 0, smpl_time, 0);
-                adc_set_ch(ADC2, 0, ch2, 0, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC1, ch1, 0, 0, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC2, 0, ch2, 0, 0, smpl_time, 0);
             }
             else if (ch1 && ch3) {
-                adc_set_ch(ADC1, ch1, 0, 0, 0, smpl_time, 0);
-                adc_set_ch(ADC2, 0, 0, ch3, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC1, ch1, 0, 0, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC2, 0, 0, ch3, 0, smpl_time, 0);
             }
             else if (ch1 && ch4) {
-                adc_set_ch(ADC1, ch1, 0, 0, 0, smpl_time, 0);
-                adc_set_ch(ADC2, 0, 0, 0, ch4, smpl_time, 0);
+                adc_set_ch(EM_ADC1, ch1, 0, 0, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC2, 0, 0, 0, ch4, smpl_time, 0);
             }
             else if (ch2 && ch3) {
-                adc_set_ch(ADC1, 0, ch2, 0, 0, smpl_time, 0);
-                adc_set_ch(ADC2, 0, 0, ch3, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC1, 0, ch2, 0, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC2, 0, 0, ch3, 0, smpl_time, 0);
             }
             else if (ch2 && ch4) {
-                adc_set_ch(ADC1, 0, ch2, 0, 0, smpl_time, 0);
-                adc_set_ch(ADC2, 0, 0, 0, ch4, smpl_time, 0);
+                adc_set_ch(EM_ADC1, 0, ch2, 0, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC2, 0, 0, 0, ch4, smpl_time, 0);
             }
             else if (ch3 && ch4) {
-                adc_set_ch(ADC1, 0, 0, ch3, 0, smpl_time, 0);
-                adc_set_ch(ADC2, 0, 0, 0, ch4, smpl_time, 0);
+                adc_set_ch(EM_ADC1, 0, 0, ch3, 0, smpl_time, 0);
+                adc_set_ch(EM_ADC2, 0, 0, 0, ch4, smpl_time, 0);
             }
             else ASSERT(0);
         }
         else if (channs == 4)
         {
-            adc_set_ch(ADC1, ch1, ch2, 0, 0, smpl_time, 0);
-            adc_set_ch(ADC2, 0, 0, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC1, ch1, ch2, 0, 0, smpl_time, 0);
+            adc_set_ch(EM_ADC2, 0, 0, ch3, ch4, smpl_time, 0);
         }
 
         if (channs == 2 || channs == 4)
         {
-            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_MULTI_DUAL_REG_SIMULT);
-            LL_ADC_REG_SetTriggerSource(ADC2, LL_ADC_REG_TRIG_SOFTWARE);
-            LL_ADC_REG_SetDMATransfer(ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
+            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(EM_ADC1), LL_ADC_MULTI_DUAL_REG_SIMULT);
+            LL_ADC_REG_SetTriggerSource(EM_ADC2, LL_ADC_REG_TRIG_SOFTWARE);
+            LL_ADC_REG_SetDMATransfer(EM_ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
 
             self->dualmode = EM_TRUE;
         }
@@ -541,12 +547,12 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
 #if defined(EM_ADC_INTERLEAVED)
         if (channs == 1)
         {
-            adc_set_ch(ADC1, ch1, ch2, ch3, ch4, smpl_time, 0);
-            adc_set_ch(ADC2, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC1, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC2, ch1, ch2, ch3, ch4, smpl_time, 0);
 
-            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_MULTI_DUAL_REG_INTERL_FAST);
-            LL_ADC_REG_SetTriggerSource(ADC2, LL_ADC_REG_TRIG_SOFTWARE);
-            LL_ADC_REG_SetDMATransfer(ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
+            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(EM_ADC1), LL_ADC_MULTI_DUAL_REG_INTERL_FAST);
+            LL_ADC_REG_SetTriggerSource(EM_ADC2, LL_ADC_REG_TRIG_SOFTWARE);
+            LL_ADC_REG_SetDMATransfer(EM_ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
 
             self->interleaved = EM_TRUE;
         }
@@ -555,18 +561,18 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
 #endif
 
 #elif defined(EM_ADC_MODE_ADC12) /* --------------------------------------------------------------------------*/
-        adc_set_ch(ADC1, ch1, ch2, 0, 0, smpl_time, is_vcc);
-        adc_set_ch(ADC2, 0, 0, ch3, ch4, smpl_time, 0);
+        adc_set_ch(EM_ADC1, ch1, ch2, 0, 0, smpl_time, is_vcc);
+        adc_set_ch(EM_ADC2, 0, 0, ch3, ch4, smpl_time, 0);
 
 #if defined(EM_ADC_INTERLEAVED)
         if (channs == 1)
         {
-            adc_set_ch(ADC1, ch1, ch2, ch3, ch4, smpl_time, 0);
-            adc_set_ch(ADC2, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC1, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC2, ch1, ch2, ch3, ch4, smpl_time, 0);
 
-            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_MULTI_DUAL_REG_INTERL_FAST);
-            LL_ADC_REG_SetTriggerSource(ADC2, LL_ADC_REG_TRIG_SOFTWARE);
-            LL_ADC_REG_SetDMATransfer(ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
+            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(EM_ADC1), LL_ADC_MULTI_DUAL_REG_INTERL_FAST);
+            LL_ADC_REG_SetTriggerSource(EM_ADC2, LL_ADC_REG_TRIG_SOFTWARE);
+            LL_ADC_REG_SetDMATransfer(EM_ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
 
             self->interleaved = EM_TRUE;
         }
@@ -575,26 +581,26 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
 #endif
 
 #elif defined(EM_ADC_MODE_ADC1234) /* --------------------------------------------------------------------------*/
-        adc_set_ch(ADC1, ch1, 0, 0, 0, smpl_time, is_vcc);
-        adc_set_ch(ADC2, 0, ch2, 0, 0, smpl_time, 0);
-        adc_set_ch(ADC3, 0, 0, ch3, 0, smpl_time, 0);
-        adc_set_ch(ADC4, 0, 0, 0, ch4, smpl_time, 0);
+        adc_set_ch(EM_ADC1, ch1, 0, 0, 0, smpl_time, is_vcc);
+        adc_set_ch(EM_ADC2, 0, ch2, 0, 0, smpl_time, 0);
+        adc_set_ch(EM_ADC3, 0, 0, ch3, 0, smpl_time, 0);
+        adc_set_ch(EM_ADC4, 0, 0, 0, ch4, smpl_time, 0);
 
 #if defined(EM_ADC_INTERLEAVED)
         if (channs == 1)
         {
-            adc_set_ch(ADC1, ch1, ch2, ch3, ch4, smpl_time, 0);
-            adc_set_ch(ADC2, ch1, ch2, ch3, ch4, smpl_time, 0);
-            adc_set_ch(ADC3, ch1, ch2, ch3, ch4, smpl_time, 0);
-            adc_set_ch(ADC4, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC1, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC2, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC3, ch1, ch2, ch3, ch4, smpl_time, 0);
+            adc_set_ch(EM_ADC4, ch1, ch2, ch3, ch4, smpl_time, 0);
 
-            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(ADC1), LL_ADC_MULTI_DUAL_REG_INTERL_FAST);
-            LL_ADC_REG_SetTriggerSource(ADC2, LL_ADC_REG_TRIG_SOFTWARE);
-            LL_ADC_REG_SetDMATransfer(ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
-            LL_ADC_REG_SetTriggerSource(ADC3, LL_ADC_REG_TRIG_SOFTWARE);
-            LL_ADC_REG_SetDMATransfer(ADC3, LL_ADC_REG_DMA_TRANSFER_NONE);
-            LL_ADC_REG_SetTriggerSource(ADC4, LL_ADC_REG_TRIG_SOFTWARE);
-            LL_ADC_REG_SetDMATransfer(ADC4, LL_ADC_REG_DMA_TRANSFER_NONE);
+            LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(EM_ADC1), LL_ADC_MULTI_DUAL_REG_INTERL_FAST);
+            LL_ADC_REG_SetTriggerSource(EM_ADC2, LL_ADC_REG_TRIG_SOFTWARE);
+            LL_ADC_REG_SetDMATransfer(EM_ADC2, LL_ADC_REG_DMA_TRANSFER_NONE);
+            LL_ADC_REG_SetTriggerSource(EM_ADC3, LL_ADC_REG_TRIG_SOFTWARE);
+            LL_ADC_REG_SetDMATransfer(EM_ADC3, LL_ADC_REG_DMA_TRANSFER_NONE);
+            LL_ADC_REG_SetTriggerSource(EM_ADC4, LL_ADC_REG_TRIG_SOFTWARE);
+            LL_ADC_REG_SetDMATransfer(EM_ADC4, LL_ADC_REG_DMA_TRANSFER_NONE);
 
             self->interleaved = EM_TRUE;
         }
@@ -659,16 +665,16 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     {
 
 #if defined(EM_ADC_MODE_ADC1)
-        daq_enable_adc(self, ADC1, enable, EM_DMA_CH_ADC1);
+        daq_enable_adc(self, EM_ADC1, enable, EM_DMA_CH_ADC1);
 #elif defined(EM_ADC_MODE_ADC12)
-        daq_enable_adc(self, ADC1, (enable && (self->set.ch1_en == EM_TRUE || self->set.ch2_en == EM_TRUE)), EM_DMA_CH_ADC1);
-        daq_enable_adc(self, ADC2, (enable && (self->set.ch3_en == EM_TRUE || self->set.ch4_en == EM_TRUE) &&
+        daq_enable_adc(self, EM_ADC1, (enable && (self->set.ch1_en == EM_TRUE || self->set.ch2_en == EM_TRUE)), EM_DMA_CH_ADC1);
+        daq_enable_adc(self, EM_ADC2, (enable && (self->set.ch3_en == EM_TRUE || self->set.ch4_en == EM_TRUE) &&
                 (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC2);
 #elif defined(EM_ADC_MODE_ADC1234)
-        daq_enable_adc(self, ADC1, (enable && (self->set.ch1_en == EM_TRUE)), EM_DMA_CH_ADC1);
-        daq_enable_adc(self, ADC2, (enable && (self->set.ch2_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC2);
-        daq_enable_adc(self, ADC3, (enable && (self->set.ch3_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC3);
-        daq_enable_adc(self, ADC4, (enable && (self->set.ch4_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC4);
+        daq_enable_adc(self, EM_ADC1, (enable && (self->set.ch1_en == EM_TRUE)), EM_DMA_CH_ADC1);
+        daq_enable_adc(self, EM_ADC2, (enable && (self->set.ch2_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC2);
+        daq_enable_adc(self, EM_ADC3, (enable && (self->set.ch3_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC3);
+        daq_enable_adc(self, EM_ADC4, (enable && (self->set.ch4_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC4);
 #endif
 
     }

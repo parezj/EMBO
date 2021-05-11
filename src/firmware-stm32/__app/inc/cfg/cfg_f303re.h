@@ -79,13 +79,13 @@
 #define EM_GPIO_EXTI_SRC       LL_SYSCFG_SetEXTISource         // GPIO EXTI source
 
 // ADC -------------------------------------------------------------
-//#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)               - N/A
+//#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)               - verified
 //#define EM_ADC_MODE_ADC12                                    // 2 full ADCs (2 DMA)         - N/A
-#define EM_ADC_MODE_ADC1234                                    // 4 full ADCs (4 DMA)         - TODO
-#define EM_ADC_BIT12                                           // 12-bit mode available       - TODO
-#define EM_ADC_BIT8                                            // 8-bit mode available        - TODO
-//#define EM_ADC_INTERLEAVED                                   // interleaved mode available  - N/A ??
-//#define EM_ADC_DUALMODE                                      // dual mode available         - N/A
+#define EM_ADC_MODE_ADC1234                                    // 4 full ADCs (4 DMA)         - verified
+#define EM_ADC_BIT12                                           // 12-bit mode available       - verified
+#define EM_ADC_BIT8                                            // 8-bit mode available        - verified
+//#define EM_ADC_INTERLEAVED                                   // interleaved mode available  - TODO
+//#define EM_ADC_DUALMODE                                      // dual mode available         - TODO
 
 #define EM_VREF                3300                            // main voltage reference in mV
 #define EM_ADC_VREF_CAL        *((uint16_t*)VREFINT_CAL_ADDR)  // Vref cal value
@@ -141,11 +141,22 @@
 // max values ------------------------------------------------------
 #define EM_DAQ_MAX_MEM         50000      // DAQ max total memory
 #define EM_LA_MAX_FS           10285714   // Logic Analyzer max FS
-#define EM_DAQ_MAX_B12_FS      5000000    // DAQ ADC max fs per 1 channel - 12 bit
-#define EM_DAQ_MAX_B8_FS       5000000    // DAQ ADC max fs per 1 channel - 8 bit TODO
+#define EM_DAQ_MAX_B12_FS      5142857    // DAQ ADC max fs per 1 channel - 12 bit
+#define EM_DAQ_MAX_B8_FS       5142857    // DAQ ADC max fs per 1 channel - 8 bit TODO
 #define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)   // PWM max freq
 #define EM_SGEN_MAX_F          EM_DAC_TIM_MAX_F    // SGEN max output freq.
 #define EM_MEM_RESERVE         10         // DAQ circ buff memory reserve (min 2)
+
+// ADC -------------------------------------------------------------
+#define EM_ADC1                ADC1
+#define EM_ADC2                ADC2
+#define EM_ADC3                ADC3
+#define EM_ADC4                ADC4
+
+#define EM_ADC1_USED
+#define EM_ADC2_USED
+#define EM_ADC3_USED
+#define EM_ADC4_USED
 
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
@@ -168,7 +179,8 @@
 #define EM_DMA_CH_SGEN         LL_DMA_CHANNEL_3
 
 // IRQ map ---------------------------------------------------------
-#define EM_IRQN_ADC12          ADC1_2_IRQn
+#define EM_IRQN_ADC1           ADC1_2_IRQn
+#define EM_IRQN_ADC2           ADC1_2_IRQn
 #define EM_IRQN_ADC3           ADC3_IRQn
 #define EM_IRQN_ADC4           ADC4_IRQn
 #define EM_IRQN_UART           USART1_IRQn //USART2_IRQn

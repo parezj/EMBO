@@ -151,14 +151,13 @@ static void gen_sine(uint32_t* data, float A, float f, int offset, int N)
 {
     ASSERT(A >= 0 && A <= 100 && f > 0);
 
-    float shift = 5;
-    float max = EM_DAC_MAX_VAL - (2.0*shift);
+    float max = EM_DAC_MAX_VAL;
     float a = ((A/100.0*max)/2);
     uint32_t o = (((float)offset / 100.0 * max) / 2.0);
 
     for (int i = 0; i < N; i++)
     {
-        data[i] = (uint32_t)(a*(sin((float)i*2.0*PI/(float)N) + 1)) + o + shift;
+        data[i] = (uint32_t)(a*(sin((float)i*2.0*PI/(float)N) + 1)) + o;
 
         if (data[i] > EM_DAC_MAX_VAL)
             data[i] = EM_DAC_MAX_VAL;

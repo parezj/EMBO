@@ -348,8 +348,8 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
 
 #elif defined(EM_ADC_MODE_ADC12)
 
-        size_t buff_len1 *= daq.set.ch1_en + daq.set.ch2_en;
-        size_t buff_len2 *= daq.set.ch3_en + daq.set.ch4_en;
+        size_t buff_len1 = buff_len * (daq.set.ch1_en + daq.set.ch2_en);
+        size_t buff_len2 = buff_len * (daq.set.ch3_en + daq.set.ch4_en);
 
         SCPI_ResultArbitraryBlocks(context, buff_len1, buff_len2, 0, 0,
                                             (daq.set.ch1_en == EM_TRUE || daq.set.ch2_en == EM_TRUE ? (uint8_t*)daq.buff1.data : NULL),

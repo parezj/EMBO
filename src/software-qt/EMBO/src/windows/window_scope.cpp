@@ -2133,7 +2133,11 @@ void WindowScope::on_pushButton_disable1_clicked()
 
     m_rescale_needed = true;
 
-    m_ui->customPlot->graph(GRAPH_CH1)->setVisible(false);
+    fix2ADCproblem(false);
+
+    if (m_ui->pushButton_enable1->isVisible())
+        m_ui->customPlot->graph(GRAPH_CH1)->setVisible(false);
+
     sendSet();
 }
 
@@ -2147,7 +2151,11 @@ void WindowScope::on_pushButton_disable2_clicked()
 
     m_rescale_needed = true;
 
-    m_ui->customPlot->graph(GRAPH_CH2)->setVisible(false);
+    fix2ADCproblem(false);
+
+    if (m_ui->pushButton_enable2->isVisible())
+        m_ui->customPlot->graph(GRAPH_CH2)->setVisible(false);
+
     sendSet();
 }
 
@@ -2159,9 +2167,13 @@ void WindowScope::on_pushButton_disable3_clicked()
     m_ui->pushButton_enable3->show();
     m_ui->pushButton_disable3->hide();
 
+    fix2ADCproblem(false);
+
     m_rescale_needed = true;
 
-    m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
+    if (m_ui->pushButton_enable3->isVisible())
+        m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
+
     sendSet();
 }
 
@@ -2173,9 +2185,13 @@ void WindowScope::on_pushButton_disable4_clicked()
     m_ui->pushButton_enable4->show();
     m_ui->pushButton_disable4->hide();
 
+    fix2ADCproblem(false);
+
     m_rescale_needed = true;
 
-    m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
+    if (m_ui->pushButton_enable4->isVisible())
+        m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
+
     sendSet();
 }
 
@@ -2183,6 +2199,8 @@ void WindowScope::on_pushButton_enable1_clicked()
 {
     m_ui->pushButton_enable1->hide();
     m_ui->pushButton_disable1->show();
+
+    fix2ADCproblem(true);
 
     m_rescale_needed = true;
 
@@ -2194,6 +2212,8 @@ void WindowScope::on_pushButton_enable2_clicked()
     m_ui->pushButton_enable2->hide();
     m_ui->pushButton_disable2->show();
 
+    fix2ADCproblem(true);
+
     m_rescale_needed = true;
 
     sendSet();
@@ -2204,6 +2224,8 @@ void WindowScope::on_pushButton_enable3_clicked()
     m_ui->pushButton_enable3->hide();
     m_ui->pushButton_disable3->show();
 
+    fix2ADCproblem(true);
+
     m_rescale_needed = true;
 
     sendSet();
@@ -2213,6 +2235,8 @@ void WindowScope::on_pushButton_enable4_clicked()
 {
     m_ui->pushButton_enable4->hide();
     m_ui->pushButton_disable4->show();
+
+    fix2ADCproblem(true);
 
     m_rescale_needed = true;
 
@@ -2912,6 +2936,56 @@ void WindowScope::enablePanel(bool en)
     m_ui->groupBox_horizontal->setEnabled(en);
     m_ui->groupBox_vertical->setEnabled(en);
     m_ui->groupBox_utils->setEnabled(en);
+}
+
+void WindowScope::fix2ADCproblem(bool add)
+{
+    if (Core::getInstance()->getDevInfo()->adc_num == 2)
+    {
+        int count = 0;
+
+        if (m_ui->pushButton_disable1->isVisible()) count++;
+        if (m_ui->pushButton_disable2->isVisible()) count++;
+        if (m_ui->pushButton_disable3->isVisible()) count++;
+        if (m_ui->pushButton_disable4->isVisible()) count++;
+
+        if (count == 3)
+        {
+            if (add)
+            {
+                m_ui->pushButton_enable1->hide();
+                m_ui->pushButton_disable1->show();
+
+                m_ui->pushButton_enable2->hide();
+                m_ui->pushButton_disable2->show();
+
+                m_ui->pushButton_enable3->hide();
+                m_ui->pushButton_disable3->show();
+
+                m_ui->pushButton_enable4->hide();
+                m_ui->pushButton_disable4->show();
+            }
+            else
+            {
+                if (m_ui->pushButton_disable1->isVisible() && m_ui->pushButton_disable2->isVisible())
+                {
+                    m_ui->pushButton_enable3->show();
+                    m_ui->pushButton_disable3->hide();
+
+                    m_ui->pushButton_enable4->show();
+                    m_ui->pushButton_disable4->hide();
+                }
+                else
+                {
+                    m_ui->pushButton_enable1->show();
+                    m_ui->pushButton_disable1->hide();
+
+                    m_ui->pushButton_enable2->show();
+                    m_ui->pushButton_disable2->hide();
+                }
+            }
+        }
+    }
 }
 
 void WindowScope::sendSet()

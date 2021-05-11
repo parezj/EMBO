@@ -26,6 +26,9 @@ CONFIG(debug, debug|release): DESTDIR = $$OUT_PWD/debug
 
 include(__updater/QSimpleUpdater.pri)
 
+LINUX_LIB_DIR = ubuntu_18
+MACOS_LIB_DIR = mac_10.15
+
 win32 {
 
     include(__crashhandler/qBreakpad.pri)
@@ -59,9 +62,9 @@ linux {
     #include(__crashhandler/qBreakpad.pri)
 
     ARCHITECTURE = linux
-    QMAKE_LIBDIR += $$PWD/lib/linux
-    LIBS += $$PWD/lib/linux/libfftw3.a
-    #LIBS += $$PWD/lib/linux/libqBreakpad.a
+    QMAKE_LIBDIR += $$PWD/lib/$$LINUX_LIB_DIR
+    LIBS += $$PWD/lib/$$LINUX_LIB_DIR/libfftw3.a
+    #LIBS += $$PWD/lib/$$LINUX_LIB_DIR/libqBreakpad.a
 }
 
 macx {
@@ -69,10 +72,10 @@ macx {
     include(__crashhandler/qBreakpad.pri)
 
     ARCHITECTURE = mac
-    QMAKE_LIBDIR += $$PWD/lib/mac
+    QMAKE_LIBDIR += $$PWD/lib/$$MACOS_LIB_DIR
     LIBS += -framework AppKit
-    LIBS += $$PWD/lib/mac/libfftw3.a
-    LIBS += $$PWD/lib/mac/libqBreakpad.a
+    LIBS += $$PWD/lib/$$MACOS_LIB_DIR/libfftw3.a
+    LIBS += $$PWD/lib/$$MACOS_LIB_DIR/libqBreakpad.a
 }
 
 #LIBS += -lOpenGL32

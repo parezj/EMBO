@@ -120,6 +120,8 @@ void adc_init_calib(ADC_TypeDef* adc)
 #endif
 }
 
+volatile uint32_t _smpl_time = 0;
+
 void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, uint32_t smpl_time, uint8_t vrefint)
 {
 /*
@@ -150,6 +152,8 @@ void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t
     LL_ADC_REG_SetSequencerLength(adc, len_raw);
 
     uint32_t next_rank = LL_ADC_REG_RANK_1;
+
+    _smpl_time = smpl_time;
 
     if (vrefint)
     {

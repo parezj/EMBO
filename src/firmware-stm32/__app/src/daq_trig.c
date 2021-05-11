@@ -43,7 +43,7 @@ void daq_trig_init(daq_data_t* self)
     self->trig.buff_trig = NULL;
     self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
     self->trig.exti_trig = EM_LA_IRQ_EXTI1;
-    self->trig.adc_trig = ADC1;
+    self->trig.adc_trig = EM_ADC1;
     self->trig.dma_trig = EM_DMA_ADC1;
     self->trig.order = 0;
     self->trig.ready_last = EM_FALSE;
@@ -377,7 +377,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 
     daq_enable(self, EM_FALSE);
     daq_reset(self);
-    ADC_TypeDef* adc = ADC1;
+    ADC_TypeDef* adc = EM_ADC1;
 
     if (self->mode == LA)
     {
@@ -424,7 +424,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 
         if (ch2 == 1 || ch2 == 2)
         {
-            adc = ADC1;
+            adc = EM_ADC1;
             self->trig.buff_trig = &self->buff1;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
             self->trig.dma_trig = EM_DMA_ADC1;
@@ -442,7 +442,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         }
         else // if (ch == 3 || ch == 4)
         {
-            adc = ADC2;
+            adc = EM_ADC2;
             self->trig.buff_trig = &self->buff2;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
             self->trig.dma_trig = EM_DMA_ADC2;
@@ -456,6 +456,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             if (self->set.ch4_en){
                 it++;
                 if (ch2 == 4) self->trig.order = ch_cnt - it;
+            }
         }
 
 #elif defined(EM_ADC_MODE_ADC1234)
@@ -463,28 +464,28 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         self->trig.order = 0;
         if (ch2 == 1)
         {
-            adc = ADC1;
+            adc = EM_ADC1;
             self->trig.buff_trig = &self->buff1;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
             self->trig.dma_trig = EM_DMA_ADC1;
         }
         else if (ch2 == 2)
         {
-            adc = ADC2;
+            adc = EM_ADC2;
             self->trig.buff_trig = &self->buff2;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
             self->trig.dma_trig = EM_DMA_ADC2;
         }
         else if (ch2 == 3)
         {
-            adc = ADC3;
+            adc = EM_ADC3;
             self->trig.buff_trig = &self->buff3;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC3;
             self->trig.dma_trig = EM_DMA_ADC3;
         }
         else // if (ch2 == 4)
         {
-            adc = ADC4;
+            adc = EM_ADC4;
             self->trig.buff_trig = &self->buff4;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC4;
             self->trig.dma_trig = EM_DMA_ADC4;
@@ -585,7 +586,13 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
                 self->trig.awd_trig = EM_ADC_AWD4;
 
             uint32_t level_raw = (int)(self->adc_max_val / 100.0 * (double)level);
-            uint32_t res = (self->set.bits == B12 ? LL_ADC_RESOLUTION_12B : LL_ADC_RESOLUTION_8B);
+            uint32_t res __attribute__((unused));
+
+#ifdef LL_ADC_RESOLUTION_8B
+            res = (self->set.bits == B12 ? LL_ADC_RESOLUTION_12B : LL_ADC_RESOLUTION_8B);
+#else
+            res = LL_ADC_RESOLUTION_12B;
+#endif
 
             self->trig.awd_hi = __LL_ADC_ANALOGWD_SET_THRESHOLD_RESOLUTION(res, (int)self->adc_max_val);
             self->trig.awd_mid = __LL_ADC_ANALOGWD_SET_THRESHOLD_RESOLUTION(res, level_raw);

@@ -235,7 +235,7 @@ static void MX_ADC1_Init(void)
   ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;
   ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;
-  ADC_REG_InitStruct.Overrun = LL_ADC_REG_OVR_DATA_PRESERVED;
+  ADC_REG_InitStruct.Overrun = LL_ADC_REG_OVR_DATA_OVERWRITTEN;
   LL_ADC_REG_Init(ADC1, &ADC_REG_InitStruct);
 
    /* Enable ADC internal voltage regulator */
@@ -336,7 +336,7 @@ static void MX_ADC2_Init(void)
   ADC_InitStruct.LowPowerMode = LL_ADC_LP_MODE_NONE;
   LL_ADC_Init(ADC2, &ADC_InitStruct);
   ADC_REG_InitStruct.TriggerSource = LL_ADC_REG_TRIG_EXT_TIM3_TRGO_ADC12;
-  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_DISABLE;
+  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_ENABLE_2RANKS;
   ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;
   ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;
@@ -365,7 +365,13 @@ static void MX_ADC2_Init(void)
   LL_ADC_EnableIT_AWD1(ADC2);
   /** Configure Regular Channel
   */
-  LL_ADC_REG_SetSequencerRanks(ADC2, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_7);
+  LL_ADC_REG_SetSequencerRanks(ADC2, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_VREFINT);
+  LL_ADC_SetChannelSamplingTime(ADC2, LL_ADC_CHANNEL_VREFINT, LL_ADC_SAMPLINGTIME_1CYCLE_5);
+  LL_ADC_SetChannelSingleDiff(ADC2, LL_ADC_CHANNEL_VREFINT, LL_ADC_SINGLE_ENDED);
+  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC2), LL_ADC_PATH_INTERNAL_VREFINT);
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC2, LL_ADC_REG_RANK_2, LL_ADC_CHANNEL_7);
   LL_ADC_SetChannelSamplingTime(ADC2, LL_ADC_CHANNEL_7, LL_ADC_SAMPLINGTIME_1CYCLE_5);
   LL_ADC_SetChannelSingleDiff(ADC2, LL_ADC_CHANNEL_7, LL_ADC_SINGLE_ENDED);
   /* USER CODE BEGIN ADC2_Init 2 */
@@ -431,7 +437,7 @@ static void MX_ADC3_Init(void)
   ADC_InitStruct.LowPowerMode = LL_ADC_LP_MODE_NONE;
   LL_ADC_Init(ADC3, &ADC_InitStruct);
   ADC_REG_InitStruct.TriggerSource = LL_ADC_REG_TRIG_EXT_TIM3_TRGO__ADC34;
-  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_DISABLE;
+  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_ENABLE_2RANKS;
   ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;
   ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;
@@ -463,7 +469,13 @@ static void MX_ADC3_Init(void)
   LL_ADC_EnableIT_AWD1(ADC3);
   /** Configure Regular Channel
   */
-  LL_ADC_REG_SetSequencerRanks(ADC3, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_12);
+  LL_ADC_REG_SetSequencerRanks(ADC3, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_VREFINT);
+  LL_ADC_SetChannelSamplingTime(ADC3, LL_ADC_CHANNEL_VREFINT, LL_ADC_SAMPLINGTIME_1CYCLE_5);
+  LL_ADC_SetChannelSingleDiff(ADC3, LL_ADC_CHANNEL_VREFINT, LL_ADC_SINGLE_ENDED);
+  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC3), LL_ADC_PATH_INTERNAL_VREFINT);
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC3, LL_ADC_REG_RANK_2, LL_ADC_CHANNEL_12);
   LL_ADC_SetChannelSamplingTime(ADC3, LL_ADC_CHANNEL_12, LL_ADC_SAMPLINGTIME_1CYCLE_5);
   LL_ADC_SetChannelSingleDiff(ADC3, LL_ADC_CHANNEL_12, LL_ADC_SINGLE_ENDED);
   /* USER CODE BEGIN ADC3_Init 2 */
@@ -530,7 +542,7 @@ static void MX_ADC4_Init(void)
   ADC_InitStruct.LowPowerMode = LL_ADC_LP_MODE_NONE;
   LL_ADC_Init(ADC4, &ADC_InitStruct);
   ADC_REG_InitStruct.TriggerSource = LL_ADC_REG_TRIG_EXT_TIM3_TRGO__ADC34;
-  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_DISABLE;
+  ADC_REG_InitStruct.SequencerLength = LL_ADC_REG_SEQ_SCAN_ENABLE_2RANKS;
   ADC_REG_InitStruct.SequencerDiscont = LL_ADC_REG_SEQ_DISCONT_DISABLE;
   ADC_REG_InitStruct.ContinuousMode = LL_ADC_REG_CONV_SINGLE;
   ADC_REG_InitStruct.DMATransfer = LL_ADC_REG_DMA_TRANSFER_UNLIMITED;
@@ -559,7 +571,13 @@ static void MX_ADC4_Init(void)
   LL_ADC_EnableIT_AWD1(ADC4);
   /** Configure Regular Channel
   */
-  LL_ADC_REG_SetSequencerRanks(ADC4, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_4);
+  LL_ADC_REG_SetSequencerRanks(ADC4, LL_ADC_REG_RANK_1, LL_ADC_CHANNEL_VREFINT);
+  LL_ADC_SetChannelSamplingTime(ADC4, LL_ADC_CHANNEL_VREFINT, LL_ADC_SAMPLINGTIME_1CYCLE_5);
+  LL_ADC_SetChannelSingleDiff(ADC4, LL_ADC_CHANNEL_VREFINT, LL_ADC_SINGLE_ENDED);
+  LL_ADC_SetCommonPathInternalCh(__LL_ADC_COMMON_INSTANCE(ADC4), LL_ADC_PATH_INTERNAL_VREFINT);
+  /** Configure Regular Channel
+  */
+  LL_ADC_REG_SetSequencerRanks(ADC4, LL_ADC_REG_RANK_2, LL_ADC_CHANNEL_4);
   LL_ADC_SetChannelSamplingTime(ADC4, LL_ADC_CHANNEL_4, LL_ADC_SAMPLINGTIME_1CYCLE_5);
   LL_ADC_SetChannelSingleDiff(ADC4, LL_ADC_CHANNEL_4, LL_ADC_SINGLE_ENDED);
   /* USER CODE BEGIN ADC4_Init 2 */

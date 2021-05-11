@@ -1,1 +1,0 @@
-Ubuntu 18 LTS 64 bit
