@@ -310,6 +310,25 @@ void WindowPwm::showEvent(QShowEvent*)
     m_ui->pushButton_ch2enable->show();
     m_ui->pushButton_ch2disable->hide();
 
+    auto info = Core::getInstance()->getDevInfo();
+
+    if (!info->pwm2)
+    {
+        m_ui->pushButton_ch2enable->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_PWM_ON);
+        m_ui->pushButton_ch2disable->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_PWM_ON);
+
+        m_ui->spinBox_duty2->setStyleSheet(CSS_SPINBOX);
+        m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX);
+    }
+    else
+    {
+        m_ui->pushButton_ch2enable->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_PWM_ON);
+        m_ui->pushButton_ch2disable->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_PWM_ON);
+
+        m_ui->spinBox_duty2->setStyleSheet(CSS_SPINBOX_NODIS);
+        m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
+    }
+
     enableAll(false);
     m_instrEnabled = true;
 
@@ -338,10 +357,19 @@ void WindowPwm::enableAll(bool enable)
 
     m_ui->textBrowser_realFreq->setEnabled(enable);
 
+    auto info = Core::getInstance()->getDevInfo();
+
     if (enable)
     {
-        m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "Enabled" : "Disabled") +
+        if (!info->pwm2)
+        {
+            m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "Enabled" : "Disabled"));
+        }
+        else
+        {
+            m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "Enabled" : "Disabled") +
                                   "     Ch2: " + QString(m_ch2_enabled ? "Enabled" : "Disabled"));
+        }
 
         if (m_ch1_enabled)
         {
@@ -368,6 +396,18 @@ void WindowPwm::enableAll(bool enable)
     else
     {
         m_status_enabled->setText(" Wait...");
+    }
+
+    if (!info->pwm2)
+    {
+        m_ui->pushButton_ch2enable->setEnabled(false);
+        m_ui->pushButton_ch2disable->setEnabled(false);
+
+        m_ui->spinBox_duty2->setEnabled(false);
+        m_ui->spinBox_offset->setEnabled(false);
+
+        m_ui->dial_duty2->setEnabled(false);
+        m_ui->dial_offset->setEnabled(false);
     }
 }
 

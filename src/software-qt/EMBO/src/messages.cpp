@@ -24,6 +24,40 @@ void Msg_Idn::on_dataRx()
 
     core->getDevInfo()->name = tokens[1];
     core->getDevInfo()->fw = tokens[3];
+
+    QStringList tokens_ver1 = core->getDevInfo()->fw.split(" ", QString::SkipEmptyParts);
+
+    if (tokens_ver1.size() < 2)
+    {
+        core->err(INVALID_MSG + m_rxData, true);
+        return;
+    }
+
+    QStringList tokens_ver2 = tokens_ver1[0].split(".", QString::SkipEmptyParts);
+
+    if (tokens_ver2.size() != 3)
+    {
+        core->err(INVALID_MSG + m_rxData, true);
+        return;
+    }
+
+    int fw_major = tokens_ver2[0].toInt();
+    int fw_minor = tokens_ver2[1].toInt();
+    int fw_rev = tokens_ver2[2].toInt();
+
+    QStringList tokens_req = QString(MIN_FW_VER).split(".", QString::SkipEmptyParts);
+
+    int req_major = tokens_req[0].toInt();
+    int req_minor = tokens_req[1].toInt();
+    int req_rev = tokens_req[2].toInt();
+
+    if ((fw_major < req_major) ||
+        (fw_major == req_major && fw_minor < req_minor) ||
+        (fw_major == req_major && fw_minor == req_minor && fw_rev < req_rev))
+    {
+        core->err("Firmware version " + tokens_ver1[0] + " is not supported with this application! Please upgrade.", true);
+        return;
+    }
 }
 
 void Msg_Rst::on_dataRx()
@@ -61,32 +95,35 @@ void Msg_SYS_Lims::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
-    if (tokens.size() != 15 || tokens[5].size() < 1 || tokens[14].size() != 4)
+    if (tokens.size() != 16 || tokens[6].size() < 1 || tokens[15].size() != 4)
     {
         core->err(INVALID_MSG + m_rxData, true);
         return;
     }
 
-    core->getDevInfo()->adc_fs_12b = tokens[0].toInt();
-    core->getDevInfo()->adc_fs_8b = tokens[1].toInt();
-    core->getDevInfo()->mem = tokens[2].toInt();
-    core->getDevInfo()->la_fs = tokens[3].toInt();
-    core->getDevInfo()->pwm_fs = tokens[4].toInt();
-    core->getDevInfo()->adc_num = (tokens[5])[0].digitValue();
-    core->getDevInfo()->adc_dualmode = tokens[5].contains('D');
-    core->getDevInfo()->adc_interleaved = tokens[5].contains('I');
-    core->getDevInfo()->adc_bit8 = tokens[6] == '1';
-    core->getDevInfo()->dac = tokens[7] == '1';
-    core->getDevInfo()->vm_fs = tokens[8].toInt();
-    core->getDevInfo()->vm_mem = tokens[9].toInt();
-    core->getDevInfo()->cntr_timeout = tokens[10].toInt();
-    core->getDevInfo()->sgen_maxf = tokens[11].toInt();
-    core->getDevInfo()->sgen_maxmem = tokens[12].toInt();
-    core->getDevInfo()->daq_reserve = tokens[13].toInt();
-    core->getDevInfo()->la_ch1_pin = tokens[14][0].toLatin1() - '0';
-    core->getDevInfo()->la_ch2_pin = tokens[14][1].toLatin1() - '0';
-    core->getDevInfo()->la_ch3_pin = tokens[14][2].toLatin1() - '0';
-    core->getDevInfo()->la_ch4_pin = tokens[14][3].toLatin1() - '0';
+    auto devInfo = core->getDevInfo();
+
+    devInfo->adc_fs_12b = tokens[0].toInt();
+    devInfo->adc_fs_8b = tokens[1].toInt();
+    devInfo->mem = tokens[2].toInt();
+    devInfo->la_fs = tokens[3].toInt();
+    devInfo->pwm_fs = tokens[4].toInt();
+    devInfo->pwm2 = tokens[5] == '1';
+    devInfo->adc_num = (tokens[6])[0].digitValue();
+    devInfo->adc_dualmode = tokens[6].contains('D');
+    devInfo->adc_interleaved = tokens[6].contains('I');
+    devInfo->adc_bit8 = tokens[7] == '1';
+    devInfo->dac = tokens[8] == '1';
+    devInfo->vm_fs = tokens[9].toInt();
+    devInfo->vm_mem = tokens[10].toInt();
+    devInfo->cntr_timeout = tokens[11].toInt();
+    devInfo->sgen_maxf = tokens[12].toInt();
+    devInfo->sgen_maxmem = tokens[13].toInt();
+    devInfo->daq_reserve = tokens[14].toInt();
+    devInfo->la_ch1_pin = tokens[15][0].toLatin1() - '0';
+    devInfo->la_ch2_pin = tokens[15][1].toLatin1() - '0';
+    devInfo->la_ch3_pin = tokens[15][2].toLatin1() - '0';
+    devInfo->la_ch4_pin = tokens[15][3].toLatin1() - '0';
 }
 
 
@@ -103,16 +140,18 @@ void Msg_SYS_Info::on_dataRx()
         return;
     }
 
-    core->getDevInfo()->rtos = tokens[0];
-    core->getDevInfo()->ll = tokens[1];
-    core->getDevInfo()->comm = tokens[2];
-    core->getDevInfo()->fcpu = tokens[3];
-    core->getDevInfo()->ref_mv = tokens[4].toInt();
-    core->getDevInfo()->pins_scope_vm = tokens[5];
-    core->getDevInfo()->pins_la = tokens[6];
-    core->getDevInfo()->pins_cntr = tokens[7];
-    core->getDevInfo()->pins_pwm = tokens[8];
-    core->getDevInfo()->pins_sgen = tokens[9];
+    auto devInfo = core->getDevInfo();
+
+    devInfo->rtos = tokens[0];
+    devInfo->ll = tokens[1];
+    devInfo->comm = tokens[2];
+    devInfo->fcpu = tokens[3];
+    devInfo->ref_mv = tokens[4].toInt();
+    devInfo->pins_scope_vm = tokens[5];
+    devInfo->pins_la = tokens[6];
+    devInfo->pins_cntr = tokens[7];
+    devInfo->pins_pwm = tokens[8];
+    devInfo->pins_sgen = tokens[9];
 }
 
 void Msg_SYS_Mode::on_dataRx()
@@ -199,7 +238,7 @@ void Msg_SCOP_Set::on_dataRx()
     {
         QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
-        if (tokens.size() != 11)
+        if (tokens.size() != 12)
         {
             emit err(INVALID_MSG + m_rxData, CRITICAL, true);
             return;
@@ -226,11 +265,11 @@ void Msg_SCOP_Set::on_dataRx()
         emit result(bits, tokens[1].toInt(), tokens[2].toInt(),
                     tokens[3][0] == '1', tokens[3][1] == '1', tokens[3][2] == '1', tokens[3][3] == '1',
                     tokens[4].toInt(), tokens[5].toInt(), edge, mode, tokens[8].toInt(),
-                    maxZ, tokens[10].toDouble(), tokens[10]);
+                    maxZ, tokens[10].toDouble(), tokens[11].toDouble(), tokens[11]);
     }
     else
     {
-        if (tokens.size() != 3 && !m_rxData.contains(EMBO_OK))
+        if (tokens.size() != 4 && !m_rxData.contains(EMBO_OK))
         {
             emit err("SCOPE set failed! " + m_rxData, CRITICAL, true);
             return;
@@ -240,7 +279,7 @@ void Msg_SCOP_Set::on_dataRx()
         if (maxZ < 0)
             maxZ = 10;
 
-        emit ok2(maxZ, tokens[2].toDouble(), tokens[2]);
+        emit ok2(maxZ, tokens[2].toDouble(), tokens[3].toDouble(), tokens[3]);
     }
 }
 

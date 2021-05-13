@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1234</width>
-    <height>606</height>
+    <width>1252</width>
+    <height>605</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>940</width>
-    <height>606</height>
+    <height>0</height>
    </size>
   </property>
   <property name="font">
@@ -33,7 +33,7 @@
    <property name="minimumSize">
     <size>
      <width>0</width>
-     <height>562</height>
+     <height>100</height>
     </size>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -52,6 +52,34 @@
     <property name="spacing">
      <number>0</number>
     </property>
+    <item row="3" column="1">
+     <widget class="Line" name="line">
+      <property name="windowModality">
+       <enum>Qt::NonModal</enum>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>2</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>2</height>
+       </size>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="1">
      <layout class="QGridLayout" name="layout_main">
       <property name="leftMargin">
@@ -61,7 +89,7 @@
        <number>9</number>
       </property>
       <property name="rightMargin">
-       <number>9</number>
+       <number>0</number>
       </property>
       <property name="bottomMargin">
        <number>9</number>
@@ -99,201 +127,6 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
            <property name="verticalSpacing">
             <number>3</number>
            </property>
-           <item row="1" column="0">
-            <layout class="QGridLayout" name="gridLayout_plot">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <item row="1" column="1">
-              <widget class="ctkRangeSlider" name="horizontalSlider_cursorH">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>25</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-height: 25px;
-    max-height: 25px;
-	margin-left: 33px;
-	margin-right:2px;
-}
-
-ctkRangeSlider::groove:horizontal {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:horizontal {
-     width: 25px;
-	 image: url(:/main/img/range_down.png);
-}
-
-ctkRangeSlider::handle:horizontal:hover {
-     width: 25px;
-	 image: url(:/main/img/range_down2.png);
-}
-
-QSlider {
-    min-height: 25px;
-    max-height: 25px;
-	margin-left: 33px;
-	margin-right:2px;
-}
-
-QSlider::groove:horizontal {
-	background-color: transparent;
-}
-
-QSlider::handle:horizontal {
-     width: 25px;
-	 image: url(:/main/img/range_down.png);
-}
-
-QSlider::handle:horizontal:hover {
-	 width: 25px;
-	 image: url(:/main/img/range_down2.png);
-}</string>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="singleStep">
-                <number>1</number>
-               </property>
-               <property name="value">
-                <number>500</number>
-               </property>
-               <property name="sliderPosition">
-                <number>500</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100000</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="ctkRangeSlider" name="horizontalSlider_cursorV">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>25</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="font">
-                <font>
-                 <weight>50</weight>
-                 <bold>false</bold>
-                </font>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">ctkRangeSlider {
-    min-width: 25px;
-    max-width: 25px;
-	margin-bottom: 16px;
-	margin-top: 2px;
-}
-
-ctkRangeSlider::groove:vertical {
-    background-color: transparent;
-}
-
-ctkRangeSlider::handle:vertical {
-     height: 25px;
-	 image: url(:/main/img/range_left.png);
-}
-
-ctkRangeSlider::handle:vertical:hover {
-     height: 25px;
-	 image: url(:/main/img/range_left2.png);
-}
-
-QSlider {
-    min-width: 25px;
-    max-width: 25px;
-	margin-bottom: 16px;
-	margin-top: 2px;
-}
-
-QSlider::groove:vertical {
-	background-color: transparent;
-}
-
-QSlider::handle:vertical {
-     height: 25px;
-	 image: url(:/main/img/range_left.png);
-}
-
-QSlider::handle:vertical:hover {
-	 height: 25px;
-	 image: url(:/main/img/range_left2.png);
-}</string>
-               </property>
-               <property name="maximum">
-                <number>1000</number>
-               </property>
-               <property name="value">
-                <number>500</number>
-               </property>
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="tickPosition">
-                <enum>QSlider::NoTicks</enum>
-               </property>
-               <property name="tickInterval">
-                <number>100000</number>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="1">
-              <widget class="QCustomPlot" name="customPlot" native="true">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>0</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">background-color: white;border: 0px;</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
            <item row="2" column="0">
             <layout class="QGridLayout" name="gridLayout_3">
              <property name="topMargin">
@@ -580,6 +413,32 @@ QPushButton:disabled {
                  </size>
                 </property>
                </widget>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_meas_2">
+               <property name="font">
+                <font>
+                 <family>Roboto Medium</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Cursors</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_meas">
+               <property name="font">
+                <font>
+                 <family>Roboto Medium</family>
+                 <pointsize>11</pointsize>
+                </font>
+               </property>
+               <property name="text">
+                <string>Measure (Channel 1)</string>
+               </property>
               </widget>
              </item>
              <item row="1" column="0">
@@ -917,29 +776,204 @@ p, li { white-space: pre-wrap; }
                <zorder>label_10</zorder>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QLabel" name="label_meas_2">
+            </layout>
+           </item>
+           <item row="1" column="0">
+            <layout class="QGridLayout" name="gridLayout_plot">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item row="0" column="0">
+              <widget class="ctkRangeSlider" name="horizontalSlider_cursorV">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>25</width>
+                 <height>0</height>
+                </size>
+               </property>
                <property name="font">
                 <font>
-                 <family>Roboto Medium</family>
-                 <pointsize>11</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
                 </font>
                </property>
-               <property name="text">
-                <string>Cursors</string>
+               <property name="styleSheet">
+                <string notr="true">ctkRangeSlider {
+    min-width: 25px;
+    max-width: 25px;
+	margin-bottom: 16px;
+	margin-top: 2px;
+}
+
+ctkRangeSlider::groove:vertical {
+    background-color: transparent;
+}
+
+ctkRangeSlider::handle:vertical {
+     height: 25px;
+	 image: url(:/main/img/range_left.png);
+}
+
+ctkRangeSlider::handle:vertical:hover {
+     height: 25px;
+	 image: url(:/main/img/range_left2.png);
+}
+
+QSlider {
+    min-width: 25px;
+    max-width: 25px;
+	margin-bottom: 16px;
+	margin-top: 2px;
+}
+
+QSlider::groove:vertical {
+	background-color: transparent;
+}
+
+QSlider::handle:vertical {
+     height: 25px;
+	 image: url(:/main/img/range_left.png);
+}
+
+QSlider::handle:vertical:hover {
+	 height: 25px;
+	 image: url(:/main/img/range_left2.png);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="value">
+                <number>500</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>100000</number>
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label_meas">
+             <item row="0" column="1">
+              <widget class="QCustomPlot" name="customPlot" native="true">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>100000</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">background-color: white;border: 0px;</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="ctkRangeSlider" name="horizontalSlider_cursorH">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>25</height>
+                </size>
+               </property>
                <property name="font">
                 <font>
-                 <family>Roboto Medium</family>
-                 <pointsize>11</pointsize>
+                 <weight>50</weight>
+                 <bold>false</bold>
                 </font>
                </property>
-               <property name="text">
-                <string>Measure (Channel 1)</string>
+               <property name="styleSheet">
+                <string notr="true">ctkRangeSlider {
+    min-height: 25px;
+    max-height: 25px;
+	margin-left: 33px;
+	margin-right:2px;
+}
+
+ctkRangeSlider::groove:horizontal {
+    background-color: transparent;
+}
+
+ctkRangeSlider::handle:horizontal {
+     width: 25px;
+	 image: url(:/main/img/range_down.png);
+}
+
+ctkRangeSlider::handle:horizontal:hover {
+     width: 25px;
+	 image: url(:/main/img/range_down2.png);
+}
+
+QSlider {
+    min-height: 25px;
+    max-height: 25px;
+	margin-left: 33px;
+	margin-right:2px;
+}
+
+QSlider::groove:horizontal {
+	background-color: transparent;
+}
+
+QSlider::handle:horizontal {
+     width: 25px;
+	 image: url(:/main/img/range_down.png);
+}
+
+QSlider::handle:horizontal:hover {
+	 width: 25px;
+	 image: url(:/main/img/range_down2.png);
+}</string>
+               </property>
+               <property name="maximum">
+                <number>1000</number>
+               </property>
+               <property name="singleStep">
+                <number>1</number>
+               </property>
+               <property name="value">
+                <number>500</number>
+               </property>
+               <property name="sliderPosition">
+                <number>500</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="tickPosition">
+                <enum>QSlider::NoTicks</enum>
+               </property>
+               <property name="tickInterval">
+                <number>100000</number>
                </property>
               </widget>
              </item>
@@ -951,7 +985,7 @@ p, li { white-space: pre-wrap; }
        </layout>
       </item>
       <item row="0" column="1">
-       <widget class="QGroupBox" name="layout_controls">
+       <widget class="QScrollArea" name="scrollArea_panel">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
           <horstretch>0</horstretch>
@@ -960,116 +994,140 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="minimumSize">
          <size>
-          <width>388</width>
+          <width>0</width>
           <height>0</height>
          </size>
         </property>
-        <property name="font">
-         <font>
-          <family>Roboto</family>
-         </font>
+        <property name="maximumSize">
+         <size>
+          <width>420</width>
+          <height>16777215</height>
+         </size>
         </property>
-        <property name="styleSheet">
-         <string notr="true">QGroupBox {background-color: rgba(220,220,220,0); border:0px}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="title">
-         <string/>
+        <property name="lineWidth">
+         <number>0</number>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="spacing">
-          <number>0</number>
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOn</enum>
+        </property>
+        <property name="horizontalScrollBarPolicy">
+         <enum>Qt::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>403</width>
+           <height>542</height>
+          </rect>
          </property>
-         <property name="leftMargin">
-          <number>5</number>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
          </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>1</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_ch1">
-           <property name="minimumSize">
-            <size>
-             <width>390</width>
-             <height>95</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>95</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto Medium</family>
-             <pointsize>11</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px; }; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
-           </property>
-           <property name="title">
-            <string/>
-           </property>
-           <widget class="QTextBrowser" name="textBrowser_ch1">
-            <property name="enabled">
-             <bool>true</bool>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>8</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-            <property name="geometry">
-             <rect>
-              <x>9</x>
-              <y>20</y>
-              <width>225</width>
-              <height>65</height>
-             </rect>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
             </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_ch1">
+            <property name="minimumSize">
+             <size>
+              <width>390</width>
+              <height>95</height>
+             </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>225</width>
-              <height>65</height>
+              <width>390</width>
+              <height>95</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <family>Roboto Mono Medium</family>
-              <pointsize>30</pointsize>
-              <weight>62</weight>
-              <italic>false</italic>
-              <bold>true</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="cursor" stdset="0">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
             <property name="styleSheet">
-             <string notr="true">QTextBrowser {
+             <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px; }; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QTextBrowser" name="textBrowser_ch1">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>20</y>
+               <width>225</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>225</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Mono Medium</family>
+               <pointsize>30</pointsize>
+               <weight>62</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="cursor" stdset="0">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: gray;
@@ -1081,41 +1139,41 @@ QTextBrowser:disabled {
 	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }</string>
-            </property>
-            <property name="html">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:496; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_gain1">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>55</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>121</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>120</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
+             </property>
+            </widget>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_gain1">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>55</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>121</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>120</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
 				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
 
 QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px;
@@ -1139,82 +1197,82 @@ QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; imag
 
 QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down2.png); }
 </string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="frame">
-             <bool>true</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="minimum">
-             <double>-9.900000000000000</double>
-            </property>
-            <property name="value">
-             <double>1.000000000000000</double>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_7">
-            <property name="geometry">
-             <rect>
-              <x>264</x>
-              <y>59</y>
-              <width>45</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Scale:</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_disable1">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>20</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="prefix">
+              <string/>
+             </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="minimum">
+              <double>-9.900000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_7">
+             <property name="geometry">
+              <rect>
+               <x>264</x>
+               <y>59</y>
+               <width>45</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Scale:</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_disable1">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>20</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -1243,38 +1301,38 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH1 ON  </string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-on_ch1.png</normaloff>:/main/img/power-on_ch1.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_enable1">
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>20</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> CH1 ON  </string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-on_ch1.png</normaloff>:/main/img/power-on_ch1.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_enable1">
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>20</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -1303,54 +1361,54 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH1 OFF</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_ch1">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>1</y>
-              <width>221</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Medium</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Channel 1 (A12)</string>
-            </property>
-           </widget>
-           <widget class="QProgressBar" name="progressBar_ch1">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>239</x>
-              <y>20</y>
-              <width>15</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"> QProgressBar {
+             </property>
+             <property name="text">
+              <string> CH1 OFF</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_ch1">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>1</y>
+               <width>221</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Channel 1 (A12)</string>
+             </property>
+            </widget>
+            <widget class="QProgressBar" name="progressBar_ch1">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>239</x>
+               <y>20</y>
+               <width>15</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"> QProgressBar {
      border: 1px solid;
 	 border-color: #0072BD;
      border-radius: 2px;
@@ -1369,91 +1427,91 @@ QProgressBar:disabled {
     border-color: gray;
 	background-color:  rgb(210,210,210);
  }</string>
-            </property>
-            <property name="value">
-             <number>24</number>
-            </property>
-            <property name="textVisible">
-             <bool>false</bool>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
+             </property>
+             <property name="value">
+              <number>24</number>
+             </property>
+             <property name="textVisible">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+            <zorder>textBrowser_ch1</zorder>
+            <zorder>doubleSpinBox_gain1</zorder>
+            <zorder>label_7</zorder>
+            <zorder>pushButton_enable1</zorder>
+            <zorder>pushButton_disable1</zorder>
+            <zorder>label_ch1</zorder>
+            <zorder>progressBar_ch1</zorder>
            </widget>
-           <zorder>textBrowser_ch1</zorder>
-           <zorder>doubleSpinBox_gain1</zorder>
-           <zorder>label_7</zorder>
-           <zorder>pushButton_enable1</zorder>
-           <zorder>pushButton_disable1</zorder>
-           <zorder>label_ch1</zorder>
-           <zorder>progressBar_ch1</zorder>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_ch2">
-           <property name="minimumSize">
-            <size>
-             <width>370</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto Medium</family>
-             <pointsize>11</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
-           </property>
-           <property name="title">
-            <string/>
-           </property>
-           <widget class="QTextBrowser" name="textBrowser_ch2">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>9</x>
-              <y>26</y>
-              <width>225</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_ch2">
+            <property name="minimumSize">
+             <size>
+              <width>370</width>
+              <height>100</height>
+             </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>225</width>
-              <height>65</height>
+              <width>16777215</width>
+              <height>100</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <family>Roboto Mono Medium</family>
-              <pointsize>30</pointsize>
-              <weight>62</weight>
-              <italic>false</italic>
-              <bold>true</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="cursor" stdset="0">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
             <property name="styleSheet">
-             <string notr="true">QTextBrowser {
+             <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QTextBrowser" name="textBrowser_ch2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>26</y>
+               <width>225</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>225</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Mono Medium</family>
+               <pointsize>30</pointsize>
+               <weight>62</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="cursor" stdset="0">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: gray;
@@ -1465,41 +1523,41 @@ QTextBrowser:disabled {
 	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }</string>
-            </property>
-            <property name="html">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:496; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_gain2">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>61</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>121</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>120</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
+             </property>
+            </widget>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_gain2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>61</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>121</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>120</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
 				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
 
 QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px;
@@ -1523,79 +1581,79 @@ QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; imag
 
 QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down2.png); }
 </string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="frame">
-             <bool>true</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="minimum">
-             <double>-9.900000000000000</double>
-            </property>
-            <property name="value">
-             <double>1.000000000000000</double>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_6">
-            <property name="geometry">
-             <rect>
-              <x>264</x>
-              <y>65</y>
-              <width>45</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Scale:</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_disable2">
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>26</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="prefix">
+              <string/>
+             </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="minimum">
+              <double>-9.900000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_6">
+             <property name="geometry">
+              <rect>
+               <x>264</x>
+               <y>65</y>
+               <width>45</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Scale:</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_disable2">
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>26</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -1624,38 +1682,38 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH2 ON  </string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-on_ch2.png</normaloff>:/main/img/power-on_ch2.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_enable2">
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>26</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> CH2 ON  </string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-on_ch2.png</normaloff>:/main/img/power-on_ch2.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_enable2">
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>26</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -1684,54 +1742,54 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH2 OFF</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_ch2">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>8</y>
-              <width>221</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Medium</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Channel 2  (A12)</string>
-            </property>
-           </widget>
-           <widget class="QProgressBar" name="progressBar_ch2">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>239</x>
-              <y>26</y>
-              <width>15</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"> QProgressBar {
+             </property>
+             <property name="text">
+              <string> CH2 OFF</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_ch2">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>8</y>
+               <width>221</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Channel 2  (A12)</string>
+             </property>
+            </widget>
+            <widget class="QProgressBar" name="progressBar_ch2">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>239</x>
+               <y>26</y>
+               <width>15</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"> QProgressBar {
      border: 1px solid;
 	 border-color: #D95319;
      border-radius: 2px;
@@ -1752,91 +1810,91 @@ QProgressBar:disabled {
  }
 
 </string>
-            </property>
-            <property name="value">
-             <number>50</number>
-            </property>
-            <property name="textVisible">
-             <bool>false</bool>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
+             </property>
+             <property name="value">
+              <number>50</number>
+             </property>
+             <property name="textVisible">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+            <zorder>textBrowser_ch2</zorder>
+            <zorder>doubleSpinBox_gain2</zorder>
+            <zorder>label_6</zorder>
+            <zorder>pushButton_enable2</zorder>
+            <zorder>pushButton_disable2</zorder>
+            <zorder>label_ch2</zorder>
+            <zorder>progressBar_ch2</zorder>
            </widget>
-           <zorder>textBrowser_ch2</zorder>
-           <zorder>doubleSpinBox_gain2</zorder>
-           <zorder>label_6</zorder>
-           <zorder>pushButton_enable2</zorder>
-           <zorder>pushButton_disable2</zorder>
-           <zorder>label_ch2</zorder>
-           <zorder>progressBar_ch2</zorder>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_ch3">
-           <property name="minimumSize">
-            <size>
-             <width>370</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto Medium</family>
-             <pointsize>11</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
-</string>
-           </property>
-           <property name="title">
-            <string/>
-           </property>
-           <widget class="QTextBrowser" name="textBrowser_ch3">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>9</x>
-              <y>26</y>
-              <width>225</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_ch3">
+            <property name="minimumSize">
+             <size>
+              <width>370</width>
+              <height>100</height>
+             </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>225</width>
-              <height>65</height>
+              <width>16777215</width>
+              <height>100</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <family>Roboto Mono Medium</family>
-              <pointsize>30</pointsize>
-              <weight>62</weight>
-              <italic>false</italic>
-              <bold>true</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="cursor" stdset="0">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
             <property name="styleSheet">
-             <string notr="true">QTextBrowser {
+             <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QTextBrowser" name="textBrowser_ch3">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>26</y>
+               <width>225</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>225</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Mono Medium</family>
+               <pointsize>30</pointsize>
+               <weight>62</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="cursor" stdset="0">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: gray;
@@ -1849,41 +1907,41 @@ QTextBrowser:disabled {
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }
 </string>
-            </property>
-            <property name="html">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:496; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_gain3">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>61</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>121</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>120</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
+             </property>
+            </widget>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_gain3">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>61</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>121</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>120</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
 				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
 
 QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px;
@@ -1907,79 +1965,79 @@ QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; imag
 
 QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down2.png); }
 </string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="frame">
-             <bool>true</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="minimum">
-             <double>-9.900000000000000</double>
-            </property>
-            <property name="value">
-             <double>1.000000000000000</double>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_5">
-            <property name="geometry">
-             <rect>
-              <x>264</x>
-              <y>65</y>
-              <width>45</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Scale:</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_disable3">
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>26</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="prefix">
+              <string/>
+             </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="minimum">
+              <double>-9.900000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_5">
+             <property name="geometry">
+              <rect>
+               <x>264</x>
+               <y>65</y>
+               <width>45</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Scale:</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_disable3">
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>26</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -2008,38 +2066,38 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH3 ON  </string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-on_ch3.png</normaloff>:/main/img/power-on_ch3.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_enable3">
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>26</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> CH3 ON  </string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-on_ch3.png</normaloff>:/main/img/power-on_ch3.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_enable3">
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>26</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -2068,51 +2126,51 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH3 OFF</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_ch3">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>8</y>
-              <width>221</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Medium</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Channel 3  (A12)</string>
-            </property>
-           </widget>
-           <widget class="QProgressBar" name="progressBar_ch3">
-            <property name="geometry">
-             <rect>
-              <x>239</x>
-              <y>26</y>
-              <width>15</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"> QProgressBar {
+             </property>
+             <property name="text">
+              <string> CH3 OFF</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_ch3">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>8</y>
+               <width>221</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Channel 3  (A12)</string>
+             </property>
+            </widget>
+            <widget class="QProgressBar" name="progressBar_ch3">
+             <property name="geometry">
+              <rect>
+               <x>239</x>
+               <y>26</y>
+               <width>15</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"> QProgressBar {
      border: 1px solid;
      border-color: #77AC30;
      border-radius: 2px;
@@ -2131,91 +2189,91 @@ QProgressBar:disabled {
     border-color: gray;
 	background-color:  rgb(210,210,210);
  }</string>
-            </property>
-            <property name="value">
-             <number>75</number>
-            </property>
-            <property name="textVisible">
-             <bool>false</bool>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
+             </property>
+             <property name="value">
+              <number>75</number>
+             </property>
+             <property name="textVisible">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+            </widget>
+            <zorder>textBrowser_ch3</zorder>
+            <zorder>doubleSpinBox_gain3</zorder>
+            <zorder>label_5</zorder>
+            <zorder>label_ch3</zorder>
+            <zorder>progressBar_ch3</zorder>
+            <zorder>pushButton_enable3</zorder>
+            <zorder>pushButton_disable3</zorder>
            </widget>
-           <zorder>textBrowser_ch3</zorder>
-           <zorder>doubleSpinBox_gain3</zorder>
-           <zorder>label_5</zorder>
-           <zorder>label_ch3</zorder>
-           <zorder>progressBar_ch3</zorder>
-           <zorder>pushButton_enable3</zorder>
-           <zorder>pushButton_disable3</zorder>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_ch4">
-           <property name="minimumSize">
-            <size>
-             <width>370</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>100</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto Medium</family>
-             <pointsize>11</pointsize>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
-           </property>
-           <property name="title">
-            <string/>
-           </property>
-           <widget class="QTextBrowser" name="textBrowser_ch4">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>9</x>
-              <y>26</y>
-              <width>225</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_ch4">
+            <property name="minimumSize">
+             <size>
+              <width>370</width>
+              <height>100</height>
+             </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>225</width>
-              <height>65</height>
+              <width>16777215</width>
+              <height>100</height>
              </size>
             </property>
             <property name="font">
              <font>
-              <family>Roboto Mono Medium</family>
-              <pointsize>30</pointsize>
-              <weight>62</weight>
-              <italic>false</italic>
-              <bold>true</bold>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
              </font>
             </property>
-            <property name="cursor" stdset="0">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
             <property name="styleSheet">
-             <string notr="true">QTextBrowser {
+             <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QTextBrowser" name="textBrowser_ch4">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>26</y>
+               <width>225</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>225</width>
+               <height>65</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Mono Medium</family>
+               <pointsize>30</pointsize>
+               <weight>62</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="cursor" stdset="0">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QTextBrowser {
 	background-color: rgba(240,240,240, 1.0);border: 1px solid; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 	border-color: gray;
@@ -2227,41 +2285,41 @@ QTextBrowser:disabled {
 	border: 1px solid gray; border-radius:10px;
 	text-align:center;font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:500;
 }</string>
-            </property>
-            <property name="html">
-             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+             </property>
+             <property name="html">
+              <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Roboto Mono Medium'; font-size:30pt; font-weight:496; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-            </property>
-           </widget>
-           <widget class="QDoubleSpinBox" name="doubleSpinBox_gain4">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>61</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>121</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>120</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
+             </property>
+            </widget>
+            <widget class="QDoubleSpinBox" name="doubleSpinBox_gain4">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>61</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>121</width>
+               <height>0</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>120</width>
+               <height>16777215</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:5px;
 				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
 
 QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px;
@@ -2285,79 +2343,79 @@ QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; imag
 
 QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down2.png); }
 </string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="frame">
-             <bool>true</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::NoButtons</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="prefix">
-             <string/>
-            </property>
-            <property name="decimals">
-             <number>2</number>
-            </property>
-            <property name="minimum">
-             <double>-9.900000000000000</double>
-            </property>
-            <property name="value">
-             <double>1.000000000000000</double>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_4">
-            <property name="geometry">
-             <rect>
-              <x>264</x>
-              <y>65</y>
-              <width>45</width>
-              <height>23</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Scale:</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_enable4">
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>26</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="frame">
+              <bool>true</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::NoButtons</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="prefix">
+              <string/>
+             </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="minimum">
+              <double>-9.900000000000000</double>
+             </property>
+             <property name="value">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_4">
+             <property name="geometry">
+              <rect>
+               <x>264</x>
+               <y>65</y>
+               <width>45</width>
+               <height>23</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Scale:</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_enable4">
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>26</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -2386,38 +2444,38 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH4 OFF</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_disable4">
-            <property name="geometry">
-             <rect>
-              <x>259</x>
-              <y>26</y>
-              <width>121</width>
-              <height>30</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> CH4 OFF</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-off-gray2.png</normaloff>:/main/img/power-off-gray2.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_disable4">
+             <property name="geometry">
+              <rect>
+               <x>259</x>
+               <y>26</y>
+               <width>121</width>
+               <height>30</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -2446,51 +2504,51 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> CH4 ON  </string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-on_ch4.png</normaloff>:/main/img/power-on_ch4.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_ch4">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>8</y>
-              <width>221</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Medium</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Channel 4  (A12)</string>
-            </property>
-           </widget>
-           <widget class="QProgressBar" name="progressBar_ch4">
-            <property name="geometry">
-             <rect>
-              <x>239</x>
-              <y>26</y>
-              <width>15</width>
-              <height>65</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true"> QProgressBar {
+             </property>
+             <property name="text">
+              <string> CH4 ON  </string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-on_ch4.png</normaloff>:/main/img/power-on_ch4.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_ch4">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>8</y>
+               <width>221</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Channel 4  (A12)</string>
+             </property>
+            </widget>
+            <widget class="QProgressBar" name="progressBar_ch4">
+             <property name="geometry">
+              <rect>
+               <x>239</x>
+               <y>26</y>
+               <width>15</width>
+               <height>65</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"> QProgressBar {
      border: 1px solid;
      border-color: #7E2F8E;
      border-radius: 2px;
@@ -2510,238 +2568,135 @@ QProgressBar:disabled {
 	background-color:  rgb(210,210,210);
  }
 </string>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-            <property name="textVisible">
-             <bool>false</bool>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Vertical</enum>
-            </property>
-            <property name="invertedAppearance">
-             <bool>false</bool>
-            </property>
-            <property name="textDirection">
-             <enum>QProgressBar::TopToBottom</enum>
-            </property>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+             <property name="textVisible">
+              <bool>false</bool>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+             <property name="textDirection">
+              <enum>QProgressBar::TopToBottom</enum>
+             </property>
+            </widget>
+            <zorder>textBrowser_ch4</zorder>
+            <zorder>doubleSpinBox_gain4</zorder>
+            <zorder>label_4</zorder>
+            <zorder>label_ch4</zorder>
+            <zorder>progressBar_ch4</zorder>
+            <zorder>pushButton_enable4</zorder>
+            <zorder>pushButton_disable4</zorder>
            </widget>
-           <zorder>textBrowser_ch4</zorder>
-           <zorder>doubleSpinBox_gain4</zorder>
-           <zorder>label_4</zorder>
-           <zorder>label_ch4</zorder>
-           <zorder>progressBar_ch4</zorder>
-           <zorder>pushButton_enable4</zorder>
-           <zorder>pushButton_disable4</zorder>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_settigns">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>140</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>140</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <family>Roboto Medium</family>
-             <pointsize>11</pointsize>
-             <weight>50</weight>
-             <italic>false</italic>
-             <bold>false</bold>
-             <kerning>true</kerning>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
-           </property>
-           <property name="title">
-            <string/>
-           </property>
-           <widget class="QLabel" name="label_3">
-            <property name="geometry">
-             <rect>
-              <x>80</x>
-              <y>95</y>
-              <width>101</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Plot Points:</string>
-            </property>
-           </widget>
-           <widget class="QDial2" name="dial_display">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>80</y>
-              <width>51</width>
-              <height>50</height>
-             </rect>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>6000</number>
-            </property>
-            <property name="value">
-             <number>100</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="invertedAppearance">
-             <bool>false</bool>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="notchTarget">
-             <double>30.000000000000000</double>
-            </property>
-            <property name="notchesVisible">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QSpinBox" name="spinBox_display">
-            <property name="geometry">
-             <rect>
-              <x>70</x>
-              <y>85</y>
-              <width>201</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
-				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
-
-QSpinBox::up-button { 
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/img/arrow_up4.png);
-}
-
-QSpinBox::down-button {
-	height:22px; 
-	width: 30px;
-	border: 0px;
-	image: url(:/main/img/arrow_down4.png);
- }
-
-QSpinBox::up-button:hover { 
-	image: url(:/main/img/arrow_up4b.png);
-}
-
-QSpinBox::down-button:hover {
-	image: url(:/main/img/arrow_down4b.png);
- }
-
-QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
-                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
-                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
-
-QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up2.png); }
-
-QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down2.png); }
-</string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::UpDownArrows</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="suffix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>2</number>
-            </property>
-            <property name="maximum">
-             <number>6000</number>
-            </property>
-            <property name="value">
-             <number>300</number>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_dial4">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>80</y>
-              <width>51</width>
-              <height>50</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="../../resources/resources.qrc">:/main/img/dial1.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>false</bool>
-            </property>
-           </widget>
-           <widget class="QSpinBox" name="spinBox_average">
-            <property name="enabled">
-             <bool>true</bool>
-            </property>
-            <property name="geometry">
-             <rect>
-              <x>70</x>
-              <y>35</y>
-              <width>201</width>
-              <height>41</height>
-             </rect>
-            </property>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_settigns">
             <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>140</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>140</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Roboto Medium</family>
+              <pointsize>11</pointsize>
+              <weight>50</weight>
+              <italic>false</italic>
+              <bold>false</bold>
+              <kerning>true</kerning>
+             </font>
+            </property>
             <property name="styleSheet">
-             <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
+             <string notr="true">QGroupBox {background-color: rgb(200,200,200);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+            </property>
+            <property name="title">
+             <string/>
+            </property>
+            <widget class="QLabel" name="label_3">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>95</y>
+               <width>101</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Plot Points:</string>
+             </property>
+            </widget>
+            <widget class="QDial2" name="dial_display">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>80</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>6000</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="notchTarget">
+              <double>30.000000000000000</double>
+             </property>
+             <property name="notchesVisible">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QSpinBox" name="spinBox_display">
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>85</y>
+               <width>201</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
 				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
 
 QSpinBox::up-button { 
@@ -2774,129 +2729,232 @@ QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url
 
 QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down2.png); }
 </string>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-            <property name="buttonSymbols">
-             <enum>QAbstractSpinBox::UpDownArrows</enum>
-            </property>
-            <property name="accelerated">
-             <bool>false</bool>
-            </property>
-            <property name="keyboardTracking">
-             <bool>false</bool>
-            </property>
-            <property name="showGroupSeparator" stdset="0">
-             <bool>false</bool>
-            </property>
-            <property name="suffix">
-             <string/>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>500</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-           </widget>
-           <widget class="QDial2" name="dial_average">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>30</y>
-              <width>51</width>
-              <height>50</height>
-             </rect>
-            </property>
-            <property name="minimum">
-             <number>1</number>
-            </property>
-            <property name="maximum">
-             <number>500</number>
-            </property>
-            <property name="value">
-             <number>1</number>
-            </property>
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="invertedAppearance">
-             <bool>false</bool>
-            </property>
-            <property name="wrapping">
-             <bool>false</bool>
-            </property>
-            <property name="notchTarget">
-             <double>15.000000000000000</double>
-            </property>
-            <property name="notchesVisible">
-             <bool>true</bool>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_avg">
-            <property name="geometry">
-             <rect>
-              <x>80</x>
-              <y>45</y>
-              <width>111</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Light</family>
-              <pointsize>13</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Average (OFF):</string>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_dial3">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>30</y>
-              <width>51</width>
-              <height>50</height>
-             </rect>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="pixmap">
-             <pixmap resource="../../resources/resources.qrc">:/main/img/dial1.png</pixmap>
-            </property>
-            <property name="scaledContents">
-             <bool>false</bool>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_disable">
-            <property name="geometry">
-             <rect>
-              <x>280</x>
-              <y>85</y>
-              <width>101</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::UpDownArrows</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string/>
+             </property>
+             <property name="minimum">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <number>6000</number>
+             </property>
+             <property name="value">
+              <number>300</number>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_dial4">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>80</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="../../resources/resources.qrc">:/main/img/dial1.png</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QSpinBox" name="spinBox_average">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="geometry">
+              <rect>
+               <x>70</x>
+               <y>35</y>
+               <width>201</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px;
+				   text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  }
+
+QSpinBox::up-button { 
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/img/arrow_up4.png);
+}
+
+QSpinBox::down-button {
+	height:22px; 
+	width: 30px;
+	border: 0px;
+	image: url(:/main/img/arrow_down4.png);
+ }
+
+QSpinBox::up-button:hover { 
+	image: url(:/main/img/arrow_up4b.png);
+}
+
+QSpinBox::down-button:hover {
+	image: url(:/main/img/arrow_down4b.png);
+ }
+
+QSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px;
+                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px;
+                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; }
+
+QSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up2.png); }
+
+QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down2.png); }
+</string>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="buttonSymbols">
+              <enum>QAbstractSpinBox::UpDownArrows</enum>
+             </property>
+             <property name="accelerated">
+              <bool>false</bool>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="showGroupSeparator" stdset="0">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string/>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>500</number>
+             </property>
+             <property name="value">
+              <number>1</number>
+             </property>
+            </widget>
+            <widget class="QDial2" name="dial_average">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>500</number>
+             </property>
+             <property name="value">
+              <number>1</number>
+             </property>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="invertedAppearance">
+              <bool>false</bool>
+             </property>
+             <property name="wrapping">
+              <bool>false</bool>
+             </property>
+             <property name="notchTarget">
+              <double>15.000000000000000</double>
+             </property>
+             <property name="notchesVisible">
+              <bool>true</bool>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_avg">
+             <property name="geometry">
+              <rect>
+               <x>80</x>
+               <y>45</y>
+               <width>111</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Light</family>
+               <pointsize>13</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Average (OFF):</string>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_dial3">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>30</y>
+               <width>51</width>
+               <height>50</height>
+              </rect>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="pixmap">
+              <pixmap resource="../../resources/resources.qrc">:/main/img/dial1.png</pixmap>
+             </property>
+             <property name="scaledContents">
+              <bool>false</bool>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_disable">
+             <property name="geometry">
+              <rect>
+               <x>280</x>
+               <y>85</y>
+               <width>101</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -2925,39 +2983,39 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> ON  </string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-off-green3.png</normaloff>
-              <disabledoff>:/main/img/power-off-green3.png</disabledoff>:/main/img/power-off-green3.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_enable">
-            <property name="geometry">
-             <rect>
-              <x>280</x>
-              <y>85</y>
-              <width>101</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> ON  </string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-off-green3.png</normaloff>
+               <disabledoff>:/main/img/power-off-green3.png</disabledoff>:/main/img/power-off-green3.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_enable">
+             <property name="geometry">
+              <rect>
+               <x>280</x>
+               <y>85</y>
+               <width>101</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -2986,57 +3044,57 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string> OFF</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../../resources/resources.qrc">
-              <normaloff>:/main/img/power-off-red.png</normaloff>:/main/img/power-off-red.png</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_titleSettings">
-            <property name="geometry">
-             <rect>
-              <x>10</x>
-              <y>8</y>
-              <width>81</width>
-              <height>16</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto Medium</family>
-              <pointsize>11</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Settings</string>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_reset">
-            <property name="geometry">
-             <rect>
-              <x>280</x>
-              <y>35</y>
-              <width>101</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string> OFF</string>
+             </property>
+             <property name="icon">
+              <iconset resource="../../resources/resources.qrc">
+               <normaloff>:/main/img/power-off-red.png</normaloff>:/main/img/power-off-red.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_titleSettings">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>8</y>
+               <width>81</width>
+               <height>16</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto Medium</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="text">
+              <string>Settings</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_reset">
+             <property name="geometry">
+              <rect>
+               <x>280</x>
+               <y>35</y>
+               <width>101</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -3064,34 +3122,34 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
-            </property>
-            <property name="text">
-             <string>Reset All</string>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>23</width>
-              <height>22</height>
-             </size>
-            </property>
-           </widget>
-           <widget class="QPushButton" name="pushButton_resetZoom">
-            <property name="geometry">
-             <rect>
-              <x>280</x>
-              <y>35</y>
-              <width>101</width>
-              <height>41</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>13</pointsize>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QPushButton {
+             </property>
+             <property name="text">
+              <string>Reset All</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="pushButton_resetZoom">
+             <property name="geometry">
+              <rect>
+               <x>280</x>
+               <y>35</y>
+               <width>101</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>13</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
 	padding: 0.2em 0.2em 0.3em 0.2em;
 	border: 1px solid rgb(150, 150, 150);
 	border-radius: 5px;
@@ -3118,127 +3176,100 @@ QPushButton:disabled {
 	color: gray;
 	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
+             </property>
+             <property name="text">
+              <string>Reset Zoom</string>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>23</width>
+               <height>22</height>
+              </size>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_nplc">
+             <property name="geometry">
+              <rect>
+               <x>160</x>
+               <y>10</y>
+               <width>71</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>10</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="text">
+              <string>10.5 NPLC</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+            <widget class="QLabel" name="label_fs">
+             <property name="geometry">
+              <rect>
+               <x>110</x>
+               <y>10</y>
+               <width>61</width>
+               <height>21</height>
+              </rect>
+             </property>
+             <property name="font">
+              <font>
+               <family>Roboto</family>
+               <pointsize>10</pointsize>
+               <weight>50</weight>
+               <bold>false</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>100 Sps</string>
+             </property>
+            </widget>
+            <zorder>spinBox_display</zorder>
+            <zorder>label_3</zorder>
+            <zorder>label_dial4</zorder>
+            <zorder>dial_display</zorder>
+            <zorder>spinBox_average</zorder>
+            <zorder>label_avg</zorder>
+            <zorder>label_dial3</zorder>
+            <zorder>dial_average</zorder>
+            <zorder>pushButton_enable</zorder>
+            <zorder>pushButton_disable</zorder>
+            <zorder>label_titleSettings</zorder>
+            <zorder>pushButton_resetZoom</zorder>
+            <zorder>pushButton_reset</zorder>
+            <zorder>label_nplc</zorder>
+            <zorder>label_fs</zorder>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
             </property>
-            <property name="text">
-             <string>Reset Zoom</string>
-            </property>
-            <property name="iconSize">
+            <property name="sizeHint" stdset="0">
              <size>
-              <width>23</width>
-              <height>22</height>
+              <width>20</width>
+              <height>40</height>
              </size>
             </property>
-           </widget>
-           <widget class="QLabel" name="label_nplc">
-            <property name="geometry">
-             <rect>
-              <x>160</x>
-              <y>10</y>
-              <width>71</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>10</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="layoutDirection">
-             <enum>Qt::LeftToRight</enum>
-            </property>
-            <property name="text">
-             <string>10.5 NPLC</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-            </property>
-           </widget>
-           <widget class="QLabel" name="label_fs">
-            <property name="geometry">
-             <rect>
-              <x>110</x>
-              <y>10</y>
-              <width>61</width>
-              <height>21</height>
-             </rect>
-            </property>
-            <property name="font">
-             <font>
-              <family>Roboto</family>
-              <pointsize>10</pointsize>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>100 Sps</string>
-            </property>
-           </widget>
-           <zorder>spinBox_display</zorder>
-           <zorder>label_3</zorder>
-           <zorder>label_dial4</zorder>
-           <zorder>dial_display</zorder>
-           <zorder>spinBox_average</zorder>
-           <zorder>label_avg</zorder>
-           <zorder>label_dial3</zorder>
-           <zorder>dial_average</zorder>
-           <zorder>pushButton_enable</zorder>
-           <zorder>pushButton_disable</zorder>
-           <zorder>label_titleSettings</zorder>
-           <zorder>pushButton_resetZoom</zorder>
-           <zorder>pushButton_reset</zorder>
-           <zorder>label_nplc</zorder>
-           <zorder>label_fs</zorder>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_4">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-        </layout>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
-    </item>
-    <item row="3" column="1">
-     <widget class="Line" name="line">
-      <property name="windowModality">
-       <enum>Qt::NonModal</enum>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>2</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>2</height>
-       </size>
-      </property>
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>
@@ -3247,7 +3278,7 @@ QPushButton:disabled {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1234</width>
+     <width>1252</width>
      <height>22</height>
     </rect>
    </property>

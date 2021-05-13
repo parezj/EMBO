@@ -4,6 +4,12 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
+VERSION = 0.1.3
+MIN_FW = 0.1.9
+
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
+DEFINES += MIN_FW_VER=\\\"$$MIN_FW\\\"
+
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -87,9 +93,6 @@ help.files += "$${PWD}/doc/EMBO.chm" \
               "$${PWD}/doc/EMBO.qch"
 help.path += $${DESTDIR}/doc
 INSTALLS += help
-
-VERSION = 0.1.2
-DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 QMAKE_TARGET_COMPANY = CTU Jakub Parez
 QMAKE_TARGET_PRODUCT = EMBO

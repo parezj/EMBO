@@ -6,7 +6,7 @@
 #ifndef INC_CFG_CFG_F303RE_H_
 #define INC_CFG_CFG_F303RE_H_
 
-#if defined(STM32F303xE)
+#if defined(EM_F303RE)
 
 #include "stm32f3xx.h"
 
@@ -32,6 +32,13 @@
 #define EM_DEV_COMM            "USART2 (115200 bps)"         // device comm methods
 #define EM_LL_VER              "1.11.2"                      // STM32 CubeMX LL drivers
 
+// pins ------------------------------------------------------------
+#define EM_PINS_SCOPE_VM       "C0-C1-B0-B14"
+#define EM_PINS_LA             "C0-C1-C2-C3"
+#define EM_PINS_CNTR           "C9"
+#define EM_PINS_PWM            "B8-B10"
+#define EM_PINS_SGEN           "A4"
+
 // stack size ------------------------------------------------------
 #define EM_STACK_MIN           128
 #define EM_STACK_T1            128
@@ -40,12 +47,13 @@
 #define EM_STACK_T4            512
 #define EM_STACK_T5            128
 
-// pins ------------------------------------------------------------
-#define EM_PINS_SCOPE_VM       "C0-C1-B0-B14"
-#define EM_PINS_LA             "C0-C1-C2-C3"
-#define EM_PINS_CNTR           "C9"
-#define EM_PINS_PWM            "B8-B10"
-#define EM_PINS_SGEN           "A4"
+// IRQ priorities --------------------------------------------------
+#define EM_IT_PRI_CNTR         4   // counter - overflow bit
+#define EM_IT_PRI_ADC          5   // analog watchdog ADC
+#define EM_IT_PRI_EXTI         5   // logic analyzer GPIO
+#define EM_IT_PRI_UART         6   // UART RX
+#define EM_IT_PRI_USB          7   // USB RX
+#define EM_IT_PRI_SYST         15  // systick
 
 // freqs  -----------------------------------------------------------
 #define EM_FREQ_LSI            40000     // LSI clock - wdg
@@ -53,11 +61,12 @@
 #define EM_FREQ_ADCCLK         72000000  // ADC clock
 #define EM_FREQ_PCLK1          72000000  // APB1 clock - TIM2,3,4
 #define EM_FREQ_PCLK2          72000000  // APB2 clock - TIM1,8
+#define EM_FREQ_PLLCLK2_x2     144000000 // doubled PLL clock
 #define EM_SYSTICK_FREQ        1000      // Systick clock
 
 // UART -------------------------------------------------------------
-#define EM_UART                USART1 //USART2               // UART periph
-#define EM_UART_RX_IRQHandler  USART1_IRQHandler //USART2_IRQHandler    // UART IRQ handler
+#define EM_UART                USART2               // UART periph
+#define EM_UART_RX_IRQHandler  USART2_IRQHandler    // UART IRQ handler
 #define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RTO(x);  // RTO flags needs clearing
 //#define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RXNE(x);  // RXNE flags needs clearing
 //#define EM_USB                                    // if emulated USB enabled
@@ -76,7 +85,12 @@
 #define EM_DAC_TIM_MAX_F       4500000              // DAC max sampling time
 
 // GPIO ------------------------------------------------------------
-#define EM_GPIO_EXTI_SRC       LL_SYSCFG_SetEXTISource         // GPIO EXTI source
+#define EM_GPIO_EXTI_SRC       LL_SYSCFG_SetEXTISource      // GPIO EXTI source
+#define EM_GPIO_EXTI_ACTIVE_R  LL_EXTI_IsActiveFlag_0_31    // GPIO EXTI is active rising?
+#define EM_GPIO_EXTI_ACTIVE_F  LL_EXTI_IsActiveFlag_0_31    // GPIO EXTI is active falling?
+#define EM_GPIO_EXTI_CLEAR_R   LL_EXTI_ClearFlag_0_31       // GPIO EXTI clear rising flag
+#define EM_GPIO_EXTI_CLEAR_F   LL_EXTI_ClearFlag_0_31       // GPIO EXTI clear rising flag
+//#define EM_GPIO_EXTI_R_F
 
 // ADC -------------------------------------------------------------
 //#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)               - verified
@@ -96,13 +110,10 @@
 #define EM_ADC_C_F             0.000000000005 // 5pF           // ADC internal capacitance in F
 #define EM_ADC_R_OHM           1000.0                          // ADC internal impedance in Ohm
 #define EM_ADC_SMPLT_CNT       8                               // count of available smpl times
-//#define EM_ADC_LINREG                                          // before calibration enable regulator
+//#define EM_ADC_LINREG                                        // before calibration enable regulator
 //#define EM_ADC_CAL_EN                                        // calibration while enabled
 //#define LL_ADC_SPEC_START                                    // special start stop methods needed
 #define EM_ADC_AWD             LL_ADC_AWD1,                    // Analog Watchdog
-
-#define EM_ADC_TRIG_12         LL_ADC_REG_TRIG_EXT_TIM3_TRGO_ADC12     // ADC TIM trig TRGO 12
-#define EM_ADC_TRIG_34         LL_ADC_REG_TRIG_EXT_TIM3_TRGO__ADC34    // ADC TIM trig TRGO 34
 #define EM_ADC_EN_TICKS        LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES
 
 
@@ -110,20 +121,20 @@
 //#define EM_HAL_SYSTICK
 #define EM_TIM_DAQ             TIM3
 #define EM_TIM_DAQ_MAX         65535
-#define EM_TIM_DAQ_FREQ        EM_FREQ_PCLK1
+#define EM_TIM_DAQ_FREQ        EM_FREQ_PLLCLK2_x2
 #define EM_TIM_DAQ_IRQh        TIM3_IRQHandler
 #define EM_TIM_PWM1            TIM2
 #define EM_TIM_PWM1_MAX        65535
-#define EM_TIM_PWM1_FREQ       EM_FREQ_PCLK1
+#define EM_TIM_PWM1_FREQ       EM_FREQ_PLLCLK2_x2
 #define EM_TIM_PWM1_CH         LL_TIM_CHANNEL_CH3
 #define EM_TIM_PWM1_CHN(a)     a##CH3
 #define EM_TIM_PWM2            TIM4
 #define EM_TIM_PWM2_MAX        65535
-#define EM_TIM_PWM2_FREQ       EM_FREQ_PCLK1
+#define EM_TIM_PWM2_FREQ       EM_FREQ_PLLCLK2_x2
 #define EM_TIM_PWM2_CH         LL_TIM_CHANNEL_CH3
 #define EM_TIM_PWM2_CHN(a)     a##CH3
 #define EM_TIM_CNTR            TIM8
-#define EM_TIM_CNTR_FREQ       (EM_FREQ_PCLK2*2)
+#define EM_TIM_CNTR_FREQ       EM_FREQ_PLLCLK2_x2
 #define EM_TIM_CNTR_UP_IRQh    TIM8_UP_IRQHandler
 #define EM_TIM_CNTR_MAX        65535
 #define EM_TIM_CNTR_CH         LL_TIM_CHANNEL_CH4 // direct input capture - channel
@@ -140,10 +151,10 @@
 
 // max values ------------------------------------------------------
 #define EM_DAQ_MAX_MEM         50000      // DAQ max total memory
-#define EM_LA_MAX_FS           10285714   // Logic Analyzer max FS
-#define EM_DAQ_MAX_B12_FS      5142857    // DAQ ADC max fs per 1 channel - 12 bit
-#define EM_DAQ_MAX_B8_FS       5142857    // DAQ ADC max fs per 1 channel - 8 bit TODO
-#define EM_PWM_MAX_F           (EM_TIM_PWM1_FREQ / 2)   // PWM max freq
+#define EM_LA_MAX_FS           14400000   // Logic Analyzer max FS
+#define EM_DAQ_MAX_B12_FS      4965517    // DAQ ADC max fs per 1 channel - 12 bit
+#define EM_DAQ_MAX_B8_FS       4965517    // DAQ ADC max fs per 1 channel - 8 bit TODO
+#define EM_PWM_MAX_F           48000000   // PWM max freq
 #define EM_SGEN_MAX_F          EM_DAC_TIM_MAX_F    // SGEN max output freq.
 #define EM_MEM_RESERVE         10         // DAQ circ buff memory reserve (min 2)
 
@@ -157,6 +168,10 @@
 #define EM_ADC2_USED
 #define EM_ADC3_USED
 #define EM_ADC4_USED
+
+#define EM_ADC12_IRQh          ADC1_2_IRQHandler
+#define EM_ADC3_IRQh           ADC3_IRQHandler
+#define EM_ADC4_IRQh           ADC4_IRQHandler
 
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
@@ -183,7 +198,7 @@
 #define EM_IRQN_ADC2           ADC1_2_IRQn
 #define EM_IRQN_ADC3           ADC3_IRQn
 #define EM_IRQN_ADC4           ADC4_IRQn
-#define EM_IRQN_UART           USART1_IRQn //USART2_IRQn
+#define EM_IRQN_UART           USART2_IRQn
 #define EM_LA_IRQ_EXTI1        EXTI0_IRQn
 #define EM_LA_IRQ_EXTI2        EXTI1_IRQn
 #define EM_LA_IRQ_EXTI3        EXTI2_TSC_IRQn
@@ -206,6 +221,12 @@
 #define EM_LA_CH3_IRQh         EXTI2_TSC_IRQHandler
 #define EM_LA_CH4_IRQh         EXTI3_IRQHandler
 #define EM_LA_UNUSED_IRQh      EXTI4_IRQHandler
+
+// LA IRQ dynamic handlers ---------------------------------------
+#define EM_LA_IRQ1_CH1         la_irq_ch1
+#define EM_LA_IRQ2_CH2         la_irq_ch2
+#define EM_LA_IRQ3_CH3         la_irq_ch3
+#define EM_LA_IRQ4_CH4         la_irq_ch4
 
 // ADC pins --------------------------------------------------------
 #define EM_ADC_AWD1            LL_ADC_AWD_CHANNEL_6_REG

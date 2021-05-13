@@ -544,7 +544,8 @@ void WindowVm::on_actionShowPlot_triggered(bool checked)
 
         m_ui->groupBox_screen->show();
 
-        this->setMinimumWidth(940);
+        this->setMinimumWidth(947);
+        this->setMinimumHeight(261);
     }
     else
     {

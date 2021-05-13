@@ -108,6 +108,8 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
     uint8_t dac = 0;
     uint8_t bit8 = 0;
     uint8_t adcs = 0;
+    uint8_t pwm2 = 0;
+
 #ifdef EM_DAC
     dac = 1;
 #endif
@@ -130,8 +132,12 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
     inter[0] = 'I';
 #endif
 
-    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d,%d%d%d%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
-                      EM_LA_MAX_FS, EM_PWM_MAX_F, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MEAS_MS,
+#ifdef EM_TIM_PWM2
+    pwm2 = 1;
+#endif
+
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d,%d%d%d%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
+                      EM_LA_MAX_FS, EM_PWM_MAX_F, pwm2, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MEAS_MS,
                       EM_SGEN_MAX_F, EM_DAC_BUFF_LEN, EM_MEM_RESERVE,
                       EM_GPIO_LA_CH1_NUM, EM_GPIO_LA_CH2_NUM, EM_GPIO_LA_CH3_NUM, EM_GPIO_LA_CH4_NUM); // 78 chars
 
@@ -433,7 +439,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             daq_settings_save(&daq.set, &daq.trig.set, &daq.save_s, &daq.trig.save_s); // added later
             daq_enable(&daq, EM_TRUE);
 
-            char buff[45];
+            char buff[50];
             char maxZ_s[15];
             double max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
             sprint_fast(maxZ_s, "%s", max_Z, 1);
@@ -441,7 +447,10 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             char freq_real_s[20];
             sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
-            int len = sprintf(buff, "\"OK\",%s,%s", maxZ_s, freq_real_s);
+            char T_s[6];
+            sprint_fast(T_s, "%s", daq.smpl_time, 1);
+
+            int len = sprintf(buff, "\"OK\",%s,%s,%s", maxZ_s, T_s, freq_real_s);
 
             SCPI_ResultCharacters(context, buff, len);
             return SCPI_RES_OK;
@@ -468,7 +477,7 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
 {
     if (daq.mode == SCOPE)
     {
-        char buff[105];
+        char buff[110];
         char chans_en[5];
         char edge_s[2];
         char mode_s[2];
@@ -491,8 +500,12 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
         char freq_real_s[20];
         sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
-        int len = sprintf(buff, "%d,%d,%d,%s,%d,%d,%s,%s,%d,%s,%s", daq.set.bits, daq.set.mem, daq.set.fs, chans_en,
-                          daq.trig.set.ch, daq.trig.set.val_percent, edge_s, mode_s, daq.trig.set.pretrigger, maxZ_s, freq_real_s);
+        char T_s[6];
+        sprint_fast(T_s, "%s", daq.smpl_time, 1);
+
+
+        int len = sprintf(buff, "%d,%d,%d,%s,%d,%d,%s,%s,%d,%s,%s,%s", daq.set.bits, daq.set.mem, daq.set.fs, chans_en,
+                          daq.trig.set.ch, daq.trig.set.val_percent, edge_s, mode_s, daq.trig.set.pretrigger, maxZ_s, T_s, freq_real_s);
 
         SCPI_ResultCharacters(context, buff, len);
         return SCPI_RES_OK;
@@ -525,6 +538,8 @@ scpi_result_t EM_SCOPE_ForceTrig(scpi_t* context)
 
     if (daq.trig.pretrig_cntr < daq.trig.pretrig_val || en == EM_FALSE)
     {
+        daq.trig.force_single = EM_TRUE;
+
         SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE2);
         return SCPI_RES_ERR;
     }
@@ -694,6 +709,8 @@ scpi_result_t EM_LA_ForceTrig(scpi_t* context)
 
     if (daq.trig.pretrig_cntr < daq.trig.pretrig_val || en == EM_FALSE)
     {
+        daq.trig.force_single = EM_TRUE;
+
         SCPI_ErrorPush(context, SCPI_ERROR_FUNCTION_NOT_AVAILABLE2);
         return SCPI_RES_ERR;
     }

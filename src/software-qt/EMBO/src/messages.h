@@ -148,9 +148,10 @@ public:
     explicit Msg_SCOP_Set(QObject* parent=0) : Msg(EMBO_SCOP_SET, true, parent) {};
     virtual void on_dataRx() override;
 signals:
-    void ok2(double maxZ, double fs_real_n, const QString fs_real);
+    void ok2(double maxZ, double smpl_time, double fs_real_n, const QString fs_real);
     void result(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
-                DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real_n, const QString fs_real);
+                DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre,
+                double maxZ,  double smpl_time, double fs_real_n, const QString fs_real);
 };
 
 class Msg_SCOP_ForceTrig : public Msg

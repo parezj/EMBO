@@ -120,23 +120,8 @@ void adc_init_calib(ADC_TypeDef* adc)
 #endif
 }
 
-volatile uint32_t _smpl_time = 0;
-
 void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, uint32_t smpl_time, uint8_t vrefint)
 {
-/*
-#ifdef EM_ADC_TRIG_34
-    if (ch1 == 1 || ch2 == 2)
-        LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_12);
-    else
-        LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_34);
-#else
-    LL_ADC_REG_SetTriggerSource(adc, EM_ADC_TRIG_12);
-#endif
-*/
-    //LL_ADC_SetMultimode(__LL_ADC_COMMON_INSTANCE(adc), LL_ADC_MULTI_INDEPENDENT); // CHANGED 6.5.21
-    //LL_ADC_REG_SetDMATransfer(adc, LL_ADC_REG_DMA_TRANSFER_UNLIMITED); // CHANGED 6.5.21
-
     int len = ch1 + ch2 + ch3 + ch4 + vrefint;
 
     uint32_t len_raw = LL_ADC_REG_SEQ_SCAN_DISABLE;
@@ -153,7 +138,10 @@ void adc_set_ch(ADC_TypeDef* adc, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t
 
     uint32_t next_rank = LL_ADC_REG_RANK_1;
 
-    _smpl_time = smpl_time;
+#ifdef LL_ADC_SAMPLINGTIME_COMMON_1
+    LL_ADC_SetSamplingTimeCommonChannels(adc, LL_ADC_SAMPLINGTIME_COMMON_1, smpl_time);
+    smpl_time = LL_ADC_SAMPLINGTIME_COMMON_1;
+#endif
 
     if (vrefint)
     {

@@ -847,7 +847,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       </font>
      </property>
      <property name="text">
-      <string>Channel 2</string>
+      <string>Channel 1</string>
      </property>
     </widget>
     <zorder>spinBox_duty1</zorder>

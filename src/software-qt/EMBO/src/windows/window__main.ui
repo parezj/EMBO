@@ -1004,7 +1004,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pins:</string>
+       <string>• Port:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -1302,7 +1302,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pins:</string>
+       <string>• Port:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -1574,7 +1574,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pins:</string>
+       <string>• Port:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -1873,7 +1873,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pins:</string>
+       <string>• Port:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -2145,7 +2145,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pin:</string>
+       <string>• Port:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -2341,7 +2341,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Pin:</string>
+       <string>• Port:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>

@@ -660,6 +660,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     self->trig.cntr = 0;
     self->trig.ignore = EM_FALSE;
     self->trig.irq_en = EM_FALSE;
+    self->trig.force_single = EM_FALSE;
 
     if (self->mode == SCOPE || self->mode == VM)
     {

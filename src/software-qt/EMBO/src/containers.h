@@ -100,6 +100,7 @@ public:
     int mem;
     int la_fs;
     int pwm_fs;
+    bool pwm2;
     int adc_num;
     bool adc_dualmode;
     bool adc_interleaved;
@@ -138,6 +139,7 @@ public:
 
     /* read-only */
     double maxZ_ohm;
+    double smpl_time;
     double fs_real_n;
     QString fs_real;
 };

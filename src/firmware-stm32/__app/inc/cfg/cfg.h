@@ -15,7 +15,7 @@
 #define EM_DEBUG      // auto enable PWM, SGEN on start and more verbose
 //#define EM_SYSVIEW  // SEGGER System View enabled - less DAQ memory
 
-#define EM_DEV_VER      "0.1.8"
+#define EM_DEV_VER      "0.1.9"
 #define EM_DEV_AUTHOR   "CTU/Jakub Parez"
 
 
@@ -23,7 +23,7 @@
  +                                               board specific                                              +
  +-----------------------------------------------------------------------------------------------------------*/
 
-/*................................................... F103 ..................................................*/
+/*.................................................. F103C8 .................................................*/
 
 #if defined(STM32F103xB)
 
@@ -44,6 +44,7 @@
 #include "cfg_f103c8.h"
 
 #elif defined(STM32F103xE)
+/*.................................................. F103RE .................................................*/
 
 #define EM_F103RE
 
@@ -63,6 +64,7 @@
 #include "cfg_f103re.h"
 
 #elif defined(STM32F303xE)
+/*.................................................. F303RE .................................................*/
 
 #define EM_F303RE
 
@@ -83,6 +85,45 @@
 
 #include "cfg_f303re.h"
 
+#elif defined(STM32G031xx)
+/*.................................................. G031K8 .................................................*/
+
+#if defined(K8)
+#define EM_G031K8
+
+/*
+ * =========layout=========
+ *  DAQ CH1 ........... PA0  (Arduino A0)
+ *  DAQ CH2 ........... PA1  (Arduino A1)
+ *  DAQ CH3 ........... PA4  (Arduino A2)
+ *  DAQ CH4 ........... PA5  (Arduino A3)
+ *  PWM CH1 ........... PA15 (Arduino D2)
+ *  CNTR .............. PA8  (Arduino D9)
+ *  =======================
+*/
+
+#include "cfg_g031k8.h"
+
+#elif defined(J6)
+/*.................................................. G031J6 .................................................*/
+
+#define EM_G031J6
+
+/*
+ * =========layout=========
+ *  DAQ CH1 ........... PA0  (Arduino A0)
+ *  DAQ CH2 ........... PA1  (Arduino A1)
+ *  DAQ CH3 ........... PA4  (Arduino A2)
+ *  DAQ CH4 ........... PA5  (Arduino A3)
+ *  PWM CH1 ........... PA15 (Arduino D2)
+ *  CNTR .............. PA8  (Arduino D9)
+ *  =======================
+*/
+
+#include "cfg_g031j6.h"
+
+#endif
+
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------+
@@ -93,14 +134,6 @@
 #define EM_LN2POW14            9.70406    // ln(2^14)
 #define EM_LN2POW10            6.93147    // ln(2^10)
 #define EM_UWTICK_MAX          4294967295 // (2^32) - 1
-
-// IRQ priorities --------------------------------------------------
-#define EM_IT_PRI_CNTR         4   // counter - overflow bit
-#define EM_IT_PRI_ADC          5   // analog watchdog ADC
-#define EM_IT_PRI_EXTI         5   // logic analyzer GPIO
-#define EM_IT_PRI_UART         6   // UART RX
-#define EM_IT_PRI_USB          7   // USB RX
-#define EM_IT_PRI_SYST         15  // systick
 
 // Async respond strings -------------------------------------------
 #define EM_RESP_NRDY           "Not ready!"
@@ -126,7 +159,7 @@
 
 // Voltmeter common ------------------------------------------------
 #define EM_VM_FS               100  // voltmeter fs (Hz)
-#define EM_VM_MEM              10 // 300  // voltmeter mem
+#define EM_VM_MEM              300  // voltmeter mem
 
 // LED timing ------------------------------------------------------
 #define EM_BLINK_LONG_MS       500  // long blink - startup

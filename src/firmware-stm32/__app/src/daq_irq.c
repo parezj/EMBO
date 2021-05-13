@@ -15,11 +15,20 @@
 #include "SEGGER_SYSVIEW.h"
 #endif
 
+static void la_irq_ch1(void);
+static void la_irq_ch2(void);
+static void la_irq_ch3(void);
+static void la_irq_ch4(void);
+
+#ifdef EM_LA_EXTI_UNUSED
+static void la_irq_unused(void);
+#endif
+
+
 #if defined(EM_ADC1_USED) || defined(EM_ADC2_USED)
-void ADC1_2_IRQHandler(void)
+void EM_ADC12_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
-    ASSERT(!(LL_ADC_IsActiveFlag_AWD1(ADC1) && LL_ADC_IsActiveFlag_AWD1(ADC2)));
 
     traceISR_ENTER();
     uint8_t ret = -1;
@@ -30,12 +39,14 @@ void ADC1_2_IRQHandler(void)
         ret = daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC1);
     }
+#ifdef EM_ADC2_USED
     else if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1)
     {
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
         ret = daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC2);
     }
+#endif
 
     //if (LL_ADC_IsActiveFlag_EOS(ADC1) == 1)
     //    LL_ADC_ClearFlag_EOS(ADC1);
@@ -48,7 +59,7 @@ void ADC1_2_IRQHandler(void)
 #endif
 
 #if defined(EM_ADC3_USED)
-void ADC3_IRQHandler(void)
+void EM_ADC3_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
 
@@ -71,7 +82,7 @@ void ADC3_IRQHandler(void)
 #endif
 
 #if defined(EM_ADC4_USED)
-void ADC4_IRQHandler(void)
+void EM_ADC4_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
 
@@ -93,87 +104,207 @@ void ADC4_IRQHandler(void)
 }
 #endif
 
+/************************************************************************************************************************/
+
+#ifdef EM_LA_CH1_IRQh
 void EM_LA_CH1_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
-    traceISR_ENTER();
-    uint8_t ret = -1;
+#ifdef EM_LA_IRQ1_CH1
+    EM_LA_IRQ1_CH1();
+#endif
+#ifdef EM_LA_IRQ1_CH2
+    EM_LA_IRQ1_CH2();
+#endif
+#ifdef EM_LA_IRQ1_CH3
+    EM_LA_IRQ1_CH3();
+#endif
+#ifdef EM_LA_IRQ1_CH4
+    EM_LA_IRQ1_CH1();
+#endif
 
-    if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI1) == 1)
-    {
-        NVIC_DisableIRQ(EM_LA_IRQ_EXTI1);
-        ret = daq_trig_trigger_la(&daq);
-    }
-    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI1);
-
-    if (ret == 0)
-        traceISR_EXIT();
 }
+#endif
 
+#ifdef EM_LA_CH2_IRQh
 void EM_LA_CH2_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
-    traceISR_ENTER();
-    uint8_t ret = -1;
-
-    if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI2) == 1)
-    {
-        NVIC_DisableIRQ(EM_LA_IRQ_EXTI2);
-        ret = daq_trig_trigger_la(&daq);
-    }
-    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI2);
-
-    if (ret == 0)
-        traceISR_EXIT();
+#ifdef EM_LA_IRQ2_CH1
+    EM_LA_IRQ2_CH1();
+#endif
+#ifdef EM_LA_IRQ2_CH2
+    EM_LA_IRQ2_CH2();
+#endif
+#ifdef EM_LA_IRQ2_CH3
+    EM_LA_IRQ2_CH3();
+#endif
+#ifdef EM_LA_IRQ2_CH4
+    EM_LA_IRQ2_CH1();
+#endif
 }
+#endif
 
+#ifdef EM_LA_CH3_IRQh
 void EM_LA_CH3_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
-    traceISR_ENTER();
-    uint8_t ret = -1;
-
-    if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI3) == 1)
-    {
-        NVIC_DisableIRQ(EM_LA_IRQ_EXTI3);
-        ret = daq_trig_trigger_la(&daq);
-    }
-    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI3);
-
-    if (ret == 0)
-        traceISR_EXIT();
+#ifdef EM_LA_IRQ3_CH1
+    EM_LA_IRQ3_CH1();
+#endif
+#ifdef EM_LA_IRQ3_CH2
+    EM_LA_IRQ3_CH2();
+#endif
+#ifdef EM_LA_IRQ3_CH3
+    EM_LA_IRQ3_CH3();
+#endif
+#ifdef EM_LA_IRQ3_CH4
+    EM_LA_IRQ3_CH1();
+#endif
 }
+#endif
 
+#ifdef EM_LA_CH4_IRQh
 void EM_LA_CH4_IRQh(void)
 {
     daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
+#ifdef EM_LA_IRQ4_CH1
+    EM_LA_IRQ4_CH1();
+#endif
+#ifdef EM_LA_IRQ4_CH2
+    EM_LA_IRQ4_CH2();
+#endif
+#ifdef EM_LA_IRQ4_CH3
+    EM_LA_IRQ4_CH3();
+#endif
+#ifdef EM_LA_IRQ4_CH4
+    EM_LA_IRQ4_CH4();
+#endif
+}
+#endif
+
+#ifdef EM_LA_EXTI_UNUSED
+void EM_LA_UNUSED_IRQh(void)
+{
+    la_irq_unused();
+}
+#endif
+
+/************************************************************************************************************************/
+
+void la_irq_ch1(void)
+{
     traceISR_ENTER();
     uint8_t ret = -1;
 
-    if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI4) == 1)
+#ifdef EM_GPIO_EXTI_R_F
+    if ((EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI1) == 1) || (EM_GPIO_EXTI_ACTIVE_F(EM_LA_EXTI1) == 1))
+#else
+    if (EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI1) == 1)
+#endif
     {
-        NVIC_DisableIRQ(EM_LA_IRQ_EXTI4);
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI1);
         ret = daq_trig_trigger_la(&daq);
     }
-    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI4);
+    EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI1);
+#ifdef EM_GPIO_EXTI_R_F
+    EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI1);
+#endif
 
     if (ret == 0)
         traceISR_EXIT();
 }
 
-void EM_LA_UNUSED_IRQh(void)
+void la_irq_ch2(void)
+{
+    traceISR_ENTER();
+    uint8_t ret = -1;
+
+#ifdef EM_GPIO_EXTI_R_F
+    if ((EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI2) == 1) || (EM_GPIO_EXTI_ACTIVE_F(EM_LA_EXTI2) == 1))
+#else
+    if (EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI2) == 1)
+#endif
+    {
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI2);
+        ret = daq_trig_trigger_la(&daq);
+    }
+    EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI2);
+#ifdef EM_GPIO_EXTI_R_F
+    EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI2);
+#endif
+
+    if (ret == 0)
+        traceISR_EXIT();
+}
+
+void la_irq_ch3(void)
+{
+    traceISR_ENTER();
+    uint8_t ret = -1;
+
+#ifdef EM_GPIO_EXTI_R_F
+    if ((EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI3) == 1) || (EM_GPIO_EXTI_ACTIVE_F(EM_LA_EXTI3) == 1))
+#else
+    if (EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI3) == 1)
+#endif
+    {
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI3);
+        ret = daq_trig_trigger_la(&daq);
+    }
+    EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI3);
+#ifdef EM_GPIO_EXTI_R_F
+    EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI3);
+#endif
+
+    if (ret == 0)
+        traceISR_EXIT();
+}
+
+void la_irq_ch4(void)
+{
+    traceISR_ENTER();
+    uint8_t ret = -1;
+
+#ifdef EM_GPIO_EXTI_R_F
+    if ((EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI4) == 1) || (EM_GPIO_EXTI_ACTIVE_F(EM_LA_EXTI4) == 1))
+#else
+    if (EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI4) == 1)
+#endif
+    {
+        NVIC_DisableIRQ(EM_LA_IRQ_EXTI4);
+        ret = daq_trig_trigger_la(&daq);
+    }
+    EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI4);
+#ifdef EM_GPIO_EXTI_R_F
+    EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI4);
+#endif
+
+    if (ret == 0)
+        traceISR_EXIT();
+}
+
+#ifdef EM_LA_EXTI_UNUSED
+void la_irq_unused(void)
 {
     traceISR_ENTER();
 
-    if (LL_EXTI_IsActiveFlag_0_31(EM_LA_EXTI_UNUSED) == 1)
+#ifdef EM_GPIO_EXTI_R_F
+    if ((EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI_UNUSED) == 1) || (EM_GPIO_EXTI_ACTIVE_F(EM_LA_EXTI_UNUSED) == 1))
+#else
+    if (EM_GPIO_EXTI_ACTIVE_R(EM_LA_EXTI_UNUSED) == 1)
+#endif
     {
     }
-    LL_EXTI_ClearFlag_0_31(EM_LA_EXTI_UNUSED);
+    EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI_UNUSED);
+#ifdef EM_GPIO_EXTI_R_F
+    EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI_UNUSED);
+#endif
 
     traceISR_EXIT();
 }
-
+#endif

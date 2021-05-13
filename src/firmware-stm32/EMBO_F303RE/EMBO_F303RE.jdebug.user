@@ -1,12 +1,12 @@
 
 Breakpoint=core_cm4.h:1730, State=BP_STATE_DISABLED
-Breakpoint=daq_irq.c:103, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=daq_irq.c:121, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=daq_irq.c:139, State=BP_STATE_DISABLED
-Breakpoint=daq_irq.c:166, State=BP_STATE_DISABLED
+Breakpoint=daq_irq.c:123, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
+Breakpoint=daq_irq.c:145, State=BP_STATE_DISABLED
+Breakpoint=daq_irq.c:170, State=BP_STATE_DISABLED
 Breakpoint=stm32f3xx_ll_adc.h:6434, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=daq_trig.c:378, State=BP_STATE_DISABLED
-Breakpoint=daq_trig.c:607, State=BP_STATE_DISABLED
+Breakpoint=stm32f3xx_ll_exti.h:1205, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
+Breakpoint=daq_trig.c:381, State=BP_STATE_DISABLED
+Breakpoint=daq_trig.c:608, State=BP_STATE_DISABLED
 Breakpoint=stm32f3xx_ll_tim.h:1366, State=BP_STATE_DISABLED
 Breakpoint=tasks.c:4064, State=BP_STATE_DISABLED
 Breakpoint=periph.c:58, State=BP_STATE_DISABLED
@@ -20,7 +20,7 @@ OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/task
 OpenDocument="comm_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_irq.c", Line=2
 OpenDocument="utility.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/utility.c", Line=125
 OpenDocument="stm32f3xx_ll_dma.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_dma.h", Line=920
-OpenDocument="periph.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/periph.c", Line=133
+OpenDocument="periph.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/periph.c", Line=121
 OpenDocument="cntr_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr_irq.c", Line=0
 OpenDocument="cntr.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr.c", Line=74
 OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=450
@@ -48,7 +48,7 @@ OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=496, h=377, FilterBarSh
 OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=175, h=1143, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1075, h=105, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;554]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;566]
 TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
 TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[211;147;224]
 TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;109;100;125]

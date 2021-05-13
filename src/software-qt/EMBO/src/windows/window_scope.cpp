@@ -115,12 +115,15 @@ void WindowScope::statusBarLoad()
 {
     m_status_vcc = new QLabel(" ", this);
     m_status_seq = new QLabel("Sequence Number: 0", this);
+    m_status_smpl = new QLabel("Sampling Time: 1.5", this);
+
     QWidget* widget = new QWidget(this);
     QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
 
     QFont font1("Roboto", 11, QFont::Normal);
     m_status_vcc->setFont(font1);
     m_status_seq->setFont(font1);
+    m_status_smpl->setFont(font1);
     status_zoom->setFont(font1);
 
     QLabel* status_img = new QLabel(this);
@@ -137,8 +140,16 @@ void WindowScope::statusBarLoad()
     m_status_line1->setStyleSheet("color:gray;");
     m_status_line1->setFixedHeight(18);
 
+    m_status_line2 = new QFrame(this);
+    m_status_line2->setFrameShape(QFrame::VLine);
+    m_status_line2->setFrameShadow(QFrame::Plain);
+    m_status_line2->setStyleSheet("color:gray;");
+    m_status_line2->setFixedHeight(18);
+
     QLabel* status_spacer2 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
     QLabel* status_spacer3 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer4 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer5 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
 
     QSpacerItem* status_spacer0 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
 
@@ -148,11 +159,16 @@ void WindowScope::statusBarLoad()
     layout->addWidget(status_spacer2, 0,2,1,1,Qt::AlignVCenter);
     layout->addWidget(m_status_line1, 0,3,1,1,Qt::AlignVCenter);
     layout->addWidget(status_spacer3, 0,4,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_seq,   0,5,1,1,Qt::AlignVCenter | Qt::AlignLeft);
-    layout->addItem(status_spacer0,   0,6,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_zoom,    0,7,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_smpl,  0,5,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer4, 0,6,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line2, 0,7,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer5, 0,8,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_seq,   0,9,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addItem(status_spacer0,   0,10,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_zoom,    0,11,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
+
     m_ui->statusbar->addWidget(widget,1);
     m_ui->statusbar->setSizeGripEnabled(false);
 }
@@ -323,9 +339,10 @@ void WindowScope::on_msg_err(const QString text, MsgBoxType type, bool needClose
     msgBox(this, text, type);
 }
 
-void WindowScope::on_msg_ok_set(double maxZ, double fs_real_n, const QString fs_real)
+void WindowScope::on_msg_ok_set(double maxZ, double smpl_time, double fs_real_n, const QString fs_real)
 {
     m_daqSet.maxZ_ohm = maxZ;
+    m_daqSet.smpl_time = smpl_time;
     m_daqSet.fs_real = fs_real;
     m_daqSet.fs_real_n = fs_real_n;
 
@@ -334,7 +351,8 @@ void WindowScope::on_msg_ok_set(double maxZ, double fs_real_n, const QString fs_
 }
 
 void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
-                             DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real_n, const QString fs_real)
+                             DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ,
+                             double smpl_time, double fs_real_n, const QString fs_real)
 {
     m_daqSet.bits = bits;
     m_daqSet.mem = mem;
@@ -349,6 +367,7 @@ void WindowScope::on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, 
     m_daqSet.trig_mode = trig_mode;
     m_daqSet.trig_pre = trig_pre;
     m_daqSet.maxZ_ohm = maxZ;
+    m_daqSet.smpl_time = smpl_time;
     m_daqSet.fs_real = fs_real;
     m_daqSet.fs_real_n = fs_real_n;
 
@@ -2925,6 +2944,8 @@ void WindowScope::updatePanel()
     //m_ui->dial_div->setRange(((1.0 / info->adc_fs_12b) * 2.0 * 1000000.0), 1000000);
     m_ui->dial_div->setValue(lin_to_exp_1to1M(div_sec * 1000000.0, true));
     m_ui->radioButton_div->setEnabled(true);
+
+    m_status_smpl->setText("Sampling Time: " + QString::number(m_daqSet.smpl_time, 10, 1));
 
     m_ignoreValuesChanged = false;
 }

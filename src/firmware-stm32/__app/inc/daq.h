@@ -104,6 +104,7 @@ typedef struct
 
     // helpers
     uint8_t forced;         // flag when set forced trigger is responded instead normal/single
+    uint8_t force_single;   // flag when set single trigger is forced after start from FORC
     uint8_t order;          // order from bottom of triggered ch in circular buffer
     uint8_t post_start;     // flag when set posttrigger counting starts
     int post_from;          // position from where start counting posttrigger

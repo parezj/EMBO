@@ -64,10 +64,12 @@ void app_main(void)
 {
     __disable_irq();
 
-    /* crucial for FreeRTOS */
+    /* crucial for FreeRTOS on M3 and M4 */
+#ifdef NVIC_PRIORITYGROUP_4
     NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+#endif
 
-    /* SysTick  (added: need to check with BluePill ! */
+    /* SysTick */
     SysTick->VAL   = 0UL;
     LL_Init1msTick(SystemCoreClock);
     NVIC_SetPriority(SysTick_IRQn, EM_IT_PRI_SYST);

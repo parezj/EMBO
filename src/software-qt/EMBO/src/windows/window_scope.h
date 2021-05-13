@@ -59,12 +59,13 @@ signals:
 private slots:
     /* data msg */
     void on_msg_set(DaqBits bits, int mem, int fs, bool ch1, bool ch2, bool ch3, bool ch4, int trig_ch, int trig_val,
-                    DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre, double maxZ, double fs_real_n, const QString fs_real);
+                    DaqTrigEdge trig_edge, DaqTrigMode trig_mode, int trig_pre,
+                    double maxZ, double smpl_time, double fs_real_n, const QString fs_real);
     void on_msg_read(const QByteArray data);
 
     /* ok-err msg */
     void on_msg_err(const QString text, MsgBoxType type, bool needClose);
-    void on_msg_ok_set(double maxZ, double fs_real_n, const QString fs_real);
+    void on_msg_ok_set(double maxZ, double smpl_time, double fs_real_n, const QString fs_real);
     void on_msg_ok_forceTrig(const QString, const QString);
 
      /* async ready msg */
@@ -238,6 +239,8 @@ private:
     QLabel* m_status_vcc;
     QLabel* m_status_seq;
     QFrame* m_status_line1;
+    QLabel* m_status_smpl;
+    QFrame* m_status_line2;
 
     /* FFT */
     int m_fft_size = 0;

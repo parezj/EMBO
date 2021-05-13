@@ -1,7 +1,7 @@
 
-Breakpoint=daq_trig.c:247, State=BP_STATE_DISABLED
+Breakpoint=daq_trig.c:248, State=BP_STATE_DISABLED
 Breakpoint=utility.c:293, State=BP_STATE_DISABLED
-OpenDocument="stm32f1xx_it.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Core/Src/stm32f1xx_it.c", Line=66
+OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=503
 OpenDocument="startup_stm32f103c8tx.s", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Core/Startup/startup_stm32f103c8tx.s", Line=45
 OpenDocument="usbd_conf.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/USB_DEVICE/Target/usbd_conf.c", Line=165
 OpenDocument="usbd_core.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c", Line=453
@@ -17,13 +17,13 @@ OpenDocument="daq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/d
 OpenDocument="utils.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__lib/scpi/src/utils.c", Line=585
 OpenDocument="irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/irq.c", Line=0
 OpenDocument="pwm.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/pwm.c", Line=0
-OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/tasks.c", Line=4716
+OpenDocument="stm32f1xx_it.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Core/Src/stm32f1xx_it.c", Line=66
 OpenDocument="stm32f1xx_hal_pcd.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_pcd.c", Line=1299
 OpenDocument="stm32f1xx_ll_dma.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_dma.h", Line=826
 OpenDocument="stm32f1xx_ll_usart.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_ll_usart.h", Line=1843
 OpenDocument="stm32f1xx_ll_adc.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_ll_adc.c", Line=543
-OpenDocument="cntr.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr.c", Line=78
-OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=111
+OpenDocument="cntr.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr.c", Line=76
+OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/tasks.c", Line=3504
 OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_trig.c", Line=208
 OpenDocument="daq_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_irq.c", Line=0
 OpenDocument="usb_device.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F103C8/USB_DEVICE/App/usb_device.c", Line=15
@@ -47,7 +47,7 @@ OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=502, h=377, FilterBarSh
 OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=340, h=1143, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1074, h=105, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;482]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;218]
 TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
 TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[144;147;224]
 TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;103;100;120]

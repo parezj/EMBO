@@ -51,6 +51,7 @@ void daq_trig_init(daq_data_t* self)
     self->trig.post_from = 0;
     self->trig.dma_pos_catched = 0;
     self->trig.forced = EM_FALSE;
+    self->trig.force_single = EM_FALSE;
     self->trig.respond = EM_FALSE;
     self->trig.irq_en = EM_FALSE;
     self->trig.awd_hi = 0;
@@ -70,7 +71,17 @@ void daq_trig_check(daq_data_t* self)
         if (self->trig.pretrig_cntr < 0)
             self->trig.pretrig_cntr += EM_UWTICK_MAX;
 
-        if (self->trig.irq_en == EM_FALSE && self->trig.pretrig_cntr > self->trig.pretrig_val && self->trig.set.mode != DISABLED) // enable IRQ
+        if (self->trig.force_single == EM_TRUE && self->trig.pretrig_cntr > self->trig.pretrig_val) // forced single
+        {
+            self->trig.force_single = EM_FALSE;
+
+            self->trig.ready = EM_TRUE;
+            daq_enable(self, EM_FALSE);
+
+            self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
+            comm_daq_ready(comm_ptr, EM_RESP_RDY_F, self->trig.pos_frst);
+        }
+        else if (self->trig.irq_en == EM_FALSE && self->trig.pretrig_cntr > self->trig.pretrig_val && self->trig.set.mode != DISABLED) // enable IRQ
         {
             if (self->mode == SCOPE)
             {
@@ -84,10 +95,16 @@ void daq_trig_check(daq_data_t* self)
                 ASSERT(self->trig.exti_trig != 0);
 
                 NVIC_ClearPendingIRQ(self->trig.exti_trig);
-                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI1);
-                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI2);
-                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI3);
-                LL_EXTI_ClearFlag_0_31(EM_LA_EXTI4);
+                EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI1);
+                EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI2);
+                EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI3);
+                EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI4);
+#ifdef EM_GPIO_EXTI_R_F
+                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI1);
+                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI2);
+                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI3);
+                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI4);
+#endif
 
                 NVIC_EnableIRQ(self->trig.exti_trig);
             }

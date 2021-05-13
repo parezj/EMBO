@@ -22,12 +22,16 @@ void pwm_init(pwm_data_t* self)
     self->ch2.freq = 1000;
     self->ch1.duty = 50;
     self->ch2.duty = 50;
+    self->ch1.freq_real = 1000;
+    self->ch2.freq_real = 1000;
 }
 
 void pwm_disable(pwm_data_t* self)
 {
     LL_TIM_DisableCounter(EM_TIM_PWM1);
+#ifdef EM_TIM_PWM2
     LL_TIM_DisableCounter(EM_TIM_PWM2);
+#endif
     self->ch1.enabled = EM_FALSE;
     self->ch2.enabled = EM_FALSE;
 }
@@ -41,7 +45,9 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     }
 
     LL_TIM_DisableCounter(EM_TIM_PWM1);
+#ifdef EM_TIM_PWM2
     LL_TIM_DisableCounter(EM_TIM_PWM2);
+#endif
 
     int prescaler = 1;
     int reload = 0;
@@ -60,40 +66,48 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     self->ch2.offset = offset2;
 
     LL_TIM_SetAutoReload(EM_TIM_PWM1, reload);
-    LL_TIM_SetAutoReload(EM_TIM_PWM2, reload);
     LL_TIM_SetPrescaler(EM_TIM_PWM1, prescaler);
+#ifdef EM_TIM_PWM2
+    LL_TIM_SetAutoReload(EM_TIM_PWM2, reload);
     LL_TIM_SetPrescaler(EM_TIM_PWM2, prescaler);
+#endif
 
     int compare1 = (duty1 / (double)100) * reload;
     //double real_duty1 = ((double)compare1 / (double)reload) * 100.0;
-
+#ifdef EM_TIM_PWM2
     int compare2 = (duty2 / (double)100) * reload;
     //double real_duty2 = ((double)compare2 / (double)reload) * 100.0;
-
+#endif
     //self->ch1.duty = real_duty1;
     //self->ch2.duty = real_duty2;
     self->ch1.duty = duty1;
     self->ch2.duty = duty2;
 
     EM_TIM_PWM1_CHN(LL_TIM_OC_SetCompare)(EM_TIM_PWM1, compare1);
+#ifdef EM_TIM_PWM2
     EM_TIM_PWM2_CHN(LL_TIM_OC_SetCompare)(EM_TIM_PWM2, compare2);
+#endif
     
     LL_TIM_SetCounter(EM_TIM_PWM1, 0);
+#ifdef EM_TIM_PWM2
     LL_TIM_SetCounter(EM_TIM_PWM2, 0);
 
     // http://www.micromouseonline.com/2016/02/05/clock-pulses-with-variable-phase-stm32/
     if (offset2 > 0)
         LL_TIM_SetCounter(EM_TIM_PWM2, (int)((double)offset2 / 100.0 * (double)reload));
+#endif
 
     if (enable1 == EM_TRUE)
         LL_TIM_CC_EnableChannel(EM_TIM_PWM1, EM_TIM_PWM1_CH);
     else
         LL_TIM_CC_DisableChannel(EM_TIM_PWM1, EM_TIM_PWM1_CH);
 
+#ifdef EM_TIM_PWM2
     if (enable2 == EM_TRUE)
         LL_TIM_CC_EnableChannel(EM_TIM_PWM2, EM_TIM_PWM2_CH);
     else
         LL_TIM_CC_DisableChannel(EM_TIM_PWM2, EM_TIM_PWM2_CH);
+#endif
 
     LL_TIM_EnableCounter(EM_TIM_PWM1);
 
