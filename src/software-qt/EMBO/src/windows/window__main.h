@@ -91,6 +91,7 @@ private:
     QPixmap m_img_chip;
     QPixmap m_img_bluepill;
     QPixmap m_img_nucleoF303;
+    QPixmap m_img_nucleo32;
     QPixmap m_img_unknown;
 
     /* status bar */

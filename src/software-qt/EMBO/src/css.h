@@ -82,6 +82,12 @@
 #define CSS_BUTTON_VM_RESET   " QPushButton { text-align:left; padding-left:5px }"
 #define CSS_BUTTON_VM_RESETZ  " QPushButton { text-align:left; padding-left:4px  }"
 
+#define CSS_BUTTON_CH         " QPushButton { text-align:left; padding-left:13px }"
+#define CSS_BUTTON_FORC       " QPushButton { text-align:left; padding-left:13px }"
+#define CSS_BUTTON_FFT        " QPushButton { text-align:left; padding-left:11px }"
+#define CSS_BUTTON_BIT        " QPushButton { text-align:left; padding-left:8px }"
+#define CSS_BUTTON_AVG        " QPushButton { text-align:left; padding-left:11px }"
+
 
 #define CSS_BUTTON_ON         "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
                                              background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B); } \
@@ -99,7 +105,6 @@
                                QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \
                                                       background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"
 
-
 #define CSS_BUTTON_ON_NODIS   "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
                                              background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1  #7B7B7B); } \
                                QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
@@ -116,9 +121,77 @@
 
 #define CSS_INSTR_BUTTON_OFF  "QPushButton {padding: 0.2em 0.2em 0.3em 0.2em; color: gray; border: 1px solid gray; border-radius: 5px;}"
 
+/* channel buttons */
+
+#define CSS_BUTTON_CH1        "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #0072BD); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #63BFFC); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
+                               QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \
+                                                      background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"
+
+#define CSS_BUTTON_CH2        "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #D95319); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #FDA47D); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
+                               QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \
+                                                      background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"
+
+#define CSS_BUTTON_CH3        "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #77AC30); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #C3F384); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
+                               QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \
+                                                      background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"
+
+#define CSS_BUTTON_CH4        "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7E2F8E); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #CC70DE); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; } \
+                               QPushButton:disabled { border: 1px solid rgb(180, 180, 180); color: gray; \
+                                                      background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC , stop:0.1 #EEEEEE , stop:1 #BBBBBB ); }"
+
+#define CSS_BUTTON_CH1_NODIS  "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #0072BD); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #63BFFC); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; }"
+
+#define CSS_BUTTON_CH2_NODIS  "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #D95319); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #FDA47D); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; }"
+
+#define CSS_BUTTON_CH3_NODIS   "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #77AC30); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #C3F384); } \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; }"
+
+#define CSS_BUTTON_CH4_NODIS  "QPushButton { padding: 0.2em 0.2em 0.3em 0.2em; border: 1px solid rgb(150, 150, 150); border-radius: 5px; color: black; \
+                                             background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #7E2F8E); } \
+                               QPushButton:hover:!pressed { border: 1px solid rgb(150, 150, 150); border-radius: 5px; color:#256552; \
+                                                            background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #FFFFFF, stop:0.1 #FFFFFF, stop:1 #CC70DE);} \
+                               QPushButton:pressed { border: 2px solid rgb(150, 150, 150); border-radius: 5px; background: #FFFFFF; color:#2f836a; }"
+
 /* radio buttons */
 
 #define CSS_RADIOBUTTON        "QRadioButton:checked { background-color: rgba(245,245,245, 1.0); border: 0px; border-radius:5px; } \
+                                QRadioButton:hover { background-color: rgba(230,230,230, 1.0); border: 0px; border-radius:5px; } \
+                                QRadioButton:checked:hover { background-color: rgba(245,245,245, 0.8); border: 0px; border-radius:5px; } \
+                                QRadioButton::indicator { width: 20px; height: 20px; } \
+                                QRadioButton::indicator:unchecked { image: url(:/main/img/radio_off1.png); } \
+                                QRadioButton::indicator:unchecked:hover { image: url(:/main/img/radio_off1.png); } \
+                                QRadioButton::indicator:checked { image: url(:/main/img/radio_on2.png); } \
+                                QRadioButton::indicator::disabled { image: url(:/main/img/radio_off_dis.png); } \
+                                QRadioButton::disabled { color:gray; }"
+
+#define CSS_RADIOBUTTON_NODIS  "QRadioButton:checked { background-color: rgba(245,245,245, 1.0); border: 0px; border-radius:5px; } \
                                 QRadioButton:hover { background-color: rgba(230,230,230, 1.0); border: 0px; border-radius:5px; } \
                                 QRadioButton:checked:hover { background-color: rgba(245,245,245, 0.8); border: 0px; border-radius:5px; } \
                                 QRadioButton::indicator { width: 20px; height: 20px; } \
@@ -156,6 +229,25 @@
                                 QSpinBox::down-button:hover { image: url(:/main/img/arrow_down4b.png); } \
                                 QSpinBox:disabled { color: black; }"
 
+#define CSS_DSPINBOX           "QDoubleSpinBox { background-color: white;border: 1px solid gray; border-radius:10px; color:black; \
+                                                 text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  } \
+                                QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up4.png); } \
+                                QDoubleSpinBox::down-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down4.png); } \
+                                QDoubleSpinBox::up-button:hover { image: url(:/main/img/arrow_up4b.png); } \
+                                QDoubleSpinBox::down-button:hover { image: url(:/main/img/arrow_down4b.png); } \
+                                QDoubleSpinBox:disabled { background-color: rgba(220,220,220, 1.0); border: 1px transparent; border-radius:10px; \
+                                                          border: 1px solid gray; border-radius:10px; \
+                                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; } \
+                                QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up3.png); } \
+                                QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down3.png); }"
+
+#define CSS_DSPINBOX_NODIS     "QDoubleSpinBox { background-color: white;border: 1px solid gray; border-radius:10px; color:black; \
+                                                 text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  } \
+                                QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up4.png); } \
+                                QDoubleSpinBox::down-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down4.png); } \
+                                QDoubleSpinBox::up-button:hover { image: url(:/main/img/arrow_up4b.png); } \
+                                QDoubleSpinBox::down-button:hover { image: url(:/main/img/arrow_down4b.png); }"
+
 /* trigger sliders */
 
 #define CSS_SCOPE_TRIG_PRE      "QSlider { min-height: 10px; max-height: 10px; margin-left: 28px; margin-right:0px; } \
@@ -189,6 +281,25 @@
 #define CSS_TRIG_LED2           "QRadioButton::indicator { width: 25px; height: 25px; } \
                                  QRadioButton::indicator::unchecked { image: url(:/main/img/led_gray.png); } \
                                  QRadioButton::indicator::checked   { image: url(:/main/img/led_green4.png); }"
+
+/* cursors */
+#define CSS_CURSOR_H            "ctkRangeSlider { min-height: 25px; max-height: 25px; margin-left: 20px; margin-right:2px; } \
+                                 ctkRangeSlider::groove:horizontal { background-color: transparent; } \
+                                 ctkRangeSlider::handle:horizontal { width: 25px; image: url(:/main/img/range_down.png); } \
+                                 ctkRangeSlider::handle:horizontal:hover { width: 25px; image: url(:/main/img/range_down2.png); } \
+                                 QSlider { min-height: 25px; max-height: 25px; margin-left: 20px; margin-right:2px; } \
+                                 QSlider::groove:horizontal { background-color: transparent; } \
+                                 QSlider::handle:horizontal { width: 25px; image: url(:/main/img/range_down.png); } \
+                                 QSlider::handle:horizontal:hover { width: 25px; image: url(:/main/img/range_down2.png); }"
+
+#define CSS_CURSOR_H2           "ctkRangeSlider { min-height: 25px; max-height: 25px; margin-left: 30px; margin-right:2px; } \
+                                 ctkRangeSlider::groove:horizontal { background-color: transparent; } \
+                                 ctkRangeSlider::handle:horizontal { width: 25px; image: url(:/main/img/range_down.png); } \
+                                 ctkRangeSlider::handle:horizontal:hover { width: 25px; image: url(:/main/img/range_down2.png); } \
+                                 QSlider { min-height: 25px; max-height: 25px; margin-left: 30px; margin-right:2px; } \
+                                 QSlider::groove:horizontal { background-color: transparent; } \
+                                 QSlider::handle:horizontal { width: 25px; image: url(:/main/img/range_down.png); } \
+                                 QSlider::handle:horizontal:hover { width: 25px; image: url(:/main/img/range_down2.png); }"
 
 /* plot colors  */
 

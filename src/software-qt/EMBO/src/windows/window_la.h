@@ -235,6 +235,16 @@ private:
     int m_last_fs = 0;
     int m_last_mem = 0;
     int m_err_cntr = 0;
+    bool m_refresh = true;
+
+    /* last widget enabled values */
+    bool m_last_trigEnabled = true;
+    bool m_last_trigCh1_en = true;
+    bool m_last_trigCh2_en = true;
+    bool m_last_trigCh3_en = true;
+    bool m_last_trigCh4_en = true;
+    bool m_last_forc = true;
+    bool m_last_single = false;
 
     /* stm32 pins */
     QString m_pin1 = "?";

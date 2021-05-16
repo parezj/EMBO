@@ -18,6 +18,8 @@
  *  DAQ CH4 ........... PA5  (Arduino A3)
  *  PWM CH1 ........... PA15 (Arduino D2)
  *  CNTR .............. PA8  (Arduino D9)
+ *  UART RX ........... PA3
+ *  UART TX ........... PA2
  *  =======================
 */
 
@@ -82,8 +84,11 @@
 #define EM_GPIO_EXTI_ACTIVE_R  LL_EXTI_IsActiveRisingFlag_0_31    // GPIO EXTI is active rising?
 #define EM_GPIO_EXTI_ACTIVE_F  LL_EXTI_IsActiveRisingFlag_0_31    // GPIO EXTI is active falling?
 #define EM_GPIO_EXTI_CLEAR_R   LL_EXTI_ClearRisingFlag_0_31       // GPIO EXTI clear rising flag
-#define EM_GPIO_EXTI_CLEAR_F   LL_EXTI_ClearFallingFlag_0_31      // GPIO EXTI clear rising flag
+#define EM_GPIO_EXTI_CLEAR_F   LL_EXTI_ClearFallingFlag_0_31      // GPIO EXTI clear falling flag
 #define EM_GPIO_EXTI_R_F
+
+// DAQ -------------------------------------------------------------
+#define EM_DAQ_4CH   // if defined, DAQ operates with 4 channels, else with 2 channels
 
 // ADC -------------------------------------------------------------
 #define EM_ADC_MODE_ADC1                                       // 1 ADC (1 DMA)              - verified
@@ -106,6 +111,7 @@
 //#define EM_ADC_LINREG                                        // before calibration enable regulator
 //#define EM_ADC_CAL_EN                                        // calibration while enabled
 //#define LL_ADC_SPEC_START                                    // special start stop methods needed
+#define EM_ADC_SEQ_CONF                                        // fully configurable sequencer
 #define EM_ADC_AWD             LL_ADC_AWD1,                    // Analog Watchdog
 #define EM_ADC_EN_TICKS        LL_ADC_DELAY_CALIB_ENABLE_ADC_CYCLES
 
@@ -142,12 +148,13 @@
 //#define EM_TIM_SGEN_MAX      65535
 
 // max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         2000     // DAQ max total memory in release mode
+#define EM_DAQ_MAX_MEM         800     // DAQ max total memory in release mode
 #define EM_LA_MAX_FS           10285714  // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      2500000   // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       2500000   // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           21000000  // PWM max freq
 #define EM_SGEN_MAX_F          0         // SGEN max output freq.
+#define EM_CNTR_MAX_F          30000000  // CNTR max input frequency
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve
 
 // ADC -------------------------------------------------------------
@@ -197,6 +204,12 @@
 #define EM_LA_IRQ_EXTI4        EXTI4_15_IRQn
 #define EM_CNTR_IRQ            TIM1_BRK_UP_TRG_COM_IRQn
 
+// IRQ helpers -----------------------------------------------------
+#define EM_IRQ_ADC1            EM_IRQN_ADC1
+//#define EM_IRQ_ADC2          EM_IRQN_ADC2
+//#define EM_IRQ_ADC3          EM_IRQN_ADC3
+//#define EM_IRQ_ADC4          EM_IRQN_ADC4
+
 // LA pins and IRQs ------------------------------------------------
 #define EM_LA_EXTI_PORT        LL_EXTI_CONFIG_PORTA
 #define EM_LA_EXTI1            LL_EXTI_LINE_0
@@ -242,6 +255,7 @@
 
 // LA - GPIO pins --------------------------------------------------
 #define EM_GPIO_LA_PORT        GPIOA
+#define EM_GPIO_LA_OFFSET      0
 #define EM_GPIO_LA_CH1         LL_GPIO_PIN_0
 #define EM_GPIO_LA_CH2         LL_GPIO_PIN_1
 #define EM_GPIO_LA_CH3         LL_GPIO_PIN_4

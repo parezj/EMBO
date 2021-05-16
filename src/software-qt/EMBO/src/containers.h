@@ -101,6 +101,7 @@ public:
     int la_fs;
     int pwm_fs;
     bool pwm2;
+    int daq_ch;
     int adc_num;
     bool adc_dualmode;
     bool adc_interleaved;
@@ -111,6 +112,7 @@ public:
     int cntr_timeout;
     int sgen_maxf;
     int sgen_maxmem;
+    int cntr_maxf;
     int daq_reserve;
     int la_ch1_pin;
     int la_ch2_pin;

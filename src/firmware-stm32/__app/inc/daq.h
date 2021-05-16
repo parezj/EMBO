@@ -99,8 +99,9 @@ typedef struct
     daq_buff_t* buff_trig;  // pointer to buffer 1-4, which is triggered
     uint32_t dma_ch_trig;   // DMA channel, which is triggered
     DMA_TypeDef* dma_trig;  // DMA, which is triggered
-    uint32_t exti_trig;     // EXTI channel, which is triggered
     ADC_TypeDef* adc_trig;  // ADC, which is triggered
+    uint32_t exti_trig;     // EXTI IRQ, which is triggered
+    uint32_t adcirq_trig;   // ADC IRQ, which is triggered
 
     // helpers
     uint8_t forced;         // flag when set forced trigger is responded instead normal/single

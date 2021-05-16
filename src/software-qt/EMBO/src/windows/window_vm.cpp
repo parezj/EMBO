@@ -1375,15 +1375,19 @@ void WindowVm::showEvent(QShowEvent*)
     auto info = Core::getInstance()->getDevInfo();
     QStringList pins = info->pins_scope_vm.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
-    if (pins.size() == 4)
+    if (pins.size() == 2)
     {
         m_pin1 = pins[0].trimmed();
         m_pin2 = pins[1].trimmed();
-        m_pin3 = pins[2].trimmed();
-        m_pin4 = pins[3].trimmed();
 
         m_ui->label_ch1->setText("Channel 1 (" + m_pin1 + ")");
         m_ui->label_ch2->setText("Channel 2 (" + m_pin2 + ")");
+    }
+    if (pins.size() == 4)
+    {
+        m_pin3 = pins[2].trimmed();
+        m_pin4 = pins[3].trimmed();
+
         m_ui->label_ch3->setText("Channel 3 (" + m_pin3 + ")");
         m_ui->label_ch4->setText("Channel 4 (" + m_pin4 + ")");
     }
@@ -1415,6 +1419,20 @@ void WindowVm::showEvent(QShowEvent*)
     m_timer_elapsed = 0;
     m_timer_plot->start((int)TIMER_VM_PLOT);
     m_timer_digits->start(TIMER_VM_DIGITS);
+
+    if (info->daq_ch == 2)
+    {
+        on_pushButton_disable3_clicked();
+        on_pushButton_disable4_clicked();
+
+        m_ui->groupBox_ch3->setEnabled(false);
+        m_ui->groupBox_ch4->setEnabled(false);
+
+        m_ui->actionMeasChannel_3->setEnabled(false);
+        m_ui->actionMeasChannel_4->setEnabled(false);
+
+        m_ui->actionMath_3_4->setEnabled(false);
+    }
 }
 
 void WindowVm::rescaleYAxis()

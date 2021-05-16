@@ -1,37 +1,35 @@
 
-Breakpoint=core_cm4.h:1730, State=BP_STATE_DISABLED
-Breakpoint=daq_irq.c:123, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=daq_irq.c:145, State=BP_STATE_DISABLED
-Breakpoint=daq_irq.c:170, State=BP_STATE_DISABLED
+Breakpoint=core_cm4.h:1730, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
+Breakpoint=daq_irq.c:140, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
 Breakpoint=stm32f3xx_ll_adc.h:6434, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
 Breakpoint=stm32f3xx_ll_exti.h:1205, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=daq_trig.c:381, State=BP_STATE_DISABLED
-Breakpoint=daq_trig.c:608, State=BP_STATE_DISABLED
+Breakpoint=daq_trig.c:287, State=BP_STATE_DISABLED
+Breakpoint=daq_trig.c:398, State=BP_STATE_DISABLED
 Breakpoint=stm32f3xx_ll_tim.h:1366, State=BP_STATE_DISABLED
 Breakpoint=tasks.c:4064, State=BP_STATE_DISABLED
-Breakpoint=periph.c:58, State=BP_STATE_DISABLED
-Breakpoint=daq.c:270, State=BP_STATE_DISABLED
-Breakpoint=daq.c:790, State=BP_STATE_DISABLED
-OpenDocument="daq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq.c", Line=539
-OpenDocument="stm32f3xx_ll_usart.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_usart.h", Line=2585
+Breakpoint=periph.c:63, State=BP_STATE_DISABLED
+Breakpoint=stm32f3xx_ll_system.h:1107, State=BP_STATE_DISABLED
+Breakpoint=daq.c:280, State=BP_STATE_DISABLED
+Breakpoint=daq.c:794, State=BP_STATE_DISABLED
 OpenDocument="startup_stm32f303retx.s", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Core/Startup/startup_stm32f303retx.s", Line=43
+OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_trig.c", Line=152
+OpenDocument="daq_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_irq.c", Line=15
 OpenDocument="main.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Core/Src/main.c", Line=59
 OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/tasks.c", Line=3504
 OpenDocument="comm_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_irq.c", Line=2
-OpenDocument="utility.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/utility.c", Line=125
+OpenDocument="utility.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/utility.c", Line=0
 OpenDocument="stm32f3xx_ll_dma.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_dma.h", Line=920
 OpenDocument="periph.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/periph.c", Line=121
 OpenDocument="cntr_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr_irq.c", Line=0
 OpenDocument="cntr.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/cntr.c", Line=74
-OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=450
-OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_trig.c", Line=295
+OpenDocument="daq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq.c", Line=539
 OpenDocument="daq.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/inc/daq.h", Line=85
 OpenDocument="cfg_f303re.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/inc/cfg/cfg_f303re.h", Line=0
 OpenDocument="stm32f3xx_ll_adc.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_adc.h", Line=5454
 OpenDocument="app.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/app.c", Line=160
 OpenDocument="irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/irq.c", Line=0
 OpenDocument="sgen.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/sgen.c", Line=75
-OpenDocument="daq_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_irq.c", Line=1
+OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=112
 OpenDocument="stm32f3xx_it.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Core/Src/stm32f3xx_it.c", Line=64
 OpenDocument="core_cm4.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/Drivers/CMSIS/Include/core_cm4.h", Line=2006
 OpenDocument="periph.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/inc/periph.h", Line=0
@@ -45,14 +43,14 @@ OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=626, h=105, FilterBarShown=0
 OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=496, h=377, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=496, h=377, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=496, h=377, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
-OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=175, h=1143, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=177, h=1143, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1075, h=105, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;566]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;500]
 TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
 TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[211;147;224]
 TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;109;100;125]
-TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[179;121;84;44;185;100]
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[179;121;84;44;185;242]
 TableHeader="Functions", SortCol="Size", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[130;64;44;57;176]
 TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;360]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]

@@ -15,6 +15,7 @@ typedef struct
     int duty;
     uint32_t prescaler;
     uint32_t reload;
+    uint32_t compare;
     uint32_t offset;        // percentage of reload
 }pwm_ch_t;
 

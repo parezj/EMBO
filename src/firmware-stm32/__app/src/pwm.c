@@ -81,7 +81,11 @@ int pwm_set(pwm_data_t* self, int freq, int duty1, int duty2, int offset2, int e
     //self->ch1.duty = real_duty1;
     //self->ch2.duty = real_duty2;
     self->ch1.duty = duty1;
+    self->ch1.compare = compare1;
+#ifdef EM_TIM_PWM2
     self->ch2.duty = duty2;
+    self->ch2.compare = compare2;
+#endif
 
     EM_TIM_PWM1_CHN(LL_TIM_OC_SetCompare)(EM_TIM_PWM1, compare1);
 #ifdef EM_TIM_PWM2

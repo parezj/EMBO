@@ -17,8 +17,10 @@
 
 static void la_irq_ch1(void);
 static void la_irq_ch2(void);
+#ifdef EM_DAQ_4CH
 static void la_irq_ch3(void);
 static void la_irq_ch4(void);
+#endif
 
 #ifdef EM_LA_EXTI_UNUSED
 static void la_irq_unused(void);
@@ -33,16 +35,23 @@ void EM_ADC12_IRQh(void)
     traceISR_ENTER();
     uint8_t ret = -1;
 
+#ifdef EM_ADC1_USED
     if (LL_ADC_IsActiveFlag_AWD1(ADC1) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+
         ret = daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC1);
     }
+#endif
+
 #ifdef EM_ADC2_USED
     else if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+
         ret = daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC2);
     }
@@ -68,7 +77,9 @@ void EM_ADC3_IRQh(void)
 
     if (LL_ADC_IsActiveFlag_AWD1(ADC3) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+
         ret = daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC3);
     }
@@ -91,7 +102,9 @@ void EM_ADC4_IRQh(void)
 
     if (LL_ADC_IsActiveFlag_AWD1(ADC4) == 1)
     {
+        NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+
         ret = daq_trig_trigger_scope(&daq);
         LL_ADC_ClearFlag_AWD1(ADC4);
     }
@@ -242,6 +255,7 @@ void la_irq_ch2(void)
         traceISR_EXIT();
 }
 
+#ifdef EM_DAQ_4CH
 void la_irq_ch3(void)
 {
     traceISR_ENTER();
@@ -287,6 +301,7 @@ void la_irq_ch4(void)
     if (ret == 0)
         traceISR_EXIT();
 }
+#endif
 
 #ifdef EM_LA_EXTI_UNUSED
 void la_irq_unused(void)

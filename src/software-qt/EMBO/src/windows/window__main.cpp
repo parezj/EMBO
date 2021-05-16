@@ -111,6 +111,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     m_img_chip = QPixmap(":/main/img/chip.png");
     m_img_bluepill = QPixmap(":/main/img/bluepill2.png");
     m_img_nucleoF303 = QPixmap(":/main/img/nucleo-f303.png");
+    m_img_nucleo32 = QPixmap(":/main/img/nucleo-32.png");
     m_img_unknown = QPixmap(":/main/img/unknown2.png");
 
     statusBarLoad();
@@ -317,7 +318,6 @@ void WindowMain::setConnected()
     m_ui->listWidget_ports->currentItem()->setIcon(QIcon(":/main/img/serial2_busy.png"));
 
     m_status_icon_comm->setPixmap(m_icon_plugOn);
-    m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
 
     m_ui->groupBox_scope->show();
     m_ui->groupBox_la->show();
@@ -336,9 +336,12 @@ void WindowMain::setConnected()
     m_ui->label_dev_comm->setText(info->comm);
     m_ui->label_dev_vref->setText(QString::number(info->ref_mv) + " mV");
 
-    if (info->name.toLower().contains("bluepill"))
+    QString n = info->name.toLower();
+    if (n.contains("bluepill"))
         m_ui->label_boardImg->setPixmap(m_img_bluepill);
-    else if (info->name.toLower().contains("nucleo"))
+    else if (n.contains("nucleo32"))
+        m_ui->label_boardImg->setPixmap(m_img_nucleo32);
+    else if (n.contains("nucleo"))
         m_ui->label_boardImg->setPixmap(m_img_nucleoF303);
     else
         m_ui->label_boardImg->setPixmap(m_img_chip);
@@ -347,7 +350,7 @@ void WindowMain::setConnected()
     m_ui->label_scope_mem->setText(format_unit((info->mem / 2), "S", 3) +
                                    (info->adc_bit8 ? " / " + format_unit(info->mem, "S", 3) : ""));
     m_ui->label_scope_bits->setText(info->adc_bit8 ? "12 / 8 bit" : "12 bit");
-    m_ui->label_scope_modes->setText("4ch " + QString::number(info->adc_num) + "ADC " + (info->adc_dualmode ? "D" : "") +
+    m_ui->label_scope_modes->setText(QString::number(info->daq_ch) + "ch " + QString::number(info->adc_num) + "ADC " + (info->adc_dualmode ? "D" : "") +
                                      (info->adc_dualmode && info->adc_interleaved ? "+" : "") + (info->adc_interleaved ? "I" : ""));
     m_ui->label_scope_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
@@ -357,15 +360,15 @@ void WindowMain::setConnected()
     m_ui->label_la_pins->setText(info->pins_la.replace("-", ", "));
 
     m_ui->label_vm_fs->setText(format_unit(info->vm_fs, "Sps", 0));
-    m_ui->label_vm_mem->setText(format_unit(info->vm_mem, "S", 0));
+    //m_ui->label_vm_mem->setText(format_unit(info->vm_mem, "S", 0));
     m_ui->label_vm_bits->setText("12 bit");
     m_ui->label_vm_pins->setText(info->pins_scope_vm.replace("-", ", "));
 
-    m_ui->label_cntr_mode->setText("Slow / Fast");
+    m_ui->label_cntr_maxf->setText(format_unit(info->cntr_maxf, "Hz", 0));
     m_ui->label_cntr_timeout->setText(QString::number(info->cntr_timeout) + " ms");
     m_ui->label_cntr_pins->setText(info->pins_cntr);
 
-    m_ui->label_pwm_mode->setText("2ch sync");
+    m_ui->label_pwm_mode->setText(info->pwm2 ? "2ch sync" : "1ch");
     m_ui->label_pwm_freq->setText(format_unit(info->pwm_fs, "Hz", 0));
     m_ui->label_pwm_pins->setText(info->pins_pwm.replace("-", ", "));
 
@@ -456,11 +459,11 @@ void WindowMain::setDisconnected()
     m_ui->label_la_pins->setText("-");
 
     m_ui->label_vm_fs->setText("-");
-    m_ui->label_vm_mem->setText("-");
+    //m_ui->label_vm_mem->setText("-");
     m_ui->label_vm_bits->setText("-");
     m_ui->label_vm_pins->setText("-");
 
-    m_ui->label_cntr_mode->setText("-");
+    m_ui->label_cntr_maxf->setText("-");
     m_ui->label_cntr_timeout->setText("-");
     m_ui->label_cntr_pins->setText("-");
 
@@ -576,7 +579,7 @@ void WindowMain::on_pushButton_scan_clicked()
             QListWidgetItem* item = new QListWidgetItem(m_ui->listWidget_ports);
             item->setIcon(port.isBusy() ? QIcon(":/main/img/serial2_red.png") : QIcon(":/main/img/serial2.png"));
             QString val = port.portName() + (port.description().size() > 0 ? (" — " + port.description()) : "");
-            item->setText(val <= 20 ? val : val.left(16) + "...");
+            item->setText(val.size() <= 20 ? val : val.left(16) + "...");
             item->setToolTip(val + (port.manufacturer().size() > 0 ? (" (" + port.manufacturer() + ")") : ""));
             item->setData(Qt::UserRole, port.portName());
 

@@ -15,7 +15,7 @@
 #define EM_DEBUG      // auto enable PWM, SGEN on start and more verbose
 //#define EM_SYSVIEW  // SEGGER System View enabled - less DAQ memory
 
-#define EM_DEV_VER      "0.1.9"
+#define EM_DEV_VER      "0.2.1"
 #define EM_DEV_AUTHOR   "CTU/Jakub Parez"
 
 
@@ -28,6 +28,7 @@
 #if defined(STM32F103xB)
 
 #define EM_F103C8
+#define EM_CORTEX_M3
 
 /*
  * =========layout=========
@@ -38,6 +39,8 @@
  *  PWM CH1 ........... PA15
  *  PWM CH2 ........... PB6
  *  CNTR .............. PA8
+ *  UART RX ........... PA10
+ *  UART TX ........... PA9
  *  =======================
 */
 
@@ -47,6 +50,7 @@
 /*.................................................. F103RE .................................................*/
 
 #define EM_F103RE
+#define EM_CORTEX_M3
 
 /*
  * =========layout=========
@@ -58,6 +62,8 @@
  *  PWM CH2 ........... PB6
  *  CNTR .............. PA8
  *  DAC ............... PA4
+ *  UART RX ........... PA10
+ *  UART TX ........... PA9
  *  =======================
 */
 
@@ -67,6 +73,7 @@
 /*.................................................. F303RE .................................................*/
 
 #define EM_F303RE
+#define EM_CORTEX_M4F
 
 /*
  * =========layout=========
@@ -80,16 +87,20 @@
  *  PWM CH2 ........... PB10 (Arduino D6)
  *  CNTR .............. PC9  (Morpho CN10-1)
  *  DAC ............... PA4  (Arduino A2)
+ *  UART RX ........... PA3
+ *  UART TX ........... PA2
  *  =======================
 */
 
 #include "cfg_f303re.h"
 
 #elif defined(STM32G031xx)
-/*.................................................. G031K8 .................................................*/
 
 #if defined(K8)
+/*.................................................. G031K8 .................................................*/
+
 #define EM_G031K8
+#define EM_CORTEX_M0
 
 /*
  * =========layout=========
@@ -99,6 +110,8 @@
  *  DAQ CH4 ........... PA5  (Arduino A3)
  *  PWM CH1 ........... PA15 (Arduino D2)
  *  CNTR .............. PA8  (Arduino D9)
+ *  UART RX ........... PA3
+ *  UART TX ........... PA2
  *  =======================
 */
 
@@ -108,15 +121,16 @@
 /*.................................................. G031J6 .................................................*/
 
 #define EM_G031J6
+#define EM_CORTEX_M0
 
 /*
  * =========layout=========
- *  DAQ CH1 ........... PA0  (Arduino A0)
- *  DAQ CH2 ........... PA1  (Arduino A1)
- *  DAQ CH3 ........... PA4  (Arduino A2)
- *  DAQ CH4 ........... PA5  (Arduino A3)
- *  PWM CH1 ........... PA15 (Arduino D2)
- *  CNTR .............. PA8  (Arduino D9)
+ *  DAQ CH1 ........... PA13
+ *  DAQ CH2 ........... PA10
+ *  PWM CH1 ........... PA0
+ *  CNTR .............. PA8
+ *  UART RX ........... PB7
+ *  UART TX ........... PB6
  *  =======================
 */
 
@@ -124,6 +138,10 @@
 
 #endif
 
+#endif
+
+#if !defined(EM_DAQ_4CH) && (defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234))
+#error ADC12 or ADC1234 must be implemented with 4 channels only!
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------+
@@ -159,7 +177,7 @@
 
 // Voltmeter common ------------------------------------------------
 #define EM_VM_FS               100  // voltmeter fs (Hz)
-#define EM_VM_MEM              300  // voltmeter mem
+#define EM_VM_MEM              50   // voltmeter mem
 
 // LED timing ------------------------------------------------------
 #define EM_BLINK_LONG_MS       500  // long blink - startup

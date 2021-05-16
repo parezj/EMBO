@@ -1314,7 +1314,7 @@ QPushButton:pressed
         <x>70</x>
         <y>50</y>
         <width>101</width>
-        <height>20</height>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">
@@ -1502,37 +1502,11 @@ QPushButton:pressed
        <enum>Qt::AutoText</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="label_16">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>30</y>
-        <width>51</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Roboto</family>
-        <pointsize>10</pointsize>
-        <weight>50</weight>
-        <italic>false</italic>
-        <bold>false</bold>
-        <kerning>true</kerning>
-       </font>
-      </property>
-      <property name="text">
-       <string>• Mem:</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_17">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>30</y>
         <width>51</width>
         <height>16</height>
        </rect>
@@ -1558,7 +1532,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>70</y>
+        <y>50</y>
         <width>51</width>
         <height>16</height>
        </rect>
@@ -1586,33 +1560,7 @@ QPushButton:pressed
         <x>70</x>
         <y>10</y>
         <width>91</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Roboto</family>
-        <pointsize>10</pointsize>
-        <weight>50</weight>
-        <italic>false</italic>
-        <bold>false</bold>
-        <kerning>true</kerning>
-       </font>
-      </property>
-      <property name="text">
-       <string>-</string>
-      </property>
-      <property name="textFormat">
-       <enum>Qt::AutoText</enum>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_vm_mem">
-      <property name="geometry">
-       <rect>
-        <x>70</x>
-        <y>30</y>
-        <width>91</width>
-        <height>20</height>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">
@@ -1636,9 +1584,9 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>50</y>
+        <y>30</y>
         <width>91</width>
-        <height>20</height>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">
@@ -1662,9 +1610,9 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>70</x>
-        <y>70</y>
+        <y>50</y>
         <width>91</width>
-        <height>20</height>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">
@@ -1831,7 +1779,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>10</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -1909,7 +1857,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>80</x>
-        <y>30</y>
+        <y>10</y>
         <width>81</width>
         <height>16</height>
        </rect>
@@ -1935,9 +1883,9 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>80</x>
-        <y>10</y>
+        <y>30</y>
         <width>81</width>
-        <height>20</height>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">
@@ -1961,7 +1909,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>30</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -2367,7 +2315,7 @@ QPushButton:pressed
        </font>
       </property>
       <property name="text">
-       <string>• Mode:</string>
+       <string>• Max freq:</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -2399,13 +2347,13 @@ QPushButton:pressed
        <enum>Qt::AutoText</enum>
       </property>
      </widget>
-     <widget class="QLabel" name="label_cntr_mode">
+     <widget class="QLabel" name="label_cntr_maxf">
       <property name="geometry">
        <rect>
         <x>80</x>
         <y>10</y>
         <width>91</width>
-        <height>20</height>
+        <height>16</height>
        </rect>
       </property>
       <property name="font">

@@ -466,10 +466,10 @@ void WindowScope::on_msg_read(const QByteArray data)
 
         if (m_daqSet.ch1_en || m_daqSet.ch2_en)
             found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, _y2, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
+                                        m_gain1, m_gain2, 0, 0, m_offset1, m_offset2, 0, 0);
         if (m_daqSet.ch3_en || m_daqSet.ch4_en)
-            found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y3, _y4, NULL, NULL, // todo trigger problem ?
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
+            found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y3, _y4, NULL, NULL,
+                                        m_gain3, m_gain4, 0, 0, m_offset3, m_offset4, 0, 0);
 
     }
     else if (info->adc_num == 4)
@@ -523,16 +523,16 @@ void WindowScope::on_msg_read(const QByteArray data)
 
         if (m_daqSet.ch1_en)
             found += get_vals_from_circ(m_firstPos, buff1_mem, buff1_len, m_daqSet.bits, vcc, buff1, _y1, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
+                                        m_gain1, 0, 0, 0, m_offset1, 0, 0, 0);
         if (m_daqSet.ch2_en)
             found += get_vals_from_circ(m_firstPos, buff2_mem, buff2_len, m_daqSet.bits, vcc, buff2, _y2, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
+                                        m_gain2, 0, 0, 0, m_offset2, 0, 0, 0);
         if (m_daqSet.ch3_en)
             found += get_vals_from_circ(m_firstPos, buff3_mem, buff3_len, m_daqSet.bits, vcc, buff3, _y3, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
+                                        m_gain3, 0, 0, 0, m_offset3, 0, 0, 0);
         if (m_daqSet.ch4_en)
             found += get_vals_from_circ(m_firstPos, buff4_mem, buff4_len, m_daqSet.bits, vcc, buff4, _y4, NULL, NULL, NULL,
-                                        m_gain1, m_gain2, m_gain3, m_gain4, m_offset1, m_offset2, m_offset3, m_offset4);
+                                        m_gain4, 0, 0, 0, m_offset4, 0, 0, 0);
 
     }
     else assert(0);
@@ -1794,6 +1794,8 @@ void WindowScope::on_radioButton_trigMode_Disabled_clicked(bool checked)
         m_ui->radioButton_trigSlope_Rising->setEnabled(false);
         m_ui->radioButton_trigSlope_Falling->setEnabled(false);
 
+        m_ui->groupBox_t_19->setEnabled(false);
+
         sendSet();
     }
 }
@@ -2002,6 +2004,10 @@ void WindowScope::on_radioButton_fsMem_clicked(bool checked)
     {
         m_ui->groupBox_h_fsMem->setEnabled(true);
         m_ui->groupBox_h_div->setEnabled(false);
+
+        m_ui->spinBox_mem->setStyleSheet(CSS_SPINBOX_NODIS);
+        m_ui->spinBox_fs->setStyleSheet(CSS_SPINBOX_NODIS);
+        m_ui->doubleSpinBox_div->setStyleSheet(CSS_DSPINBOX);
     }
 }
 
@@ -2011,6 +2017,10 @@ void WindowScope::on_radioButton_div_clicked(bool checked)
     {
         m_ui->groupBox_h_fsMem->setEnabled(false);
         m_ui->groupBox_h_div->setEnabled(true);
+
+        m_ui->spinBox_mem->setStyleSheet(CSS_SPINBOX);
+        m_ui->spinBox_fs->setStyleSheet(CSS_SPINBOX);
+        m_ui->doubleSpinBox_div->setStyleSheet(CSS_DSPINBOX_NODIS);
     }
 }
 
@@ -2180,38 +2190,46 @@ void WindowScope::on_pushButton_disable2_clicked()
 
 void WindowScope::on_pushButton_disable3_clicked()
 {
-    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
-        return;
+    auto info = Core::getInstance()->getDevInfo();
+    if (info->daq_ch == 4)
+    {
+        if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+            return;
 
-    m_ui->pushButton_enable3->show();
-    m_ui->pushButton_disable3->hide();
+        m_ui->pushButton_enable3->show();
+        m_ui->pushButton_disable3->hide();
 
-    fix2ADCproblem(false);
+        fix2ADCproblem(false);
 
-    m_rescale_needed = true;
+        m_rescale_needed = true;
 
-    if (m_ui->pushButton_enable3->isVisible())
-        m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
+        if (m_ui->pushButton_enable3->isVisible())
+            m_ui->customPlot->graph(GRAPH_CH3)->setVisible(false);
 
-    sendSet();
+        sendSet();
+    }
 }
 
 void WindowScope::on_pushButton_disable4_clicked()
 {
-    if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
-        return;
+    auto info = Core::getInstance()->getDevInfo();
+    if (info->daq_ch == 4)
+    {
+        if ((m_daqSet.ch1_en + m_daqSet.ch2_en + m_daqSet.ch3_en + m_daqSet.ch4_en) == 1)
+            return;
 
-    m_ui->pushButton_enable4->show();
-    m_ui->pushButton_disable4->hide();
+        m_ui->pushButton_enable4->show();
+        m_ui->pushButton_disable4->hide();
 
-    fix2ADCproblem(false);
+        fix2ADCproblem(false);
 
-    m_rescale_needed = true;
+        m_rescale_needed = true;
 
-    if (m_ui->pushButton_enable4->isVisible())
-        m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
+        if (m_ui->pushButton_enable4->isVisible())
+            m_ui->customPlot->graph(GRAPH_CH4)->setVisible(false);
 
-    sendSet();
+        sendSet();
+    }
 }
 
 void WindowScope::on_pushButton_enable1_clicked()
@@ -2240,26 +2258,34 @@ void WindowScope::on_pushButton_enable2_clicked()
 
 void WindowScope::on_pushButton_enable3_clicked()
 {
-    m_ui->pushButton_enable3->hide();
-    m_ui->pushButton_disable3->show();
+    auto info = Core::getInstance()->getDevInfo();
+    if (info->daq_ch == 4)
+    {
+        m_ui->pushButton_enable3->hide();
+        m_ui->pushButton_disable3->show();
 
-    fix2ADCproblem(true);
+        fix2ADCproblem(true);
 
-    m_rescale_needed = true;
+        m_rescale_needed = true;
 
-    sendSet();
+        sendSet();
+    }
 }
 
 void WindowScope::on_pushButton_enable4_clicked()
 {
-    m_ui->pushButton_enable4->hide();
-    m_ui->pushButton_disable4->show();
+    auto info = Core::getInstance()->getDevInfo();
+    if (info->daq_ch == 4)
+    {
+        m_ui->pushButton_enable4->hide();
+        m_ui->pushButton_disable4->show();
 
-    fix2ADCproblem(true);
+        fix2ADCproblem(true);
 
-    m_rescale_needed = true;
+        m_rescale_needed = true;
 
-    sendSet();
+        sendSet();
+    }
 }
 
 void WindowScope::on_doubleSpinBox_gain_ch1_valueChanged(double arg1)
@@ -2374,6 +2400,7 @@ void WindowScope::on_pushButton_average_off_clicked()
     m_average_num = m_ui->spinBox_average->value();
 
     m_ui->spinBox_average->setEnabled(false);
+    m_ui->spinBox_average->setStyleSheet(CSS_SPINBOX);
 
     m_average = true;
 }
@@ -2394,6 +2421,7 @@ void WindowScope::on_pushButton_average_on_clicked()
     }
 
     m_ui->spinBox_average->setEnabled(true);
+    m_ui->spinBox_average->setStyleSheet(CSS_SPINBOX_NODIS);
 }
 
 void WindowScope::on_spinBox_average_valueChanged(int)
@@ -2496,6 +2524,8 @@ void WindowScope::on_pushButton_fft_off_clicked()
     m_last_fs = 0;
 
     createX();
+
+    m_ui->horizontalSlider_cursorH->setStyleSheet(CSS_CURSOR_H2);
 }
 
 void WindowScope::on_pushButton_fft_on_clicked()
@@ -2551,6 +2581,8 @@ void WindowScope::on_pushButton_fft_on_clicked()
     m_fft_in = NULL;
     m_fft_out = NULL;
     m_fft_plan = NULL;
+
+    //m_ui->horizontalSlider_cursorH->setStyleSheet(CSS_CURSOR_H);
 }
 
 /******************************** private ********************************/
@@ -2608,6 +2640,7 @@ void WindowScope::showEvent(QShowEvent*)
     }
 
     on_actionMeasReset_triggered();
+    on_pushButton_resetZoom_clicked();
 
     m_ui->radioButton_trigLed->setChecked(false);
 
@@ -2632,6 +2665,108 @@ void WindowScope::showEvent(QShowEvent*)
     m_ui->dial_Vpos_ch4->setRange(-m_ref_v * m_gain4 * 1000.0, m_ref_v * m_gain4 * 1000.0);
 
     m_ignoreValuesChanged = false;
+
+    m_ui->pushButton_average_off->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_AVG);
+    m_ui->pushButton_average_on->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_AVG);
+    if (info->adc_bit8)
+    {
+        m_ui->pushButton_bit8_off->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_BIT);
+        m_ui->pushButton_bit8_on->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_BIT);
+    }
+    else
+    {
+        m_ui->pushButton_bit8_off->setStyleSheet(CSS_BUTTON_ON CSS_BUTTON_BIT);
+        m_ui->pushButton_bit8_on->setStyleSheet(CSS_BUTTON_OFF CSS_BUTTON_BIT);
+    }
+    m_ui->pushButton_bit12_off->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_BIT);
+    m_ui->pushButton_bit12_on->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_BIT);
+    m_ui->pushButton_fft_off->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_FFT);
+    m_ui->pushButton_fft_on->setStyleSheet(CSS_BUTTON_OFF_NODIS CSS_BUTTON_FFT);
+    m_ui->spinBox_average->setStyleSheet(m_ui->pushButton_average_on->isVisible() ? CSS_SPINBOX : CSS_SPINBOX_NODIS);
+
+    m_ui->pushButton_disable1->setStyleSheet(CSS_BUTTON_CH1_NODIS CSS_BUTTON_CH);
+    m_ui->pushButton_disable2->setStyleSheet(CSS_BUTTON_CH2_NODIS CSS_BUTTON_CH);
+    m_ui->pushButton_enable1->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_CH);
+    m_ui->pushButton_enable2->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_CH);
+    m_ui->doubleSpinBox_gain_ch1->setStyleSheet(CSS_DSPINBOX_NODIS);
+    m_ui->doubleSpinBox_gain_ch2->setStyleSheet(CSS_DSPINBOX_NODIS);
+    if (info->daq_ch == 4)
+    {
+        m_ui->pushButton_enable3->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_CH);
+        m_ui->pushButton_enable4->setStyleSheet(CSS_BUTTON_ON_NODIS CSS_BUTTON_CH);
+        m_ui->pushButton_disable3->setStyleSheet(CSS_BUTTON_CH3_NODIS CSS_BUTTON_CH);
+        m_ui->pushButton_disable4->setStyleSheet(CSS_BUTTON_CH4_NODIS CSS_BUTTON_CH);
+        m_ui->doubleSpinBox_gain_ch3->setStyleSheet(CSS_DSPINBOX_NODIS);
+        m_ui->doubleSpinBox_gain_ch4->setStyleSheet(CSS_DSPINBOX_NODIS);
+
+        m_ui->groupBox_v_5->show();
+        m_ui->groupBox_v_6->show();
+
+        m_ui->pushButton_enable3->show();
+        m_ui->pushButton_enable4->show();
+        m_ui->pushButton_disable3->show();
+        m_ui->pushButton_disable4->show();
+        m_ui->doubleSpinBox_gain_ch3->show();
+        m_ui->doubleSpinBox_gain_ch4->show();
+
+        m_ui->dial_Vpos_ch3->show();
+        m_ui->dial_Vpos_ch4->show();
+        m_ui->label_dial3->show();
+        m_ui->label_dial4->show();
+
+        m_ui->radioButton_trigCh_3->show();
+        m_ui->radioButton_trigCh_4->show();
+    }
+    else
+    {
+        m_ui->groupBox_v_5->hide();
+        m_ui->groupBox_v_6->hide();
+
+        m_ui->pushButton_enable3->hide();
+        m_ui->pushButton_enable4->hide();
+        m_ui->pushButton_disable3->hide();
+        m_ui->pushButton_disable4->hide();
+        m_ui->doubleSpinBox_gain_ch3->hide();
+        m_ui->doubleSpinBox_gain_ch4->hide();
+
+        m_ui->dial_Vpos_ch3->hide();
+        m_ui->dial_Vpos_ch4->hide();
+        m_ui->label_dial3->hide();
+        m_ui->label_dial4->hide();
+
+        m_ui->radioButton_trigCh_3->hide();
+        m_ui->radioButton_trigCh_4->hide();
+    }
+
+    bool fsMem = m_ui->radioButton_fsMem->isChecked();
+
+    m_ui->spinBox_mem->setStyleSheet(fsMem ? CSS_SPINBOX_NODIS : CSS_SPINBOX);
+    m_ui->spinBox_fs->setStyleSheet(fsMem ? CSS_SPINBOX_NODIS : CSS_SPINBOX);
+    m_ui->doubleSpinBox_div->setStyleSheet(fsMem ? CSS_DSPINBOX : CSS_DSPINBOX_NODIS);
+    m_ui->radioButton_fsMem->setStyleSheet(CSS_RADIOBUTTON_NODIS);
+    m_ui->radioButton_div->setStyleSheet(CSS_RADIOBUTTON_NODIS);
+
+    m_ui->radioButton_trigMode_Auto->setStyleSheet(m_single ? CSS_RADIOBUTTON : CSS_RADIOBUTTON_NODIS);
+    m_ui->radioButton_trigMode_Normal->setStyleSheet(m_single ? CSS_RADIOBUTTON : CSS_RADIOBUTTON_NODIS);
+    m_ui->radioButton_trigMode_Disabled->setStyleSheet(m_single ? CSS_RADIOBUTTON : CSS_RADIOBUTTON_NODIS);
+
+    bool trigEnabled = !(m_daqSet.trig_mode == DaqTrigMode::DISABLED);
+
+    m_ui->radioButton_trigSlope_Rising->setStyleSheet(trigEnabled ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+    m_ui->radioButton_trigSlope_Falling->setStyleSheet(trigEnabled ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+
+    m_ui->spinBox_trigVal->setStyleSheet(trigEnabled ? CSS_SPINBOX_NODIS : CSS_SPINBOX);
+    m_ui->spinBox_trigPre->setStyleSheet(trigEnabled ? CSS_SPINBOX_NODIS : CSS_SPINBOX);
+
+    bool forc = (m_daqSet.trig_mode != DaqTrigMode::DISABLED && m_daqSet.trig_mode != DaqTrigMode::AUTO);
+    m_ui->pushButton_trigForc->setStyleSheet(forc ? (CSS_BUTTON_ON_NODIS CSS_BUTTON_FORC) : (CSS_BUTTON_ON CSS_BUTTON_FORC));
+
+    m_ui->radioButton_trigCh_1->setStyleSheet(m_ui->radioButton_trigCh_1->isEnabled() ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+    m_ui->radioButton_trigCh_2->setStyleSheet(m_ui->radioButton_trigCh_2->isEnabled() ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+    m_ui->radioButton_trigCh_3->setStyleSheet(m_ui->radioButton_trigCh_3->isEnabled() ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+    m_ui->radioButton_trigCh_4->setStyleSheet(m_ui->radioButton_trigCh_4->isEnabled() ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+
+    m_refresh = true;
 }
 
 void WindowScope::rescaleYAxis()
@@ -2777,6 +2912,8 @@ void WindowScope::createX()
 
 void WindowScope::updatePanel()
 {
+    auto info = Core::getInstance()->getDevInfo();
+
     m_ignoreValuesChanged = true;
 
     on_pushButton_average_on_clicked();
@@ -2809,13 +2946,16 @@ void WindowScope::updatePanel()
 
     m_ui->pushButton_enable1->setVisible(!m_daqSet.ch1_en);
     m_ui->pushButton_enable2->setVisible(!m_daqSet.ch2_en);
-    m_ui->pushButton_enable3->setVisible(!m_daqSet.ch3_en);
-    m_ui->pushButton_enable4->setVisible(!m_daqSet.ch4_en);
-
     m_ui->pushButton_disable1->setVisible(m_daqSet.ch1_en);
     m_ui->pushButton_disable2->setVisible(m_daqSet.ch2_en);
-    m_ui->pushButton_disable3->setVisible(m_daqSet.ch3_en);
-    m_ui->pushButton_disable4->setVisible(m_daqSet.ch4_en);
+
+    if (info->daq_ch == 4)
+    {
+        m_ui->pushButton_enable3->setVisible(!m_daqSet.ch3_en);
+        m_ui->pushButton_enable4->setVisible(!m_daqSet.ch4_en);
+        m_ui->pushButton_disable3->setVisible(m_daqSet.ch3_en);
+        m_ui->pushButton_disable4->setVisible(m_daqSet.ch4_en);
+    }
 
     m_ui->pushButton_bit12_on->setVisible(m_daqSet.bits == B12);
     m_ui->pushButton_bit12_off->setVisible(!(m_daqSet.bits == B12));
@@ -2856,6 +2996,8 @@ void WindowScope::updatePanel()
     m_ui->radioButton_trigCh_3->setEnabled(trigEnabled);
     m_ui->radioButton_trigCh_4->setEnabled(trigEnabled);
 
+    m_ui->groupBox_t_19->setEnabled(trigEnabled);
+
     m_ui->radioButton_trigSlope_Rising->setEnabled(trigEnabled);
     m_ui->radioButton_trigSlope_Falling->setEnabled(trigEnabled);
 
@@ -2895,14 +3037,14 @@ void WindowScope::updatePanel()
     else // 4
         m_ui->radioButton_trigCh_4->setChecked(true);
 
-    m_ui->pushButton_trigForc->setEnabled(m_daqSet.trig_mode != DaqTrigMode::DISABLED && m_daqSet.trig_mode != DaqTrigMode::AUTO);
+    bool forc = (m_daqSet.trig_mode != DaqTrigMode::DISABLED && m_daqSet.trig_mode != DaqTrigMode::AUTO);
+    m_ui->pushButton_trigForc->setEnabled(forc);
     m_ui->spinBox_average->setEnabled(!m_average);
 
     on_radioButton_fsMem_clicked(m_ui->radioButton_fsMem->isChecked());
 
     /* MAX FS AND MEM */
 
-    auto info = Core::getInstance()->getDevInfo();
     int max_mem = info->mem;
     if (m_daqSet.bits == B12)
         max_mem /= 2;
@@ -2947,7 +3089,67 @@ void WindowScope::updatePanel()
 
     m_status_smpl->setText("Sampling Time: " + QString::number(m_daqSet.smpl_time, 10, 1));
 
+    m_ui->doubleSpinBox_gain_ch3->setEnabled(info->daq_ch == 4);
+    m_ui->doubleSpinBox_gain_ch4->setEnabled(info->daq_ch == 4);
+
+    m_ui->dial_Vpos_ch3->setEnabled(info->daq_ch == 4);
+    m_ui->dial_Vpos_ch4->setEnabled(info->daq_ch == 4);
+
+    m_ui->radioButton_trigCh_3->setEnabled(info->daq_ch == 4);
+    m_ui->radioButton_trigCh_4->setEnabled(info->daq_ch == 4);
+
+    m_ui->actionMeasChannel_3->setEnabled(info->daq_ch == 4);
+    m_ui->actionMeasChannel_4->setEnabled(info->daq_ch == 4);
+
+    m_ui->actionFFTChannel_3->setEnabled(info->daq_ch == 4);
+    m_ui->actionFFTChannel_4->setEnabled(info->daq_ch == 4);
+
+    m_ui->actionMath_3_4->setEnabled(info->daq_ch == 4);
+    m_ui->actionMath_XY_X_3_Y_4->setEnabled(info->daq_ch == 4);
+
+    bool trigCh1_en = m_ui->radioButton_trigCh_1->isEnabled();
+    bool trigCh2_en = m_ui->radioButton_trigCh_2->isEnabled();
+    bool trigCh3_en = m_ui->radioButton_trigCh_3->isEnabled();
+    bool trigCh4_en = m_ui->radioButton_trigCh_4->isEnabled();
+
+    if (m_refresh || m_last_trigEnabled != trigEnabled)
+    {
+        m_ui->radioButton_trigSlope_Rising->setStyleSheet(trigEnabled ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+        m_ui->radioButton_trigSlope_Falling->setStyleSheet(trigEnabled ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+
+        m_ui->spinBox_trigVal->setStyleSheet(trigEnabled ? CSS_SPINBOX_NODIS : CSS_SPINBOX);
+        m_ui->spinBox_trigPre->setStyleSheet(trigEnabled ? CSS_SPINBOX_NODIS : CSS_SPINBOX);
+    }
+
+    if (m_refresh || m_last_forc != forc)
+        m_ui->pushButton_trigForc->setStyleSheet(forc ? (CSS_BUTTON_ON_NODIS CSS_BUTTON_FORC) : (CSS_BUTTON_ON CSS_BUTTON_FORC));
+
+    if (m_refresh || m_last_trigCh1_en != trigCh1_en)
+        m_ui->radioButton_trigCh_1->setStyleSheet(trigCh1_en ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+    if (m_refresh || m_last_trigCh2_en != trigCh2_en)
+        m_ui->radioButton_trigCh_2->setStyleSheet(trigCh2_en ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+    if (m_refresh || m_last_trigCh3_en != trigCh3_en)
+        m_ui->radioButton_trigCh_3->setStyleSheet(trigCh3_en ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+    if (m_refresh || m_last_trigCh4_en != trigCh4_en)
+        m_ui->radioButton_trigCh_4->setStyleSheet(trigCh4_en ? CSS_RADIOBUTTON_NODIS : CSS_RADIOBUTTON);
+
+    if (m_refresh || m_last_single != m_single)
+    {
+        m_ui->radioButton_trigMode_Auto->setStyleSheet(m_single ? CSS_RADIOBUTTON : CSS_RADIOBUTTON_NODIS);
+        m_ui->radioButton_trigMode_Normal->setStyleSheet(m_single ? CSS_RADIOBUTTON : CSS_RADIOBUTTON_NODIS);
+        m_ui->radioButton_trigMode_Disabled->setStyleSheet(m_single ? CSS_RADIOBUTTON : CSS_RADIOBUTTON_NODIS);
+    }
+
+    m_last_forc = forc;
+    m_last_single = m_single;
+    m_last_trigEnabled = trigEnabled;
+    m_last_trigCh1_en = trigCh1_en;
+    m_last_trigCh2_en = trigCh2_en;
+    m_last_trigCh3_en = trigCh3_en;
+    m_last_trigCh4_en = trigCh4_en;
+
     m_ignoreValuesChanged = false;
+    m_refresh = false;
 }
 
 void WindowScope::enablePanel(bool en)
@@ -3011,6 +3213,8 @@ void WindowScope::fix2ADCproblem(bool add)
 
 void WindowScope::sendSet()
 {
+    auto info = Core::getInstance()->getDevInfo();
+
     m_msgPending = true;
     enablePanel(false);
 
@@ -3079,7 +3283,6 @@ void WindowScope::sendSet()
 
     /* fs, mem, trig ch -> trimm */
 
-    auto info = Core::getInstance()->getDevInfo();
     int max_mem = info->mem;
     if (m_daqSet.bits == B12)
         max_mem /= 2;
@@ -3102,7 +3305,8 @@ void WindowScope::sendSet()
     m_ui->spinBox_fs->setRange(1,max_fs);
     m_ui->dial_fs->setRange(1,max_fs);
 
-    for (int i = 0, j = m_daqSet.trig_ch; i < 4; i++) // optimize trigger channel according to enabled channels
+    int trig_cnt = info->daq_ch;
+    for (int i = 0, j = m_daqSet.trig_ch; i < trig_cnt; i++) // optimize trigger channel according to enabled channels
     {
         if ((m_daqSet.trig_ch == 1 && m_ui->pushButton_enable1->isVisible()) ||
             (m_daqSet.trig_ch == 2 && m_ui->pushButton_enable2->isVisible()) ||
@@ -3110,7 +3314,7 @@ void WindowScope::sendSet()
             (m_daqSet.trig_ch == 4 && m_ui->pushButton_enable4->isVisible()))
         {
             j++;
-            if (j == 5)
+            if (j == trig_cnt + 1)
                 j = 1;
 
             m_daqSet.trig_ch = j;

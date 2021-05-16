@@ -171,7 +171,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                 <string notr="true">QSlider {
     min-height: 10px;
     max-height: 10px;
-	margin-left: 28px;
+	margin-left: 15px;
 	margin-right:0px;
 }
 
@@ -379,7 +379,7 @@ QSlider::handle:vertical:hover {
                 <string notr="true">ctkRangeSlider {
     min-height: 25px;
     max-height: 25px;
-	margin-left: 33px;
+	margin-left: 20px;
 	margin-right:2px;
 }
 
@@ -400,7 +400,7 @@ ctkRangeSlider::handle:horizontal:hover {
 QSlider {
     min-height: 25px;
     max-height: 25px;
-	margin-left: 33px;
+	margin-left: 20px;
 	margin-right:2px;
 }
 
@@ -1403,12 +1403,7 @@ QPushButton:pressed {
 	background: #FFFFFF;
 	color: #2f836a;
 }
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
+</string>
               </property>
               <property name="text">
                <string> SINGLE</string>
@@ -1575,12 +1570,7 @@ QPushButton:pressed {
 	background: #FFFFFF;
 	color: #2f836a;
 }
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
+</string>
               </property>
               <property name="text">
                <string> RUN  </string>
@@ -1636,12 +1626,7 @@ QPushButton:pressed {
 	background: #FFFFFF;
 	color: #2f836a;
 }
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
-}</string>
+</string>
               </property>
               <property name="text">
                <string> RUN  </string>
@@ -1749,10 +1734,7 @@ QRadioButton::indicator:unchecked:hover {
 QRadioButton::indicator::checked {
     image: url(:/main/img/radio_on2.png);
 }
-
-QRadioButton::indicator::disabled {
-    image: url(:/main/img/radio_off_dis.png);
-}</string>
+</string>
               </property>
               <property name="text">
                <string>ZoomH</string>
@@ -1808,12 +1790,6 @@ QPushButton:pressed {
 	border-radius: 5px;
 	background: #FFFFFF;
 	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
               </property>
               <property name="text">
@@ -1874,10 +1850,6 @@ QRadioButton::indicator:unchecked:hover {
 
 QRadioButton::indicator::checked {
     image: url(:/main/img/radio_on2.png);
-}
-
-QRadioButton::indicator::disabled {
-    image: url(:/main/img/radio_off_dis.png);
 }</string>
               </property>
               <property name="text">
@@ -1934,12 +1906,6 @@ QPushButton:pressed {
 	border-radius: 5px;
 	background: #FFFFFF;
 	color: #2f836a;
-}
-
-QPushButton:disabled {
-	border: 1px solid rgb(180, 180, 180);
-	color: gray;
-	background: qlineargradient(x1:0, y1:0, x2:0, y2:2, stop:0 #CCCCCC, stop:0.1 #EEEEEE, stop:1 #BBBBBB);
 }</string>
               </property>
               <property name="text">
@@ -2001,11 +1967,17 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                <pointsize>11</pointsize>
               </font>
              </property>
+             <property name="styleSheet">
+              <string notr="true">color:black;</string>
+             </property>
              <property name="text">
               <string>Trigger</string>
              </property>
             </widget>
             <widget class="QGroupBox" name="groupBox_t_16">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="geometry">
               <rect>
                <x>10</x>
@@ -2091,6 +2063,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2161,6 +2137,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2231,6 +2211,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2339,6 +2323,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2374,6 +2362,9 @@ QRadioButton::indicator::disabled {
                 <bold>false</bold>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
+              </property>
               <property name="text">
                <string>Channel:</string>
               </property>
@@ -2395,11 +2386,17 @@ QRadioButton::indicator::disabled {
                 <bold>false</bold>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
+              </property>
               <property name="text">
                <string>Mode:</string>
               </property>
              </widget>
              <widget class="QRadioButton" name="radioButton_trigCh_4">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="geometry">
                <rect>
                 <x>350</x>
@@ -2451,6 +2448,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2470,6 +2471,9 @@ QRadioButton::indicator::disabled {
               </property>
              </widget>
              <widget class="QRadioButton" name="radioButton_trigCh_1">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="geometry">
                <rect>
                 <x>90</x>
@@ -2521,6 +2525,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2555,6 +2563,9 @@ QRadioButton::indicator::disabled {
                 <weight>50</weight>
                 <bold>false</bold>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
               </property>
               <property name="text">
                <string>Slope:</string>
@@ -2612,6 +2623,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2682,6 +2697,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -2752,6 +2771,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -3255,6 +3278,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
                 <bold>false</bold>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
+              </property>
               <property name="text">
                <string>Level:</string>
               </property>
@@ -3275,6 +3301,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
                 <weight>50</weight>
                 <bold>false</bold>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
               </property>
               <property name="text">
                <string>Pre-trigger:</string>
@@ -3297,6 +3326,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
           </item>
           <item>
            <widget class="QGroupBox" name="groupBox_horizontal">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="minimumSize">
              <size>
               <width>452</width>
@@ -3336,6 +3368,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                <family>Roboto Medium</family>
                <pointsize>11</pointsize>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:black;</string>
              </property>
              <property name="text">
               <string>Horizontal</string>
@@ -3433,6 +3468,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -3453,7 +3492,7 @@ QRadioButton::indicator::disabled {
              </widget>
              <widget class="QRadioButton" name="radioButton_div">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="geometry">
                <rect>
@@ -3506,6 +3545,10 @@ QRadioButton::indicator::checked {
 
 QRadioButton::indicator::disabled {
     image: url(:/main/img/radio_off_dis.png);
+}
+
+QRadioButton::disabled {
+    color:gray;
 }</string>
               </property>
               <property name="text">
@@ -3525,6 +3568,9 @@ QRadioButton::indicator::disabled {
               </property>
              </widget>
              <widget class="QLabel" name="label_27">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="geometry">
                <rect>
                 <x>0</x>
@@ -3541,6 +3587,9 @@ QRadioButton::indicator::disabled {
                 <bold>false</bold>
                 <underline>false</underline>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
               </property>
               <property name="text">
                <string>Real Fs (Sps)</string>
@@ -3618,6 +3667,9 @@ p, li { white-space: pre-wrap; }
                 <bold>false</bold>
                 <underline>false</underline>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color:black</string>
               </property>
               <property name="text">
                <string>Max Impedance</string>
@@ -3977,6 +4029,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
                 <bold>false</bold>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
+              </property>
               <property name="text">
                <string>Mem (S/ch):</string>
               </property>
@@ -4000,6 +4055,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
                 <weight>50</weight>
                 <bold>false</bold>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
               </property>
               <property name="text">
                <string>Fs (Sps):</string>
@@ -4075,7 +4133,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
             </widget>
             <widget class="QGroupBox" name="groupBox_h_div">
              <property name="enabled">
-              <bool>true</bool>
+              <bool>false</bool>
              </property>
              <property name="geometry">
               <rect>
@@ -4112,7 +4170,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
              </property>
              <widget class="QDoubleSpinBox" name="doubleSpinBox_div">
               <property name="enabled">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="geometry">
                <rect>
@@ -4193,13 +4251,13 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
              </widget>
              <widget class="QLabel" name="label_div">
               <property name="enabled">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
               <property name="geometry">
                <rect>
                 <x>10</x>
                 <y>25</y>
-                <width>101</width>
+                <width>51</width>
                 <height>21</height>
                </rect>
               </property>
@@ -4210,6 +4268,9 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
                 <weight>50</weight>
                 <bold>false</bold>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
               </property>
               <property name="text">
                <string>Width:</string>
@@ -4256,7 +4317,7 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
                <number>1</number>
               </property>
               <property name="tracking">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
@@ -4286,6 +4347,9 @@ QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; im
           </item>
           <item>
            <widget class="QGroupBox" name="groupBox_vertical">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
             <property name="minimumSize">
              <size>
               <width>452</width>
@@ -4325,6 +4389,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                <family>Roboto Medium</family>
                <pointsize>11</pointsize>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:black;</string>
              </property>
              <property name="text">
               <string>Vertical</string>
@@ -4531,7 +4598,8 @@ QPushButton:disabled {
              </property>
              <property name="icon">
               <iconset resource="../../resources/resources.qrc">
-               <normaloff>:/main/img/power-on_ch1.png</normaloff>:/main/img/power-on_ch1.png</iconset>
+               <normaloff>:/main/img/power-on_ch1.png</normaloff>
+               <disabledoff>:/main/img/power-on_ch1.png</disabledoff>:/main/img/power-on_ch1.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -4595,7 +4663,7 @@ QPushButton:disabled {
              <property name="icon">
               <iconset resource="../../resources/resources.qrc">
                <normaloff>:/main/img/power-on_ch2.png</normaloff>
-               <disabledoff>:/main/img/power-off-green3.png</disabledoff>:/main/img/power-on_ch2.png</iconset>
+               <disabledoff>:/main/img/power-on_ch2.png</disabledoff>:/main/img/power-on_ch2.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -4659,7 +4727,7 @@ QPushButton:disabled {
              <property name="icon">
               <iconset resource="../../resources/resources.qrc">
                <normaloff>:/main/img/power-on_ch3.png</normaloff>
-               <disabledoff>:/main/img/power-off-green3.png</disabledoff>:/main/img/power-on_ch3.png</iconset>
+               <disabledoff>:/main/img/power-on_ch3.png</disabledoff>:/main/img/power-on_ch3.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -4723,7 +4791,7 @@ QPushButton:disabled {
              <property name="icon">
               <iconset resource="../../resources/resources.qrc">
                <normaloff>:/main/img/power-on_ch4.png</normaloff>
-               <disabledoff>:/main/img/power-off-green3.png</disabledoff>:/main/img/power-on_ch4.png</iconset>
+               <disabledoff>:/main/img/power-on_ch4.png</disabledoff>:/main/img/power-on_ch4.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -5484,6 +5552,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                 <underline>false</underline>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
+              </property>
               <property name="text">
                <string>0.0</string>
               </property>
@@ -5543,6 +5614,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                 <bold>false</bold>
                 <underline>false</underline>
                </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
               </property>
               <property name="text">
                <string>0.0</string>
@@ -5604,6 +5678,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                 <underline>false</underline>
                </font>
               </property>
+              <property name="styleSheet">
+               <string notr="true">color:black;</string>
+              </property>
               <property name="text">
                <string>0.0</string>
               </property>
@@ -5629,6 +5706,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                <bold>false</bold>
                <underline>false</underline>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:black;</string>
              </property>
              <property name="text">
               <string>-0.0</string>
@@ -5706,6 +5786,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                <family>Roboto Medium</family>
                <pointsize>11</pointsize>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:black;</string>
              </property>
              <property name="text">
               <string>Utils:</string>
@@ -6371,6 +6454,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
                <bold>false</bold>
                <underline>false</underline>
               </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color:black;</string>
              </property>
              <property name="text">
               <string>CH1</string>

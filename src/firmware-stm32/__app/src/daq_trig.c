@@ -43,6 +43,7 @@ void daq_trig_init(daq_data_t* self)
     self->trig.buff_trig = NULL;
     self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
     self->trig.exti_trig = EM_LA_IRQ_EXTI1;
+    self->trig.adcirq_trig = EM_IRQN_ADC1;
     self->trig.adc_trig = EM_ADC1;
     self->trig.dma_trig = EM_DMA_ADC1;
     self->trig.order = 0;
@@ -88,6 +89,9 @@ void daq_trig_check(daq_data_t* self)
                 ASSERT(self->trig.awd_trig != 0);
 
                 self->trig.awd_rising2 = self->trig.awd_rising;
+
+                NVIC_ClearPendingIRQ(self->trig.adcirq_trig);
+                NVIC_EnableIRQ(self->trig.adcirq_trig);
                 LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig);
             }
             else if (self->mode == LA)
@@ -97,13 +101,17 @@ void daq_trig_check(daq_data_t* self)
                 NVIC_ClearPendingIRQ(self->trig.exti_trig);
                 EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI1);
                 EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI2);
+#ifdef EM_DAQ_4CH
                 EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI3);
                 EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI4);
+#endif
 #ifdef EM_GPIO_EXTI_R_F
-                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI1);
-                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI2);
-                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI3);
-                EM_GPIO_EXTI_CLEAR_L(EM_LA_EXTI4);
+                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI1);
+                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI2);
+#ifdef EM_DAQ_4CH
+                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI3);
+                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI4);
+#endif
 #endif
 
                 NVIC_EnableIRQ(self->trig.exti_trig);
@@ -131,7 +139,7 @@ void daq_trig_check(daq_data_t* self)
             self->trig.is_post = EM_FALSE;
 
             t_resp = 'A';
-            self->trig.respond = EM_TRUE; // init async respond ReadyX
+            self->trig.respond = EM_TRUE; // init async respond ReadyA
         }
         else if (self->trig.set.mode == DISABLED &&  // disabled trigger
                  self->trig.pretrig_cntr > self->trig.fullmem_val)
@@ -143,7 +151,7 @@ void daq_trig_check(daq_data_t* self)
                 self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
 
                 t_resp = 'D';
-                self->trig.respond = EM_TRUE; // init async respond ReadyX
+                self->trig.respond = EM_TRUE; // init async respond ReadyD
             }
         }
     }
@@ -166,13 +174,9 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
     ASSERT(self->trig.buff_trig != NULL);
     ASSERT(self->trig.dma_ch_trig != 0);
 
-    if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE || self->trig.irq_en == EM_FALSE) // invalid trig
+    if (!(self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE || self->trig.irq_en == EM_FALSE)) // valid trig
     {
-        LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
-    }
-    else // VALID TRIG
-    {
-        int ch_cnt = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en;
+        int ch_cnt = self->trig.buff_trig->chans;
         int ch_pos_trig = self->trig.dma_pos_catched % ch_cnt;
         int ch_pos_want = ch_cnt - self->trig.order - 1;
 
@@ -184,20 +188,40 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
         if (self->trig.dma_pos_catched < 0)
             self->trig.dma_pos_catched += self->trig.buff_trig->len;
 
-        int prev_last_idx = self->trig.dma_pos_catched - self->trig.buff_trig->chans;
-        if (prev_last_idx < 0)
-            prev_last_idx += self->trig.buff_trig->len;
+        int prev1_last_idx = self->trig.dma_pos_catched - self->trig.buff_trig->chans;
+        if (prev1_last_idx < 0)
+            prev1_last_idx += self->trig.buff_trig->len;
 
-        //uint16_t last_val = 0;
-        uint16_t prev_last_val = 0;
+        int prev2_last_idx = prev1_last_idx - self->trig.buff_trig->chans;
+        if (prev2_last_idx < 0)
+            prev2_last_idx += self->trig.buff_trig->len;
+
+        int prev3_last_idx = prev2_last_idx - self->trig.buff_trig->chans;
+        if (prev3_last_idx < 0)
+            prev3_last_idx += self->trig.buff_trig->len;
+
+        int prev4_last_idx = prev3_last_idx - self->trig.buff_trig->chans;
+        if (prev4_last_idx < 0)
+            prev4_last_idx += self->trig.buff_trig->len;
+
+        uint16_t prev1_last_val = 0;
+        uint16_t prev2_last_val = 0;
+        uint16_t prev3_last_val = 0;
+        uint16_t prev4_last_val = 0;
 
         if (self->set.bits == B8)
         {
-            prev_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev_last_idx]);
+            prev1_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev1_last_idx]);
+            prev2_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev2_last_idx]);
+            prev3_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev3_last_idx]);
+            prev4_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev4_last_idx]);
         }
         else //(self->set.bits == B12)
         {
-            prev_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev_last_idx * 2))));
+            prev1_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev1_last_idx * 2))));
+            prev2_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev2_last_idx * 2))));
+            prev3_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev3_last_idx * 2))));
+            prev4_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev4_last_idx * 2))));
         }
 
         self->trig.all_cntr++;
@@ -210,8 +234,14 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
         else
         {
             // trigger condition
-            if ((self->trig.set.edge == RISING && prev_last_val <= self->trig.set.val) || // last_val > self->trig.set.val &&
-                (self->trig.set.edge == FALLING && prev_last_val >= self->trig.set.val))  // last_val < self->trig.set.val &&
+            if ((self->trig.set.edge == RISING && (prev1_last_val <= self->trig.set.val ||
+                                                   prev2_last_val <= self->trig.set.val ||
+                                                   prev3_last_val <= self->trig.set.val ||
+                                                   prev4_last_val <= self->trig.set.val)) ||
+                (self->trig.set.edge == FALLING && (prev1_last_val >= self->trig.set.val ||
+                                                    prev2_last_val >= self->trig.set.val ||
+                                                    prev3_last_val >= self->trig.set.val ||
+                                                    prev4_last_val >= self->trig.set.val)))
             {
                 return daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
             }
@@ -240,8 +270,14 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
             }
         }
 
+        NVIC_ClearPendingIRQ(self->trig.adcirq_trig);
+        NVIC_EnableIRQ(self->trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig); // reenable irq
 
+    }
+    else // invalid trig (interrupted while DAQ disabled)
+    {
+        // TODO check if its ok to pass this
     }
 
     return 0;
@@ -385,6 +421,11 @@ void daq_trig_disable(daq_data_t* self)
 
 int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge edge, enum trig_mode mode, int pretrigger)
 {
+#ifndef EM_DAQ_4CH
+    if (ch == 3 || ch == 4)
+        return -1;
+#endif
+
     if((level < 0 || level > 100) ||
        (ch < 1 || ch > 4) ||
        (pretrigger > 99 || pretrigger < 1))
@@ -418,6 +459,8 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
         self->trig.buff_trig = &self->buff1;
         self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
         self->trig.dma_trig = EM_DMA_ADC1;
+        self->trig.adcirq_trig = EM_IRQ_ADC1;
+
         int ch_cnt = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + 0;
         int it = 0;
         if (self->set.ch1_en){
@@ -445,6 +488,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             self->trig.buff_trig = &self->buff1;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
             self->trig.dma_trig = EM_DMA_ADC1;
+            self->trig.adcirq_trig = EM_IRQ_ADC1;
 
             int ch_cnt = self->set.ch1_en + self->set.ch2_en + 0;
             int it = 0;
@@ -463,6 +507,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             self->trig.buff_trig = &self->buff2;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
             self->trig.dma_trig = EM_DMA_ADC2;
+            self->trig.adcirq_trig = EM_IRQ_ADC2;
 
             int ch_cnt = self->set.ch3_en + self->set.ch4_en;
             int it = 0;
@@ -485,6 +530,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             self->trig.buff_trig = &self->buff1;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
             self->trig.dma_trig = EM_DMA_ADC1;
+            self->trig.adcirq_trig = EM_IRQ_ADC1;
         }
         else if (ch2 == 2)
         {
@@ -492,6 +538,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             self->trig.buff_trig = &self->buff2;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
             self->trig.dma_trig = EM_DMA_ADC2;
+            self->trig.adcirq_trig = EM_IRQ_ADC2;
         }
         else if (ch2 == 3)
         {
@@ -499,6 +546,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             self->trig.buff_trig = &self->buff3;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC3;
             self->trig.dma_trig = EM_DMA_ADC3;
+            self->trig.adcirq_trig = EM_IRQ_ADC3;
         }
         else // if (ch2 == 4)
         {
@@ -506,6 +554,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             self->trig.buff_trig = &self->buff4;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC4;
             self->trig.dma_trig = EM_DMA_ADC4;
+            self->trig.adcirq_trig = EM_IRQ_ADC4;
         }
 
 #endif
@@ -515,13 +564,15 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
     self->trig.auttrig_val = EM_AUTRIG_MIN_MS + (int)((double)self->trig.fullmem_val * 1.0);
     self->trig.adc_trig = adc;
 
+    ASSERT(self->trig.exti_trig != 0);
+    ASSERT(self->trig.adcirq_trig != 0);
+
+    NVIC_DisableIRQ(self->trig.exti_trig);
+    NVIC_DisableIRQ(self->trig.adcirq_trig);
+    LL_ADC_SetAnalogWDMonitChannels(adc, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+
     if (mode == DISABLED)
     {
-        ASSERT(self->trig.exti_trig != 0);
-
-        NVIC_DisableIRQ(self->trig.exti_trig);
-        LL_ADC_SetAnalogWDMonitChannels(adc, EM_ADC_AWD LL_ADC_AWD_DISABLE);
-
         self->trig.set.mode = DISABLED;
 
         daq_enable(self, EM_TRUE);
@@ -530,8 +581,6 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 
     if (self->mode == LA)
     {
-        LL_ADC_SetAnalogWDMonitChannels(adc, EM_ADC_AWD LL_ADC_AWD_DISABLE);
-
         LL_EXTI_InitTypeDef EXTI_InitStruct = {0};
         uint32_t extiline = 0;
         uint32_t exti = 0;
@@ -548,6 +597,7 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             extiline = EM_LA_EXTILINE2;
             exti = EM_LA_EXTI2;
         }
+#ifdef EM_DAQ_4CH
         else if (ch == 3)
         {
             self->trig.exti_trig = EM_LA_IRQ_EXTI3;
@@ -560,11 +610,14 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             extiline = EM_LA_EXTILINE4;
             exti = EM_LA_EXTI4;
         }
+#endif
 
         LL_EXTI_DisableIT_0_31(EM_LA_EXTI1);
         LL_EXTI_DisableIT_0_31(EM_LA_EXTI2);
+#ifdef EM_DAQ_4CH
         LL_EXTI_DisableIT_0_31(EM_LA_EXTI3);
         LL_EXTI_DisableIT_0_31(EM_LA_EXTI4);
+#endif
 
         EM_GPIO_EXTI_SRC(EM_LA_EXTI_PORT, extiline);
 
@@ -585,9 +638,6 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
     }
     else // SCOPE
     {
-        ASSERT(self->trig.exti_trig != 0);
-        NVIC_DisableIRQ(self->trig.exti_trig);
-
         if ((ch == 1 && self->set.ch1_en) ||
             (ch == 2 && self->set.ch2_en) ||
             (ch == 3 && self->set.ch3_en) ||
@@ -597,10 +647,12 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
                 self->trig.awd_trig = EM_ADC_AWD1;
             else if (ch == 2)
                 self->trig.awd_trig = EM_ADC_AWD2;
+#ifdef EM_DAQ_4CH
             else if (ch == 3)
                 self->trig.awd_trig = EM_ADC_AWD3;
             else if (ch == 4)
                 self->trig.awd_trig = EM_ADC_AWD4;
+#endif
 
             uint32_t level_raw = (int)(self->adc_max_val / 100.0 * (double)level);
             uint32_t res __attribute__((unused));

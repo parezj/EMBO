@@ -20,6 +20,8 @@
  *  PWM CH2 ........... PB6
  *  CNTR .............. PA8
  *  DAC ............... PA4
+ *  UART RX ........... PA10
+ *  UART TX ........... PA9
  *  =======================
 */
 
@@ -87,9 +89,12 @@
 #define EM_GPIO_EXTI_CLEAR_F   LL_EXTI_ClearFlag_0_31       // GPIO EXTI clear rising flag
 //#define EM_GPIO_EXTI_R_F
 
+// DAQ -------------------------------------------------------------
+#define EM_DAQ_4CH   // if defined, DAQ operates with 4 channels, else with 2 channels
+
 // ADC -------------------------------------------------------------
-//#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)              - verified
-#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)        - N/A
+#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)              - verified
+//#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)        - N/A
 //#define EM_ADC_MODE_ADC1234                                  // 4 full ADCs (4 DMA)        - verified
 #define EM_ADC_BIT12                                           // 12-bit mode available      - verified
 //#define EM_ADC_BIT8                                          // 8-bit mode available       - verified
@@ -108,6 +113,7 @@
 #define EM_ADC_CAL_EN                                          // calibration while enabled
 #define LL_ADC_SPEC_START                                      // special start stop methods needed
 #define EM_ADC_AWD                                             // Analog Watchdog
+#define EM_ADC_SEQ_CONF                                        // fully configurable sequencer
 #define EM_ADC_EN_TICKS        LL_ADC_DELAY_ENABLE_CALIB_ADC_CYCLES
 
 // Timers ----------------------------------------------------------
@@ -149,6 +155,7 @@
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
 #define EM_PWM_MAX_F           24000000  // PWM max freq
 #define EM_SGEN_MAX_F          EM_DAC_TIM_MAX_F        // SGEN max output freq.
+#define EM_CNTR_MAX_F          33000000  // CNTR max input frequency
 #define EM_MEM_RESERVE         10        // DAQ circ buff memory reserve
 
 // ADC -------------------------------------------------------------
@@ -198,6 +205,12 @@
 #define EM_LA_IRQ_EXTI4        EXTI4_IRQn
 #define EM_CNTR_IRQ            TIM1_UP_TIM16_IRQn
 
+// IRQ helpers -----------------------------------------------------
+#define EM_IRQ_ADC1            EM_IRQN_ADC1
+#define EM_IRQ_ADC2            EM_IRQN_ADC3
+//#define EM_IRQ_ADC3          EM_IRQN_ADC3
+//#define EM_IRQ_ADC4          EM_IRQN_ADC4
+
 // LA pins and IRQs ------------------------------------------------
 #define EM_LA_EXTI_PORT        LL_GPIO_AF_EXTI_PORTA
 #define EM_LA_EXTI1            LL_EXTI_LINE_0
@@ -243,6 +256,7 @@
 
 // LA - GPIO pins --------------------------------------------------
 #define EM_GPIO_LA_PORT        GPIOA
+#define EM_GPIO_LA_OFFSET      0
 #define EM_GPIO_LA_CH1         LL_GPIO_PIN_0
 #define EM_GPIO_LA_CH2         LL_GPIO_PIN_1
 #define EM_GPIO_LA_CH3         LL_GPIO_PIN_2

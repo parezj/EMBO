@@ -80,6 +80,7 @@
         <file>img/radio_off_dis.png</file>
         <file>img/chip.png</file>
         <file>img/led_green4.png</file>
+        <file>img/nucleo-32.png</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fonts/Roboto-Black.otf</file>

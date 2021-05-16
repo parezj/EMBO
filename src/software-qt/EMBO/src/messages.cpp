@@ -95,7 +95,7 @@ void Msg_SYS_Lims::on_dataRx()
 
     QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
-    if (tokens.size() != 16 || tokens[6].size() < 1 || tokens[15].size() != 4)
+    if (tokens.size() != 17 || tokens[6].size() < 2 || tokens[16].size() != 4)
     {
         core->err(INVALID_MSG + m_rxData, true);
         return;
@@ -109,7 +109,8 @@ void Msg_SYS_Lims::on_dataRx()
     devInfo->la_fs = tokens[3].toInt();
     devInfo->pwm_fs = tokens[4].toInt();
     devInfo->pwm2 = tokens[5] == '1';
-    devInfo->adc_num = (tokens[6])[0].digitValue();
+    devInfo->daq_ch = (tokens[6])[0].digitValue();
+    devInfo->adc_num = (tokens[6])[1].digitValue();
     devInfo->adc_dualmode = tokens[6].contains('D');
     devInfo->adc_interleaved = tokens[6].contains('I');
     devInfo->adc_bit8 = tokens[7] == '1';
@@ -119,11 +120,12 @@ void Msg_SYS_Lims::on_dataRx()
     devInfo->cntr_timeout = tokens[11].toInt();
     devInfo->sgen_maxf = tokens[12].toInt();
     devInfo->sgen_maxmem = tokens[13].toInt();
-    devInfo->daq_reserve = tokens[14].toInt();
-    devInfo->la_ch1_pin = tokens[15][0].toLatin1() - '0';
-    devInfo->la_ch2_pin = tokens[15][1].toLatin1() - '0';
-    devInfo->la_ch3_pin = tokens[15][2].toLatin1() - '0';
-    devInfo->la_ch4_pin = tokens[15][3].toLatin1() - '0';
+    devInfo->cntr_maxf = tokens[14].toInt();
+    devInfo->daq_reserve = tokens[15].toInt();
+    devInfo->la_ch1_pin = tokens[16][0].toLatin1() - '0';
+    devInfo->la_ch2_pin = tokens[16][1].toLatin1() - '0';
+    devInfo->la_ch3_pin = tokens[16][2].toLatin1() - '0';
+    devInfo->la_ch4_pin = tokens[16][3].toLatin1() - '0';
 }
 
 

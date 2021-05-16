@@ -42,23 +42,23 @@ scpi_result_t SCPI_Reset(scpi_t * context);
 const scpi_command_t scpi_commands[] = {
     /* IEEE Mandated Commands (SCPI std V1999.0 4.1.1) */
     { .pattern = "*CLS", .callback = SCPI_CoreCls,},
-    { .pattern = "*ESE", .callback = SCPI_CoreEse,},
-    { .pattern = "*ESE?", .callback = SCPI_CoreEseQ,},
-    { .pattern = "*ESR?", .callback = SCPI_CoreEsrQ,},
+    //{ .pattern = "*ESE", .callback = SCPI_CoreEse,},
+    //{ .pattern = "*ESE?", .callback = SCPI_CoreEseQ,},
+    //{ .pattern = "*ESR?", .callback = SCPI_CoreEsrQ,},
     { .pattern = "*IDN?", .callback = SCPI_CoreIdnQ,},
-    { .pattern = "*OPC", .callback = SCPI_CoreOpc,},
-    { .pattern = "*OPC?", .callback = SCPI_CoreOpcQ,},
+    //{ .pattern = "*OPC", .callback = SCPI_CoreOpc,},
+    //{ .pattern = "*OPC?", .callback = SCPI_CoreOpcQ,},
     { .pattern = "*RST", .callback = EM_Reset,},
-    { .pattern = "*SRE", .callback = SCPI_CoreSre,},
-    { .pattern = "*SRE?", .callback = SCPI_CoreSreQ,},
+    //{ .pattern = "*SRE", .callback = SCPI_CoreSre,},
+    //{ .pattern = "*SRE?", .callback = SCPI_CoreSreQ,},
     { .pattern = "*STB?", .callback = SCPI_CoreStbQ,},
     //{ .pattern = "*TST?", .callback = My_CoreTstQ,},
-    { .pattern = "*WAI", .callback = SCPI_CoreWai,},
+    //{ .pattern = "*WAI", .callback = SCPI_CoreWai,},
 
     ///* Required SCPI commands (SCPI std V1999.0 4.2.1) */
-    {.pattern = "SYStem:ERRor[:NEXT]?", .callback = SCPI_SystemErrorNextQ,},
-    {.pattern = "SYStem:ERRor:COUNt?", .callback = SCPI_SystemErrorCountQ,},
-    {.pattern = "SYStem:VERsion?", .callback = SCPI_SystemVersionQ,},
+    //{.pattern = "SYStem:ERRor[:NEXT]?", .callback = SCPI_SystemErrorNextQ,},
+    //{.pattern = "SYStem:ERRor:COUNt?", .callback = SCPI_SystemErrorCountQ,},
+    //{.pattern = "SYStem:VERsion?", .callback = SCPI_SystemVersionQ,},
 
     /* EMBO - System */
     {.pattern = "SYStem:MODE?", .callback = EM_SYS_ModeQ,},

@@ -52,27 +52,36 @@ void daq_init(daq_data_t* self)
 
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI1);
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI2);
+#ifdef EM_DAQ_4CH
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI3);
     NVIC_DisableIRQ(EM_LA_IRQ_EXTI4);
+#endif
+
+    NVIC_SetPriority(EM_LA_IRQ_EXTI1, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_EXTI, 0));
+    NVIC_SetPriority(EM_LA_IRQ_EXTI2, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_EXTI, 0));
+#ifdef EM_DAQ_4CH
+    NVIC_SetPriority(EM_LA_IRQ_EXTI3, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_EXTI, 0));
+    NVIC_SetPriority(EM_LA_IRQ_EXTI4, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_EXTI, 0));
+#endif
 
 #if defined(EM_ADC1_USED)
     NVIC_SetPriority(EM_IRQN_ADC1, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(EM_IRQN_ADC1);
+    NVIC_DisableIRQ(EM_IRQN_ADC1);
 #endif
 
 #if defined(EM_ADC2_USED)
     NVIC_SetPriority(EM_IRQN_ADC2, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(EM_IRQN_ADC2);
+    NVIC_DisableIRQ(EM_IRQN_ADC2);
 #endif
 
 #if defined(EM_ADC3_USED)
     NVIC_SetPriority(EM_IRQN_ADC3, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(EM_IRQN_ADC3);
+    NVIC_DisableIRQ(EM_IRQN_ADC3);
 #endif
 
 #if defined(EM_ADC4_USED)
     NVIC_SetPriority(EM_IRQN_ADC4, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_ADC, 0));
-    NVIC_EnableIRQ(EM_IRQN_ADC4);
+    NVIC_DisableIRQ(EM_IRQN_ADC4);
 #endif
 
     adc_init();
@@ -227,7 +236,8 @@ int daq_mem_set(daq_data_t* self, uint16_t mem_per_ch)
         if (mem_per_ch < 1 || mem_per_ch > EM_DAQ_MAX_MEM)
             return -2;
 
-        daq_malloc(self, &self->buff1, mem_per_ch, EM_MEM_RESERVE, 4, (uint32_t)&EM_GPIO_LA_PORT->IDR, EM_DMA_CH_LA, EM_DMA_LA, self->set.bits);
+        daq_malloc(self, &self->buff1, mem_per_ch, EM_MEM_RESERVE, 4, (uint32_t)&EM_GPIO_LA_PORT->IDR+EM_GPIO_LA_OFFSET,
+                   EM_DMA_CH_LA, EM_DMA_LA, self->set.bits);
     }
 
     self->set.mem = mem_per_ch;
@@ -367,6 +377,7 @@ int daq_bit_set(daq_data_t* self, enum daq_bits bits)
         adc_set_res(EM_ADC3, bits_raw);
         adc_set_res(EM_ADC4, bits_raw);
 #endif
+
         int ret = daq_mem_set(self, self->set.mem);
 
         daq_enable(self, EM_TRUE);
@@ -436,6 +447,11 @@ int daq_fs_set(daq_data_t* self, int fs)
 
 int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t ch4, int fs)
 {
+#ifndef EM_DAQ_4CH
+    if (ch3 == EM_TRUE || ch4 == EM_TRUE)
+        return -1;
+#endif
+
     self->set.ch1_en = ch1;
     self->set.ch2_en = ch2;
     self->set.ch3_en = ch3;
@@ -611,11 +627,12 @@ int daq_ch_set(daq_data_t* self, uint8_t ch1, uint8_t ch2, uint8_t ch3, uint8_t 
 #endif
     }
 
-    int ret = daq_mem_set(self, self->set.mem);
+    //int ret = daq_mem_set(self, self->set.mem);
 
     if (reen)
         daq_enable(self, EM_TRUE);
-    return ret;
+
+    return 0;
 }
 
 void daq_reset(daq_data_t* self)
@@ -755,16 +772,22 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
         LL_GPIO_Init(EM_GPIO_ADC_PORT1, &GPIO_InitStruct);
         GPIO_InitStruct.Pin = EM_GPIO_ADC_CH2;
         LL_GPIO_Init(EM_GPIO_ADC_PORT2, &GPIO_InitStruct);
+#ifdef EM_DAQ_4CH
         GPIO_InitStruct.Pin = EM_GPIO_ADC_CH3;
         LL_GPIO_Init(EM_GPIO_ADC_PORT3, &GPIO_InitStruct);
         GPIO_InitStruct.Pin = EM_GPIO_ADC_CH4;
         LL_GPIO_Init(EM_GPIO_ADC_PORT4, &GPIO_InitStruct);
+#endif
     }
     else // if (mode == LA)
     {
         LL_GPIO_InitTypeDef GPIO_InitStruct =
         {
+#ifdef EM_DAQ_4CH
             .Pin = EM_GPIO_LA_CH1 | EM_GPIO_LA_CH2 | EM_GPIO_LA_CH3 | EM_GPIO_LA_CH4,
+#else
+            .Pin = EM_GPIO_LA_CH1 | EM_GPIO_LA_CH2,
+#endif
             .Speed = LL_GPIO_SPEED_FREQ_HIGH,
             .Mode = LL_GPIO_MODE_INPUT //LL_GPIO_MODE_FLOATING;
         };
@@ -776,7 +799,11 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     {
         daq_mem_set(self, 3); // safety guard
         daq_bit_set(self, self->save_s.bits);
+#ifdef EM_DAQ_4CH
         daq_ch_set(self, self->save_s.ch1_en, self->save_s.ch2_en, self->save_s.ch3_en, self->save_s.ch4_en, self->save_s.fs);
+#else
+        daq_ch_set(self, self->save_s.ch1_en, self->save_s.ch2_en, EM_FALSE, EM_FALSE, self->save_s.fs);
+#endif
         daq_fs_set(self, self->save_s.fs);
         daq_mem_set(self, self->save_s.mem);
         daq_trig_set(self, self->trig.save_s.ch, self->trig.save_s.val_percent, self->trig.save_s.edge,
@@ -786,17 +813,25 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
     {
         daq_mem_set(self, 3); // safety guard
         daq_bit_set(self, B12);
-        daq_ch_set(self, 1, 1, 1, 1, EM_VM_FS);
+#ifdef EM_DAQ_4CH
+        daq_ch_set(self, EM_TRUE, EM_TRUE, EM_TRUE, EM_TRUE, EM_VM_FS);
+#else
+        daq_ch_set(self, EM_TRUE, EM_TRUE, EM_FALSE, EM_FALSE, EM_VM_FS);
+#endif
         daq_mem_set(self, EM_VM_MEM);
         daq_fs_set(self, EM_VM_FS);
-        daq_trig_set(self, 0, 0, RISING, DISABLED, 50);
+        daq_trig_set(self, 1, 0, RISING, DISABLED, 50);
         self->vm_seq = -1;
     }
     else // if (mode == LA)
     {
         daq_mem_set(self, 3); // safety guard
         daq_bit_set(self, self->save_l.bits);
+#ifdef EM_DAQ_4CH
         daq_ch_set(self, self->save_l.ch1_en, self->save_l.ch2_en, self->save_l.ch3_en, self->save_l.ch4_en, self->save_l.fs);
+#else
+        daq_ch_set(self, self->save_l.ch1_en, self->save_l.ch2_en, EM_FALSE, EM_FALSE, self->save_l.fs);
+#endif
         daq_fs_set(self, self->save_l.fs);
         daq_mem_set(self, self->save_l.mem);
         daq_trig_set(self, self->trig.save_l.ch, self->trig.save_l.val_percent, self->trig.save_l.edge,

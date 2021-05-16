@@ -1,0 +1,1 @@
+https://github.com/OP-TEE/optee_os/tree/master/lib/libutils/isoc/arch/arm

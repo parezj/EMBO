@@ -109,12 +109,19 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
     uint8_t bit8 = 0;
     uint8_t adcs = 0;
     uint8_t pwm2 = 0;
+    uint8_t daqch = 0;
 
 #ifdef EM_DAC
     dac = 1;
 #endif
 #ifdef EM_ADC_BIT8
     bit8 = 1;
+#endif
+
+#if defined(EM_DAQ_4CH)
+    daqch = 4;
+#else
+    daqch = 2;
 #endif
 
 #if defined(EM_ADC_MODE_ADC1)
@@ -136,10 +143,19 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
     pwm2 = 1;
 #endif
 
-    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d,%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d,%d%d%d%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
-                      EM_LA_MAX_FS, EM_PWM_MAX_F, pwm2, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MEAS_MS,
-                      EM_SGEN_MAX_F, EM_DAC_BUFF_LEN, EM_MEM_RESERVE,
-                      EM_GPIO_LA_CH1_NUM, EM_GPIO_LA_CH2_NUM, EM_GPIO_LA_CH3_NUM, EM_GPIO_LA_CH4_NUM); // 78 chars
+    int gpio1 = EM_GPIO_LA_CH1_NUM;
+    int gpio2 = EM_GPIO_LA_CH2_NUM;
+    int gpio3 = 0;
+    int gpio4 = 0;
+#ifdef EM_DAQ_4CH
+    gpio3 = EM_GPIO_LA_CH3_NUM;
+    gpio4 = EM_GPIO_LA_CH4_NUM;
+#endif
+
+    int len = sprintf(buff, "%d,%d,%d,%d,%d,%d,%d%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d%d%d%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
+                      EM_LA_MAX_FS, EM_PWM_MAX_F, pwm2, daqch, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MEAS_MS,
+                      EM_SGEN_MAX_F, EM_DAC_BUFF_LEN, EM_CNTR_MAX_F, EM_MEM_RESERVE,
+                      gpio1, gpio2, gpio3, gpio4);
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -188,7 +204,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
         if (context != NULL)
             SCPI_ParamUInt32(context, &p1, FALSE);
         else
-            p1 = 1;
+            p1 = 0; // changed from 1 - 16.5.21
 
         double vref_raw = 0;
         double ch1_raw = 0;
@@ -211,7 +227,11 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
         int last_idx = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
 
 #if defined(EM_ADC_MODE_ADC1)
+#ifdef EM_DAQ_CH4
         int buff1_size = 5;
+#else
+        int buff1_size = 3;
+#endif
 #elif defined(EM_ADC_MODE_ADC12)
         int buff1_size = 3;
 #elif defined(EM_ADC_MODE_ADC1234)
@@ -258,7 +278,11 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
 
 #if defined(EM_ADC_MODE_ADC1)
 
+#ifdef EM_DAQ_4CH
         get_1val_from_circ(last_idx, 5, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
+#else
+        get_1val_from_circ(last_idx, 3, daq.buff1.len, daq.buff1.data, daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
+#endif
 
 #elif defined(EM_ADC_MODE_ADC12)
 
@@ -410,7 +434,8 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             return SCPI_RES_ERR;
         }
 
-        if (p4l != 4 || p7l != 1 || p8l != 1 ||
+        if (p5 < 1 || p5 > 4 ||
+            p4l != 4 || p7l != 1 || p8l != 1 ||
             (p4[0] != '1' && p4[0] != '0') || (p4[1] != '1' && p4[1] != '0') ||
             (p4[2] != '1' && p4[2] != '0') || (p4[3] != '1' && p4[3] != '0') ||
             (p7[0] != 'R' && p7[0] != 'F') || //&& p7[0] != 'B') ||
@@ -420,6 +445,21 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             return SCPI_RES_ERR;
         }
 
+#ifndef EM_DAQ_4CH
+        if (p4[2] == '1' || p4[3] == '1' || p5 == 3 || p5 == 4)
+        {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return SCPI_RES_ERR;
+        }
+#endif
+
+        uint8_t ch1_en = p4[0] - '0' ? EM_TRUE : EM_FALSE;
+        uint8_t ch2_en = p4[1] - '0' ? EM_TRUE : EM_FALSE;
+#ifdef EM_DAQ_4CH
+        uint8_t ch3_en = p4[2] - '0' ? EM_TRUE : EM_FALSE;
+        uint8_t ch4_en = p4[3] - '0' ? EM_TRUE : EM_FALSE;
+#endif
+
         daq_settings_save(&daq.set, &daq.trig.set, &daq.save_s, &daq.trig.save_s);
         daq_enable(&daq, EM_FALSE);
         daq_reset(&daq);
@@ -427,7 +467,11 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
 
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, (int)p1);
-        int ret4 = daq_ch_set(&daq, p4[0] - '0', p4[1] - '0', p4[2] - '0', p4[3] - '0', (int)p3);
+#ifdef EM_DAQ_4CH
+        int ret4 = daq_ch_set(&daq, ch1_en, ch2_en, ch3_en, ch4_en, (int)p3);
+#else
+        int ret4 = daq_ch_set(&daq, ch1_en, ch2_en, EM_FALSE, EM_FALSE, (int)p3);
+#endif
         int ret3 = daq_fs_set(&daq, p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
         int ret5 = daq_trig_set(&daq, p5, p6, (p7[0] == 'R' ? RISING : (p7[0] == 'F' ? FALLING : BOTH)),
@@ -604,13 +648,22 @@ scpi_result_t EM_LA_Set(scpi_t* context)
             return SCPI_RES_ERR;
         }
 
-        if (p7l != 1 || p8l != 1 ||
+        if (p5 < 1 || p5 > 4 ||
+            p7l != 1 || p8l != 1 ||
             (p7[0] != 'R' && p7[0] != 'F' && p7[0] != 'B') ||
             (p8[0] != 'A' && p8[0] != 'N' && p8[0] != 'S' && p8[0] != 'D'))
         {
             SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
             return SCPI_RES_ERR;
         }
+
+#ifndef EM_DAQ_4CH
+        if (p5 == 3 || p5 == 4)
+        {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return SCPI_RES_ERR;
+        }
+#endif
 
         daq_settings_save(&daq.set, &daq.trig.set, &daq.save_l, &daq.trig.save_l);
         daq_enable(&daq, EM_FALSE);
@@ -619,7 +672,11 @@ scpi_result_t EM_LA_Set(scpi_t* context)
 
         daq_mem_set(&daq, 3); // safety guard
         int ret2 = daq_bit_set(&daq, B1);
-        int ret4 = daq_ch_set(&daq, 1, 1, 1, 1, (int)p3);
+#ifdef EM_DAQ_4CH
+        int ret4 = daq_ch_set(&daq, EM_TRUE, EM_TRUE, EM_TRUE, EM_TRUE, (int)p3);
+#else
+        int ret4 = daq_ch_set(&daq, EM_TRUE, EM_TRUE, EM_FALSE, EM_FALSE, (int)p3);
+#endif
         int ret3 = daq_fs_set(&daq, p3);
         int ret1 = daq_mem_set(&daq, (int)p2);
         int ret5 = daq_trig_set(&daq, p5, 0, (p7[0] == 'R' ? RISING : (p7[0] == 'F' ? FALLING : BOTH)),
