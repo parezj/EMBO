@@ -64,8 +64,6 @@ private slots:
     void on_pushButton_sgen_clicked();
     void on_actionCheck_Updates_triggered();
 
-    void on_actionDocumentation_triggered();
-
 private:
     void instrFirstRowEnable(bool enable);
     QStringList addFontsFromResources(const QStringList& filters={QStringLiteral("*.ttf"),QStringLiteral("*.otf")});

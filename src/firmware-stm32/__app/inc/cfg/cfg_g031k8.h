@@ -56,8 +56,8 @@
 #define EM_FREQ_LSI            40000     // LSI clock - wdg
 #define EM_FREQ_HCLK           64000000  // HCLK clock - main
 #define EM_FREQ_ADCCLK         64000000  // ADC clock
-#define EM_FREQ_PCLK1          64000000  // APB1 clock - TIM2,3,4
-#define EM_FREQ_PCLK2          64000000  // APB2 clock - TIM1
+#define EM_FREQ_PCLK1          64000000  // APB1 clock
+#define EM_FREQ_PCLK2          64000000  // APB2 clock
 #define EM_SYSTICK_FREQ        1000      // Systick clock
 
 // UART -------------------------------------------------------------
@@ -101,8 +101,8 @@
 
 #define EM_VREF                3300                            // main voltage reference in mV
 #define EM_ADC_VREF_CAL        *((uint16_t*)VREFINT_CAL_ADDR)  // vref cal value = 1200 mV
-#define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // max sampling time in ticks
-#define EM_ADC_SMPLT_MAX_N     1.5                             // max smpl time value
+#define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // min sampling time in ticks
+#define EM_ADC_SMPLT_MAX_N     1.5                             // min smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit
 #define EM_ADC_TCONV12         12.5                            // ADC Tconversion ticks for 12-bit
 #define EM_ADC_C_F             0.000000000005 // 5pF           // ADC internal capacitance in F
@@ -120,7 +120,6 @@
 #define EM_TIM_DAQ             TIM3
 #define EM_TIM_DAQ_MAX         65535
 #define EM_TIM_DAQ_FREQ        EM_FREQ_PCLK1
-#define EM_TIM_DAQ_IRQh        TIM3_IRQHandler
 #define EM_TIM_PWM1            TIM2
 #define EM_TIM_PWM1_MAX        65535
 #define EM_TIM_PWM1_FREQ       EM_FREQ_PCLK1
@@ -148,7 +147,7 @@
 //#define EM_TIM_SGEN_MAX      65535
 
 // max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         800     // DAQ max total memory in release mode
+#define EM_DAQ_MAX_MEM         800      // DAQ max total memory in release mode
 #define EM_LA_MAX_FS           10285714  // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      2500000   // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       2500000   // DAQ ADC max fs per 1 channel - 8 bit

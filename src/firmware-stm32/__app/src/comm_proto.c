@@ -204,7 +204,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
         if (context != NULL)
             SCPI_ParamUInt32(context, &p1, FALSE);
         else
-            p1 = 0; // changed from 1 - 16.5.21
+            p1 = 0;
 
         double vref_raw = 0;
         double ch1_raw = 0;
@@ -227,7 +227,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
         int last_idx = EM_DMA_LAST_IDX(daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
 
 #if defined(EM_ADC_MODE_ADC1)
-#ifdef EM_DAQ_CH4
+#ifdef EM_DAQ_4CH
         int buff1_size = 5;
 #else
         int buff1_size = 3;
@@ -259,19 +259,29 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
             }
             else // continue seq. transfer
             {
-                if (daq.vm_seq == last_mem)
+                int diff = last_mem - daq.vm_seq;
+                if (diff < 0)
+                    diff += daq.set.mem + EM_MEM_RESERVE;
+
+                if (diff == 0) // no new data
                 {
                     //daq_enable(&daq, EM_TRUE);
 
                     SCPI_ResultText(context, "Empty");
                     return SCPI_RES_OK;
                 }
-                else
+                else if (diff > 5) // too old, disable seq. mode
+                {
+                    //ASSERT(0);
+                    daq.vm_seq = last_mem;
+                }
+                else // good
                 {
                     daq.vm_seq++;
-                    if (daq.vm_seq >= daq.set.mem + (daq.buff1.reserve / buff1_size))
+                    if (daq.vm_seq >= daq.set.mem + EM_MEM_RESERVE)
                         daq.vm_seq = 0;
                     last_idx = (daq.vm_seq * buff1_size) + (buff1_size - 1);
+                    last_mem = last_idx / buff1_size;
                 }
             }
         }
@@ -483,7 +493,7 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             daq_settings_save(&daq.set, &daq.trig.set, &daq.save_s, &daq.trig.save_s); // added later
             daq_enable(&daq, EM_TRUE);
 
-            char buff[50];
+            char buff[60];
             char maxZ_s[15];
             double max_Z = EM_ADC_MAXZ(daq.smpl_time, daq.set.bits == B12 ? EM_LN2POW14 : EM_LN2POW10);
             sprint_fast(maxZ_s, "%s", max_Z, 1);
@@ -491,8 +501,8 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             char freq_real_s[20];
             sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
-            char T_s[6];
-            sprint_fast(T_s, "%s", daq.smpl_time, 1);
+            char T_s[15];
+            sprint_fast(T_s, "%s", (1 / (double)EM_FREQ_ADCCLK) * daq.smpl_time * 1000000000.0, 2);
 
             int len = sprintf(buff, "\"OK\",%s,%s,%s", maxZ_s, T_s, freq_real_s);
 
@@ -521,7 +531,7 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
 {
     if (daq.mode == SCOPE)
     {
-        char buff[110];
+        char buff[100];
         char chans_en[5];
         char edge_s[2];
         char mode_s[2];
@@ -544,8 +554,8 @@ scpi_result_t EM_SCOPE_SetQ(scpi_t* context)
         char freq_real_s[20];
         sprint_fast(freq_real_s, "%s", daq.set.fs_real, 6);
 
-        char T_s[6];
-        sprint_fast(T_s, "%s", daq.smpl_time, 1);
+        char T_s[15];
+        sprint_fast(T_s, "%s", (1 / (double)EM_FREQ_ADCCLK) * daq.smpl_time * 1000000000.0, 2);
 
 
         int len = sprintf(buff, "%d,%d,%d,%s,%d,%d,%s,%s,%d,%s,%s,%s", daq.set.bits, daq.set.mem, daq.set.fs, chans_en,
@@ -719,7 +729,7 @@ scpi_result_t EM_LA_SetQ(scpi_t* context)
 {
     if (daq.mode == LA)
     {
-        char buff[105];
+        char buff[100];
         char edge_s[2];
         char mode_s[2];
 

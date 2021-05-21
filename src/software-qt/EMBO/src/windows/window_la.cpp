@@ -47,6 +47,8 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     connect(m_timer_plot, &QTimer::timeout, this, &WindowLa::on_timer_plot);
     connect(m_timer_trigSliders, &QTimer::timeout, this, &WindowLa::on_hideTrigSliders);
 
+    connect(m_ui->actionEMBO_Help, SIGNAL(triggered()), Core::getInstance(), SLOT(on_actionEMBO_Help()));
+
     /* QCP */
 
     initQcp();
@@ -1344,7 +1346,10 @@ void WindowLa::on_pushButton_disable4_clicked()
         m_daqSet.ch4_en = false;
         m_rescale_needed = true;
 
-        updatePanel();
+        if (m_daqSet.trig_ch == 4)
+            sendSet();
+        else
+            updatePanel();
 
         m_ui->customPlot->replot();
     }
@@ -1358,10 +1363,7 @@ void WindowLa::on_pushButton_enable1_clicked()
     m_daqSet.ch1_en = true;
     m_rescale_needed = true;
 
-    if (m_daqSet.trig_ch == 4)
-        sendSet();
-    else
-        updatePanel();
+    updatePanel();
 
     m_ui->customPlot->replot();
 }
@@ -1433,6 +1435,8 @@ void WindowLa::closeEvent(QCloseEvent*)
 void WindowLa::showEvent(QShowEvent*)
 {
     m_ignoreValuesChanged = true;
+
+    m_seq_num = 0;
 
     enablePanel(false);
 
@@ -1519,6 +1523,11 @@ void WindowLa::showEvent(QShowEvent*)
         m_ui->radioButton_trigCh_3->hide();
         m_ui->radioButton_trigCh_4->hide();
     }
+
+    m_ui->actionMeasChannel_3->setEnabled(info->daq_ch == 4);
+    m_ui->actionMeasChannel_4->setEnabled(info->daq_ch == 4);
+
+    m_ui->actionMath_3_4->setEnabled(info->daq_ch == 4);
 
     bool fsMem = m_ui->radioButton_fsMem->isChecked();
 
@@ -1852,14 +1861,6 @@ void WindowLa::updatePanel()
     //m_ui->dial_div->setRange(((1.0 / info->la_fs) * 2.0 * 1000000.0), 1000000);
     m_ui->dial_div->setValue(lin_to_exp_1to1M(div_sec * 1000000.0, true));
     m_ui->radioButton_div->setEnabled(true);
-
-    m_ui->radioButton_trigCh_3->setEnabled(info->daq_ch == 4);
-    m_ui->radioButton_trigCh_4->setEnabled(info->daq_ch == 4);
-
-    m_ui->actionMeasChannel_3->setEnabled(info->daq_ch == 4);
-    m_ui->actionMeasChannel_4->setEnabled(info->daq_ch == 4);
-
-    m_ui->actionMath_3_4->setEnabled(info->daq_ch == 4);
 
     bool trigCh1_en = m_ui->radioButton_trigCh_1->isEnabled();
     bool trigCh2_en = m_ui->radioButton_trigCh_2->isEnabled();

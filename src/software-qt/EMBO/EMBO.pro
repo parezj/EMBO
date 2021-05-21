@@ -88,9 +88,7 @@ macx {
 #DEFINES += QCUSTOMPLOT_USE_OPENGL
 
 help.files += "$${PWD}/doc/EMBO.chm" \
-              "$${PWD}/doc/EMBO.pdf" \
-              "$${PWD}/doc/EMBO.qhc" \
-              "$${PWD}/doc/EMBO.qch"
+              "$${PWD}/doc/EMBO.pdf"
 help.path += $${DESTDIR}/doc
 INSTALLS += help
 

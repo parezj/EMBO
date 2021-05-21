@@ -94,6 +94,27 @@
 
 #include "cfg_f303re.h"
 
+#elif defined(STM32L412xx)
+/*.................................................. L412KB .................................................*/
+
+#define EM_L412KB
+#define EM_CORTEX_M4F
+
+/*
+ * =========layout=========
+ *  DAQ CH1 ........... PA0  (Arduino A0)
+ *  DAQ CH2 ........... PA1  (Arduino A1)
+ *  DAQ CH3 ........... PA3  (Arduino A2)
+ *  DAQ CH4 ........... PA4  (Arduino A3)
+ *  PWM CH1 ........... PA5  (Arduino A4)
+ *  CNTR .............. PA8  (Arduino D9)
+ *  UART RX ........... PA15
+ *  UART TX ........... PA2
+ *  =======================
+*/
+
+#include "cfg_l412kb.h"
+
 #elif defined(STM32G031xx)
 
 #if defined(K8)
@@ -177,7 +198,7 @@
 
 // Voltmeter common ------------------------------------------------
 #define EM_VM_FS               100  // voltmeter fs (Hz)
-#define EM_VM_MEM              50   // voltmeter mem
+#define EM_VM_MEM              100  // voltmeter mem
 
 // LED timing ------------------------------------------------------
 #define EM_BLINK_LONG_MS       500  // long blink - startup

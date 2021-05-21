@@ -26,6 +26,8 @@ WindowSgen::WindowSgen(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect(m_msg_set, &Msg_SGEN_Set::err, this, &WindowSgen::on_msg_err, Qt::QueuedConnection);
     connect(m_msg_set, &Msg_SGEN_Set::result, this, &WindowSgen::on_msg_set, Qt::QueuedConnection);
 
+    connect(m_ui->actionEMBO_Help, SIGNAL(triggered()), Core::getInstance(), SLOT(on_actionEMBO_Help()));
+
     m_status_enabled = new QLabel(" Disabled", this);
     QWidget* widget = new QWidget(this);
     QFont font1("Roboto", 11, QFont::Normal);

@@ -55,6 +55,8 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     connect(m_timer_plot, &QTimer::timeout, this, &WindowScope::on_timer_plot);
     connect(m_timer_trigSliders, &QTimer::timeout, this, &WindowScope::on_hideTrigSliders);
 
+    connect(m_ui->actionEMBO_Help, SIGNAL(triggered()), Core::getInstance(), SLOT(on_actionEMBO_Help()));
+
     /* QCP */
 
     initQcp();
@@ -2604,6 +2606,8 @@ void WindowScope::showEvent(QShowEvent*)
 {
     m_ignoreValuesChanged = true;
 
+    m_seq_num = 0;
+
     enablePanel(false);
 
     Core::getInstance()->setMode(SCOPE);
@@ -2737,6 +2741,15 @@ void WindowScope::showEvent(QShowEvent*)
         m_ui->radioButton_trigCh_3->hide();
         m_ui->radioButton_trigCh_4->hide();
     }
+
+    m_ui->actionMeasChannel_3->setEnabled(info->daq_ch == 4);
+    m_ui->actionMeasChannel_4->setEnabled(info->daq_ch == 4);
+
+    m_ui->actionFFTChannel_3->setEnabled(info->daq_ch == 4);
+    m_ui->actionFFTChannel_4->setEnabled(info->daq_ch == 4);
+
+    m_ui->actionMath_3_4->setEnabled(info->daq_ch == 4);
+    m_ui->actionMath_XY_X_3_Y_4->setEnabled(info->daq_ch == 4);
 
     bool fsMem = m_ui->radioButton_fsMem->isChecked();
 
@@ -3087,25 +3100,7 @@ void WindowScope::updatePanel()
     m_ui->dial_div->setValue(lin_to_exp_1to1M(div_sec * 1000000.0, true));
     m_ui->radioButton_div->setEnabled(true);
 
-    m_status_smpl->setText("Sampling Time: " + QString::number(m_daqSet.smpl_time, 10, 1));
-
-    m_ui->doubleSpinBox_gain_ch3->setEnabled(info->daq_ch == 4);
-    m_ui->doubleSpinBox_gain_ch4->setEnabled(info->daq_ch == 4);
-
-    m_ui->dial_Vpos_ch3->setEnabled(info->daq_ch == 4);
-    m_ui->dial_Vpos_ch4->setEnabled(info->daq_ch == 4);
-
-    m_ui->radioButton_trigCh_3->setEnabled(info->daq_ch == 4);
-    m_ui->radioButton_trigCh_4->setEnabled(info->daq_ch == 4);
-
-    m_ui->actionMeasChannel_3->setEnabled(info->daq_ch == 4);
-    m_ui->actionMeasChannel_4->setEnabled(info->daq_ch == 4);
-
-    m_ui->actionFFTChannel_3->setEnabled(info->daq_ch == 4);
-    m_ui->actionFFTChannel_4->setEnabled(info->daq_ch == 4);
-
-    m_ui->actionMath_3_4->setEnabled(info->daq_ch == 4);
-    m_ui->actionMath_XY_X_3_Y_4->setEnabled(info->daq_ch == 4);
+    m_status_smpl->setText("Sampling Time: " + format_unit(m_daqSet.smpl_time, "s", 2));
 
     bool trigCh1_en = m_ui->radioButton_trigCh_1->isEnabled();
     bool trigCh2_en = m_ui->radioButton_trigCh_2->isEnabled();

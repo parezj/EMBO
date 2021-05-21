@@ -11,7 +11,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-
+/* counter overflow bit - software extended counter resolution */
 void EM_TIM_CNTR_UP_IRQh(void)
 {
     traceISR_ENTER();

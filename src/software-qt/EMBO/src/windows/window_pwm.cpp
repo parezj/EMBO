@@ -26,6 +26,8 @@ WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Window
     connect(m_msg_set, &Msg_PWM_Set::err, this, &WindowPwm::on_msg_err, Qt::QueuedConnection);
     connect(m_msg_set, &Msg_PWM_Set::result, this, &WindowPwm::on_msg_set, Qt::QueuedConnection);
 
+    connect(m_ui->actionEMBO_Help, SIGNAL(triggered()), Core::getInstance(), SLOT(on_actionEMBO_Help()));
+
     m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">? Hz&nbsp;&nbsp;&nbsp;</p>");
 
     m_status_enabled = new QLabel(" Wait...", this);

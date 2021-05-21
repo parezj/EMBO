@@ -95,6 +95,8 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect(m_w_pwm, &WindowPwm::closing, this, &WindowMain::on_instrClose);
     connect(m_w_sgen, &WindowSgen::closing, this, &WindowMain::on_instrClose);
 
+    connect(m_ui->actionEMBO_Help, SIGNAL(triggered()), Core::getInstance(), SLOT(on_actionEMBO_Help()));
+
     core->moveToThread(t1);
     t1->start();
 
@@ -347,8 +349,12 @@ void WindowMain::setConnected()
         m_ui->label_boardImg->setPixmap(m_img_chip);
 
     m_ui->label_scope_fs->setText(format_unit(info->adc_fs_12b, "Sps", 3));
-    m_ui->label_scope_mem->setText(format_unit((info->mem / 2), "S", 3) +
-                                   (info->adc_bit8 ? " / " + format_unit(info->mem, "S", 3) : ""));
+
+    if (info->adc_bit8)
+        m_ui->label_scope_mem->setText(format_unit((info->mem / 2), "", 3) + " / " + format_unit(info->mem, "S", 3));
+    else
+        m_ui->label_scope_mem->setText(format_unit((info->mem / 2), "S", 3));
+
     m_ui->label_scope_bits->setText(info->adc_bit8 ? "12 / 8 bit" : "12 bit");
     m_ui->label_scope_modes->setText(QString::number(info->daq_ch) + "ch " + QString::number(info->adc_num) + "ADC " + (info->adc_dualmode ? "D" : "") +
                                      (info->adc_dualmode && info->adc_interleaved ? "+" : "") + (info->adc_interleaved ? "I" : ""));
@@ -379,13 +385,13 @@ void WindowMain::setConnected()
         m_ui->label_sgen_pins->setText(info->pins_sgen);
         m_ui->groupBox_sgen->show();
     }
-    else m_ui->groupBox_sgen->hide(); // TODO DEBUG
+    else m_ui->groupBox_sgen->hide();
 
-    m_w_scope->setWindowTitle("EMBO - Oscilloscope [4 channel] (pins: " + m_ui->label_scope_pins->text() + ")");
-    m_w_la->setWindowTitle("EMBO - Logic Analyzer [4 channel] (pins: " + m_ui->label_la_pins->text() + ")");
-    m_w_vm->setWindowTitle("EMBO - Voltmeter [4 channel] (Pins: " + m_ui->label_vm_pins->text() + ")");
+    m_w_scope->setWindowTitle("EMBO - Oscilloscope [" + QString::number(info->daq_ch) + " channel] (pins: " + m_ui->label_scope_pins->text() + ")");
+    m_w_la->setWindowTitle("EMBO - Logic Analyzer [" + QString::number(info->daq_ch) + " channel] (pins: " + m_ui->label_la_pins->text() + ")");
+    m_w_vm->setWindowTitle("EMBO - Voltmeter [" + QString::number(info->daq_ch) + " channel] (Pins: " + m_ui->label_vm_pins->text() + ")");
     m_w_cntr->setWindowTitle("EMBO - Counter (pin: " + m_ui->label_cntr_pins->text() + ")");
-    m_w_pwm->setWindowTitle("EMBO - PWM Generator [2 channel] (pins: " + m_ui->label_pwm_pins->text() + ")");
+    m_w_pwm->setWindowTitle("EMBO - PWM Generator [" + QString((info->pwm2 ? "2" : "1")) + " channel] (pins: " + m_ui->label_pwm_pins->text() + ")");
     m_w_sgen->setWindowTitle("EMBO - Signal Generator (pin: " + m_ui->label_sgen_pins->text() + ")");
 
     m_status_latency->setText("?");
@@ -847,18 +853,4 @@ void WindowMain::displayAppcast (const QString& url, const QByteArray& reply)
                    "It allows your application to interpret the appcast "
                    "using your code and not QSU's code.</p>";
     qInfo() << text;
-}
-
-void WindowMain::on_actionDocumentation_triggered()
-{
-#if defined(Q_OS_WIN)
-    QString help_path = QDir(QDir::currentPath() + QDir::separator() + "doc").filePath("EMBO.chm");
-#elif defined(Q_OS_UNIX)
-    QString help_path = QDir(QDir::currentPath() + QDir::separator() + "doc").filePath("EMBO.pdf");
-#elif defined(Q_OS_MAC)
-    QString help_path = QDir(QDir::currentPath() + QDir::separator() + "doc").filePath("EMBO.pdf");
-#endif
-
-    qInfo() << help_path;
-    QDesktopServices::openUrl(QUrl::fromUserInput(help_path));
 }

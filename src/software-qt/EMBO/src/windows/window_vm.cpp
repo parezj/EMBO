@@ -67,6 +67,8 @@ WindowVm::WindowVm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowVm
     connect(m_timer_plot, &QTimer::timeout, this, &WindowVm::on_timer_plot);
     connect(m_timer_digits, &QTimer::timeout, this, &WindowVm::on_timer_digits);
 
+    connect(m_ui->actionEMBO_Help, SIGNAL(triggered()), Core::getInstance(), SLOT(on_actionEMBO_Help()));
+
     m_ui->dial_display->setValue(DISPLAY_VM_DEFAULT);
 
     /* QCP */
@@ -130,7 +132,7 @@ void WindowVm::statusBarLoad()
 {
     m_status_vcc = new QLabel(" ", this);
     m_status_rec = new QLabel(" ", this);
-    QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
+    status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
     QWidget* widget = new QWidget(this);
 
     QFont font1("Roboto", 11, QFont::Normal);
@@ -542,6 +544,7 @@ void WindowVm::on_actionShowPlot_triggered(bool checked)
         this->setMaximumWidth(QWIDGETSIZE_MAX);
         this->setMaximumHeight(QWIDGETSIZE_MAX);
 
+        status_zoom->show();
         m_ui->groupBox_screen->show();
 
         this->setMinimumWidth(947);
@@ -552,8 +555,12 @@ void WindowVm::on_actionShowPlot_triggered(bool checked)
         this->setFixedWidth(426);
         this->setFixedHeight(606);
 
+        status_zoom->hide();
         m_ui->groupBox_screen->hide();
     }
+
+    m_ui->spinBox_display->setEnabled(checked);
+    m_ui->dial_display->setEnabled(checked);
 }
 
 /********** Export **********/
@@ -1195,8 +1202,11 @@ void WindowVm::on_pushButton_enable_clicked()
     m_ui->spinBox_average->setEnabled(true);
     m_ui->dial_average->setEnabled(true);
 
-    m_ui->spinBox_display->setEnabled(true);
-    m_ui->dial_display->setEnabled(true);
+    if (m_plot)
+    {
+        m_ui->spinBox_display->setEnabled(true);
+        m_ui->dial_display->setEnabled(true);
+    }
 
     m_ui->textBrowser_measVpp->setEnabled(true);
     m_ui->textBrowser_measAvg->setEnabled(true);

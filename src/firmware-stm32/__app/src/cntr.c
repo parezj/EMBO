@@ -70,7 +70,7 @@ void cntr_enable(cntr_data_t* self, uint8_t enable, uint8_t fast_mode)
 
 void cntr_start(cntr_data_t* self, uint8_t start)
 {
-    if (start)
+    if (start) // start counter
     {
         cntr_reset(self);
 
@@ -81,7 +81,7 @@ void cntr_start(cntr_data_t* self, uint8_t start)
         LL_TIM_CC_EnableChannel(EM_TIM_CNTR, EM_TIM_CNTR_CH2);
         LL_TIM_EnableCounter(EM_TIM_CNTR);
     }
-    else
+    else // stop counter
     {
         LL_TIM_DisableCounter(EM_TIM_CNTR);
         LL_TIM_CC_DisableChannel(EM_TIM_CNTR, EM_TIM_CNTR_CH);
@@ -100,7 +100,7 @@ void cntr_meas(cntr_data_t* self)
 
     cntr_start(self, 1); // start
 
-    while (1)
+    while (1) // wait DMA fill buffer or timeout
     {
         sz = LL_DMA_GetDataLength(EM_DMA_CNTR, EM_DMA_CH_CNTR);
 
@@ -118,7 +118,7 @@ void cntr_meas(cntr_data_t* self)
 
     cntr_start(self, 0); // stop
 
-    sz = (self->fast_mode_now ? EM_CNTR_BUFF_SZ : EM_CNTR_BUFF_SZ2) - sz;
+    sz = (self->fast_mode_now ? EM_CNTR_BUFF_SZ : EM_CNTR_BUFF_SZ2) - sz; // get data size
 
     if (sz >= 2)
     {
@@ -127,7 +127,7 @@ void cntr_meas(cntr_data_t* self)
 
         ovf = self->data_ovf[sz - 1] - self->data_ovf[0];
 
-        if (ovf > 0)
+        if (ovf > 0) // prepare overflow bit values
         {
             ccr_sum += (EM_TIM_CNTR_MAX - self->data_ccr[0]) + self->data_ccr[sz - 1];
             ovf -= 1;
@@ -140,6 +140,7 @@ void cntr_meas(cntr_data_t* self)
                 return;
         }
 
+        /* finally calc freq */
         double total = (ovf * EM_TIM_CNTR_MAX) + ccr_sum;
         total /= (double)(sz - 1);
         self->freq = ((double)EM_TIM_CNTR_FREQ / total) * (double)(self->fast_mode_now ? 8 : 1);

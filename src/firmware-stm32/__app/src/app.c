@@ -110,8 +110,8 @@ void t1_wd(void* p)
 
     while(1)
     {
-        iwdg_feed();
-        led_blink_do(&led, daq.uwTick);
+        iwdg_feed(); // feed watchdog
+        led_blink_do(&led, daq.uwTick); // blink leds optionaly
 
         vTaskDelay(10);
 
@@ -130,7 +130,7 @@ void t2_trig_check(void* p)
     {
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
-        daq_trig_check(&daq);
+        daq_trig_check(&daq); // check pre-trigger, auto-trigger, send Ready
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
@@ -152,7 +152,7 @@ void t3_trig_post_count(void* p)
         ASSERT(xSemaphoreTake(sem2_trig, portMAX_DELAY) == pdPASS);
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
-        daq_trig_postcount(&daq);
+        daq_trig_postcount(&daq); // count post-trigger and send Ready
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
@@ -164,6 +164,7 @@ void t3_trig_post_count(void* p)
 
 void t4_comm_and_init(void* p)
 {
+    /* init modules */
     pwm_init(&pwm);
     led_init(&led);
     cntr_init(&cntr);
@@ -174,13 +175,6 @@ void t4_comm_and_init(void* p)
 
 #ifdef EM_DAC
     sgen_init(&sgen);
-#endif
-
-#ifdef EM_DEBUG
-    //pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
-#ifdef EM_DAC
-    //sgen_enable(&sgen, SINE, 100, 1000, 0, EM_DAC_BUFF_LEN);
-#endif
 #endif
 
 #ifdef EM_SYSVIEW
@@ -196,13 +190,17 @@ void t4_comm_and_init(void* p)
     //iwdg_feed();
     init_done = 1;
 
+#ifdef EM_DEBUG
+        watermark_t4 = uxTaskGetStackHighWaterMark(NULL);
+#endif
+
     while(1)
     {
         ASSERT(xSemaphoreTake(sem1_comm, portMAX_DELAY) == pdPASS);
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
-        if (comm_main(&comm) == EM_TRUE)
-            led_blink_set(&led, 1, EM_BLINK_SHORT_MS, daq.uwTick);
+        if (comm_main(&comm) == EM_TRUE) // check if new message is in buffer
+            led_blink_set(&led, 1, EM_BLINK_SHORT_MS, daq.uwTick); // toggle green led
 
         comm.uart.available = EM_FALSE;
         comm.usb.available = EM_FALSE;
@@ -226,7 +224,7 @@ void t5_cntr(void* p)
 
         while (cntr.enabled)
         {
-            cntr_meas(&cntr);
+            cntr_meas(&cntr); // calc freq from counter measured data
             vTaskDelay(50);
 
 #ifdef EM_DEBUG

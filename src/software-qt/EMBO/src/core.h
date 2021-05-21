@@ -22,6 +22,7 @@
 #include <assert.h>
 
 #define UPDATE_URL      "http://embo.jakubparez.com/updates.json"
+#define HELP_URL        "https://github.com/parezj/EMBO/raw/main/doc/EMBO.pdf"
 
 #define INVALID_MSG     "Invalid message! "
 #define COMM_FATAL_ERR  "Communication fatal error! "
@@ -34,7 +35,9 @@ For just few dollar hardware can become powerfull scope, logic analyzer, voltmet
 PWM and signal generator.<br>And of course, it's opensource! \
 <br><br>Supported MCUs:<br>\
 <b>STM32F103C8</b> (BluePill)<br>\
-<b>STM32F303RE</b> (Nucleo-64)\
+<b>STM32F103RE</b> (LQFP64)<br>\
+<b>STM32F303RE</b> (Nucleo-64)<br>\
+<b>STM32L412KB</b> (Nucleo-32)\
 <br><br>EMBO uses this free software:<br>\
 <a href='https://www.qcustomplot.com'>QCustomPlot</a><br>\
 <a href='https://github.com/alex-spataru/QSimpleUpdater'>alex-spataru / QSimpleUpdater </a><br>\
@@ -119,6 +122,7 @@ public slots:
     //void on_msgAdd(Msg* msg);
     void on_closeComm(bool force);
     void on_dispose();
+    void on_actionEMBO_Help();
 
 signals:
     void daqReady(Ready ready, int firstPos);

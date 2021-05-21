@@ -36,7 +36,7 @@ void EM_ADC12_IRQh(void)
     uint8_t ret = -1;
 
 #ifdef EM_ADC1_USED
-    if (LL_ADC_IsActiveFlag_AWD1(ADC1) == 1)
+    if (LL_ADC_IsActiveFlag_AWD1(ADC1) == 1) // ADC1 AWD triggered
     {
         NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
@@ -47,7 +47,7 @@ void EM_ADC12_IRQh(void)
 #endif
 
 #ifdef EM_ADC2_USED
-    else if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1)
+    else if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1) // ADC2 AWD triggered
     {
         NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
@@ -75,7 +75,7 @@ void EM_ADC3_IRQh(void)
     traceISR_ENTER();
     uint8_t ret = -1;
 
-    if (LL_ADC_IsActiveFlag_AWD1(ADC3) == 1)
+    if (LL_ADC_IsActiveFlag_AWD1(ADC3) == 1) // ADC3 AWD triggered
     {
         NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
@@ -100,7 +100,7 @@ void EM_ADC4_IRQh(void)
     traceISR_ENTER();
     uint8_t ret = -1;
 
-    if (LL_ADC_IsActiveFlag_AWD1(ADC4) == 1)
+    if (LL_ADC_IsActiveFlag_AWD1(ADC4) == 1) // ADC4 AWD triggered
     {
         NVIC_DisableIRQ(daq.trig.adcirq_trig);
         LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);

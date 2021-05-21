@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V9.0.0 - Copyright (C) 2016 Real Time Engineers Ltd.
+    FreeRTOS Kernel V10.4.3 - Copyright (C) 2016 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -32,7 +32,7 @@
 #define configUSE_PREEMPTION                     1
 #define configSUPPORT_STATIC_ALLOCATION          1
 #define configSUPPORT_DYNAMIC_ALLOCATION         0
-#define configCPU_CLOCK_HZ                       EM_FREQ_HCLK
+#define configCPU_CLOCK_HZ                       EM_FREQ_HCLK // SystemCoreClock
 #define configTICK_RATE_HZ                       ((TickType_t)1000)
 #define configMAX_PRIORITIES                     ( 7 )
 #define configMINIMAL_STACK_SIZE                 ((uint16_t)EM_STACK_MIN)
@@ -82,6 +82,9 @@ to exclude the API function. */
 header file. */
 #define configASSERT( x ) if ((x) == 0) {taskDISABLE_INTERRUPTS(); for( ;; );}
 
+
+#if defined(EM_CORTEX_M3) || defined(EM_CORTEX_M4F) || defined(EM_CORTEX_M7)
+
 /* Cortex-M specific definitions. */
 #ifdef __NVIC_PRIO_BITS
  /* __BVIC_PRIO_BITS will be specified when CMSIS is being used. */
@@ -90,7 +93,6 @@ header file. */
  #define configPRIO_BITS         4
 #endif
 
-#if defined(EM_CORTEX_M3) || defined(EM_CORTEX_M4F)
 /* The lowest interrupt priority that can be used in a call to a "set priority"
 function. */
 #define configLIBRARY_LOWEST_INTERRUPT_PRIORITY         15
@@ -101,18 +103,15 @@ INTERRUPT SAFE FREERTOS API FUNCTIONS FROM ANY INTERRUPT THAT HAS A HIGHER
 PRIORITY THAN THIS! (higher priorities are lower numeric values. */
 #define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY    5
 
-#elif defined(EM_CORTEX_M0)
-
-#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY         3
-#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY    1
-#endif
-
 /* Interrupt priorities used by the kernel port layer itself.  These are generic
 to all Cortex-M ports, and do not rely on any particular library functions. */
 #define configKERNEL_INTERRUPT_PRIORITY         ( configLIBRARY_LOWEST_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
 /* !!!! configMAX_SYSCALL_INTERRUPT_PRIORITY must not be set to zero !!!!
 See http://www.FreeRTOS.org/RTOS-Cortex-M3-M4.html. */
 #define configMAX_SYSCALL_INTERRUPT_PRIORITY    ( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
+
+#endif
+
 
 /* Definitions that map the FreeRTOS port interrupt handlers to their CMSIS
 standard names. */

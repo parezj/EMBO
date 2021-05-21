@@ -12,6 +12,7 @@
 #include <QTimer>
 #include <QElapsedTimer>
 #include <QSettings>
+#include <QDesktopServices>
 #include <QtSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
@@ -169,6 +170,17 @@ void Core::sendRst(Mode mode)
 {
     msgAdd(m_msg_rst, false, (mode == SCOPE ? "S" : (mode == LA ? "L" : "")));
     //msgAdd(m_msg_sys_mode, false, (mode == SCOPE ? "SCOPE" : (mode == LA ? "LA" : "VM"))); // TODO CHECK
+}
+
+void Core::on_actionEMBO_Help()
+{
+#if defined(Q_OS_WIN)
+    QString help_path = QDir(QDir::currentPath() + QDir::separator() + "doc").filePath("EMBO.chm");
+    qInfo() << help_path;
+    QDesktopServices::openUrl(QUrl::fromUserInput(help_path));
+#elif defined(Q_OS_UNIX) || defined(Q_OS_MAC)
+    QDesktopServices::openUrl(QUrl(HELP_URL));
+#endif
 }
 
 /* private */

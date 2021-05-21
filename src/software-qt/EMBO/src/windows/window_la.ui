@@ -4625,6 +4625,7 @@ QPushButton:disabled {
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionEMBO_Help"/>
     <addaction name="actionAbout"/>
    </widget>
    <widget class="QMenu" name="menuExport">
@@ -5035,6 +5036,21 @@ QPushButton:disabled {
   <action name="actionExportPDF">
    <property name="text">
     <string>Plot PDF</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionEMBO_Help">
+   <property name="icon">
+    <iconset resource="../../resources/resources.qrc">
+     <normaloff>:/main/img/doc.png</normaloff>:/main/img/doc.png</iconset>
+   </property>
+   <property name="text">
+    <string>EMBO Help</string>
    </property>
    <property name="font">
     <font>

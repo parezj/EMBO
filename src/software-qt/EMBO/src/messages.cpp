@@ -267,7 +267,7 @@ void Msg_SCOP_Set::on_dataRx()
         emit result(bits, tokens[1].toInt(), tokens[2].toInt(),
                     tokens[3][0] == '1', tokens[3][1] == '1', tokens[3][2] == '1', tokens[3][3] == '1',
                     tokens[4].toInt(), tokens[5].toInt(), edge, mode, tokens[8].toInt(),
-                    maxZ, tokens[10].toDouble(), tokens[11].toDouble(), tokens[11]);
+                    maxZ, tokens[10].toDouble() / 1000000000.0, tokens[11].toDouble(), tokens[11]);
     }
     else
     {
@@ -281,7 +281,7 @@ void Msg_SCOP_Set::on_dataRx()
         if (maxZ < 0)
             maxZ = 10;
 
-        emit ok2(maxZ, tokens[2].toDouble(), tokens[3].toDouble(), tokens[3]);
+        emit ok2(maxZ, tokens[2].toDouble() / 1000000000.0, tokens[3].toDouble(), tokens[3]);
     }
 }
 

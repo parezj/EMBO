@@ -60,6 +60,9 @@ QString format_unit(double value, QString unit, int precision)
 
     QString ret = QString::number(value * scale, 'd', precision);
 
+    if (unit == "")
+        suffix = "";
+
     if (ret.contains('.'))
         return ret.remove(QRegExp(r)) + suffix + unit;
     else

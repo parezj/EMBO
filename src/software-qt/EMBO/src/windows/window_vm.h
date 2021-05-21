@@ -212,6 +212,9 @@ private:
     bool m_en3 = true;
     bool m_en4 = true;
 
+    /* status bar */
+    QLabel* status_zoom;
+
     /* cursors */
     QCPCursors* m_cursors;
     double m_cursorV_min = CURSOR_DEFAULT_V_MIN;

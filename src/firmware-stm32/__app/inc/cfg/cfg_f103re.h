@@ -103,8 +103,8 @@
 
 #define EM_VREF                3300                            // main voltage reference in mV
 #define EM_ADC_VREF_CAL        1490                            // vref cal value = 1200 mV
-#define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // max sampling time in ticks
-#define EM_ADC_SMPLT_MAX_N     1.5                             // max smpl time value
+#define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // min sampling time in ticks
+#define EM_ADC_SMPLT_MAX_N     1.5                             // min smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit
 #define EM_ADC_TCONV12         12.5                            // ADC Tconversion ticks for 12-bit
 #define EM_ADC_C_F             0.000000000008 // 8pF           // ADC internal capacitance in F
@@ -121,7 +121,6 @@
 #define EM_TIM_DAQ             TIM3
 #define EM_TIM_DAQ_MAX         65535
 #define EM_TIM_DAQ_FREQ        EM_FREQ_PCLK1
-#define EM_TIM_DAQ_IRQh        TIM3_IRQHandler
 #define EM_TIM_PWM1            TIM2
 #define EM_TIM_PWM1_MAX        65535
 #define EM_TIM_PWM1_FREQ       EM_FREQ_PCLK1

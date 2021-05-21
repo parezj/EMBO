@@ -277,7 +277,7 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
     }
     else // invalid trig (interrupted while DAQ disabled)
     {
-        // TODO check if its ok to pass this
+        // just pass this
     }
 
     return 0;

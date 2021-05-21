@@ -13,7 +13,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
-
+/* UART IRQ handler */
 void EM_UART_RX_IRQHandler(void)
 {
     traceISR_ENTER();
@@ -33,8 +33,11 @@ void EM_UART_RX_IRQHandler(void)
             comm.uart.last = EM_TRUE;
             comm.usb.last = EM_FALSE;
 
+#ifdef EM_UART_CLEAR_FLAG
             EM_UART_CLEAR_FLAG(EM_UART);
+#endif
 
+            /* new message detected */
             if (rx == '\n' && comm.uart.rx_index > 1 && comm.uart.rx_buffer[comm.uart.rx_index - 2] == '\r')
             {
                 comm.uart.available = EM_TRUE;
