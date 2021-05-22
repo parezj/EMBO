@@ -18,9 +18,10 @@ Supported MCUs:
 1. [Parameters](#1-Parameters)
 2. [Connection](#2-Connection)
 3. [Pinout](#3-Pinout)
-4. [PC App](#4-PC-App)
-5. [FW Block Diagram](#5-FW-Block-Diagram)
-6. [PC App Class Diagram](#6-PC-App-Class-Diagram)
+4. [PC App Description](#4-PC-App-Description)
+5. [PC App Class Diagram](#5-PC-App-Class-Diagram)
+6. [FW Block Diagram](#6-FW-Block-Diagram)
+
 
 ## 1. Parameters
 
@@ -52,7 +53,7 @@ Supported MCUs:
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_f303_png_en.png" alt="EMBO pinout F303">
 </div>
 
-## 4. PC App
+## 4. PC App Description
 
 ### Main Window 
 After starting the PC application, the user gets to the main window with the selection of individual devices. On the left is a list of available ports (in the case of Windows OS these are COM ports, in the case of a UNIX-like system these are tty ports. The user selects the port and connects to the oscilloscope. The three panels on the right are displayed. about the microcontroller and firmware, in the middle panel there are primary devices and their parameters and in the bottom panel secondary devices are available.
@@ -165,19 +166,19 @@ The signal generator is a secondary optional device that uses a 12-bit DAC. It i
 Operation modes: 
 - **Constant**
 - **Sine**
-- **Triangle **
+- **Triangle**
 - **Sawtooth**
 - **Square**
 - **Noise**
 
-## 5. FW Block Diagram
-
-<div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/periferie_png_en.png" alt="EMBO fw block diagram">
-</div>
-
-## 6. PC App Class Diagram
+## 5. PC App Class Diagram
 
 <div align="center" margin="0" padding="0">
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/qt_classes_png_en.png" alt="EMBO PC class diagram">
+</div>
+
+## 6. FW Block Diagram
+
+<div align="center" margin="0" padding="0">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/periferie_png_en.png" alt="EMBO fw block diagram">
 </div>
