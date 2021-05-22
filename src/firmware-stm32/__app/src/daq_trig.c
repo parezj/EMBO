@@ -172,7 +172,6 @@ void daq_trig_check(daq_data_t* self)
 int8_t daq_trig_trigger_scope(daq_data_t* self)
 {
     ASSERT(self->trig.buff_trig != NULL);
-    ASSERT(self->trig.dma_ch_trig != 0);
 
     if (!(self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE || self->trig.irq_en == EM_FALSE)) // valid trig
     {
@@ -286,7 +285,6 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
 int8_t daq_trig_trigger_la(daq_data_t* self)
 {
     ASSERT(self->trig.buff_trig != NULL);
-    ASSERT(self->trig.dma_ch_trig != 0);
     ASSERT(self->trig.exti_trig != 0);
 
     if (self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE) // invalid trig

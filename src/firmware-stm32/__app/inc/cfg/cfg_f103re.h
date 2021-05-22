@@ -94,7 +94,7 @@
 
 // ADC -------------------------------------------------------------
 #define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)              - verified
-//#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)        - N/A
+//#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)        - TODO FIX !
 //#define EM_ADC_MODE_ADC1234                                  // 4 full ADCs (4 DMA)        - verified
 #define EM_ADC_BIT12                                           // 12-bit mode available      - verified
 //#define EM_ADC_BIT8                                          // 8-bit mode available       - verified
@@ -159,22 +159,22 @@
 
 // ADC -------------------------------------------------------------
 #define EM_ADC1                ADC1
-#define EM_ADC2                ADC3
+//#define EM_ADC2                ADC3 <--------------
 //#define EM_ADC3              ADC3
 //#define EM_ADC4              ADC4
 
 #define EM_ADC1_USED
 //#define EM_ADC2_USED
-#define EM_ADC3_USED
+//#define EM_ADC3_USED <-------------
 //#define EM_ADC4_USED
 
 #define EM_ADC12_IRQh          ADC1_2_IRQHandler
-#define EM_ADC3_IRQh           ADC3_IRQHandler
+//#define EM_ADC3_IRQh           ADC3_IRQHandler <------------
 //#define EM_ADC4_IRQh         ADC4_IRQHandler
 
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
-#define EM_DMA_ADC2            DMA2
+//#define EM_DMA_ADC2            DMA2 <--------------
 //#define EM_DMA_ADC3          DMA2
 //#define EM_DMA_ADC4          DMA2
 #define EM_DMA_LA              DMA1
@@ -184,7 +184,7 @@
 
 // DMA channels ----------------------------------------------------
 #define EM_DMA_CH_ADC1         LL_DMA_CHANNEL_1
-#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_5
+//#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_5 <---------------
 //#define EM_DMA_CH_ADC3       LL_DMA_CHANNEL_4
 //#define EM_DMA_CH_ADC4       LL_DMA_CHANNEL_5
 #define EM_DMA_CH_LA           LL_DMA_CHANNEL_6
@@ -195,7 +195,7 @@
 // IRQ map ---------------------------------------------------------
 #define EM_IRQN_ADC1           ADC1_2_IRQn
 //#define EM_IRQN_ADC2         ADC1_2_IRQn
-#define EM_IRQN_ADC3           ADC3_IRQn
+//#define EM_IRQN_ADC3           ADC3_IRQn <--------------
 //#define EM_IRQN_ADC4         ADC4_IRQn
 #define EM_IRQN_UART           USART1_IRQn
 #define EM_LA_IRQ_EXTI1        EXTI1_IRQn
@@ -206,7 +206,7 @@
 
 // IRQ helpers -----------------------------------------------------
 #define EM_IRQ_ADC1            EM_IRQN_ADC1
-#define EM_IRQ_ADC2            EM_IRQN_ADC3
+//#define EM_IRQ_ADC2            EM_IRQN_ADC3 <----------------------
 //#define EM_IRQ_ADC3          EM_IRQN_ADC3
 //#define EM_IRQ_ADC4          EM_IRQN_ADC4
 

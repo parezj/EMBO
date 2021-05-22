@@ -46,6 +46,7 @@ Temporary Items
 *.bin
 *.o
 
+build
 .settings/
 Debug/
 Release/

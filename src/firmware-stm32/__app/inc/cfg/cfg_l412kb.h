@@ -91,8 +91,8 @@
 #define EM_DAQ_4CH   // if defined, DAQ operates with 4 channels, else with 2 channels
 
 // ADC -------------------------------------------------------------
-//#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)               - verified
-#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)         - N/A
+#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)               - verified
+//#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)         - need fix !
 //#define EM_ADC_MODE_ADC1234                                  // 4 full ADCs (4 DMA)         - verified
 #define EM_ADC_BIT12                                           // 12-bit mode available       - verified
 #define EM_ADC_BIT8                                            // 8-bit mode available        - verified
@@ -148,23 +148,23 @@
 //#define EM_TIM_SGEN_MAX      65535
 
 // max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         30000      // DAQ max total memory
-#define EM_LA_MAX_FS           14400000   // Logic Analyzer max FS
-#define EM_DAQ_MAX_B12_FS      4965517    // DAQ ADC max fs per 1 channel - 12 bit
-#define EM_DAQ_MAX_B8_FS       4965517    // DAQ ADC max fs per 1 channel - 8 bit TODO
-#define EM_PWM_MAX_F           48000000   // PWM max freq
+#define EM_DAQ_MAX_MEM         28000      // DAQ max total memory
+#define EM_LA_MAX_FS           13333333   // Logic Analyzer max FS
+#define EM_DAQ_MAX_B12_FS      5000000    // DAQ ADC max fs per 1 channel - 12 bit
+#define EM_DAQ_MAX_B8_FS       5000000    // DAQ ADC max fs per 1 channel - 8 bit TODO
+#define EM_PWM_MAX_F           16000000   // PWM max freq
 #define EM_SGEN_MAX_F          0          // SGEN max output freq.
-#define EM_CNTR_MAX_F          57000000   // CNTR max input frequency
+#define EM_CNTR_MAX_F          37000000   // CNTR max input frequency
 #define EM_MEM_RESERVE         10         // DAQ circ buff memory reserve (min 2)
 
 // ADC -------------------------------------------------------------
 #define EM_ADC1                ADC1
-#define EM_ADC2                ADC2
+//#define EM_ADC2                ADC2 <-------------
 //#define EM_ADC3              ADC3
 //#define EM_ADC4              ADC4
 
 #define EM_ADC1_USED
-#define EM_ADC2_USED
+//#define EM_ADC2_USED <-------------
 //#define EM_ADC3_USED
 //#define EM_ADC4_USED
 
@@ -174,7 +174,7 @@
 
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
-#define EM_DMA_ADC2            DMA2
+//#define EM_DMA_ADC2            DMA2 <---------------
 //#define EM_DMA_ADC3          DMA2
 //#define EM_DMA_ADC4          DMA2
 #define EM_DMA_LA              DMA1
@@ -184,7 +184,7 @@
 
 // DMA channels ----------------------------------------------------
 #define EM_DMA_CH_ADC1         LL_DMA_CHANNEL_1
-#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_4
+//#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_4 <----------------
 //#define EM_DMA_CH_ADC3       LL_DMA_CHANNEL_5
 //#define EM_DMA_CH_ADC4       LL_DMA_CHANNEL_4
 #define EM_DMA_CH_LA           LL_DMA_CHANNEL_5
@@ -194,7 +194,7 @@
 
 // IRQ map ---------------------------------------------------------
 #define EM_IRQN_ADC1           ADC1_2_IRQn
-#define EM_IRQN_ADC2           ADC1_2_IRQn
+//#define EM_IRQN_ADC2           ADC1_2_IRQn <------------------
 //#define EM_IRQN_ADC3         ADC3_IRQn
 //#define EM_IRQN_ADC4         ADC4_IRQn
 #define EM_IRQN_UART           USART2_IRQn
@@ -206,7 +206,7 @@
 
 // IRQ helpers -----------------------------------------------------
 #define EM_IRQ_ADC1            EM_IRQN_ADC1
-#define EM_IRQ_ADC2            EM_IRQN_ADC2
+//#define EM_IRQ_ADC2            EM_IRQN_ADC2 <-------------------
 //#define EM_IRQ_ADC3          EM_IRQN_ADC3
 //#define EM_IRQ_ADC4          EM_IRQN_ADC4
 
@@ -234,14 +234,14 @@
 #define EM_LA_IRQ4_CH4         la_irq_ch4
 
 // ADC pins --------------------------------------------------------
-#define EM_ADC_AWD1            LL_ADC_AWD_CHANNEL_6_REG
-#define EM_ADC_AWD2            LL_ADC_AWD_CHANNEL_7_REG
-#define EM_ADC_AWD3            LL_ADC_AWD_CHANNEL_12_REG
-#define EM_ADC_AWD4            LL_ADC_AWD_CHANNEL_4_REG
-#define EM_ADC_CH1             LL_ADC_CHANNEL_6
-#define EM_ADC_CH2             LL_ADC_CHANNEL_7
-#define EM_ADC_CH3             LL_ADC_CHANNEL_12
-#define EM_ADC_CH4             LL_ADC_CHANNEL_4
+#define EM_ADC_AWD1            LL_ADC_AWD_CHANNEL_5_REG
+#define EM_ADC_AWD2            LL_ADC_AWD_CHANNEL_6_REG
+#define EM_ADC_AWD3            LL_ADC_AWD_CHANNEL_8_REG
+#define EM_ADC_AWD4            LL_ADC_AWD_CHANNEL_9_REG
+#define EM_ADC_CH1             LL_ADC_CHANNEL_5
+#define EM_ADC_CH2             LL_ADC_CHANNEL_6
+#define EM_ADC_CH3             LL_ADC_CHANNEL_8
+#define EM_ADC_CH4             LL_ADC_CHANNEL_9
 
 // ADC - GPIO pins -------------------------------------------------
 #define EM_GPIO_ADC_PORT1      GPIOA

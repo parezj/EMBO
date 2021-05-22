@@ -1,9 +1,11 @@
 #MicroXplorer Configuration settings - do not modify
+ADC1.AWD1ITMode=ENABLE
 ADC1.ClockPrescaler=ADC_CLOCK_ASYNC_DIV1
+ADC1.DMAContinuousRequests=ENABLE
 ADC1.EOCSelection=ADC_EOC_SEQ_CONV
 ADC1.EnableAnalogWatchDog1=true
 ADC1.ExternalTrigConv=ADC_EXTERNALTRIG_T3_TRGO
-ADC1.IPParameters=NbrOfConversionFlag,ClockPrescaler,NbrOfConversion,ExternalTrigConv,EnableAnalogWatchDog1,WatchdogChannel,EOCSelection,Sequencer,master,SelectedChannel,ScanConvMode
+ADC1.IPParameters=NbrOfConversionFlag,ClockPrescaler,NbrOfConversion,ExternalTrigConv,EnableAnalogWatchDog1,WatchdogChannel,EOCSelection,Sequencer,master,SelectedChannel,ScanConvMode,AWD1ITMode,DMAContinuousRequests
 ADC1.NbrOfConversion=1
 ADC1.NbrOfConversionFlag=0
 ADC1.ScanConvMode=ADC_SCAN_SEQ_FIXED_BACKWARD
@@ -119,6 +121,9 @@ Mcu.UserConstants=
 Mcu.UserName=STM32G031J6Mx
 MxCube.Version=6.0.1
 MxDb.Version=DB.6.0.0
+NVIC.DMA1_Ch4_5_DMAMUX1_OVR_IRQn=true\:0\:0\:false\:false\:true\:false\:true
+NVIC.DMA1_Channel1_IRQn=true\:0\:0\:false\:false\:true\:false\:true
+NVIC.DMA1_Channel2_3_IRQn=true\:0\:0\:false\:false\:true\:false\:true
 NVIC.ForceEnableDMAVector=false
 NVIC.HardFault_IRQn=true\:0\:0\:false\:false\:true\:false\:false
 NVIC.NonMaskableInt_IRQn=true\:0\:0\:false\:false\:true\:false\:false

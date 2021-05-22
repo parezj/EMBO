@@ -1,4 +1,5 @@
 #MicroXplorer Configuration settings - do not modify
+ADC1.AWD1ITMode=ENABLE
 ADC1.Channel-0\#ChannelRegularConversion=ADC_CHANNEL_VREFINT
 ADC1.Channel-1\#ChannelRegularConversion=ADC_CHANNEL_0
 ADC1.Channel-2\#ChannelRegularConversion=ADC_CHANNEL_1
@@ -6,11 +7,12 @@ ADC1.Channel-3\#ChannelRegularConversion=ADC_CHANNEL_4
 ADC1.Channel-4\#ChannelRegularConversion=ADC_CHANNEL_5
 ADC1.ChannelVREF=ADC_CHANNEL_VREFINT
 ADC1.ClockPrescaler=ADC_CLOCK_ASYNC_DIV1
+ADC1.DMAContinuousRequests=ENABLE
 ADC1.EOCSelection=ADC_EOC_SEQ_CONV
 ADC1.EnableAnalogWatchDog1=true
 ADC1.EnableAnalogWatchDog3=false
 ADC1.ExternalTrigConv=ADC_EXTERNALTRIG_T3_TRGO
-ADC1.IPParameters=Rank-0\#ChannelRegularConversion,Channel-0\#ChannelRegularConversion,SamplingTime-0\#ChannelRegularConversion,NbrOfConversionFlag,master,SelectedChannel,Rank-1\#ChannelRegularConversion,Channel-1\#ChannelRegularConversion,SamplingTime-1\#ChannelRegularConversion,Rank-2\#ChannelRegularConversion,Channel-2\#ChannelRegularConversion,SamplingTime-2\#ChannelRegularConversion,Rank-3\#ChannelRegularConversion,Channel-3\#ChannelRegularConversion,SamplingTime-3\#ChannelRegularConversion,Rank-4\#ChannelRegularConversion,Channel-4\#ChannelRegularConversion,SamplingTime-4\#ChannelRegularConversion,NbrOfConversion,EnableAnalogWatchDog1,ExternalTrigConv,EOCSelection,ClockPrescaler,EnableAnalogWatchDog3,ChannelVREF
+ADC1.IPParameters=Rank-0\#ChannelRegularConversion,Channel-0\#ChannelRegularConversion,SamplingTime-0\#ChannelRegularConversion,NbrOfConversionFlag,master,SelectedChannel,Rank-1\#ChannelRegularConversion,Channel-1\#ChannelRegularConversion,SamplingTime-1\#ChannelRegularConversion,Rank-2\#ChannelRegularConversion,Channel-2\#ChannelRegularConversion,SamplingTime-2\#ChannelRegularConversion,Rank-3\#ChannelRegularConversion,Channel-3\#ChannelRegularConversion,SamplingTime-3\#ChannelRegularConversion,Rank-4\#ChannelRegularConversion,Channel-4\#ChannelRegularConversion,SamplingTime-4\#ChannelRegularConversion,NbrOfConversion,EnableAnalogWatchDog1,ExternalTrigConv,EOCSelection,ClockPrescaler,EnableAnalogWatchDog3,DMAContinuousRequests,AWD1ITMode,ChannelVREF
 ADC1.NbrOfConversion=5
 ADC1.NbrOfConversionFlag=1
 ADC1.Rank-0\#ChannelRegularConversion=1

@@ -324,7 +324,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
 
         if (context == NULL)
         {
-            if (vref_raw > 0 && daq.vcc_mv > 1500)
+            if (vref_raw > 0 && daq.vcc_mv > 3000)
                 return SCPI_RES_OK;
             else
                 return SCPI_RES_ERR;
