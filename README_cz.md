@@ -1,5 +1,5 @@
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="200" height="200">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="150" height="150">
 </div>
 
 # EMBO - EMBedded Oscilloscope
@@ -23,17 +23,17 @@ Kapitoly:
 ## 1. Parametry
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params1.png" alt="EMBO params 1">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params1.png" alt="EMBO params 1" width="700">
 </div>
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params2.png" alt="EMBO params 2">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params2.png" alt="EMBO params 2" width="700">
 </div>
 
 ## 2. Připojení
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/comm_types_png_en.png" alt="EMBO comm">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/comm_types_png_en.png" alt="EMBO comm" width="700">
 </div>
 
 ## 3. Pinout
@@ -41,13 +41,13 @@ Kapitoly:
 ### STM32F103C (Blue Pill)
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_bluepill_png_en.png" alt="EMBO pinout bluepill">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_bluepill_png_en.png" alt="EMBO pinout bluepill" width="500">
 </div>
 
 ### STM32F303RE (Nucleo-64)
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_f303_png_en.png" alt="EMBO pinout F303">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_f303_png_en.png" alt="EMBO pinout F303" width="600">
 </div>
 
 ## 4. Popis PC aplikace
@@ -56,7 +56,7 @@ Kapitoly:
 Po spuštění PC aplikace se uživatel dostane do hlavního okna s výběrem jednotlivých přístrojů. Po levé straně je seznam dostupných portů (v případě OS Windows jsou to COM porty, v případě UNIX-like systému jsou to tty porty). Uživatel vybere port a připojí se k osciloskopu. Zobrazí se tři panely na pravé straně. V horním panelu jsou informace o mikrořadiči a firmware. V prostředním panelu jsou primární přístroje a jejich parametry a ve spodním panelu jsou dostupné sekundární přístroje.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/main2.png" alt="EMBO main2">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/main2.png" alt="EMBO main2" width="700">
 </div>
 
 V dolní liště (stavovém panelu) jsou informace o aktuální relaci, které se v ideálním případě aktualizují s periodou 10 ms. Latence udává dobu odezvy osciloskopu a Uptime udává dobu od zapnutí. Pokud je komunikace vytížena (osciloskop odesílá mnoho dat) může se latence zvýšit až na stovky ms v případě použití UART (ST-LINK).
@@ -73,7 +73,7 @@ Popis parametrů přístrojů:
 Osciloskop je stěžejní přístroj celého systému. Okno osciloskopu je rozděleno do dvou hlavních bloků. V levém bloku je interaktivní graf, pod kterým leží měřící prvky a ovladače kurzorů. V pravém bloků jsou soustředěny ty nejdůležitější ovládací prvky. Pomocné a doplňkové funkce se ovládají z horního menu. Spodní část obrazovky je vyčleněna pro stavový panel.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/scope.png" alt="EMBO scope">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/scope.png" alt="EMBO scope" width="800">
 </div>
 
 Popis ovládacích panelů: 
@@ -111,7 +111,7 @@ Popis horního menu:
 Logický analyzátor zprostředkovává doplňkovou funkcionalitu osciloskopu pro sledování rychlých digitálních signálů. Podobně jako osciloskop je přístroj rozdělen do dvou hlavních bloků. V levém bloku je interaktivní graf, který dynamicky zobrazuje příslušný počet kanálů, na rozdíl od osciloskopu ale pod sebou. V pravém bloků jsou hlavní ovládací prvky vycházející z osciloskopu. Doplňkové funkce se opět ovládají z horního menu. Spodní část obrazovky je vyčleněna pro stavový panel.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/la.png" alt="EMBO la">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/la.png" alt="EMBO la" width="800">
 </div>
 
 Většina ovládacích prvků sdílí stejnou funkčnost i design s osciloskopem. Rozdíl je u triggeru, kde chybí spouštěcí úroveň, naopak přibyla možnost triggerovat na obě hrany (Both). Dále chybí vertikální zesílení a offset, protože pro logický analyzátor nemají smysl. Podobně také chybí režim průměrování, bitové rozlišení a FFT.
@@ -127,7 +127,7 @@ Popis ovládacích panelů:
 Voltmetr je poslední primární přístroj osciloskopu EMBO. Jeho okno je opět rozděleno na dva hlavní bloky. V levém bloku je interaktivní graf, pod kterým jsou zobrazeny měřené parametry a ovladač kurzorů. V pravém bloku jsou pod sebou 4 panely kanálů a pod nimi je hlavní ovládací panel (Settings).
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/vm.png" alt="EMBO vm">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/vm.png" alt="EMBO vm" width="800">
 </div>
 
 Popis nastavitelných parametrů:
@@ -143,7 +143,7 @@ Kromě hlavního nastavení lze využít doplňkové možnosti z horního menu, 
 Čítač je jednoduchý sekundární přístroj, který lze paralelně provozovat s ostatními přístroji. Lze nastavit režim Slow (pro signály do cca 1 MHz) a režim Fast (pro signály cca od 1 MHz). Pro pomalé signály trvá měření delší dobu. V případě že nebyl detekován signál během 2 sekund nastane timeout. Při použití s osciloskopem nebo logickým analyzátorem při maximální vzorkovací frekvenci může docházet k přetížení DMA a vypadávání vzorků.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/cntr.png" alt="EMBO cntr">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/cntr.png" alt="EMBO cntr" width="250">
 </div>
 
 ### PWM Generator 
@@ -151,12 +151,12 @@ Generátor PWM signálu existuje buď s 1 nebo 2 kanály. V případě 2 kanál�
 vzorkovací frekvence osciloskopu může docházet k nežádoucímu ovlivnění měřeného signálu.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/pwm.png" alt="EMBO pwm">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/pwm.png" alt="EMBO pwm" width="300">
 </div>
 
 ### Signal Generator 
 Signálový generátor je sekundární volitelný přístroj, který využívá 12-bitové DAC. Je dostupný pouze u těch mikrořadičů, které disponují DAC, jako je např. F303RE. Uživatel může nastavit frekvenci, amplitudu a ofset. U vysokých frekvencích je dynamicky snížena velikost výstupního bufferu, tedy vzorků na periodu (Size), aby DAC stíhal generovat. Dále je zobrazena reálná frekvence generovaného signálu a velikost amplitudy v milivoltech. V režimu Constant se chová generátor jako zdroj napětí.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/sgen.png" alt="EMBO sgen">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/sgen.png" alt="EMBO sgen" width="450">
 </div>
