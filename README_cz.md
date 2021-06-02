@@ -1,7 +1,7 @@
 <p float="left" align="center">
-  <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="150" />
+  <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="110" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <a href="https://meas.fel.cvut.cz/" alt="CTU"><img src="https://raw.githubusercontent.com/parezj/EMBO/master/src/software-qt/EMBO/resources/img/ctu_meas.png" height="150" /></a>
+  <a href="https://meas.fel.cvut.cz/" alt="CTU"><img src="https://raw.githubusercontent.com/parezj/EMBO/main/img/ctu_meas_cz.png" /></a>
 </p>
 
 # EMBO - EMBedded Oscilloscope
