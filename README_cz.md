@@ -1,11 +1,15 @@
-<div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="150" height="150">
-</div>
+<p float="left" align="center">
+  <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="150" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://meas.fel.cvut.cz/" alt="CTU"><img src="https://raw.githubusercontent.com/parezj/EMBO/master/src/software-qt/EMBO/resources/img/ctu_meas.png" height="150" /></a>
+</p>
 
 # EMBO - EMBedded Oscilloscope
 > **[GitHub](https://github.com/parezj/EMBO/releases)**  
 
 Aplikace EMBO se skládá ze 3 primárních přístrojů (4-kanálový osciloskop, logický analyzátor, voltmetr) a ze 3 sekundárních přístrojů (čítač, PWM and funkční generátor). Multiplatformní aplikace je zkompilována pro Windows, Linux a macOS. Stabilní firmware je dostupný pro STM32F103C8, STM32F103RE, STM32F303RE a STM32L412KB ve formátu HEX, další řady budou následovat. Osciloskop EMBO slouží jako levný a jednoduchý nástroj pro hromadnou výuku praktické elektroniky.
+
+Tato práce byla vytvořena v rámci mé diplomové práce na [FEL ČVUT] (https://meas.fel.cvut.cz/) v Praze (Katedra měření) pod vedením doc. Fischera a za pomoci Ing. Hladíka z STMicroelectronics. Chtěl bych jim poděkovat za perfektní podporu. Celý projekt EMBO je zveřejněn pod licencí MIT. 
 
 Ke stažení:
 - **[EMBO app 0.1.4 (macOS Catalina)](https://github.com/parezj/EMBO/releases/download/sw0.1.4/EMBO_app-0.1.4_macOS-Catalina.zip)**
@@ -19,6 +23,9 @@ Kapitoly:
 2. [Připojení](#2-Pripojeni)
 3. [Pinout](#3-Pinout)
 4. [Popis PC aplikace](#4-Popis-PC-aplikace)
+5. [Třídní diagram PC aplikace](#5-Tridni-diagram-PC-aplikace)
+6. [Blokové schéma firmware](#6-Blokove-schema-firmware)
+7. [Použité IP](#7-Pouzite-IP)
 
 ## 1. Parametry
 
@@ -146,7 +153,7 @@ Kromě hlavního nastavení lze využít doplňkové možnosti z horního menu, 
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/cntr.png" alt="EMBO cntr" width="250">
 </div>
 
-### PWM Generator 
+### PWM generátor 
 Generátor PWM signálu existuje buď s 1 nebo 2 kanály. V případě 2 kanálů jde o synchronní generátor, který může být použit pro ovládání motorů nebo pro simulaci signálů z kvadraturního enkodéru. Frekvence se nastavuje shodná pro oba kanály. Dále lze nastavit střídu zvlášť pro kanál a offset druhého kanálu. Opět je třeba zdůraznit, že při vysokých hodnotách
 vzorkovací frekvence osciloskopu může docházet k nežádoucímu ovlivnění měřeného signálu.
 
@@ -154,9 +161,31 @@ vzorkovací frekvence osciloskopu může docházet k nežádoucímu ovlivnění 
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/pwm.png" alt="EMBO pwm" width="300">
 </div>
 
-### Signal Generator 
+### Signálový generátor 
 Signálový generátor je sekundární volitelný přístroj, který využívá 12-bitové DAC. Je dostupný pouze u těch mikrořadičů, které disponují DAC, jako je např. F303RE. Uživatel může nastavit frekvenci, amplitudu a ofset. U vysokých frekvencích je dynamicky snížena velikost výstupního bufferu, tedy vzorků na periodu (Size), aby DAC stíhal generovat. Dále je zobrazena reálná frekvence generovaného signálu a velikost amplitudy v milivoltech. V režimu Constant se chová generátor jako zdroj napětí.
 
 <div align="center" margin="0" padding="0">
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/sgen.png" alt="EMBO sgen" width="450">
 </div>
+
+## 5. Třídní diagram PC aplikace
+
+<div align="center" margin="0" padding="0">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/qt_classes_png_en.png" alt="EMBO PC class diagram" width="700">
+</div>
+
+## 6. Blokové schéma firmware
+
+<div align="center" margin="0" padding="0">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/periferie_png_en.png" alt="EMBO fw block diagram" width="700">
+</div>
+
+## 7. Použité IP
+- **[SCPI Parser](https://github.com/j123b567/scpi-parser)**  (Jan Breuer)
+- **[FreeRTOS](https://www.freertos.org/)**
+- **[SEGGER SystemView](https://www.segger.com/products/development-tools/systemview/)**
+- **[QCustomPlot](https://www.qcustomplot.com/)**
+- **[FFTW3](http://www.fftw.org/)**
+- **[qBreakpad](https://github.com/buzzySmile/qBreakpad)**
+- **[Google Breakpad](https://github.com/google/breakpad)**
+- **[QSimpleUpdater](https://github.com/alex-spataru/QSimpleUpdater)**
