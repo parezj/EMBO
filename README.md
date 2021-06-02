@@ -41,7 +41,7 @@ Supported MCUs:
 
 ## 3. Pinout
 
-### STM32F103C (Blue Pill)
+### STM32F103C8 (Blue Pill)
 
 <div align="center" margin="0" padding="0">
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_bluepill_png_en.png" alt="EMBO pinout bluepill" width="500">
