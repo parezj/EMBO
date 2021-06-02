@@ -1,5 +1,5 @@
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="200" height="200">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/icon.png" alt="EMBO" width="150" height="150">
 </div>
 
 # EMBO - EMBedded Oscilloscope
@@ -26,17 +26,17 @@ Supported MCUs:
 ## 1. Parameters
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params1.png" alt="EMBO params 1">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params1.png" alt="EMBO params 1" width="700">
 </div>
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params2.png" alt="EMBO params 2">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params2.png" alt="EMBO params 2" width="700">
 </div>
 
 ## 2. Connection
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/comm_types_png_en.png" alt="EMBO comm">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/comm_types_png_en.png" alt="EMBO comm" width="700">
 </div>
 
 ## 3. Pinout
@@ -44,13 +44,13 @@ Supported MCUs:
 ### STM32F103C (Blue Pill)
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_bluepill_png_en.png" alt="EMBO pinout bluepill">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_bluepill_png_en.png" alt="EMBO pinout bluepill" width="500">
 </div>
 
 ### STM32F303RE (Nucleo-64)
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_f303_png_en.png" alt="EMBO pinout F303">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/pinout_f303_png_en.png" alt="EMBO pinout F303" width="600">
 </div>
 
 ## 4. PC App Description
@@ -59,7 +59,7 @@ Supported MCUs:
 After starting the PC application, the user gets to the main window with the selection of individual devices. On the left is a list of available ports (in the case of Windows OS these are COM ports, in the case of a UNIX-like system these are tty ports. The user selects the port and connects to the oscilloscope. The three panels on the right are displayed. about the microcontroller and firmware, in the middle panel there are primary devices and their parameters and in the bottom panel secondary devices are available.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/main2.png" alt="EMBO main2">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/main2.png" alt="EMBO main2" width="700">
 </div>
 
 The bottom bar (status bar) contains information about the current session, which is ideally updated with a period of 10 ms. Latency indicates the response time of the oscilloscope and Uptime indicates the time since power-up. If the communication is busy (the oscilloscope sends a lot of data), the latency can increase up to hundreds of ms when using UART (ST-LINK).
@@ -76,7 +76,7 @@ Description of device parameters:
 The oscilloscope is a key device of the whole system. The oscilloscope window is divided into two main blocks. In the left block there is an interactive graph, under which lie measuring elements and cursor controls. The most important controls are concentrated in the right blocks. Auxiliary and additional functions are controlled from the top menu. The lower part of the screen is set aside for the status bar.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/scope.png" alt="EMBO scope">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/scope.png" alt="EMBO scope" width="800">
 </div>
 
 Description of control panels: 
@@ -114,7 +114,7 @@ Description of the top menu:
 The logic analyzer provides additional oscilloscope functionality for fast digital signals. Like the oscilloscope, the instrument is divided into two main blocks. In the left block there is an interactive graph that dynamically displays the appropriate number of channels, unlike the oscilloscope but below it. In the right blocks are the main controls coming from the oscilloscope. Additional functions are controlled again from the top menu. The lower part of the screen is set aside for the status bar.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/la.png" alt="EMBO la">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/la.png" alt="EMBO la" width="800">
 </div>
 
 Most controls share the same functionality and design with the oscilloscope. The difference is with the trigger, where the trigger level is missing, on the contrary, the possibility to trigger on both edges (Both) has been added. Furthermore, the vertical gain and offset are missing because they do not make sense for the logic analyzer. Similarly, averaging mode, bit resolution, and FFT are also missing. 
@@ -130,7 +130,7 @@ Description of control panels:
 The voltmeter is the last primary instrument of the EMBO oscilloscope. Its window is again divided into two main blocks. In the left block there is an interactive graph, under which the measured parameters and the cursor driver are displayed. In the right block there are 4 channel panels below them and below them is the main control panel (Settings).
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/vm.png" alt="EMBO vm">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/vm.png" alt="EMBO vm" width="800">
 </div>
 
 Description of adjustable parameters: 
@@ -146,21 +146,21 @@ In addition to the main settings, you can use additional options from the top me
 The counter is a simple secondary device that can be operated in parallel with other devices. Slow mode (for signals up to approx. 1 MHz) and Fast mode (for signals from approx. 1 MHz) can be set. For slow signals, the measurement takes longer. If no signal is detected within 2 seconds, a timeout occurs. When used with an oscilloscope or logic analyzer at the maximum sampling frequency, DMA overload and sample dropping may occur.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/cntr.png" alt="EMBO cntr">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/cntr.png" alt="EMBO cntr" width="250">
 </div>
 
 ### PWM Generator 
 The PWM signal generator exists with either 1 or 2 channels. In the case of 2 channels, it is a synchronous generator that can be used to control motors or to simulate signals from a quadrature encoder. The frequency is set the same for both channels. You can also set the shift separately for the channel and the offset of the second channel. Again, it should be emphasized that at high values of the sampling frequency of the oscilloscope, the measured signal may be adversely affected.
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/pwm.png" alt="EMBO pwm">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/pwm.png" alt="EMBO pwm" width="300">
 </div>
 
 ### Signal Generator 
 The signal generator is a secondary optional device that uses a 12-bit DAC. It is only available for those microcontrollers that have a DAC, such as the F303RE. The user can set the frequency, amplitude and offset. At high frequencies, the size of the output buffer is dynamically reduced, ie the samples per period (Size), so that the DAC manages to generate. The real frequency of the generated signal and the magnitude of the amplitude in millivolts are also shown. In Constant mode, the generator acts as a voltage source. 
 
 <div align="center" margin="0" padding="0">
-<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/sgen.png" alt="EMBO sgen">
+<img src="https://raw.githubusercontent.com/parezj/EMBO/master/screenshots/sgen.png" alt="EMBO sgen" width="450">
 </div>
 
 Operation modes: 
