@@ -9,7 +9,7 @@
 
 EMBO consists of 3 primary devices (oscilloscope, logic analyzer, voltmeter) and 3 secondary devices (counter, PWM and signal generator). The multiplatform PC application can be run on Windows, Linux and macOS operating systems. Stable firmware is available for STM32 series F1, F3 and L4 in HEX format, other series L0 and G0 are currently supported experimentally. The EMBO oscilloscope is intended to serve as a cheap and accessible tool for all electronics enthusiasts. 
 
-This work was created as part of my diploma thesis at [FEE CTU](https://meas.fel.cvut.cz/) in Prague (Department of Measurement) under the supervision of doc. Fischer and with the help of Ing. Hladík from STMicroelectronics. I would like to thank them for perfect support. Whole EMBO is published under the MIT license. 
+This work was created as part of my master thesis at [FEE CTU](https://meas.fel.cvut.cz/) in Prague (Department of Measurement) under the supervision of doc. Fischer and with the help of Ing. Hladík from STMicroelectronics. I would like to thank them for perfect support. Whole EMBO is published under the MIT license. 
 
 Supported MCUs:
 - **STM32F103C8**
