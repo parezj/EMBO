@@ -174,7 +174,7 @@ void WindowCntr::on_timer_render()
         }
         else if (freq.contains("ERROR"))
         {
-            m_status_enabled->setText(" " + freq);
+            //m_status_enabled->setText(" " + freq);
         }
         else // ALL GOOD
         {

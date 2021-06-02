@@ -19,7 +19,7 @@
 
 #define TIMER_COMM          10
 #define TIMER_COMM_MIN      1
-#define TIMER_RX            3000
+#define TIMER_RX            1500
 #define TIMER_RENDER        100
 
 #define MOVEMEAN_LATENCY    100

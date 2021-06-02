@@ -99,6 +99,7 @@
 
 #define EM_VREF                3300                            // main voltage reference in mV
 #define EM_ADC_VREF_CAL        *((uint16_t*)VREFINT_CAL_ADDR)  // vref cal value = 1200 mV
+#define EM_ADC_VREF_CALVAL     3.3
 #define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_1CYCLE_5    // min sampling time in ticks
 #define EM_ADC_SMPLT_MAX_N     1.5                             // min smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit

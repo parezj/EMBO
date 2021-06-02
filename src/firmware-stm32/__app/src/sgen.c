@@ -129,6 +129,7 @@ void sgen_disable(sgen_data_t* self)
     LL_TIM_DisableCounter(EM_TIM_SGEN);
     LL_DAC_DisableDMAReq(EM_DAC, EM_DAC_CH);
     LL_DAC_DisableTrigger(EM_DAC, EM_DAC_CH);
+    LL_DMA_DisableChannel(EM_DMA_SGEN, EM_DMA_CH_SGEN); // ADDED 29.5.21
 
     self->enabled = EM_FALSE;
 }

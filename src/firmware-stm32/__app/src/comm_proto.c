@@ -313,7 +313,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
         char ch3_s[10];
         char ch4_s[10];
 
-        double vcc = 3.3 * (double)EM_ADC_VREF_CAL / vref_raw;
+        double vcc = EM_ADC_VREF_CALVAL * (double)EM_ADC_VREF_CAL / vref_raw;
         double ch1 = vcc * ch1_raw / (double)daq.adc_max_val;
         double ch2 = vcc * ch2_raw / (double)daq.adc_max_val;
         double ch3 = vcc * ch3_raw / (double)daq.adc_max_val;
@@ -324,7 +324,7 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
 
         if (context == NULL)
         {
-            if (vref_raw > 0 && daq.vcc_mv > 3000)
+            if (vref_raw > 0 && daq.vcc_mv > 2000)
                 return SCPI_RES_OK;
             else
                 return SCPI_RES_ERR;

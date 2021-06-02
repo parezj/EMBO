@@ -111,7 +111,7 @@ void t1_wd(void* p)
     while(1)
     {
         iwdg_feed(); // feed watchdog
-        led_blink_do(&led, daq.uwTick); // blink leds optionaly
+        led_blink_do(&led, daq.uwTick); // blink led optionaly
 
         vTaskDelay(10);
 

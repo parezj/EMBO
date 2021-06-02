@@ -26,7 +26,7 @@ void cntr_init(cntr_data_t* self)
     self->fast_mode_now = 0;
 
     NVIC_SetPriority(EM_CNTR_IRQ, NVIC_EncodePriority(NVIC_GetPriorityGrouping(), EM_IT_PRI_CNTR, 0));
-    cntr_reset(self);
+    //cntr_reset(self); REMOVED 29.5.21
 }
 
 static void cntr_reset(cntr_data_t* self)
@@ -66,6 +66,12 @@ void cntr_enable(cntr_data_t* self, uint8_t enable, uint8_t fast_mode)
         xSemaphoreGive(sem3_cntr);
     else if (enable == EM_FALSE && en == EM_TRUE)
         xSemaphoreTake(sem3_cntr, 0);
+
+    if (enable == EM_FALSE) // ADDED 29.5.21
+    {
+        LL_DMA_DisableChannel(EM_DMA_CNTR, EM_DMA_CH_CNTR);
+        LL_DMA_DisableChannel(EM_DMA_CNTR, EM_DMA_CH_CNTR2);
+    }
 }
 
 void cntr_start(cntr_data_t* self, uint8_t start)

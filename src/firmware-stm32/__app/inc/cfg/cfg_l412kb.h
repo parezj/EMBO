@@ -25,7 +25,7 @@
 
 // device -----------------------------------------------------------
 #define EM_DEV_NAME            "EMBO-STM32L412KB-Nucleo32"   // device specific name
-#define EM_DEV_COMM            "USART2 (115200 bps)"         // device comm methods
+#define EM_DEV_COMM            "USB + USART2 (115200 bps)"         // device comm methods
 #define EM_LL_VER              "1.16.0"                      // STM32 CubeMX LL drivers
 
 // pins ------------------------------------------------------------
@@ -64,7 +64,7 @@
 #define EM_UART_RX_IRQHandler  USART2_IRQHandler    // UART IRQ handler
 #define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RTO(x);  // RTO flags needs clearing
 //#define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RXNE(x);  // RXNE flags needs clearing
-#define EM_USB                                      // if emulated USB enabled TODO
+#define EM_USB                                      // if emulated USB enabled
 #define EM_UART_POLLINIT                            // if defined poll for init
 
 // LED -------------------------------------------------------------
@@ -91,8 +91,8 @@
 #define EM_DAQ_4CH   // if defined, DAQ operates with 4 channels, else with 2 channels
 
 // ADC -------------------------------------------------------------
-#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)               - verified
-//#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)         - need fix !
+//#define EM_ADC_MODE_ADC1                                     // 1 ADC (1 DMA)               - verified
+#define EM_ADC_MODE_ADC12                                      // 2 full ADCs (2 DMA)         - need fix !
 //#define EM_ADC_MODE_ADC1234                                  // 4 full ADCs (4 DMA)         - verified
 #define EM_ADC_BIT12                                           // 12-bit mode available       - verified
 #define EM_ADC_BIT8                                            // 8-bit mode available        - verified
@@ -101,6 +101,7 @@
 
 #define EM_VREF                3300                            // main voltage reference in mV
 #define EM_ADC_VREF_CAL        *((uint16_t*)VREFINT_CAL_ADDR)  // Vref cal value
+#define EM_ADC_VREF_CALVAL     3.0
 #define EM_ADC_SMPLT_MAX       LL_ADC_SAMPLINGTIME_2CYCLES_5   // min sampling time in ticks
 #define EM_ADC_SMPLT_MAX_N     2.5                             // min smpl time value
 #define EM_ADC_TCONV8          8.5                             // ADC Tconversion ticks for 8-bit
@@ -159,12 +160,12 @@
 
 // ADC -------------------------------------------------------------
 #define EM_ADC1                ADC1
-//#define EM_ADC2                ADC2 <-------------
+#define EM_ADC2                ADC2
 //#define EM_ADC3              ADC3
 //#define EM_ADC4              ADC4
 
 #define EM_ADC1_USED
-//#define EM_ADC2_USED <-------------
+#define EM_ADC2_USED
 //#define EM_ADC3_USED
 //#define EM_ADC4_USED
 
@@ -174,7 +175,7 @@
 
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
-//#define EM_DMA_ADC2            DMA2 <---------------
+#define EM_DMA_ADC2            DMA2
 //#define EM_DMA_ADC3          DMA2
 //#define EM_DMA_ADC4          DMA2
 #define EM_DMA_LA              DMA1
@@ -184,7 +185,7 @@
 
 // DMA channels ----------------------------------------------------
 #define EM_DMA_CH_ADC1         LL_DMA_CHANNEL_1
-//#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_4 <----------------
+#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_4
 //#define EM_DMA_CH_ADC3       LL_DMA_CHANNEL_5
 //#define EM_DMA_CH_ADC4       LL_DMA_CHANNEL_4
 #define EM_DMA_CH_LA           LL_DMA_CHANNEL_5
@@ -194,7 +195,7 @@
 
 // IRQ map ---------------------------------------------------------
 #define EM_IRQN_ADC1           ADC1_2_IRQn
-//#define EM_IRQN_ADC2           ADC1_2_IRQn <------------------
+#define EM_IRQN_ADC2           ADC1_2_IRQn
 //#define EM_IRQN_ADC3         ADC3_IRQn
 //#define EM_IRQN_ADC4         ADC4_IRQn
 #define EM_IRQN_UART           USART2_IRQn
@@ -206,7 +207,7 @@
 
 // IRQ helpers -----------------------------------------------------
 #define EM_IRQ_ADC1            EM_IRQN_ADC1
-//#define EM_IRQ_ADC2            EM_IRQN_ADC2 <-------------------
+#define EM_IRQ_ADC2            EM_IRQN_ADC2
 //#define EM_IRQ_ADC3          EM_IRQN_ADC3
 //#define EM_IRQ_ADC4          EM_IRQN_ADC4
 
