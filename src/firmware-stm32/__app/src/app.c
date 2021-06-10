@@ -22,11 +22,11 @@
 #endif
 
 
-#define EM_PRI_T1       3
-#define EM_PRI_T2       1
-#define EM_PRI_T3       5
-#define EM_PRI_T4       2
-#define EM_PRI_T5       4
+#define EM_PRI_T1       3  // wd
+#define EM_PRI_T2       2  // trig_check        // CHANGED 10.6 from value 1
+#define EM_PRI_T3       5  // trig_post_count
+#define EM_PRI_T4       1  // comm_and_init     // CHANGED 10.6 from value 2
+#define EM_PRI_T5       4  // cntr
 
 void t1_wd(void* p);
 void t2_trig_check(void* p);

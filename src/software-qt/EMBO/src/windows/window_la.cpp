@@ -555,9 +555,9 @@ void WindowLa::on_actionExportSave_triggered()
 
 void WindowLa::on_actionExportPNG_triggered()
 {
-     //QString ret = m_rec.takeScreenshot("VM", m_ui->customPlot);
+     //QString ret = m_rec.takeScreenshot("LA", m_ui->customPlot);
 
-     QString path = m_rec.generateFilePath("VM", ".png");
+     QString path = m_rec.generateFilePath("LA", ".png");
      bool ret = m_ui->customPlot->savePng(path);
 
      if (ret)
@@ -568,7 +568,7 @@ void WindowLa::on_actionExportPNG_triggered()
 
 void WindowLa::on_actionExportPDF_triggered()
 {
-    QString path = m_rec.generateFilePath("VM", ".pdf");
+    QString path = m_rec.generateFilePath("LA", ".pdf");
     bool ret = m_ui->customPlot->savePdf(path);
 
     if (ret)
