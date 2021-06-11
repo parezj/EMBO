@@ -1405,6 +1405,111 @@ void WindowScope::on_actionFFTSplit_Screen_triggered(bool checked)
     m_ui->customPlot->replot();
 }
 
+void WindowScope::on_actionFFT_8192_triggered(bool checked)
+{
+    if (checked)
+    {
+        bool en = m_fft;
+
+        if (en)
+            on_pushButton_fft_on_clicked();
+
+        m_fft_size = 8192;
+
+        m_ui->actionFFT_32768->setChecked(false);
+        m_ui->actionFFT_131072->setChecked(false);
+        m_ui->actionFFT_524288->setChecked(false);
+        m_ui->actionFFT_1048576->setChecked(false);
+
+        if (en)
+            on_pushButton_fft_off_clicked();
+    }
+}
+
+void WindowScope::on_actionFFT_32768_triggered(bool checked)
+{
+    if (checked)
+    {
+        bool en = m_fft;
+
+        if (en)
+            on_pushButton_fft_on_clicked();
+
+        m_fft_size = 32768;
+
+        m_ui->actionFFT_8192->setChecked(false);
+        m_ui->actionFFT_131072->setChecked(false);
+        m_ui->actionFFT_524288->setChecked(false);
+        m_ui->actionFFT_1048576->setChecked(false);
+
+        if (en)
+            on_pushButton_fft_off_clicked();
+    }
+}
+
+void WindowScope::on_actionFFT_131072_triggered(bool checked)
+{
+    if (checked)
+    {
+        bool en = m_fft;
+
+        if (en)
+            on_pushButton_fft_on_clicked();
+
+        m_fft_size = 131072;
+
+        m_ui->actionFFT_8192->setChecked(false);
+        m_ui->actionFFT_32768->setChecked(false);
+        m_ui->actionFFT_524288->setChecked(false);
+        m_ui->actionFFT_1048576->setChecked(false);
+
+        if (en)
+            on_pushButton_fft_off_clicked();
+    }
+}
+
+void WindowScope::on_actionFFT_524288_triggered(bool checked)
+{
+    if (checked)
+    {
+        bool en = m_fft;
+
+        if (en)
+            on_pushButton_fft_on_clicked();
+
+        m_fft_size = 524288;
+
+        m_ui->actionFFT_8192->setChecked(false);
+        m_ui->actionFFT_32768->setChecked(false);
+        m_ui->actionFFT_131072->setChecked(false);
+        m_ui->actionFFT_1048576->setChecked(false);
+
+        if (en)
+            on_pushButton_fft_off_clicked();
+    }
+}
+
+void WindowScope::on_actionFFT_1048576_triggered(bool checked)
+{
+    if (checked)
+    {
+        bool en = m_fft;
+
+        if (en)
+            on_pushButton_fft_on_clicked();
+
+        m_fft_size = 1048576;
+
+        m_ui->actionFFT_8192->setChecked(false);
+        m_ui->actionFFT_32768->setChecked(false);
+        m_ui->actionFFT_131072->setChecked(false);
+        m_ui->actionFFT_524288->setChecked(false);
+
+        if (en)
+            on_pushButton_fft_off_clicked();
+    }
+}
+
 /********** ETS **********/
 
 void WindowScope::on_actionETS_Custom_triggered(bool checked)
@@ -1412,14 +1517,13 @@ void WindowScope::on_actionETS_Custom_triggered(bool checked)
     if (checked)
     {
         bool ok;
-        double value = QInputDialog::getDouble(this, "EMBO - ETS (Equivalent Time Sampling - Stroboscopic)", "Signal frequency:", 10002.779, 0.00001, 1000000000, 6, &ok);
+        double value = QInputDialog::getDouble(this, "EMBO - ETS (Equivalent Time Sampling - Stroboscopic)", "Signal frequency:", m_ets_freq, 0.00001, 1000000000, 6, &ok);
 
         if (ok)
         {
             m_ets_freq = value;
             m_ets_pwm = false;
 
-            m_ui->actionETS_Custom->setText("Custom (" + QString::number(m_ets_freq, 10, 6) +  "Hz)");
             m_ui->actionETS_PWM_Generator->setChecked(false);
 
             if (m_ets)
@@ -1438,7 +1542,6 @@ void WindowScope::on_actionETS_PWM_Generator_triggered(bool checked)
     {
         m_ets_pwm = true;
 
-        //m_ui->actionETS_Custom->setText("Custom");
         m_ui->actionETS_Custom->setChecked(false);
 
         if (m_ets)
@@ -1468,7 +1571,7 @@ void WindowScope::on_actionETS_Enabled_triggered(bool checked)
         m_status_ets->setText("");
         m_status_line3->setVisible(false);
         m_ui->actionETS_fSEQ->setText("fSEQ: ?");
-        m_ui->actionETS_coef->setText("coef: ?");
+        m_ui->actionETS_coef->setText("coef:  ?");
     }
 
 }
@@ -2963,7 +3066,7 @@ void WindowScope::createX()
                 }
             }
             */
-            m_fft_size = FFT_MAX_SIZE;
+            //m_fft_size = FFT_MAX_SIZE;
 
             double fft_x = 0;
             double fft_dt = m_daqSet.fs_real_n / (double)m_fft_size;
@@ -2978,7 +3081,7 @@ void WindowScope::createX()
             }
 
             m_ui->actionFFTwindow->setText("wind:   Hanning");
-            m_ui->actionFFTsamples->setText("size:    " + QString::number(m_fft_size));
+            //m_ui->menuFFTsamples->setText("size:    " + QString::number(m_fft_size));
             m_ui->actionFFTresolution->setText("res:      " + QString::number(fft_dt_real, 10, 2) + " Hz");
 
             if (m_fft_in != NULL)
@@ -3019,7 +3122,8 @@ void WindowScope::createX()
             for (int i = 0; i < m_daqSet.mem; i++)
                 m_t[i] *= ets_coef;
 
-            m_ui->actionETS_coef->setText("coef: " + QString::number(ets_coef, 10, 9));
+            m_ui->actionETS_fIN->setText("fIN:    " + QString::number(fin, 10, 6) +  "Hz");
+            m_ui->actionETS_coef->setText("coef:  " + QString::number(ets_coef, 10, 9));
             m_ui->actionETS_fSEQ->setText("fSEQ: " + QString::number(f_seq, 10, 2) + " Hz");
             m_status_ets->setText("ETS: " + QString::number(f_seq, 10, 2) + " Hz");
         }
@@ -3448,4 +3552,3 @@ void WindowScope::sendSet()
                                                    trigMode + "," +                            // trig mode
                                                    QString::number(m_daqSet.trig_pre));        // trig pre
 }
-

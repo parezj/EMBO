@@ -204,6 +204,16 @@ private slots:
 
     void on_actionETS_Enabled_triggered(bool checked);
 
+    void on_actionFFT_8192_triggered(bool checked);
+
+    void on_actionFFT_32768_triggered(bool checked);
+
+    void on_actionFFT_131072_triggered(bool checked);
+
+    void on_actionFFT_524288_triggered(bool checked);
+
+    void on_actionFFT_1048576_triggered(bool checked);
+
 private:
     void statusBarLoad();
     void initQcp();
@@ -252,7 +262,7 @@ private:
     QFrame* m_status_line3;
 
     /* FFT */
-    int m_fft_size = 0;
+    int m_fft_size = 131072;
     int m_fft_ch = 1;
     fftw_plan m_fft_plan = NULL;
     QVector<double> m_fft_x;
@@ -333,7 +343,7 @@ private:
     bool m_ets = false;
     bool m_ets_pwm = true;
     bool m_ets_pwm_shown = false;
-    double m_ets_freq = 0;
+    double m_ets_freq = 1001;
     double m_fin_last = 0;
 
     /* stm32 pins */

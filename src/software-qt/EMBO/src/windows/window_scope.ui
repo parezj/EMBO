@@ -6664,11 +6664,21 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
      <addaction name="actionFFTChannel_3"/>
      <addaction name="actionFFTChannel_4"/>
     </widget>
+    <widget class="QMenu" name="menuFFTsamples">
+     <property name="title">
+      <string>size</string>
+     </property>
+     <addaction name="actionFFT_8192"/>
+     <addaction name="actionFFT_32768"/>
+     <addaction name="actionFFT_131072"/>
+     <addaction name="actionFFT_524288"/>
+     <addaction name="actionFFT_1048576"/>
+    </widget>
     <addaction name="menuFFTChannel"/>
     <addaction name="actionFFTSplit_Screen"/>
     <addaction name="separator"/>
+    <addaction name="menuFFTsamples"/>
     <addaction name="actionFFTwindow"/>
-    <addaction name="actionFFTsamples"/>
     <addaction name="actionFFTresolution"/>
    </widget>
    <widget class="QMenu" name="menuETS">
@@ -6700,8 +6710,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     <addaction name="actionETS_Enabled"/>
     <addaction name="menuETS_Signal_frequency"/>
     <addaction name="separator"/>
-    <addaction name="actionETS_fSEQ"/>
+    <addaction name="actionETS_fIN"/>
     <addaction name="actionETS_coef"/>
+    <addaction name="actionETS_fSEQ"/>
    </widget>
    <addaction name="menuExport"/>
    <addaction name="menuView"/>
@@ -7209,20 +7220,6 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     </font>
    </property>
   </action>
-  <action name="actionFFTsamples">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>size:    ?</string>
-   </property>
-   <property name="font">
-    <font>
-     <family>Roboto</family>
-     <pointsize>10</pointsize>
-    </font>
-   </property>
-  </action>
   <action name="actionFFTresolution">
    <property name="enabled">
     <bool>false</bool>
@@ -7310,13 +7307,64 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>coef: ?</string>
+    <string>coef:  ?</string>
    </property>
    <property name="font">
     <font>
      <family>Roboto</family>
      <pointsize>10</pointsize>
     </font>
+   </property>
+  </action>
+  <action name="actionFFT_8192">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>8192</string>
+   </property>
+  </action>
+  <action name="actionFFT_32768">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>32768</string>
+   </property>
+  </action>
+  <action name="actionFFT_131072">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>131072</string>
+   </property>
+  </action>
+  <action name="actionFFT_524288">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>524288</string>
+   </property>
+  </action>
+  <action name="actionFFT_1048576">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>1048576</string>
+   </property>
+  </action>
+  <action name="actionETS_fIN">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>fIN:    ?</string>
    </property>
   </action>
  </widget>
