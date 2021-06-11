@@ -15,6 +15,7 @@
 #include <QMessageBox>
 #include <QGridLayout>
 
+QString WindowPwm::s_freq_real = "1000.0";
 
 WindowPwm::WindowPwm(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowPwm)
 {
@@ -102,6 +103,7 @@ void WindowPwm::on_msg_ok(const QString val1, const QString)
     }
 
     m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">" + formatFreq(val1) + " Hz&nbsp;</p>");
+    s_freq_real = val1;
 
     enableAll(true);
 }
@@ -139,6 +141,7 @@ void WindowPwm::on_msg_set(int freq, int duty1, int duty2, int offset, bool en1,
     m_ui->dial_freq->setRange(1, info->pwm_fs);
 
     m_ui->textBrowser_realFreq->setHtml("<p align=\"right\">" + formatFreq(freq_real) + " Hz&nbsp;</p>");
+    s_freq_real = freq_real;
 
     m_ignoreValuesChanged = false;
 

@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++11
 
-VERSION = 0.1.4
+VERSION = 0.1.5
 MIN_FW = 0.2.1
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

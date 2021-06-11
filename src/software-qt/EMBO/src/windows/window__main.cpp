@@ -89,6 +89,7 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
     connect(t1, SIGNAL(finished()), t1, SLOT(deleteLater()));
 
     connect(m_w_scope, &WindowScope::closing, this, &WindowMain::on_instrClose);
+    connect(m_w_scope, &WindowScope::showPwm, this, &WindowMain::on_showPwm);
     connect(m_w_la, &WindowLa::closing, this, &WindowMain::on_instrClose);
     connect(m_w_vm, &WindowVm::closing, this, &WindowMain::on_instrClose);
     connect(m_w_cntr, &WindowCntr::closing, this, &WindowMain::on_instrClose);
@@ -836,6 +837,11 @@ void WindowMain::on_actionCheck_Updates_triggered()
     */
 
     updater->checkForUpdates(UPDATE_URL);
+}
+
+void WindowMain::on_showPwm()
+{
+    m_w_pwm->show();
 }
 
 void WindowMain::updateChangelog (const QString& url)

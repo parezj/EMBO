@@ -55,6 +55,7 @@ private slots:
     void on_coreState_changed(const State newState);
     void on_msgDisplay(const QString text, MsgBoxType type);
     void on_instrClose(const char* className);
+    void on_showPwm();
 
     void on_pushButton_scope_clicked();
     void on_pushButton_la_clicked();

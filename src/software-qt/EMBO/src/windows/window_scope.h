@@ -55,6 +55,7 @@ public:
 
 signals:
     void closing(const char* className);
+    void showPwm();
 
 private slots:
     /* data msg */
@@ -197,6 +198,12 @@ private slots:
     void on_pushButton_fft_off_clicked();
     void on_pushButton_fft_on_clicked();
 
+    void on_actionETS_Custom_triggered(bool checked);
+
+    void on_actionETS_PWM_Generator_triggered(bool checked);
+
+    void on_actionETS_Enabled_triggered(bool checked);
+
 private:
     void statusBarLoad();
     void initQcp();
@@ -241,6 +248,8 @@ private:
     QFrame* m_status_line1;
     QLabel* m_status_smpl;
     QFrame* m_status_line2;
+    QLabel* m_status_ets;
+    QFrame* m_status_line3;
 
     /* FFT */
     int m_fft_size = 0;
@@ -319,6 +328,13 @@ private:
     QVector<QVector<double>> m_average_buff_ch2;
     QVector<QVector<double>> m_average_buff_ch3;
     QVector<QVector<double>> m_average_buff_ch4;
+
+    /* ETS */
+    bool m_ets = false;
+    bool m_ets_pwm = true;
+    bool m_ets_pwm_shown = false;
+    double m_ets_freq = 0;
+    double m_fin_last = 0;
 
     /* stm32 pins */
     QString m_pin1 = "?";

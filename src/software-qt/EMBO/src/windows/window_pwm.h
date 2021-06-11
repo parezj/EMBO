@@ -29,6 +29,7 @@ public:
 
     bool getInstrEnabled() override { return m_instrEnabled; };
     std::vector<Msg*>& getActiveMsgs() override { return m_activeMsgs; };
+    static const QString getFreqReal() { return s_freq_real; }
 
 signals:
     void closing(const char* className);
@@ -82,6 +83,7 @@ private:
     /* data */
     bool m_ch1_enabled = false;
     bool m_ch2_enabled = false;
+    static QString s_freq_real;
 };
 
 #endif // WINDOW_PWM_H

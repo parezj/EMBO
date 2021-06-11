@@ -6671,11 +6671,44 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     <addaction name="actionFFTsamples"/>
     <addaction name="actionFFTresolution"/>
    </widget>
+   <widget class="QMenu" name="menuETS">
+    <property name="font">
+     <font>
+      <family>Roboto</family>
+      <pointsize>10</pointsize>
+     </font>
+    </property>
+    <property name="toolTip">
+     <string>Equivalent Time Sampling (Stroboscopic)</string>
+    </property>
+    <property name="title">
+     <string>ETS</string>
+    </property>
+    <widget class="QMenu" name="menuETS_Signal_frequency">
+     <property name="font">
+      <font>
+       <family>Roboto</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>Signal frequency</string>
+     </property>
+     <addaction name="actionETS_PWM_Generator"/>
+     <addaction name="actionETS_Custom"/>
+    </widget>
+    <addaction name="actionETS_Enabled"/>
+    <addaction name="menuETS_Signal_frequency"/>
+    <addaction name="separator"/>
+    <addaction name="actionETS_fSEQ"/>
+    <addaction name="actionETS_coef"/>
+   </widget>
    <addaction name="menuExport"/>
    <addaction name="menuView"/>
    <addaction name="menuMeasure"/>
    <addaction name="menuFFT"/>
    <addaction name="menuMath"/>
+   <addaction name="menuETS"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
@@ -7211,6 +7244,73 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
    </property>
    <property name="text">
     <string>EMBO Help</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionETS_Enabled">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Enabled</string>
+   </property>
+   <property name="toolTip">
+    <string>Equivalent Time Sampling (Stroboscopic)</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionETS_PWM_Generator">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>PWM Generator (built-in)</string>
+   </property>
+  </action>
+  <action name="actionETS_Custom">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Custom</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>Roboto</family>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionETS_fSEQ">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>fSEQ: ?</string>
+   </property>
+  </action>
+  <action name="actionETS_coef">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>coef: ?</string>
    </property>
    <property name="font">
     <font>

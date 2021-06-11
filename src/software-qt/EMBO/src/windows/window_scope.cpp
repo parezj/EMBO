@@ -5,6 +5,7 @@
 
 #include "window_scope.h"
 #include "ui_window_scope.h"
+#include "window_pwm.h"
 #include "core.h"
 #include "utils.h"
 #include "settings.h"
@@ -118,6 +119,7 @@ void WindowScope::statusBarLoad()
     m_status_vcc = new QLabel(" ", this);
     m_status_seq = new QLabel("Sequence Number: 0", this);
     m_status_smpl = new QLabel("Sampling Time: 1.5", this);
+    m_status_ets = new QLabel("", this);
 
     QWidget* widget = new QWidget(this);
     QLabel* status_zoom = new QLabel("<span>Zoom with Scroll Wheel, Move with Mouse Drag&nbsp;&nbsp;<span>", this);
@@ -126,6 +128,7 @@ void WindowScope::statusBarLoad()
     m_status_vcc->setFont(font1);
     m_status_seq->setFont(font1);
     m_status_smpl->setFont(font1);
+    m_status_ets->setFont(font1);
     status_zoom->setFont(font1);
 
     QLabel* status_img = new QLabel(this);
@@ -148,10 +151,19 @@ void WindowScope::statusBarLoad()
     m_status_line2->setStyleSheet("color:gray;");
     m_status_line2->setFixedHeight(18);
 
+    m_status_line3 = new QFrame(this);
+    m_status_line3->setFrameShape(QFrame::VLine);
+    m_status_line3->setFrameShadow(QFrame::Plain);
+    m_status_line3->setStyleSheet("color:gray;");
+    m_status_line3->setFixedHeight(18);
+    m_status_line3->setVisible(false);
+
     QLabel* status_spacer2 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
     QLabel* status_spacer3 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
     QLabel* status_spacer4 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
     QLabel* status_spacer5 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer6 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
+    QLabel* status_spacer7 = new QLabel("<span>&nbsp;&nbsp;&nbsp;</span>", this);
 
     QSpacerItem* status_spacer0 = new QSpacerItem(1, 1, QSizePolicy::Expanding, QSizePolicy::Preferred);
 
@@ -165,9 +177,13 @@ void WindowScope::statusBarLoad()
     layout->addWidget(status_spacer4, 0,6,1,1,Qt::AlignVCenter);
     layout->addWidget(m_status_line2, 0,7,1,1,Qt::AlignVCenter);
     layout->addWidget(status_spacer5, 0,8,1,1,Qt::AlignVCenter);
-    layout->addWidget(m_status_seq,   0,9,1,1,Qt::AlignVCenter | Qt::AlignLeft);
-    layout->addItem(status_spacer0,   0,10,1,1,Qt::AlignVCenter);
-    layout->addWidget(status_zoom,    0,11,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_seq,   0,9,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer6, 0,10,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_line3, 0,11,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_spacer7, 0,12,1,1,Qt::AlignVCenter);
+    layout->addWidget(m_status_ets,   0,13,1,1,Qt::AlignVCenter | Qt::AlignLeft);
+    layout->addItem(status_spacer0,   0,14,1,1,Qt::AlignVCenter);
+    layout->addWidget(status_zoom,    0,15,1,1,Qt::AlignVCenter);
     layout->setMargin(0);
     layout->setSpacing(0);
 
@@ -726,6 +742,24 @@ void WindowScope::on_msg_read(const QByteArray data)
 
     m_seq_num++;
     m_status_seq->setText("Sequence Number: " + QString::number(m_seq_num));
+
+    /************** ETS ****************/
+
+    if (m_ets)
+    {
+        double fin = m_ets_freq;
+        if (m_ets_pwm)
+            fin = WindowPwm::getFreqReal().toDouble();
+
+        if (m_fin_last != fin)
+        {
+            m_last_fs = 0;
+            m_rescale_needed = true;
+            updatePanel();
+        }
+
+        m_fin_last = fin;
+    }
 
     /************* finally replot *************/
 
@@ -1369,6 +1403,74 @@ void WindowScope::on_actionFFTSplit_Screen_triggered(bool checked)
         }
     }
     m_ui->customPlot->replot();
+}
+
+/********** ETS **********/
+
+void WindowScope::on_actionETS_Custom_triggered(bool checked)
+{
+    if (checked)
+    {
+        bool ok;
+        double value = QInputDialog::getDouble(this, "EMBO - ETS (Equivalent Time Sampling - Stroboscopic)", "Signal frequency:", 10002.779, 0.00001, 1000000000, 6, &ok);
+
+        if (ok)
+        {
+            m_ets_freq = value;
+            m_ets_pwm = false;
+
+            m_ui->actionETS_Custom->setText("Custom (" + QString::number(m_ets_freq, 10, 6) +  "Hz)");
+            m_ui->actionETS_PWM_Generator->setChecked(false);
+
+            if (m_ets)
+                on_actionETS_Enabled_triggered(true);
+        }
+        else
+        {
+            m_ui->actionETS_Custom->setChecked(false);
+        }
+    }
+}
+
+void WindowScope::on_actionETS_PWM_Generator_triggered(bool checked)
+{
+    if (checked)
+    {
+        m_ets_pwm = true;
+
+        //m_ui->actionETS_Custom->setText("Custom");
+        m_ui->actionETS_Custom->setChecked(false);
+
+        if (m_ets)
+            on_actionETS_Enabled_triggered(true);
+    }
+}
+
+void WindowScope::on_actionETS_Enabled_triggered(bool checked)
+{
+    m_ets = checked;
+    m_last_fs = 0;
+    m_rescale_needed = true;
+    updatePanel();
+
+    if (checked)
+    {
+        if (m_ets_pwm && !m_ets_pwm_shown)
+        {
+            emit showPwm();
+            m_ets_pwm_shown = true;
+        }
+
+        m_status_line3->setVisible(true);
+    }
+    else
+    {
+        m_status_ets->setText("");
+        m_status_line3->setVisible(false);
+        m_ui->actionETS_fSEQ->setText("fSEQ: ?");
+        m_ui->actionETS_coef->setText("coef: ?");
+    }
+
 }
 
 /********** Cursors **********/
@@ -2902,6 +3004,25 @@ void WindowScope::createX()
                 on_pushButton_fft_on_clicked();
             }
         }
+
+        /* ETS */
+        if (m_ets)
+        {
+            double fin = m_ets_freq;
+            if (m_ets_pwm)
+                fin = WindowPwm::getFreqReal().toDouble();
+
+            qInfo() << "ETS: " << fin;
+            double ets_coef = abs(fin - m_daqSet.fs_real_n) / fin;
+            double f_seq = (1.0 / ets_coef) * m_daqSet.fs_real_n;
+
+            for (int i = 0; i < m_daqSet.mem; i++)
+                m_t[i] *= ets_coef;
+
+            m_ui->actionETS_coef->setText("coef: " + QString::number(ets_coef, 10, 9));
+            m_ui->actionETS_fSEQ->setText("fSEQ: " + QString::number(f_seq, 10, 2) + " Hz");
+            m_status_ets->setText("ETS: " + QString::number(f_seq, 10, 2) + " Hz");
+        }
     }
 
     m_last_fs = m_daqSet.fs;
@@ -3327,5 +3448,4 @@ void WindowScope::sendSet()
                                                    trigMode + "," +                            // trig mode
                                                    QString::number(m_daqSet.trig_pre));        // trig pre
 }
-
 
