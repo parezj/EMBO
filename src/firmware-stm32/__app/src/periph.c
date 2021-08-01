@@ -82,6 +82,10 @@ void adc_init_calib(ADC_TypeDef* adc)
     adc->CR2 |= ADC_CR2_TSVREFE;
 #endif
 
+#if defined(EM_ADC_DEEPPWD)
+    LL_ADC_DisableDeepPowerDown(adc);
+#endif
+
 #if defined(EM_ADC_LINREG)
     LL_ADC_EnableInternalRegulator(adc);
     for (int i = 0; i <  10000; ++i) asm("nop"); // ?

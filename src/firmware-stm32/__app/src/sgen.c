@@ -16,6 +16,21 @@
 #include <math.h>
 #include <stdlib.h>
 
+#ifndef EMBO
+#define EM_TRUE                1
+#define EM_FALSE               0
+#define EM_DAC                 DAC1                 // sgen available
+#define EM_DAC_CH              LL_DAC_CHANNEL_1     // DAC channel
+#define EM_DAC_BUFF_LEN        0                    // sgen buffer max len
+#define EM_DAC_MAX_VAL         4095.0               // DAC max value
+#define EM_DAC_TIM_MAX_F       4500000              // DAC max sampling time
+#define EM_DMA_SGEN            DMA1
+#define EM_DMA_CH_SGEN         LL_DMA_CHANNEL_3
+#define EM_TIM_SGEN            TIM6
+#define EM_TIM_SGEN_FREQ       EM_FREQ_PCLK1
+#define EM_TIM_SGEN_MAX        65535
+#define EM_SGEN_MAX_F          EM_DAC_TIM_MAX_F     // SGEN max output freq.
+#endif
 
 static void gen_const(uint32_t* data, float A, int N);
 static void gen_sine(uint32_t* data, float A, float f, int offset, int N);

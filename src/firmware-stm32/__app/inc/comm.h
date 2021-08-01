@@ -16,6 +16,22 @@
 #define APP_RX_DATA_SIZE  RX_BUFF_LEN
 #define APP_TX_DATA_SIZE  1
 
+#ifndef EMBO
+#define EM_TRUE                1
+#define EM_FALSE               0
+#define SCPI_IDN1              "Author"
+#define SCPI_IDN2              "Device"
+#define SCPI_IDN3              "0.0.1"
+#define SCPI_IDN4              "0"
+#define EM_UART                USART2               // UART periph
+#define EM_UART_RX_IRQHandler  USART2_IRQHandler    // UART IRQ handler
+#define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RTO(x);  // RTO flags needs clearing
+//#define EM_UART_CLEAR_FLAG(x)  LL_USART_ClearFlag_RXNE(x);  // RXNE flags needs clearing
+#define EM_USB                                      // if emulated USB enabled
+#define EM_UART_POLLINIT                            // if defined poll for init
+#endif
+
+
 void uart_put_text(const char* data);
 
 extern const scpi_command_t scpi_commands[];

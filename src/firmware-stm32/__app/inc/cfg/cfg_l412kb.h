@@ -109,7 +109,8 @@
 #define EM_ADC_C_F             0.000000000005 // 5pF           // ADC internal capacitance in F
 #define EM_ADC_R_OHM           1000.0                          // ADC internal impedance in Ohm
 #define EM_ADC_SMPLT_CNT       8                               // count of available smpl times
-//#define EM_ADC_LINREG                                        // before calibration enable regulator
+#define EM_ADC_LINREG                                          // before calibration enable regulator
+#define EM_ADC_DEEPPWD										   // before calibration disable deep power down mode !!
 //#define EM_ADC_CAL_EN                                        // calibration while enabled
 //#define LL_ADC_SPEC_START                                    // special start stop methods needed
 #define EM_ADC_SEQ_CONF                                        // fully configurable sequencer

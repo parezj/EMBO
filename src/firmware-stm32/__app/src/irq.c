@@ -22,7 +22,7 @@ void SysTick_Handler(void)
 #ifdef EM_HAL_SYSTICK
     HAL_IncTick();
 #endif
-    daq.uwTick++;
+    em_daq.uwTick++;
 }
 
 void SVC_Handler(void)

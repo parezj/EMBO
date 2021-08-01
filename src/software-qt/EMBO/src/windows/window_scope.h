@@ -114,6 +114,16 @@ private slots:
     void on_actionFFTChannel_3_triggered(bool checked);
     void on_actionFFTChannel_4_triggered(bool checked);
     void on_actionFFTSplit_Screen_triggered(bool checked);
+    void on_actionFFT_8192_triggered(bool checked);
+    void on_actionFFT_32768_triggered(bool checked);
+    void on_actionFFT_131072_triggered(bool checked);
+    void on_actionFFT_524288_triggered(bool checked);
+    void on_actionFFT_1048576_triggered(bool checked);
+
+    /* GUI slots - Menu - ETS */
+    void on_actionETS_Custom_triggered(bool checked);
+    void on_actionETS_PWM_Generator_triggered(bool checked);
+    void on_actionETS_Enabled_triggered(bool checked);
 
     /* GUI slots - Cursors */
     void on_cursorH_valuesChanged(int min, int max);
@@ -197,22 +207,6 @@ private slots:
     void on_pushButton_bit12_on_clicked();
     void on_pushButton_fft_off_clicked();
     void on_pushButton_fft_on_clicked();
-
-    void on_actionETS_Custom_triggered(bool checked);
-
-    void on_actionETS_PWM_Generator_triggered(bool checked);
-
-    void on_actionETS_Enabled_triggered(bool checked);
-
-    void on_actionFFT_8192_triggered(bool checked);
-
-    void on_actionFFT_32768_triggered(bool checked);
-
-    void on_actionFFT_131072_triggered(bool checked);
-
-    void on_actionFFT_524288_triggered(bool checked);
-
-    void on_actionFFT_1048576_triggered(bool checked);
 
 private:
     void statusBarLoad();

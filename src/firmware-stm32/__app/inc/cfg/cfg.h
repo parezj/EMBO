@@ -169,7 +169,11 @@
  +                                                  Common                                                   +
  +-----------------------------------------------------------------------------------------------------------*/
 
+#define EMBO
+
 // generic constants -----------------------------------------------
+#define EM_TRUE                1
+#define EM_FALSE               0
 #define EM_LN2POW14            9.70406    // ln(2^14)
 #define EM_LN2POW10            6.93147    // ln(2^10)
 #define EM_UWTICK_MAX          4294967295 // (2^32) - 1
@@ -244,38 +248,5 @@ extern const float EM_ADC_SMPLT_N[EM_ADC_SMPLT_CNT];
 #define USBD_CONFIGURATION_STRING_FS    "CDC Config"
 #define USBD_INTERFACE_STRING_FS        "CDC Interface"
 
-/*-----------------------------------------------------------------------------------------------------------+
- +                                                   utils                                                   +
- +-----------------------------------------------------------------------------------------------------------*/
-
-#define EM_TRUE                       1
-#define EM_FALSE                      0
-#define PI                            3.14159265359
-#define J(a,b)                        a##b
-#define WTF                           assert(0)
-#define NUMARGS8(...)                 (sizeof((uint8_t[]){__VA_ARGS__})/sizeof(uint8_t))
-#define BITMAP_GET_BIT(m,b,s)         (*(m + (b / s)) &  (uint8_t)(1 << (b % s)))
-#define BITMAP_SET_BIT(m,b,s)         (*(m + (b / s)) |= (uint8_t)(1 << (b % s)))
-#define U8_TO_U16(h,l)                ((uint16_t)(h << 8u) | l)
-#define U8_TO_U32(h,a,b,l)            ((uint32_t)(h << 24u) | (uint32_t)(a << 16u) | (uint32_t)(b << 8u) | l)
-#define U16_TO_U8_L(x)                ((uint8_t)(((x) & 0x00FF)))
-#define U16_TO_U8_H(x)                ((uint8_t)(((x) & 0xFF00) >> 8))
-#define U32_TO_U8_L(x)                ((uint8_t)(((x) & 0x000000FF)))
-#define U32_TO_U8_B(x)                ((uint8_t)(((x) & 0x0000FF00) >> 8))
-#define U32_TO_U8_A(x)                ((uint8_t)(((x) & 0x00FF0000) >> 16))
-#define U32_TO_U8_H(x)                ((uint8_t)(((x) & 0xFF000000) >> 24))
-
-#define Pu8 "hu"
-#define Pd8 "hd"
-#define Px8 "hx"
-#define Pu16 "hu"
-#define Pd16 "hd"
-#define Px16 "hx"
-#define Pu32 "u"
-#define Pd32 "d"
-#define Px32 "x"
-#define Pu64 "llu" // or possibly "lu"
-#define Pd64 "lld" // or possibly "ld"
-#define Px64 "llx" // or possibly "lx"
 
 #endif /* CFG_H */

@@ -10,6 +10,10 @@
 
 #ifdef EM_DAC
 
+#ifndef EMBO
+#define EM_DAC_BUFF_LEN        1000      // sgen buffer max len
+#endif
+
 enum sgen_mode
 {
     CONST    = 0,

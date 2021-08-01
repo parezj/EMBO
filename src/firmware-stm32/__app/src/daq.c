@@ -666,7 +666,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
     if (enable == EM_FALSE)
     {
         LL_TIM_DisableCounter(EM_TIM_DAQ);
-        //for (int i = 0; i < 1000; i++) __asm("nop");
+        for (int i = 0; i < 10000; i++) __asm("nop"); // wait for all conversions finish (crucial!)
     }
 
     if (self->enabled == EM_TRUE && self->dis_hold == EM_TRUE)
@@ -681,7 +681,6 @@ void daq_enable(daq_data_t* self, uint8_t enable)
 
     if (self->mode == SCOPE || self->mode == VM)
     {
-
 #if defined(EM_ADC_MODE_ADC1)
         daq_enable_adc(self, EM_ADC1, enable, EM_DMA_CH_ADC1);
 #elif defined(EM_ADC_MODE_ADC12)
@@ -694,7 +693,6 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         daq_enable_adc(self, EM_ADC3, (enable && (self->set.ch3_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC3);
         daq_enable_adc(self, EM_ADC4, (enable && (self->set.ch4_en == EM_TRUE) && (self->interleaved == EM_FALSE)), EM_DMA_CH_ADC4);
 #endif
-
     }
     else //if(self->mode == LA)
     {
@@ -715,8 +713,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         }
     }
 
-    for (int i = 0; i < 10000; i++)  // let DMA and ADC finish their jobs
-        __asm("nop");
+    //for (int i = 0; i < 10000; i++) __asm("nop");  // let DMA and ADC finish their jobs
 
     if (enable == EM_TRUE) // start the timer
     {
@@ -740,9 +737,9 @@ static void daq_enable_adc(daq_data_t* self, ADC_TypeDef* adc, uint8_t enable, u
     else
     {
 #ifdef LL_ADC_SPEC_START
-        LL_ADC_REG_StopConversionExtTrig(adc);
+    		LL_ADC_REG_StopConversionExtTrig(adc);
 #else
-        LL_ADC_REG_StopConversion(adc);
+    		LL_ADC_REG_StopConversion(adc); // if stopped anytime (not synced with timer) it could break order of channels!
 #endif
         LL_ADC_SetAnalogWDMonitChannels(adc, EM_ADC_AWD LL_ADC_AWD_DISABLE);
     }
@@ -836,6 +833,15 @@ void daq_mode_set(daq_data_t* self, enum daq_mode mode)
         daq_mem_set(self, self->save_l.mem);
         daq_trig_set(self, self->trig.save_l.ch, self->trig.save_l.val_percent, self->trig.save_l.edge,
                      self->trig.save_l.mode, self->trig.save_l.pretrigger);
+    }
+
+    if (mode == LA)
+    {
+
+    }
+    else
+    {
+
     }
 
     self->dis_hold = EM_FALSE;

@@ -56,8 +56,8 @@ volatile UBaseType_t watermark_t4 = -1;
 volatile UBaseType_t watermark_t5 = -1;
 #endif
 
-/* NOTE: without optimizations -Os (for size) vTaskDelay or context switch
- * cause probably stack overflow somewhere, because hard fault. its weird
+/* NOTE: without optimizations -Os or -O1 vTaskDelay or context switch
+ * cause probably stack overflow somewhere (hard fault) its weird...
  */
 
 void app_main(void)
@@ -96,7 +96,7 @@ void app_main(void)
 
     __enable_irq();
 
-    init_done = true;
+    //init_done = true; // WTF??? who put it here???  removed 26.7.2021
 
     vTaskStartScheduler(); // start scheduler
 
@@ -111,7 +111,7 @@ void t1_wd(void* p)
     while(1)
     {
         iwdg_feed(); // feed watchdog
-        led_blink_do(&led, daq.uwTick); // blink led optionaly
+        led_blink_do(&em_led, em_daq.uwTick); // blink led optionaly
 
         vTaskDelay(10);
 
@@ -130,7 +130,7 @@ void t2_trig_check(void* p)
     {
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
-        daq_trig_check(&daq); // check pre-trigger, auto-trigger, send Ready
+        daq_trig_check(&em_daq); // check pre-trigger, auto-trigger, send Ready
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
@@ -152,7 +152,7 @@ void t3_trig_post_count(void* p)
         ASSERT(xSemaphoreTake(sem2_trig, portMAX_DELAY) == pdPASS);
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
-        daq_trig_postcount(&daq); // count post-trigger and send Ready
+        daq_trig_postcount(&em_daq); // count post-trigger and send Ready
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
@@ -165,16 +165,16 @@ void t3_trig_post_count(void* p)
 void t4_comm_and_init(void* p)
 {
     /* init modules */
-    pwm_init(&pwm);
-    led_init(&led);
-    cntr_init(&cntr);
-    comm_init(&comm);
-    daq_init(&daq);
-    daq_mode_set(&daq, VM);
-    led_blink_set(&led, 3, EM_BLINK_LONG_MS, daq.uwTick);
+    pwm_init(&em_pwm);
+    led_init(&em_led);
+    cntr_init(&em_cntr);
+    comm_init(&em_comm);
+    daq_init(&em_daq);
+    daq_mode_set(&em_daq, VM);
+    led_blink_set(&em_led, 3, EM_BLINK_LONG_MS, em_daq.uwTick);
 
 #ifdef EM_DAC
-    sgen_init(&sgen);
+    sgen_init(&em_sgen);
 #endif
 
 #ifdef EM_SYSVIEW
@@ -199,11 +199,11 @@ void t4_comm_and_init(void* p)
         ASSERT(xSemaphoreTake(sem1_comm, portMAX_DELAY) == pdPASS);
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
-        if (comm_main(&comm) == EM_TRUE) // check if new message is in buffer
-            led_blink_set(&led, 1, EM_BLINK_SHORT_MS, daq.uwTick); // toggle green led
+        if (comm_main(&em_comm) == EM_TRUE) // check if new message is in buffer
+            led_blink_set(&em_led, 1, EM_BLINK_SHORT_MS, em_daq.uwTick); // toggle green led
 
-        comm.uart.available = EM_FALSE;
-        comm.usb.available = EM_FALSE;
+        em_comm.uart.available = EM_FALSE;
+        em_comm.usb.available = EM_FALSE;
 
         ASSERT(xSemaphoreGive(mtx1) == pdPASS);
 
@@ -222,9 +222,9 @@ void t5_cntr(void* p)
     {
         ASSERT(xSemaphoreTake(sem3_cntr, portMAX_DELAY) == pdPASS);
 
-        while (cntr.enabled)
+        while (em_cntr.enabled)
         {
-            cntr_meas(&cntr); // calc freq from counter measured data
+            cntr_meas(&em_cntr); // calc freq from counter measured data
             vTaskDelay(50);
 
 #ifdef EM_DEBUG

@@ -21,6 +21,8 @@
 #include <string.h>
 #include <math.h>
 
+static int trig_normalize_catched_idx(daq_data_t* self, int catched);
+
 
 void daq_trig_init(daq_data_t* self)
 {
@@ -64,9 +66,9 @@ void daq_trig_init(daq_data_t* self)
 
 void daq_trig_check(daq_data_t* self)
 {
-    char t_resp = '0';
+    //char t_resp = '0';
 
-    if (self->enabled == EM_TRUE) // check pre trigger
+    if (self->enabled == EM_TRUE) // check pre trigger - if sufficient amount of data available, enable trigger
     {
         self->trig.pretrig_cntr = self->uwTick - self->trig.uwtick_first;
         if (self->trig.pretrig_cntr < 0)
@@ -84,7 +86,7 @@ void daq_trig_check(daq_data_t* self)
         }
         else if (self->trig.irq_en == EM_FALSE && self->trig.pretrig_cntr > self->trig.pretrig_val && self->trig.set.mode != DISABLED) // enable IRQ
         {
-            if (self->mode == SCOPE)
+            if (self->mode == SCOPE) // enable AWD
             {
                 ASSERT(self->trig.awd_trig != 0);
 
@@ -94,7 +96,7 @@ void daq_trig_check(daq_data_t* self)
                 NVIC_EnableIRQ(self->trig.adcirq_trig);
                 LL_ADC_SetAnalogWDMonitChannels(self->trig.adc_trig, EM_ADC_AWD self->trig.awd_trig);
             }
-            else if (self->mode == LA)
+            else if (self->mode == LA) // enable EXTI
             {
                 ASSERT(self->trig.exti_trig != 0);
 
@@ -126,37 +128,64 @@ void daq_trig_check(daq_data_t* self)
 
     if (self->mode != VM) // check auto trigger & disabled trigger
     {
+        /* decide action - AUTO or DISABLED */
+
+    	uint8_t aut_or_dis = 0;
+
         if (self->enabled == EM_TRUE && // auto trigger
             self->trig.set.mode == AUTO &&
             self->trig.is_post == EM_FALSE &&
             self->trig.ready == EM_FALSE &&
             self->trig.pretrig_cntr > self->trig.auttrig_val)
         {
-            daq_enable(self, EM_FALSE);
-            self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
+        	aut_or_dis = 1;
+        }
+        else if (self->trig.set.mode == DISABLED &&  // disabled trigger
+                 self->trig.pretrig_cntr > self->trig.fullmem_val &&
+				 self->trig.ready_last == EM_FALSE)
+        {
+        	aut_or_dis = 2;
+        }
+
+        if (aut_or_dis > 0)
+        {
+        	int catched = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
+        	daq_enable(self, EM_FALSE);
+
+        	if (self->mode == SCOPE)
+        	{
+        		//self->trig.pos_last = trig_normalize_catched_idx(self, catched); // normalize catched DMA index into valid trigger index
+        		self->trig.pos_last = catched - ((catched % self->trig.buff_trig->chans) + self->trig.buff_trig->chans);
+
+                if (self->trig.pos_last < 0)
+                    self->trig.pos_last += self->trig.buff_trig->len;
+
+                self->trig.pos_frst = self->trig.pos_last - (self->trig.buff_trig->chans * (self->set.mem - 1)); // + 1
+                if (self->trig.pos_frst < 0)
+                	self->trig.pos_frst += self->trig.buff_trig->len;
+        	}
+        	else
+        	{
+                self->trig.pos_frst = catched - (1 * (self->set.mem - 1));
+                if (self->trig.pos_frst < 0)
+                	self->trig.pos_frst += self->trig.buff_trig->len;
+        	}
 
             self->trig.ready = EM_TRUE;
             self->trig.is_post = EM_FALSE;
 
-            t_resp = 'A';
-            self->trig.respond = EM_TRUE; // init async respond ReadyA
-        }
-        else if (self->trig.set.mode == DISABLED &&  // disabled trigger
-                 self->trig.pretrig_cntr > self->trig.fullmem_val)
-        {
-            self->trig.ready = EM_TRUE;
-            if (self->trig.ready_last == EM_FALSE)
-            {
-                daq_enable(self, EM_FALSE);
-                self->trig.pos_frst = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
+            if (aut_or_dis == 1)
+            	comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);       // data ready - trig auto
+            else if (aut_or_dis == 2)
+            	comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst);       // data ready - trig disabled
 
-                t_resp = 'D';
-                self->trig.respond = EM_TRUE; // init async respond ReadyD
-            }
+            //t_resp = 'A';
+            //self->trig.respond = EM_TRUE; // init async respond ReadyA
         }
     }
     self->trig.ready_last = self->trig.ready;
 
+    /*
     if (self->trig.respond == EM_TRUE) // // check async respond ReadyX
     {
         if (t_resp == 'A')
@@ -167,6 +196,7 @@ void daq_trig_check(daq_data_t* self)
         self->trig.respond = EM_FALSE;
         self->trig.forced = EM_FALSE;
     }
+    */
 }
 
 int8_t daq_trig_trigger_scope(daq_data_t* self)
@@ -175,17 +205,11 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
 
     if (!(self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE || self->trig.irq_en == EM_FALSE)) // valid trig
     {
-        int ch_cnt = self->trig.buff_trig->chans;
-        int ch_pos_trig = self->trig.dma_pos_catched % ch_cnt;
-        int ch_pos_want = ch_cnt - self->trig.order - 1;
+    	/* normalize catched DMA index into valid trigger index */
 
-        if (ch_pos_want < ch_pos_trig)
-            self->trig.dma_pos_catched -= ch_pos_trig - ch_pos_want;
-        else if (ch_pos_want > ch_pos_trig)
-            self->trig.dma_pos_catched -= ch_cnt - (ch_pos_want - ch_pos_trig);
+    	self->trig.dma_pos_catched = trig_normalize_catched_idx(self, self->trig.dma_pos_catched);
 
-        if (self->trig.dma_pos_catched < 0)
-            self->trig.dma_pos_catched += self->trig.buff_trig->len;
+        /* get few last indexes to compare (TODO ARRAY) */
 
         int prev1_last_idx = self->trig.dma_pos_catched - self->trig.buff_trig->chans;
         if (prev1_last_idx < 0)
@@ -208,6 +232,8 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
         uint16_t prev3_last_val = 0;
         uint16_t prev4_last_val = 0;
 
+        /* turn indexes into values */
+
         if (self->set.bits == B8)
         {
             prev1_last_val = (uint16_t)(((uint8_t*)(self->trig.buff_trig->data))[prev1_last_idx]);
@@ -222,6 +248,8 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
             prev3_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev3_last_idx * 2))));
             prev4_last_val = (*((uint16_t*)(((uint8_t*)self->trig.buff_trig->data)+(prev4_last_idx * 2))));
         }
+
+        /* finally compare - trigger condition */
 
         self->trig.all_cntr++;
         uint8_t switch_awd = 0;
@@ -244,7 +272,7 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
             {
                 return daq_trig_poststart(self, self->trig.dma_pos_catched); // VALID TRIG
             }
-            else // false trig, switch edges and wait for another window
+            else // invalid trig, switch edges and wait for another window
             {
                 self->trig.ignore = EM_TRUE;
                 switch_awd = 1;
@@ -354,7 +382,7 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
         if (self->trig.pos_last >= self->trig.buff_trig->len)
             self->trig.pos_last -= self->trig.buff_trig->len;
 
-        self->trig.pos_frst = self->trig.pos_trig - (self->set.mem - self->trig.posttrig_size) + 1; // +1 ??
+        self->trig.pos_frst = self->trig.pos_trig - (self->set.mem - self->trig.posttrig_size) + 1;
         if (self->trig.pos_frst < 0)
             self->trig.pos_frst += self->trig.buff_trig->len;
     }
@@ -394,11 +422,18 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             //self->trig.respond = EM_TRUE; // init async respond ReadyX
 
             if (self->trig.forced == EM_TRUE)
+            {
                 comm_daq_ready(comm_ptr, EM_RESP_RDY_F, self->trig.pos_frst);   // data ready - trig forced
+            	self->trig.forced = EM_FALSE;
+            }
             else if (self->trig.set.mode == SINGLE)
-                comm_daq_ready(comm_ptr, EM_RESP_RDY_S, self->trig.pos_frst);   // data ready - trig single
+            {
+            	comm_daq_ready(comm_ptr, EM_RESP_RDY_S, self->trig.pos_frst);   // data ready - trig single
+            }
             else
-                comm_daq_ready(comm_ptr, EM_RESP_RDY_N, self->trig.pos_frst);   // data ready - trig normal
+            {
+            	comm_daq_ready(comm_ptr, EM_RESP_RDY_N, self->trig.pos_frst);   // data ready - trig normal
+            }
 
             break;
         }
@@ -705,4 +740,24 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 
     daq_enable(self, EM_TRUE);
     return 0;
+}
+
+static int trig_normalize_catched_idx(daq_data_t* self, int catched)
+{
+	/* normalize catched DMA index into valid trigger index */
+	int ret = catched;
+    int ch_cnt = self->trig.buff_trig->chans;
+    int ch_pos_trig = catched % ch_cnt;
+    int ch_pos_want = ch_cnt - self->trig.order - 1;
+
+    if (ch_pos_want == ch_pos_trig)
+    	__asm("nop");
+    else if (ch_pos_want < ch_pos_trig)
+    	ret -= ch_pos_trig - ch_pos_want;
+    else if (ch_pos_want > ch_pos_trig)
+    	ret -= ch_cnt - (ch_pos_want - ch_pos_trig);
+
+    if (ret < 0)
+    	ret += self->trig.buff_trig->len;
+    return ret;
 }

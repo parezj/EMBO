@@ -8,6 +8,11 @@
 
 #include "main.h"
 
+#ifndef EMBO
+#define EM_LED_PORT            GPIOB    // main LED port
+#define EM_LED_PIN             3        // main LED pin
+#define EM_LED_INVERTED                 // inverted behavior
+#endif
 
 void led_init(led_data_t* self)
 {

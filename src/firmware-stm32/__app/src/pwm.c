@@ -13,6 +13,21 @@
 #include <string.h>
 #include <math.h>
 
+#ifndef EMBO
+#define EM_TRUE                1
+#define EM_FALSE               0
+#define EM_TIM_PWM1            TIM2
+#define EM_TIM_PWM1_MAX        65535
+#define EM_TIM_PWM1_FREQ       EM_FREQ_PCLK1
+#define EM_TIM_PWM1_CH         LL_TIM_CHANNEL_CH1
+#define EM_TIM_PWM1_CHN(a)     a##CH1
+#define EM_TIM_PWM2            TIM4
+#define EM_TIM_PWM2_MAX        65535
+#define EM_TIM_PWM2_FREQ       EM_FREQ_PLLCLK2_x2
+#define EM_TIM_PWM2_CH         LL_TIM_CHANNEL_CH3
+#define EM_TIM_PWM2_CHN(a)     a##CH3
+#define EM_PWM_MAX_F           16000000   // PWM max freq
+#endif
 
 void pwm_init(pwm_data_t* self)
 {

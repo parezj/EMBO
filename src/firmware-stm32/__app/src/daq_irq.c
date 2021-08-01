@@ -30,7 +30,7 @@ static void la_irq_unused(void);
 #if defined(EM_ADC1_USED) || defined(EM_ADC2_USED)
 void EM_ADC12_IRQh(void)
 {
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
+    em_daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(em_daq.trig.buff_trig->len, em_daq.trig.dma_ch_trig, em_daq.trig.dma_trig); // critical
 
     traceISR_ENTER();
     uint8_t ret = -1;
@@ -38,10 +38,10 @@ void EM_ADC12_IRQh(void)
 #ifdef EM_ADC1_USED
     if (LL_ADC_IsActiveFlag_AWD1(ADC1) == 1) // ADC1 AWD triggered
     {
-        NVIC_DisableIRQ(daq.trig.adcirq_trig);
-        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+        NVIC_DisableIRQ(em_daq.trig.adcirq_trig);
+        LL_ADC_SetAnalogWDMonitChannels(em_daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
 
-        ret = daq_trig_trigger_scope(&daq);
+        ret = daq_trig_trigger_scope(&em_daq);
         LL_ADC_ClearFlag_AWD1(ADC1);
     }
 #endif
@@ -49,10 +49,10 @@ void EM_ADC12_IRQh(void)
 #ifdef EM_ADC2_USED
     else if (LL_ADC_IsActiveFlag_AWD1(ADC2) == 1) // ADC2 AWD triggered
     {
-        NVIC_DisableIRQ(daq.trig.adcirq_trig);
-        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+        NVIC_DisableIRQ(em_daq.trig.adcirq_trig);
+        LL_ADC_SetAnalogWDMonitChannels(em_daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
 
-        ret = daq_trig_trigger_scope(&daq);
+        ret = daq_trig_trigger_scope(&em_daq);
         LL_ADC_ClearFlag_AWD1(ADC2);
     }
 #endif
@@ -70,17 +70,17 @@ void EM_ADC12_IRQh(void)
 #if defined(EM_ADC3_USED)
 void EM_ADC3_IRQh(void)
 {
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
+    em_daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(em_daq.trig.buff_trig->len, em_daq.trig.dma_ch_trig, em_daq.trig.dma_trig); // critical
 
     traceISR_ENTER();
     uint8_t ret = -1;
 
     if (LL_ADC_IsActiveFlag_AWD1(ADC3) == 1) // ADC3 AWD triggered
     {
-        NVIC_DisableIRQ(daq.trig.adcirq_trig);
-        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+        NVIC_DisableIRQ(em_daq.trig.adcirq_trig);
+        LL_ADC_SetAnalogWDMonitChannels(em_daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
 
-        ret = daq_trig_trigger_scope(&daq);
+        ret = daq_trig_trigger_scope(&em_daq);
         LL_ADC_ClearFlag_AWD1(ADC3);
     }
 
@@ -95,17 +95,17 @@ void EM_ADC3_IRQh(void)
 #if defined(EM_ADC4_USED)
 void EM_ADC4_IRQh(void)
 {
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, daq.trig.dma_trig); // critical
+    em_daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(em_daq.trig.buff_trig->len, em_daq.trig.dma_ch_trig, em_daq.trig.dma_trig); // critical
 
     traceISR_ENTER();
     uint8_t ret = -1;
 
     if (LL_ADC_IsActiveFlag_AWD1(ADC4) == 1) // ADC4 AWD triggered
     {
-        NVIC_DisableIRQ(daq.trig.adcirq_trig);
-        LL_ADC_SetAnalogWDMonitChannels(daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
+        NVIC_DisableIRQ(em_daq.trig.adcirq_trig);
+        LL_ADC_SetAnalogWDMonitChannels(em_daq.trig.adc_trig, EM_ADC_AWD LL_ADC_AWD_DISABLE);
 
-        ret = daq_trig_trigger_scope(&daq);
+        ret = daq_trig_trigger_scope(&em_daq);
         LL_ADC_ClearFlag_AWD1(ADC4);
     }
 
@@ -122,7 +122,7 @@ void EM_ADC4_IRQh(void)
 #ifdef EM_LA_CH1_IRQh
 void EM_LA_CH1_IRQh(void)
 {
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
+    em_daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(em_daq.trig.buff_trig->len, em_daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
 #ifdef EM_LA_IRQ1_CH1
     EM_LA_IRQ1_CH1();
@@ -143,7 +143,7 @@ void EM_LA_CH1_IRQh(void)
 #ifdef EM_LA_CH2_IRQh
 void EM_LA_CH2_IRQh(void)
 {
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
+    em_daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(em_daq.trig.buff_trig->len, em_daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
 #ifdef EM_LA_IRQ2_CH1
     EM_LA_IRQ2_CH1();
@@ -163,7 +163,7 @@ void EM_LA_CH2_IRQh(void)
 #ifdef EM_LA_CH3_IRQh
 void EM_LA_CH3_IRQh(void)
 {
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
+    em_daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(em_daq.trig.buff_trig->len, em_daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
 #ifdef EM_LA_IRQ3_CH1
     EM_LA_IRQ3_CH1();
@@ -183,7 +183,7 @@ void EM_LA_CH3_IRQh(void)
 #ifdef EM_LA_CH4_IRQh
 void EM_LA_CH4_IRQh(void)
 {
-    daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(daq.trig.buff_trig->len, daq.trig.dma_ch_trig, EM_DMA_LA); // critical
+    em_daq.trig.dma_pos_catched = EM_DMA_LAST_IDX(em_daq.trig.buff_trig->len, em_daq.trig.dma_ch_trig, EM_DMA_LA); // critical
 
 #ifdef EM_LA_IRQ4_CH1
     EM_LA_IRQ4_CH1();
@@ -221,7 +221,7 @@ void la_irq_ch1(void)
 #endif
     {
         NVIC_DisableIRQ(EM_LA_IRQ_EXTI1);
-        ret = daq_trig_trigger_la(&daq);
+        ret = daq_trig_trigger_la(&em_daq);
     }
     EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI1);
 #ifdef EM_GPIO_EXTI_R_F
@@ -244,7 +244,7 @@ void la_irq_ch2(void)
 #endif
     {
         NVIC_DisableIRQ(EM_LA_IRQ_EXTI2);
-        ret = daq_trig_trigger_la(&daq);
+        ret = daq_trig_trigger_la(&em_daq);
     }
     EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI2);
 #ifdef EM_GPIO_EXTI_R_F
@@ -268,7 +268,7 @@ void la_irq_ch3(void)
 #endif
     {
         NVIC_DisableIRQ(EM_LA_IRQ_EXTI3);
-        ret = daq_trig_trigger_la(&daq);
+        ret = daq_trig_trigger_la(&em_daq);
     }
     EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI3);
 #ifdef EM_GPIO_EXTI_R_F
@@ -291,7 +291,7 @@ void la_irq_ch4(void)
 #endif
     {
         NVIC_DisableIRQ(EM_LA_IRQ_EXTI4);
-        ret = daq_trig_trigger_la(&daq);
+        ret = daq_trig_trigger_la(&em_daq);
     }
     EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI4);
 #ifdef EM_GPIO_EXTI_R_F

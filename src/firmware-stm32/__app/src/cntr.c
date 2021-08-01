@@ -3,7 +3,6 @@
  * Author: Jakub Parez <parez.jakub@gmail.com>
  */
 
-#include "cfg.h"
 #include "cntr.h"
 
 #include "app_sync.h"
@@ -14,6 +13,28 @@
 
 #include <string.h>
 
+#ifndef EMBO
+#define EM_TRUE                1
+#define EM_FALSE               0
+#define EM_IT_PRI_CNTR         4   // overflow bit
+#define EM_CNTR_IRQ            TIM1_UP_TIM16_IRQn
+#define EM_TIM_CNTR            TIM1
+#define EM_TIM_CNTR_FREQ       EM_FREQ_PCLK2
+#define EM_TIM_CNTR_UP_IRQh    TIM1_UP_TIM16_IRQHandler
+#define EM_TIM_CNTR_MAX        65535
+#define EM_TIM_CNTR_CH         LL_TIM_CHANNEL_CH1 // direct input capture - channel
+#define EM_TIM_CNTR_CH2        LL_TIM_CHANNEL_CH2 // indirect input capture - channel
+#define EM_TIM_CNTR_CCR        CCR1   // direct input capture - ccr register
+#define EM_TIM_CNTR_CCR2       CCR3   // ovf store - ccr register
+#define EM_TIM_CNTR_CC(a)      a##CC1 // direct input capture - cc name
+#define EM_TIM_CNTR_CC2(a)     a##CC2 // indirect input capture - cc name
+#define EM_TIM_CNTR_OVF(a)     a##CH3 // ovf store
+#define EM_TIM_CNTR_PSC_FAST   8      // prescaler for fast mode
+#define EM_DMA_CNTR            DMA1
+#define EM_DMA_CNTR2           DMA1
+#define EM_DMA_CH_CNTR         LL_DMA_CHANNEL_2
+#define EM_DMA_CH_CNTR2        LL_DMA_CHANNEL_3
+#endif
 
 static void cntr_reset(cntr_data_t* self);
 

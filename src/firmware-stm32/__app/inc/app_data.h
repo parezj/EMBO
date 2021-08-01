@@ -14,14 +14,14 @@
 #include "pwm.h"
 #include "sgen.h"
 
-pwm_data_t pwm;
-led_data_t led;
-daq_data_t daq;
-cntr_data_t cntr;
-comm_data_t comm;
+pwm_data_t em_pwm;
+led_data_t em_led;
+daq_data_t em_daq;
+cntr_data_t em_cntr;
+comm_data_t em_comm;
 
 #ifdef EM_DAC
-sgen_data_t sgen;
+sgen_data_t em_sgen;
 #endif
 
 #endif /* APP_DATA_H */

@@ -13,6 +13,7 @@
 #include "FreeRTOS.h"
 #include "semphr.h"
 
+
 /* UART IRQ handler */
 void EM_UART_RX_IRQHandler(void)
 {
@@ -23,24 +24,24 @@ void EM_UART_RX_IRQHandler(void)
     {
         char rx = LL_USART_ReceiveData8(EM_UART);
 
-        if (comm.uart.available == EM_FALSE && comm.usb.available == EM_FALSE)
+        if (em_comm.uart.available == EM_FALSE && em_comm.usb.available == EM_FALSE)
         {
-            comm.uart.rx_buffer[comm.uart.rx_index++] = rx;
+            em_comm.uart.rx_buffer[em_comm.uart.rx_index++] = rx;
 
-            if (comm.uart.rx_index >= RX_BUFF_LAST)
-                comm.uart.rx_index = 0;
+            if (em_comm.uart.rx_index >= RX_BUFF_LAST)
+                em_comm.uart.rx_index = 0;
 
-            comm.uart.last = EM_TRUE;
-            comm.usb.last = EM_FALSE;
+            em_comm.uart.last = EM_TRUE;
+            em_comm.usb.last = EM_FALSE;
 
 #ifdef EM_UART_CLEAR_FLAG
             EM_UART_CLEAR_FLAG(EM_UART);
 #endif
 
             /* new message detected */
-            if (rx == '\n' && comm.uart.rx_index > 1 && comm.uart.rx_buffer[comm.uart.rx_index - 2] == '\r')
+            if (rx == '\n' && em_comm.uart.rx_index > 1 && em_comm.uart.rx_buffer[em_comm.uart.rx_index - 2] == '\r')
             {
-                comm.uart.available = EM_TRUE;
+                em_comm.uart.available = EM_TRUE;
                 exit = -1;
 
                 portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;
