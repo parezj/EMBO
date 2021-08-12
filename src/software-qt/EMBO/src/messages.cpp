@@ -114,7 +114,7 @@ void Msg_SYS_Lims::on_dataRx()
     devInfo->adc_dualmode = tokens[6].contains('D');
     devInfo->adc_interleaved = tokens[6].contains('I');
     devInfo->adc_bit8 = tokens[7] == '1';
-    devInfo->dac = tokens[8] == '1';
+    devInfo->dac = tokens[8].toInt();
     devInfo->vm_fs = tokens[9].toInt();
     devInfo->vm_mem = tokens[10].toInt();
     devInfo->cntr_timeout = tokens[11].toInt();
@@ -406,14 +406,14 @@ void Msg_SGEN_Set::on_dataRx()
     {
         QStringList tokens = m_rxData.split(EMBO_DELIM2, QString::SkipEmptyParts);
 
-        if (tokens.size() != 7)
+        if (tokens.size() != 8)
         {
             emit err(INVALID_MSG + m_rxData, CRITICAL, true);
             return;
         }
 
-        emit result(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt(),
-                    (SgenMode)tokens[3].toInt(), tokens[4] == "1", tokens[5], tokens[6]);
+        emit result(tokens[0].toInt(), tokens[1].toInt(), tokens[2].toInt(), tokens[3].toInt(),
+                    (SgenMode)tokens[4].toInt(), tokens[5] == "1", tokens[6], tokens[7]);
     }
     else
     {

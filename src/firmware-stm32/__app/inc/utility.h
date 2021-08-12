@@ -58,7 +58,8 @@ char* ftoa2(double f, char * buf, int precision);
 #define PI                            3.14159265359
 #define J(a,b)                        a##b
 #define WTF                           assert(0)
-#define NUMARGS8(...)                 (sizeof((uint8_t[]){__VA_ARGS__})/sizeof(uint8_t))
+#define ARRAYSIZE(a)				  (sizeof(a)/sizeof(a[0]))
+#define ARGSIZE(...)                  (sizeof((uint8_t[]){__VA_ARGS__})/sizeof(uint8_t))
 #define BITMAP_GET_BIT(m,b,s)         (*(m + (b / s)) &  (uint8_t)(1 << (b % s)))
 #define BITMAP_SET_BIT(m,b,s)         (*(m + (b / s)) |= (uint8_t)(1 << (b % s)))
 #define U8_TO_U16(h,l)                ((uint16_t)(h << 8u) | l)

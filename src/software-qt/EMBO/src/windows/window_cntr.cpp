@@ -229,7 +229,7 @@ void WindowCntr::enableAll(bool enable)
             m_ui->pushButton_enable->hide();
             m_ui->pushButton_disable->show();
 
-            m_status_enabled->setText(" Enabled");
+            m_status_enabled->setText(" ON");
             m_timer_render->start(TIMER_CNTR_RENDER);
         }
         else
@@ -237,7 +237,7 @@ void WindowCntr::enableAll(bool enable)
             m_ui->pushButton_enable->show();
             m_ui->pushButton_disable->hide();
 
-            m_status_enabled->setText(" Disabled");
+            m_status_enabled->setText(" OFF");
             m_timer_render->stop();
         }
     }

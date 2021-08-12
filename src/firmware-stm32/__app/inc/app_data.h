@@ -15,10 +15,13 @@
 #include "sgen.h"
 
 pwm_data_t em_pwm;
-led_data_t em_led;
 daq_data_t em_daq;
 cntr_data_t em_cntr;
 comm_data_t em_comm;
+
+#ifdef EM_LED
+led_data_t em_led;
+#endif
 
 #ifdef EM_DAC
 sgen_data_t em_sgen;

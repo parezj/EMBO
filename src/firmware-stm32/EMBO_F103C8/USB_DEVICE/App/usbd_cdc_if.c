@@ -294,21 +294,21 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   }
   while(result != USBD_OK);
 
-  if (comm.uart.available == EM_FALSE && comm.usb.available == EM_FALSE)
+  if (em_comm.uart.available == EM_FALSE && em_comm.usb.available == EM_FALSE)
   {
       while (len--)
       {
-         comm.usb.rx_buffer[comm.usb.rx_index++] = *Buf;
+         em_comm.usb.rx_buffer[em_comm.usb.rx_index++] = *Buf;
 
-         if (comm.usb.rx_index >= RX_BUFF_LAST)
-             comm.usb.rx_index = 0;
+         if (em_comm.usb.rx_index >= RX_BUFF_LAST)
+             em_comm.usb.rx_index = 0;
 
-         comm.uart.last = EM_FALSE;
-         comm.usb.last = EM_TRUE;
+         em_comm.uart.last = EM_FALSE;
+         em_comm.usb.last = EM_TRUE;
 
-         if (*Buf == '\n' && comm.usb.rx_index > 1 && comm.usb.rx_buffer[comm.usb.rx_index - 2] == '\r')
+         if (*Buf == '\n' && em_comm.usb.rx_index > 1 && em_comm.usb.rx_buffer[em_comm.usb.rx_index - 2] == '\r')
          {
-             comm.usb.available = EM_TRUE;
+             em_comm.usb.available = EM_TRUE;
              exit = -1;
 
              portBASE_TYPE xHigherPriorityTaskWoken = pdFALSE;

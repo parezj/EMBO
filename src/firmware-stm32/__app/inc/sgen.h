@@ -26,21 +26,37 @@ enum sgen_mode
 
 typedef struct
 {
+	DAC_TypeDef* dac;
+	uint32_t dac_ch;
+	uint32_t dac_trig_src;
+	DMA_TypeDef* dma;
+	uint32_t dma_ch;
+	TIM_TypeDef* tim;
+	uint32_t tim_ch;
+
     uint8_t enabled;
     enum sgen_mode mode;
-    int freq;
-    float ampl;
+    int freq;	// 1 - fMAX
+    float ampl; // 0 - 100 %
+    int offset; // 0 - 100 %
+    int phase;  // 0 - 360 °
     int tim_f;
     double tim_f_real;
+    double freq_real;
     int samples;
-    int offset;
     uint32_t data[EM_DAC_BUFF_LEN];
+}sgen_ch_t;
+
+typedef struct
+{
+	sgen_ch_t ch1;
+#ifdef EM_DAC2
+	sgen_ch_t ch2;
+#endif
 }sgen_data_t;
 
-
 void sgen_init(sgen_data_t* self);
-void sgen_enable(sgen_data_t* self, enum sgen_mode mode, float A, float f, int offset);
-void sgen_disable(sgen_data_t* self);
+void sgen_set(sgen_data_t* self, sgen_ch_t* ch, enum sgen_mode mode, float A, float f, int offset, int phase, uint8_t en);
 
 #endif
 

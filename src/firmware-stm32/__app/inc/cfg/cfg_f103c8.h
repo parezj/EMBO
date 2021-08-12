@@ -70,15 +70,21 @@
 //#define EM_UART_POLLINIT                          // if defined poll for init
 
 // LED -------------------------------------------------------------
+#define EM_LED										// LED enabled
 #define EM_LED_PORT            GPIOC                // main LED port
 #define EM_LED_PIN             13                   // main LED pin
 //#define EM_LED_INVERTED                           // inverted behavior
 
 // DAC -------------------------------------------------------------
-//#define EM_DAC               DAC1                 // sgen available
-//#define EM_DAC_CH            LL_DAC_CHANNEL_1     // DAC channel
-#define EM_DAC_BUFF_LEN        0                    // buffer max len
-//#define EM_DAC_MAX_VAL       4095.0               // DAC max value
+//#define EM_DAC               DAC1                 		// sgen ch.1 available
+//#define EM_DAC_CH            LL_DAC_CHANNEL_1     		// sgen ch.1 channel
+//#define EM_DAC_SRC		   LL_DAC_TRIG_EXT_TIM6_TRGO	// sgen ch.1 trigger source
+//#define EM_DAC2              DAC1                 		// sgen ch.2 available
+//#define EM_DAC2_CH           LL_DAC_CHANNEL_2     		// sgen ch.2 channel
+//#define EM_DAC2_SRC		   LL_DAC_TRIG_EXT_TIM7_TRGO	// sgen ch.2 trigger source
+#define EM_DAC_BUFF_LEN        0                    		// buffer max len
+//#define EM_DAC_MAX_VAL       4095.0               		// DAC max value
+//#define EM_DAC_TIM_MAX_F     4500000                      // DAC max sampling time
 
 // GPIO ------------------------------------------------------------
 #define EM_GPIO_EXTI_SRC       LL_GPIO_AF_SetEXTISource     // GPIO EXTI source
@@ -146,6 +152,9 @@
 //#define EM_TIM_SGEN          TIM6
 //#define EM_TIM_SGEN_FREQ     EM_FREQ_PCLK1
 //#define EM_TIM_SGEN_MAX      65535
+//#define EM_TIM_SGEN2         TIM7
+//#define EM_TIM_SGEN2_FREQ    EM_FREQ_PCLK1
+//#define EM_TIM_SGEN2_MAX     65535
 
 // max values ------------------------------------------------------
 #ifdef EM_SYSVIEW
@@ -185,6 +194,7 @@
 #define EM_DMA_CNTR            DMA1
 #define EM_DMA_CNTR2           DMA1
 //#define EM_DMA_SGEN          DMA1
+//#define EM_DMA_SGEN2         DMA1
 
 // DMA channels ----------------------------------------------------
 #define EM_DMA_CH_ADC1         LL_DMA_CHANNEL_1
@@ -195,6 +205,7 @@
 #define EM_DMA_CH_CNTR         LL_DMA_CHANNEL_2
 #define EM_DMA_CH_CNTR2        LL_DMA_CHANNEL_3
 //#define EM_DMA_CH_SGEN       LL_DMA_CHANNEL_2
+//#define EM_DMA_CH_SGEN2      LL_DMA_CHANNEL_4
 
 // IRQ map ---------------------------------------------------------
 #define EM_IRQN_ADC1           ADC1_2_IRQn

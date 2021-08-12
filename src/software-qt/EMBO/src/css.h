@@ -229,6 +229,7 @@
                                 QSpinBox::down-button:hover { image: url(:/main/img/arrow_down4b.png); } \
                                 QSpinBox:disabled { color: black; }"
 
+// special style
 #define CSS_DSPINBOX           "QDoubleSpinBox { background-color: white;border: 1px solid gray; border-radius:10px; color:black; \
                                                  text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  } \
                                 QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up4.png); } \
@@ -247,6 +248,19 @@
                                 QDoubleSpinBox::down-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down4.png); } \
                                 QDoubleSpinBox::up-button:hover { image: url(:/main/img/arrow_up4b.png); } \
                                 QDoubleSpinBox::down-button:hover { image: url(:/main/img/arrow_down4b.png); }"
+
+// like spinbox
+#define CSS_DSPINBOX2          "QDoubleSpinBox { background-color: rgba(255,255,255, 1.0);border: 1px solid gray; border-radius:10px; \
+                                text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500;  } \
+                                QDoubleSpinBox::up-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up4.png); } \
+                                QDoubleSpinBox::down-button { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down4.png); } \
+                                QDoubleSpinBox::up-button:hover { image: url(:/main/img/arrow_up4b.png); } \
+                                QDoubleSpinBox::down-button:hover { image: url(:/main/img/arrow_down4b.png); } \
+                                QDoubleSpinBox:disabled { background-color: rgba(240,240,240, 1.0); border: 1px transparent; border-radius:10px; \
+                                                          border-color: transparent; border-width: 1px; border-style:inset; border-radius:10px; \
+                                                          text-align:right;font-family:'Roboto Mono Medium','Roboto'; font-size:16pt; font-weight:500; } \
+                                QDoubleSpinBox::up-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_up3.png); } \
+                                QDoubleSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: url(:/main/img/arrow_down3.png); }"
 
 /* trigger sliders */
 

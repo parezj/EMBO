@@ -106,7 +106,7 @@ public:
     bool adc_dualmode;
     bool adc_interleaved;
     bool adc_bit8;
-    bool dac;
+    int dac;
     int vm_mem;
     int vm_fs;
     int cntr_timeout;

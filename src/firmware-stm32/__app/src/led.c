@@ -4,8 +4,10 @@
  */
  
 #include "cfg.h"
-#include "led.h"
 
+#ifdef EM_LED
+
+#include "led.h"
 #include "main.h"
 
 #ifndef EMBO
@@ -24,7 +26,6 @@ void led_init(led_data_t* self)
 
 void led_set(led_data_t* self, uint8_t enable)
 {
-#ifdef EM_LED_PORT
     self->enabled = enable;
 
 #ifdef EM_LED_INVERTED
@@ -38,23 +39,19 @@ void led_set(led_data_t* self, uint8_t enable)
     else
         EM_LED_PORT->BRR |= (1 << EM_LED_PIN);   // 0
 #endif
-#endif
 }
 
 void led_toggle(led_data_t* self)
 {
-#ifdef EM_LED_PORT
     if (self->enabled == EM_TRUE)
         EM_LED_PORT->BSRR |= (1 << EM_LED_PIN);  // 1
     else
         EM_LED_PORT->BRR |= (1 << EM_LED_PIN);   // 0
     self->enabled = !self->enabled;
-#endif
 }
 
 void led_blink_set(led_data_t* self, int num, int ms, uint32_t _uwTick)
 {
-#ifdef EM_LED_PORT
     self->num = (num * 2) - 1;
 #ifdef EM_LED_INVERTED
     self->num++;
@@ -62,12 +59,10 @@ void led_blink_set(led_data_t* self, int num, int ms, uint32_t _uwTick)
     self->ms = ms;
     self->uwtick_first = _uwTick;
     led_set(self, 1);
-#endif
 }
 
 void led_blink_do(led_data_t* self, uint32_t _uwTick)
 {
-#ifdef EM_LED_PORT
     if (self->num > 0)
     {
         int diff;
@@ -83,5 +78,6 @@ void led_blink_do(led_data_t* self, uint32_t _uwTick)
             led_toggle(self);
         }
     }
-#endif
+
 }
+#endif

@@ -111,7 +111,10 @@ void t1_wd(void* p)
     while(1)
     {
         iwdg_feed(); // feed watchdog
+
+#ifdef EM_LED
         led_blink_do(&em_led, em_daq.uwTick); // blink led optionaly
+#endif
 
         vTaskDelay(10);
 
@@ -166,12 +169,15 @@ void t4_comm_and_init(void* p)
 {
     /* init modules */
     pwm_init(&em_pwm);
-    led_init(&em_led);
     cntr_init(&em_cntr);
     comm_init(&em_comm);
     daq_init(&em_daq);
     daq_mode_set(&em_daq, VM);
+
+#ifdef EM_LED
+    led_init(&em_led);
     led_blink_set(&em_led, 3, EM_BLINK_LONG_MS, em_daq.uwTick);
+#endif
 
 #ifdef EM_DAC
     sgen_init(&em_sgen);
@@ -200,7 +206,11 @@ void t4_comm_and_init(void* p)
         ASSERT(xSemaphoreTake(mtx1, portMAX_DELAY) == pdPASS);
 
         if (comm_main(&em_comm) == EM_TRUE) // check if new message is in buffer
+#ifdef EM_LED
             led_blink_set(&em_led, 1, EM_BLINK_SHORT_MS, em_daq.uwTick); // toggle green led
+#else
+        	__asm("nop");
+#endif
 
         em_comm.uart.available = EM_FALSE;
         em_comm.usb.available = EM_FALSE;

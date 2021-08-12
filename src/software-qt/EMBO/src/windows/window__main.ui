@@ -2051,7 +2051,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>30</y>
+        <y>50</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -2077,7 +2077,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
+        <y>70</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -2103,7 +2103,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>90</x>
-        <y>50</y>
+        <y>70</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -2129,7 +2129,7 @@ QPushButton:pressed
       <property name="geometry">
        <rect>
         <x>90</x>
-        <y>30</y>
+        <y>50</y>
         <width>71</width>
         <height>16</height>
        </rect>
@@ -2156,6 +2156,58 @@ QPushButton:pressed
        <rect>
         <x>90</x>
         <y>10</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="text">
+       <string>-</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_29">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>71</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Roboto</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+        <kerning>true</kerning>
+       </font>
+      </property>
+      <property name="text">
+       <string>• Mode:</string>
+      </property>
+      <property name="textFormat">
+       <enum>Qt::AutoText</enum>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_sgen_mode">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>30</y>
         <width>71</width>
         <height>16</height>
        </rect>

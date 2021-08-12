@@ -379,21 +379,25 @@ void WindowMain::setConnected()
     m_ui->label_pwm_freq->setText(format_unit(info->pwm_fs, "Hz", 0));
     m_ui->label_pwm_pins->setText(info->pins_pwm.replace("-", ", "));
 
-    if (info->dac)
+    if (info->dac > 0)
     {
         m_ui->label_sgen_freq->setText(format_unit(info->sgen_maxf, "Hz", 3));
+        m_ui->label_sgen_mode->setText(info->dac == 2 ? "2ch" : "1ch");
         m_ui->label_sgen_mem->setText(format_unit(info->sgen_maxmem, "S", 0));
-        m_ui->label_sgen_pins->setText(info->pins_sgen);
+        m_ui->label_sgen_pins->setText(info->pins_sgen.replace("-", ", "));
         m_ui->groupBox_sgen->show();
     }
     else m_ui->groupBox_sgen->hide();
 
+    QString s1 = info->pwm2 ? "s" : "";
+    QString s2 = info->dac == 2 ? "s" : "";
+
     m_w_scope->setWindowTitle("EMBO - Oscilloscope [" + QString::number(info->daq_ch) + " channel] (pins: " + m_ui->label_scope_pins->text() + ")");
     m_w_la->setWindowTitle("EMBO - Logic Analyzer [" + QString::number(info->daq_ch) + " channel] (pins: " + m_ui->label_la_pins->text() + ")");
     m_w_vm->setWindowTitle("EMBO - Voltmeter [" + QString::number(info->daq_ch) + " channel] (Pins: " + m_ui->label_vm_pins->text() + ")");
-    m_w_cntr->setWindowTitle("EMBO - Counter (pin: " + m_ui->label_cntr_pins->text() + ")");
-    m_w_pwm->setWindowTitle("EMBO - PWM Generator [" + QString((info->pwm2 ? "2" : "1")) + " channel] (pins: " + m_ui->label_pwm_pins->text() + ")");
-    m_w_sgen->setWindowTitle("EMBO - Signal Generator (pin: " + m_ui->label_sgen_pins->text() + ")");
+    m_w_cntr->setWindowTitle("EMBO - Counter [1 channel] (pin: " + m_ui->label_cntr_pins->text() + ")");
+    m_w_pwm->setWindowTitle("EMBO - PWM Generator [" + QString((info->pwm2 ? "2" : "1")) + " channel] (pin" + s1 + ": " + m_ui->label_pwm_pins->text() + ")");
+    m_w_sgen->setWindowTitle("EMBO - Signal Generator [" + QString((info->dac == 2 ? "2" : "1")) + " channel] (pin" + s2 + ": " + m_ui->label_sgen_pins->text() + ")");
 
     m_status_latency->setText("?");
     m_status_uptime->setText("?");

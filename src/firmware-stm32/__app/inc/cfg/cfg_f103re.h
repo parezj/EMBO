@@ -35,7 +35,7 @@
 #define EM_PINS_LA             "A0-A1-A2-A3"
 #define EM_PINS_CNTR           "A8"
 #define EM_PINS_PWM            "A15-B6"
-#define EM_PINS_SGEN           "A4"
+#define EM_PINS_SGEN           "A4-A5"
 
 // stack size -------------------------------------------------------
 #define EM_STACK_MIN           64
@@ -70,16 +70,21 @@
 //#define EM_UART_POLLINIT                          // if defined poll for init
 
 // LED -------------------------------------------------------------
+#define EM_LED										// LED enabled
 #define EM_LED_PORT            GPIOC                // main LED port
 #define EM_LED_PIN             13                   // main LED pin
 //#define EM_LED_INVERTED                           // inverted behavior
 
 // DAC -------------------------------------------------------------
-#define EM_DAC                 DAC1                 // sgen available
-#define EM_DAC_CH              LL_DAC_CHANNEL_1     // DAC channel
-#define EM_DAC_BUFF_LEN        1000                 // sgen buffer max len
-#define EM_DAC_MAX_VAL         4095.0               // DAC max value
-#define EM_DAC_TIM_MAX_F       4500000              // DAC max sampling time
+#define EM_DAC                 DAC1                 		// sgen available
+#define EM_DAC_CH              LL_DAC_CHANNEL_1     		// sgen channel
+#define EM_DAC_SRC		       LL_DAC_TRIG_EXT_TIM6_TRGO	// sgen trigger source
+#define EM_DAC2                DAC1                 		// sgen2 available
+#define EM_DAC2_CH             LL_DAC_CHANNEL_2     		// sgen2 channel
+#define EM_DAC2_SRC		       LL_DAC_TRIG_EXT_TIM7_TRGO	// sgen2 trigger source
+#define EM_DAC_BUFF_LEN        1000                    		// buffer max len
+#define EM_DAC_MAX_VAL         4095.0               		// DAC max value
+#define EM_DAC_TIM_MAX_F       4500000              		// DAC max sampling time
 
 // GPIO ------------------------------------------------------------
 #define EM_GPIO_EXTI_SRC       LL_GPIO_AF_SetEXTISource     // GPIO EXTI source
@@ -147,9 +152,12 @@
 #define EM_TIM_SGEN            TIM6
 #define EM_TIM_SGEN_FREQ       EM_FREQ_PCLK1
 #define EM_TIM_SGEN_MAX        65535
+#define EM_TIM_SGEN2           TIM7
+#define EM_TIM_SGEN2_FREQ      EM_FREQ_PCLK1
+#define EM_TIM_SGEN2_MAX       65535
 
 // max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         50000     // DAQ max total memory in release mode
+#define EM_DAQ_MAX_MEM         46000     // DAQ max total memory in release mode
 #define EM_LA_MAX_FS           5142857   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit
@@ -160,43 +168,45 @@
 
 // ADC -------------------------------------------------------------
 #define EM_ADC1                ADC1
-//#define EM_ADC2                ADC3 <--------------
+#define EM_ADC2                ADC3
 //#define EM_ADC3              ADC3
 //#define EM_ADC4              ADC4
 
 #define EM_ADC1_USED
 //#define EM_ADC2_USED
-//#define EM_ADC3_USED <-------------
+#define EM_ADC3_USED
 //#define EM_ADC4_USED
 
 #define EM_ADC12_IRQh          ADC1_2_IRQHandler
-//#define EM_ADC3_IRQh           ADC3_IRQHandler <------------
+#define EM_ADC3_IRQh           ADC3_IRQHandler
 //#define EM_ADC4_IRQh         ADC4_IRQHandler
 
 // DMA -------------------------------------------------------------
 #define EM_DMA_ADC1            DMA1
-//#define EM_DMA_ADC2            DMA2 <--------------
+#define EM_DMA_ADC2            DMA2
 //#define EM_DMA_ADC3          DMA2
 //#define EM_DMA_ADC4          DMA2
 #define EM_DMA_LA              DMA1
 #define EM_DMA_CNTR            DMA1
 #define EM_DMA_CNTR2           DMA1
 #define EM_DMA_SGEN            DMA2
+#define EM_DMA_SGEN2           DMA1
 
 // DMA channels ----------------------------------------------------
 #define EM_DMA_CH_ADC1         LL_DMA_CHANNEL_1
-//#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_5 <---------------
+#define EM_DMA_CH_ADC2         LL_DMA_CHANNEL_5
 //#define EM_DMA_CH_ADC3       LL_DMA_CHANNEL_4
 //#define EM_DMA_CH_ADC4       LL_DMA_CHANNEL_5
 #define EM_DMA_CH_LA           LL_DMA_CHANNEL_6
 #define EM_DMA_CH_CNTR         LL_DMA_CHANNEL_2
 #define EM_DMA_CH_CNTR2        LL_DMA_CHANNEL_3
 #define EM_DMA_CH_SGEN         LL_DMA_CHANNEL_3
+#define EM_DMA_CH_SGEN2        LL_DMA_CHANNEL_4
 
 // IRQ map ---------------------------------------------------------
 #define EM_IRQN_ADC1           ADC1_2_IRQn
 //#define EM_IRQN_ADC2         ADC1_2_IRQn
-//#define EM_IRQN_ADC3           ADC3_IRQn <--------------
+#define EM_IRQN_ADC3           ADC3_IRQn
 //#define EM_IRQN_ADC4         ADC4_IRQn
 #define EM_IRQN_UART           USART1_IRQn
 #define EM_LA_IRQ_EXTI1        EXTI1_IRQn
@@ -207,7 +217,7 @@
 
 // IRQ helpers -----------------------------------------------------
 #define EM_IRQ_ADC1            EM_IRQN_ADC1
-//#define EM_IRQ_ADC2            EM_IRQN_ADC3 <----------------------
+#define EM_IRQ_ADC2            EM_IRQN_ADC3
 //#define EM_IRQ_ADC3          EM_IRQN_ADC3
 //#define EM_IRQ_ADC4          EM_IRQN_ADC4
 

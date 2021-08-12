@@ -371,12 +371,12 @@ void WindowPwm::enableAll(bool enable)
     {
         if (!info->pwm2)
         {
-            m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "Enabled" : "Disabled"));
+            m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "ON" : "OFF"));
         }
         else
         {
-            m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "Enabled" : "Disabled") +
-                                  "     Ch2: " + QString(m_ch2_enabled ? "Enabled" : "Disabled"));
+            m_status_enabled->setText(" Ch1: " + QString(m_ch1_enabled ? "ON" : "OFF") +
+                                  "     Ch2: " + QString(m_ch2_enabled ? "ON" : "OFF"));
         }
 
         if (m_ch1_enabled)

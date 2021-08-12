@@ -1803,6 +1803,9 @@ QPushButton:pressed {
               </property>
              </widget>
              <widget class="QRadioButton" name="radioButton_zoomV">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="geometry">
                <rect>
                 <x>6</x>
@@ -2572,6 +2575,9 @@ QRadioButton::disabled {
               </property>
              </widget>
              <widget class="QRadioButton" name="radioButton_trigMode_Auto">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="geometry">
                <rect>
                 <x>90</x>
