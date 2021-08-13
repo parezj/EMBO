@@ -327,6 +327,14 @@ void WindowPwm::showEvent(QShowEvent*)
 
         m_ui->spinBox_duty2->setStyleSheet(CSS_SPINBOX);
         m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX);
+
+        m_ui->groupBox_ch2->setEnabled(false);
+
+        m_ui->pushButton_ch2enable->setEnabled(false);
+        m_ui->pushButton_ch2disable->setEnabled(false);
+
+        m_ui->dial_duty2->hide();
+        m_ui->dial_offset->hide();
     }
     else
     {
@@ -347,25 +355,26 @@ void WindowPwm::showEvent(QShowEvent*)
 
 void WindowPwm::enableAll(bool enable)
 {
+    auto info = Core::getInstance()->getDevInfo();
+
     m_ui->pushButton_ch1enable->setEnabled(enable);
-    m_ui->pushButton_ch2enable->setEnabled(enable);
-
     m_ui->pushButton_ch1disable->setEnabled(enable);
-    m_ui->pushButton_ch2disable->setEnabled(enable);
-
     m_ui->spinBox_freq->setEnabled(enable);
     m_ui->spinBox_duty1->setEnabled(enable);
-    m_ui->spinBox_duty2->setEnabled(enable);
-    m_ui->spinBox_offset->setEnabled(enable);
-
     m_ui->dial_freq->setEnabled(enable);
     m_ui->dial_duty1->setEnabled(enable);
-    m_ui->dial_duty2->setEnabled(enable);
-    m_ui->dial_offset->setEnabled(enable);
 
     m_ui->textBrowser_realFreq->setEnabled(enable);
 
-    auto info = Core::getInstance()->getDevInfo();
+    if (info->pwm2)
+    {
+        m_ui->pushButton_ch2enable->setEnabled(enable);
+        m_ui->pushButton_ch2disable->setEnabled(enable);
+        m_ui->spinBox_duty2->setEnabled(enable);
+        m_ui->spinBox_offset->setEnabled(enable);
+        m_ui->dial_duty2->setEnabled(enable);
+        m_ui->dial_offset->setEnabled(enable);
+    }
 
     if (enable)
     {
@@ -390,32 +399,23 @@ void WindowPwm::enableAll(bool enable)
             m_ui->pushButton_ch1disable->hide();
         }
 
-        if (m_ch2_enabled)
+        if (info->pwm2)
         {
-            m_ui->pushButton_ch2enable->hide();
-            m_ui->pushButton_ch2disable->show();
-        }
-        else
-        {
-            m_ui->pushButton_ch2enable->show();
-            m_ui->pushButton_ch2disable->hide();
+            if (m_ch2_enabled)
+            {
+                m_ui->pushButton_ch2enable->hide();
+                m_ui->pushButton_ch2disable->show();
+            }
+            else
+            {
+                m_ui->pushButton_ch2enable->show();
+                m_ui->pushButton_ch2disable->hide();
+            }
         }
     }
     else
     {
         m_status_enabled->setText(" Wait...");
-    }
-
-    if (!info->pwm2)
-    {
-        m_ui->pushButton_ch2enable->setEnabled(false);
-        m_ui->pushButton_ch2disable->setEnabled(false);
-
-        m_ui->spinBox_duty2->setEnabled(false);
-        m_ui->spinBox_offset->setEnabled(false);
-
-        m_ui->dial_duty2->setEnabled(false);
-        m_ui->dial_offset->setEnabled(false);
     }
 }
 

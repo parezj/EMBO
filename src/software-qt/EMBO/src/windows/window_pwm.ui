@@ -298,7 +298,7 @@ QPushButton:pressed
      </size>
     </property>
    </widget>
-   <widget class="QGroupBox" name="groupBox_1">
+   <widget class="QGroupBox" name="groupBox_common">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -324,7 +324,7 @@ QPushButton:pressed
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
@@ -752,7 +752,7 @@ QRadioButton::indicator::checked {
     <zorder>line_2</zorder>
     <zorder>radioButton_fine</zorder>
    </widget>
-   <widget class="QGroupBox" name="groupBox_2">
+   <widget class="QGroupBox" name="groupBox_ch1">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -778,7 +778,7 @@ QRadioButton::indicator::checked {
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220); border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;};
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
@@ -944,7 +944,10 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
     <zorder>dial_duty1</zorder>
     <zorder>label_titleCh1</zorder>
    </widget>
-   <widget class="QGroupBox" name="groupBox_3">
+   <widget class="QGroupBox" name="groupBox_ch2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -970,7 +973,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;};
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
@@ -992,6 +995,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
        <weight>50</weight>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
      </property>
      <property name="text">
       <string>Offset:</string>
@@ -1220,6 +1226,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
      </property>
     </widget>
     <widget class="QLabel" name="label_2">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>80</x>
@@ -1235,6 +1244,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
        <weight>50</weight>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
      </property>
      <property name="text">
       <string>Duty:</string>
@@ -1260,6 +1272,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
      </property>
     </widget>
     <widget class="QLabel" name="label_titleCh2">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -1273,6 +1288,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
        <family>Roboto Medium</family>
        <pointsize>11</pointsize>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
      </property>
      <property name="text">
       <string>Channel 2</string>

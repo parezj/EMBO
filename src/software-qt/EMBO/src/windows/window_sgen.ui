@@ -138,7 +138,7 @@ QPushButton:pressed
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
 QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
     </property>
     <property name="title">
@@ -1637,8 +1637,11 @@ QPushButton:pressed
      </font>
     </property>
     <property name="styleSheet">
-     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 0px; border-radius: 5px;  margin-top: 0.5em;}; 
-QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</string>
+     <string notr="true">QGroupBox {background-color: rgb(220,220,220);border: 1px solid rgb(150,150,150); border-radius: 5px;  margin-top: 0.5em;}; 
+QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}
+
+
+QGroupBox:disabled {color:gray;background-color: rgb(220,220,220); border-radius:10px;  margin-top: 0.5em;}</string>
     </property>
     <property name="title">
      <string/>
@@ -1659,6 +1662,9 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
        <weight>50</weight>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
      </property>
      <property name="text">
       <string>Offset:</string>
@@ -1978,6 +1984,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
+     </property>
      <property name="text">
       <string>Frequency:</string>
      </property>
@@ -2001,6 +2010,9 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
        <weight>50</weight>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
      </property>
      <property name="text">
       <string>Amplitude:</string>
@@ -2563,6 +2575,9 @@ QSpinBox:disabled { color: black; }
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
+     </property>
      <property name="text">
       <string>Phase:</string>
      </property>
@@ -2743,6 +2758,9 @@ p, li { white-space: pre-wrap; }
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
+     </property>
      <property name="text">
       <string>Real:</string>
      </property>
@@ -2822,6 +2840,9 @@ p, li { white-space: pre-wrap; }
        <bold>false</bold>
       </font>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
+     </property>
      <property name="text">
       <string>Size:</string>
      </property>
@@ -2900,6 +2921,9 @@ p, li { white-space: pre-wrap; }
        <weight>50</weight>
        <bold>false</bold>
       </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel:disabled {color:gray;}</string>
      </property>
      <property name="text">
       <string>Ampl:</string>
