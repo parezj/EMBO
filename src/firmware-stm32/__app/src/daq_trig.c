@@ -103,18 +103,21 @@ void daq_trig_check(daq_data_t* self)
                 NVIC_ClearPendingIRQ(self->trig.exti_trig);
                 EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI1);
                 EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI2);
-#ifdef EM_DAQ_4CH
-                EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI3);
-                EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI4);
-#endif
-#ifdef EM_GPIO_EXTI_R_F
-                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI1);
-                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI2);
-#ifdef EM_DAQ_4CH
-                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI3);
-                EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI4);
-#endif
-#endif
+
+                #ifdef EM_DAQ_4CH
+                    EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI3);
+                    EM_GPIO_EXTI_CLEAR_R(EM_LA_EXTI4);
+                #endif
+
+                #ifdef EM_GPIO_EXTI_R_F
+                    EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI1);
+                    EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI2);
+
+                    #ifdef EM_DAQ_4CH
+                        EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI3);
+                        EM_GPIO_EXTI_CLEAR_F(EM_LA_EXTI4);
+                    #endif
+                #endif
 
                 NVIC_EnableIRQ(self->trig.exti_trig);
             }
@@ -130,7 +133,7 @@ void daq_trig_check(daq_data_t* self)
     {
         /* decide action - AUTO or DISABLED */
 
-    	uint8_t aut_or_dis = 0;
+        uint8_t aut_or_dis = 0;
 
         if (self->enabled == EM_TRUE && // auto trigger
             self->trig.set.mode == AUTO &&
@@ -138,46 +141,46 @@ void daq_trig_check(daq_data_t* self)
             self->trig.ready == EM_FALSE &&
             self->trig.pretrig_cntr > self->trig.auttrig_val)
         {
-        	aut_or_dis = 1;
+            aut_or_dis = 1;
         }
         else if (self->trig.set.mode == DISABLED &&  // disabled trigger
                  self->trig.pretrig_cntr > self->trig.fullmem_val &&
-				 self->trig.ready_last == EM_FALSE)
+                 self->trig.ready_last == EM_FALSE)
         {
-        	aut_or_dis = 2;
+            aut_or_dis = 2;
         }
 
         if (aut_or_dis > 0)
         {
-        	int catched = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
-        	daq_enable(self, EM_FALSE);
+            int catched = EM_DMA_LAST_IDX(self->trig.buff_trig->len, self->trig.dma_ch_trig, self->trig.dma_trig);
+            daq_enable(self, EM_FALSE);
 
-        	if (self->mode == SCOPE)
-        	{
-        		//self->trig.pos_last = trig_normalize_catched_idx(self, catched); // normalize catched DMA index into valid trigger index
-        		self->trig.pos_last = catched - ((catched % self->trig.buff_trig->chans) + self->trig.buff_trig->chans);
+            if (self->mode == SCOPE)
+            {
+                //self->trig.pos_last = trig_normalize_catched_idx(self, catched); // normalize catched DMA index into valid trigger index
+                self->trig.pos_last = catched - ((catched % self->trig.buff_trig->chans) + self->trig.buff_trig->chans);
 
                 if (self->trig.pos_last < 0)
                     self->trig.pos_last += self->trig.buff_trig->len;
 
                 self->trig.pos_frst = self->trig.pos_last - (self->trig.buff_trig->chans * (self->set.mem - 1)); // + 1
                 if (self->trig.pos_frst < 0)
-                	self->trig.pos_frst += self->trig.buff_trig->len;
-        	}
-        	else
-        	{
+                    self->trig.pos_frst += self->trig.buff_trig->len;
+            }
+            else
+            {
                 self->trig.pos_frst = catched - (1 * (self->set.mem - 1));
                 if (self->trig.pos_frst < 0)
-                	self->trig.pos_frst += self->trig.buff_trig->len;
-        	}
+                    self->trig.pos_frst += self->trig.buff_trig->len;
+            }
 
             self->trig.ready = EM_TRUE;
             self->trig.is_post = EM_FALSE;
 
             if (aut_or_dis == 1)
-            	comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);       // data ready - trig auto
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);       // data ready - trig auto
             else if (aut_or_dis == 2)
-            	comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst);       // data ready - trig disabled
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst);       // data ready - trig disabled
 
             //t_resp = 'A';
             //self->trig.respond = EM_TRUE; // init async respond ReadyA
@@ -205,9 +208,9 @@ int8_t daq_trig_trigger_scope(daq_data_t* self)
 
     if (!(self->trig.ready == EM_TRUE || self->trig.post_start == EM_TRUE || self->trig.irq_en == EM_FALSE)) // valid trig
     {
-    	/* normalize catched DMA index into valid trigger index */
+        /* normalize catched DMA index into valid trigger index */
 
-    	self->trig.dma_pos_catched = trig_normalize_catched_idx(self, self->trig.dma_pos_catched);
+        self->trig.dma_pos_catched = trig_normalize_catched_idx(self, self->trig.dma_pos_catched);
 
         /* get few last indexes to compare (TODO ARRAY) */
 
@@ -424,15 +427,15 @@ void daq_trig_postcount(daq_data_t* self) // TODO slow start ??!! 600 samples (8
             if (self->trig.forced == EM_TRUE)
             {
                 comm_daq_ready(comm_ptr, EM_RESP_RDY_F, self->trig.pos_frst);   // data ready - trig forced
-            	self->trig.forced = EM_FALSE;
+                self->trig.forced = EM_FALSE;
             }
             else if (self->trig.set.mode == SINGLE)
             {
-            	comm_daq_ready(comm_ptr, EM_RESP_RDY_S, self->trig.pos_frst);   // data ready - trig single
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_S, self->trig.pos_frst);   // data ready - trig single
             }
             else
             {
-            	comm_daq_ready(comm_ptr, EM_RESP_RDY_N, self->trig.pos_frst);   // data ready - trig normal
+                comm_daq_ready(comm_ptr, EM_RESP_RDY_N, self->trig.pos_frst);   // data ready - trig normal
             }
 
             break;
@@ -454,10 +457,10 @@ void daq_trig_disable(daq_data_t* self)
 
 int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge edge, enum trig_mode mode, int pretrigger)
 {
-#ifndef EM_DAQ_4CH
-    if (ch == 3 || ch == 4)
-        return -1;
-#endif
+    #ifndef EM_DAQ_4CH
+        if (ch == 3 || ch == 4)
+            return -1;
+    #endif
 
     if((level < 0 || level > 100) ||
        (ch < 1 || ch > 4) ||
@@ -487,43 +490,14 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             else if (self->set.ch4_en) ch2 = 4;
         }
 
-#if defined(EM_ADC_MODE_ADC1)
+        #if defined(EM_ADC_MODE_ADC1)
 
-        self->trig.buff_trig = &self->buff1;
-        self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
-        self->trig.dma_trig = EM_DMA_ADC1;
-        self->trig.adcirq_trig = EM_IRQ_ADC1;
-
-        int ch_cnt = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + 0;
-        int it = 0;
-        if (self->set.ch1_en){
-            it++;
-            if (ch2 == 1) self->trig.order = ch_cnt - it;
-        }
-        if (self->set.ch2_en){
-            it++;
-            if (ch2 == 2) self->trig.order = ch_cnt - it;
-        }
-        if (self->set.ch3_en){
-            it++;
-            if (ch2 == 3) self->trig.order = ch_cnt - it;
-        }
-        if (self->set.ch4_en){
-            it++;
-            if (ch2 == 4) self->trig.order = ch_cnt - it;
-        }
-
-#elif defined(EM_ADC_MODE_ADC12)
-
-        if (ch2 == 1 || ch2 == 2)
-        {
-            adc = EM_ADC1;
             self->trig.buff_trig = &self->buff1;
             self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
             self->trig.dma_trig = EM_DMA_ADC1;
             self->trig.adcirq_trig = EM_IRQ_ADC1;
 
-            int ch_cnt = self->set.ch1_en + self->set.ch2_en + 0;
+            int ch_cnt = self->set.ch1_en + self->set.ch2_en + self->set.ch3_en + self->set.ch4_en + 0;
             int it = 0;
             if (self->set.ch1_en){
                 it++;
@@ -533,17 +507,6 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
                 it++;
                 if (ch2 == 2) self->trig.order = ch_cnt - it;
             }
-        }
-        else // if (ch == 3 || ch == 4)
-        {
-            adc = EM_ADC2;
-            self->trig.buff_trig = &self->buff2;
-            self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
-            self->trig.dma_trig = EM_DMA_ADC2;
-            self->trig.adcirq_trig = EM_IRQ_ADC2;
-
-            int ch_cnt = self->set.ch3_en + self->set.ch4_en;
-            int it = 0;
             if (self->set.ch3_en){
                 it++;
                 if (ch2 == 3) self->trig.order = ch_cnt - it;
@@ -552,45 +515,85 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
                 it++;
                 if (ch2 == 4) self->trig.order = ch_cnt - it;
             }
-        }
 
-#elif defined(EM_ADC_MODE_ADC1234)
+        #elif defined(EM_ADC_MODE_ADC12)
 
-        self->trig.order = 0;
-        if (ch2 == 1)
-        {
-            adc = EM_ADC1;
-            self->trig.buff_trig = &self->buff1;
-            self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
-            self->trig.dma_trig = EM_DMA_ADC1;
-            self->trig.adcirq_trig = EM_IRQ_ADC1;
-        }
-        else if (ch2 == 2)
-        {
-            adc = EM_ADC2;
-            self->trig.buff_trig = &self->buff2;
-            self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
-            self->trig.dma_trig = EM_DMA_ADC2;
-            self->trig.adcirq_trig = EM_IRQ_ADC2;
-        }
-        else if (ch2 == 3)
-        {
-            adc = EM_ADC3;
-            self->trig.buff_trig = &self->buff3;
-            self->trig.dma_ch_trig = EM_DMA_CH_ADC3;
-            self->trig.dma_trig = EM_DMA_ADC3;
-            self->trig.adcirq_trig = EM_IRQ_ADC3;
-        }
-        else // if (ch2 == 4)
-        {
-            adc = EM_ADC4;
-            self->trig.buff_trig = &self->buff4;
-            self->trig.dma_ch_trig = EM_DMA_CH_ADC4;
-            self->trig.dma_trig = EM_DMA_ADC4;
-            self->trig.adcirq_trig = EM_IRQ_ADC4;
-        }
+            if (ch2 == 1 || ch2 == 2)
+            {
+                adc = EM_ADC1;
+                self->trig.buff_trig = &self->buff1;
+                self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
+                self->trig.dma_trig = EM_DMA_ADC1;
+                self->trig.adcirq_trig = EM_IRQ_ADC1;
 
-#endif
+                int ch_cnt = self->set.ch1_en + self->set.ch2_en + 0;
+                int it = 0;
+                if (self->set.ch1_en){
+                    it++;
+                    if (ch2 == 1) self->trig.order = ch_cnt - it;
+                }
+                if (self->set.ch2_en){
+                    it++;
+                    if (ch2 == 2) self->trig.order = ch_cnt - it;
+                }
+            }
+            else // if (ch == 3 || ch == 4)
+            {
+                adc = EM_ADC2;
+                self->trig.buff_trig = &self->buff2;
+                self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
+                self->trig.dma_trig = EM_DMA_ADC2;
+                self->trig.adcirq_trig = EM_IRQ_ADC2;
+
+                int ch_cnt = self->set.ch3_en + self->set.ch4_en;
+                int it = 0;
+                if (self->set.ch3_en){
+                    it++;
+                    if (ch2 == 3) self->trig.order = ch_cnt - it;
+                }
+                if (self->set.ch4_en){
+                    it++;
+                    if (ch2 == 4) self->trig.order = ch_cnt - it;
+                }
+            }
+
+        #elif defined(EM_ADC_MODE_ADC1234)
+
+            self->trig.order = 0;
+            if (ch2 == 1)
+            {
+                adc = EM_ADC1;
+                self->trig.buff_trig = &self->buff1;
+                self->trig.dma_ch_trig = EM_DMA_CH_ADC1;
+                self->trig.dma_trig = EM_DMA_ADC1;
+                self->trig.adcirq_trig = EM_IRQ_ADC1;
+            }
+            else if (ch2 == 2)
+            {
+                adc = EM_ADC2;
+                self->trig.buff_trig = &self->buff2;
+                self->trig.dma_ch_trig = EM_DMA_CH_ADC2;
+                self->trig.dma_trig = EM_DMA_ADC2;
+                self->trig.adcirq_trig = EM_IRQ_ADC2;
+            }
+            else if (ch2 == 3)
+            {
+                adc = EM_ADC3;
+                self->trig.buff_trig = &self->buff3;
+                self->trig.dma_ch_trig = EM_DMA_CH_ADC3;
+                self->trig.dma_trig = EM_DMA_ADC3;
+                self->trig.adcirq_trig = EM_IRQ_ADC3;
+            }
+            else // if (ch2 == 4)
+            {
+                adc = EM_ADC4;
+                self->trig.buff_trig = &self->buff4;
+                self->trig.dma_ch_trig = EM_DMA_CH_ADC4;
+                self->trig.dma_trig = EM_DMA_ADC4;
+                self->trig.adcirq_trig = EM_IRQ_ADC4;
+            }
+
+        #endif
     }
 
     self->trig.fullmem_val = (int)(((1.0 / (double)self->set.fs) * (double)self->set.mem) * (double)EM_SYSTICK_FREQ) + 1;
@@ -647,10 +650,11 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 
         LL_EXTI_DisableIT_0_31(EM_LA_EXTI1);
         LL_EXTI_DisableIT_0_31(EM_LA_EXTI2);
-#ifdef EM_DAQ_4CH
-        LL_EXTI_DisableIT_0_31(EM_LA_EXTI3);
-        LL_EXTI_DisableIT_0_31(EM_LA_EXTI4);
-#endif
+
+        #ifdef EM_DAQ_4CH
+            LL_EXTI_DisableIT_0_31(EM_LA_EXTI3);
+            LL_EXTI_DisableIT_0_31(EM_LA_EXTI4);
+        #endif
 
         EM_GPIO_EXTI_SRC(EM_LA_EXTI_PORT, extiline);
 
@@ -690,11 +694,11 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
             uint32_t level_raw = (int)(self->adc_max_val / 100.0 * (double)level);
             uint32_t res __attribute__((unused));
 
-#ifdef LL_ADC_RESOLUTION_8B
-            res = (self->set.bits == B12 ? LL_ADC_RESOLUTION_12B : LL_ADC_RESOLUTION_8B);
-#else
-            res = LL_ADC_RESOLUTION_12B;
-#endif
+            #ifdef LL_ADC_RESOLUTION_8B
+                res = (self->set.bits == B12 ? LL_ADC_RESOLUTION_12B : LL_ADC_RESOLUTION_8B);
+            #else
+                res = LL_ADC_RESOLUTION_12B;
+            #endif
 
             self->trig.awd_hi = __LL_ADC_ANALOGWD_SET_THRESHOLD_RESOLUTION(res, (int)self->adc_max_val);
             self->trig.awd_mid = __LL_ADC_ANALOGWD_SET_THRESHOLD_RESOLUTION(res, level_raw);
@@ -744,20 +748,20 @@ int daq_trig_set(daq_data_t* self, uint32_t ch, uint8_t level, enum trig_edge ed
 
 static int trig_normalize_catched_idx(daq_data_t* self, int catched)
 {
-	/* normalize catched DMA index into valid trigger index */
-	int ret = catched;
+    /* normalize catched DMA index into valid trigger index */
+    int ret = catched;
     int ch_cnt = self->trig.buff_trig->chans;
     int ch_pos_trig = catched % ch_cnt;
     int ch_pos_want = ch_cnt - self->trig.order - 1;
 
     if (ch_pos_want == ch_pos_trig)
-    	__asm("nop");
+        __asm("nop");
     else if (ch_pos_want < ch_pos_trig)
-    	ret -= ch_pos_trig - ch_pos_want;
+        ret -= ch_pos_trig - ch_pos_want;
     else if (ch_pos_want > ch_pos_trig)
-    	ret -= ch_cnt - (ch_pos_want - ch_pos_trig);
+        ret -= ch_cnt - (ch_pos_want - ch_pos_trig);
 
     if (ret < 0)
-    	ret += self->trig.buff_trig->len;
+        ret += self->trig.buff_trig->len;
     return ret;
 }

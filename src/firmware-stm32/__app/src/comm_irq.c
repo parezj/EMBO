@@ -34,9 +34,9 @@ void EM_UART_RX_IRQHandler(void)
             em_comm.uart.last = EM_TRUE;
             em_comm.usb.last = EM_FALSE;
 
-#ifdef EM_UART_CLEAR_FLAG
-            EM_UART_CLEAR_FLAG(EM_UART);
-#endif
+            #ifdef EM_UART_CLEAR_FLAG
+                EM_UART_CLEAR_FLAG(EM_UART);
+            #endif
 
             /* new message detected */
             if (rx == '\n' && em_comm.uart.rx_index > 1 && em_comm.uart.rx_buffer[em_comm.uart.rx_index - 2] == '\r')

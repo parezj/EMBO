@@ -51,9 +51,9 @@ scpi_result_t EM_Reset(scpi_t* context)
         //pwm_disable(&em_pwm);
         //sgen_disale();
 
-#ifdef EM_DEBUG
-        //pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
-#endif
+        #ifdef EM_DEBUG
+            //pwm_set(&pwm, 1000, 50, 50, 50, EM_TRUE, EM_TRUE);
+        #endif
     }
 
     SCPI_ResultText(context, SCPI_OK);
@@ -109,50 +109,50 @@ scpi_result_t EM_SYS_LimitsQ(scpi_t* context)
     uint8_t pwm2 = 0;
     uint8_t daqch = 0;
 
-#ifdef EM_DAC
-    dac = 1;
-#endif
-#ifdef EM_DAC2
-    dac = 2;
-#endif
+    #ifdef EM_DAC
+        dac = 1;
+    #endif
+    #ifdef EM_DAC2
+        dac = 2;
+    #endif
 
-#ifdef EM_ADC_BIT8
-    bit8 = 1;
-#endif
+    #ifdef EM_ADC_BIT8
+        bit8 = 1;
+    #endif
 
-#if defined(EM_DAQ_4CH)
-    daqch = 4;
-#else
-    daqch = 2;
-#endif
+    #if defined(EM_DAQ_4CH)
+        daqch = 4;
+    #else
+        daqch = 2;
+    #endif
 
-#if defined(EM_ADC_MODE_ADC1)
-    adcs = 1;
-#elif defined(EM_ADC_MODE_ADC12)
-    adcs = 2;
-#elif defined(EM_ADC_MODE_ADC1234)
-    adcs = 4;
-#endif
+    #if defined(EM_ADC_MODE_ADC1)
+        adcs = 1;
+    #elif defined(EM_ADC_MODE_ADC12)
+        adcs = 2;
+    #elif defined(EM_ADC_MODE_ADC1234)
+        adcs = 4;
+    #endif
 
-#if defined(EM_ADC_DUALMODE)
-    dual[0] = 'D';
-#endif
-#if defined(EM_ADC_INTERLEAVED)
-    inter[0] = 'I';
-#endif
+    #if defined(EM_ADC_DUALMODE)
+        dual[0] = 'D';
+    #endif
+    #if defined(EM_ADC_INTERLEAVED)
+        inter[0] = 'I';
+    #endif
 
-#ifdef EM_TIM_PWM2
-    pwm2 = 1;
-#endif
+    #ifdef EM_TIM_PWM2
+        pwm2 = 1;
+    #endif
 
     int gpio1 = EM_GPIO_LA_CH1_NUM;
     int gpio2 = EM_GPIO_LA_CH2_NUM;
     int gpio3 = 0;
     int gpio4 = 0;
-#ifdef EM_DAQ_4CH
-    gpio3 = EM_GPIO_LA_CH3_NUM;
-    gpio4 = EM_GPIO_LA_CH4_NUM;
-#endif
+    #ifdef EM_DAQ_4CH
+        gpio3 = EM_GPIO_LA_CH3_NUM;
+        gpio4 = EM_GPIO_LA_CH4_NUM;
+    #endif
 
     int len = sprintf(buff, "%d,%d,%d,%d,%d,%d,%d%d%s%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d%d%d%d", EM_DAQ_MAX_B12_FS, EM_DAQ_MAX_B8_FS, EM_DAQ_MAX_MEM,
                       EM_LA_MAX_FS, EM_PWM_MAX_F, pwm2, daqch, adcs, dual, inter, bit8, dac, EM_VM_FS, EM_VM_MEM, EM_CNTR_MEAS_MS,
@@ -228,17 +228,17 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
 
         int last_idx = EM_DMA_LAST_IDX(em_daq.buff1.len, EM_DMA_CH_ADC1, EM_DMA_ADC1);
 
-#if defined(EM_ADC_MODE_ADC1)
-#ifdef EM_DAQ_4CH
-        int buff1_size = 5;
-#else
-        int buff1_size = 3;
-#endif
-#elif defined(EM_ADC_MODE_ADC12)
-        int buff1_size = 3;
-#elif defined(EM_ADC_MODE_ADC1234)
-        int buff1_size = 2;
-#endif
+        #if defined(EM_ADC_MODE_ADC1)
+            #ifdef EM_DAQ_4CH
+                int buff1_size = 5;
+            #else
+                int buff1_size = 3;
+            #endif
+        #elif defined(EM_ADC_MODE_ADC12)
+            int buff1_size = 3;
+        #elif defined(EM_ADC_MODE_ADC1234)
+            int buff1_size = 2;
+        #endif
 
         for (int x = 0; x < buff1_size; x++) // normalize index to mem size
         {
@@ -288,26 +288,26 @@ scpi_result_t EM_VM_ReadQ(scpi_t* context)
             }
         }
 
-#if defined(EM_ADC_MODE_ADC1)
+        #if defined(EM_ADC_MODE_ADC1)
 
-#ifdef EM_DAQ_4CH
-        get_1val_from_circ(last_idx, 5, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
-#else
-        get_1val_from_circ(last_idx, 3, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
-#endif
+            #ifdef EM_DAQ_4CH
+                get_1val_from_circ(last_idx, 5, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, &ch3_raw, &ch4_raw);
+            #else
+                get_1val_from_circ(last_idx, 3, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
+            #endif
 
-#elif defined(EM_ADC_MODE_ADC12)
+        #elif defined(EM_ADC_MODE_ADC12)
 
-        get_1val_from_circ(last_idx, 3, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
-        get_1val_from_circ((last_mem * 2) + 1, 2, em_daq.buff2.len, em_daq.buff2.data, em_daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
+            get_1val_from_circ(last_idx, 3, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, &ch2_raw, NULL, NULL);
+            get_1val_from_circ((last_mem * 2) + 1, 2, em_daq.buff2.len, em_daq.buff2.data, em_daq.set.bits, &ch3_raw, &ch4_raw, NULL, NULL, NULL);
 
-#elif defined(EM_ADC_MODE_ADC1234)
+        #elif defined(EM_ADC_MODE_ADC1234)
 
-        get_1val_from_circ(last_idx, 2, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
-        get_1val_from_circ(last_mem, 1, em_daq.buff2.len, em_daq.buff2.data, em_daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
-        get_1val_from_circ(last_mem, 1, em_daq.buff3.len, em_daq.buff3.data, em_daq.set.bits, &ch3_raw, NULL, NULL, NULL, NULL);
-        get_1val_from_circ(last_mem, 1, em_daq.buff4.len, em_daq.buff4.data, em_daq.set.bits, &ch4_raw, NULL, NULL, NULL, NULL);
-#endif
+            get_1val_from_circ(last_idx, 2, em_daq.buff1.len, em_daq.buff1.data, em_daq.set.bits, &vref_raw, &ch1_raw, NULL, NULL, NULL);
+            get_1val_from_circ(last_mem, 1, em_daq.buff2.len, em_daq.buff2.data, em_daq.set.bits, &ch2_raw, NULL, NULL, NULL, NULL);
+            get_1val_from_circ(last_mem, 1, em_daq.buff3.len, em_daq.buff3.data, em_daq.set.bits, &ch3_raw, NULL, NULL, NULL, NULL);
+            get_1val_from_circ(last_mem, 1, em_daq.buff4.len, em_daq.buff4.data, em_daq.set.bits, &ch4_raw, NULL, NULL, NULL, NULL);
+        #endif
 
         char vcc_s[10];
         char ch1_s[10];
@@ -366,11 +366,11 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         }
 
         ///*
-#ifdef VREFINT_CAL_ADDR
-        float cal = (float)EM_ADC_VREF_CAL / (float)em_daq.adc_max_val * EM_VREF;
-#else
-        float cal = EM_ADC_VREF_CAL;
-#endif
+        #ifdef VREFINT_CAL_ADDR
+            float cal = (float)EM_ADC_VREF_CAL / (float)em_daq.adc_max_val * EM_VREF;
+        #else
+            float cal = EM_ADC_VREF_CAL;
+        #endif
 
         if (em_daq.set.bits == B8) // compressing
             cal /= 10.0;
@@ -382,30 +382,30 @@ scpi_result_t EM_SCOPE_ReadQ(scpi_t* context)
         if (em_daq.set.bits == B12)
             buff_len *= 2;
 
-#if defined(EM_ADC_MODE_ADC1)
+        #if defined(EM_ADC_MODE_ADC1)
 
-        buff_len *= em_daq.set.ch1_en + em_daq.set.ch2_en + em_daq.set.ch3_en + em_daq.set.ch4_en;
+            buff_len *= em_daq.set.ch1_en + em_daq.set.ch2_en + em_daq.set.ch3_en + em_daq.set.ch4_en;
 
-        SCPI_ResultArbitraryBlocks(context, buff_len, 0, 0, 0, (uint8_t*)em_daq.buff1.data, NULL, NULL, NULL);
+            SCPI_ResultArbitraryBlocks(context, buff_len, 0, 0, 0, (uint8_t*)em_daq.buff1.data, NULL, NULL, NULL);
 
-#elif defined(EM_ADC_MODE_ADC12)
+        #elif defined(EM_ADC_MODE_ADC12)
 
-        size_t buff_len1 = buff_len * (em_daq.set.ch1_en + em_daq.set.ch2_en);
-        size_t buff_len2 = buff_len * (em_daq.set.ch3_en + em_daq.set.ch4_en);
+            size_t buff_len1 = buff_len * (em_daq.set.ch1_en + em_daq.set.ch2_en);
+            size_t buff_len2 = buff_len * (em_daq.set.ch3_en + em_daq.set.ch4_en);
 
-        SCPI_ResultArbitraryBlocks(context, buff_len1, buff_len2, 0, 0,
-                                            (em_daq.set.ch1_en == EM_TRUE || em_daq.set.ch2_en == EM_TRUE ? (uint8_t*)em_daq.buff1.data : NULL),
-                                            (em_daq.set.ch3_en == EM_TRUE || em_daq.set.ch4_en == EM_TRUE ? (uint8_t*)em_daq.buff2.data : NULL),
-                                            NULL, NULL);
+            SCPI_ResultArbitraryBlocks(context, buff_len1, buff_len2, 0, 0,
+                                                (em_daq.set.ch1_en == EM_TRUE || em_daq.set.ch2_en == EM_TRUE ? (uint8_t*)em_daq.buff1.data : NULL),
+                                                (em_daq.set.ch3_en == EM_TRUE || em_daq.set.ch4_en == EM_TRUE ? (uint8_t*)em_daq.buff2.data : NULL),
+                                                NULL, NULL);
 
-#elif defined(EM_ADC_MODE_ADC1234)
+        #elif defined(EM_ADC_MODE_ADC1234)
 
-        SCPI_ResultArbitraryBlocks(context, buff_len, buff_len, buff_len, buff_len,
-                                            (em_daq.set.ch1_en == EM_TRUE ? (uint8_t*)em_daq.buff1.data : NULL),
-                                            (em_daq.set.ch2_en == EM_TRUE ? (uint8_t*)em_daq.buff2.data : NULL),
-                                            (em_daq.set.ch3_en == EM_TRUE ? (uint8_t*)em_daq.buff3.data : NULL),
-                                            (em_daq.set.ch4_en == EM_TRUE ? (uint8_t*)em_daq.buff4.data : NULL));
-#endif
+            SCPI_ResultArbitraryBlocks(context, buff_len, buff_len, buff_len, buff_len,
+                                                (em_daq.set.ch1_en == EM_TRUE ? (uint8_t*)em_daq.buff1.data : NULL),
+                                                (em_daq.set.ch2_en == EM_TRUE ? (uint8_t*)em_daq.buff2.data : NULL),
+                                                (em_daq.set.ch3_en == EM_TRUE ? (uint8_t*)em_daq.buff3.data : NULL),
+                                                (em_daq.set.ch4_en == EM_TRUE ? (uint8_t*)em_daq.buff4.data : NULL));
+        #endif
 
         em_daq.trig.pretrig_cntr = 0;
         em_daq.trig.ready = EM_FALSE;
@@ -457,20 +457,20 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
             return SCPI_RES_ERR;
         }
 
-#ifndef EM_DAQ_4CH
-        if (p4[2] == '1' || p4[3] == '1' || p5 == 3 || p5 == 4)
-        {
-            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
-            return SCPI_RES_ERR;
-        }
-#endif
+        #ifndef EM_DAQ_4CH
+            if (p4[2] == '1' || p4[3] == '1' || p5 == 3 || p5 == 4)
+            {
+                SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+                return SCPI_RES_ERR;
+            }
+        #endif
 
         uint8_t ch1_en = p4[0] - '0' ? EM_TRUE : EM_FALSE;
         uint8_t ch2_en = p4[1] - '0' ? EM_TRUE : EM_FALSE;
-#ifdef EM_DAQ_4CH
-        uint8_t ch3_en = p4[2] - '0' ? EM_TRUE : EM_FALSE;
-        uint8_t ch4_en = p4[3] - '0' ? EM_TRUE : EM_FALSE;
-#endif
+        #ifdef EM_DAQ_4CH
+            uint8_t ch3_en = p4[2] - '0' ? EM_TRUE : EM_FALSE;
+            uint8_t ch4_en = p4[3] - '0' ? EM_TRUE : EM_FALSE;
+        #endif
 
         daq_settings_save(&em_daq.set, &em_daq.trig.set, &em_daq.save_s, &em_daq.trig.save_s);
         daq_enable(&em_daq, EM_FALSE);
@@ -479,11 +479,11 @@ scpi_result_t EM_SCOPE_Set(scpi_t* context)
 
         daq_mem_set(&em_daq, 3); // safety guard
         int ret2 = daq_bit_set(&em_daq, (int)p1);
-#ifdef EM_DAQ_4CH
-        int ret4 = daq_ch_set(&em_daq, ch1_en, ch2_en, ch3_en, ch4_en, (int)p3);
-#else
-        int ret4 = daq_ch_set(&em_daq, ch1_en, ch2_en, EM_FALSE, EM_FALSE, (int)p3);
-#endif
+        #ifdef EM_DAQ_4CH
+            int ret4 = daq_ch_set(&em_daq, ch1_en, ch2_en, ch3_en, ch4_en, (int)p3);
+        #else
+            int ret4 = daq_ch_set(&em_daq, ch1_en, ch2_en, EM_FALSE, EM_FALSE, (int)p3);
+        #endif
         int ret3 = daq_fs_set(&em_daq, p3);
         int ret1 = daq_mem_set(&em_daq, (int)p2);
         int ret5 = daq_trig_set(&em_daq, p5, p6, (p7[0] == 'R' ? RISING : (p7[0] == 'F' ? FALLING : BOTH)),
@@ -669,13 +669,13 @@ scpi_result_t EM_LA_Set(scpi_t* context)
             return SCPI_RES_ERR;
         }
 
-#ifndef EM_DAQ_4CH
-        if (p5 == 3 || p5 == 4)
-        {
-            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
-            return SCPI_RES_ERR;
-        }
-#endif
+        #ifndef EM_DAQ_4CH
+            if (p5 == 3 || p5 == 4)
+            {
+                SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+                return SCPI_RES_ERR;
+            }
+        #endif
 
         daq_settings_save(&em_daq.set, &em_daq.trig.set, &em_daq.save_l, &em_daq.trig.save_l);
         daq_enable(&em_daq, EM_FALSE);
@@ -684,11 +684,11 @@ scpi_result_t EM_LA_Set(scpi_t* context)
 
         daq_mem_set(&em_daq, 3); // safety guard
         int ret2 = daq_bit_set(&em_daq, B1);
-#ifdef EM_DAQ_4CH
-        int ret4 = daq_ch_set(&em_daq, EM_TRUE, EM_TRUE, EM_TRUE, EM_TRUE, (int)p3);
-#else
-        int ret4 = daq_ch_set(&em_daq, EM_TRUE, EM_TRUE, EM_FALSE, EM_FALSE, (int)p3);
-#endif
+        #ifdef EM_DAQ_4CH
+            int ret4 = daq_ch_set(&em_daq, EM_TRUE, EM_TRUE, EM_TRUE, EM_TRUE, (int)p3);
+        #else
+            int ret4 = daq_ch_set(&em_daq, EM_TRUE, EM_TRUE, EM_FALSE, EM_FALSE, (int)p3);
+        #endif
         int ret3 = daq_fs_set(&em_daq, p3);
         int ret1 = daq_mem_set(&em_daq, (int)p2);
         int ret5 = daq_trig_set(&em_daq, p5, 0, (p7[0] == 'R' ? RISING : (p7[0] == 'F' ? FALLING : BOTH)),
@@ -882,25 +882,25 @@ scpi_result_t EM_CNTR_ReadQ(scpi_t* context)
 scpi_result_t EM_SGEN_SetQ(scpi_t* context)
 {
 #ifdef EM_DAC
-	uint32_t param1 = 1;
+    uint32_t param1 = 1;
 
-	SCPI_ParamUInt32(context, &param1, FALSE);
+    SCPI_ParamUInt32(context, &param1, FALSE);
 
-#ifdef EM_DAC2
-    if (param1 < 1 || param1 > 2)
-#else
-    if (param1 != 1)
-#endif
+    #ifdef EM_DAC2
+        if (param1 < 1 || param1 > 2)
+    #else
+        if (param1 != 1)
+    #endif
     {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
 
     sgen_ch_t* ch = &em_sgen.ch1;
-#ifdef EM_DAC2
-    if (param1 == 2)
-    	ch = &em_sgen.ch2;
-#endif
+    #ifdef EM_DAC2
+        if (param1 == 2)
+            ch = &em_sgen.ch2;
+    #endif
 
     char buff[60];
     char freq_real_s[20];
@@ -908,7 +908,7 @@ scpi_result_t EM_SGEN_SetQ(scpi_t* context)
     sprint_fast(freq_real_s, "%s", ch->freq_real, 3);
 
     int len = sprintf(buff, "%d,%d,%d,%d,%d,%d,%s,%d", ch->freq, (int)(ch->ampl * 10.0), ch->offset, ch->phase,
-    				  	  	  	  	  	  	  	  	   ch->mode, ch->enabled, freq_real_s, ch->samples);
+                                                                       ch->mode, ch->enabled, freq_real_s, ch->samples);
 
     SCPI_ResultCharacters(context, buff, len);
     return SCPI_RES_OK;
@@ -925,38 +925,38 @@ scpi_result_t EM_SGEN_Set(scpi_t* context)
     uint32_t param2, param3, param4, param6, param7, param1, param5;
 
     if (!SCPI_ParamUInt32(context, &param1, TRUE) ||
-    	!SCPI_ParamUInt32(context, &param2, TRUE) ||
+        !SCPI_ParamUInt32(context, &param2, TRUE) ||
         !SCPI_ParamUInt32(context, &param3, TRUE) ||
         !SCPI_ParamUInt32(context, &param4, TRUE) ||
         !SCPI_ParamUInt32(context, &param5, TRUE) ||
-		!SCPI_ParamUInt32(context, &param6, TRUE) ||
+        !SCPI_ParamUInt32(context, &param6, TRUE) ||
         !SCPI_ParamUInt32(context, &param7, TRUE))
     {
         SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
         return SCPI_RES_ERR;
     }
 
-#ifdef EM_DAC2
-    if (param1 < 1 || param1 > 2 || 		    // ch
-#else
-	if (param1 != 1 ||							// ch
-#endif
-    	param2 < 0 || param2 > EM_SGEN_MAX_F || // freq
-        param3 < 0 || param3 > 1000 ||          // ampl
-        param4 < 0 || param4 > 100 ||           // offset
-		param5 < 0 || param5 > 360 ||           // phase
-        param6 < 0 || param6 > 5 ||             // mode
-        param7 < 0 || param7 > 1)               // enable
-    {
-        SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
-        return SCPI_RES_ERR;
-    }
+    #ifdef EM_DAC2
+        if (param1 < 1 || param1 > 2 ||             // ch
+    #else
+        if (param1 != 1 ||                            // ch
+    #endif
+            param2 < 0 || param2 > EM_SGEN_MAX_F || // freq
+            param3 < 0 || param3 > 1000 ||          // ampl
+            param4 < 0 || param4 > 100 ||           // offset
+            param5 < 0 || param5 > 360 ||           // phase
+            param6 < 0 || param6 > 5 ||             // mode
+            param7 < 0 || param7 > 1)               // enable
+        {
+            SCPI_ErrorPush(context, SCPI_ERROR_ILLEGAL_PARAMETER_VALUE);
+            return SCPI_RES_ERR;
+        }
 
     sgen_ch_t* ch = &em_sgen.ch1;
-#ifdef EM_DAC2
-    if (param1 == 2)
-    	ch = &em_sgen.ch2;
-#endif
+    #ifdef EM_DAC2
+        if (param1 == 2)
+            ch = &em_sgen.ch2;
+    #endif
 
     sgen_set(&em_sgen, ch, param6, (float)param3 / 10.0, param2, param4, param5, (param7 == 1 ? EM_TRUE : EM_FALSE));
 

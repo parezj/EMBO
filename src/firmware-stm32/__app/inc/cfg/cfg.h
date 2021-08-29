@@ -15,7 +15,7 @@
 #define EM_DEBUG      // auto enable PWM, SGEN on start and more verbose
 //#define EM_SYSVIEW  // SEGGER System View enabled - less DAQ memory
 
-#define EM_DEV_VER      "0.2.2"
+#define EM_DEV_VER      "0.2.3"
 #define EM_DEV_AUTHOR   "CTU/Jakub Parez"
 
 
@@ -27,142 +27,182 @@
 
 #if defined(STM32F103xB)
 
-#define EM_F103C8
-#define EM_CORTEX_M3
+    #define EM_F103C8
+    #define EM_CORTEX_M3
 
-/*
- * =========layout=========
- *  DAQ CH1 ........... PA1
- *  DAQ CH2 ........... PA2
- *  DAQ CH3 ........... PA3
- *  DAQ CH4 ........... PA4
- *  PWM CH1 ........... PA15
- *  PWM CH2 ........... PB6
- *  CNTR .............. PA8
- *  UART RX ........... PA10
- *  UART TX ........... PA9
- *  =======================
-*/
+    /*
+     * =========layout=========
+     *  DAQ CH1 ........... PA1
+     *  DAQ CH2 ........... PA2
+     *  DAQ CH3 ........... PA3
+     *  DAQ CH4 ........... PA4
+     *  PWM CH1 ........... PA15
+     *  PWM CH2 ........... PB6
+     *  CNTR .............. PA8
+     *  UART RX ........... PA10
+     *  UART TX ........... PA9
+     *  =======================
+     */
 
-#include "cfg_f103c8.h"
+    #include "cfg_f103c8.h"
 
 #elif defined(STM32F103xE)
 /*.................................................. F103RE .................................................*/
 
-#define EM_F103RE
-#define EM_CORTEX_M3
+    #define EM_F103RE
+    #define EM_CORTEX_M3
 
-/*
- * =========layout=========
- *  DAQ CH1 ........... PA0
- *  DAQ CH2 ........... PA1
- *  DAQ CH3 ........... PA2
- *  DAQ CH4 ........... PA3
- *  PWM CH1 ........... PA15
- *  PWM CH2 ........... PB6
- *  CNTR .............. PA8
- *  DAC ............... PA4
- *  UART RX ........... PA10
- *  UART TX ........... PA9
- *  =======================
-*/
+    /*
+     * =========layout=========
+     *  DAQ CH1 ........... PA0
+     *  DAQ CH2 ........... PA1
+     *  DAQ CH3 ........... PA2
+     *  DAQ CH4 ........... PA3
+     *  PWM CH1 ........... PA15
+     *  PWM CH2 ........... PB6
+     *  CNTR .............. PA8
+     *  DAC CH1 ........... PA4
+     *  DAC CH2 ........... PA5
+     *  UART RX ........... PA10
+     *  UART TX ........... PA9
+     *  USB D- ............ PA11
+     *  USB D+ ............ PA12
+     *  SWDIO ............. PA13
+     *  SWDCLK ............ PA14
+     *  =======================
+     */
 
-#include "cfg_f103re.h"
+    #include "cfg_f103re.h"
 
 #elif defined(STM32F303xE)
 /*.................................................. F303RE .................................................*/
 
-#define EM_F303RE
-#define EM_CORTEX_M4F
+    #define EM_F303RE
+    #define EM_CORTEX_M4F
 
-/*
- * =========layout=========
- *  DAQ CH1 ........... PC0  (Arduino A5)   - both ADC + LA
- *  DAQ CH2 ........... PC1  (Arduino A4)   - both ADC + LA
- *  ADC CH3 ........... PB0  (Arduino A3)
- *  ADC CH4 ........... PB14 (Morpho CN10-28)
- *  LA  CH3 ........... PC2  (Morpho CN7-35)
- *  LA  CH4 ........... PC3  (Morpho CN7-37)
- *  PWM CH1 ........... PB8  (Arduino D15)
- *  PWM CH2 ........... PB10 (Arduino D6)
- *  CNTR .............. PC9  (Morpho CN10-1)
- *  DAC ............... PA4  (Arduino A2)
- *  UART RX ........... PA3
- *  UART TX ........... PA2
- *  =======================
-*/
+    /*
+     * =========layout=========
+     *  DAQ CH1 ........... PC0  (Arduino A5)   - both ADC + LA
+     *  DAQ CH2 ........... PC1  (Arduino A4)   - both ADC + LA
+     *  ADC CH3 ........... PB0  (Arduino A3)
+     *  ADC CH4 ........... PB14 (Morpho CN10-28)
+     *  LA  CH3 ........... PC2  (Morpho CN7-35)
+     *  LA  CH4 ........... PC3  (Morpho CN7-37)
+     *  PWM CH1 ........... PB8  (Arduino D15)
+     *  PWM CH2 ........... PB10 (Arduino D6)
+     *  CNTR .............. PC9  (Morpho CN10-1)
+     *  DAC CH1 ........... PA4  (Arduino A2)
+     *  DAC CH2 ........... PA5
+     *  UART RX ........... PA3
+     *  UART TX ........... PA2
+     *  USB D- ............ PA11
+     *  USB D+ ............ PA12
+     *  =======================
+     */
 
-#include "cfg_f303re.h"
+    #include "cfg_f303re.h"
 
 #elif defined(STM32L412xx)
 /*.................................................. L412KB .................................................*/
 
-#define EM_L412KB
-#define EM_CORTEX_M4F
+    #define EM_L412KB
+    #define EM_CORTEX_M4F
 
-/*
- * =========layout=========
- *  DAQ CH1 ........... PA0  (Arduino A0)
- *  DAQ CH2 ........... PA1  (Arduino A1)
- *  DAQ CH3 ........... PA3  (Arduino A2)
- *  DAQ CH4 ........... PA4  (Arduino A3)
- *  PWM CH1 ........... PA5  (Arduino A4)
- *  CNTR .............. PA8  (Arduino D9)
- *  UART RX ........... PA15
- *  UART TX ........... PA2
- *  =======================
-*/
+    /*
+     * =========layout=========
+     *  DAQ CH1 ........... PA0  (Arduino A0)
+     *  DAQ CH2 ........... PA1  (Arduino A1)
+     *  DAQ CH3 ........... PA3  (Arduino A2)
+     *  DAQ CH4 ........... PA4  (Arduino A3)
+     *  PWM CH1 ........... PA5  (Arduino A4)
+     *  CNTR .............. PA8  (Arduino D9)
+     *  UART RX ........... PA15
+     *  UART TX ........... PA2
+     *  USB D- ............ PA11
+     *  USB D+ ............ PA12
+     *  SWDIO ............. PA13
+     *  SWDCLK ............ PA14
+     *  =======================
+     */
 
-#include "cfg_l412kb.h"
+    #include "cfg_l412kb.h"
 
 #elif defined(STM32G031xx)
 
-#if defined(K8)
+    #if defined(K8)
 /*.................................................. G031K8 .................................................*/
 
-#define EM_G031K8
-#define EM_CORTEX_M0
+        #define EM_G031K8
+        #define EM_CORTEX_M0
 
-/*
- * =========layout=========
- *  DAQ CH1 ........... PA0  (Arduino A0)
- *  DAQ CH2 ........... PA1  (Arduino A1)
- *  DAQ CH3 ........... PA4  (Arduino A2)
- *  DAQ CH4 ........... PA5  (Arduino A3)
- *  PWM CH1 ........... PA15 (Arduino D2)
- *  CNTR .............. PA8  (Arduino D9)
- *  UART RX ........... PA3
- *  UART TX ........... PA2
- *  =======================
-*/
+        /*
+         * =========layout=========
+         *  DAQ CH1 ........... PA0  (Arduino A0)
+         *  DAQ CH2 ........... PA1  (Arduino A1)
+         *  DAQ CH3 ........... PA4  (Arduino A2)
+         *  DAQ CH4 ........... PA5  (Arduino A3)
+         *  PWM CH1 ........... PA15 (Arduino D2)
+         *  CNTR .............. PA8  (Arduino D9)
+         *  UART RX ........... PA3
+         *  UART TX ........... PA2
+         *  =======================
+         */
 
-#include "cfg_g031k8.h"
+        #include "cfg_g031k8.h"
 
-#elif defined(J6)
+    #elif defined(J6)
 /*.................................................. G031J6 .................................................*/
 
-#define EM_G031J6
-#define EM_CORTEX_M0
+        #define EM_G031J6
+        #define EM_CORTEX_M0
 
-/*
- * =========layout=========
- *  DAQ CH1 ........... PA13
- *  DAQ CH2 ........... PA10
- *  PWM CH1 ........... PA0
- *  CNTR .............. PA8
- *  UART RX ........... PB7
- *  UART TX ........... PB6
- *  =======================
-*/
+        /*
+         * =========layout=========
+         *  DAQ CH1 ........... PA13
+         *  DAQ CH2 ........... PA10
+         *  PWM CH1 ........... PA0
+         *  CNTR .............. PA8
+         *  UART RX ........... PB7
+         *  UART TX ........... PB6
+         *  =======================
+         */
 
-#include "cfg_g031j6.h"
+        #include "cfg_g031j6.h"
 
-#endif
+    #endif
+
+#elif defined(STM32G431xx)
+/*.................................................. L412KB .................................................*/
+
+    #define EM_G431KB
+    #define EM_CORTEX_M4F
+
+    /*
+     * =========layout=========
+     *  DAQ CH1 ........... PA0
+     *  DAQ CH2 ........... PA1
+     *  DAQ CH3 ........... PA6
+     *  DAQ CH4 ........... PA7
+     *  PWM CH1 ........... PA15
+     *  PWM CH2 ........... PB6
+     *  CNTR .............. PA8
+     *  DAC CH1 ........... PA4
+     *  DAC CH2 ........... PA5
+     *  UART RX ........... PA2
+     *  UART TX ........... PA3
+     *  USB D- ............ PA11
+     *  USB D+ ............ PA12
+     *  SWDIO ............. PA13
+     *  SWDCLK ............ PA14
+     *  =======================
+     */
+
+    #include "cfg_g431kb.h"
 
 #endif
 
 #if !defined(EM_DAQ_4CH) && (defined(EM_ADC_MODE_ADC12) || defined(EM_ADC_MODE_ADC1234))
-#error ADC12 or ADC1234 must be implemented with 4 channels only!
+    #error ADC12 or ADC1234 must be implemented with 4 channels only!
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------+
@@ -190,7 +230,7 @@
 #define EM_IWDG_RST_VAL        0xAAAA  // watchdog reset key value
 #define EM_IWDG_RST            (IWDG->KR = EM_IWDG_RST_VAL) // watchdog reset
 
-// DAQ -------------------------------------------------------------
+// DAQ common ------------------------------------------------------
 #define EM_AUTRIG_MIN_MS       500   // auto trigger ms delay
 #define EM_PRETRIG_MIN_MS      10    // pre trigger minimum ms
 

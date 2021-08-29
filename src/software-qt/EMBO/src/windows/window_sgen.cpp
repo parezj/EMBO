@@ -658,16 +658,19 @@ void WindowSgen::enableAll(bool enable)
 
     if (m_ui->radioButton_const->isChecked())
     {
+        m_ui->dial_freq->hide();
+        m_ui->dial_offset->hide();
+        m_ui->dial_phase->hide();
+
         m_ui->textBrowser_realFs->setText("");
 
-        m_ui->dial_freq->setEnabled(false);
         m_ui->spinBox_freq->setEnabled(false);
-
-        m_ui->dial_offset->setEnabled(false);
         m_ui->spinBox_offset->setEnabled(false);
-
-        m_ui->dial_phase->setEnabled(false);
         m_ui->spinBox_phase->setEnabled(false);
+
+        m_ui->label_freq->setEnabled(false);
+        m_ui->label_offset->setEnabled(false);
+        m_ui->label_phase->setEnabled(false);
 
         m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX);
         m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX);
@@ -675,6 +678,14 @@ void WindowSgen::enableAll(bool enable)
     }
     else
     {
+        m_ui->dial_freq->show();
+        m_ui->dial_offset->show();
+        m_ui->dial_phase->show();
+
+        m_ui->label_freq->setEnabled(true);
+        m_ui->label_offset->setEnabled(true);
+        m_ui->label_phase->setEnabled(true);
+
         m_ui->spinBox_freq->setStyleSheet(CSS_SPINBOX_NODIS);
         m_ui->spinBox_offset->setStyleSheet(CSS_SPINBOX_NODIS);
         m_ui->spinBox_phase->setStyleSheet(CSS_SPINBOX_NODIS);
@@ -708,15 +719,18 @@ void WindowSgen::enableAll(bool enable)
 
         if (m_ui->radioButton_const2->isChecked())
         {
+            m_ui->dial_freq2->hide();
+            m_ui->dial_offset2->hide();
+            m_ui->dial_phase2->hide();
+
+            m_ui->label_freq2->setEnabled(false);
+            m_ui->label_offset2->setEnabled(false);
+            m_ui->label_phase2->setEnabled(false);
+
             m_ui->textBrowser_realFs2->setText("");
 
-            m_ui->dial_freq2->setEnabled(false);
             m_ui->spinBox_freq2->setEnabled(false);
-
-            m_ui->dial_offset2->setEnabled(false);
             m_ui->spinBox_offset2->setEnabled(false);
-
-            m_ui->dial_phase2->setEnabled(false);
             m_ui->spinBox_phase2->setEnabled(false);
 
             m_ui->spinBox_freq2->setStyleSheet(CSS_SPINBOX);
@@ -725,6 +739,14 @@ void WindowSgen::enableAll(bool enable)
         }
         else
         {
+            m_ui->dial_freq2->show();
+            m_ui->dial_offset2->show();
+            m_ui->dial_phase2->show();
+
+            m_ui->label_freq2->setEnabled(true);
+            m_ui->label_offset2->setEnabled(true);
+            m_ui->label_phase2->setEnabled(true);
+
             m_ui->spinBox_freq2->setStyleSheet(CSS_SPINBOX_NODIS);
             m_ui->spinBox_offset2->setStyleSheet(CSS_SPINBOX_NODIS);
             m_ui->spinBox_phase2->setStyleSheet(CSS_SPINBOX_NODIS);

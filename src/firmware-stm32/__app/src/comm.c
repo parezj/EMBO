@@ -10,7 +10,7 @@
 #include "build_defs.h"
 
 #ifdef EM_USB
-#include "usbd_cdc_if.h"
+    #include "usbd_cdc_if.h"
 #endif
 
 #include "main.h"

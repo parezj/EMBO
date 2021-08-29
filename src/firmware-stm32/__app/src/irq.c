@@ -19,9 +19,9 @@ void SysTick_Handler(void)
 {
     if(xTaskGetSchedulerState() != taskSCHEDULER_NOT_STARTED)
         xPortSysTickHandler();
-#ifdef EM_HAL_SYSTICK
-    HAL_IncTick();
-#endif
+    #ifdef EM_HAL_SYSTICK
+        HAL_IncTick();
+    #endif
     em_daq.uwTick++;
 }
 

@@ -22,18 +22,16 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB", "$(ProjectDir)");
-  Project.AddPathSubstitute ("f:/stm32cube/embo/src/firmware-stm32/embo_l412kb", "$(ProjectDir)");
   Project.SetDevice ("STM32L412KB");
   Project.SetHostIF ("USB", "");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M4F.svd");
-  Project.AddSvdFile ("F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB/STM32L4x2.svd");
+  Project.AddSvdFile ("./STM32L4x2.svd");
   //
   // User settings
   //
-  File.Open ("$(ProjectDir)/Debug/EMBO_L412KB.elf");
+  File.Open ("./Debug/EMBO_L412KB.elf");
   Project.SetOSPlugin ("FreeRTOSPlugin");
 }
 

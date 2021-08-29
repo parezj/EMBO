@@ -29,6 +29,20 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32g4xx_hal.h"
+#include "stm32g4xx_ll_adc.h"
+#include "stm32g4xx_ll_dac.h"
+#include "stm32g4xx_ll_rcc.h"
+#include "stm32g4xx_ll_bus.h"
+#include "stm32g4xx_ll_crs.h"
+#include "stm32g4xx_ll_system.h"
+#include "stm32g4xx_ll_exti.h"
+#include "stm32g4xx_ll_cortex.h"
+#include "stm32g4xx_ll_utils.h"
+#include "stm32g4xx_ll_pwr.h"
+#include "stm32g4xx_ll_dma.h"
+#include "stm32g4xx_ll_tim.h"
+#include "stm32g4xx_ll_usart.h"
+#include "stm32g4xx_ll_gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -50,6 +64,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -58,17 +74,17 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define USART2_TX_Pin GPIO_PIN_2
+#define USART2_TX_Pin LL_GPIO_PIN_2
 #define USART2_TX_GPIO_Port GPIOA
-#define USART2_RX_Pin GPIO_PIN_3
+#define USART2_RX_Pin LL_GPIO_PIN_3
 #define USART2_RX_GPIO_Port GPIOA
-#define T_SWDIO_Pin GPIO_PIN_13
+#define T_SWDIO_Pin LL_GPIO_PIN_13
 #define T_SWDIO_GPIO_Port GPIOA
-#define T_SWCLK_Pin GPIO_PIN_14
+#define T_SWCLK_Pin LL_GPIO_PIN_14
 #define T_SWCLK_GPIO_Port GPIOA
-#define T_SWO_Pin GPIO_PIN_3
+#define T_SWO_Pin LL_GPIO_PIN_3
 #define T_SWO_GPIO_Port GPIOB
-#define LD2_Pin GPIO_PIN_8
+#define LD2_Pin LL_GPIO_PIN_8
 #define LD2_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 

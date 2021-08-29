@@ -144,7 +144,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
     <property name="title">
      <string/>
     </property>
-    <widget class="QLabel" name="label_3">
+    <widget class="QLabel" name="label_offset">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -462,7 +462,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <number>5000000</number>
      </property>
     </widget>
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="label_freq">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -483,7 +483,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <string>Frequency:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="label_ampl">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -1044,7 +1044,7 @@ QSpinBox:disabled { color: black; }
       <number>360</number>
      </property>
     </widget>
-    <widget class="QLabel" name="label_4">
+    <widget class="QLabel" name="label_phase">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -1406,15 +1406,15 @@ p, li { white-space: pre-wrap; }
     <zorder>doubleSpinBox_ampl</zorder>
     <zorder>spinBox_offset</zorder>
     <zorder>spinBox_freq</zorder>
-    <zorder>label</zorder>
-    <zorder>label_3</zorder>
+    <zorder>label_freq</zorder>
+    <zorder>label_offset</zorder>
     <zorder>label_dial1</zorder>
     <zorder>label_dial3</zorder>
     <zorder>label_dial2</zorder>
     <zorder>dial_ampl</zorder>
     <zorder>dial_offset</zorder>
     <zorder>dial_freq</zorder>
-    <zorder>label_2</zorder>
+    <zorder>label_ampl</zorder>
     <zorder>radioButton_sine</zorder>
     <zorder>radioButton_triangle</zorder>
     <zorder>radioButton_square</zorder>
@@ -1422,7 +1422,7 @@ p, li { white-space: pre-wrap; }
     <zorder>radioButton_saw</zorder>
     <zorder>radioButton_noise</zorder>
     <zorder>spinBox_phase</zorder>
-    <zorder>label_4</zorder>
+    <zorder>label_phase</zorder>
     <zorder>label_dial4</zorder>
     <zorder>dial_phase</zorder>
     <zorder>label_title</zorder>
@@ -1646,7 +1646,7 @@ QGroupBox:disabled {color:gray;background-color: rgb(220,220,220); border-radius
     <property name="title">
      <string/>
     </property>
-    <widget class="QLabel" name="label_8">
+    <widget class="QLabel" name="label_offset2">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -1967,7 +1967,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <number>5000000</number>
      </property>
     </widget>
-    <widget class="QLabel" name="label_9">
+    <widget class="QLabel" name="label_freq2">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -1991,7 +1991,7 @@ QSpinBox::down-button:disabled { height:22px; width: 30px; border: 0px; image: u
       <string>Frequency:</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_10">
+    <widget class="QLabel" name="label_ampl2">
      <property name="enabled">
       <bool>true</bool>
      </property>
@@ -2558,7 +2558,7 @@ QSpinBox:disabled { color: black; }
       <number>120</number>
      </property>
     </widget>
-    <widget class="QLabel" name="label_11">
+    <widget class="QLabel" name="label_phase2">
      <property name="geometry">
       <rect>
        <x>240</x>
@@ -2932,8 +2932,8 @@ p, li { white-space: pre-wrap; }
     <zorder>doubleSpinBox_ampl2</zorder>
     <zorder>spinBox_offset2</zorder>
     <zorder>spinBox_freq2</zorder>
-    <zorder>label_9</zorder>
-    <zorder>label_10</zorder>
+    <zorder>label_freq2</zorder>
+    <zorder>label_ampl2</zorder>
     <zorder>label_dial1_2</zorder>
     <zorder>label_dial2_2</zorder>
     <zorder>label_dial3_2</zorder>
@@ -2944,7 +2944,7 @@ p, li { white-space: pre-wrap; }
     <zorder>radioButton_saw2</zorder>
     <zorder>radioButton_noise2</zorder>
     <zorder>spinBox_phase2</zorder>
-    <zorder>label_11</zorder>
+    <zorder>label_phase2</zorder>
     <zorder>label_dial4_2</zorder>
     <zorder>label_title2</zorder>
     <zorder>line_4</zorder>
@@ -2959,7 +2959,7 @@ p, li { white-space: pre-wrap; }
     <zorder>dial_offset2</zorder>
     <zorder>dial_phase2</zorder>
     <zorder>dial_ampl2</zorder>
-    <zorder>label_8</zorder>
+    <zorder>label_offset2</zorder>
    </widget>
    <zorder>line</zorder>
    <zorder>groupBox_ch1</zorder>

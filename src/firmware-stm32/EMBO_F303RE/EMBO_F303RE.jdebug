@@ -22,19 +22,17 @@ void OnProjectLoad (void) {
   //
   // Dialog-generated settings
   //
-  Project.AddPathSubstitute ("F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE", "$(ProjectDir)");
-  Project.AddPathSubstitute ("f:/stm32cube/embo/src/firmware-stm32/embo_f303re", "$(ProjectDir)");
   Project.SetDevice ("STM32F303RE");
   Project.SetHostIF ("USB", "");
   Project.SetTargetIF ("SWD");
   Project.SetTIFSpeed ("4 MHz");
   Project.AddSvdFile ("$(InstallDir)/Config/CPU/Cortex-M4F.svd");
-  Project.AddSvdFile ("F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_F303RE/STM32F303.svd");
+  Project.AddSvdFile ("./STM32F303.svd");
   //
   // User settings
   //
   Project.SetOSPlugin ("FreeRTOSPlugin");
-  File.Open ("$(ProjectDir)/Debug/EMBO_F303RE.elf");
+  File.Open ("./Debug/EMBO_F303RE.elf");
 }
 
 /*********************************************************************

@@ -67,20 +67,20 @@
 #define EM_UART_POLLINIT                            // if defined poll for init
 
 // LED -------------------------------------------------------------
-//#define EM_LED									// LED enabled
+//#define EM_LED                                    // LED enabled
 //#define EM_LED_PORT            GPIOC              // main LED port
 //#define EM_LED_PIN             6                  // main LED pin
 //#define EM_LED_INVERTED                           // inverted behavior
 
 // DAC -------------------------------------------------------------
-//#define EM_DAC               DAC1                 		// sgen ch.1 available
-//#define EM_DAC_CH            LL_DAC_CHANNEL_1     		// sgen ch.1 channel
-//#define EM_DAC_SRC		   LL_DAC_TRIG_EXT_TIM6_TRGO	// sgen ch.1 trigger source
-//#define EM_DAC2              DAC1                 		// sgen ch.2 available
-//#define EM_DAC2_CH           LL_DAC_CHANNEL_2     		// sgen ch.2 channel
-//#define EM_DAC2_SRC		   LL_DAC_TRIG_EXT_TIM7_TRGO	// sgen ch.2 trigger source
-#define EM_DAC_BUFF_LEN        0                    		// buffer max len
-//#define EM_DAC_MAX_VAL       4095.0               		// DAC max value
+//#define EM_DAC               DAC1                         // sgen ch.1 available
+//#define EM_DAC_CH            LL_DAC_CHANNEL_1             // sgen ch.1 channel
+//#define EM_DAC_SRC           LL_DAC_TRIG_EXT_TIM6_TRGO    // sgen ch.1 trigger source
+//#define EM_DAC2              DAC1                         // sgen ch.2 available
+//#define EM_DAC2_CH           LL_DAC_CHANNEL_2             // sgen ch.2 channel
+//#define EM_DAC2_SRC          LL_DAC_TRIG_EXT_TIM7_TRGO    // sgen ch.2 trigger source
+#define EM_DAC_BUFF_LEN        0                            // buffer max len
+//#define EM_DAC_MAX_VAL       4095.0                       // DAC max value
 //#define EM_DAC_TIM_MAX_F     4500000                      // DAC max sampling time
 
 // GPIO ------------------------------------------------------------
@@ -96,7 +96,7 @@
 
 // ADC -------------------------------------------------------------
 #define EM_ADC_MODE_ADC1                                       // 1 ADC (1 DMA)              - verified
-//#define EM_ADC_MODE_ADC12                                    // 2 full ADCs (2 DMA)        - N/A
+//#define EM_ADC_MODE_ADC12                                    // 2 full ADCs (2 DMA)        - verified
 //#define EM_ADC_MODE_ADC1234                                  // 4 full ADCs (4 DMA)        - verified
 #define EM_ADC_BIT12                                           // 12-bit mode available      - verified
 #define EM_ADC_BIT8                                            // 8-bit mode available       - verified
@@ -125,6 +125,7 @@
 #define EM_TIM_DAQ             TIM3
 #define EM_TIM_DAQ_MAX         65535
 #define EM_TIM_DAQ_FREQ        EM_FREQ_PCLK1
+#define EM_TIM_DAQ_CC(a)       a##CC1
 #define EM_TIM_PWM1            TIM2
 #define EM_TIM_PWM1_MAX        65535
 #define EM_TIM_PWM1_FREQ       EM_FREQ_PCLK1

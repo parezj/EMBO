@@ -2239,9 +2239,9 @@ QRadioButton::disabled {
              <widget class="Line" name="line_2">
               <property name="geometry">
                <rect>
-                <x>10</x>
+                <x>0</x>
                 <y>30</y>
-                <width>411</width>
+                <width>431</width>
                 <height>20</height>
                </rect>
               </property>
@@ -2258,9 +2258,9 @@ QRadioButton::disabled {
              <widget class="Line" name="line_3">
               <property name="geometry">
                <rect>
-                <x>10</x>
+                <x>0</x>
                 <y>60</y>
-                <width>411</width>
+                <width>431</width>
                 <height>20</height>
                </rect>
               </property>
@@ -3426,7 +3426,7 @@ QGroupBox::title {subcontrol-origin: margin;left: 10px;padding: 0 3px 0 3px;}</s
               <property name="geometry">
                <rect>
                 <x>10</x>
-                <y>15</y>
+                <y>13</y>
                 <width>101</width>
                 <height>21</height>
                </rect>
@@ -3503,7 +3503,7 @@ QRadioButton::disabled {
               <property name="geometry">
                <rect>
                 <x>10</x>
-                <y>40</y>
+                <y>38</y>
                 <width>101</width>
                 <height>21</height>
                </rect>
@@ -3598,7 +3598,7 @@ QRadioButton::disabled {
                <string notr="true">color:black;</string>
               </property>
               <property name="text">
-               <string>Real Fs (Sps)</string>
+               <string>Real Fs (Sps):</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -3678,7 +3678,7 @@ p, li { white-space: pre-wrap; }
                <string notr="true">color:black</string>
               </property>
               <property name="text">
-               <string>Max Impedance</string>
+               <string>Max Impedance:</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -3733,9 +3733,9 @@ p, li { white-space: pre-wrap; }
              <widget class="Line" name="line_4">
               <property name="geometry">
                <rect>
-                <x>10</x>
-                <y>75</y>
-                <width>101</width>
+                <x>0</x>
+                <y>54</y>
+                <width>121</width>
                 <height>20</height>
                </rect>
               </property>
@@ -3752,9 +3752,9 @@ p, li { white-space: pre-wrap; }
              <widget class="Line" name="line_5">
               <property name="geometry">
                <rect>
-                <x>10</x>
-                <y>140</y>
-                <width>101</width>
+                <x>0</x>
+                <y>120</y>
+                <width>121</width>
                 <height>20</height>
                </rect>
               </property>
