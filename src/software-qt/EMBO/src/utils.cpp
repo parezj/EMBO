@@ -174,7 +174,7 @@ int get_vals_from_circ(int from, int total, int bufflen, DaqBits daq_bits, doubl
             i = 0;
 
         found++;
-        double val;
+        double val = 0;
 
         if (daq_bits == B12)
         {
