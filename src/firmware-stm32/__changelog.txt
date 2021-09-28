@@ -1,5 +1,21 @@
+0.2.3 - 27.9.2021
+=================
++ 2 channel Signal Generator (fw + sq)
++ F303RE full support added
++ L412KB full support added
+* Qt fixed wrong font scaling on high DPI displays (SetProcessDpiAwarenessContext)
+* fixed daq_enable(EM_FALSE) - added timeout between disable timer and ADC, which was causing channels order failure
+* fixed modes AUTO/DISABLED - trigger position was incorrectly set as last, not first
+* fixed ADC2 in L4 series - DEEPPWD was incorrectly enabled
+* fixed missing libs in qt project src dir (libfftw3-3.dll, libqBreakpad.a)
+* project structure refactored
+
+------------------------------------------------------------------------------------------------------------------------------
+
 0.2.2 - 11.6.2021
 =================
++ Qt FFT size can be adjusted
++ ETS (Equivalent Time Sampling - Stroboscopic) mode added to SCOPE 
 * task priorities changed (critical)
 
 ------------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,38 @@
+
+OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__os/tasks.c", Line=3489
+OpenDocument="startup_stm32l412kbux.s", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB/Core/Startup/startup_stm32l412kbux.s", Line=46
+OpenDocument="app.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/app.c", Line=114
+OpenDocument="comm_proto.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_proto.c", Line=379
+OpenDocument="main.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB/Core/Src/main.c", Line=59
+OpenDocument="daq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq.c", Line=564
+OpenDocument="comm_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/comm_irq.c", Line=2
+OpenDocument="stm32l4xx_ll_usart.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_usart.h", Line=3144
+OpenDocument="stm32l4xx_it.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB/Core/Src/stm32l4xx_it.c", Line=67
+OpenDocument="utility.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/utility.c", Line=0
+OpenDocument="daq_trig.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_trig.c", Line=113
+OpenDocument="daq_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/daq_irq.c", Line=35
+OpenDocument="periph.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/__app/src/periph.c", Line=167
+OpenDocument="EMBO_L412KB.jdebug", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB/EMBO_L412KB.jdebug", Line=0
+OpenDocument="stm32l4xx_ll_adc.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/EMBO_L412KB/Drivers/STM32L4xx_HAL_Driver/Inc/stm32l4xx_ll_adc.h", Line=4705
+OpenToolbar="Debug", Floating=0, x=0, y=0
+OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=496, h=326, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=496, h=320, TabPos=0, TopOfStack=1, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=496, h=319, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=496, h=320, TabPos=3, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
+OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=627, h=265, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x2000DFF8
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=496, h=320, TabPos=4, TopOfStack=0, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=496, h=320, TabPos=2, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=496, h=320, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
+OpenWindow="Functions", DockArea=LEFT, x=0, y=0, w=177, h=983, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1074, h=265, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[179;121;84;44;185;100]
+TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;100]
+TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;109;100;125]
+TableHeader="Functions", SortCol="Size", SortOrder="ASCENDING", VisibleCols=["Name";"Address";"Size";"#Insts";"Source"], ColWidths=[130;64;44;57;176]
+TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;360]
+TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
+TableHeader="Task List", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State"], ColWidths=[110;110;110;110;110;110;110;110;110;110]
+TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[211;105;163]

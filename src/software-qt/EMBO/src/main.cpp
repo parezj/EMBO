@@ -9,9 +9,42 @@
 #include <QApplication>
 #include <QStyleFactory>
 
+#ifdef _WIN32
+    #include "windows.h"
+    #include "windef.h"
+    #include "winuser.h"
+#endif
+
+#if !defined(DPI_AWARENESS_CONTEXT_UNAWARE)
+// (these lines are copied from a fresh windef.h)
+     DECLARE_HANDLE(DPI_AWARENESS_CONTEXT);
+
+     #define DPI_AWARENESS_CONTEXT_UNAWARE              ((DPI_AWARENESS_CONTEXT)-1)
+     #define DPI_AWARENESS_CONTEXT_SYSTEM_AWARE         ((DPI_AWARENESS_CONTEXT)-2)
+     #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE    ((DPI_AWARENESS_CONTEXT)-3)
+     #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((DPI_AWARENESS_CONTEXT)-4)
+     #define DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED    ((DPI_AWARENESS_CONTEXT)-5)
+#endif
+
 
 int main(int argc, char *argv[])
 {
+#ifdef _WIN32
+    {
+        typedef BOOL (*SetProcessDpiAwarenessContextT)(DPI_AWARENESS_CONTEXT);
+        QLibrary user32("user32.dll");
+        SetProcessDpiAwarenessContextT SetProcessDpiAwarenessContextD =
+            (SetProcessDpiAwarenessContextT)user32.resolve("SetProcessDpiAwarenessContext");
+        if (SetProcessDpiAwarenessContextD) {
+            SetProcessDpiAwarenessContextD(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+        }
+    }
+#endif
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+#endif
+
     QApplication a(argc, argv);
     qInfo() << QStyleFactory::keys();
     //QApplication::setStyle(QStyleFactory::create("windowsvista"));
