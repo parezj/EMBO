@@ -37,6 +37,29 @@ double get_freq(int* prescaler, int* reload, int max_reload, int freq_osc, int f
     return ret;
 }
 
+void split3(const char* input, size_t len, char delim, char* str1, char* str2, char* str3)
+{
+    char *start, *end;
+    start = end = (char*) input;
+    int c = 2;
+    char* str[3] = {str3, str2, str1};
+
+    while((end = strchr(start, delim)))
+    {
+        int l = (int)(end - start + 0);
+        strncpy(str[c], start, l);
+        start = end + 1;
+
+        if (c == 0)
+            break;
+        c--;
+    }
+
+    int last_len = ((char*) input+len) - start;
+    if (last_len > 0)
+        strncpy(str[c], start, last_len);
+}
+
 void busy_wait(int us)
 {
     for (int i = 0; i < 2000000; ++i)

@@ -28,6 +28,8 @@ static inline int get_last_circ_idx(int pos, int len)
 
 double get_freq(int* prescaler, int* reload, int max_reload, int freq_osc, int freq_want);
 
+void split3(const char* input, size_t len, char delim, char* str1, char* str2, char* str3);
+
 void busy_wait(int us);
 float fastlog2 (float x);
 float fastlog(float x);

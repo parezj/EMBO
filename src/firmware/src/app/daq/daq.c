@@ -722,7 +722,7 @@ void daq_enable(daq_data_t* self, uint8_t enable)
         }
         else
         {
-            EM_TIM_DAQ_CC(LL_TIM_EnableDMAReq_)(EM_TIM_DAQ);
+            EM_TIM_DAQ_CC(LL_TIM_DisableDMAReq_)(EM_TIM_DAQ);
             NVIC_DisableIRQ(self->trig.exti_trig);
         }
     }

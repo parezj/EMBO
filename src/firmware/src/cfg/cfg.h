@@ -15,7 +15,7 @@
 #define EM_DEBUG      // auto enable PWM, SGEN on start and more verbose
 //#define EM_SYSVIEW  // SEGGER System View enabled - less DAQ memory
 
-#define EM_DEV_VER      "0.2.3"
+#define EM_DEV_VER      "0.2.4"
 #define EM_DEV_AUTHOR   "CTU/Jakub Parez"
 
 

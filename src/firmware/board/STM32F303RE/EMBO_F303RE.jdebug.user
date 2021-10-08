@@ -1,60 +1,42 @@
 
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_system.h:1107, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Drivers/CMSIS/Include/core_cm4.h:1732, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_exti.h:1205, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/src/app/daq/daq.c:287, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/src/app/daq/daq.c:797, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/src/os/tasks.c:4064, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/src/app/daq/daq_irq.c:141, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_adc.h:6434, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/src/app/daq/daq_trig.c:289, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/src/app/daq/daq_trig.c:401, State=BP_STATE_DISABLED
-Breakpoint=F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_tim.h:1366, State=BP_STATE_DISABLED
-OpenDocument="main.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Core/Src/main.c", Line=40
-OpenDocument="stm32f3xx_ll_usart.h", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_usart.h", Line=2579
-OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/src/os/tasks.c", Line=3504
-OpenDocument="main.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/board/STM32F303RE/Core/Src/main.c", Line=40
-OpenDocument="app.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/src/app/app.c", Line=0
-OpenDocument="tasks.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/src/os/tasks.c", Line=3504
-OpenDocument="stm32f7xx_hal.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal.c", Line=284
-OpenDocument="stm32f7xx_hal_spi.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/Drivers/STM32F7xx_HAL_Driver/Src/stm32f7xx_hal_spi.c", Line=1374
-OpenDocument="stm32f7xx_it.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/Core/Src/stm32f7xx_it.c", Line=65
-OpenDocument="app.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/src/app/app.c", Line=0
-OpenDocument="startup_stm32f745vgtx.s", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/Core/Startup/startup_stm32f745vgtx.s", Line=43
-OpenDocument="ff.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/Middlewares/Third_Party/FatFs/src/ff.c", Line=4394
-OpenDocument="fatfs_sd.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/__lib/fatfs_sd.c", Line=350
-OpenDocument="stm32f7xx_ll_usart.h", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_ll_usart.h", Line=2617
-OpenDocument="reg_irq.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/__app/src/reg_irq.c", Line=0
-OpenDocument="mpu6000.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/__lib/mpu6000.c", Line=381
-OpenDocument="diskio.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/Middlewares/Third_Party/FatFs/src/diskio.c", Line=38
-OpenDocument="RocketF7.jdebug", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/RocketF7.jdebug", Line=0
-OpenDocument="comm_irq.c", FilePath="F:/STM32Cube/EMBO/src/firmware-stm32/src/app/comm/comm_irq.c", Line=0
-OpenDocument="", FilePath="", Line=0
-OpenDocument="", FilePath="", Line=0
-OpenDocument="reg.c", FilePath="F:/STM32Cube/ItsGoodButStill/src/RocketF7/__app/src/reg.c", Line=0
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_trig.c:289, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_trig.c:401, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/os/tasks.c:4064, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_exti.h:1205, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq.c:287, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq.c:797, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Drivers/CMSIS/Include/core_cm4.h:1732, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_adc.h:6434, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_system.h:1107, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_tim.h:1366, State=BP_STATE_DISABLED
+OpenDocument="tasks.c", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/os/tasks.c", Line=3513
+OpenDocument="startup_stm32f303retx.s", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Core/Startup/startup_stm32f303retx.s", Line=52
+OpenDocument="daq_trig.c", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_trig.c", Line=304
+OpenDocument="daq_irq.c", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_irq.c", Line=175
+OpenDocument="main.c", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Core/Src/main.c", Line=68
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=2, w=496, h=379, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=1, y=1, w=1539, h=1011, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
-OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=340, h=1140, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=3, w=496, h=369, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=1, y=1, w=1539, h=1011, TabPos=3, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
-OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=628, h=108, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x2000DFF8
-OpenWindow="Global Data", DockArea=RIGHT, x=1, y=1, w=1539, h=1011, TabPos=4, TopOfStack=0, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Local Data", DockArea=RIGHT, x=1, y=1, w=1539, h=1011, TabPos=2, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=496, h=374, TabPos=0, TopOfStack=1, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
-OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=1077, h=108, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;109;100;125]
-TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[179;121;84;44;185;242]
-TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;500]
-TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;100]
+OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=484, h=156, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=287, h=662, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=484, h=230, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=3, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
+OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=531, h=108, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x2000DFF8
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=4, TopOfStack=1, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=2, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=0, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
+OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=908, h=108, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[211;147;428]
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[179;121;84;44;185;100]
+TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;1172]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;566]
 TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
-TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[211;147;224]
-TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;360]
-TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
-TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
-TableHeader="Task List", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State";"Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State"], ColWidths=[110;110;110;110;110;110;110;110;110;110;100;100;100;100;100;100;100;100;100;100]
-TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[200;100;100;984]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;109;100;230]
+TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;348]
 TableHeader="Source Files", SortCol="Status", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[222;56;44;57;1244]
+TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
+TableHeader="Task List", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State";"Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State"], ColWidths=[110;110;110;110;110;110;110;110;110;110;100;100;100;100;100;100;100;100;100;100]
+TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
+TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[27;27;27;31]
 WatchedExpression="app.c::daq", Window=Watched Data 1
 WatchedExpression="dma1_addr", Window=Watched Data 1
 WatchedExpression="dma2_addr", Window=Watched Data 1

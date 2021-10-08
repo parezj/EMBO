@@ -22,9 +22,9 @@
 
 
 #define EM_PRI_T1       3  // wd
-#define EM_PRI_T2       2  // trig_check        // CHANGED 10.6 from value 1
+#define EM_PRI_T2       2  // trig_check
 #define EM_PRI_T3       5  // trig_post_count
-#define EM_PRI_T4       1  // comm_and_init     // CHANGED 10.6 from value 2
+#define EM_PRI_T4       1  // comm_and_init
 #define EM_PRI_T5       4  // cntr
 
 void t1_wd(void* p);
@@ -95,12 +95,13 @@ void app_main(void)
 
     __enable_irq();
 
-    //init_done = true; // WTF??? who put it here???  removed 26.7.2021
-
     vTaskStartScheduler(); // start scheduler
 
     ASSERT(0); // never get here
 }
+
+/***************************************************************************/
+/********************************** t1 *************************************/
 
 void t1_wd(void* p)
 {
@@ -123,6 +124,9 @@ void t1_wd(void* p)
     }
 }
 
+/***************************************************************************/
+/********************************** t2 *************************************/
+
 void t2_trig_check(void* p)
 {
     while (!init_done)
@@ -144,6 +148,9 @@ void t2_trig_check(void* p)
     }
 }
 
+/***************************************************************************/
+/********************************** t3 *************************************/
+
 void t3_trig_post_count(void* p)
 {
     while (!init_done)
@@ -163,6 +170,9 @@ void t3_trig_post_count(void* p)
         #endif
     }
 }
+
+/***************************************************************************/
+/********************************** t4 *************************************/
 
 void t4_comm_and_init(void* p)
 {
@@ -221,6 +231,9 @@ void t4_comm_and_init(void* p)
         #endif
     }
 }
+
+/***************************************************************************/
+/********************************** t5 *************************************/
 
 void t5_cntr(void* p)
 {
