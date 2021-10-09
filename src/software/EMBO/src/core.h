@@ -48,6 +48,7 @@ PWM and signal generator.<br>And of course, it's opensource! \
 <a href='https://github.com/parezj/EMBO'>github.com/parezj/EMBO</a>"
 
 #define CFG_MAIN_PORT       "main/port"
+#define CFG_RUN_MONTH       "main/run_month"
 #define CFG_REC_DIR         "rec/dir"
 
 #define CFG_VM_CH1_EN       "vm/ch1_en"

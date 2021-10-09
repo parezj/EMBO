@@ -74,7 +74,7 @@ private:
     void setConnected();
     void setDisconnected();
     void updateChangelog (const QString& url);
-    void displayAppcast (const QString& url, const QByteArray& reply);
+    //void displayAppcast (const QString& url, const QByteArray& reply);
 
     /* main window */
     Ui::WindowMain* m_ui = Q_NULLPTR;

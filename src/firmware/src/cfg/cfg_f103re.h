@@ -196,7 +196,7 @@
 #define EM_DMA_CNTR            DMA1
 #define EM_DMA_CNTR2           DMA1
 #define EM_DMA_SGEN            DMA2
-#define EM_DMA_SGEN2           DMA1
+#define EM_DMA_SGEN2           DMA2
 
 // DMA channels ----------------------------------------------------
 #define EM_DMA_CH_ADC1         LL_DMA_CHANNEL_1

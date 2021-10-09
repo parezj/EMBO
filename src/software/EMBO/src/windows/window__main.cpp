@@ -144,12 +144,26 @@ WindowMain::WindowMain(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wind
 
     auto updater = QSimpleUpdater::getInstance();
 
-    updater->setNotifyOnUpdate(UPDATE_URL, true);
-    updater->setNotifyOnFinish(UPDATE_URL, true);
     updater->setDownloaderEnabled(UPDATE_URL, true);
+    updater->setModuleVersion (UPDATE_URL, APP_VERSION);
+    updater->setNotifyOnFinish (UPDATE_URL, true);
+    updater->setNotifyOnUpdate (UPDATE_URL, true);
+    updater->setUseCustomAppcast (UPDATE_URL, false);
+    //updater->setDownloaderEnabled (UPDATE_URL, true);
+    //updater->setMandatoryUpdate (UPDATE_URL, false);
+    //updater->setModuleName(UPDATE_URL, "EMBO");
+
+    /*
+    if (QSysInfo::productType().toLower().contains("windows"))
+        updater->setModuleName(UPDATE_URL, "EMBO-Windows");
+    else if (QSysInfo::productType().toLower().contains("mac"))
+        updater->setModuleName(UPDATE_URL, "EMBO-macOS");
+    else if (QSysInfo::productType().toLower().contains("ubuntu"))
+        updater->setModuleName(UPDATE_URL, "EMBO-Ubunut");
+    */
 
     connect (updater, SIGNAL (checkingFinished  (QString)), this, SLOT(updateChangelog(QString)));
-    connect (updater, SIGNAL (appcastDownloaded (QString, QByteArray)), this,  SLOT(displayAppcast(QString, QByteArray)));
+    //connect (updater, SIGNAL (appcastDownloaded (QString, QByteArray)), this,  SLOT(displayAppcast(QString, QByteArray)));
 
     qInfo() << "EMBO version: " << APP_VERSION;
 
@@ -297,13 +311,26 @@ QStringList WindowMain::addFontsFromResources(const QStringList& filters)
 
 void WindowMain::loadSettings()
 {
-  QString port_saved = Settings::getValue(CFG_MAIN_PORT, "").toString();
+    QString port_saved = Settings::getValue(CFG_MAIN_PORT, "").toString();
 
-  for(int i = 0; i < m_ui->listWidget_ports->count(); ++i)
-  {
-      if (m_ui->listWidget_ports->item(i)->data(Qt::UserRole) == port_saved)
-          m_ui->listWidget_ports->setCurrentRow(i);
-  }
+    for(int i = 0; i < m_ui->listWidget_ports->count(); ++i)
+    {
+        if (m_ui->listWidget_ports->item(i)->data(Qt::UserRole) == port_saved)
+            m_ui->listWidget_ports->setCurrentRow(i);
+    }
+
+    int run_month = Settings::getValue(CFG_RUN_MONTH, -1).toInt();
+    int curr_month = QDate::currentDate().month();
+
+    if (curr_month != run_month)
+    {
+        auto updater = QSimpleUpdater::getInstance();
+
+        updater->setNotifyOnFinish (UPDATE_URL, false);
+        updater->checkForUpdates(UPDATE_URL);
+    }
+
+    Settings::setValue(CFG_RUN_MONTH, curr_month);
 }
 
 void WindowMain::saveSettings()
@@ -823,24 +850,10 @@ void WindowMain::on_actionCheck_Updates_triggered()
 {
     auto updater = QSimpleUpdater::getInstance();
 
-    updater->setModuleVersion (UPDATE_URL, APP_VERSION);
     updater->setNotifyOnFinish (UPDATE_URL, true);
-    updater->setNotifyOnUpdate (UPDATE_URL, true);
-    updater->setUseCustomAppcast (UPDATE_URL, false);
-    updater->setDownloaderEnabled (UPDATE_URL, true);
-    updater->setMandatoryUpdate (UPDATE_URL, false);
-    //updater->setModuleName(UPDATE_URL, "EMBO");
-
-    /*
-    if (QSysInfo::productType().toLower().contains("windows"))
-        updater->setModuleName(UPDATE_URL, "EMBO-Windows");
-    else if (QSysInfo::productType().toLower().contains("mac"))
-        updater->setModuleName(UPDATE_URL, "EMBO-macOS");
-    else if (QSysInfo::productType().toLower().contains("ubuntu"))
-        updater->setModuleName(UPDATE_URL, "EMBO-Ubunut");
-    */
-
     updater->checkForUpdates(UPDATE_URL);
+
+    //updateChangelog(UPDATE_URL);
 }
 
 void WindowMain::on_showPwm()
@@ -850,11 +863,17 @@ void WindowMain::on_showPwm()
 
 void WindowMain::updateChangelog (const QString& url)
 {
-    qInfo() << url;
+    auto updater = QSimpleUpdater::getInstance();
+
+    QMessageBox::information(this, EMBO_TITLE, updater->getChangelog(url));
+    qInfo() << updater->getChangelog(url);
 }
 
+/*
 void WindowMain::displayAppcast (const QString& url, const QByteArray& reply)
 {
+    //auto updater = QSimpleUpdater::getInstance();
+
     QString text = "This is the downloaded appcast: <p><pre>" +
                    QString::fromUtf8 (reply) +
                    "</pre></p><p> If you need to store more information on the "
@@ -862,5 +881,8 @@ void WindowMain::displayAppcast (const QString& url, const QByteArray& reply)
                    "<b>QSimpleUpdater::setCustomAppcast()</b> function. "
                    "It allows your application to interpret the appcast "
                    "using your code and not QSU's code.</p>";
+
+    QMessageBox::information(this, EMBO_TITLE, text);
     qInfo() << text;
 }
+*/

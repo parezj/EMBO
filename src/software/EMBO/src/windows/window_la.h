@@ -45,6 +45,9 @@ public:
     bool getInstrEnabled() override { return m_instrEnabled; };
     std::vector<Msg*>& getActiveMsgs() override { return m_activeMsgs; };
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *ev) override;
+
 signals:
     void closing(const char* className);
 

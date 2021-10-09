@@ -80,9 +80,27 @@ WindowLa::WindowLa(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::WindowLa
     m_trigCh.setExclusive(true);
     m_fsMem.setExclusive(true);
 
-    /* styles */
+    /* event filter */
+
+    m_ui->dial_trigPre->installEventFilter(this);
 
     m_instrEnabled = true;
+}
+
+bool WindowLa::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == m_ui->dial_trigPre)
+    {
+        if (event->type() == QEvent::Wheel)
+        {
+            return true; // handled
+        }
+        return false; // pass the event to the widget
+    }
+    else
+    {
+        return QMainWindow::eventFilter(obj, event); // pass the event on to the parent class
+    }
 }
 
 void WindowLa::statusBarLoad()

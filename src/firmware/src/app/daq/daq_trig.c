@@ -68,8 +68,6 @@ void daq_trig_init(daq_data_t* self)
 
 void daq_trig_check(daq_data_t* self)
 {
-    //char t_resp = '0';
-
     if (self->enabled == EM_TRUE) // check pre trigger - if sufficient amount of data available, enable trigger
     {
         self->trig.pretrig_cntr = self->uwTick - self->trig.uwtick_first;
@@ -159,7 +157,6 @@ void daq_trig_check(daq_data_t* self)
 
             if (self->mode == SCOPE)
             {
-                //self->trig.pos_last = trig_normalize_catched_idx(self, catched); // normalize catched DMA index into valid trigger index
                 self->trig.pos_last = catched - ((catched % self->trig.buff_trig->chans) + self->trig.buff_trig->chans);
 
                 if (self->trig.pos_last < 0)
@@ -183,25 +180,9 @@ void daq_trig_check(daq_data_t* self)
                 comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);       // data ready - trig auto
             else if (aut_or_dis == 2)
                 comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst);       // data ready - trig disabled
-
-            //t_resp = 'A';
-            //self->trig.respond = EM_TRUE; // init async respond ReadyA
         }
     }
     self->trig.ready_last = self->trig.ready;
-
-    /*
-    if (self->trig.respond == EM_TRUE) // // check async respond ReadyX
-    {
-        if (t_resp == 'A')
-            comm_daq_ready(comm_ptr, EM_RESP_RDY_A, self->trig.pos_frst);       // data ready - trig auto
-        else if (t_resp == 'D')
-            comm_daq_ready(comm_ptr, EM_RESP_RDY_D, self->trig.pos_frst);       // data ready - trig disabled
-
-        self->trig.respond = EM_FALSE;
-        self->trig.forced = EM_FALSE;
-    }
-    */
 }
 
 int8_t daq_trig_trigger_scope(daq_data_t* self)

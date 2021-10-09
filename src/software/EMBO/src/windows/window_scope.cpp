@@ -111,7 +111,28 @@ WindowScope::WindowScope(QWidget *parent) : QMainWindow(parent), m_ui(new Ui::Wi
     m_ui->actionInterpSinc->setChecked(Settings::getValue(CFG_SCOPE_SPLINE, true).toBool());
     on_actionInterpSinc_triggered(m_ui->actionInterpSinc->isChecked());
 
+    /* event filter */
+
+    m_ui->dial_trigPre->installEventFilter(this);
+    m_ui->dial_trigVal->installEventFilter(this);
+
     m_instrEnabled = true;
+}
+
+bool WindowScope::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == m_ui->dial_trigPre || obj == m_ui->dial_trigVal)
+    {
+        if (event->type() == QEvent::Wheel)
+        {
+            return true; // handled
+        }
+        return false; // pass the event to the widget
+    }
+    else
+    {
+        return QMainWindow::eventFilter(obj, event); // pass the event on to the parent class
+    }
 }
 
 void WindowScope::statusBarLoad()
