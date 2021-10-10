@@ -26,10 +26,6 @@ greaterThan(QT_MAJOR_VERSION, 4){
     TARGET_ARCH=$${QMAKE_HOST.arch}
 }
 
-CONFIG(release, debug|release): DESTDIR = $$OUT_PWD/release
-CONFIG(debug, debug|release): DESTDIR = $$OUT_PWD/debug
-
-
 include(__updater/QSimpleUpdater.pri)
 
 LINUX_LIB_DIR = ubuntu_18
@@ -46,6 +42,9 @@ win32 {
         LIBS += $$PWD/lib/win64/libfftw3-3.dll
         LIBS += $$PWD/lib/win64/libqBreakpad.a
 
+        CONFIG(release, debug|release): DESTDIR = $$PWD/build-win64/release
+        CONFIG(debug, debug|release): DESTDIR = $$PWD/build-win64/debug
+
         inst.files += $$PWD/lib/win64/libfftw3-3.dll
         inst.path += $${DESTDIR}
         INSTALLS += inst
@@ -56,6 +55,9 @@ win32 {
         QMAKE_LIBDIR += $$PWD/lib/win32
         LIBS += $$PWD/lib/win32/libfftw3-3.dll
         LIBS += $$PWD/lib/win32/libqBreakpad.a
+
+        CONFIG(release, debug|release): DESTDIR = $$PWD/build-win32/release
+        CONFIG(debug, debug|release): DESTDIR = $$PWD/build-win32/debug
 
         inst.files += $$PWD/lib/win32/libfftw3-3.dll
         inst.path += $${DESTDIR}
@@ -71,6 +73,9 @@ linux {
     QMAKE_LIBDIR += $$PWD/lib/$$LINUX_LIB_DIR
     LIBS += $$PWD/lib/$$LINUX_LIB_DIR/libfftw3.a
     #LIBS += $$PWD/lib/$$LINUX_LIB_DIR/libqBreakpad.a
+
+    CONFIG(release, debug|release): DESTDIR = $$PWD/build/linux/release
+    CONFIG(debug, debug|release): DESTDIR = $$PWD/build/linux/debug
 }
 
 macx {
@@ -82,6 +87,9 @@ macx {
     LIBS += -framework AppKit
     LIBS += $$PWD/lib/$$MACOS_LIB_DIR/libfftw3.a
     LIBS += $$PWD/lib/$$MACOS_LIB_DIR/libqBreakpad.a
+
+    CONFIG(release, debug|release): DESTDIR = $$PWD/build/macx/release
+    CONFIG(debug, debug|release): DESTDIR = $$PWD/build/macx/debug
 }
 
 #LIBS += -lOpenGL32
@@ -98,6 +106,7 @@ QMAKE_TARGET_DESCRIPTION = EMBedded Oscilloscope
 QMAKE_TARGET_COPYRIGHT = CTU Jakub Parez
 
 QMAKE_CXXFLAGS += -Wno-deprecated -Wno-deprecated-declarations
+QMAKE_POST_LINK=$(MAKE) install
 
 # You can also make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
