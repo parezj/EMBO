@@ -38,7 +38,7 @@ Supported MCUs:
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params2.png" alt="EMBO params 2" width="700">
 </div>
 
-\* SCOPE - Oscilloscope, LA - Logic Analyzer, VM - Voltmeter, CNTR - Counter, PWM - PWM Generator, SGEN - Signal Generator
+\* SCOPE - Oscilloscope, LA - Logic Analyzer, VM - Voltmeter, CNTR - Counter, PWM - PWM Generator, SGEN - Signal Generator, DAQ - total memory for SCOPE or LA
 
 ## 2. Connection
 
