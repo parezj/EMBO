@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{mhchem}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{makebox}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage[czech]{babel}
+\usepackage{fancyhdr}
+\usepackage[titles]{tocloft}
+
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+
+\begin{document}
+
+
+\begin{table}[!htbp]
+\catcode`\-=12
+\bgroup
+\def\arraystretch{1.5}%
+\begin{tabular}  { |l|l||c|c|c|c|c|c| }
+ \hline
+ \multicolumn{8}{|c|}{ Limits of EMBO oscilloscope instruments } \\
+ \hline
+ STM32 & product & DAQ & SCOPE & LA & CNTR & PWM & SGEN \\
+ \hhline{|=|=||=|=|=|=|=|=|}
+F103C8 & BluePill & 10 kB & 0.800 MSps & \,\,\,5.142 MSps & 33 MHz & 14.4 MHz & $\times$  \\
+F103RE & LQFP64 & 44 kB & 0.800 MSps & \,\,\,5.142 MSps & 33 MHz & 14.4 MHz & 4.5 Msps  \\
+F303RE & Nucleo64 & 44 kB & 4.965 MSps & 14.400 MSps & 57 MHz & 20.6 MHz & 4.5 Msps  \\
+L412KB & Nucleo32 & 25 kB & 5.000 MSps & 13.333 MSps & 37 MHz & 16.0 MHz & $\times$ \\
+ \hline
+\end{tabular}
+\egroup
+\end{table}
+
+
+\end{document}

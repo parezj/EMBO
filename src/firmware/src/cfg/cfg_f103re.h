@@ -163,7 +163,7 @@
 #define EM_TIM_SGEN2_MAX       65535
 
 // max values ------------------------------------------------------
-#define EM_DAQ_MAX_MEM         42000     // DAQ max total memory in release mode
+#define EM_DAQ_MAX_MEM         44000     // DAQ max total memory in release mode
 #define EM_LA_MAX_FS           5142857   // Logic Analyzer max FS
 #define EM_DAQ_MAX_B12_FS      800000    // DAQ ADC max fs per 1 channel - 12 bit
 #define EM_DAQ_MAX_B8_FS       0         // DAQ ADC max fs per 1 channel - 8 bit

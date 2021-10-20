@@ -1,8 +1,10 @@
 0.1.5 - 11.6.2021
 =================
++ High DPI screens compatibility
 + FFT size can be adjusted
 + ETS mode
 * screenshot and export file name bug fixed
+* PWM, SGEN and CNTR windows redesigned
 
 ------------------------------------------------------------------------------------------------------------------------------
 

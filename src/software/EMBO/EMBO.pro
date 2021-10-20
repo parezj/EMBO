@@ -63,6 +63,10 @@ win32 {
         inst.path += $${DESTDIR}
         INSTALLS += inst
     }
+    help.files += "$${PWD}/doc/EMBO.chm" \
+                  "$${PWD}/doc/EMBO.pdf"
+    help.path += $${DESTDIR}/doc
+    INSTALLS += help
 }
 
 linux {
@@ -94,11 +98,6 @@ macx {
 
 #LIBS += -lOpenGL32
 #DEFINES += QCUSTOMPLOT_USE_OPENGL
-
-help.files += "$${PWD}/doc/EMBO.chm" \
-              "$${PWD}/doc/EMBO.pdf"
-help.path += $${DESTDIR}/doc
-INSTALLS += help
 
 QMAKE_TARGET_COMPANY = CTU Jakub Parez
 QMAKE_TARGET_PRODUCT = EMBO

@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{czech}
+\usepackage[utf8]{inputenc}
+\usepackage{mhchem}
+\usepackage{multirow}
+\usepackage{hhline}
+\usepackage{makebox}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage[czech]{babel}
+\usepackage{fancyhdr}
+\usepackage[titles]{tocloft}
+
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+
+
+\begin{document}
+
+
+\begin{table}[!htbp]
+\catcode`\-=12
+\bgroup
+\def\arraystretch{1.5}%
+\begin{tabular}  { |l|l||c|c|c|c|c|c|c| }
+ \hline
+ \multicolumn{9}{|c|}{ Základní parametry pøístrojù osciloskopu EMBO } \\
+ \hline
+ STM32 & produkt & USB & SCOPE & LA & VM & CNTR & PWM & SGEN \\
+ \hhline{|=|=||=|=|=|=|=|=|=|}
+F103C8 & BluePill & $\checkmark$ & 4 ch / 1 ADC  & 4 ch  & 4 ch & 1 ch & 2 ch & $\times$  \\
+F103RE & LQFP64 & $\checkmark$ & 4 ch / 2 ADC  & 4 ch  & 4 ch & 1 ch & 2 ch & 1 ch  \\
+F303RE & Nucleo64 & STLINK & 4 ch / 4 ADC  & 4 ch  & 4 ch & 1 ch & 2 ch & 1 ch  \\
+L412KB & Nucleo32 & $\checkmark$ & 4 ch / 2 ADC  & 4 ch  & 4 ch & 1 ch & 1 ch & $\times$ \\
+ \hline
+\end{tabular}
+\egroup
+\end{table}
+
+
+\end{document}
