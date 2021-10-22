@@ -1,5 +1,5 @@
 
-Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_trig.c:289, State=BP_STATE_DISABLED
+Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_trig.c:297, State=BP_STATE_DISABLED
 Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_trig.c:401, State=BP_STATE_DISABLED
 Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/os/tasks.c:4064, State=BP_STATE_DISABLED
 Breakpoint=D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Drivers/STM32F3xx_HAL_Driver/Inc/stm32f3xx_ll_exti.h:1205, Permitted Impl.=BP_TYPE_MIXED, State=BP_STATE_DISABLED
@@ -15,27 +15,27 @@ OpenDocument="daq_trig.c", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/src
 OpenDocument="daq_irq.c", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/src/app/daq/daq_irq.c", Line=175
 OpenDocument="main.c", FilePath="D:/PROJECTS/STM32Cube/EMBO/src/firmware/board/STM32F303RE/Core/Src/main.c", Line=68
 OpenToolbar="Debug", Floating=0, x=0, y=0
-OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=484, h=156, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
+OpenWindow="Call Stack", DockArea=RIGHT, x=0, y=1, w=484, h=161, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Registers 1", DockArea=RIGHT, x=0, y=0, w=484, h=254, TabPos=1, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, FilteredItems=[], RefreshRate=1
 OpenWindow="Source Files", DockArea=LEFT, x=0, y=0, w=287, h=662, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=484, h=230, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=3, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
+OpenWindow="Disassembly", DockArea=RIGHT, x=0, y=2, w=484, h=229, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Break & Tracepoints", DockArea=RIGHT, x=0, y=0, w=484, h=254, TabPos=3, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, VectorCatchIndexMask=255
 OpenWindow="Memory 1", DockArea=BOTTOM, x=0, y=0, w=531, h=108, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0, EditorAddress=0x2000DFF8
-OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=4, TopOfStack=1, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=2, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=484, h=258, TabPos=0, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
+OpenWindow="Global Data", DockArea=RIGHT, x=0, y=0, w=484, h=254, TabPos=4, TopOfStack=1, FilterBarShown=1, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Local Data", DockArea=RIGHT, x=0, y=0, w=484, h=254, TabPos=2, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
+OpenWindow="Watched Data 1", DockArea=RIGHT, x=0, y=0, w=484, h=254, TabPos=0, TopOfStack=0, FilterBarShown=0, TotalValueBarShown=1, ToolBarShown=0
 OpenWindow="Console", DockArea=BOTTOM, x=1, y=0, w=908, h=108, FilterBarShown=0, TotalValueBarShown=0, ToolBarShown=0
-TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[211;147;428]
-TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[179;121;84;44;185;100]
 TableHeader="Vector Catches", SortCol="Vector Catch", SortOrder="ASCENDING", VisibleCols=["";"Vector Catch";"Description"], ColWidths=[50;300;1172]
-TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;566]
+TableHeader="Break & Tracepoints", SortCol="None", SortOrder="ASCENDING", VisibleCols=["";"Type";"Location";"Extras"], ColWidths=[100;100;452;176]
 TableHeader="Local Data", SortCol="Name", SortOrder="DESCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[154;227;84;44;145;100]
-TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;109;100;230]
+TableHeader="Registers 1", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Description"], ColWidths=[211;147;224]
+TableHeader="Watched Data 1", SortCol="Expression", SortOrder="ASCENDING", VisibleCols=["Expression";"Value";"Location";"Refresh"], ColWidths=[162;109;100;100]
 TableHeader="Call Stack", SortCol="Function", SortOrder="ASCENDING", VisibleCols=["Function";"Source"], ColWidths=[136;348]
 TableHeader="Source Files", SortCol="Status", SortOrder="ASCENDING", VisibleCols=["File";"Status";"Size";"#Insts";"Path"], ColWidths=[222;56;44;57;1244]
 TableHeader="Power Sampling", SortCol="Index", SortOrder="ASCENDING", VisibleCols=["Index";"Time";"Ch 0"], ColWidths=[100;100;100]
-TableHeader="Task List", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State";"Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State"], ColWidths=[110;110;110;110;110;110;110;110;110;110;100;100;100;100;100;100;100;100;100;100]
+TableHeader="Task List", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Run Count";"Priority";"Status";"Timeout";"Stack Info (Free / Size)";"ID";"Mutex Count";"Notified Value";"Notify State"], ColWidths=[110;110;110;110;110;110;110;110;110;110]
 TableHeader="RegisterSelectionDialog", SortCol="None", SortOrder="ASCENDING", VisibleCols=[], ColWidths=[]
+TableHeader="Global Data", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Location";"Size";"Type";"Scope"], ColWidths=[179;121;84;44;185;242]
 TableHeader="TargetExceptionDialog", SortCol="Name", SortOrder="ASCENDING", VisibleCols=["Name";"Value";"Address";"Description"], ColWidths=[27;27;27;31]
 WatchedExpression="app.c::daq", Window=Watched Data 1
 WatchedExpression="dma1_addr", Window=Watched Data 1

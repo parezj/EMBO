@@ -13,17 +13,17 @@
     #include "windows.h"
     #include "windef.h"
     #include "winuser.h"
-#endif
 
-#if !defined(DPI_AWARENESS_CONTEXT_UNAWARE)
-// (these lines are copied from a fresh windef.h)
-     DECLARE_HANDLE(DPI_AWARENESS_CONTEXT);
+    #if !defined(DPI_AWARENESS_CONTEXT_UNAWARE)
+    // (these lines are copied from a fresh windef.h)
+         DECLARE_HANDLE(DPI_AWARENESS_CONTEXT);
 
-     #define DPI_AWARENESS_CONTEXT_UNAWARE              ((DPI_AWARENESS_CONTEXT)-1)
-     #define DPI_AWARENESS_CONTEXT_SYSTEM_AWARE         ((DPI_AWARENESS_CONTEXT)-2)
-     #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE    ((DPI_AWARENESS_CONTEXT)-3)
-     #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((DPI_AWARENESS_CONTEXT)-4)
-     #define DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED    ((DPI_AWARENESS_CONTEXT)-5)
+         #define DPI_AWARENESS_CONTEXT_UNAWARE              ((DPI_AWARENESS_CONTEXT)-1)
+         #define DPI_AWARENESS_CONTEXT_SYSTEM_AWARE         ((DPI_AWARENESS_CONTEXT)-2)
+         #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE    ((DPI_AWARENESS_CONTEXT)-3)
+         #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 ((DPI_AWARENESS_CONTEXT)-4)
+         #define DPI_AWARENESS_CONTEXT_UNAWARE_GDISCALED    ((DPI_AWARENESS_CONTEXT)-5)
+    #endif
 #endif
 
 
