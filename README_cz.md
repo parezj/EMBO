@@ -5,18 +5,19 @@
 </p>
 
 # EMBO - EMBedded Oscilloscope
-> **[GitHub](https://github.com/parezj/EMBO/releases)**  
+> **[Stáhnout](https://github.com/parezj/EMBO/releases)**  
 
 Aplikace EMBO se skládá ze 3 primárních přístrojů (4-kanálový osciloskop, logický analyzátor, voltmetr) a ze 3 sekundárních přístrojů (čítač, PWM and funkční generátor). Multiplatformní aplikace je zkompilována pro Windows, Linux a macOS. Stabilní firmware je dostupný pro STM32F103C8, STM32F103RE, STM32F303RE a STM32L412KB ve formátu HEX, další řady budou následovat. Osciloskop EMBO slouží jako levný a jednoduchý nástroj pro hromadnou výuku praktické elektroniky.
 
 Tato práce byla vytvořena v rámci mé diplomové práce na [FEL ČVUT] (https://meas.fel.cvut.cz/) v Praze (Katedra měření) pod vedením doc. Fischera a za pomoci Ing. Hladíka z STMicroelectronics. Chtěl bych jim poděkovat za perfektní podporu. Celý projekt EMBO je zveřejněn pod licencí MIT. 
 
-Ke stažení:
-- **[EMBO app 0.1.4 (macOS Catalina)](https://github.com/parezj/EMBO/releases/download/sw0.1.4/EMBO_app-0.1.4_macOS-Catalina.zip)**
-- **[EMBO app 0.1.4 (Windows 7/8/10 x64)](https://github.com/parezj/EMBO/releases/download/sw0.1.4/EMBO_app-0.1.4_Win64.zip)**
-- **[EMBO app 0.1.4 (Windows 7/8/10 x64 instalátor)](https://github.com/parezj/EMBO/releases/download/sw0.1.4/EMBO_app-0.1.4_Win64_installer.zip)**
-- **[EMBO app 0.1.4 (Xubuntu 18)](https://github.com/parezj/EMBO/releases/download/sw0.1.4/EMBO_app-0.1.4_Xubuntu18.zip)**
-- **[EMBO firmware 0.2.1](https://github.com/parezj/EMBO/releases/download/fw0.2.1/EMBO_firmware-0.2.1_hex.zip)**
+Podporované MCU:
+- **STM32F103C8**
+- **STM32F103RE**
+- **STM32F303RE**
+- **STM32L412KB**
+
+*Další příjdou brzy... (L0, G0, G4, F4)*
 
 Kapitoly:
 1. [Parametry](#1-Parametry)
@@ -36,6 +37,8 @@ Kapitoly:
 <div align="center" margin="0" padding="0">
 <img src="https://raw.githubusercontent.com/parezj/EMBO/master/img/params2.png" alt="EMBO params 2" width="700">
 </div>
+
+\* SCOPE - Osciloskop, LA - Logický Analyzátor, VM - Voltmetr, CNTR - Čítač, PWM - PWM Generátor, SGEN - Signálový Generátor, DAQ - celková velikost paměti pro SCOPE nebo LA
 
 ## 2. Připojení
 
