@@ -994,7 +994,7 @@ QSlider::handle:horizontal:hover {
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>420</width>
           <height>0</height>
          </size>
         </property>
@@ -1067,14 +1067,14 @@ QSlider::handle:horizontal:hover {
            <widget class="QGroupBox" name="groupBox_ch1">
             <property name="minimumSize">
              <size>
-              <width>390</width>
-              <height>95</height>
+              <width>370</width>
+              <height>100</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>390</width>
-              <height>95</height>
+              <width>100000</width>
+              <height>100</height>
              </size>
             </property>
             <property name="font">
